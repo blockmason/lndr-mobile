@@ -9,7 +9,7 @@ import {
 
 import styles from './styles';
 
-class Friends extends Component {
+export default class Friends extends Component {
   static navigationOptions = {
     tabBarLabel: 'Friends'
   }
@@ -26,5 +26,3 @@ class Friends extends Component {
     );
   }
 }
-
-export default Friends;
