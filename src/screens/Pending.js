@@ -9,7 +9,7 @@ import {
 
 import styles from './styles';
 
-class Pending extends Component {
+export default class Pending extends Component {
   static navigationOptions = {
     tabBarLabel: 'Pending'
   }
@@ -26,5 +26,3 @@ class Pending extends Component {
     );
   }
 }
-
-export default Pending;

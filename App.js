@@ -1,9 +1,9 @@
 import React from 'react';
 import { TabNavigator } from 'react-navigation';
 
-import Balances from './src/Balances';
-import Friends from './src/Friends';
-import Pending from './src/Pending';
+import Balances from './src/screens/Balances';
+import Friends from './src/screens/Friends';
+import Pending from './src/screens/Pending';
 
 const App = TabNavigator({
   Balances: { screen: Balances },
