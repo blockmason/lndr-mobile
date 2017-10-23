@@ -1,19 +1,28 @@
 import React, { Component } from 'react';
+import RadioForm, {RadioButton, RadioButtonInput, RadioButtonLabel} from 'react-native-simple-radio-button';
+import PopupDialog, { SlideAnimation, DialogTitle } from 'react-native-popup-dialog';
+import ActionSheet from 'react-native-actionsheet'
 import {
   StyleSheet,
   TouchableHighlight,
   Text,
-  Picker,
   TextInput,
-  Button,
   ScrollView,
   View,
   Image
 } from 'react-native';
 
 import styles from '../../screens/styles';
+import dialog from './dialog_styles';
 
+const CANCEL_INDEX = 0
 const FRIEND_MOCK_DATA = [{name: "tim"}, {name: "matt"}];
+const OPTIONS = ["cancel", "tim", "matt"];
+
+const RADIO_OWED_DEFAULT = {
+  owe: 'I owe this debt',
+  owed: 'The debt is owed to me'
+};
 
 export default class AddDebt extends Component {
 
@@ -21,138 +30,122 @@ export default class AddDebt extends Component {
      super(props);
 
      this.state = {
-       friends: FRIEND_MOCK_DATA
+       friends: FRIEND_MOCK_DATA,
+       selectedFriend: "Select a friend",
+       validFriend: false,
+       amount: 0,
+       currencyType: "USD",
+       owed: 0,
+       radioLabels: RADIO_OWED_DEFAULT
      };
+
+     this.validateAndCreateDebt = this.validateAndCreateDebt.bind(this)
+     this.handleFriendSelected = this.handleFriendSelected.bind(this)
+     this.updateOwedAmount = this.updateOwedAmount.bind(this)
+     this.showFriendSelection = this.showFriendSelection.bind(this)
   }
 
-  processAmountOwed() {
+  changeCreateDebtButton() {
+    //I owe tim 5 USD
+    //Tim owes me 5 USD
+
+  }
+
+  validateAndCreateDebt() {
     //Validate inputs and complete action
     console.log("Debt process.");
+
+  }
+
+  showFriendSelection() {
+    this.friendActionSheet.show()
+  }
+
+  updateRadioLabels(amount) {
+    var radioLabels = RADIO_OWED_DEFAULT,
+        state = this.state;
+
+    if (state.validFriend) {
+      var selectedFriend = state.selectedFriend;
+      var money = amount + " " + state.currencyType;
+
+      radioLabels = {
+        owe: "I owe " + selectedFriend + " " + money,
+        owed: selectedFriend + " owes me " + money
+      };
+    }
+
+    this.setState({
+      radioLabels: radioLabels
+    })
+  }
+
+  handleFriendSelected(index) {
+
+    var validFriend = index > 0,
+        selectedFriend = validFriend ? OPTIONS[index] : "Select a friend";
+
+    this.setState({
+      selectedFriend: selectedFriend,
+      validFriend: validFriend
+    })
+
+    this.updateRadioLabels(this.state.amount);
+  }
+
+  updateOwedAmount(amount) {
+    this.setState({
+      amount: amount,
+    })
+
+    this.updateRadioLabels(amount);
   }
 
   render() {
-    const friends = [];
-    for (var i = 0; i < this.state.friends.length; i++) {
-      s = this.state.friends[i];
-      friends.push(<Picker.Item key={i} value={s.name} label={s.name} />);
-    }
-
     return (
       <ScrollView contentContainerStyle={styles.contentContainer}>
-        <Text style={dialog.sectionTitle}>ENTER DEBT YOU OWE</Text>
         <View style={dialog.payment_row}>
            <Text style={dialog.payment_curr}>$</Text>
-           <TextInput style={dialog.payment_amount}></TextInput>
-           <Text style={dialog.payment_curr}>USD</Text>
-       </View>
-        <Picker
-          style={dialog.dialog_margins}
-          selectedValue={this.state.friend}
-          onValueChange={(itemValue, itemIndex) => this.setState({friend: itemValue})}>
-          <Picker.Item label = 'Select a Friend' value='-1' />
-          {friends}
-        </Picker>
-        <TextInput
-           placeholder="Enter debt memo here"
-           style={dialog.dialog_margins}
-           onChangeText = {(text) => this.setState({text})}
-           hint = ""
-           value = {this.state.text}/>
-        <TouchableHighlight
-          onPress={() => this.processAmountOwed()}
-          style={[dialog.owe_button, {backgroundColor: '#FFF'}]}>
-          <Text style={dialog.owe_text}>I OWE THIS</Text>
-        </TouchableHighlight>
-        <Text style={dialog.or_text}>OR</Text>
-        <Text style={dialog.sectionTitle}>ENTER DEBT OWED TO YOU</Text>
-        <View style={dialog.payment_row}>
-           <Text style={dialog.payment_curr}>$</Text>
-           <TextInput style={dialog.payment_amount}></TextInput>
+           <TextInput
+            onChangeText = {(amount) => this.updateOwedAmount(amount)}
+            keyboardType={'numeric'}
+            style={dialog.payment_amount}>
+              </TextInput>
            <Text style={dialog.payment_curr}>USD</Text>
         </View>
-        <Picker
-          style={dialog.dialog_margins}
-          selectedValue={this.state.friend}
-          onValueChange={(itemValue, itemIndex) => this.setState({friend: itemValue})}>
-          <Picker.Item label='Select a Friend' value='-1' />
-          {friends}
-        </Picker>
         <TextInput
-           placeholder="Enter debt memo here"
-           style={dialog.dialog_margins}
-           onChangeText={(text) => this.setState({text})}
-           value={this.state.text}/>
-         <TouchableHighlight
-           onPress={() => this.processAmountOwed()}
-           style={[dialog.owe_button, {backgroundColor: '#FFF'}]}>
-           <Text style={dialog.owe_text}>THIS IS OWED TO ME</Text>
-         </TouchableHighlight>
-
+          placeholder="Enter debt memo here"
+          style={[dialog.dialog_margins, {marginTop: 10}]}
+          onChangeText = {(memo) => this.setState({memo: memo})}
+          value = {this.state.memo}/>
+         <Text style={dialog.select_friend} onPress={this.showFriendSelection}>{this.state.selectedFriend}</Text>
+         <ActionSheet
+           ref={o => this.friendActionSheet = o}
+           title="Select a friend"
+           options={OPTIONS}
+           cancelButtonIndex={CANCEL_INDEX}
+           onPress={this.handleFriendSelected}
+         />
+         <RadioForm
+           ref={(oweRadioForm) => { this.oweRadioForm = oweRadioForm;}}
+           styles = {[dialog.dialog_margins, {marginTop: 10}]}
+           radio_props={[
+             {label: this.state.radioLabels.owe, value: 0 },
+             {label: this.state.radioLabels.owed, value: 1 }
+           ]}
+           initial={0}
+           buttonColor={'#03A9F4'}
+           formHorizontal={false}
+           labelHorizontal={true}
+           animation={true}
+           onPress={(owed) => {this.setState({owed:owed})}}
+         />
+        <TouchableHighlight
+          onPress={() => this.validateAndCreateDebt()}
+          style={[dialog.dialog_button, {backgroundColor: '#FFF'}]}>
+          <Text style={dialog.dialog_text}>Confirm Debt</Text>
+        </TouchableHighlight>
       </ScrollView>
     );
   }
 }
-
-const dialog = StyleSheet.create({
-  icon: {
-    width: 26,
-    height: 26,
-  },
-  or_text: {
-    alignSelf: 'center',
-    fontSize: 16,
-    fontWeight: 'bold',
-    color: '#03A9F4',
-    padding: 10
-  },
-  dialog_margins: {
-    marginLeft: 20,
-    marginRight: 20,
-    padding: 2
-  },
-  payment_row: {
-    flexDirection:'row',
-    padding: 2,
-    marginLeft: 20,
-    marginRight: 20
-  },
-  payment_curr: {
-    padding: 2
-  },
-  payment_amount: {
-     width: "30%",
-     padding: 2
-  },
-  container: {
-    flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center'
-  },
-  owe_button: {
-    alignSelf: 'stretch',
-    marginTop: 5,
-    marginBottom: 5,
-    marginLeft: 20,
-    marginRight: 20,
-    padding: 10,
-    borderRadius: 5,
-    height: 50,
-    backgroundColor: '#FFF',
-    justifyContent: 'center',
-    borderColor: 'grey',
-    borderWidth: 1
-  },
-  owe_text: {
-    alignSelf: 'center',
-    fontSize: 16,
-    fontWeight: 'bold',
-    color: '#03A9F4'
-  },
-  sectionTitle: {
-      color: 'grey',
-      alignSelf: 'baseline',
-      fontSize: 14,
-      padding: 10,
-      marginLeft: 10
-  }
-});
