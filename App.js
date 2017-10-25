@@ -10,7 +10,7 @@ const App = TabNavigator({
   Friends: { screen: Friends },
   Pending: { screen: Pending }
 }, {
-    tabBarPosition: 'top',
+    tabBarPosition: 'bottom',
     tabBarOptions: {
         activeTintColor: '#000000',
         inactiveTintColor: '#FFFFFF',
@@ -22,7 +22,7 @@ const App = TabNavigator({
             height: 60,
             marginTop: 24,
             paddingBottom: 5,
-            backgroundColor: '#f76e0c'
+            backgroundColor: '#f76e0c'  
         }
     }
 });
