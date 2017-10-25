@@ -12,7 +12,7 @@ class BalanceItem extends React.PureComponent {
     this.props.onPressItem(this.props.id);
   };
 
-  getStateStyle(user) {
+  getStateStyle() {
     return [balance.end_block, balance.state_text ,{color: this.props.state == "cr" ? "red" : "green"}]
   }
 
