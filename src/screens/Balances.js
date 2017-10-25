@@ -62,8 +62,14 @@ export default class Balances extends Component {
           <AddDebt />
         </PopupDialog>
         <ActionButton buttonColor="rgba(231,76,60,1)">
+          <ActionButton.Item buttonColor='#26c6da' title="My profile" onPress={() => console.log("My Profile")}>
+            <Icon name="md-stats" style={styles.actionButtonIcon} />
+          </ActionButton.Item>
+          <ActionButton.Item buttonColor='#00AA8D' title="Add new friend" onPress={() => console.log("Add friend")}>
+            <Icon name="md-people" style={styles.actionButtonIcon} />
+          </ActionButton.Item>
           <ActionButton.Item buttonColor='#9b59b6' title="Add new debt" onPress={() => this.showCreateDebtDialog()}>
-            <Icon name="md-create" style={styles.actionButtonIcon} />
+            <Icon name="md-cash" style={styles.actionButtonIcon} />
           </ActionButton.Item>
         </ActionButton>
       </View>
