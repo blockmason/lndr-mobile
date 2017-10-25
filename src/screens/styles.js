@@ -10,8 +10,9 @@ const styles = StyleSheet.create({
   },
   container: {
      flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center'
+     justifyContent: 'center',
+     alignItems: 'center',
+     backgroundColor: '#BDBDBD'
   },
   button: {
     alignSelf: 'stretch',
@@ -26,7 +27,12 @@ const styles = StyleSheet.create({
       color: 'white',
       alignSelf: 'center',
       fontSize: 16
-  }
+  },
+  actionButtonIcon: {
+    fontSize: 20,
+    height: 22,
+    color: 'white',
+  },
 });
 
 export default styles;

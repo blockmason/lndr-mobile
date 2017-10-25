@@ -45,16 +45,8 @@ export default class AddDebt extends Component {
      this.showFriendSelection = this.showFriendSelection.bind(this)
   }
 
-  changeCreateDebtButton() {
-    //I owe tim 5 USD
-    //Tim owes me 5 USD
-
-  }
-
   validateAndCreateDebt() {
-    //Validate inputs and complete action
     console.log("Debt process.");
-
   }
 
   showFriendSelection() {
