@@ -19,10 +19,10 @@ const App = TabNavigator({
             fontWeight: '500'
         },
         style: {
-            height: 80,
+            height: 60,
+            marginTop: 24,
             paddingBottom: 5,
             backgroundColor: '#f76e0c'
-
         }
     }
 });
