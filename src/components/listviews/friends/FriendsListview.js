@@ -6,6 +6,7 @@ import {
 } from 'react-native';
 
 import friends from './friends_styles';
+import styles from '../../../screens/styles';
 
 class FriendsItem extends React.PureComponent {
   _onPress = () => {
@@ -13,7 +14,7 @@ class FriendsItem extends React.PureComponent {
   };
 
   getStateStyle() {
-    return [friends.end_block, friends.state_text ,{color: this.props.state == "cr" ? "red" : "green"}]
+    return [friends.end_block, friends.state_text, styles.thin_font ,{color: this.props.state == "cr" ? "red" : "green"}]
   }
 
   render() {
@@ -26,7 +27,7 @@ class FriendsItem extends React.PureComponent {
           <Text style={friends.category_text}>
             {this.props.name[0]}</Text>
           <View>
-            <Text style={friends.state_text}>
+            <Text style={[friends.state_text, styles.thin_font]}>
               {this.props.name}</Text>
             <Text style={this.getStateStyle()}>
               balance: {this.props.curr}{this.props.balance}</Text>

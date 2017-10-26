@@ -1,5 +1,5 @@
 import {
-  StyleSheet,
+  StyleSheet
 } from 'react-native';
 
 const balances = StyleSheet.create({
@@ -46,13 +46,11 @@ const balances = StyleSheet.create({
   state_text: {
     marginLeft: 5,
     fontSize: 26,
-    fontWeight: '100',
-    fontFamily: 'sans-serif-thin'
+    fontWeight: '100'
   },
   name_text: {
     marginLeft: 20,
     fontSize: 26,
-    fontFamily: 'sans-serif-thin'
   },
   curr_text: {
     fontWeight: 'bold',

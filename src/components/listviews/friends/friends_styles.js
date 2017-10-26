@@ -1,5 +1,5 @@
 import {
-  StyleSheet,
+  StyleSheet
 } from 'react-native';
 
 const friends = StyleSheet.create({
@@ -32,8 +32,6 @@ const friends = StyleSheet.create({
   state_text: {
     marginLeft: 5,
     fontSize: 22,
-    fontWeight: '100',
-    fontFamily: 'sans-serif-thin'
   },
   category_text: {
     marginLeft: 10,

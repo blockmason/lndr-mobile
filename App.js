@@ -1,5 +1,8 @@
 import React from 'react';
 import { TabNavigator } from 'react-navigation';
+import {
+    Platform
+} from 'react-native';
 
 import Balances from './src/screens/Balances';
 import Friends from './src/screens/Friends';
@@ -10,7 +13,7 @@ const App = TabNavigator({
   Friends: { screen: Friends },
   Pending: { screen: Pending }
 }, {
-    tabBarPosition: 'bottom',
+    tabBarPosition: 'top',
     tabBarOptions: {
         activeTintColor: '#000000',
         inactiveTintColor: '#FFFFFF',
@@ -20,9 +23,9 @@ const App = TabNavigator({
         },
         style: {
             height: 60,
-            marginTop: 24,
+            marginTop: Platform.OS === 'android' ? 24 : 0,
             paddingBottom: 5,
-            backgroundColor: '#f76e0c'  
+            backgroundColor: '#f76e0c'
         }
     }
 });
