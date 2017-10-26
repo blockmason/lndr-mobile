@@ -5,6 +5,7 @@ import {
   View
 } from 'react-native';
 
+import styles from '../../../screens/styles';
 import pending from './pending_styles';
 
 class PendingItem extends React.PureComponent {
@@ -21,7 +22,7 @@ class PendingItem extends React.PureComponent {
       <View
         style={pending.flatlist_row}
         onPress={this._onPress}>
-        <Text style={pending.status_text}>
+        <Text style={[pending.status_text, styles.thin_font]}>
           {this.props.status}</Text>
         <View style={pending.detail_row}>
            <View>
@@ -36,7 +37,7 @@ class PendingItem extends React.PureComponent {
             <View style={pending.curr_block}>
               <Text style={pending.curr_text}>
                 {this.props.curr} </Text>
-              <Text style={pending.amount_text}>
+              <Text style={[pending.amount_text, styles.thin_font]}>
                 {this.props.sym}{this.props.amount}</Text>
             </View>
            </View>

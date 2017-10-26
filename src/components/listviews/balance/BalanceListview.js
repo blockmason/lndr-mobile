@@ -6,6 +6,7 @@ import {
 } from 'react-native';
 
 import balance from './balance_styles';
+import styles from '../../../screens/styles';
 
 class BalanceItem extends React.PureComponent {
   _onPress = () => {
@@ -13,7 +14,7 @@ class BalanceItem extends React.PureComponent {
   };
 
   getStateStyle() {
-    return [balance.end_block, balance.state_text ,{color: this.props.state == "cr" ? "red" : "green"}]
+    return [balance.end_block, balance.state_text, styles.thin_font ,{color: this.props.state == "cr" ? "red" : "green"}]
   }
 
   getDateString() {
@@ -30,7 +31,7 @@ class BalanceItem extends React.PureComponent {
         style={balance.flatlist_row}
         onPress={this._onPress}>
         <View style={balance.detail_row}>
-          <Text style={[balance.name_text, balance.start_block]}>
+          <Text style={[balance.name_text, balance.start_block, styles.thin_font]}>
             {this.props.name}</Text>
           <Text style = {this.getStateStyle()}>
             {this.props.curr_sym}{this.props.amount}</Text>

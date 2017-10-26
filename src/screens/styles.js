@@ -1,6 +1,7 @@
 import React from 'react';
 import {
-    StyleSheet
+    StyleSheet,
+    Platform
 } from 'react-native';
 
 const styles = StyleSheet.create({
@@ -33,6 +34,10 @@ const styles = StyleSheet.create({
     height: 22,
     color: 'white',
   },
+  thin_font: {
+    fontWeight: '100',
+    fontFamily: Platform.OS === 'android' ? 'sans-serif-thin' : 'HelveticaNeue-Thin'
+  }
 });
 
 export default styles;

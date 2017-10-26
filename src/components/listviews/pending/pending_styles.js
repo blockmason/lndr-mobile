@@ -1,6 +1,8 @@
 import {
-  StyleSheet,
+  StyleSheet
 } from 'react-native';
+
+// import styles from '../../../screens/styles';
 
 const pending = StyleSheet.create({
   pending_layout: {
@@ -37,7 +39,6 @@ const pending = StyleSheet.create({
     marginLeft: 5,
     fontSize: 20,
     fontWeight: '100',
-    fontFamily: 'sans-serif-thin'
   },
   owe_text: {
     fontWeight: 'bold',
@@ -48,7 +49,6 @@ const pending = StyleSheet.create({
   },
   amount_text: {
     fontSize: 28,
-    fontFamily: 'sans-serif-thin'
   },
   curr_text: {
     fontWeight: 'bold',
