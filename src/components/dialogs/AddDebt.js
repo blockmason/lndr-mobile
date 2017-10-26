@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import {TextInputMask} from 'react-native-masked-text';
 import RadioForm, {RadioButton, RadioButtonInput, RadioButtonLabel} from 'react-native-simple-radio-button';
 import PopupDialog, { SlideAnimation, DialogTitle } from 'react-native-popup-dialog';
 import ActionSheet from 'react-native-actionsheet'
@@ -31,7 +32,7 @@ export default class AddDebt extends Component {
 
      this.state = {
        friends: FRIEND_MOCK_DATA,
-       selectedFriend: "Select a friend",
+       selectedFriend: "none selected",
        validFriend: false,
        amount: 0,
        currencyType: "USD",
@@ -75,7 +76,7 @@ export default class AddDebt extends Component {
   handleFriendSelected(index) {
 
     var validFriend = index > 0,
-        selectedFriend = validFriend ? OPTIONS[index] : "Select a friend";
+        selectedFriend = validFriend ? OPTIONS[index] : "none selected";
 
     this.setState({
       selectedFriend: selectedFriend,
@@ -93,31 +94,43 @@ export default class AddDebt extends Component {
     this.updateRadioLabels(amount);
   }
 
+  // onChangeEvent = {(value) => this.updateOwedAmount(value)}
+  // style={dialog.payment_amount}/>
+
   render() {
     return (
       <ScrollView contentContainerStyle={styles.contentContainer}>
+        <Text style={dialog.section_title}>1) Enter the debt amount:</Text>
         <View style={dialog.payment_row}>
            <Text style={dialog.payment_curr}>$</Text>
-           <TextInput
-            onChangeText = {(amount) => this.updateOwedAmount(amount)}
-            keyboardType={'numeric'}
-            style={dialog.payment_amount}>
-              </TextInput>
+           <TextInputMask
+              style={dialog.payment_amount}
+              onChangeText={(amount) => this.updateOwedAmount(amount)}
+              options = {{
+                unit: '',
+                delimiter: ',',
+                separator: '.'
+              }}
+              type={'money'}
+              value={this.state.amount} />
            <Text style={dialog.payment_curr}>USD</Text>
         </View>
+        <Text style={dialog.section_title}>2) Enter a concise memo:</Text>
         <TextInput
           placeholder="Enter debt memo here"
           style={[dialog.dialog_margins, {marginTop: 10}]}
           onChangeText = {(memo) => this.setState({memo: memo})}
           value = {this.state.memo}/>
+         <Text style={dialog.section_title}>3) Select a friend:</Text>
          <Text style={dialog.select_friend} onPress={this.showFriendSelection}>{this.state.selectedFriend}</Text>
          <ActionSheet
            ref={o => this.friendActionSheet = o}
-           title="Select a friend"
+           title="none selected"
            options={OPTIONS}
            cancelButtonIndex={CANCEL_INDEX}
            onPress={this.handleFriendSelected}
          />
+         <Text style={dialog.section_title}>4) Select the valid statement:</Text>
          <RadioForm
            ref={(oweRadioForm) => { this.oweRadioForm = oweRadioForm;}}
            styles = {[dialog.dialog_margins, {marginTop: 10}]}
