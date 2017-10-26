@@ -18,6 +18,7 @@ const dialog = StyleSheet.create({
   dialog_margins: {
     marginLeft: 20,
     marginRight: 20,
+    padding: 12,
     padding: 2
   },
   payment_row: {
@@ -32,7 +33,8 @@ const dialog = StyleSheet.create({
   },
   payment_amount: {
      width: "30%",
-     padding: 3
+     padding: 3,
+     borderRadius: 5
   },
   container: {
     flex: 1,
@@ -83,12 +85,11 @@ const dialog = StyleSheet.create({
     marginTop: 5,
     marginBottom: 5,
   },
-  sectionTitle: {
+  section_title: {
       color: 'grey',
       alignSelf: 'baseline',
-      fontSize: 14,
+      fontSize: 12,
       padding: 10,
-      marginLeft: 10
   }
 });
 
