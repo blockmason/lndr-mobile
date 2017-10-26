@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import {TextInputMask} from 'react-native-masked-text';
 import RadioForm, {RadioButton, RadioButtonInput, RadioButtonLabel} from 'react-native-simple-radio-button';
 import PopupDialog, { SlideAnimation, DialogTitle } from 'react-native-popup-dialog';
 import ActionSheet from 'react-native-actionsheet'
@@ -93,17 +94,25 @@ export default class AddDebt extends Component {
     this.updateRadioLabels(amount);
   }
 
+  // onChangeEvent = {(value) => this.updateOwedAmount(value)}
+  // style={dialog.payment_amount}/>
+
   render() {
     return (
       <ScrollView contentContainerStyle={styles.contentContainer}>
         <Text style={dialog.section_title}>1) Enter the debt amount:</Text>
         <View style={dialog.payment_row}>
            <Text style={dialog.payment_curr}>$</Text>
-           <TextInput
-              onChangeText = {(amount) => this.updateOwedAmount(amount)}
-              keyboardType={'numeric'}
-              style={dialog.payment_amount}>
-            </TextInput>
+           <TextInputMask
+              style={dialog.payment_amount}
+              onChangeText={(amount) => this.updateOwedAmount(amount)}
+              options = {{
+                unit: '',
+                delimiter: ',',
+                separator: '.'
+              }}
+              type={'money'}
+              value={this.state.amount} />
            <Text style={dialog.payment_curr}>USD</Text>
         </View>
         <Text style={dialog.section_title}>2) Enter a concise memo:</Text>
