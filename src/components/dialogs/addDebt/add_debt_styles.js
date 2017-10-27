@@ -15,6 +15,11 @@ const dialog = StyleSheet.create({
     color: '#03A9F4',
     padding: 10
   },
+  left_view: {
+     flex: 1,
+     justifyContent: 'flex-start',
+     alignItems: 'baseline'
+  },
   dialog_margins: {
     marginLeft: 20,
     marginRight: 20,

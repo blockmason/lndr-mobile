@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import {
   FlatList,
+  TouchableOpacity,
   Text,
   View
 } from 'react-native';
@@ -27,30 +28,33 @@ class BalanceItem extends React.PureComponent {
 
   render() {
     return (
-      <View
-        style={balance.flatlist_row}
+      <TouchableOpacity
+        style={balance.touch_row}
         onPress={this._onPress}>
-        <View style={balance.detail_row}>
-          <Text style={[balance.name_text, balance.start_block, styles.thin_font]}>
-            {this.props.name}</Text>
-          <Text style = {this.getStateStyle()}>
-            {this.props.curr_sym}{this.props.amount}</Text>
-        </View>
-        <View style={balance.detail_row}>
-          <View style={balance.start_block}>
-            <Text style={balance.title_text}>Last</Text>
-            <Text>{this.getDateString()}</Text>
+        <View
+          style={balance.flatlist_row}>
+          <View style={balance.detail_row}>
+            <Text style={[balance.name_text, balance.start_block, styles.thin_font]}>
+              {this.props.name}</Text>
+            <Text style = {this.getStateStyle()}>
+              {this.props.curr_sym}{this.props.amount}</Text>
           </View>
-          <View style={balance.curr_block}>
-            <Text style={balance.curr_text}>
-              {this.props.currency}</Text>
+          <View style={balance.detail_row}>
+            <View style={balance.start_block}>
+              <Text style={balance.title_text}>Last</Text>
+              <Text>{this.getDateString()}</Text>
+            </View>
+            <View style={balance.curr_block}>
+              <Text style={balance.curr_text}>
+                {this.props.currency}</Text>
+            </View>
+            <View style={balance.end_block}>
+              <Text style={balance.title_text}>Debts</Text>
+              <Text>{this.props.total_debts}</Text>
+            </View>
+           </View>
           </View>
-          <View style={balance.end_block}>
-            <Text style={balance.title_text}>Debts</Text>
-            <Text>{this.props.total_debts}</Text>
-          </View>
-         </View>
-        </View>
+        </TouchableOpacity>
     )
   }
 }
@@ -58,14 +62,20 @@ class BalanceItem extends React.PureComponent {
 export default class BalanceList extends React.PureComponent {
   state = {selected: (new Map(): Map<string, boolean>)};
 
+  constructor(props) {
+    super(props)
+    this.state.displayDebt = props.displayDebt;
+  }
+
   _keyExtractor = (item, index) => item.id;
 
   _onPressItem = (id: string) => {
-    // updater functions are preferred for transactional updates
+
+    this.state.displayDebt(id)
+
     this.setState((state) => {
-      // copy the map rather than modifying state.
       const selected = new Map(state.selected);
-      selected.set(id, !selected.get(id)); // toggle
+      selected.set(id, !selected.get(id));
       return {selected};
     });
   };

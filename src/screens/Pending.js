@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import ActionButton from 'react-native-action-button';
 import {
   StyleSheet,
   TouchableHighlight,
@@ -21,12 +22,48 @@ export default class Pending extends Component {
   static navigationOptions = {
     tabBarLabel: 'Pending'
   }
+
+  constructor(props) {
+    super(props)
+
+    this.state = {
+      total: "0",
+      totalColor: "green"
+    }
+  }
+
+  //tie with actual data
+  displayPendingItemCount(numOfItems) {
+    // const numOfItems = FRIEND_PENDING_MOCK_DATA.length
+    // var total = numOfItems.length;
+    var totalColor = "";
+    var total = numOfItems;
+
+    if (numOfItems < 40) {
+      totalColor = "green";
+    } else if (numOfItems < 80) {
+      totalColor = "orange";
+    } else if (numOfItems < 99) {
+      totalColor = "red";
+    } else {
+      totalColor = "red";
+      total = "99+"
+    }
+
+    return (
+      <ActionButton
+        buttonText={total.toString()}
+        buttonColor={totalColor}/>
+    )
+  }
+
   render() {
     const { navigate } = this.props.navigation;
     return (
       <View style={styles.container}>
         <PendingList
           data={FRIEND_PENDING_MOCK_DATA}/>
+        {this.displayPendingItemCount(100)}
       </View>
     );
   }

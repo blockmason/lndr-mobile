@@ -26,7 +26,7 @@
     "react-native-actionsheet": "^2.3.0",
     "react-native-masked-text": "^1.6.2",
     "react-native-popup-dialog": "^0.9.37",
-    "react-native-simple-radio-button": "^2.7.0",
-    "react-navigation": "^1.0.0-beta.15"
+    "react-navigation": "^1.0.0-beta.15",
+    "underscore": "^1.8.3"
   }
 }
