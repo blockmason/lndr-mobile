@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import {
   FlatList,
+  TouchableHighlight,
   Text,
   View
 } from 'react-native';
@@ -9,15 +10,69 @@ import styles from '../../../screens/styles';
 import pending from './pending_styles';
 
 class PendingItem extends React.PureComponent {
+
+  constructor(props) {
+    super(props)
+
+    this.state = {
+      type: props.type
+    }
+
+    this.renderWaitingForConfirmation = this.renderWaitingForConfirmation.bind(this);
+    this.renderWaitingForFriend = this.renderWaitingForFriend.bind(this);
+    this.renderItemFromType = this.renderItemFromType.bind(this);
+    this.onConfirmSelected = this.onConfirmSelected.bind(this);
+    this.onRejectSelected = this.onRejectSelected.bind(this);
+  }
+
   _onPress = () => {
     this.props.onPressItem(this.props.id);
   };
 
   getUserStyle(user) {
-    return [pending.owe_text, {color: user == "You" ? "black" : "#03A9F4"}]
+    return [pending.owe_text, {fontSize: 20, color: user == "You" ? "black" : "#03A9F4"}]
   }
 
-  render() {
+  onConfirmSelected() {
+    console.log("confirmed");
+    console.log(this.props.id);
+    console.log(this.props.type);
+  }
+
+  onRejectSelected() {
+    console.log("rejected");
+    console.log(this.props.id);
+    console.log(this.props.type);
+  }
+
+  getFriendRequestType(confirm) {
+    if (confirm) {
+      return "You have received a friend request from:"
+    }
+
+    return "You have send a friend request to:"
+  }
+
+  renderConfirmDebtButtons(confirm) {
+    if (confirm) {
+      return (
+        <View style={pending.end_block}>
+          <TouchableHighlight
+            onPress={() => this.onRejectSelected()}
+            style={pending.dialog_button}>
+            <Text style={[pending.dialog_text, {color:"red"}]}>Reject</Text>
+          </TouchableHighlight>
+          <TouchableHighlight
+            onPress={() => this.onConfirmSelected()}
+            style={pending.dialog_button}>
+            <Text style={[pending.dialog_text, {color:"green"}]}>Confirm</Text>
+          </TouchableHighlight>
+        </View>
+      )
+    }
+  }
+
+  renderWaitingForConfirmation(confirm = false) {
     return (
       <View
         style={pending.flatlist_row}
@@ -25,24 +80,72 @@ class PendingItem extends React.PureComponent {
         <Text style={[pending.status_text, styles.thin_font]}>
           {this.props.status}</Text>
         <View style={pending.detail_row}>
-           <View>
+           <View style={pending.start_block}>
             <Text style={this.getUserStyle(this.props.owed)}>
-              {this.props.owed}</Text>
-            <Text>{this.props.verb}</Text>
-            <Text style={this.getUserStyle(this.props.owee)}>
-              {this.props.owee}</Text>
+              {this.props.data.owed}</Text>
+            <Text>{this.props.data.verb}</Text>
+            <Text style={this.getUserStyle(this.props.data.owee)}>
+              {this.props.data.owee}</Text>
            </View>
-           <View style={{marginLeft: 50}}>
-            <Text>{this.props.memo}</Text>
-            <View style={pending.curr_block}>
-              <Text style={pending.curr_text}>
-                {this.props.curr} </Text>
-              <Text style={[pending.amount_text, styles.thin_font]}>
-                {this.props.sym}{this.props.amount}</Text>
-            </View>
+           <View style={pending.memo_block}>
+            <Text style={pending.name_title}>memo:</Text>
+            <Text style={pending.memo_text}>{this.props.data.memo}</Text>
            </View>
+           <View style={pending.end_block}>
+            <Text style={[pending.amount_text, styles.thin_font]}>
+              {this.props.data.sym}{this.props.data.amount}</Text>
+            <Text style={pending.curr_text}>
+              {this.props.data.curr} </Text>
+          </View>
         </View>
+        {this.renderConfirmDebtButtons(confirm)}
       </View>
+    )
+  }
+
+  renderWaitingForFriend(confirm = false) {
+    return (
+      <View
+        style={pending.flatlist_row}
+        onPress={this._onPress}>
+        <Text style={[pending.status_text, styles.thin_font]}>
+          {this.props.status}</Text>
+        <Text style={pending.name_title}>{this.getFriendRequestType(confirm)}</Text>
+        <Text style={pending.name_text}>{this.props.data.username}</Text>
+        <Text style={pending.name_title}>A.K.A</Text>
+        <Text style={pending.name_text}>{this.props.data.nickname}</Text>
+        {this.renderConfirmDebtButtons(confirm)}
+      </View>
+    )
+  }
+
+  //Normally dislike switch with a passion, but it is useful for UI render
+  renderItemFromType() {
+    var type = this.state.type
+
+    if (type == "waiting_debt") {
+      return this.renderWaitingForConfirmation()
+    }
+
+    if (type == "confirm_debt") {
+      return this.renderWaitingForConfirmation(true)
+    }
+
+    if (type == "waiting_friend") {
+      return this.renderWaitingForFriend()
+    }
+
+    if (type == "confirm_friend") {
+      return this.renderWaitingForFriend(true)
+    }
+  }
+
+  render() {
+    return (
+      <View>
+        {this.renderItemFromType()}
+      </View>
+
     )
   }
 }
@@ -68,13 +171,8 @@ export default class PendingList extends React.PureComponent {
       onPressItem={this._onPressItem}
       selected={!!this.state.selected.get(item.id)}
       status={item.status}
-      memo={item.memo}
-      owed={item.owed}
-      owee={item.owee}
-      amount={item.amount}
-      curr={item.curr}
-      sym={item.curr_sym}
-      verb={item.verb}
+      type={item.type}
+      data={item}
     />
   );
 

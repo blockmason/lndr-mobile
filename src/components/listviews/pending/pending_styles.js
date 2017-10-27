@@ -19,26 +19,52 @@ const pending = StyleSheet.create({
     borderRadius: 5,
     backgroundColor: "white"
   },
+  name_title: {
+    alignSelf: 'center',
+    justifyContent: "center",
+    fontSize: 14,
+    fontWeight: 'bold',
+    marginTop: 2,
+    marginBottom: 2,
+    padding: 3
+  },
   detail_row: {
     flexDirection:'row',
+    justifyContent: 'center',
+    alignItems: 'center',
     padding: 2,
-    marginLeft: 5,
-    marginRight: 5,
-    marginTop: 5
+    margin: 5
+  },
+  start_block: {
+    flex: 1,
+    justifyContent: 'flex-start',
+    alignItems: 'center'
+  },
+  end_block: {
+    flex: 1,
+    flexDirection:'row',
+    justifyContent: 'center',
+    alignItems: 'center'
   },
   owe_block: {
     padding: 2,
   },
-  curr_block: {
-    flexDirection:'row',
+  memo_block: {
+    flex: 1,
     padding: 2,
-    marginTop: 3,
-    alignItems: 'baseline'
+    alignItems: 'center',
+    justifyContent: 'center',
   },
   status_text: {
     marginLeft: 5,
+    fontSize: 22,
+    fontWeight: '100',
+  },
+  name_text: {
     fontSize: 20,
     fontWeight: '100',
+    alignSelf: 'center',
+    padding: 2
   },
   owe_text: {
     fontWeight: 'bold',
@@ -46,12 +72,34 @@ const pending = StyleSheet.create({
   },
   memo_text: {
     fontWeight: 'bold',
+    textAlign: 'center'
   },
   amount_text: {
-    fontSize: 28,
+    fontSize: 48,
+    marginLeft: 5,
+    marginRight: 5
   },
   curr_text: {
     fontWeight: 'bold',
+    fontSize: 14,
+  },
+  dialog_button: {
+    alignSelf: 'stretch',
+    marginTop: 5,
+    marginBottom: 5,
+    marginLeft: 20,
+    marginRight: 10,
+    padding: 10,
+    borderRadius: 5,
+    height: 30,
+    width: '35%',
+    backgroundColor: '#FFF',
+    justifyContent: 'center',
+    borderColor: 'grey',
+    borderWidth: 1
+  },
+  dialog_text: {
+    alignSelf: 'center',
     fontSize: 14,
   },
 });

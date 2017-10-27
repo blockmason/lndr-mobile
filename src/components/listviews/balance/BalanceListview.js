@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import {
   FlatList,
   TouchableOpacity,
+  TouchableHighlight,
   Text,
   View
 } from 'react-native';
@@ -28,7 +29,7 @@ class BalanceItem extends React.PureComponent {
 
   render() {
     return (
-      <TouchableOpacity
+      <TouchableHighlight
         style={balance.touch_row}
         onPress={this._onPress}>
         <View
@@ -54,7 +55,7 @@ class BalanceItem extends React.PureComponent {
             </View>
            </View>
           </View>
-        </TouchableOpacity>
+        </TouchableHighlight>
     )
   }
 }
