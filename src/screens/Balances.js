@@ -12,6 +12,7 @@ import {
 
 import AddDebt from '../components/dialogs/addDebt/AddDebt';
 import DebtHistory from '../components/dialogs/debtHistory/DebtHistory';
+import AddFriend from '../components/dialogs/addFriend/AddFriend';
 import BalanceList from '../components/listviews/balance/BalanceListview';
 
 import styles from './styles';
@@ -60,6 +61,7 @@ export default class Balances extends Component {
 
     this.showCreateDebtDialog = this.showCreateDebtDialog.bind(this);
     this.showDebtHistoryDialog = this.showDebtHistoryDialog.bind(this);
+    this.showAddFriendDialog = this.showAddFriendDialog.bind(this);
   }
 
   showDebtHistoryDialog() {
@@ -68,6 +70,10 @@ export default class Balances extends Component {
 
   showCreateDebtDialog() {
     this.createDebtDialog.show();
+  }
+
+  showAddFriendDialog() {
+    this.createAddFriendDialog.show();
   }
 
   displayDebtHistory = (id) => {
@@ -79,6 +85,43 @@ export default class Balances extends Component {
     this.showDebtHistoryDialog()
   }
 
+  renderAddDebt() {
+    return (
+      <PopupDialog
+        height={null}
+        dialogTitle={<DialogTitle title="Create Debt" />}
+        ref={(createDebtDialog) => { this.createDebtDialog = createDebtDialog;}}
+        dialogAnimation = { new SlideAnimation({ slideFrom: 'bottom' })}>
+        <AddDebt />
+      </PopupDialog>
+    )
+  }
+
+  renderDebtHistory() {
+    return (
+      <PopupDialog
+        height={0.7}
+        dialogTitle={<DialogTitle title="Debt History" />}
+        ref={(createHistoryDialog) => { this.createHistoryDialog = createHistoryDialog;}}
+        dialogAnimation = { new SlideAnimation({ slideFrom: 'bottom' })}>
+        <DebtHistory
+          ref={component => this.debtHistory = component}/>
+      </PopupDialog>
+    )
+  }
+
+  renderAddFriend() {
+    return (
+      <PopupDialog
+        height={null}
+        dialogTitle={<DialogTitle title="Add a new friend" />}
+        ref={(createAddFriendDialog) => { this.createAddFriendDialog = createAddFriendDialog;}}
+        dialogAnimation = { new SlideAnimation({ slideFrom: 'bottom' })}>
+        <AddFriend />
+      </PopupDialog>
+    )
+  }
+
   render() {
     const { navigate } = this.props.navigation;
     return (
@@ -86,26 +129,14 @@ export default class Balances extends Component {
         <BalanceList
           displayDebt={this.displayDebtHistory}
           data={BALANCE_MOCK_DATA}/>
-        <PopupDialog
-          height={null}
-          dialogTitle={<DialogTitle title="Create Debt" />}
-          ref={(createDebtDialog) => { this.createDebtDialog = createDebtDialog;}}
-          dialogAnimation = { new SlideAnimation({ slideFrom: 'bottom' })}>
-          <AddDebt />
-        </PopupDialog>
-        <PopupDialog
-          height={0.7}
-          dialogTitle={<DialogTitle title="Debt History" />}
-          ref={(createHistoryDialog) => { this.createHistoryDialog = createHistoryDialog;}}
-          dialogAnimation = { new SlideAnimation({ slideFrom: 'bottom' })}>
-          <DebtHistory
-            ref={component => this.debtHistory = component}/>
-        </PopupDialog>
+        {this.renderAddDebt()}
+        {this.renderDebtHistory()}
+        {this.renderAddFriend()}
         <ActionButton buttonColor="rgba(231,76,60,1)">
           <ActionButton.Item buttonColor='#26c6da' title="My profile" onPress={() => console.log("My Profile")}>
             <Icon name="md-stats" style={styles.actionButtonIcon} />
           </ActionButton.Item>
-          <ActionButton.Item buttonColor='#00AA8D' title="Add new friend" onPress={() => console.log("Add friend")}>
+          <ActionButton.Item buttonColor='#00AA8D' title="Add new friend" onPress={() => this.showAddFriendDialog()}>
             <Icon name="md-people" style={styles.actionButtonIcon} />
           </ActionButton.Item>
           <ActionButton.Item buttonColor='#9b59b6' title="Add new debt" onPress={() => this.showCreateDebtDialog()}>
