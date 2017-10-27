@@ -13,8 +13,7 @@ import {
   Image
 } from 'react-native';
 
-import styles from '../../screens/styles';
-import dialog from './dialog_styles';
+import dialog from './add_debt_styles';
 
 const CANCEL_INDEX = 0
 const FRIEND_MOCK_DATA = [{name: "tim"}, {name: "matt"}];
@@ -78,6 +77,11 @@ export default class AddDebt extends Component {
     var validFriend = index > 0,
         selectedFriend = validFriend ? OPTIONS[index] : "none selected";
 
+    var radio_props = [
+      {label: this.state.radioLabels.owe, value: 0 },
+      {label: this.state.radioLabels.owed, value: 1 }
+    ]
+
     this.setState({
       selectedFriend: selectedFriend,
       validFriend: validFriend
@@ -94,12 +98,9 @@ export default class AddDebt extends Component {
     this.updateRadioLabels(amount);
   }
 
-  // onChangeEvent = {(value) => this.updateOwedAmount(value)}
-  // style={dialog.payment_amount}/>
-
   render() {
     return (
-      <ScrollView contentContainerStyle={styles.contentContainer}>
+      <ScrollView>
         <Text style={dialog.section_title}>1) Enter the debt amount:</Text>
         <View style={dialog.payment_row}>
            <Text style={dialog.payment_curr}>$</Text>
@@ -133,7 +134,7 @@ export default class AddDebt extends Component {
          <Text style={dialog.section_title}>4) Select the valid statement:</Text>
          <RadioForm
            ref={(oweRadioForm) => { this.oweRadioForm = oweRadioForm;}}
-           styles = {[dialog.dialog_margins, {marginTop: 10}]}
+           styles = {[dialog.dialog_margins, dialog.left_view, {marginTop: 10}]}
            radio_props={[
              {label: this.state.radioLabels.owe, value: 0 },
              {label: this.state.radioLabels.owed, value: 1 }
