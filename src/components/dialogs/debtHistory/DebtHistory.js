@@ -1,7 +1,6 @@
 import React, { Component } from 'react';
 import {TextInputMask} from 'react-native-masked-text';
 import {sortBy} from 'underscore';
-import RadioForm, {RadioButton, RadioButtonInput, RadioButtonLabel} from 'react-native-simple-radio-button';
 import PopupDialog, { SlideAnimation, DialogTitle } from 'react-native-popup-dialog';
 import ActionSheet from 'react-native-actionsheet'
 import {
