@@ -22,9 +22,9 @@ const App = TabNavigator({
             fontWeight: '500'
         },
         style: {
-            height: 60,
+            height: Platform.OS === 'android' ? 60 : 80,
             marginTop: Platform.OS === 'android' ? 24 : 0,
-            paddingBottom: 5,
+            paddingBottom: 10,
             backgroundColor: '#f76e0c'
         }
     }

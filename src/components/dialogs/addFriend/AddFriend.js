@@ -12,8 +12,6 @@ import {
   Image
 } from 'react-native';
 
-import RadioForm, {RadioButton, RadioButtonInput, RadioButtonLabel} from '../../../lib/SimpleRadioButton';
-
 import add_friend from './add_friend_styles';
 
 export default class AddFriend extends Component {

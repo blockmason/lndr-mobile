@@ -6,10 +6,12 @@ import {
   FlatList,
   Text,
   View,
-  Image
+  Image,
+  Icon
 } from 'react-native';
 
 import PendingList from '../components/listviews/pending/PendingListview';
+import PendingTitleCounter from '../components/navigation/pendingTitle/PendingTitleCounter';
 import styles from './styles';
 
 //EXPORT MOCK AND PROCESSING
@@ -19,9 +21,17 @@ const FRIEND_PENDING_MOCK_DATA = [
   {id: 3, status: "Waiting for Friend Confirmation", type: "waiting_friend", username: "Tim", nickname: "BlockmasonTim"},
   {id: 4, status: "Friend Request Received", type: "confirm_friend", username: "Jared", nickname: "BlockmasonJared"}];
 
+//This will almost be moved to some sort of state management class, using null as ref pointer could be problematic
+const PendingComponantState = {
+  titleCounter: null
+};
+
 export default class Pending extends Component {
+
   static navigationOptions = {
-    tabBarLabel: 'Pending'
+    tabBarLabel: () =>
+    <PendingTitleCounter
+      ref={(counter) => PendingComponantState.titleCounter = counter}/>
   }
 
   constructor(props) {
@@ -31,33 +41,16 @@ export default class Pending extends Component {
       total: "0",
       totalColor: "green"
     }
+
+    this.updatePendingCounter = this.updatePendingCounter.bind(this);
   }
 
-  //tie with actual data
-  displayPendingItemCount(numOfItems) {
-    // const numOfItems = FRIEND_PENDING_MOCK_DATA.length
-    // var total = numOfItems.length;
-    var totalColor = "";
-    var total = numOfItems;
+  updatePendingCounter(amount) {
+    const counter = PendingComponantState.titleCounter;
 
-    if (numOfItems < 40) {
-      totalColor = "green";
-    } else if (numOfItems < 80) {
-      totalColor = "orange";
-    } else if (numOfItems < 99) {
-      totalColor = "red";
-    } else {
-      totalColor = "red";
-      total = "99+"
+    if (counter != null) {
+      counter.updateTotalCount(amount)
     }
-
-    return (
-      <ActionButton
-        offsetY={5}
-        offsetX={5}
-        buttonText={total.toString()}
-        buttonColor={totalColor}/>
-    )
   }
 
   render() {
@@ -66,7 +59,8 @@ export default class Pending extends Component {
       <View style={styles.container}>
         <PendingList
           data={FRIEND_PENDING_MOCK_DATA}/>
-        {this.displayPendingItemCount(4)}
+        <ActionButton
+          onPress={() => { this.updatePendingCounter(1)}}/>
       </View>
     );
   }

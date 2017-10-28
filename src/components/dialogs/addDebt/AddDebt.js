@@ -12,7 +12,7 @@ import {
   Image
 } from 'react-native';
 
-import RadioForm, {RadioButton, RadioButtonInput, RadioButtonLabel} from '../../../lib/SimpleRadioButton';
+import RadioForm, {RadioButton, RadioButtonInput, RadioButtonLabel} from '../../../lib/radiobutton/SimpleRadioButton';
 
 import dialog from './add_debt_styles';
 
