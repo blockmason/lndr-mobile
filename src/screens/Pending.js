@@ -22,8 +22,8 @@ const FRIEND_PENDING_MOCK_DATA = [
   {id: 4, status: "Friend Request Received", type: "confirm_friend", username: "Jared", nickname: "BlockmasonJared"}];
 
 //This will almost be moved to some sort of state management class, using null as ref pointer could be problematic
-const PendingComponantState = {
-  titleCounter: null
+const PendingComponentState = {
+  titleCounter: null,
 };
 
 export default class Pending extends Component {
@@ -31,7 +31,7 @@ export default class Pending extends Component {
   static navigationOptions = {
     tabBarLabel: () =>
     <PendingTitleCounter
-      ref={(counter) => PendingComponantState.titleCounter = counter}/>
+      ref={(counter) => PendingComponentState.titleCounter = counter}/>
   }
 
   constructor(props) {
@@ -46,7 +46,7 @@ export default class Pending extends Component {
   }
 
   updatePendingCounter(amount) {
-    const counter = PendingComponantState.titleCounter;
+    const counter = PendingComponentState.titleCounter;
 
     if (counter != null) {
       counter.updateTotalCount(amount)
@@ -54,7 +54,6 @@ export default class Pending extends Component {
   }
 
   render() {
-    const { navigate } = this.props.navigation;
     return (
       <View style={styles.container}>
         <PendingList
