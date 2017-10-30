@@ -35,18 +35,11 @@ export default class PendingTitleCounter extends Component {
     })
   }
 
-  pendingTitle() {
-    if (Platform.OS === 'android') {
-      return "PENDING"
-    }
-
-    return "Pending"
-  }
-
   render() {
     return (
-      <View style={counterStyles.tab_row}>
-        <Text style={{fontWeight: 'bold'}}>{this.pendingTitle()}</Text>
+      <View style={counterStyles.tab_row}
+        onClick={() => {console.log("clicks");}}>
+        <Text style={{fontWeight: 'bold', color: this.state.focusedTextColor}}>PENDING</Text>
         <View style={counterStyles.counter_icon}>
           <Text
             ref={(counter) => {this.counterText = counter}}

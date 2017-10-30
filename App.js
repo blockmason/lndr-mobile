@@ -1,5 +1,5 @@
 import React from 'react';
-import { TabNavigator } from 'react-navigation';
+import { TabNavigator, TabBarTop} from 'react-navigation';
 import {
     Platform
 } from 'react-native';
@@ -13,18 +13,19 @@ const App = TabNavigator({
   Friends: { screen: Friends },
   Pending: { screen: Pending }
 }, {
+  	tabBarComponent: TabBarTop,
     tabBarPosition: 'top',
     tabBarOptions: {
-        activeTintColor: '#000000',
+        activeTintColor: '#FFFFFF',
         inactiveTintColor: '#FFFFFF',
         labelStyle: {
             fontSize: 14,
             fontWeight: '500'
         },
         style: {
-            height: Platform.OS === 'android' ? 60 : 80,
-            marginTop: Platform.OS === 'android' ? 24 : 0,
-            paddingBottom: 10,
+            paddingTop: 25,
+            height: 80,
+
             backgroundColor: '#f76e0c'
         }
     }

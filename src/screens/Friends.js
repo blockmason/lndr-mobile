@@ -25,7 +25,7 @@ export default class Friends extends Component {
     tabBarLabel: 'Friends'
   }
   render() {
-    const { navigate } = this.props.navigation;
+
     return (
       <View style={styles.container}>
         <FriendsList
