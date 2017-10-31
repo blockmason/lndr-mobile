@@ -12,6 +12,7 @@ import {
   Image
 } from 'react-native';
 
+import { executeTransaction } from '../../../utils/Storage';
 import add_friend from './add_friend_styles';
 
 export default class AddFriend extends Component {
@@ -29,8 +30,22 @@ export default class AddFriend extends Component {
   }
 
   submitFriendRequest() {
-    console.log(this.state.username);
-    console.log(this.state.nickname);
+
+    const options = {
+      table: 'friends',
+      action: 'insert',
+      data: {
+        username: this.state.username,
+        nickname: this.state.nickname,
+        currency: "USD"
+      }
+    }
+
+    executeTransaction(options, (result) => {
+      console.log(result);
+    });
+
+    this.props.dismiss();
   }
 
   searchForFriend(username) {
