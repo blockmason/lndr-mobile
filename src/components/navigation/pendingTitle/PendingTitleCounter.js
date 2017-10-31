@@ -15,7 +15,8 @@ export default class PendingTitleCounter extends Component {
     this.state = {
       count: 0,
       color: "green",
-      display: 0
+      display: 0,
+      focusedTextColor: 'white',
     }
   }
 
