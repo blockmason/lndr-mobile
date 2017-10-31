@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { Component } from 'react';
 import { TabNavigator, TabBarTop} from 'react-navigation';
 import {
     Platform
@@ -8,7 +8,9 @@ import Balances from './src/screens/Balances';
 import Friends from './src/screens/Friends';
 import Pending from './src/screens/Pending';
 
-const App = TabNavigator({
+import { createTables, dropAll } from './src/utils/Storage';
+
+const Navigator = TabNavigator({
   Balances: { screen: Balances },
   Friends: { screen: Friends },
   Pending: { screen: Pending }
@@ -25,10 +27,27 @@ const App = TabNavigator({
         style: {
             paddingTop: 25,
             height: 80,
-
             backgroundColor: '#f76e0c'
         }
     }
 });
 
-export default App;
+export default class App extends Component {
+
+  componentDidMount() {
+    // dropAll();
+    createTables();
+  }
+
+  fetch() {
+    console.log("this that");
+  }
+
+  render() {
+    return (
+      <Navigator
+        fetch={this.fetch}/>
+    );
+  }
+
+}

@@ -81,7 +81,7 @@ class PendingItem extends React.PureComponent {
           {this.props.status}</Text>
         <View style={pending.detail_row}>
            <View style={pending.start_block}>
-            <Text style={this.getUserStyle(this.props.owed)}>
+            <Text style={this.getUserStyle(this.props.data.owed)}>
               {this.props.data.owed}</Text>
             <Text>{this.props.data.verb}</Text>
             <Text style={this.getUserStyle(this.props.data.owee)}>
