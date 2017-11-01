@@ -6,7 +6,7 @@ import {
 
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
-import { updateFriends, updatePending } from './actions/friends';
+import { updateFriends, updatePending } from './actions/data';
 import { updateCount } from './actions/updateCount';
 
 import Balances from './screens/Balances';

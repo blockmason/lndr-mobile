@@ -51,7 +51,7 @@ export class Pending extends Component {
   }
 }
 
-export const mapStateToProps = ({ friends }) => ({ state: friends });
+export const mapStateToProps = ({ data }) => ({ state: data });
 
 export const mapDispatchToProps = dispatch => ({ actions: bindActionCreators({}, dispatch) });
 

@@ -9,7 +9,7 @@ import {
 
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
-import { updateFriends } from '../actions/friends';
+import { updateFriends } from '../actions/data';
 
 import FriendsList from '../components/listviews/friends/FriendsListview';
 
@@ -31,7 +31,7 @@ export class Friends extends Component {
   }
 }
 
-export const mapStateToProps = ({ friends }) => ({ state: friends });
+export const mapStateToProps = ({ data }) => ({ state: data });
 
 export const mapDispatchToProps = dispatch => ({ actions: bindActionCreators({ updateFriends }, dispatch) });
 

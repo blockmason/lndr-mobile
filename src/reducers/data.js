@@ -1,4 +1,4 @@
-import { UPDATE_FRIENDS, UPDATE_PENDING, UPDATE_DEBT } from '../types/friends';
+import { UPDATE_FRIENDS, UPDATE_PENDING, UPDATE_DEBT } from '../types/data';
 
 const initialState = {
   friends: [],

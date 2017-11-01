@@ -3,7 +3,7 @@ import createLogger from 'redux-logger';
 import thunk from 'redux-thunk';
 
 import updateCount from './reducers/updateCount';
-import friends from './reducers/friends';
+import data from './reducers/data';
 
 const identity = x => x;
 
@@ -12,7 +12,7 @@ const logger = createLogger();
 const createStoreWithMiddleware = applyMiddleware(thunk, __DEV__ ? logger : identity)(createStore);
 
 const reducer = combineReducers({
-  friends,
+  data,
   updateCount
 });
 
