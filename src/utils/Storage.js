@@ -46,7 +46,9 @@ function getTableAction(table, action) {
   }
 }
 
-function executeBatchTransaction(ref, cmds) {
+const complete = (value) => (console.log("complete"));
+
+function executeBatchTransaction(ref, cmds, callback = complete) {
 
   db.transaction(
     tx => {
@@ -59,6 +61,7 @@ function executeBatchTransaction(ref, cmds) {
    },
    (success) => {
      console.log(ref);
+     callback()
    }
   );
 }
@@ -67,8 +70,8 @@ export function dropAll() {
   executeBatchTransaction('dropAll', pluck(DB_SPEC, 'drop'))
 }
 
-export function createTables() {
-  executeBatchTransaction('createTables', pluck(DB_SPEC, 'create'))
+export function createTables(actionCompleted) {
+  executeBatchTransaction('createTables', pluck(DB_SPEC, 'create'), actionCompleted)
 }
 
 export function executeTransaction(options, success) {
@@ -98,7 +101,7 @@ export function insertRecord(options, success) {
   db.transaction(
     tx => {
       tx.executeSql(insert, options.data);
-      tx.executeSql('SELECT * FROM ' + table, [], (transaction, result) => success(result));
+      tx.executeSql('SELECT * FROM ' + table, [], (transaction, result) => success(result.rows._array));
     },
     (err) => {
       console.log(err);

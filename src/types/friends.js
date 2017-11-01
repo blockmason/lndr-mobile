@@ -1,0 +1,1 @@
+export const UPDATE_FRIENDS = 'UPDATE_FRIENDS';

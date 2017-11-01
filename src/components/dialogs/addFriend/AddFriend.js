@@ -12,10 +12,14 @@ import {
   Image
 } from 'react-native';
 
-import { executeTransaction } from '../../../utils/Storage';
+import { bindActionCreators } from 'redux';
+import { connect } from 'react-redux';
+import { updateFriends } from '../../../actions/friends';
+
+import { insertRecord, executeTransaction } from '../../../utils/Storage';
 import add_friend from './add_friend_styles';
 
-export default class AddFriend extends Component {
+export class AddFriend extends Component {
 
   constructor(props) {
      super(props);
@@ -31,27 +35,29 @@ export default class AddFriend extends Component {
 
   submitFriendRequest() {
 
-    const options = {
-      table: 'friends',
-      action: 'insert',
-      data: {
-        username: this.state.username,
-        nickname: this.state.nickname,
-        currency: "USD"
+    const username = this.state.username;
+    const nickname = this.state.nickname;
+
+    //check that username is valid from server
+    if (username && nickname) {
+
+      const options = {
+        table: 'friends',
+        action: 'insert',
+        data: [this.state.username, this.state.nickname, "USD"]
       }
+
+      insertRecord(options, (result) => {
+        this.props.actions.updateFriends(result)
+      });
+
+      this.props.dismiss();
     }
-
-    executeTransaction(options, (result) => {
-      console.log(result);
-    });
-
-    this.props.dismiss();
   }
 
   searchForFriend(username) {
 
     // fuzzy search, need endpoint for searching, min 3 characters
-
     this.setState({username: username})
   }
 
@@ -79,3 +85,9 @@ export default class AddFriend extends Component {
     );
   }
 }
+
+export const mapStateToProps = ({ friends }) => ({ state: friends });
+
+export const mapDispatchToProps = dispatch => ({ actions: bindActionCreators({ updateFriends }, dispatch) });
+
+export default connect(mapStateToProps, mapDispatchToProps)(AddFriend);

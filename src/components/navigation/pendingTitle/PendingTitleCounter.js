@@ -16,8 +16,6 @@ export class PendingTitleCounter extends Component {
   constructor(props) {
     super(props)
 
-    console.log(props);
-
     this.state = {
       count: 0,
       color: "green",
