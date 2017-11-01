@@ -6,7 +6,8 @@ import {
 
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
-import { updateFriends } from './actions/friends';
+import { updateFriends, updatePending } from './actions/friends';
+import { updateCount } from './actions/updateCount';
 
 import Balances from './screens/Balances';
 import Friends from './screens/Friends';
@@ -47,15 +48,28 @@ export class AppNavigation extends Component {
     createTables(() => {
       console.log("get data")
 
-      const options = {
+      const actions = this.props.actions;
+      const friends = {
         table: 'friends',
         action: 'select'
       }
 
-      executeTransaction(options, (result) => {
-        console.log(result.rows);
-        this.props.actions.updateFriends(result.rows._array)
+      executeTransaction(friends, (result) => {
+        actions.updateFriends(result.rows._array)
       });
+
+      const pending = {
+        table: 'pending',
+        action: 'select'
+      }
+
+      executeTransaction(pending, (result) => {
+        const data = result.rows._array;
+
+        actions.updatePending(data)
+        actions.updateCount(data.length);
+      });
+
 
     });
   }
@@ -69,6 +83,6 @@ export class AppNavigation extends Component {
 
 export const mapStateToProps = ({ friends }) => ({ state: friends });
 
-export const mapDispatchToProps = dispatch => ({ actions: bindActionCreators({ updateFriends }, dispatch) });
+export const mapDispatchToProps = dispatch => ({ actions: bindActionCreators({ updateFriends, updatePending, updateCount }, dispatch) });
 
 export default connect(mapStateToProps, mapDispatchToProps)(AppNavigation);

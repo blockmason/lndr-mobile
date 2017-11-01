@@ -14,7 +14,8 @@ import {
 
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
-import { updateFriends } from '../../../actions/friends';
+import { updateFriends, updatePending } from '../../../actions/friends';
+import { updateCount } from '../../../actions/updateCount';
 
 import { insertRecord, executeTransaction } from '../../../utils/Storage';
 import add_friend from './add_friend_styles';
@@ -35,21 +36,39 @@ export class AddFriend extends Component {
 
   submitFriendRequest() {
 
+    const actions = this.props.actions;
     const username = this.state.username;
     const nickname = this.state.nickname;
 
     //check that username is valid from server
     if (username && nickname) {
 
-      const options = {
+      const friends = {
         table: 'friends',
         action: 'insert',
-        data: [this.state.username, this.state.nickname, "USD"]
+        data: [username, nickname, "USD"]
       }
 
-      insertRecord(options, (result) => {
-        this.props.actions.updateFriends(result)
+      insertRecord(friends, (result) => {
+        actions.updateFriends(result)
       });
+//  username: "Tim", nickname: "BlockmasonTim"},
+
+      const json = {
+        username: username,
+        nickname: nickname
+      }
+
+      const pending = {
+        table: 'pending',
+        action: 'insert',
+        data: ['Waiting for Friend Confirmation', 'waiting_friend', JSON.stringify(json)]
+      }
+
+      insertRecord(pending, (result) => {
+        actions.updatePending(result);
+        actions.updateCount(result.length)
+      })
 
       this.props.dismiss();
     }
@@ -88,6 +107,6 @@ export class AddFriend extends Component {
 
 export const mapStateToProps = ({ friends }) => ({ state: friends });
 
-export const mapDispatchToProps = dispatch => ({ actions: bindActionCreators({ updateFriends }, dispatch) });
+export const mapDispatchToProps = dispatch => ({ actions: bindActionCreators({ updateFriends, updatePending, updateCount }, dispatch) });
 
 export default connect(mapStateToProps, mapDispatchToProps)(AddFriend);

@@ -1,5 +1,4 @@
 import React, { Component } from 'react';
-import ActionButton from 'react-native-action-button';
 import {
   StyleSheet,
   TouchableHighlight,
@@ -12,7 +11,6 @@ import {
 
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
-import { updateCount } from '../actions/updateCount';
 
 import PendingList from '../components/listviews/pending/PendingListview';
 import PendingTitleCounter from '../components/navigation/pendingTitle/PendingTitleCounter';
@@ -42,20 +40,19 @@ export class Pending extends Component {
     }
   }
 
+  // data={this.props.state.pending}
   render() {
     return (
       <View style={styles.container}>
         <PendingList
-          data={FRIEND_PENDING_MOCK_DATA}/>
-        <ActionButton
-          onPress={() => { this.props.actions.updateCount(1)}}/>
+          data={this.props.state.pending}/>
       </View>
     );
   }
 }
 
-export const mapStateToProps = ({ updateCount }) => ({ state: updateCount });
+export const mapStateToProps = ({ friends }) => ({ state: friends });
 
-export const mapDispatchToProps = dispatch => ({ actions: bindActionCreators({ updateCount }, dispatch) });
+export const mapDispatchToProps = dispatch => ({ actions: bindActionCreators({}, dispatch) });
 
 export default connect(mapStateToProps, mapDispatchToProps)(Pending);

@@ -15,7 +15,8 @@ class PendingItem extends React.PureComponent {
     super(props)
 
     this.state = {
-      type: props.type
+      type: props.type,
+      data: JSON.parse(props.data.data)
     }
 
     this.renderWaitingForConfirmation = this.renderWaitingForConfirmation.bind(this);
@@ -104,6 +105,7 @@ class PendingItem extends React.PureComponent {
   }
 
   renderWaitingForFriend(confirm = false) {
+    const data = this.state.data;
     return (
       <View
         style={pending.flatlist_row}
@@ -111,9 +113,9 @@ class PendingItem extends React.PureComponent {
         <Text style={[pending.status_text, styles.thin_font]}>
           {this.props.status}</Text>
         <Text style={pending.name_title}>{this.getFriendRequestType(confirm)}</Text>
-        <Text style={pending.name_text}>{this.props.data.username}</Text>
+        <Text style={pending.name_text}>{data.username}</Text>
         <Text style={pending.name_title}>A.K.A</Text>
-        <Text style={pending.name_text}>{this.props.data.nickname}</Text>
+        <Text style={pending.name_text}>{data.nickname}</Text>
         {this.renderConfirmDebtButtons(confirm)}
       </View>
     )

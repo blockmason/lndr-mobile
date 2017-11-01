@@ -7,7 +7,7 @@ const initialState = {
 
 export default (state = initialState, action) => {
 
-  var total = state.count + action.value;
+  var total = action.value;
   var display = total;
 
   if (total > 99) {
