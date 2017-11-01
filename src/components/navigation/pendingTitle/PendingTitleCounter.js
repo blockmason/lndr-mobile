@@ -5,12 +5,18 @@ import {
   Platform
 } from 'react-native';
 
+import { bindActionCreators } from 'redux';
+import { connect } from 'react-redux';
+import { updateCount } from '../../../actions/updateCount';
+
 import counterStyles from './pending_counter_styles';
 
-export default class PendingTitleCounter extends Component {
+export class PendingTitleCounter extends Component {
 
   constructor(props) {
     super(props)
+
+    console.log(props);
 
     this.state = {
       count: 0,
@@ -45,10 +51,15 @@ export default class PendingTitleCounter extends Component {
           <Text
             ref={(counter) => {this.counterText = counter}}
             style={{alignSelf: 'center', fontSize: 12, color: "white"}}>
-            {this.state.display}</Text>
+            {this.props.state.display}</Text>
         </View>
       </View>
     )
   }
-
 }
+
+export const mapStateToProps = ({ updateCount }) => ({ state: updateCount });
+
+export const mapDispatchToProps = dispatch => ({ actions: bindActionCreators({ updateCount }, dispatch) });
+
+export default connect(mapStateToProps, mapDispatchToProps)(PendingTitleCounter);

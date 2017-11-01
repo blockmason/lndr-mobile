@@ -40,16 +40,6 @@ export class Pending extends Component {
       total: "0",
       totalColor: "green"
     }
-
-    this.updatePendingCounter = this.updatePendingCounter.bind(this);
-  }
-
-  updatePendingCounter(amount) {
-    const counter = PendingComponentState.titleCounter;
-
-    if (counter != null) {
-      counter.updateTotalCount(amount)
-    }
   }
 
   render() {
@@ -58,8 +48,14 @@ export class Pending extends Component {
         <PendingList
           data={FRIEND_PENDING_MOCK_DATA}/>
         <ActionButton
-          onPress={() => { this.updatePendingCounter(1)}}/>
+          onPress={() => { this.props.actions.updateCount(1)}}/>
       </View>
     );
   }
 }
+
+export const mapStateToProps = ({ updateCount }) => ({ state: updateCount });
+
+export const mapDispatchToProps = dispatch => ({ actions: bindActionCreators({ updateCount }, dispatch) });
+
+export default connect(mapStateToProps, mapDispatchToProps)(Pending);

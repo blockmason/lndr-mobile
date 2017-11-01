@@ -27,6 +27,10 @@
     "react-native-masked-text": "^1.6.2",
     "react-native-popup-dialog": "^0.9.37",
     "react-navigation": "^1.0.0-beta.15",
+    "react-redux": "^5.0.6",
+    "redux": "^3.7.2",
+    "redux-actions": "^2.2.1",
+    "redux-thunk": "^2.2.0",
     "underscore": "^1.8.3"
   }
 }

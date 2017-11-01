@@ -4,6 +4,9 @@ import {
     Platform
 } from 'react-native';
 
+import { Provider } from 'react-redux';
+import createStore from './src/store';
+
 import Balances from './src/screens/Balances';
 import Friends from './src/screens/Friends';
 import Pending from './src/screens/Pending';
@@ -45,8 +48,10 @@ export default class App extends Component {
 
   render() {
     return (
-      <Navigator
-        fetch={this.fetch}/>
+      <Provider store={createStore()}>
+        <Navigator
+          fetch={this.fetch}/>
+      </Provider>
     );
   }
 
