@@ -12,10 +12,15 @@ import {
   Image
 } from 'react-native';
 
-import { executeTransaction } from '../../../utils/Storage';
+import { bindActionCreators } from 'redux';
+import { connect } from 'react-redux';
+import { updateFriends, updatePending } from '../../../actions/data';
+import { updateCount } from '../../../actions/updateCount';
+
+import { insertRecord, executeTransaction } from '../../../utils/Storage';
 import add_friend from './add_friend_styles';
 
-export default class AddFriend extends Component {
+export class AddFriend extends Component {
 
   constructor(props) {
      super(props);
@@ -31,27 +36,47 @@ export default class AddFriend extends Component {
 
   submitFriendRequest() {
 
-    const options = {
-      table: 'friends',
-      action: 'insert',
-      data: {
-        username: this.state.username,
-        nickname: this.state.nickname,
-        currency: "USD"
+    const actions = this.props.actions;
+    const username = this.state.username;
+    const nickname = this.state.nickname;
+
+    //check that username is valid from server
+    if (username && nickname) {
+
+      const friends = {
+        table: 'friends',
+        action: 'insert',
+        data: [username, nickname, "USD"]
       }
+
+      insertRecord(friends, (result) => {
+        actions.updateFriends(result)
+      });
+//  username: "Tim", nickname: "BlockmasonTim"},
+
+      const json = {
+        username: username,
+        nickname: nickname
+      }
+
+      const pending = {
+        table: 'pending',
+        action: 'insert',
+        data: ['Waiting for Friend Confirmation', 'waiting_friend', JSON.stringify(json)]
+      }
+
+      insertRecord(pending, (result) => {
+        actions.updatePending(result);
+        actions.updateCount(result.length)
+      })
+
+      this.props.dismiss();
     }
-
-    executeTransaction(options, (result) => {
-      console.log(result);
-    });
-
-    this.props.dismiss();
   }
 
   searchForFriend(username) {
 
     // fuzzy search, need endpoint for searching, min 3 characters
-
     this.setState({username: username})
   }
 
@@ -79,3 +104,9 @@ export default class AddFriend extends Component {
     );
   }
 }
+
+export const mapStateToProps = ({ friends }) => ({ state: friends });
+
+export const mapDispatchToProps = dispatch => ({ actions: bindActionCreators({ updateFriends, updatePending, updateCount }, dispatch) });
+
+export default connect(mapStateToProps, mapDispatchToProps)(AddFriend);

@@ -7,30 +7,32 @@ import {
   Image
 } from 'react-native';
 
+import { bindActionCreators } from 'redux';
+import { connect } from 'react-redux';
+import { updateFriends } from '../actions/data';
+
 import FriendsList from '../components/listviews/friends/FriendsListview';
 
 import styles from './styles';
 
-//amount
-//name
-//currency
-//state = ["CR", "DR"]?
-const FRIENDS_MOCK_DATA = [
-  {id: 1, balance: "300.78", name: "Tim", state: "dr", curr_type: "$"},
-  {id: 2, balance: "66.21", name: "Matt", state: "dr", curr_type: "£"},
-  {id: 3, balance: "9.00", name: "Derek", state: "cr", curr_type: "$"}]
+import {FRIENDS_MOCK_DATA} from '../test/mock';
 
-export default class Friends extends Component {
+export class Friends extends Component {
   static navigationOptions = {
     tabBarLabel: 'Friends'
   }
   render() {
-
     return (
       <View style={styles.container}>
         <FriendsList
-          data={FRIENDS_MOCK_DATA}/>
+          data={this.props.state.friends}/>
       </View>
     );
   }
 }
+
+export const mapStateToProps = ({ data }) => ({ state: data });
+
+export const mapDispatchToProps = dispatch => ({ actions: bindActionCreators({ updateFriends }, dispatch) });
+
+export default connect(mapStateToProps, mapDispatchToProps)(Friends);

@@ -25,12 +25,14 @@ class FriendsItem extends React.PureComponent {
         <View
           style={friends.detail_row}>
           <Text style={friends.category_text}>
-            {this.props.name[0]}</Text>
+            {this.props.nickname[0]}</Text>
           <View>
             <Text style={[friends.state_text, styles.thin_font]}>
-              {this.props.name}</Text>
+              {this.props.nickname}</Text>
+            <Text style={[friends.state_text, styles.thin_font, {fontSize: 16, padding: 5}]}>
+              {this.props.username}</Text>
             <Text style={this.getStateStyle()}>
-              balance: {this.props.curr}{this.props.balance}</Text>
+              balance: {this.props.balance} {this.props.curr}</Text>
           </View>
         </View>
       </View>
@@ -59,9 +61,10 @@ export default class FriendsList extends React.PureComponent {
       onPressItem={this._onPressItem}
       selected={!!this.state.selected.get(item.id)}
       state={item.state}
-      balance={item.balance}
-      name={item.name}
-      curr={item.curr_type}
+      balance={item.amount}
+      username={item.username}
+      nickname={item.nickname}
+      curr={item.currency}
     />
   );
 

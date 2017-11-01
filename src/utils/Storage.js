@@ -29,7 +29,7 @@ const DB_SPEC = [
     },
     {
       table: 'debts',
-      create: 'CREATE TABLE IF NOT EXISTS pending (id INTEGER PRIMARY KEY NOT NULL, user_id TEXT, amount INTEGER DEFAULT 0, state TEXT, time INTEGER, memo TEXT, currency TEXT);',
+      create: 'CREATE TABLE IF NOT EXISTS debts (id INTEGER PRIMARY KEY NOT NULL, user_id TEXT, amount INTEGER DEFAULT 0, state TEXT, time INTEGER, memo TEXT, currency TEXT);',
       drop: 'DROP TABLE IF EXISTS debts',
       insert: 'INSERT INTO debts (user_id, amount, state, time, memo, currency) values (?, ?, ?, ?, ?, "USD")',
       select: 'SELECT * FROM debts',
@@ -46,7 +46,9 @@ function getTableAction(table, action) {
   }
 }
 
-function executeBatchTransaction(ref, cmds) {
+const complete = (value) => (console.log("complete"));
+
+function executeBatchTransaction(ref, cmds, callback = complete) {
 
   db.transaction(
     tx => {
@@ -59,6 +61,7 @@ function executeBatchTransaction(ref, cmds) {
    },
    (success) => {
      console.log(ref);
+     callback()
    }
   );
 }
@@ -67,8 +70,8 @@ export function dropAll() {
   executeBatchTransaction('dropAll', pluck(DB_SPEC, 'drop'))
 }
 
-export function createTables() {
-  executeBatchTransaction('createTables', pluck(DB_SPEC, 'create'))
+export function createTables(actionCompleted) {
+  executeBatchTransaction('createTables', pluck(DB_SPEC, 'create'), actionCompleted)
 }
 
 export function executeTransaction(options, success) {
@@ -98,7 +101,7 @@ export function insertRecord(options, success) {
   db.transaction(
     tx => {
       tx.executeSql(insert, options.data);
-      tx.executeSql('SELECT * FROM ' + table, [], (transaction, result) => success(result));
+      tx.executeSql('SELECT * FROM ' + table, [], (transaction, result) => success(result.rows._array));
     },
     (err) => {
       console.log(err);

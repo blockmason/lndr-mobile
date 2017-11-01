@@ -15,36 +15,11 @@ import DebtHistory from '../components/dialogs/debtHistory/DebtHistory';
 import AddFriend from '../components/dialogs/addFriend/AddFriend';
 import BalanceList from '../components/listviews/balance/BalanceListview';
 
+import { insertRecord, executeTransaction } from '../utils/Storage';
+
 import styles from './styles';
 
-//this will be a key (history) inside of Balances
-const HISTORY = [
-  {time: 1508510707000, amount: "100", state: "dr", memo: "test1", currency: "$USD"},
-  {time: 1506510707000, amount: "100", state: "cr", memo: "test2", currency: "$USD"},
-  {time: 1518510707000, amount: "100", state: "dr", memo: "test2", currency: "$USD"},
-  {time: 1208510707000, amount: "100", state: "dr", memo: "test1", currency: "£GBP"},
-  {time: 1508410707000, amount: "100", state: "cr", memo: "test1", currency: "$USD"},
-  {time: 108510707000, amount: "100", state: "dr", memo: "test13", currency: "$USD"},
-  {time: 1508510707000, amount: "100", state: "dr", memo: "test1", currency: "$USD"},
-  {time: 1506510707000, amount: "100", state: "cr", memo: "test1", currency: "$USD"},
-  {time: 1518510707000, amount: "100", state: "dr", memo: "test1", currency: "£GBP"},
-  {time: 1208510707000, amount: "100", state: "dr", memo: "test1", currency: "$USD"},
-  {time: 1508410707000, amount: "100", state: "cr", memo: "test1", currency: "$USD"},
-  {time: 108510707000, amount: "100", state: "dr", memo: "test1", currency: "$USD"}
-]
-
-//amount
-//name
-//currency
-//state = ["CR", "DR"]?
-//curr_sym //dictionary lookup?
-//these will be fetched from db
-//last_transaction
-//total_debts
-const BALANCE_MOCK_DATA = [
-  {id: 1, amount: "300.78", name: "Tim", history: HISTORY, state: "dr", currency: "USD", curr_sym: "$", last: 1508510707000, total_debts: "2"},
-  {id: 2, amount: "66.21", name: "Matt", history: HISTORY, state: "dr", currency: "GBP", curr_sym: "£", last: 1508673607000, total_debts: "7"},
-  {id: 3, amount: "9.00", name: "Derek", history: HISTORY, state: "cr", currency: "USD", curr_sym: "$", last: 1508486827000, total_debts: "1"}]
+import {HISTORY, BALANCE_MOCK_DATA} from '../test/mock';
 
 export default class Balances extends Component {
   static navigationOptions = {
@@ -76,6 +51,36 @@ export default class Balances extends Component {
     this.createAddFriendDialog.show();
   }
 
+  showProfileDialog() {
+
+    // this.props.navigation.fetch()
+
+    // const options = {
+    //   table: 'pending',
+    //   action: 'where',
+    //   data: [14]
+    // }
+    //
+    // executeTransaction(options, (result) => {
+    //   console.log("callback");
+    //   console.log(JSON.parse(result.rows._array[0].data).data);
+    // });
+
+
+    // const options = {
+    //   name: 'pending',
+    //   action: 'insert',
+    //   data: ["data", "type", JSON.stringify({data: 1, that: "this"})]
+    // }
+    // //
+    // insertRecord(options, (result) => {
+    //   console.log("callback");
+    //   console.log(result.rows);
+    // });
+
+
+  }
+
   displayDebtHistory = (id) => {
     const user = BALANCE_MOCK_DATA.filter(function (elem) {
       return elem.id == id
@@ -92,7 +97,8 @@ export default class Balances extends Component {
         dialogTitle={<DialogTitle title="Create Debt" />}
         ref={(createDebtDialog) => { this.createDebtDialog = createDebtDialog;}}
         dialogAnimation = { new SlideAnimation({ slideFrom: 'bottom' })}>
-        <AddDebt />
+        <AddDebt
+          dismiss={() => {this.createDebtDialog.dismiss()}}/>
       </PopupDialog>
     )
   }
@@ -117,22 +123,23 @@ export default class Balances extends Component {
         dialogTitle={<DialogTitle title="Add a new friend" />}
         ref={(createAddFriendDialog) => { this.createAddFriendDialog = createAddFriendDialog;}}
         dialogAnimation = { new SlideAnimation({ slideFrom: 'bottom' })}>
-        <AddFriend />
+        <AddFriend
+          dismiss={() => {this.createAddFriendDialog.dismiss()}}/>
       </PopupDialog>
     )
   }
 
+  //TODO: data={BALANCE_MOCK_DATA}
   render() {
     return (
       <View style={styles.container}>
         <BalanceList
-          displayDebt={this.displayDebtHistory}
-          data={BALANCE_MOCK_DATA}/>
+          displayDebt={this.displayDebtHistory}/>
         {this.renderAddDebt()}
         {this.renderDebtHistory()}
         {this.renderAddFriend()}
         <ActionButton buttonColor="rgba(231,76,60,1)">
-          <ActionButton.Item buttonColor='#26c6da' title="My profile" onPress={() => console.log("My Profile")}>
+          <ActionButton.Item buttonColor='#26c6da' title="My profile" onPress={() => this.showProfileDialog()}>
             <Icon name="md-stats" style={styles.actionButtonIcon} />
           </ActionButton.Item>
           <ActionButton.Item buttonColor='#00AA8D' title="Add new friend" onPress={() => this.showAddFriendDialog()}>
