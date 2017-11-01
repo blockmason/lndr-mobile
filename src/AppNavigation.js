@@ -6,7 +6,7 @@ import {
 
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
-import { updateFriends, updatePending } from './actions/data';
+import { updateFriends, updatePending, updateDebts } from './actions/data';
 import { updateCount } from './actions/updateCount';
 
 import Balances from './screens/Balances';
@@ -71,6 +71,16 @@ export class AppNavigation extends Component {
       });
 
 
+      const debts = {
+        table: 'debts',
+        action: 'select'
+      }
+
+      executeTransaction(debts, (result) => {
+        const data = result.rows._array;
+
+        actions.updateDebts(data)
+      });
     });
   }
 
@@ -83,6 +93,6 @@ export class AppNavigation extends Component {
 
 export const mapStateToProps = ({ friends }) => ({ state: friends });
 
-export const mapDispatchToProps = dispatch => ({ actions: bindActionCreators({ updateFriends, updatePending, updateCount }, dispatch) });
+export const mapDispatchToProps = dispatch => ({ actions: bindActionCreators({ updateDebts, updateFriends, updatePending, updateCount }, dispatch) });
 
 export default connect(mapStateToProps, mapDispatchToProps)(AppNavigation);

@@ -97,7 +97,8 @@ export default class Balances extends Component {
         dialogTitle={<DialogTitle title="Create Debt" />}
         ref={(createDebtDialog) => { this.createDebtDialog = createDebtDialog;}}
         dialogAnimation = { new SlideAnimation({ slideFrom: 'bottom' })}>
-        <AddDebt />
+        <AddDebt
+          dismiss={() => {this.createDebtDialog.dismiss()}}/>
       </PopupDialog>
     )
   }
@@ -128,12 +129,12 @@ export default class Balances extends Component {
     )
   }
 
+  //TODO: data={BALANCE_MOCK_DATA}
   render() {
     return (
       <View style={styles.container}>
         <BalanceList
-          displayDebt={this.displayDebtHistory}
-          data={BALANCE_MOCK_DATA}/>
+          displayDebt={this.displayDebtHistory}/>
         {this.renderAddDebt()}
         {this.renderDebtHistory()}
         {this.renderAddFriend()}

@@ -12,7 +12,13 @@ import {
   Image
 } from 'react-native';
 
+import { bindActionCreators } from 'redux';
+import { connect } from 'react-redux';
+import { updateHistory, updatePending } from '../../../actions/data';
+
 import RadioForm, {RadioButton, RadioButtonInput, RadioButtonLabel} from '../../radiobutton/SimpleRadioButton';
+
+import { insertRecord, executeTransaction } from '../../../utils/Storage';
 
 import dialog from './add_debt_styles';
 
@@ -25,7 +31,7 @@ const RADIO_OWED_DEFAULT = {
   owed: 'The debt is owed to me'
 };
 
-export default class AddDebt extends Component {
+export class AddDebt extends Component {
 
   constructor(props) {
      super(props);
@@ -37,7 +43,8 @@ export default class AddDebt extends Component {
        amount: 0,
        currencyType: "USD",
        owed: 0,
-       radioLabels: RADIO_OWED_DEFAULT
+       radioLabels: RADIO_OWED_DEFAULT,
+       memo: "",
      };
 
      this.validateAndCreateDebt = this.validateAndCreateDebt.bind(this)
@@ -47,7 +54,47 @@ export default class AddDebt extends Component {
   }
 
   validateAndCreateDebt() {
-    console.log("Debt process.");
+
+    const actions = this.props.actions;
+    const state = this.state;
+
+    if (state.validFriend && state.memo.length > 0) {
+
+      const owed = state.owed == 0 ? "DR" : "CR";
+
+      const debts = {
+        table: 'debts',
+        action: 'insert',
+        data: [1, state.amount, owed, Date.now(), state.memo, "USD"]
+      }
+
+      insertRecord(debts, (result) => {
+        console.log(result);
+        // actions.updateHistory(result)
+      });
+
+      const json = {
+        amount: state.amount,
+        memo: state.memo,
+        curr: "USD",
+        curr_sym: "$",
+        owed: "you",
+        owee: "test",
+        verb: "owes"
+      }
+
+      const pending = {
+        table: 'pending',
+        action: 'insert',
+        data: ['Waiting for Confirmation', 'waiting_debt', JSON.stringify(json)]
+      }
+
+      insertRecord(pending, (result) => {
+        actions.updatePending(result);
+      })
+
+      this.props.dismiss();
+    }
   }
 
   showFriendSelection() {
@@ -156,3 +203,9 @@ export default class AddDebt extends Component {
     );
   }
 }
+
+export const mapStateToProps = ({ friends }) => ({ state: friends });
+
+export const mapDispatchToProps = dispatch => ({ actions: bindActionCreators({ updateHistory, updatePending }, dispatch) });
+
+export default connect(mapStateToProps, mapDispatchToProps)(AddDebt);
