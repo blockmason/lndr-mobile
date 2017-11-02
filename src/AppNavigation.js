@@ -53,13 +53,6 @@ const Navigator = TabNavigator({
 
 export class AppNavigation extends Component {
 
-  constructor(props) {
-    super(props)
-
-    this.showCreateDebtDialog = this.showCreateDebtDialog.bind(this);
-    this.showAddFriendDialog = this.showAddFriendDialog.bind(this);
-  }
-
   handleNotification = (notification) => {
     // this in prod
     // process(notification);
@@ -119,42 +112,17 @@ export class AppNavigation extends Component {
     });
   }
 
-  showCreateDebtDialog() {
-    this.createDebtDialog.show();
-  }
-
-  showAddFriendDialog() {
-    this.createAddFriendDialog.show();
-  }
-
-  showProfileDialog() {
-
-    // this.props.navigation.fetch()
-
-    // const options = {
-    //   table: 'pending',
-    //   action: 'where',
-    //   data: [14]
-    // }
-    //
-    // executeTransaction(options, (result) => {
-    //   console.log("callback");
-    //   console.log(JSON.parse(result.rows._array[0].data).data);
-    // });
-
-
-    // const options = {
-    //   name: 'pending',
-    //   action: 'insert',
-    //   data: ["data", "type", JSON.stringify({data: 1, that: "this"})]
-    // }
-    // //
-    // insertRecord(options, (result) => {
-    //   console.log("callback");
-    //   console.log(result.rows);
-    // });
-
-
+  renderShowAccount() {
+    return (
+      <PopupDialog
+        height={null}
+        dialogTitle={<DialogTitle title="My Account" />}
+        ref={(showAccountDialog) => { this.showAccountDialog = showAccountDialog;}}
+        dialogAnimation = { new SlideAnimation({ slideFrom: 'bottom' })}>
+        <ShowAccount
+          dismiss={() => {this.showAccountDialog.dismiss()}}/>
+      </PopupDialog>
+    )
   }
 
   renderAddDebt() {
