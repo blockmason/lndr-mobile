@@ -3,11 +3,14 @@ import { TabNavigator, TabBarTop} from 'react-navigation';
 import {
     Platform
 } from 'react-native';
-
+import { Notifications } from 'expo';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import { updateFriends, updatePending, updateDebts } from './actions/data';
 import { updateCount } from './actions/updateCount';
+
+import { registerForPushNotificationsAsync } from './utils/SetupPushNotifications';
+import { process } from './utils/ProcessNotification';
 
 import Balances from './screens/Balances';
 import Friends from './screens/Friends';
@@ -43,7 +46,24 @@ export class AppNavigation extends Component {
     super(props)
   }
 
+  handleNotification = (notification) => {
+    // this in prod
+    // process(notification);
+
+    //example notification
+    const notification_example = {
+      action: "NEW_FRIEND_REQUEST",
+      value: "test"
+    }
+
+    process(notification_example);
+  };
+
   componentDidMount() {
+    // push notifications setup - enabled for testing
+    // registerForPushNotificationsAsync();
+    // this.notificationSubscription = Notifications.addListener(this.handleNotification);
+
     // dropAll();
     createTables(() => {
       console.log("get data")
@@ -70,7 +90,6 @@ export class AppNavigation extends Component {
         actions.updateCount(data.length);
       });
 
-
       const debts = {
         table: 'debts',
         action: 'select'
@@ -78,7 +97,6 @@ export class AppNavigation extends Component {
 
       executeTransaction(debts, (result) => {
         const data = result.rows._array;
-
         actions.updateDebts(data)
       });
     });
