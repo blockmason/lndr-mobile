@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import {TextInputMask} from 'react-native-masked-text';
+import KeyboardSpacer from 'react-native-keyboard-spacer';
 import PopupDialog, { SlideAnimation, DialogTitle } from 'react-native-popup-dialog';
 import ActionSheet from 'react-native-actionsheet'
 import {
@@ -199,6 +200,7 @@ export class AddDebt extends Component {
           style={[dialog.dialog_button, {backgroundColor: '#FFF'}]}>
           <Text style={dialog.dialog_text}>Confirm Debt</Text>
         </TouchableHighlight>
+        <KeyboardSpacer/>
       </ScrollView>
     );
   }
