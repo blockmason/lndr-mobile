@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import { TabNavigator, TabBarTop} from 'react-navigation';
 import ActionButton from 'react-native-action-button';
+import DropdownAlert from 'react-native-dropdownalert';
 import Icon from 'react-native-vector-icons/Ionicons';
 import PopupDialog, { SlideAnimation, DialogTitle } from 'react-native-popup-dialog';
 import {
@@ -18,6 +19,7 @@ import { process } from './utils/ProcessNotification';
 
 import AddDebt from './components/dialogs/addDebt/AddDebt';
 import AddFriend from './components/dialogs/addFriend/AddFriend';
+import ShowAccount from './components/dialogs/showAccount/ShowAccount';
 
 import Balances from './screens/Balances';
 import Friends from './screens/Friends';
@@ -72,6 +74,8 @@ export class AppNavigation extends Component {
   };
 
   componentDidMount() {
+
+    this.onError("This is an example of an error")
 
     // push notifications setup - enabled for testing
     // registerForPushNotificationsAsync();
