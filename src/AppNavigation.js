@@ -1,7 +1,11 @@
 import React, { Component } from 'react';
 import { TabNavigator, TabBarTop} from 'react-navigation';
+import ActionButton from 'react-native-action-button';
+import Icon from 'react-native-vector-icons/Ionicons';
+import PopupDialog, { SlideAnimation, DialogTitle } from 'react-native-popup-dialog';
 import {
-    Platform
+    Platform,
+    View
 } from 'react-native';
 import { Notifications } from 'expo';
 import { bindActionCreators } from 'redux';
@@ -12,9 +16,14 @@ import { updateCount } from './actions/updateCount';
 import { registerForPushNotificationsAsync } from './utils/SetupPushNotifications';
 import { process } from './utils/ProcessNotification';
 
+import AddDebt from './components/dialogs/addDebt/AddDebt';
+import AddFriend from './components/dialogs/addFriend/AddFriend';
+
 import Balances from './screens/Balances';
 import Friends from './screens/Friends';
 import Pending from './screens/Pending';
+
+import styles from './screens/styles';
 
 import { createTables, dropAll, executeTransaction } from './utils/Storage';
 
@@ -44,6 +53,9 @@ export class AppNavigation extends Component {
 
   constructor(props) {
     super(props)
+
+    this.showCreateDebtDialog = this.showCreateDebtDialog.bind(this);
+    this.showAddFriendDialog = this.showAddFriendDialog.bind(this);
   }
 
   handleNotification = (notification) => {
@@ -60,6 +72,7 @@ export class AppNavigation extends Component {
   };
 
   componentDidMount() {
+
     // push notifications setup - enabled for testing
     // registerForPushNotificationsAsync();
     // this.notificationSubscription = Notifications.addListener(this.handleNotification);
@@ -102,9 +115,88 @@ export class AppNavigation extends Component {
     });
   }
 
+  showCreateDebtDialog() {
+    this.createDebtDialog.show();
+  }
+
+  showAddFriendDialog() {
+    this.createAddFriendDialog.show();
+  }
+
+  showProfileDialog() {
+
+    // this.props.navigation.fetch()
+
+    // const options = {
+    //   table: 'pending',
+    //   action: 'where',
+    //   data: [14]
+    // }
+    //
+    // executeTransaction(options, (result) => {
+    //   console.log("callback");
+    //   console.log(JSON.parse(result.rows._array[0].data).data);
+    // });
+
+
+    // const options = {
+    //   name: 'pending',
+    //   action: 'insert',
+    //   data: ["data", "type", JSON.stringify({data: 1, that: "this"})]
+    // }
+    // //
+    // insertRecord(options, (result) => {
+    //   console.log("callback");
+    //   console.log(result.rows);
+    // });
+
+
+  }
+
+  renderAddDebt() {
+    return (
+      <PopupDialog
+        height={null}
+        dialogTitle={<DialogTitle title="Create Debt" />}
+        ref={(createDebtDialog) => { this.createDebtDialog = createDebtDialog;}}
+        dialogAnimation = { new SlideAnimation({ slideFrom: 'bottom' })}>
+        <AddDebt
+          dismiss={() => {this.createDebtDialog.dismiss()}}/>
+      </PopupDialog>
+    )
+  }
+
+  renderAddFriend() {
+    return (
+      <PopupDialog
+        height={null}
+        dialogTitle={<DialogTitle title="Add a new friend" />}
+        ref={(createAddFriendDialog) => { this.createAddFriendDialog = createAddFriendDialog;}}
+        dialogAnimation = { new SlideAnimation({ slideFrom: 'bottom' })}>
+        <AddFriend
+          dismiss={() => {this.createAddFriendDialog.dismiss()}}/>
+      </PopupDialog>
+    )
+  }
+
   render() {
     return (
-      <Navigator/>
+      <View style={{flex: 1}}>
+        <Navigator/>
+        {this.renderAddDebt()}
+        {this.renderAddFriend()}
+        <ActionButton buttonColor="rgba(231,76,60,1)">
+          <ActionButton.Item buttonColor='#26c6da' title="My account" onPress={() => this.showProfileDialog()}>
+            <Icon name="md-stats" style={styles.actionButtonIcon} />
+          </ActionButton.Item>
+          <ActionButton.Item buttonColor='#00AA8D' title="Add new friend" onPress={() => this.showAddFriendDialog()}>
+            <Icon name="md-people" style={styles.actionButtonIcon} />
+          </ActionButton.Item>
+          <ActionButton.Item buttonColor='#9b59b6' title="Add new debt" onPress={() => this.showCreateDebtDialog()}>
+            <Icon name="md-cash" style={styles.actionButtonIcon} />
+          </ActionButton.Item>
+        </ActionButton>
+      </View>
     );
   }
 }
