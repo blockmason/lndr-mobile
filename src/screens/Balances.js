@@ -26,10 +26,6 @@ export default class Balances extends Component {
   constructor(props) {
     super(props);
 
-    this.state = {
-      dialogShow: false,
-    };
-
     this.showDebtHistoryDialog = this.showDebtHistoryDialog.bind(this);
   }
 
