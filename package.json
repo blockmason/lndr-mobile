@@ -24,6 +24,8 @@
     "react-native": "^0.48.4",
     "react-native-action-button": "^2.8.1",
     "react-native-actionsheet": "^2.3.0",
+    "react-native-dropdownalert": "^3.1.2",
+    "react-native-keyboard-spacer": "^0.4.1",
     "react-native-masked-text": "^1.6.2",
     "react-native-popup-dialog": "^0.9.37",
     "react-navigation": "^1.0.0-beta.15",

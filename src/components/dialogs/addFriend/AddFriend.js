@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import {TextInputMask} from 'react-native-masked-text';
+import KeyboardSpacer from 'react-native-keyboard-spacer';
 import PopupDialog, { SlideAnimation, DialogTitle } from 'react-native-popup-dialog';
 import ActionSheet from 'react-native-actionsheet'
 import {
@@ -100,6 +101,7 @@ export class AddFriend extends Component {
           style={[add_friend.dialog_button, {backgroundColor: '#FFF'}]}>
           <Text style={add_friend.dialog_text}>Send Friend Request</Text>
         </TouchableHighlight>
+        <KeyboardSpacer/>
       </ScrollView>
     );
   }
