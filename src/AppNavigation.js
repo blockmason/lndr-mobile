@@ -151,23 +151,41 @@ export class AppNavigation extends Component {
     )
   }
 
+  //Separate class for handling dropdown alert status,
+  onError = error => {
+    if (error) {
+      this.dropdown.alertWithType('error', 'Error', error);
+    }
+  };
+  // ...
+  onClose(data) {
+    // data = {type, title, message, action}
+    // action means how the alert was closed.
+    // returns: automatic, programmatic, tap, pan or cancel
+  }
+
   render() {
     return (
       <View style={{flex: 1}}>
-        <Navigator/>
+        <Navigator />
+        {this.renderShowAccount()}
         {this.renderAddDebt()}
         {this.renderAddFriend()}
         <ActionButton buttonColor="rgba(231,76,60,1)">
-          <ActionButton.Item buttonColor='#26c6da' title="My account" onPress={() => this.showProfileDialog()}>
+          <ActionButton.Item buttonColor='#26c6da' title="My account" onPress={() => this.showAccountDialog.show()}>
             <Icon name="md-stats" style={styles.actionButtonIcon} />
           </ActionButton.Item>
-          <ActionButton.Item buttonColor='#00AA8D' title="Add new friend" onPress={() => this.showAddFriendDialog()}>
+          <ActionButton.Item buttonColor='#00AA8D' title="Add new friend" onPress={() => this.createAddFriendDialog.show()}>
             <Icon name="md-people" style={styles.actionButtonIcon} />
           </ActionButton.Item>
-          <ActionButton.Item buttonColor='#9b59b6' title="Add new debt" onPress={() => this.showCreateDebtDialog()}>
+          <ActionButton.Item buttonColor='#9b59b6' title="Add new debt" onPress={() => this.createDebtDialog.show()}>
             <Icon name="md-cash" style={styles.actionButtonIcon} />
           </ActionButton.Item>
         </ActionButton>
+        <DropdownAlert
+          defaultContainer={{ padding: 8, paddingTop: 40, flexDirection: 'row' }}
+          ref={ref => this.dropdown = ref}
+          onClose={data => this.onClose(data)} />
       </View>
     );
   }
