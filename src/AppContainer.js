@@ -1,5 +1,4 @@
 import React, { Component } from 'react';
-import { TabNavigator, TabBarTop} from 'react-navigation';
 import ActionButton from 'react-native-action-button';
 import DropdownAlert from 'react-native-dropdownalert';
 import Icon from 'react-native-vector-icons/Ionicons';
@@ -16,42 +15,20 @@ import { updateCount } from './actions/updateCount';
 
 import { registerForPushNotificationsAsync } from './utils/SetupPushNotifications';
 import { process } from './utils/ProcessNotification';
+import { retrievePrivateKey, savePrivateKey } from './utils/secureDataStore';
 
 import AddDebt from './components/dialogs/addDebt/AddDebt';
 import AddFriend from './components/dialogs/addFriend/AddFriend';
 import ShowAccount from './components/dialogs/showAccount/ShowAccount';
 
-import Balances from './screens/Balances';
-import Friends from './screens/Friends';
-import Pending from './screens/Pending';
+import { Navigator } from './components/navigation/Navigation';
 
 import styles from './screens/styles';
 
 import { createTables, dropAll, executeTransaction } from './utils/Storage';
 
-const Navigator = TabNavigator({
-  Balances: { screen: Balances },
-  Friends: { screen: Friends },
-  Pending: { screen: Pending }
-}, {
-  	tabBarComponent: TabBarTop,
-    tabBarPosition: 'top',
-    tabBarOptions: {
-        activeTintColor: '#FFFFFF',
-        inactiveTintColor: '#FFFFFF',
-        labelStyle: {
-            fontSize: 14,
-            fontWeight: '500'
-        },
-        style: {
-            paddingTop: 25,
-            height: 80,
-            backgroundColor: '#f76e0c'
-        }
-    }
-});
 
-export class AppNavigation extends Component {
+export class AppContainer extends Component {
 
   handleNotification = (notification) => {
     // this in prod
@@ -70,46 +47,49 @@ export class AppNavigation extends Component {
 
     this.onError("This is an example of an error")
 
+
+
+
     // push notifications setup - enabled for testing
     // registerForPushNotificationsAsync();
     // this.notificationSubscription = Notifications.addListener(this.handleNotification);
 
     // dropAll();
-    createTables(() => {
-      console.log("get data")
-
-      const actions = this.props.actions;
-      const friends = {
-        table: 'friends',
-        action: 'select'
-      }
-
-      executeTransaction(friends, (result) => {
-        actions.updateFriends(result.rows._array)
-      });
-
-      const pending = {
-        table: 'pending',
-        action: 'select'
-      }
-
-      executeTransaction(pending, (result) => {
-        const data = result.rows._array;
-
-        actions.updatePending(data)
-        actions.updateCount(data.length);
-      });
-
-      const debts = {
-        table: 'debts',
-        action: 'select'
-      }
-
-      executeTransaction(debts, (result) => {
-        const data = result.rows._array;
-        actions.updateDebts(data)
-      });
-    });
+    // createTables(() => {
+    //   console.log("get data")
+    //
+    //   const actions = this.props.actions;
+    //   const friends = {
+    //     table: 'friends',
+    //     action: 'select'
+    //   }
+    //
+    //   executeTransaction(friends, (result) => {
+    //     actions.updateFriends(result.rows._array)
+    //   });
+    //
+    //   const pending = {
+    //     table: 'pending',
+    //     action: 'select'
+    //   }
+    //
+    //   executeTransaction(pending, (result) => {
+    //     const data = result.rows._array;
+    //
+    //     actions.updatePending(data)
+    //     actions.updateCount(data.length);
+    //   });
+    //
+    //   const debts = {
+    //     table: 'debts',
+    //     action: 'select'
+    //   }
+    //
+    //   executeTransaction(debts, (result) => {
+    //     const data = result.rows._array;
+    //     actions.updateDebts(data)
+    //   });
+    // });
   }
 
   renderShowAccount() {
@@ -195,4 +175,4 @@ export const mapStateToProps = ({ friends }) => ({ state: friends });
 
 export const mapDispatchToProps = dispatch => ({ actions: bindActionCreators({ updateDebts, updateFriends, updatePending, updateCount }, dispatch) });
 
-export default connect(mapStateToProps, mapDispatchToProps)(AppNavigation);
+export default connect(mapStateToProps, mapDispatchToProps)(AppContainer);
