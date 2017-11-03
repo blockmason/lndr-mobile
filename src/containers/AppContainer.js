@@ -10,22 +10,22 @@ import {
 import { Notifications } from 'expo';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
-import { updateFriends, updatePending, updateDebts } from './actions/data';
-import { updateCount } from './actions/updateCount';
+import { updateFriends, updatePending, updateDebts } from '../actions/data';
+import { updateCount } from '../actions/updateCount';
 
-import { registerForPushNotificationsAsync } from './utils/SetupPushNotifications';
-import { process } from './utils/ProcessNotification';
-import { retrievePrivateKey, savePrivateKey } from './utils/secureDataStore';
+import { registerForPushNotificationsAsync } from '../utils/SetupPushNotifications';
+import { process } from '../utils/ProcessNotification';
+import { retrievePrivateKey, savePrivateKey } from '../utils/SecureDataStore';
 
-import AddDebt from './components/dialogs/addDebt/AddDebt';
-import AddFriend from './components/dialogs/addFriend/AddFriend';
-import ShowAccount from './components/dialogs/showAccount/ShowAccount';
+import AddDebt from '../components/dialogs/addDebt/AddDebt';
+import AddFriend from '../components/dialogs/addFriend/AddFriend';
+import ShowAccount from '../components/dialogs/showAccount/ShowAccount';
 
-import { Navigator } from './components/navigation/Navigation';
+import { Navigator } from '../components/navigation/Navigation';
 
-import styles from './screens/styles';
+import styles from '../screens/styles';
 
-import { createTables, dropAll, executeTransaction } from './utils/Storage';
+import { createTables, dropAll, executeTransaction } from '../utils/Storage';
 
 
 export class AppContainer extends Component {
