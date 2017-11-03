@@ -5,8 +5,6 @@ import thunk from 'redux-thunk';
 import updateCount from './reducers/updateCount';
 import data from './reducers/data';
 
-const identity = x => x;
-
 const logger = createLogger({
   diff: true
 });
