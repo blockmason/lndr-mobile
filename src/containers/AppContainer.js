@@ -1,6 +1,5 @@
 import React, { Component } from 'react';
 import ActionButton from 'react-native-action-button';
-import DropdownAlert from 'react-native-dropdownalert';
 import Icon from 'react-native-vector-icons/Ionicons';
 import PopupDialog, { SlideAnimation, DialogTitle } from 'react-native-popup-dialog';
 import {
@@ -20,6 +19,7 @@ import { retrievePrivateKey, savePrivateKey } from '../utils/SecureDataStore';
 import AddDebt from '../components/dialogs/addDebt/AddDebt';
 import AddFriend from '../components/dialogs/addFriend/AddFriend';
 import ShowAccount from '../components/dialogs/showAccount/ShowAccount';
+import StatusAlert from '../components/status/StatusAlert';
 
 import { Navigator } from '../components/navigation/Navigation';
 
@@ -44,11 +44,6 @@ export class AppContainer extends Component {
   };
 
   componentDidMount() {
-
-    this.onError("This is an example of an error")
-
-
-
 
     // push notifications setup - enabled for testing
     // registerForPushNotificationsAsync();
@@ -131,19 +126,6 @@ export class AppContainer extends Component {
     )
   }
 
-  //Separate class for handling dropdown alert status,
-  onError = error => {
-    if (error) {
-      this.dropdown.alertWithType('error', 'Error', error);
-    }
-  };
-  // ...
-  onClose(data) {
-    // data = {type, title, message, action}
-    // action means how the alert was closed.
-    // returns: automatic, programmatic, tap, pan or cancel
-  }
-
   render() {
     return (
       <View style={{flex: 1}}>
@@ -162,10 +144,6 @@ export class AppContainer extends Component {
             <Icon name="md-cash" style={styles.actionButtonIcon} />
           </ActionButton.Item>
         </ActionButton>
-        <DropdownAlert
-          defaultContainer={{ padding: 8, paddingTop: 40, flexDirection: 'row' }}
-          ref={ref => this.dropdown = ref}
-          onClose={data => this.onClose(data)} />
       </View>
     );
   }
