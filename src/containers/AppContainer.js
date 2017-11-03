@@ -161,6 +161,7 @@ export class AppContainer extends Component {
         </ActionButton>
         <StatusAlert
           display={'screen'}
+          closeInterval={2000}
           ref={(statusAlert) => this.statusAlert = statusAlert}/>
       </View>
     );

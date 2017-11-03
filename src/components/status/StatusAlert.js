@@ -25,7 +25,8 @@ export default class StatusAlert extends Component {
      super(props);
 
      this.state = {
-       displayMode: getDisplayMode(props.display)
+       displayMode: getDisplayMode(props.display),
+       closeInterval: props.closeInterval || 4000
      }
   }
 
@@ -47,6 +48,7 @@ export default class StatusAlert extends Component {
     return (
       <DropdownAlert
         ref={(dropdown) => this.dropdown = dropdown}
+        closeInterval={this.state.closeInterval}
         defaultContainer={this.state.displayMode}
         onClose={data => this.onClose(data)} />
     );
