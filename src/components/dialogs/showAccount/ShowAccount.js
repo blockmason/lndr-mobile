@@ -13,18 +13,42 @@ import {
   Image
 } from 'react-native';
 
+import { clearPrivateKey } from '../../../utils/SecureDataStore';
+
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import { updateFriends, updatePending } from '../../../actions/data';
 import { updateCount } from '../../../actions/updateCount';
 
-import { insertRecord, executeTransaction } from '../../../utils/Storage';
+import { dropAll, createTables } from '../../../utils/Storage';
 import show_account from './show_account_styles';
+
+import StatusAlert from '../../../components/status/StatusAlert';
 
 export class ShowAccount extends Component {
 
   constructor(props) {
      super(props);
+
+     this.resetPrivateKeyAndDB = this.resetPrivateKeyAndDB.bind(this);
+  }
+
+  resetPrivateKeyAndDB() {
+    clearPrivateKey()
+
+    dropAll(() => {
+      console.log("Data dropped");
+
+      createTables(() => {
+        console.log("Tables created");
+
+        this.statusAlert.display({
+          type: 'success',
+          title: 'Next Action',
+          body: 'Use "ctrl + s" in editor to reset the app'
+        })
+      })
+    })
   }
 
   render() {
@@ -38,6 +62,15 @@ export class ShowAccount extends Component {
         <Text style={show_account.dialog_text}>Test</Text>
         <Text style={show_account.section_title}>Your key</Text>
         <Text style={show_account.dialog_text}>1234567</Text>
+
+        <TouchableHighlight
+          onPress={() => this.resetPrivateKeyAndDB()}
+          style={[show_account.dialog_button, {backgroundColor: '#FFF'}]}>
+          <Text style={show_account.dialog_text}>Clear private key and reset DB (Testing)</Text>
+        </TouchableHighlight>
+        <StatusAlert
+          display={'dialog'}
+          ref={(statusAlert) => this.statusAlert = statusAlert}/>
       </ScrollView>
     );
   }
