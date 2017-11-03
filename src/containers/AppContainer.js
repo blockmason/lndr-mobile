@@ -145,9 +145,6 @@ export class AppContainer extends Component {
     return (
       <View style={{flex: 1}}>
         <Navigator />
-        {this.renderShowAccount()}
-        {this.renderAddDebt()}
-        {this.renderAddFriend()}
         <ActionButton buttonColor="rgba(231,76,60,1)">
           <ActionButton.Item buttonColor='#26c6da' title="My account" onPress={() => this.showAccountDialog.show()}>
             <Icon name="md-stats" style={styles.actionButtonIcon} />
@@ -163,6 +160,10 @@ export class AppContainer extends Component {
           display={'screen'}
           closeInterval={2000}
           ref={(statusAlert) => this.statusAlert = statusAlert}/>
+        {this.renderSetupAccount()}
+        {this.renderShowAccount()}
+        {this.renderAddDebt()}
+        {this.renderAddFriend()}
       </View>
     );
   }
