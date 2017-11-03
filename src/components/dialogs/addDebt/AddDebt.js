@@ -18,6 +18,7 @@ import { connect } from 'react-redux';
 import { updateHistory, updatePending } from '../../../actions/data';
 
 import RadioForm, {RadioButton, RadioButtonInput, RadioButtonLabel} from '../../radiobutton/SimpleRadioButton';
+import StatusAlert from '../../../components/status/StatusAlert';
 
 import { insertRecord, executeTransaction } from '../../../utils/Storage';
 
@@ -58,8 +59,10 @@ export class AddDebt extends Component {
 
     const actions = this.props.actions;
     const state = this.state;
+    const hasMemo = state.memo.length > 0;
+    const validFriend = state.validFriend;
 
-    if (state.validFriend && state.memo.length > 0) {
+    if (validFriend && hasMemo) {
 
       const owed = state.owed == 0 ? "DR" : "CR";
 
@@ -95,6 +98,23 @@ export class AddDebt extends Component {
       })
 
       this.props.dismiss();
+    } else {
+
+      var body = 'Some of the fields have not been filled out:';
+
+      if (!hasMemo) {
+        body += "\n - Add a memorial memo."
+      }
+
+      if (!validFriend) {
+        body += "\n - Select a friend from the list."
+      }
+
+      this.statusAlert.display({
+        type: 'warn',
+        title: 'Missing information',
+        body: body
+      })
     }
   }
 
@@ -201,6 +221,9 @@ export class AddDebt extends Component {
           <Text style={dialog.dialog_text}>Confirm Debt</Text>
         </TouchableHighlight>
         <KeyboardSpacer/>
+        <StatusAlert
+          display={'dialog'}
+          ref={(statusAlert) => this.statusAlert = statusAlert}/>
       </ScrollView>
     );
   }
