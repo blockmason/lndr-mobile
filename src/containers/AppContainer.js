@@ -4,7 +4,8 @@ import Icon from 'react-native-vector-icons/Ionicons';
 import PopupDialog, { SlideAnimation, DialogTitle } from 'react-native-popup-dialog';
 import {
     Platform,
-    View
+    View,
+    NetInfo
 } from 'react-native';
 import { Notifications } from 'expo';
 import { bindActionCreators } from 'redux';
@@ -43,8 +44,22 @@ export class AppContainer extends Component {
     process(notification_example);
   };
 
-  componentDidMount() {
+  handleConnectivityChange = (isConnected) => {
+    const options = {
+      type: isConnected ? "success" : "warn",
+      title: isConnected ? "app online" : "app offline",
+      body: "hello"
+    }
 
+    this.statusAlert.display(options);
+  };
+
+  componentWillUnmount() {
+    NetInfo.isConnected.removeEventListener('change', this.handleConnectivityChange);
+  }
+
+  componentDidMount() {
+    NetInfo.isConnected.addEventListener('change', this.handleConnectivityChange);
     // push notifications setup - enabled for testing
     // registerForPushNotificationsAsync();
     // this.notificationSubscription = Notifications.addListener(this.handleNotification);
@@ -144,6 +159,9 @@ export class AppContainer extends Component {
             <Icon name="md-cash" style={styles.actionButtonIcon} />
           </ActionButton.Item>
         </ActionButton>
+        <StatusAlert
+          display={'screen'}
+          ref={(statusAlert) => this.statusAlert = statusAlert}/>
       </View>
     );
   }
