@@ -46,7 +46,7 @@ function getTableAction(table, action) {
   }
 }
 
-const complete = (value) => (console.log("complete"));
+const complete = () => (console.log("complete"));
 
 function executeBatchTransaction(ref, cmds, callback = complete) {
 
@@ -66,8 +66,8 @@ function executeBatchTransaction(ref, cmds, callback = complete) {
   );
 }
 
-export function dropAll() {
-  executeBatchTransaction('dropAll', pluck(DB_SPEC, 'drop'))
+export function dropAll(actionCompleted = complete) {
+  executeBatchTransaction('dropAll', pluck(DB_SPEC, 'drop'), actionCompleted)
 }
 
 export function createTables(actionCompleted) {
@@ -111,3 +111,30 @@ export function insertRecord(options, success) {
     }
   );
 }
+
+
+//stuff
+// this.props.navigation.fetch()
+
+// const options = {
+//   table: 'pending',
+//   action: 'where',
+//   data: [14]
+// }
+//
+// executeTransaction(options, (result) => {
+//   console.log("callback");
+//   console.log(JSON.parse(result.rows._array[0].data).data);
+// });
+
+
+// const options = {
+//   name: 'pending',
+//   action: 'insert',
+//   data: ["data", "type", JSON.stringify({data: 1, that: "this"})]
+// }
+// //
+// insertRecord(options, (result) => {
+//   console.log("callback");
+//   console.log(result.rows);
+// });
