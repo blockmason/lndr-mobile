@@ -16,6 +16,7 @@ import {
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import { updateHistory, updatePending } from '../../../actions/data';
+import { updateCount } from '../../../actions/updateCount';
 
 import RadioForm, {RadioButton, RadioButtonInput, RadioButtonLabel} from '../../radiobutton/SimpleRadioButton';
 import StatusAlert from '../../../components/status/StatusAlert';
@@ -44,7 +45,7 @@ export class AddDebt extends Component {
        validFriend: false,
        amount: 0,
        currencyType: "USD",
-       owed: 0,
+       userOwesFriend: true,
        radioLabels: RADIO_OWED_DEFAULT,
        memo: "",
      };
@@ -64,12 +65,22 @@ export class AddDebt extends Component {
 
     if (validFriend && hasMemo) {
 
-      const owed = state.owed == 0 ? "DR" : "CR";
+      var creditor, debtor, verb;
+
+      if (state.userOwesFriend) {
+        debtor = "You";
+        creditor = "Test";
+        verb = "owe";
+      } else {
+        debtor = "Test";
+        creditor = "You";
+        verb = "owes";
+      }
 
       const debts = {
         table: 'debts',
         action: 'insert',
-        data: [1, state.amount, owed, Date.now(), state.memo, "USD"]
+        data: [debtor, creditor, state.amount, Date.now(), state.memo, "USD"]
       }
 
       insertRecord(debts, (result) => {
@@ -82,9 +93,9 @@ export class AddDebt extends Component {
         memo: state.memo,
         curr: "USD",
         curr_sym: "$",
-        owed: "you",
-        owee: "test",
-        verb: "owes"
+        debtor: debtor,
+        creditor: creditor,
+        verb: verb
       }
 
       const pending = {
@@ -95,6 +106,7 @@ export class AddDebt extends Component {
 
       insertRecord(pending, (result) => {
         actions.updatePending(result);
+        actions.updateCount(result.length);
       })
 
       this.props.dismiss();
@@ -205,15 +217,15 @@ export class AddDebt extends Component {
            ref={(oweRadioForm) => { this.oweRadioForm = oweRadioForm;}}
            styles = {[dialog.dialog_margins, dialog.left_view, {marginTop: 10}]}
            radio_props={[
-             {label: this.state.radioLabels.owe, value: 0 },
-             {label: this.state.radioLabels.owed, value: 1 }
+             {label: this.state.radioLabels.owe, value: true },
+             {label: this.state.radioLabels.owed, value: false }
            ]}
            initial={0}
            buttonColor={'#03A9F4'}
            formHorizontal={false}
            labelHorizontal={true}
            animation={true}
-           onPress={(owed) => {this.setState({owed:owed})}}
+           onPress={(owed) => {this.setState({userOwesFriend:owed})}}
          />
         <TouchableHighlight
           onPress={() => this.validateAndCreateDebt()}
@@ -231,6 +243,6 @@ export class AddDebt extends Component {
 
 export const mapStateToProps = ({ friends }) => ({ state: friends });
 
-export const mapDispatchToProps = dispatch => ({ actions: bindActionCreators({ updateHistory, updatePending }, dispatch) });
+export const mapDispatchToProps = dispatch => ({ actions: bindActionCreators({ updateHistory, updatePending, updateCount }, dispatch) });
 
 export default connect(mapStateToProps, mapDispatchToProps)(AddDebt);
