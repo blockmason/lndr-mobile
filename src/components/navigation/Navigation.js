@@ -16,10 +16,11 @@ export const Navigator = TabNavigator({
         inactiveTintColor: '#FFFFFF',
         labelStyle: {
             fontSize: 14,
-            fontWeight: '500'
+            fontWeight: '500',
+            marginTop: 13
         },
         style: {
-            paddingTop: 25,
+            paddingTop: 22,
             height: 80,
             backgroundColor: '#f76e0c'
         }
