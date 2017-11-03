@@ -6,7 +6,7 @@ import DropdownAlert from 'react-native-dropdownalert';
 
 const DISPLAY_MODES = {
   'dialog': { padding: 3, paddingTop: 0, flexDirection: 'row' },
-  'screen': { padding: 10, paddingTop: 50, flexDirection: 'row' }
+  'screen': { padding: 10, paddingTop: 40, flexDirection: 'row' }
 }
 
 const getDisplayMode = (display) => {
