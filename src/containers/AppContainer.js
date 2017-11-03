@@ -33,6 +33,14 @@ import { createTables, dropAll, executeTransaction } from '../utils/Storage';
 
 export class AppContainer extends Component {
 
+  constructor(props) {
+    super(props);
+
+    this.state = {
+      online : true
+    }
+  }
+
   handleNotification = (notification) => {
     // this in prod
     // process(notification);
@@ -53,7 +61,13 @@ export class AppContainer extends Component {
       body: ""
     }
 
-    this.statusAlert.display(options);
+    if (isConnected !== this.state.online) {
+      this.statusAlert.display(options);
+
+      this.setState({
+        online: isConnected
+      });
+    }
   };
 
   componentWillUnmount() {
