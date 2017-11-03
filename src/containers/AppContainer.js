@@ -15,11 +15,13 @@ import { updateCount } from '../actions/updateCount';
 
 import { registerForPushNotificationsAsync } from '../utils/SetupPushNotifications';
 import { process } from '../utils/ProcessNotification';
-import { retrievePrivateKey, savePrivateKey } from '../utils/SecureDataStore';
+import { retrievePrivateKey } from '../utils/SecureDataStore';
 
 import AddDebt from '../components/dialogs/addDebt/AddDebt';
 import AddFriend from '../components/dialogs/addFriend/AddFriend';
 import ShowAccount from '../components/dialogs/showAccount/ShowAccount';
+import SetupAccount from '../components/dialogs/setupAccount/SetupAccount';
+
 import StatusAlert from '../components/status/StatusAlert';
 
 import { Navigator } from '../components/navigation/Navigation';
@@ -60,46 +62,67 @@ export class AppContainer extends Component {
 
   componentDidMount() {
     NetInfo.isConnected.addEventListener('connectionChange', this.handleConnectivityChange);
+
+    retrievePrivateKey().then((result) => {
+      console.log(result);
+      if (!result) {
+        this.showSetupDialog.show(); // show if no private key
+      }
+    })
     // push notifications setup - enabled for testing
     // registerForPushNotificationsAsync();
     // this.notificationSubscription = Notifications.addListener(this.handleNotification);
 
     // dropAll();
-    // createTables(() => {
-    //   console.log("get data")
-    //
-    //   const actions = this.props.actions;
-    //   const friends = {
-    //     table: 'friends',
-    //     action: 'select'
-    //   }
-    //
-    //   executeTransaction(friends, (result) => {
-    //     actions.updateFriends(result.rows._array)
-    //   });
-    //
-    //   const pending = {
-    //     table: 'pending',
-    //     action: 'select'
-    //   }
-    //
-    //   executeTransaction(pending, (result) => {
-    //     const data = result.rows._array;
-    //
-    //     actions.updatePending(data)
-    //     actions.updateCount(data.length);
-    //   });
-    //
-    //   const debts = {
-    //     table: 'debts',
-    //     action: 'select'
-    //   }
-    //
-    //   executeTransaction(debts, (result) => {
-    //     const data = result.rows._array;
-    //     actions.updateDebts(data)
-    //   });
-    // });
+    createTables(() => {
+      console.log("get data")
+
+      const actions = this.props.actions;
+      const friends = {
+        table: 'friends',
+        action: 'select'
+      }
+
+      executeTransaction(friends, (result) => {
+        actions.updateFriends(result.rows._array)
+      });
+
+      const pending = {
+        table: 'pending',
+        action: 'select'
+      }
+
+      executeTransaction(pending, (result) => {
+        const data = result.rows._array;
+
+        actions.updatePending(data)
+        actions.updateCount(data.length);
+      });
+
+      const debts = {
+        table: 'debts',
+        action: 'select'
+      }
+
+      executeTransaction(debts, (result) => {
+        const data = result.rows._array;
+        actions.updateDebts(data)
+      });
+    });
+  }
+
+  renderSetupAccount() {
+    return (
+      <PopupDialog
+        height={null}
+        dialogTitle={<DialogTitle title="Friend in debt" />}
+        dismissOnTouchOutside={false}
+        ref={(showSetupDialog) => { this.showSetupDialog = showSetupDialog;}}
+        dialogAnimation = { new SlideAnimation({ slideFrom: 'bottom' })}>
+        <SetupAccount
+          dismiss={() => {this.showSetupDialog.dismiss()}}/>
+      </PopupDialog>
+    )
   }
 
   renderShowAccount() {
