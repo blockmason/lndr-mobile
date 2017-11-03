@@ -18,6 +18,8 @@ import { connect } from 'react-redux';
 import { updateFriends, updatePending } from '../../../actions/data';
 import { updateCount } from '../../../actions/updateCount';
 
+import StatusAlert from '../../../components/status/StatusAlert';
+
 import { insertRecord, executeTransaction } from '../../../utils/Storage';
 import add_friend from './add_friend_styles';
 
@@ -53,7 +55,6 @@ export class AddFriend extends Component {
       insertRecord(friends, (result) => {
         actions.updateFriends(result)
       });
-//  username: "Tim", nickname: "BlockmasonTim"},
 
       const json = {
         username: username,
@@ -72,6 +73,13 @@ export class AddFriend extends Component {
       })
 
       this.props.dismiss();
+    } else {
+
+      this.statusAlert.display({
+        type: 'warn',
+        title: 'Missing information',
+        body: 'Some of the fields have not been filled out'
+      })
     }
   }
 
@@ -102,6 +110,9 @@ export class AddFriend extends Component {
           <Text style={add_friend.dialog_text}>Send Friend Request</Text>
         </TouchableHighlight>
         <KeyboardSpacer/>
+        <StatusAlert
+          display={'dialog'}
+          ref={(statusAlert) => this.statusAlert = statusAlert}/>
       </ScrollView>
     );
   }

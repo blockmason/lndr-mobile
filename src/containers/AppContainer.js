@@ -1,57 +1,45 @@
 import React, { Component } from 'react';
-import { TabNavigator, TabBarTop} from 'react-navigation';
 import ActionButton from 'react-native-action-button';
-import DropdownAlert from 'react-native-dropdownalert';
 import Icon from 'react-native-vector-icons/Ionicons';
 import PopupDialog, { SlideAnimation, DialogTitle } from 'react-native-popup-dialog';
 import {
     Platform,
-    View
+    View,
+    NetInfo
 } from 'react-native';
 import { Notifications } from 'expo';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
-import { updateFriends, updatePending, updateDebts } from './actions/data';
-import { updateCount } from './actions/updateCount';
+import { updateFriends, updatePending, updateDebts } from '../actions/data';
+import { updateCount } from '../actions/updateCount';
 
-import { registerForPushNotificationsAsync } from './utils/SetupPushNotifications';
-import { process } from './utils/ProcessNotification';
+import { registerForPushNotificationsAsync } from '../utils/SetupPushNotifications';
+import { process } from '../utils/ProcessNotification';
+import { retrievePrivateKey } from '../utils/SecureDataStore';
 
-import AddDebt from './components/dialogs/addDebt/AddDebt';
-import AddFriend from './components/dialogs/addFriend/AddFriend';
-import ShowAccount from './components/dialogs/showAccount/ShowAccount';
+import AddDebt from '../components/dialogs/addDebt/AddDebt';
+import AddFriend from '../components/dialogs/addFriend/AddFriend';
+import ShowAccount from '../components/dialogs/showAccount/ShowAccount';
+import SetupAccount from '../components/dialogs/setupAccount/SetupAccount';
 
-import Balances from './screens/Balances';
-import Friends from './screens/Friends';
-import Pending from './screens/Pending';
+import StatusAlert from '../components/status/StatusAlert';
 
-import styles from './screens/styles';
+import { Navigator } from '../components/navigation/Navigation';
 
-import { createTables, dropAll, executeTransaction } from './utils/Storage';
+import styles from '../screens/styles';
 
-const Navigator = TabNavigator({
-  Balances: { screen: Balances },
-  Friends: { screen: Friends },
-  Pending: { screen: Pending }
-}, {
-  	tabBarComponent: TabBarTop,
-    tabBarPosition: 'top',
-    tabBarOptions: {
-        activeTintColor: '#FFFFFF',
-        inactiveTintColor: '#FFFFFF',
-        labelStyle: {
-            fontSize: 14,
-            fontWeight: '500'
-        },
-        style: {
-            paddingTop: 25,
-            height: 80,
-            backgroundColor: '#f76e0c'
-        }
+import { createTables, dropAll, executeTransaction } from '../utils/Storage';
+
+
+export class AppContainer extends Component {
+
+  constructor(props) {
+    super(props);
+
+    this.state = {
+      online : true
     }
-});
-
-export class AppNavigation extends Component {
+  }
 
   handleNotification = (notification) => {
     // this in prod
@@ -66,10 +54,35 @@ export class AppNavigation extends Component {
     process(notification_example);
   };
 
+  handleConnectivityChange = (isConnected) => {
+    const options = {
+      type: isConnected ? "success" : "warn",
+      title: isConnected ? "app online" : "app offline",
+      body: ""
+    }
+
+    if (isConnected !== this.state.online) {
+      this.statusAlert.display(options);
+
+      this.setState({
+        online: isConnected
+      });
+    }
+  };
+
+  componentWillUnmount() {
+    NetInfo.isConnected.removeEventListener('connectionChange', this.handleConnectivityChange);
+  }
+
   componentDidMount() {
+    NetInfo.isConnected.addEventListener('connectionChange', this.handleConnectivityChange);
 
-    this.onError("This is an example of an error")
-
+    retrievePrivateKey().then((result) => {
+      console.log(result);
+      if (!result) {
+        this.showSetupDialog.show(); // show if no private key
+      }
+    })
     // push notifications setup - enabled for testing
     // registerForPushNotificationsAsync();
     // this.notificationSubscription = Notifications.addListener(this.handleNotification);
@@ -112,6 +125,20 @@ export class AppNavigation extends Component {
     });
   }
 
+  renderSetupAccount() {
+    return (
+      <PopupDialog
+        height={null}
+        dialogTitle={<DialogTitle title="Friend in debt" />}
+        dismissOnTouchOutside={false}
+        ref={(showSetupDialog) => { this.showSetupDialog = showSetupDialog;}}
+        dialogAnimation = { new SlideAnimation({ slideFrom: 'bottom' })}>
+        <SetupAccount
+          dismiss={() => {this.showSetupDialog.dismiss()}}/>
+      </PopupDialog>
+    )
+  }
+
   renderShowAccount() {
     return (
       <PopupDialog
@@ -151,26 +178,10 @@ export class AppNavigation extends Component {
     )
   }
 
-  //Separate class for handling dropdown alert status,
-  onError = error => {
-    if (error) {
-      this.dropdown.alertWithType('error', 'Error', error);
-    }
-  };
-  // ...
-  onClose(data) {
-    // data = {type, title, message, action}
-    // action means how the alert was closed.
-    // returns: automatic, programmatic, tap, pan or cancel
-  }
-
   render() {
     return (
       <View style={{flex: 1}}>
         <Navigator />
-        {this.renderShowAccount()}
-        {this.renderAddDebt()}
-        {this.renderAddFriend()}
         <ActionButton buttonColor="rgba(231,76,60,1)">
           <ActionButton.Item buttonColor='#26c6da' title="My account" onPress={() => this.showAccountDialog.show()}>
             <Icon name="md-stats" style={styles.actionButtonIcon} />
@@ -182,10 +193,14 @@ export class AppNavigation extends Component {
             <Icon name="md-cash" style={styles.actionButtonIcon} />
           </ActionButton.Item>
         </ActionButton>
-        <DropdownAlert
-          defaultContainer={{ padding: 8, paddingTop: 40, flexDirection: 'row' }}
-          ref={ref => this.dropdown = ref}
-          onClose={data => this.onClose(data)} />
+        <StatusAlert
+          display={'screen'}
+          closeInterval={2000}
+          ref={(statusAlert) => this.statusAlert = statusAlert}/>
+        {this.renderSetupAccount()}
+        {this.renderShowAccount()}
+        {this.renderAddDebt()}
+        {this.renderAddFriend()}
       </View>
     );
   }
@@ -195,4 +210,4 @@ export const mapStateToProps = ({ friends }) => ({ state: friends });
 
 export const mapDispatchToProps = dispatch => ({ actions: bindActionCreators({ updateDebts, updateFriends, updatePending, updateCount }, dispatch) });
 
-export default connect(mapStateToProps, mapDispatchToProps)(AppNavigation);
+export default connect(mapStateToProps, mapDispatchToProps)(AppContainer);
