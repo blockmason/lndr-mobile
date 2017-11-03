@@ -9,7 +9,8 @@ const logger = createLogger({
   diff: true
 });
 
-const createStoreWithMiddleware = applyMiddleware(thunk, logger)(createStore);
+const createStoreWithMiddleware = applyMiddleware(thunk)(createStore);
+// const createStoreWithMiddleware = applyMiddleware(thunk, logger)(createStore);
 
 const reducer = combineReducers({
   data,
