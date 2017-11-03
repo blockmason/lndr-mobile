@@ -48,18 +48,18 @@ export class AppContainer extends Component {
     const options = {
       type: isConnected ? "success" : "warn",
       title: isConnected ? "app online" : "app offline",
-      body: "hello"
+      body: ""
     }
 
     this.statusAlert.display(options);
   };
 
   componentWillUnmount() {
-    NetInfo.isConnected.removeEventListener('change', this.handleConnectivityChange);
+    NetInfo.isConnected.removeEventListener('connectionChange', this.handleConnectivityChange);
   }
 
   componentDidMount() {
-    NetInfo.isConnected.addEventListener('change', this.handleConnectivityChange);
+    NetInfo.isConnected.addEventListener('connectionChange', this.handleConnectivityChange);
     // push notifications setup - enabled for testing
     // registerForPushNotificationsAsync();
     // this.notificationSubscription = Notifications.addListener(this.handleNotification);
