@@ -30,10 +30,6 @@ class PendingItem extends React.PureComponent {
     this.props.onPressItem(this.props.id);
   };
 
-  getUserStyle(user) {
-    return [pending.owe_text, {fontSize: 20, color: user == "You" ? "black" : "#03A9F4"}]
-  }
-
   onConfirmSelected() {
     console.log("confirmed");
     console.log(this.props.id);
@@ -83,11 +79,11 @@ class PendingItem extends React.PureComponent {
           {this.props.status}</Text>
         <View style={pending.detail_row}>
            <View style={pending.start_block}>
-            <Text style={this.getUserStyle(data.owed)}>
-              {data.owed}</Text>
+            <Text style={pending.owe_text}>
+              {data.debtor}</Text>
             <Text>{data.verb}</Text>
-            <Text style={this.getUserStyle(data.owee)}>
-              {data.owee}</Text>
+            <Text style={pending.owe_text}>
+              {data.creditor}</Text>
            </View>
            <View style={pending.memo_block}>
             <Text style={pending.name_title}>memo:</Text>

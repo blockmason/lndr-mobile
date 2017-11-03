@@ -29,9 +29,9 @@ const DB_SPEC = [
     },
     {
       table: 'debts',
-      create: 'CREATE TABLE IF NOT EXISTS debts (id INTEGER PRIMARY KEY NOT NULL, user_id TEXT, amount INTEGER DEFAULT 0, state TEXT, time INTEGER, memo TEXT, currency TEXT);',
+      create: 'CREATE TABLE IF NOT EXISTS debts (id INTEGER PRIMARY KEY NOT NULL, debtor TEXT, creditor TEXT, amount INTEGER DEFAULT 0, time INTEGER, memo TEXT, currency TEXT);',
       drop: 'DROP TABLE IF EXISTS debts',
-      insert: 'INSERT INTO debts (user_id, amount, state, time, memo, currency) values (?, ?, ?, ?, ?, "USD")',
+      insert: 'INSERT INTO debts (debtor, creditor, amount, time, memo, currency) values (?, ?, ?, ?, ?, "USD")',
       select: 'SELECT * FROM debts',
       where: 'SELECT * FROM debts WHERE user_id = ?',
       remove: 'DELETE FROM debts WHERE id = ?'
