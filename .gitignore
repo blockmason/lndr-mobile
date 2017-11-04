@@ -1,3 +1,5 @@
+.DS_Store
+shim.js
 node_modules/
 .expo/
 npm-debug.*

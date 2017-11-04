@@ -1,44 +1,74 @@
-import React from 'react';
 import {
     StyleSheet
-} from 'react-native';
+} from 'react-native'
 
-const setup_account = StyleSheet.create({
-  dialog_margins: {
-    marginLeft: 20,
-    marginRight: 20,
-    padding: 12,
-    padding: 2,
-    marginBottom: 10
+const verticalMargins = {
+  marginTop: 10,
+  marginBottom: 10
+}
+
+const centered = {
+  alignSelf: 'center'
+}
+
+const defaultFontSize = {
+  fontSize: 16
+}
+
+export default StyleSheet.create({
+  dialog: {
+    paddingTop: 10,
+    paddingLeft: 20,
+    paddingRight: 20,
+    paddingBottom: 10
   },
+
+  dialog_item: {
+    ...verticalMargins
+  },
+
+  text_input: {
+    ...verticalMargins,
+    ...defaultFontSize
+  },
+
+  text_area: {
+    ...verticalMargins,
+    ...defaultFontSize,
+    minHeight: 60
+  },
+
   dialog_text: {
-    alignSelf: 'center',
+    ...centered,
     fontSize: 20,
     padding: 10
   },
+
   section_title: {
-    alignSelf: 'center',
+    ...verticalMargins,
+    ...centered,
     fontSize: 20,
-    padding: 10,
-    fontWeight: 'bold',
+    fontWeight: 'bold'
   },
+
+  section_subtitle: {
+    ...verticalMargins,
+    ...centered
+  },
+
   record_words: {
-    alignSelf: 'center',
-    fontSize: 18,
-    padding: 10,
-    marginLeft: 25,
-    marginRight: 25,
+    ...verticalMargins,
+    ...defaultFontSize,
+    alignSelf: 'stretch',
+    padding: 20,
     borderRadius: 5,
     borderWidth: 2,
-    borderColor: 'red',
-    marginBottom: 20
+    borderColor: 'red'
   },
+
   dialog_button: {
+    ...verticalMargins,
     alignSelf: 'stretch',
-    marginTop: 5,
-    marginBottom: 5,
-    marginLeft: 20,
-    marginRight: 20,
     padding: 10,
     borderRadius: 5,
     height: 50,
@@ -47,12 +77,24 @@ const setup_account = StyleSheet.create({
     borderColor: 'grey',
     borderWidth: 1
   },
+
   dialog_text: {
-    alignSelf: 'center',
-    fontSize: 16,
+    ...centered,
+    ...defaultFontSize,
     fontWeight: 'bold',
     color: '#03A9F4'
   },
-});
 
-export default setup_account;
+  dialog_button_alt: {
+    ...verticalMargins,
+    justifyContent: 'center',
+    borderWidth: 0,
+    backgroundColor: '#FFF'
+  },
+
+  dialog_text_alt: {
+    ...centered,
+    fontWeight: 'bold',
+    color: 'gray'
+  }
+})

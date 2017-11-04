@@ -1,12 +1,12 @@
 import {
   StyleSheet
-} from 'react-native';
+} from 'react-native'
 
 const friends = StyleSheet.create({
   friends_layout: {
-    width: "100%",
+    width: '100%',
     marginLeft: 10,
-    marginRight: 10,
+    marginRight: 10
   },
   flatlist_row: {
     padding: 10,
@@ -15,11 +15,11 @@ const friends = StyleSheet.create({
     marginTop: 5,
     marginBottom: 5,
     borderRadius: 5,
-    backgroundColor: "white",
+    backgroundColor: 'white',
     alignItems: 'baseline'
   },
   detail_row: {
-    flexDirection:'row',
+    flexDirection: 'row',
     marginTop: 5,
     marginBottom: 5,
     alignItems: 'center'
@@ -31,13 +31,13 @@ const friends = StyleSheet.create({
   },
   state_text: {
     marginLeft: 5,
-    fontSize: 22,
+    fontSize: 22
   },
   category_text: {
     marginLeft: 10,
     marginRight: 50,
     fontSize: 32
   }
-});
+})
 
-export default friends;
+export default friends

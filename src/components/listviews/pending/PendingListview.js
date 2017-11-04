@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React from 'react' // eslint-disable-line no-unused-vars;
 import {
   FlatList,
   TouchableHighlight,
@@ -55,11 +55,13 @@ class PendingItem extends React.PureComponent {
       return (
         <View style={pending.end_block}>
           <TouchableHighlight
+            underlayColor={'#fff'}
             onPress={() => this.onRejectSelected()}
             style={pending.dialog_button}>
             <Text style={[pending.dialog_text, {color:"red"}]}>Reject</Text>
           </TouchableHighlight>
           <TouchableHighlight
+            underlayColor={'#fff'}
             onPress={() => this.onConfirmSelected()}
             style={pending.dialog_button}>
             <Text style={[pending.dialog_text, {color:"green"}]}>Confirm</Text>

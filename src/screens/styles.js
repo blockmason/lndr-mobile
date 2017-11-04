@@ -1,19 +1,19 @@
-import React from 'react';
+import React from 'react' // eslint-disable-line no-unused-vars
 import {
     StyleSheet,
     Platform
-} from 'react-native';
+} from 'react-native'
 
 const styles = StyleSheet.create({
   icon: {
     width: 26,
-    height: 26,
+    height: 26
   },
   container: {
-     flex: 1,
-     justifyContent: 'center',
-     alignItems: 'center',
-     backgroundColor: '#BDBDBD'
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+    backgroundColor: '#BDBDBD'
   },
   button: {
     alignSelf: 'stretch',
@@ -25,19 +25,19 @@ const styles = StyleSheet.create({
     justifyContent: 'center'
   },
   buttonText: {
-      color: 'white',
-      alignSelf: 'center',
-      fontSize: 16
+    color: 'white',
+    alignSelf: 'center',
+    fontSize: 16
   },
   actionButtonIcon: {
     fontSize: 20,
     height: 22,
-    color: 'white',
+    color: 'white'
   },
   thin_font: {
     fontWeight: '100',
     fontFamily: Platform.OS === 'android' ? 'sans-serif-thin' : 'HelveticaNeue-Thin'
   }
-});
+})
 
-export default styles;
+export default styles

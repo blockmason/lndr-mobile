@@ -1,8 +1,8 @@
-var React = require('react');
-var ReactNative = require('react-native');
+var React = require('react')
+var ReactNative = require('react-native')
 var {
-  StyleSheet,
-} = ReactNative;
+  StyleSheet
+} = ReactNative
 
 var Style = StyleSheet.create({
   radioForm: {
@@ -20,22 +20,22 @@ var Style = StyleSheet.create({
     height: 30,
     alignSelf: 'center',
     borderColor: '#2196f3',
-    borderRadius: 30,
+    borderRadius: 30
   },
 
   radioLabel: {
     paddingLeft: 10,
-    lineHeight: 20,
+    lineHeight: 20
   },
 
   radioNormal: {
-    borderRadius: 10,
+    borderRadius: 10
   },
 
   radioActive: {
     width: 20,
     height: 20,
-    backgroundColor: '#2196f3',
+    backgroundColor: '#2196f3'
   },
 
   labelWrapStyle: {
@@ -46,16 +46,16 @@ var Style = StyleSheet.create({
 
   labelVerticalWrap: {
     flexDirection: 'column',
-    paddingLeft: 10,
+    paddingLeft: 10
   },
 
   labelVertical: {
-    paddingLeft: 0,
+    paddingLeft: 0
   },
 
   formHorizontal: {
-    flexDirection: 'row',
-  },
-});
+    flexDirection: 'row'
+  }
+})
 
-module.exports = Style;
+module.exports = Style

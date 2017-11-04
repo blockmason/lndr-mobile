@@ -1,7 +1,7 @@
-import React from 'react';
+import React from 'react' // eslint-disable-line no-unused-vars
 import {
     StyleSheet
-} from 'react-native';
+} from 'react-native'
 
 const add_friend = StyleSheet.create({
   dialog_margins: {
@@ -13,9 +13,9 @@ const add_friend = StyleSheet.create({
     marginBottom: 10
   },
   payment_amount: {
-     width: "30%",
-     padding: 3,
-     borderRadius: 5
+    width: '30%',
+    padding: 3,
+    borderRadius: 5
   },
   dialog_button: {
     alignSelf: 'stretch',
@@ -38,11 +38,11 @@ const add_friend = StyleSheet.create({
     color: '#03A9F4'
   },
   section_title: {
-      color: 'grey',
-      alignSelf: 'baseline',
-      fontSize: 12,
-      padding: 10,
+    color: 'grey',
+    alignSelf: 'baseline',
+    fontSize: 12,
+    padding: 10
   }
-});
+})
 
-export default add_friend;
+export default add_friend

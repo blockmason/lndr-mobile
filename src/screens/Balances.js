@@ -1,69 +1,59 @@
-import React, { Component } from 'react';
-import PopupDialog, { SlideAnimation, DialogTitle } from 'react-native-popup-dialog';
-import {
-  StyleSheet,
-  TouchableHighlight,
-  Text,
-  View,
-  Image
-} from 'react-native';
+import React, { Component } from 'react' // eslint-disable-line no-unused-vars;
+import PopupDialog, { SlideAnimation, DialogTitle } from 'react-native-popup-dialog'
+import { View } from 'react-native'
 
-import DebtHistory from '../components/dialogs/debtHistory/DebtHistory';
-import BalanceList from '../components/listviews/balance/BalanceListview';
+import DebtHistory from '../components/dialogs/debtHistory/DebtHistory'
+import BalanceList from '../components/listviews/balance/BalanceListview'
 
-import { insertRecord, executeTransaction } from '../utils/Storage';
+// import { insertRecord, executeTransaction } from '../utils/Storage'
 
-import styles from './styles';
+import styles from './styles'
 
-import {HISTORY, BALANCE_MOCK_DATA} from '../test/mock';
+import { BALANCE_MOCK_DATA } from '../test/mock'
 
 export default class Balances extends Component {
-  static navigationOptions = {
-    title: 'Balances of Users',
-    tabBarLabel: 'Balances'
+  // const navigationOptions = {
+  //   title: 'Balances of Users',
+  //   tabBarLabel: 'Balances'
+  // }
+
+  constructor (props) {
+    super(props)
+
+    this.showDebtHistoryDialog = this.showDebtHistoryDialog.bind(this)
   }
 
-  constructor(props) {
-    super(props);
-
-    this.showDebtHistoryDialog = this.showDebtHistoryDialog.bind(this);
+  showDebtHistoryDialog () {
+    this.createHistoryDialog.show()
   }
 
-  showDebtHistoryDialog() {
-    this.createHistoryDialog.show();
-  }
-
-
-  displayDebtHistory = (id) => {
-    const user = BALANCE_MOCK_DATA.filter(function (elem) {
-      return elem.id == id
-    })[0];
-
+  displayDebtHistory (id) {
+    const user = BALANCE_MOCK_DATA.filter(user => user.id === id)[0]
     this.debtHistory.attachUser(user)
     this.showDebtHistoryDialog()
   }
 
-  renderDebtHistory() {
+  renderDebtHistory () {
     return (
       <PopupDialog
         height={0.7}
-        dialogTitle={<DialogTitle title="Debt History" />}
-        ref={(createHistoryDialog) => { this.createHistoryDialog = createHistoryDialog;}}
-        dialogAnimation = { new SlideAnimation({ slideFrom: 'bottom' })}>
+        dialogTitle={<DialogTitle title='Debt History' />}
+        ref={(createHistoryDialog) => { this.createHistoryDialog = createHistoryDialog }}
+        dialogAnimation={new SlideAnimation({ slideFrom: 'bottom' })}>
         <DebtHistory
-          ref={component => this.debtHistory = component}/>
+          ref={component => { this.debtHistory = component }} />
       </PopupDialog>
     )
   }
 
-  //TODO: data={BALANCE_MOCK_DATA}
-  render() {
+  // TODO: data={BALANCE_MOCK_DATA}
+  render () {
     return (
       <View style={styles.container}>
         <BalanceList
-          displayDebt={this.displayDebtHistory}/>
+          displayDebt={id => this.displayDebtHistory(id)} />
         {this.renderDebtHistory()}
       </View>
-    );
+    )
   }
 }

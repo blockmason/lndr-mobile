@@ -1,12 +1,12 @@
 import {
   StyleSheet
-} from 'react-native';
+} from 'react-native'
 
 const balances = StyleSheet.create({
   balance_layout: {
-    width: "100%",
+    width: '100%',
     marginLeft: 10,
-    marginRight: 10,
+    marginRight: 10
   },
   flatlist_row: {
     padding: 10,
@@ -15,7 +15,7 @@ const balances = StyleSheet.create({
     marginTop: 5,
     marginBottom: 5,
     borderRadius: 5,
-    backgroundColor: "white",
+    backgroundColor: 'white',
     alignItems: 'baseline'
   },
   touch_row: {
@@ -25,11 +25,11 @@ const balances = StyleSheet.create({
     marginTop: 5,
     marginBottom: 5,
     borderRadius: 5,
-    backgroundColor: "white",
-    alignItems: 'baseline',
+    backgroundColor: 'white',
+    alignItems: 'baseline'
   },
   detail_row: {
-    flexDirection:'row',
+    flexDirection: 'row',
     marginTop: 5,
     marginBottom: 5,
     alignItems: 'center'
@@ -45,10 +45,10 @@ const balances = StyleSheet.create({
     alignItems: 'center'
   },
   owe_block: {
-    padding: 2,
+    padding: 2
   },
   curr_block: {
-    flexDirection:'row',
+    flexDirection: 'row',
     padding: 2,
     marginTop: 3,
     alignItems: 'baseline'
@@ -60,15 +60,15 @@ const balances = StyleSheet.create({
   },
   name_text: {
     marginLeft: 20,
-    fontSize: 26,
+    fontSize: 26
   },
   curr_text: {
     fontWeight: 'bold',
-    fontSize: 18,
+    fontSize: 18
   },
   title_text: {
     color: 'grey'
-  },
-});
+  }
+})
 
-export default balances;
+export default balances

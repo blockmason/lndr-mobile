@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React from 'react' // eslint-disable-line no-unused-vars;
 import {
   FlatList,
   TouchableOpacity,
@@ -30,6 +30,7 @@ class BalanceItem extends React.PureComponent {
   render() {
     return (
       <TouchableHighlight
+        underlayColor={'#fff'}
         style={balance.touch_row}
         onPress={this._onPress}>
         <View

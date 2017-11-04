@@ -1,7 +1,7 @@
-import React from 'react';
+import React from 'react' // eslint-disable-line no-unused-vars
 import {
     StyleSheet
-} from 'react-native';
+} from 'react-native'
 
 const show_account = StyleSheet.create({
   dialog_margins: {
@@ -17,7 +17,7 @@ const show_account = StyleSheet.create({
     alignSelf: 'center',
     fontSize: 20,
     padding: 10,
-    fontWeight: 'bold',
+    fontWeight: 'bold'
   },
   dialog_button: {
     alignSelf: 'stretch',
@@ -38,7 +38,7 @@ const show_account = StyleSheet.create({
     fontSize: 16,
     fontWeight: 'bold',
     color: '#03A9F4'
-  },
-});
+  }
+})
 
-export default show_account;
+export default show_account
