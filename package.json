@@ -10,6 +10,7 @@
   "dependencies": {
     "assert": "^1.4.1",
     "bitcore-mnemonic": "^1.5.0",
+    "events": "^1.1.1",
     "react": "16.0.0",
     "react-native": "0.50.1",
     "react-native-action-button": "^2.8.1",
