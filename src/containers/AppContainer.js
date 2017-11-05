@@ -1,6 +1,6 @@
 import React, { Component } from 'react' // eslint-disable-line no-unused-vars;
 import ActionButton from 'react-native-action-button'
-import Icon from 'react-native-vector-icons/Ionicons'
+// import Icon from 'react-native-vector-icons/Ionicons'
 import PopupDialog, { SlideAnimation, DialogTitle } from 'react-native-popup-dialog'
 import {
     View,
@@ -189,13 +189,13 @@ export class AppContainer extends Component {
         <Navigator />
         <ActionButton buttonColor='rgba(231,76,60,1)'>
           <ActionButton.Item buttonColor='#26c6da' title='My account' onPress={() => this.showAccountDialog.show()}>
-            <Icon name='md-stats' style={styles.actionButtonIcon} />
+            // <Icon name='md-stats' style={styles.actionButtonIcon} />
           </ActionButton.Item>
           <ActionButton.Item buttonColor='#00AA8D' title='Add new friend' onPress={() => this.createAddFriendDialog.show()}>
-            <Icon name='md-people' style={styles.actionButtonIcon} />
+            // <Icon name='md-people' style={styles.actionButtonIcon} />
           </ActionButton.Item>
           <ActionButton.Item buttonColor='#9b59b6' title='Add new debt' onPress={() => this.createDebtDialog.show()}>
-            <Icon name='md-cash' style={styles.actionButtonIcon} />
+            // <Icon name='md-cash' style={styles.actionButtonIcon} />
           </ActionButton.Item>
         </ActionButton>
         <StatusAlert

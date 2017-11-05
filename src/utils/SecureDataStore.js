@@ -1,19 +1,23 @@
-import Expo from 'expo'
+// import Expo from 'expo'
 
 export const PRIVATE_KEY = 'PRIVATE_KEY'
 
+const fakeStorage = {}
+
 export const retrievePrivateKey = () => {
-  return Expo.SecureStore.getItemAsync(PRIVATE_KEY)
+  return Promise.resolve(fakeStorage[PRIVATE_KEY])
 }
 
 // Expo.SecureStore.WHEN_PASSCODE_SET_THIS_DEVICE_ONLY <-- use
 export const savePrivateKey = (key) => {
-  return Expo.SecureStore.setItemAsync(PRIVATE_KEY, key)
+  fakeStorage[PRIVATE_KEY] = key
+  return Promise.resolve()
 }
 
 // Used in the clearing of data for the app, on promised, clear db (drop tables)
 export const clearPrivateKey = () => {
-  return Expo.SecureStore.deleteItemAsync(PRIVATE_KEY)
+  delete fakeStorage[PRIVATE_KEY]
+  return Promise.resolve()
 }
 
 export const hasPrivateKey = (checkKeyCallback) => {

@@ -1,9 +1,17 @@
-import { SQLite } from 'expo'
+import SQLite from 'react-native-sqlite-storage'
 import React from 'react' // eslint-disable-line no-unused-vars
 
 import { pluck, findWhere } from 'underscore'
 
-const db = SQLite.openDatabase({ name: 'db.db' })
+function errorCB(err) {
+  console.log("SQL Error: " + err);
+}
+
+function openCB() {
+  console.log("Database opened successfully");
+}
+
+const db = SQLite.openDatabase('db.db', '1.0', 'Test Database', 200000, openCB, errorCB)
 
 const DB_SPEC = [
   {
