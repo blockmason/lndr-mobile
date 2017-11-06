@@ -10,6 +10,7 @@
   "dependencies": {
     "assert": "^1.4.1",
     "bitcore-mnemonic": "^1.5.0",
+    "ethereumjs-util": "^5.1.2",
     "events": "^1.1.1",
     "react": "16.0.0",
     "react-native": "0.50.1",
@@ -31,6 +32,7 @@
     "redux-logger": "^3.0.6",
     "redux-thunk": "^2.2.0",
     "rn-nodeify": "^8.2.0",
+    "solidity-sha3": "^0.4.1",
     "stream": "^0.0.2",
     "stream-browserify": "^1.0.0",
     "underscore": "^1.8.3",

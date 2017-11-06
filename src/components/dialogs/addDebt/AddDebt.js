@@ -23,7 +23,13 @@ import StatusAlert from '../../../components/status/StatusAlert'
 
 import { insertRecord, executeTransaction } from '../../../utils/Storage'
 
+import ethUtil from 'ethereumjs-util'
+
+global.ethUtil = ethUtil
+
 import dialog from './add_debt_styles'
+
+const UCAC_ID = '0x7624778dedc75f8b322b9fa1632a610d40b85e106c7d9bf0e743a9ce291b9c6f'
 
 const CANCEL_INDEX = 0
 const FRIEND_MOCK_DATA = [{name: 'tim'}, {name: 'matt'}]
@@ -42,7 +48,7 @@ export class AddDebt extends Component {
       friends: FRIEND_MOCK_DATA,
       selectedFriend: 'none selected',
       validFriend: false,
-      amount: 0,
+      amount: '0.00',
       currencyType: 'USD',
       userOwesFriend: true,
       radioLabels: RADIO_OWED_DEFAULT,
@@ -55,6 +61,70 @@ export class AddDebt extends Component {
     this.showFriendSelection = this.showFriendSelection.bind(this)
   }
 
+  getNonce(p1, p2) {
+    return p1.localeCompare(p2) > 0 ? nonces[p1][p2] : nonces[p2][p1];
+  }
+
+  getNonce() {
+    return 1
+  }
+
+  hexToBuffer(value) {
+    return Buffer.from(value.substr(2), 'hex')
+  }
+
+  bufferToHex(buffer) {
+    return '0x' + buffer.toString('hex')
+  }
+
+  intToBuffer(value) {
+    const hexValue = value.toString(16)
+    const stringValue = '0000000000000000000000000000000000000000000000000000000000000000'.replace(
+      new RegExp(`.{${hexValue.length}}$`),
+      hexValue
+    )
+    return Buffer.from(stringValue, 'hex')
+  }
+
+  createCreditRecord(ucac, creditorAddress, debtorAddress, amount, nonce) {
+    if (!/^[0-9,]+\.\d\d$/.test(amount)) {
+      throw new Error('amount is not formatted correctly')
+    }
+
+    const sanitizedAmount = amount.replace(/[.,]/g, '')
+    const ucacAsBuffer = this.hexToBuffer(ucac)
+    const creditorAddressAsBuffer = this.hexToBuffer(creditorAddress)
+    const debtorAddressAsBuffer = this.hexToBuffer(debtorAddress)
+    const amountAsBuffer = this.intToBuffer(parseInt(sanitizedAmount))
+    const nonceAsBuffer = this.intToBuffer(nonce)
+
+    return ethUtil.sha3(
+      Buffer.concat([
+        ucacAsBuffer,
+        creditorAddressAsBuffer,
+        debtorAddressAsBuffer,
+        amountAsBuffer,
+        nonceAsBuffer
+      ])
+    )
+  }
+
+  signCreditRecord(creditRecord, privateKey) {
+    const { r, s, v } = ethUtil.ecsign(
+      ethUtil.hashPersonalMessage(creditRecord),
+      privateKey.privateKey.toBuffer()
+    )
+    return this.bufferToHex(
+      Buffer.concat(
+        [
+          r,
+          s,
+          Buffer.from([ v ])
+        ]
+      )
+    )
+  }
+
   validateAndCreateDebt () {
     const actions = this.props.actions
     const state = this.state
@@ -62,17 +132,29 @@ export class AddDebt extends Component {
     const validFriend = state.validFriend
 
     if (validFriend && hasMemo) {
-      var creditor, debtor, verb
+      var creditor, debtor, creditorAddress, debtorAddress, verb
 
       if (state.userOwesFriend) {
         debtor = 'You'
+        debtorAddress = this.props.address
+
         creditor = 'Test'
+        creditorAddress = '0xdb203cd103a1e0deb417aecd90b2522013286ac6'
+
         verb = 'owe'
       } else {
         debtor = 'Test'
+        debtorAddress = '0xdb203cd103a1e0deb417aecd90b2522013286ac6'
+
         creditor = 'You'
+        creditorAddress = this.props.address
+
         verb = 'owes'
       }
+
+      const nonce = this.getNonce(creditorAddress, debtorAddress)
+      const creditRecord = this.createCreditRecord(UCAC_ID, creditorAddress, debtorAddress, state.amount, nonce)
+      const sig1 = this.signCreditRecord(creditRecord, this.props.privateKey)
 
       const debts = {
         table: 'debts',

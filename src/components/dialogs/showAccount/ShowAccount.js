@@ -61,7 +61,9 @@ export class ShowAccount extends Component {
         <Text style={show_account.section_title}>My Foundation ID</Text>
         <Text style={show_account.dialog_text}>Test</Text>
         <Text style={show_account.section_title}>Your key fingerprint</Text>
-        <Text style={show_account.dialog_text}>{this.props.privateKey ? this.props.privateKey.fingerPrint : 'None'}</Text>
+        <Text style={show_account.dialog_text} selectable>{this.props.privateKey ? this.props.privateKey.fingerPrint : 'None'}</Text>
+        <Text style={show_account.section_title}>Your etherium address</Text>
+        <Text style={show_account.dialog_text} selectable>{this.props.address ? this.props.address : 'None'}</Text>
 
         <TouchableHighlight
           underlayColor={'#fff'}

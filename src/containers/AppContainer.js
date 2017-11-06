@@ -14,6 +14,7 @@ import { updateFriends, updatePending, updateDebts } from '../actions/data'
 import { updateCount } from '../actions/updateCount'
 
 import Mnemonic from 'bitcore-mnemonic'
+import ethUtil from 'ethereumjs-util'
 
 // import { registerForPushNotificationsAsync } from '../utils/SetupPushNotifications'
 import { process } from '../utils/ProcessNotification'
@@ -137,6 +138,19 @@ export class AppContainer extends Component {
     })
   }
 
+  loggedIn(mnemonicInstance, password) {
+    const privateKey = mnemonicInstance.toHDPrivateKey(password)
+
+    const ethAddress = ethUtil.privateToAddress(privateKey.privateKey.toBuffer())
+    const address = ethUtil.bufferToHex(ethAddress)
+
+    this.setState({
+      loggedIn: true,
+      privateKey,
+      address
+    })
+  }
+
   mnemonicSubmitted(mnemonic, password, save=true) {
     const mnemonicInstance = new Mnemonic(mnemonic)
     const hashedPassword = mnemonicInstance.toSeed(PASSWORD_SALT + password)
@@ -148,12 +162,7 @@ export class AppContainer extends Component {
       })
     }
 
-    setTimeout(() => {
-      this.setState({
-        loggedIn: true,
-        privateKey: mnemonicInstance.toHDPrivateKey(password)
-      })
-    }, 250)
+    setTimeout(() => this.loggedIn(mnemonicInstance, password), 250)
   }
 
   renderLogin () {
@@ -200,6 +209,7 @@ export class AppContainer extends Component {
         ref={(showAccountDialog) => { this.showAccountDialog = showAccountDialog }}
         dialogAnimation={slideFromBottom}>
         <ShowAccount
+          address={this.state.address}
           privateKey={this.state.privateKey}
           dismiss={() => { this.showAccountDialog.dismiss() }} />
       </PopupDialog>
@@ -214,6 +224,8 @@ export class AppContainer extends Component {
         ref={(createDebtDialog) => { this.createDebtDialog = createDebtDialog }}
         dialogAnimation={slideFromBottom}>
         <AddDebt
+          address={this.state.address}
+          privateKey={this.state.privateKey}
           dismiss={() => { this.createDebtDialog.dismiss() }} />
       </PopupDialog>
     )
