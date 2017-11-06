@@ -3797,6 +3797,10 @@ react-native-keyboard-spacer@^0.4.1:
   version "0.4.1"
   resolved "https://registry.yarnpkg.com/react-native-keyboard-spacer/-/react-native-keyboard-spacer-0.4.1.tgz#46f18a320432098a25ea9fa89f5143dd254d332d"
 
+react-native-local-storage@^1.5.2:
+  version "1.5.2"
+  resolved "https://registry.yarnpkg.com/react-native-local-storage/-/react-native-local-storage-1.5.2.tgz#82d4d76549ab21d6529aec7b3d42a2dcd41a9993"
+
 react-native-masked-text@^1.6.3:
   version "1.6.3"
   resolved "https://registry.yarnpkg.com/react-native-masked-text/-/react-native-masked-text-1.6.3.tgz#836e2f71b84e0425c4a1c812c2467f9a614bd7cf"

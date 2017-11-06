@@ -1,37 +1,40 @@
-// import Expo from 'expo'
+import localStorage from 'react-native-local-storage'
 
-export const PRIVATE_KEY = 'PRIVATE_KEY'
+export const MNEMONIC = 'MNEMONIC'
+export const HASHED_PASSWORD_CHECK = 'HASHED_PASSWORD_CHECK'
 
-const fakeStorage = {}
-
-export const retrievePrivateKey = () => {
-  return Promise.resolve(fakeStorage[PRIVATE_KEY])
+export const retrieveMnemonic = () => {
+  return localStorage.get(MNEMONIC)
 }
 
-// Expo.SecureStore.WHEN_PASSCODE_SET_THIS_DEVICE_ONLY <-- use
-export const savePrivateKey = (key) => {
-  fakeStorage[PRIVATE_KEY] = key
-  return Promise.resolve()
+export const saveMnemonic = (key) => {
+  return localStorage.save(MNEMONIC, key)
 }
 
-// Used in the clearing of data for the app, on promised, clear db (drop tables)
-export const clearPrivateKey = () => {
-  delete fakeStorage[PRIVATE_KEY]
-  return Promise.resolve()
+export const removeMnemonic = () => {
+  return localStorage.remove(MNEMONIC)
 }
 
-export const hasPrivateKey = (checkKeyCallback) => {
-  this.retrievePrivateKey().then((result) => {
+export const hasMnemonic = (checkKeyCallback) => {
+  this.retrieveMnemonic().then((result) => {
     checkKeyCallback(result)
   })
 }
 
-// Example:
-// savePrivateKey('private').then((result) => {
-//   console.log("save");
-//
-//   retrievePrivateKey().then((result) => {
-//     console.log("get");
-//     console.log(result);
-//   })
-// })
+export const retrieveHashedPassword = () => {
+  return localStorage.get(HASHED_PASSWORD_CHECK)
+}
+
+export const saveHashedPassword = (key) => {
+  return localStorage.save(HASHED_PASSWORD_CHECK, key)
+}
+
+export const removeHashedPassword = () => {
+  return localStorage.remove(HASHED_PASSWORD_CHECK)
+}
+
+export const hasHashedPassword = (checkKeyCallback) => {
+  this.retrieveHashedPassword().then((result) => {
+    checkKeyCallback(result)
+  })
+}

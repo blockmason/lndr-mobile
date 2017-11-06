@@ -1,5 +1,7 @@
 import React, { Component } from 'react' // eslint-disable-line no-unused-vars;
 import ActionButton from 'react-native-action-button'
+import Icon from 'react-native-vector-icons/Ionicons'
+
 import PopupDialog, { SlideAnimation, DialogTitle } from 'react-native-popup-dialog'
 import {
     View,
@@ -11,14 +13,22 @@ import { connect } from 'react-redux'
 import { updateFriends, updatePending, updateDebts } from '../actions/data'
 import { updateCount } from '../actions/updateCount'
 
+import Mnemonic from 'bitcore-mnemonic'
+
 // import { registerForPushNotificationsAsync } from '../utils/SetupPushNotifications'
 import { process } from '../utils/ProcessNotification'
-import { retrievePrivateKey } from '../utils/SecureDataStore'
+import {
+  saveMnemonic,
+  retrieveMnemonic,
+  saveHashedPassword,
+  retrieveHashedPassword
+} from '../utils/SecureDataStore'
 
 import AddDebt from '../components/dialogs/addDebt/AddDebt'
 import AddFriend from '../components/dialogs/addFriend/AddFriend'
 import ShowAccount from '../components/dialogs/showAccount/ShowAccount'
 import SetupAccount from '../components/dialogs/setupAccount/SetupAccount'
+import Login, { PASSWORD_SALT } from '../components/dialogs/login/Login'
 
 import StatusAlert from '../components/status/StatusAlert'
 
@@ -81,17 +91,14 @@ export class AppContainer extends Component {
       isConnected => this.handleConnectivityChange(isConnected)
     )
 
-    retrievePrivateKey().then((result) => {
-      console.log(result)
-      if (!result) {
-        this.showSetupDialog.show() // show if no private key
+    retrieveMnemonic().then((result) => {
+      if (result) {
+        return this.loginDialog.show()
       }
-    })
-    // push notifications setup - enabled for testing
-    // registerForPushNotificationsAsync();
-    // this.notificationSubscription = Notifications.addListener(this.handleNotification);
 
-    // dropAll();
+      this.showSetupDialog.show()
+    })
+
     createTables(() => {
       console.log('get data')
 
@@ -129,16 +136,58 @@ export class AppContainer extends Component {
     })
   }
 
+  mnemonicSubmitted(mnemonic, password, save=true) {
+    const mnemonicInstance = new Mnemonic(mnemonic)
+    const hashedPassword = mnemonicInstance.toSeed(PASSWORD_SALT + password)
+
+    if (save) {
+      saveMnemonic(mnemonic)
+      .then(() => {
+        saveHashedPassword(hashedPassword)
+      })
+    }
+
+    setTimeout(() => {
+      this.setState({
+        privateKey: mnemonicInstance.toHDPrivateKey(password)
+      })
+    }, 250)
+  }
+
+  renderLogin () {
+    return (
+      <PopupDialog
+        height={null}
+        dialogTitle={<DialogTitle title='LNDR' />}
+        dismissOnTouchOutside={false}
+        ref={(loginDialog) => { this.loginDialog = loginDialog }}
+        dialogAnimation={slideFromBottom}>
+        <Login
+          dismiss={(mnemonic, password) => {
+            if (!mnemonic || !password) {
+              this.showSetupDialog.show()
+              return
+            }
+            this.mnemonicSubmitted(mnemonic, password, false)
+            this.loginDialog.dismiss()
+          }} />
+      </PopupDialog>
+    )
+  }
+
   renderSetupAccount () {
     return (
       <PopupDialog
         height={null}
-        dialogTitle={<DialogTitle title='Friend in Debt' />}
+        dialogTitle={<DialogTitle title='LNDR' />}
         dismissOnTouchOutside={false}
         ref={(showSetupDialog) => { this.showSetupDialog = showSetupDialog }}
         dialogAnimation={slideFromBottom}>
         <SetupAccount
-          dismiss={() => { this.showSetupDialog.dismiss() }} />
+          dismiss={(mnemonic, password) => {
+            this.mnemonicSubmitted(mnemonic, password)
+            this.showSetupDialog.dismiss()
+          }} />
       </PopupDialog>
     )
   }
@@ -151,6 +200,7 @@ export class AppContainer extends Component {
         ref={(showAccountDialog) => { this.showAccountDialog = showAccountDialog }}
         dialogAnimation={slideFromBottom}>
         <ShowAccount
+          privateKey={this.state.privateKey}
           dismiss={() => { this.showAccountDialog.dismiss() }} />
       </PopupDialog>
     )
@@ -183,24 +233,25 @@ export class AppContainer extends Component {
   }
 
   render () {
-    // <Icon name='md-stats' style={styles.actionButtonIcon} />
-    // <Icon name='md-people' style={styles.actionButtonIcon} />
-    // <Icon name='md-cash' style={styles.actionButtonIcon} />
     return (
       <View style={{flex: 1}}>
         <Navigator />
         <ActionButton buttonColor='rgba(231,76,60,1)'>
           <ActionButton.Item buttonColor='#26c6da' title='My account' onPress={() => this.showAccountDialog.show()}>
+            <Icon name='md-stats' style={styles.actionButtonIcon} />
           </ActionButton.Item>
           <ActionButton.Item buttonColor='#00AA8D' title='Add new friend' onPress={() => this.createAddFriendDialog.show()}>
+            <Icon name='md-people' style={styles.actionButtonIcon} />
           </ActionButton.Item>
           <ActionButton.Item buttonColor='#9b59b6' title='Add new debt' onPress={() => this.createDebtDialog.show()}>
+            <Icon name='md-cash' style={styles.actionButtonIcon} />
           </ActionButton.Item>
         </ActionButton>
         <StatusAlert
           display={'screen'}
           closeInterval={2000}
           ref={(statusAlert) => { this.statusAlert = statusAlert }} />
+        {this.renderLogin()}
         {this.renderSetupAccount()}
         {this.renderShowAccount()}
         {this.renderAddDebt()}

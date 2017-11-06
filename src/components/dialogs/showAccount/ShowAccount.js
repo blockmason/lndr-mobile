@@ -13,7 +13,7 @@ import {
   Image
 } from 'react-native'
 
-import { clearPrivateKey } from '../../../utils/SecureDataStore'
+import { removeMnemonic, removeHashedPassword } from '../../../utils/SecureDataStore'
 
 import { bindActionCreators } from 'redux'
 import { connect } from 'react-redux'
@@ -33,7 +33,8 @@ export class ShowAccount extends Component {
   }
 
   resetPrivateKeyAndDB () {
-    clearPrivateKey()
+    removeMnemonic()
+    removeHashedPassword()
 
     dropAll(() => {
       console.log('Data dropped')
@@ -43,8 +44,8 @@ export class ShowAccount extends Component {
 
         this.statusAlert.display({
           type: 'success',
-          title: 'Next Action',
-          body: 'Use "ctrl + s" in editor to reset the app'
+          title: 'Account Data Cleared',
+          body: 'Close and restart the app to continue'
         })
       })
     })
@@ -59,8 +60,8 @@ export class ShowAccount extends Component {
         <Text style={show_account.dialog_text}>USD</Text>
         <Text style={show_account.section_title}>My Foundation ID</Text>
         <Text style={show_account.dialog_text}>Test</Text>
-        <Text style={show_account.section_title}>Your key</Text>
-        <Text style={show_account.dialog_text}>1234567</Text>
+        <Text style={show_account.section_title}>Your key fingerprint</Text>
+        <Text style={show_account.dialog_text}>{this.props.privateKey ? this.props.privateKey.fingerPrint : 'None'}</Text>
 
         <TouchableHighlight
           underlayColor={'#fff'}
