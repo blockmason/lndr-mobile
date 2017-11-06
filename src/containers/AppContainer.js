@@ -45,6 +45,7 @@ export class AppContainer extends Component {
     super(props)
 
     this.state = {
+      loggedIn: false,
       online: true
     }
   }
@@ -149,6 +150,7 @@ export class AppContainer extends Component {
 
     setTimeout(() => {
       this.setState({
+        loggedIn: true,
         privateKey: mnemonicInstance.toHDPrivateKey(password)
       })
     }, 250)
@@ -169,7 +171,6 @@ export class AppContainer extends Component {
               return
             }
             this.mnemonicSubmitted(mnemonic, password, false)
-            this.loginDialog.dismiss()
           }} />
       </PopupDialog>
     )
@@ -186,7 +187,6 @@ export class AppContainer extends Component {
         <SetupAccount
           dismiss={(mnemonic, password) => {
             this.mnemonicSubmitted(mnemonic, password)
-            this.showSetupDialog.dismiss()
           }} />
       </PopupDialog>
     )
@@ -251,11 +251,11 @@ export class AppContainer extends Component {
           display={'screen'}
           closeInterval={2000}
           ref={(statusAlert) => { this.statusAlert = statusAlert }} />
-        {this.renderLogin()}
-        {this.renderSetupAccount()}
-        {this.renderShowAccount()}
-        {this.renderAddDebt()}
-        {this.renderAddFriend()}
+        {!this.state.loggedIn ? this.renderLogin() : null}
+        {!this.state.loggedIn ? this.renderSetupAccount() : null}
+        {this.state.loggedIn ? this.renderShowAccount() : null}
+        {this.state.loggedIn ? this.renderAddDebt() : null}
+        {this.state.loggedIn ? this.renderAddFriend() : null}
       </View>
     )
   }
