@@ -49,7 +49,7 @@ export class AddFriend extends Component {
         data: [username, nickname, 'USD']
       }
 
-      insertRecord(friends, (result) => {
+      insertRecord(friends).then(result => {
         actions.updateFriends(result)
       })
 
@@ -64,7 +64,7 @@ export class AddFriend extends Component {
         data: ['Waiting for Friend Confirmation', 'waiting_friend', JSON.stringify(json)]
       }
 
-      insertRecord(pending, (result) => {
+      insertRecord(pending).then(result => {
         actions.updatePending(result)
         actions.updateCount(result.length)
       })

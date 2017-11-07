@@ -87,7 +87,12 @@ export function executeTransaction (options, success) {
 
   db.transaction(
     tx => {
-      tx.executeSql(action, data, (transaction, result) => success(result))
+      tx.executeSql(
+        action, data,
+        (transaction, result) => {
+          success(result)
+        }
+      )
     },
     (err) => {
       console.log(err)
@@ -99,22 +104,24 @@ export function executeTransaction (options, success) {
 }
 
 // Insert a given record for a table afterwhich return all records of given table
-export function insertRecord (options, success) {
-  const table = options.table
-  const insert = getTableAction(table, options.action)
+export function insertRecord(options) {
+  return new Promise((resolve, reject) => {
+    const table = options.table
+    const insert = getTableAction(table, options.action)
 
-  db.transaction(
-    tx => {
-      tx.executeSql(insert, options.data)
-      tx.executeSql('SELECT * FROM ' + table, [], (transaction, result) => success(result.rows._array))
-    },
-    (err) => {
-      console.log(err)
-    },
-    () => {
-      console.log('insert: ' + table)
-    }
-  )
+    db.transaction(
+      tx => {
+        tx.executeSql(insert, options.data)
+        tx.executeSql('SELECT * FROM ' + table, [], (transaction, result) => {
+          resolve(result.rows.raw())
+        })
+      },
+      reject,
+      () => {
+        console.log('insert: ' + table)
+      }
+    )
+  })
 }
 
 // stuff
@@ -137,7 +144,7 @@ export function insertRecord (options, success) {
 //   data: ["data", "type", JSON.stringify({data: 1, that: "this"})]
 // }
 // //
-// insertRecord(options, (result) => {
+// insertRecord(options).then(result => {
 //   console.log("callback");
 //   console.log(result.rows);
 // });

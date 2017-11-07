@@ -13,6 +13,8 @@ import {
   Image
 } from 'react-native'
 
+import Spinner from 'react-native-loading-spinner-overlay'
+
 import { bindActionCreators } from 'redux'
 import { connect } from 'react-redux'
 import { updateHistory, updatePending } from '../../../actions/data'
@@ -23,11 +25,13 @@ import StatusAlert from '../../../components/status/StatusAlert'
 
 import { insertRecord, executeTransaction } from '../../../utils/Storage'
 
-import ethUtil from 'ethereumjs-util'
+import { CreditRecord, CreditProtocolClient } from '../../../credit-protocol-client'
 
-global.ethUtil = ethUtil
+const creditProtocolClient = new CreditProtocolClient('http://34.202.214.156')
 
-import dialog from './add_debt_styles'
+import style from './add_debt_styles'
+
+const delay = time => new Promise(resolve => setTimeout(resolve, time))
 
 const UCAC_ID = '0x7624778dedc75f8b322b9fa1632a610d40b85e106c7d9bf0e743a9ce291b9c6f'
 
@@ -52,7 +56,9 @@ export class AddDebt extends Component {
       currencyType: 'USD',
       userOwesFriend: true,
       radioLabels: RADIO_OWED_DEFAULT,
-      memo: ''
+      memo: '',
+      isSubmitting: false,
+      isSuccess: false
     }
 
     this.validateAndCreateDebt = this.validateAndCreateDebt.bind(this)
@@ -61,71 +67,24 @@ export class AddDebt extends Component {
     this.showFriendSelection = this.showFriendSelection.bind(this)
   }
 
-  getNonce(p1, p2) {
-    return p1.localeCompare(p2) > 0 ? nonces[p1][p2] : nonces[p2][p1];
-  }
-
-  getNonce() {
-    return 1
-  }
-
-  hexToBuffer(value) {
-    return Buffer.from(value.substr(2), 'hex')
-  }
-
-  bufferToHex(buffer) {
-    return '0x' + buffer.toString('hex')
-  }
-
-  intToBuffer(value) {
-    const hexValue = value.toString(16)
-    const stringValue = '0000000000000000000000000000000000000000000000000000000000000000'.replace(
-      new RegExp(`.{${hexValue.length}}$`),
-      hexValue
-    )
-    return Buffer.from(stringValue, 'hex')
-  }
-
-  createCreditRecord(ucac, creditorAddress, debtorAddress, amount, nonce) {
-    if (!/^[0-9,]+\.\d\d$/.test(amount)) {
-      throw new Error('amount is not formatted correctly')
+  async validateAndCreateDebt () {
+    const success = await this.validateAndCreateDebtImplementation()
+    if (success === false) {
+      return
     }
-
-    const sanitizedAmount = amount.replace(/[.,]/g, '')
-    const ucacAsBuffer = this.hexToBuffer(ucac)
-    const creditorAddressAsBuffer = this.hexToBuffer(creditorAddress)
-    const debtorAddressAsBuffer = this.hexToBuffer(debtorAddress)
-    const amountAsBuffer = this.intToBuffer(parseInt(sanitizedAmount))
-    const nonceAsBuffer = this.intToBuffer(nonce)
-
-    return ethUtil.sha3(
-      Buffer.concat([
-        ucacAsBuffer,
-        creditorAddressAsBuffer,
-        debtorAddressAsBuffer,
-        amountAsBuffer,
-        nonceAsBuffer
-      ])
-    )
+    if (!success) {
+      await delay(1000)
+      this.setState({ isSubmitting: false, isError: true })
+      return
+    }
+    await delay(2500)
+    this.setState({ isSubmitting: false, isSuccess: true })
+    this.setState({ isSubmitting: false, isSuccess: true })
+    await delay(1500)
+    this.props.dismiss()
   }
 
-  signCreditRecord(creditRecord, privateKey) {
-    const { r, s, v } = ethUtil.ecsign(
-      ethUtil.hashPersonalMessage(creditRecord),
-      privateKey.privateKey.toBuffer()
-    )
-    return this.bufferToHex(
-      Buffer.concat(
-        [
-          r,
-          s,
-          Buffer.from([ v ])
-        ]
-      )
-    )
-  }
-
-  validateAndCreateDebt () {
+  async validateAndCreateDebtImplementation () {
     const actions = this.props.actions
     const state = this.state
     const hasMemo = state.memo.length > 0
@@ -152,9 +111,27 @@ export class AddDebt extends Component {
         verb = 'owes'
       }
 
-      const nonce = this.getNonce(creditorAddress, debtorAddress)
-      const creditRecord = this.createCreditRecord(UCAC_ID, creditorAddress, debtorAddress, state.amount, nonce)
-      const sig1 = this.signCreditRecord(creditRecord, this.props.privateKey)
+      const { amount } = state
+
+      if (!/^[0-9,]+\.\d\d$/.test(amount)) {
+        throw new Error('amount is not formatted correctly')
+      }
+
+      const sanitizedAmount = parseInt(amount.replace(/[.,]/g, ''))
+      const privateKeyBuffer = this.props.privateKey.privateKey.toBuffer()
+
+      this.setState({ isSubmitting: true })
+      const creditRecord = await creditProtocolClient.createCreditRecord(
+        UCAC_ID,
+        creditorAddress,
+        debtorAddress,
+        sanitizedAmount,
+        state.memo
+      )
+
+      const sig1 = creditRecord.sign(privateKeyBuffer)
+
+      await creditProtocolClient.submitCreditRecord(creditRecord, sig1)
 
       const debts = {
         table: 'debts',
@@ -162,9 +139,8 @@ export class AddDebt extends Component {
         data: [debtor, creditor, state.amount, Date.now(), state.memo, 'USD']
       }
 
-      insertRecord(debts, (result) => {
-        console.log(result)
-        // actions.updateHistory(result)
+      insertRecord(debts).then(result => {
+        actions.updateHistory(result)
       })
 
       const json = {
@@ -183,12 +159,11 @@ export class AddDebt extends Component {
         data: ['Waiting for Confirmation', 'waiting_debt', JSON.stringify(json)]
       }
 
-      insertRecord(pending, (result) => {
+      return await insertRecord(pending).then(result => {
         actions.updatePending(result)
         actions.updateCount(result.length)
+        return true
       })
-
-      this.props.dismiss()
     } else {
       var body = 'Some of the fields have not been filled out:'
 
@@ -205,6 +180,8 @@ export class AddDebt extends Component {
         title: 'Missing information',
         body: body
       })
+
+      return false
     }
   }
 
@@ -257,13 +234,30 @@ export class AddDebt extends Component {
   }
 
   render () {
+    if (this.state.isSuccess) {
+      return <ScrollView style={style.dialog}>
+        <Text style={style.dialog_text}>Success</Text>
+      </ScrollView>
+    }
+    if (this.state.isError) {
+      return <ScrollView style={style.dialog}>
+        <Text style={style.dialog_text_error}>Unknown Error</Text>
+        <TouchableHighlight
+          underlayColor={'#fff'}
+          onPress={() => this.setState({ isError: false })}
+          style={[style.dialog_button, {backgroundColor: '#FFF'}]}>
+          <Text style={style.dialog_text}>Acknowledge</Text>
+        </TouchableHighlight>
+      </ScrollView>
+    }
     return (
-      <ScrollView>
-        <Text style={dialog.section_title}>1) Enter the debt amount:</Text>
-        <View style={dialog.payment_row}>
-          <Text style={dialog.payment_curr}>$</Text>
+      <ScrollView style={style.dialog}>
+        <Spinner visible={this.state.isSubmitting} textContent={'Submitting transaction...'} />
+        <Text style={style.section_title}>1) Enter the debt amount:</Text>
+        <View style={style.payment_row}>
+          <Text style={style.payment_curr}>$</Text>
           <TextInputMask
-            style={dialog.payment_amount}
+            style={style.payment_amount}
             onChangeText={(amount) => this.updateOwedAmount(amount)}
             options={{
               unit: '',
@@ -272,16 +266,16 @@ export class AddDebt extends Component {
             }}
             type={'money'}
             value={this.state.amount} />
-          <Text style={dialog.payment_curr}>USD</Text>
+          <Text style={style.payment_curr}>USD</Text>
         </View>
-        <Text style={dialog.section_title}>2) Enter a concise memo:</Text>
+        <Text style={style.section_title}>2) Enter a concise memo:</Text>
         <TextInput
           placeholder='Enter debt memo here'
-          style={[dialog.dialog_margins, {marginTop: 10}]}
+          style={[style.dialog_margins, {marginTop: 10}]}
           onChangeText={(memo) => this.setState({memo: memo})}
           value={this.state.memo} />
-        <Text style={dialog.section_title}>3) Select a friend:</Text>
-        <Text style={dialog.select_friend} onPress={this.showFriendSelection}>{this.state.selectedFriend}</Text>
+        <Text style={style.section_title}>3) Select a friend:</Text>
+        <Text style={style.select_friend} onPress={this.showFriendSelection}>{this.state.selectedFriend}</Text>
         <ActionSheet
           ref={o => this.friendActionSheet = o}
           title='none selected'
@@ -289,10 +283,10 @@ export class AddDebt extends Component {
           cancelButtonIndex={CANCEL_INDEX}
           onPress={this.handleFriendSelected}
          />
-        <Text style={dialog.section_title}>4) Select the valid statement:</Text>
+        <Text style={style.section_title}>4) Select the valid statement:</Text>
         <RadioForm
           ref={(oweRadioForm) => { this.oweRadioForm = oweRadioForm }}
-          styles={[dialog.dialog_margins, dialog.left_view, {marginTop: 10}]}
+          styles={[style.dialog_margins, style.left_view, {marginTop: 10}]}
           radio_props={[
              {label: this.state.radioLabels.owe, value: true },
              {label: this.state.radioLabels.owed, value: false }
@@ -307,8 +301,8 @@ export class AddDebt extends Component {
         <TouchableHighlight
           underlayColor={'#fff'}
           onPress={() => this.validateAndCreateDebt()}
-          style={[dialog.dialog_button, {backgroundColor: '#FFF'}]}>
-          <Text style={dialog.dialog_text}>Confirm Debt</Text>
+          style={[style.dialog_button, {backgroundColor: '#FFF'}]}>
+          <Text style={style.dialog_text}>Confirm Debt</Text>
         </TouchableHighlight>
         <KeyboardSpacer />
         <StatusAlert

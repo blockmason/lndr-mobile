@@ -19,6 +19,7 @@
     "react-native-crypto": "^2.1.1",
     "react-native-dropdownalert": "^3.1.2",
     "react-native-keyboard-spacer": "^0.4.1",
+    "react-native-loading-spinner-overlay": "^0.5.2",
     "react-native-local-storage": "^1.5.2",
     "react-native-masked-text": "^1.6.3",
     "react-native-popup-dialog": "^0.9.39",

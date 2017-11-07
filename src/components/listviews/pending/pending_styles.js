@@ -75,7 +75,7 @@ const pending = StyleSheet.create({
     textAlign: 'center'
   },
   amount_text: {
-    fontSize: 48,
+    fontSize: 18,
     marginLeft: 5,
     marginRight: 5
   },

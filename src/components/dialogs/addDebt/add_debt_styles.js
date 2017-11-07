@@ -4,6 +4,12 @@ import {
 } from 'react-native'
 
 const dialog = StyleSheet.create({
+  dialog: {
+    paddingTop: 10,
+    paddingLeft: 20,
+    paddingRight: 20,
+    paddingBottom: 10
+  },
   icon: {
     width: 26,
     height: 26
@@ -48,8 +54,8 @@ const dialog = StyleSheet.create({
   },
   dialog_button: {
     alignSelf: 'stretch',
-    marginTop: 5,
-    marginBottom: 5,
+    marginTop: 10,
+    marginBottom: 10,
     marginLeft: 20,
     marginRight: 20,
     padding: 10,
@@ -61,10 +67,20 @@ const dialog = StyleSheet.create({
     borderWidth: 1
   },
   dialog_text: {
+    marginTop: 10,
+    marginBottom: 10,
     alignSelf: 'center',
     fontSize: 16,
     fontWeight: 'bold',
     color: '#03A9F4'
+  },
+  dialog_text_error: {
+    marginTop: 10,
+    marginBottom: 10,
+    alignSelf: 'center',
+    fontSize: 16,
+    fontWeight: 'bold',
+    color: '#F40309'
   },
   select_friend: {
     fontSize: 16,
