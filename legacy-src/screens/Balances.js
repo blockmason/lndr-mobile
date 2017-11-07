@@ -1,4 +1,4 @@
-import React, { Component } from 'react' // eslint-disable-line no-unused-vars;
+import React, { Component } from 'react';
 import PopupDialog, { SlideAnimation, DialogTitle } from 'react-native-popup-dialog'
 import { View } from 'react-native'
 

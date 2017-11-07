@@ -1,4 +1,4 @@
-import React, { Component } from 'react' // eslint-disable-line no-unused-vars
+import React, { Component } from 'react'
 import {TextInputMask} from 'react-native-masked-text'
 import {sortBy} from 'underscore'
 import PopupDialog, { SlideAnimation, DialogTitle } from 'react-native-popup-dialog'

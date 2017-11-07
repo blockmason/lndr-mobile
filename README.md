@@ -1,18 +1,28 @@
+_*Note:* this file is over 50 lines long because it contains a lot of relevant information in one place._
+
 # Code Standards
 
+- all code is in TypeScript, using `.tsx` for files containing jsx, or `.ts` for those without
+- no semicolons
+- 2 spaces
+- newline at end of file (check your editor settings)
+- trim whitespace on save (check your editor settings)
 - keep code in appropriate packages under `packages/<package>`
 - discuss with team before adding a new package
+- only use third-party libraries when absolutely required
 - no hardcoded text in the app, belongs in `packages/language/<language>`
 - no style outside of `packages/theme/default` (we may add themes later)
-- for the most part, files should be called `index.js` with any dependencies in `./lib/<function-name>.js`
+- for the most part, files should be called `index.ts` with any dependencies in `./lib/<function-name>.ts`
 - all snake-case directory names and file names, leads to less issues
-- run `yarn lint` from time to time, especially before committing code
-- code under ui should generally begin with `import React, { Component } from 'react' // eslint-disable-line no-unused-vars` to avoid linter errors for `React`
-- ui components look like `export default class ComponentName extends Component`
+- code under ui should generally begin with `import React, { Component } from 'react'` to avoid linter errors for `React`
+- ui components generally look like `export default class ComponentName extends Component<Props, State>`
+- no files over 50 lines long without an explanation at the top
 
 # Packages
 
-Note, to import from a package see `.babelrc` for package name rewrites. *Important:* no relative imports starting with `../` - in other words never assume what's above you in the file tree - you must be able to move folders around without consequence.
+*Note:* to import from a package see `.babelrc` and `tsconfig.json` for package name rewrites. *Important:* no relative imports starting with `../` - in other words never assume what's above you in the file tree - you must be able to move folders around without consequence.
+
+*Note:* TypeScript code is compiled into `lib` top level directory.
 
 - `credit-protocol` contains the client library to connect to BlockMason's credit-protocol server.
 
@@ -39,6 +49,7 @@ Note, to import from a package see `.babelrc` for package name rewrites. *Import
 ## ... on iOS
 
 - `yarn`
-- `react-native link` (note it may hang on `rnpm-install info Assets have been successfully linked to your project` - it's ok to kill it then)
+- (only need to do this once or if native dependencies change) `react-native link` (note it may hang on `rnpm-install info Assets have been successfully linked to your project` - it's ok to kill it then)
 - `react-native run-ios`
 - _(optionally)_ kill the spawned terminal and run packager manually: `yarn start`
+- (in new terminal) `yarn run typescript`

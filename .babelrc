@@ -2,11 +2,11 @@
   "presets": ["react-native"],
   "plugins": [
     ["module-alias", [
-      { "src": "./packages/credit-protocol", "expose": "credit-protocol" },
-      { "src": "./packages/language/en", "expose": "language" },
-      { "src": "./packages/lndr/default", "expose": "lndr" },
-      { "src": "./packages/theme/default", "expose": "theme" },
-      { "src": "./packages/ui/default", "expose": "ui" }
+      { "src": "./lib/packages/credit-protocol", "expose": "credit-protocol" },
+      { "src": "./lib/packages/language/en", "expose": "language" },
+      { "src": "./lib/packages/lndr/default", "expose": "lndr" },
+      { "src": "./lib/packages/theme/default", "expose": "theme" },
+      { "src": "./lib/packages/ui/default", "expose": "ui" }
     ]]
   ]
 }

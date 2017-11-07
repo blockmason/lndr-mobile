@@ -3,10 +3,9 @@
   "version": "0.0.1",
   "private": true,
   "scripts": {
-    "start": "node node_modules/react-native/local-cli/cli.js start",
-    "test": "jest",
-    "postinstall": "node_modules/.bin/rn-nodeify --install stream,crypto --hack",
-    "lint": "node_modules/.bin/standard packages --fix"
+    "typescript": "node_modules/.bin/tsc -w",
+    "start": "node node_modules/react-native/local-cli/cli.js start --skipflow",
+    "postinstall": "node_modules/.bin/rn-nodeify --install stream,crypto --hack"
   },
   "dependencies": {
     "assert": "^1.4.1",
@@ -42,13 +41,18 @@
     "vm": "^0.1.0"
   },
   "devDependencies": {
+    "@types/jest": "^21.1.5",
+    "@types/react": "^15.6.6",
+    "@types/react-native": "^0.50.2",
+    "@types/react-redux": "^5.0.12",
+    "@types/react-test-renderer": "^16.0.0",
     "babel-jest": "21.2.0",
     "babel-plugin-module-alias": "^1.6.0",
     "babel-preset-expo": "^4.0.0",
     "babel-preset-react-native": "4.0.0",
     "jest": "21.2.1",
     "react-test-renderer": "16.0.0",
-    "standard": "^10.0.3"
+    "typescript": "^2.6.1"
   },
   "jest": {
     "preset": "react-native"
