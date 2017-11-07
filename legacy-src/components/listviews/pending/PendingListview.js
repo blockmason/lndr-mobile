@@ -16,7 +16,7 @@ class PendingItem extends React.PureComponent {
 
     this.state = {
       type: props.type,
-      data: JSON.parse(props.data.data)
+      data: props.data
     }
 
     this.renderWaitingForConfirmation = this.renderWaitingForConfirmation.bind(this);
@@ -154,7 +154,9 @@ class PendingItem extends React.PureComponent {
 export default class PendingList extends React.PureComponent {
   state = {selected: (new Map(): Map<string, boolean>)};
 
-  _keyExtractor = (item, index) => item.id;
+  _keyExtractor = ([huh, item], index) => {
+    return item.signature;
+  }
 
   _onPressItem = (id: string) => {
     // updater functions are preferred for transactional updates
@@ -166,16 +168,15 @@ export default class PendingList extends React.PureComponent {
     });
   };
 
-  _renderItem = ({item}) => (
-    <PendingItem
-      id={item.id}
+  _renderItem = (item) => {
+    return <PendingItem
       onPressItem={this._onPressItem}
       selected={!!this.state.selected.get(item.id)}
-      status={item.status}
-      type={item.type}
+      status={'Pending'}
+      type={'waiting_debt'}
       data={item}
     />
-  );
+  };
 
   render() {
     return (

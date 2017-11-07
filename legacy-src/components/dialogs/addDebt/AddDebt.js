@@ -25,9 +25,7 @@ import StatusAlert from '../../../components/status/StatusAlert'
 
 import { insertRecord, executeTransaction } from '../../../utils/Storage'
 
-import { CreditRecord, CreditProtocolClient } from '../../../credit-protocol-client'
-
-const creditProtocolClient = new CreditProtocolClient('http://34.202.214.156')
+import creditProtocolClient from '../../../config/credit-protocol-client'
 
 import style from './add_debt_styles'
 
@@ -90,82 +88,8 @@ export class AddDebt extends Component {
     const hasMemo = state.memo.length > 0
     const validFriend = state.validFriend
 
-    if (validFriend && hasMemo) {
-      var creditor, debtor, creditorAddress, debtorAddress, verb
-
-      if (state.userOwesFriend) {
-        debtor = 'You'
-        debtorAddress = this.props.address
-
-        creditor = 'Test'
-        creditorAddress = '0xdb203cd103a1e0deb417aecd90b2522013286ac6'
-
-        verb = 'owe'
-      } else {
-        debtor = 'Test'
-        debtorAddress = '0xdb203cd103a1e0deb417aecd90b2522013286ac6'
-
-        creditor = 'You'
-        creditorAddress = this.props.address
-
-        verb = 'owes'
-      }
-
-      const { amount } = state
-
-      if (!/^[0-9,]+\.\d\d$/.test(amount)) {
-        throw new Error('amount is not formatted correctly')
-      }
-
-      const sanitizedAmount = parseInt(amount.replace(/[.,]/g, ''))
-      const privateKeyBuffer = this.props.privateKey.privateKey.toBuffer()
-
-      this.setState({ isSubmitting: true })
-      const creditRecord = await creditProtocolClient.createCreditRecord(
-        UCAC_ID,
-        creditorAddress,
-        debtorAddress,
-        sanitizedAmount,
-        state.memo
-      )
-
-      const sig1 = creditRecord.sign(privateKeyBuffer)
-
-      await creditProtocolClient.submitCreditRecord(creditRecord, sig1)
-
-      const debts = {
-        table: 'debts',
-        action: 'insert',
-        data: [debtor, creditor, state.amount, Date.now(), state.memo, 'USD']
-      }
-
-      insertRecord(debts).then(result => {
-        actions.updateHistory(result)
-      })
-
-      const json = {
-        amount: state.amount,
-        memo: state.memo,
-        curr: 'USD',
-        curr_sym: '$',
-        debtor: debtor,
-        creditor: creditor,
-        verb: verb
-      }
-
-      const pending = {
-        table: 'pending',
-        action: 'insert',
-        data: ['Waiting for Confirmation', 'waiting_debt', JSON.stringify(json)]
-      }
-
-      return await insertRecord(pending).then(result => {
-        actions.updatePending(result)
-        actions.updateCount(result.length)
-        return true
-      })
-    } else {
-      var body = 'Some of the fields have not been filled out:'
+    if (!validFriend || !hasMemo) {
+      let body = 'Some of the fields have not been filled out:'
 
       if (!hasMemo) {
         body += '\n - Add a memorial memo.'
@@ -183,6 +107,52 @@ export class AddDebt extends Component {
 
       return false
     }
+
+    let creditor, debtor, creditorAddress, debtorAddress, verb, type
+
+    if (state.userOwesFriend) {
+      debtor = 'You'
+      debtorAddress = this.props.address
+
+      creditor = 'Test'
+      creditorAddress = '0xdb203cd103a1e0deb417aecd90b2522013286ac6'
+
+      verb = 'owe'
+      type = 'borrow'
+    } else {
+      debtor = 'Test'
+      debtorAddress = '0xdb203cd103a1e0deb417aecd90b2522013286ac6'
+
+      creditor = 'You'
+      creditorAddress = this.props.address
+
+      verb = 'owes'
+      type = 'lend'
+    }
+
+    const { amount } = state
+
+    if (!/^[0-9,]+\.\d\d$/.test(amount)) {
+      throw new Error('amount is not formatted correctly')
+    }
+
+    const sanitizedAmount = parseInt(amount.replace(/[.,]/g, ''))
+    const privateKeyBuffer = this.props.privateKey.privateKey.toBuffer()
+
+    this.setState({ isSubmitting: true })
+
+    const creditRecord = await creditProtocolClient.createCreditRecord(
+      UCAC_ID,
+      creditorAddress,
+      debtorAddress,
+      sanitizedAmount,
+      state.memo
+    )
+
+    const signature = creditRecord.sign(privateKeyBuffer)
+    await creditProtocolClient.submitCreditRecord(creditRecord, type, signature)
+
+    return true
   }
 
   showFriendSelection () {

@@ -1,11 +1,12 @@
 {
-  "name": "FriendInDebt",
+  "name": "LNDR",
   "version": "0.0.1",
   "private": true,
   "scripts": {
     "start": "node node_modules/react-native/local-cli/cli.js start",
     "test": "jest",
-    "postinstall": "node_modules/.bin/rn-nodeify --install stream,crypto --hack"
+    "postinstall": "node_modules/.bin/rn-nodeify --install stream,crypto --hack",
+    "lint": "node_modules/.bin/standard packages --fix"
   },
   "dependencies": {
     "assert": "^1.4.1",
@@ -42,10 +43,12 @@
   },
   "devDependencies": {
     "babel-jest": "21.2.0",
+    "babel-plugin-module-alias": "^1.6.0",
     "babel-preset-expo": "^4.0.0",
     "babel-preset-react-native": "4.0.0",
     "jest": "21.2.1",
-    "react-test-renderer": "16.0.0"
+    "react-test-renderer": "16.0.0",
+    "standard": "^10.0.3"
   },
   "jest": {
     "preset": "react-native"

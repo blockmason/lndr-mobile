@@ -53,22 +53,6 @@ export class AddFriend extends Component {
         actions.updateFriends(result)
       })
 
-      const json = {
-        username: username,
-        nickname: nickname
-      }
-
-      const pending = {
-        table: 'pending',
-        action: 'insert',
-        data: ['Waiting for Friend Confirmation', 'waiting_friend', JSON.stringify(json)]
-      }
-
-      insertRecord(pending).then(result => {
-        actions.updatePending(result)
-        actions.updateCount(result.length)
-      })
-
       this.props.dismiss()
     } else {
       this.statusAlert.display({

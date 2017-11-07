@@ -44,12 +44,20 @@ export default class CreditProtocolClient {
     return this.get(`/nonce/${address1}/${address2}`)
   }
 
+  pendingTransactions() {
+    return this.get(`/pending`)
+  }
+
   async createCreditRecord(ucac, address1, address2, amount, memo) {
     const nonce = await this.getNonce(address1, address2)
     return new CreditRecord(ucac, address1, address2, amount, memo, nonce)
   }
 
-  async submitCreditRecord(creditRecord, signature) {
+  async submitCreditRecord(creditRecord, type, signature) {
+    if (type !== 'lend' && type !== 'borrow') {
+      throw new Error('Type is invalid')
+    }
+
     const {
       creditorAddress: creditor,
       debtorAddress: debtor,
@@ -57,7 +65,7 @@ export default class CreditProtocolClient {
       memo
     } = creditRecord
 
-    return this.post('/submit_signed', {
+    return this.post(`/${type}`, {
       creditor,
       debtor,
       amount,

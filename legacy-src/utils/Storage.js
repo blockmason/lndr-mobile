@@ -15,16 +15,6 @@ const db = SQLite.openDatabase('db.db', '1.0', 'Test Database', 200000, openCB, 
 
 const DB_SPEC = [
   {
-    table: 'pending',
-    create: 'CREATE TABLE IF NOT EXISTS pending (id INTEGER PRIMARY KEY NOT NULL, status TEXT, type TEXT, data JSON);',
-    drop: 'DROP TABLE IF EXISTS pending',
-    insert: 'INSERT INTO pending (status, type, data) values (?, ?, ?)',
-    select: 'SELECT * FROM pending',
-    where: 'SELECT * FROM pending WHERE id = ?',
-    count: 'SELECT COUNT(*) AS count FROM pending',
-    remove: 'DELETE FROM pending WHERE id = ?'
-  },
-  {
     table: 'friends',
     create: 'CREATE TABLE IF NOT EXISTS friends (id INTEGER PRIMARY KEY NOT NULL, username TEXT, nickname TEXT, amount INTEGER DEFAULT 0, last_debt INTEGER, total_debts INTEGER DEFAULT 0, currency TEXT);',
     drop: 'DROP TABLE IF EXISTS friends',
@@ -128,7 +118,7 @@ export function insertRecord(options) {
 // this.props.navigation.fetch()
 
 // const options = {
-//   table: 'pending',
+//   table: 'friends',
 //   action: 'where',
 //   data: [14]
 // }
@@ -139,7 +129,7 @@ export function insertRecord(options) {
 // });
 
 // const options = {
-//   name: 'pending',
+//   name: 'friends',
 //   action: 'insert',
 //   data: ["data", "type", JSON.stringify({data: 1, that: "this"})]
 // }

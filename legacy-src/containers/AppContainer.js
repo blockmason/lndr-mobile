@@ -37,6 +37,8 @@ import { Navigator } from '../components/navigation/Navigation'
 
 import styles from '../screens/styles'
 
+import creditProtocolClient from '../config/credit-protocol-client'
+
 import { createTables, executeTransaction } from '../utils/Storage'
 
 const slideFromBottom = new SlideAnimation({ slideFrom: 'bottom' })
@@ -101,7 +103,7 @@ export class AppContainer extends Component {
       this.showSetupDialog.show()
     })
 
-    createTables(() => {
+    createTables(async () => {
       console.log('get data')
 
       const actions = this.props.actions
@@ -114,17 +116,9 @@ export class AppContainer extends Component {
         actions.updateFriends(result.rows._array)
       })
 
-      const pending = {
-        table: 'pending',
-        action: 'select'
-      }
-
-      executeTransaction(pending, (result) => {
-        const data = result.rows._array
-
-        actions.updatePending(data)
-        actions.updateCount(data.length)
-      })
+      const pendingTransactions = await creditProtocolClient.pendingTransactions()
+      actions.updatePending(pendingTransactions)
+      actions.updateCount(pendingTransactions.length)
 
       const debts = {
         table: 'debts',
