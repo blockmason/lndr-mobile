@@ -1,0 +1,5 @@
+export const light = '#f8f8f8'
+export const gray = '#777'
+export const dark = '#027323'
+export const danger = '#c00'
+export const transparent = 'transparent'

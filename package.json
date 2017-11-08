@@ -4,7 +4,7 @@
   "private": true,
   "scripts": {
     "typescript": "node_modules/.bin/tsc -w",
-    "start": "node node_modules/react-native/local-cli/cli.js start --skipflow",
+    "start": "node node_modules/react-native/local-cli/cli.js start",
     "postinstall": "node_modules/.bin/rn-nodeify --install stream,crypto --hack"
   },
   "dependencies": {

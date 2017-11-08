@@ -4,9 +4,10 @@
     ["module-alias", [
       { "src": "./lib/packages/credit-protocol", "expose": "credit-protocol" },
       { "src": "./lib/packages/language/en", "expose": "language" },
-      { "src": "./lib/packages/lndr/default", "expose": "lndr" },
-      { "src": "./lib/packages/theme/default", "expose": "theme" },
-      { "src": "./lib/packages/ui/default", "expose": "ui" }
+      { "src": "./lib/packages/lndr", "expose": "lndr" },
+      { "src": "./lib/packages/theme", "expose": "theme" },
+      { "src": "./lib/packages/ui", "expose": "ui" },
+      { "src": "./packages/images", "expose": "images" }
     ]]
   ]
 }

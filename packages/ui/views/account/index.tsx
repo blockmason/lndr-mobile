@@ -8,8 +8,8 @@ interface Props {
   engine: Engine
 }
 
-export default class CreateAccountView extends Component<Props> {
-  render () {
-    return <Text>CreateAccountView</Text>
+export default class AccountView extends Component<Props> {
+  render() {
+    return <Text>AccountView</Text>
   }
 }

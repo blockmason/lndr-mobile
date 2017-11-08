@@ -19,8 +19,8 @@
     // "isolatedModules": true,               /* Transpile each file as a separate module (similar to 'ts.transpileModule'). */
 
     /* Strict Type-Checking Options */
-    "strict": true,                        /* Enable all strict type-checking options. */
-    "noImplicitAny": true,                 /* Raise error on expressions and declarations with an implied 'any' type. */
+    "strict": false,                        /* Enable all strict type-checking options. */
+    "noImplicitAny": false,                 /* Raise error on expressions and declarations with an implied 'any' type. */
     "strictNullChecks": true,              /* Enable strict null checks. */
     "noImplicitThis": true,                /* Raise error on 'this' expressions with an implied 'any' type. */
     "alwaysStrict": true,                  /* Parse in strict mode and emit "use strict" for each source file. */
@@ -37,9 +37,9 @@
     "paths": {
       "credit-protocol":  ["packages/credit-protocol"],
       "language":         ["packages/language/en"],
-      "lndr/*":           ["packages/lndr/default/*"],
-      "theme/*":          ["packages/theme/default/*"],
-      "ui/*":             ["packages/ui/default/*"]
+      "lndr/*":             ["packages/lndr/*"],
+      "theme/*":            ["packages/theme/*"],
+      "ui/*":               ["packages/ui/*"]
     },                           /* A series of entries which re-map imports to lookup locations relative to the 'baseUrl'. */
     // "rootDirs": [],                        /* List of root folders whose combined content represents the structure of the project at runtime. */
     // "typeRoots": [],                       /* List of folders to include type definitions from. */
