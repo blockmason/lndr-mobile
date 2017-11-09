@@ -15,7 +15,7 @@ interface Props {
   style?: any
 }
 
-const showText = (text: string, alternate?: boolean) => {
+const showText = (text?: string, alternate?: boolean) => {
   if (alternate) {
     return <Text style={buttonStyle.textAlternate}>{text}</Text>
   }

@@ -14,7 +14,11 @@ interface Props {
   engine: Engine
 }
 
-export default class AccountView extends Component<Props> {
+interface State {
+  shouldShowAddDebt: boolean
+}
+
+export default class AccountView extends Component<Props, State> {
   constructor() {
     super()
     this.state = {
