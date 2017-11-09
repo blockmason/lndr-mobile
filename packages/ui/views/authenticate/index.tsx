@@ -6,7 +6,6 @@ import Engine from 'lndr/engine'
 
 import Alert from 'ui/components/alert'
 import Logo from 'ui/components/logo'
-import { PopupTarget } from 'ui/components/popup'
 
 import LoginView from 'ui/views/login'
 import CreateAccountView from 'ui/views/create-account'
@@ -29,7 +28,6 @@ interface Props {
 export default class AuthenticateView extends Component<Props> {
   render() {
     return <ScrollView contentContainerStyle={style.flex}>
-      <PopupTarget />
       <Logo />
       {this.renderView()}
       {this.renderErrorMessage()}

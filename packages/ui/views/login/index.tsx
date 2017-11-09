@@ -14,18 +14,12 @@ interface Props {
 }
 
 export default class LoginView extends Component<Props> {
-  render () {
+  render() {
     const { engine } = this.props
 
-    return <View>
-      <Popup onClose={() => {}}>
-        <Text>This is a popup, just delete this</Text>
-        <Logo />
-      </Popup>
-      <LoginAccountForm
-        onSubmit={formData => engine.loginAccount(formData)}
-        onRemoveAccount={() => engine.goToRemoveAccount()}
-      />
-    </View>
+    return <LoginAccountForm
+      onSubmit={formData => engine.loginAccount(formData)}
+      onRemoveAccount={() => engine.goToRemoveAccount()}
+    />
   }
 }

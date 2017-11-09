@@ -45,7 +45,7 @@ export class PopupTarget extends Component {
     return <ScrollView style={style.wrap}>
       <View style={style.container}>
         <View style={style.popup}>
-          <Button round onPress={() => this.closePopup()} icon={'md-close'} style={style.closeButton} />
+          <Button round onPress={() => this.closePopup()} icon='md-close' style={style.closeButton} />
           {popupContents}
         </View>
       </View>

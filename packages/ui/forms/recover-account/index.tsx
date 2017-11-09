@@ -30,7 +30,7 @@ export default class RecoverAccountForm extends Component<Props, RecoverAccountD
     this.state = defaultRecoverAccountData()
   }
 
-  render () {
+  render() {
     return <View style={style.form}>
       <Text style={style.text}>{recoverExistingAccount}</Text>
       <TextInput
