@@ -1,3 +1,7 @@
+export const large = {
+  fontSize: 20
+}
+
 export const medium = {
   fontSize: 16
 }

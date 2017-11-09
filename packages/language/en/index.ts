@@ -23,3 +23,7 @@ export const errorTitle = 'Error'
 export const mnemonicExhortation = 'Record these 12 words somewhere safe and secret'
 export const removeAccountTitle = 'Are you sure you would like to remove your account from this device?'
 export const removeAccountExhortation = 'Be sure that you have access to your mnemonic to restore your account later, as this is a permanent removal of your account information from this device.'
+
+export const myAccount = 'My account'
+export const addNewFriend = 'Add new friend'
+export const addNewDebt = 'Add new debt'
