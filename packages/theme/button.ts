@@ -14,11 +14,16 @@ export default StyleSheet.create({
     ...radius
   },
 
-  buttonDanger: {
-    ...mediumPad,
-    ...verticalMargin,
-    backgroundColor: danger,
-    ...radius
+  round: {
+    borderRadius: 100
+  },
+
+  danger: {
+    backgroundColor: danger
+  },
+
+  buttonAbsolute: {
+    position: 'absolute'
   },
 
   buttonAlternate: {
@@ -39,5 +44,15 @@ export default StyleSheet.create({
     ...bold,
     ...center,
     color: gray
+  },
+
+  icon: {
+    marginTop: -7,
+    marginLeft: -7,
+    paddingLeft: 5,
+    fontSize: 22,
+    width: 23,
+    height: 23,
+    backgroundColor: transparent
   }
 } as any)

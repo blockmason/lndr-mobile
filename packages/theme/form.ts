@@ -1,12 +1,12 @@
 import { StyleSheet } from 'react-native'
 
-import { m, largePad, verticalMargin } from 'theme/include/spacing'
+import { m, xLargePad, verticalMargin } from 'theme/include/spacing'
 import { medium, bold } from 'theme/include/fonts'
 import { attention, radius } from 'theme/include/borders'
 
 export default StyleSheet.create({
   form: {
-    ...largePad
+    ...xLargePad
   },
   text: {
     ...medium,

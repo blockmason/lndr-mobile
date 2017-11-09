@@ -10,7 +10,7 @@ export default StyleSheet.create({
   tabsContainer: {
     flexDirection: 'row',
     backgroundColor: dark,
-    paddingTop: 30
+    paddingTop: 30,
     paddingBottom: 0
   },
   tabContainer: {
