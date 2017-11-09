@@ -53,3 +53,28 @@ _*Note:* this file is over 50 lines long because it contains a lot of relevant i
 - `react-native run-ios`
 - _(optionally)_ kill the spawned terminal and run packager manually: `yarn start`
 - (in new terminal) `yarn run typescript`
+
+
+## ... on Android
+
+See iOS for initialisation
+
+Setting up ANDROID_HOME env variable
+
+`export ANDROID_HOME=/<SDK installation location>`
+`export PATH=${PATH}:$ANDROID_HOME/tools:$ANDROID_HOME/platform-tools`
+`source ~/.bash_profile`
+
+<installation location> will be found in android studio (if installed) in Preferences -> Appearance & Behaviour -> System Settings -> Android SDK
+
+Running Android  
+
+- `react-native run-android`
+
+
+## ... Logging apps
+
+*In new tabs*
+
+- `react-native log-ios`
+- `react-native log-android`
