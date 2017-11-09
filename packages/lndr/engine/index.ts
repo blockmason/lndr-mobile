@@ -1,6 +1,7 @@
 // This file is over 50 lines and needs to be split up
 
 import User, { CreateAccountData, RecoverAccountData, LoginAccountData } from 'lndr/user'
+import Underscore from 'underscore'
 
 import CreditProtocol from 'credit-protocol'
 
@@ -100,7 +101,8 @@ export default class Engine {
 
   async confirmAccount() {
     const { password, mnemonicInstance } = this.state
-    const hashedPassword = mnemonicInstance.toSeed(PASSWORD_SALT + password).join('.')
+    const passwordValues = Underscore.values(mnemonicInstance.toSeed(PASSWORD_SALT + password))
+    const hashedPassword = passwordValues.join('.')
     const user = new User(mnemonicInstance.toString(), hashedPassword)
     await this.storeUserSession(user)
     this.state = { user, hasStoredUser: true, shouldConfirmAccount: false }
@@ -113,7 +115,8 @@ export default class Engine {
     const mnemonicInstance = creditProtocol.getMnemonic(mnemonic)
 
     const hashedPasswordReference = await hashedPasswordStorage.get()
-    const hashedPassword = mnemonicInstance.toSeed(PASSWORD_SALT + confirmPassword).join('.')
+    const passwordValues = Underscore.values(mnemonicInstance.toSeed(PASSWORD_SALT + confirmPassword))
+    const hashedPassword = passwordValues.join('.')
 
     if (hashedPassword !== hashedPasswordReference) {
       return this.setErrorMessage('Password is not valid, please try again.')
@@ -129,7 +132,7 @@ export default class Engine {
     if (mnemonic.split(' ').length < 12) {
       return this.setErrorMessage('Mnemonic should have at least 12 words.')
     }
-    
+
     if (confirmPassword.length < 8) {
       return this.setErrorMessage('Password should be at least 8 characters.')
     }
