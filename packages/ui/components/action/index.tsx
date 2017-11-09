@@ -9,13 +9,13 @@ import { icStats, icPeople, icCash } from 'theme/include/icon'
 
 import { myAccount, addNewFriend, addNewDebt } from 'language'
 
-import style from 'theme/action'
+import style from 'theme/actionButton'
 import general from 'theme/general'
 
 interface Props {
 }
 
-export default (Props) => (
+export default () => (
   <View style={general.flex}>
     <ActionButton buttonColor={rootAction}>
       <ActionButton.Item buttonColor={accountAction} title={myAccount} onPress={() => console.log('My Account')}>
