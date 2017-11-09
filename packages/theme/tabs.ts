@@ -33,6 +33,7 @@ export default StyleSheet.create({
   },
   text: {},
   textActive: {
-    color: light
+    color: light,
+    fontWeight: 'bold'
   }
 } as any)

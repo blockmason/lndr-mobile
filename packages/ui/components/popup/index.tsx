@@ -10,7 +10,14 @@ let popupTarget
 let popupContents
 let popupOnClose
 
-export class PopupTarget extends Component {
+interface TargetProps {}
+
+interface TargetState {
+  flip: boolean
+  isOpen: boolean
+}
+
+export class PopupTarget extends Component<TargetProps, TargetState> {
   constructor() {
     super()
     this.state = { flip: false, isOpen: false }
@@ -45,7 +52,7 @@ export class PopupTarget extends Component {
     return <ScrollView style={style.wrap}>
       <View style={style.container}>
         <View style={style.popup}>
-          <Button round onPress={() => this.closePopup()} icon={'md-close'} style={style.closeButton} />
+          <Button round onPress={() => this.closePopup()} icon='md-close' style={style.closeButton} />
           {popupContents}
         </View>
       </View>
@@ -57,7 +64,7 @@ interface Props {
   onClose: () => void
 }
 
-export default class Popup<Props> extends Component {
+export default class Popup extends Component<Props> {
   componentWillMount() {
     if (!popupTarget) {
       throw new Error('<PopupTarget /> must be used somewhere as the place to render a <Popup />')

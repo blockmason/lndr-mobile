@@ -8,8 +8,6 @@ export const danger = '#c00'
 export const transparent = 'transparent'
 export const shade = 'rgba(0, 0, 0, 0.5)'
 
-export const white = '#fff'
-
 //action button colors
 export const rootAction = '#e74c3c'
 export const accountAction = '#26c6da'

@@ -15,15 +15,15 @@ interface Props {
   style?: any
 }
 
-const showText = (text: string, alternate?: boolean) => {
+const showText = (text?: string, alternate?: boolean) => {
   if (alternate) {
     return <Text style={buttonStyle.textAlternate}>{text}</Text>
   }
   return <Text style={buttonStyle.text}>{text}</Text>
 }
 
-const getStyle = (danger?: boolean, round?: boolean, alternate?: boolean, customStyle: any) => {
-  let styles = []
+const getStyle = (danger?: boolean, round?: boolean, alternate?: boolean, customStyle?: any) => {
+  let styles: any[] = []
 
   if (alternate) {
     styles.push(buttonStyle.buttonAlternate)
@@ -50,7 +50,7 @@ const getStyle = (danger?: boolean, round?: boolean, alternate?: boolean, custom
 
 export default ({ danger, round, alternate, style, icon, text, onPress }: Props) => (
   <TouchableHighlight
-    underlayColor={'#fff'}
+    underlayColor='#fff'
     activeOpacity={0.5}
     onPress={onPress}
   >

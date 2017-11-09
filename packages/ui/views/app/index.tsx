@@ -1,10 +1,16 @@
 import React, { Component } from 'react'
 
+import { View } from 'react-native'
+
 import Engine, { EngineState } from 'lndr/engine'
 
 import AuthenticateView from 'ui/views/authenticate'
 import AccountView from 'ui/views/account'
+
+import { PopupTarget } from 'ui/components/popup'
 import Logo from 'ui/components/logo'
+
+import style from 'theme/general'
 
 interface Props {}
 
@@ -22,6 +28,13 @@ export default class AppView extends Component<Props, EngineState> {
   }
 
   render() {
+    return <View style={style.flex}>
+      <PopupTarget />
+      {this.renderContents()}
+    </View>
+  }
+
+  renderContents() {
     const {
       user,
       mnemonicInstance,
