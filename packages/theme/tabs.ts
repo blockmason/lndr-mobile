@@ -22,14 +22,12 @@ export default StyleSheet.create({
   tab: {
     paddingTop: 15,
     paddingBottom: 15,
-    alignItems: 'center',
-    fontWeight: 'bold'
+    alignItems: 'center'
   },
   tabActive: {
     paddingTop: 15,
     paddingBottom: 15,
     alignItems: 'center',
-    fontWeight: 'bold',
     borderBottomWidth: 2,
     borderBottomColor: light
   },
