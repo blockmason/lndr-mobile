@@ -1,7 +1,10 @@
 // This file is over 50 lines of code and needs to be broken up
+declare const Buffer
 
 import Mnemonic from 'bitcore-mnemonic'
+import ethUtil from 'ethereumjs-util'
 
+import { bufferToHex } from './lib/buffer-utils'
 import Client from './lib/client'
 import CreditRecord from './lib/credit-record'
 
@@ -12,12 +15,33 @@ export default class CreditProtocol {
     this.client = new Client(baseUrl, fetch)
   }
 
+  sign(message, privateKeyBuffer) {
+    const { r, s, v } = ethUtil.ecsign(
+      ethUtil.hashPersonalMessage(message),
+      privateKeyBuffer
+    )
+
+    return bufferToHex(
+      Buffer.concat(
+        [ r, s, Buffer.from([ v ]) ]
+      )
+    )
+  }
+
+  setNickname(addr, nick, privateKeyBuffer) {
+    return this.client.post('/nick', {
+      addr,
+      nick,
+      sig: this.sign(nick, privateKeyBuffer)
+    })
+  }
+
   getNonce(address1, address2) {
     return this.client.get(`/nonce/${address1}/${address2}`)
   }
 
   pendingTransactions() {
-    return this.client.get(`/pending`)
+    return this.client.get('/pending')
   }
 
   async createCreditRecord(ucac, address1, address2, amount, memo) {

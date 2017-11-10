@@ -9,7 +9,6 @@ import style from 'theme/tabs'
 interface TabProps {
   reference: string
   text: string
-  tabContainerStyle: any
 }
 
 export class Tab extends Component<TabProps> {
@@ -31,6 +30,7 @@ const getTabStyle = (alternate?: boolean, active?: boolean) => {
 
 interface Props {
   alternate?: boolean
+  tabContainerStyle?: any
 }
 
 interface State {
