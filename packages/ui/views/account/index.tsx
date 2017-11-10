@@ -9,7 +9,13 @@ import Tabs, { Tab } from 'ui/components/tabs'
 import ActionButton from 'ui/components/action'
 import Popup from 'ui/components/popup'
 
+import HomeView from './home'
+import FriendsView from './friends'
+import ActivityView from './activity'
+
 import AddDebt from 'ui/dialogs/add-debt'
+
+import style from 'theme/account'
 
 interface Props {
   engine: Engine
@@ -42,18 +48,18 @@ export default class AccountView extends Component<Props, State> {
   }
 
   render() {
+    const { engine } = this.props
+
     return <View style={{flex: 1}}>
-      <Tabs>
-        <Tab reference={'balances'} title={'Balances'}>
-          <Text>AccountView</Text>
-          <Button text='Add Debt' onPress={() => this.setState({ shouldShowAddDebt: true })} />
-          { this.renderAddDebtDialog() }
+      <Tabs tabContainerStyle={style.tabs}>
+        <Tab reference='home' text='Home'>
+          <HomeView engine={engine} />
         </Tab>
-        <Tab reference={'friends'} title={'Friends'}>
-          <Text>Friends</Text>
+        <Tab reference='friends' text='Friends'>
+          <FriendsView engine={engine} />
         </Tab>
-        <Tab reference={'pending'} title={'Pending'}>
-          <Text>Pending</Text>
+        <Tab reference='activity' text='Activity'>
+          <ActivityView engine={engine} />
         </Tab>
       </Tabs>
       <ActionButton/>
