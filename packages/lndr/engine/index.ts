@@ -1,7 +1,6 @@
 // This file is over 50 lines and needs to be split up
 
 import User, { CreateAccountData, RecoverAccountData, LoginAccountData } from 'lndr/user'
-import Underscore from 'underscore'
 
 import CreditProtocol from 'credit-protocol'
 
@@ -101,7 +100,7 @@ export default class Engine {
 
   async confirmAccount() {
     const { password, mnemonicInstance } = this.state
-    const passwordValues = Underscore.values(mnemonicInstance.toSeed(PASSWORD_SALT + password))
+    const passwordValues = Object.values(mnemonicInstance.toSeed(PASSWORD_SALT + password))
     const hashedPassword = passwordValues.join('.')
     const user = new User(mnemonicInstance.toString(), hashedPassword)
     await this.storeUserSession(user)
@@ -110,12 +109,10 @@ export default class Engine {
 
   async loginAccount(loginData: LoginAccountData) {
     const { confirmPassword } = loginData
-
     const mnemonic = await mnemonicStorage.get()
     const mnemonicInstance = creditProtocol.getMnemonic(mnemonic)
-
     const hashedPasswordReference = await hashedPasswordStorage.get()
-    const passwordValues = Underscore.values(mnemonicInstance.toSeed(PASSWORD_SALT + confirmPassword))
+    const passwordValues = Object.values(mnemonicInstance.toSeed(PASSWORD_SALT + confirmPassword))
     const hashedPassword = passwordValues.join('.')
 
     if (hashedPassword !== hashedPasswordReference) {
