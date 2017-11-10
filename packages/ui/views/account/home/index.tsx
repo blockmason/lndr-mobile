@@ -2,19 +2,13 @@ import React, { Component } from 'react'
 
 import Engine from 'lndr/engine'
 
-import { Text } from 'react-native'
+import { Text, View } from 'react-native'
 
 import Button from 'ui/components/button'
-import Tabs, { Tab } from 'ui/components/tabs'
 import Popup from 'ui/components/popup'
-
-import HomeView from './home'
-import FriendsView from './friends'
-import ActivityView from './activity'
+import Section from 'ui/components/section'
 
 import AddDebt from 'ui/dialogs/add-debt'
-
-import style from 'theme/account'
 
 interface Props {
   engine: Engine
@@ -24,7 +18,7 @@ interface State {
   shouldShowAddDebt: boolean
 }
 
-export default class AccountView extends Component<Props, State> {
+export default class HomeView extends Component<Props, State> {
   constructor() {
     super()
     this.state = {
@@ -47,18 +41,16 @@ export default class AccountView extends Component<Props, State> {
   }
 
   render() {
-    const { engine } = this.props
+    return <View>
+      <Section>
+        <Text>Home View</Text>
+        <Button text='Add Debt' onPress={() => this.setState({ shouldShowAddDebt: true })} />
+        { this.renderAddDebtDialog() }
+      </Section>
 
-    return <Tabs tabContainerStyle={style.tabs}>
-      <Tab reference='home' text='Home'>
-        <HomeView engine={engine} />
-      </Tab>
-      <Tab reference='friends' text='Friends'>
-        <FriendsView engine={engine} />
-      </Tab>
-      <Tab reference='activity' text='Activity'>
-        <ActivityView engine={engine} />
-      </Tab>
-    </Tabs>
+      <Section text='My Balances'>
+        <Text>List of balances to go here #todo</Text>
+      </Section>
+    </View>
   }
 }

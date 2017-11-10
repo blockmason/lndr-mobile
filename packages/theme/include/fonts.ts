@@ -6,6 +6,10 @@ export const small = {
   fontSize: 14
 }
 
+export const large = {
+  fontSize: 20
+}
+
 export const wide = {
   letterSpacing: 0.5
 }

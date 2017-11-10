@@ -1,6 +1,6 @@
 import { StyleSheet } from 'react-native'
 
-import { dark, light } from 'theme/include/colors'
+import { charcoal, lightGray, gray, dark, light } from 'theme/include/colors'
 
 export default StyleSheet.create({
   topView: {
@@ -9,9 +9,10 @@ export default StyleSheet.create({
   },
   tabsContainer: {
     flexDirection: 'row',
-    backgroundColor: dark,
-    paddingTop: 30,
-    paddingBottom: 0
+    backgroundColor: dark
+  },
+  tabsContainerAlternate: {
+    backgroundColor: light
   },
   tabContainer: {
     flex: 1
@@ -25,15 +26,24 @@ export default StyleSheet.create({
     alignItems: 'center'
   },
   tabActive: {
-    paddingTop: 15,
-    paddingBottom: 15,
-    alignItems: 'center',
     borderBottomWidth: 2,
     borderBottomColor: light
   },
-  text: {},
+  text: {
+    color: charcoal
+  },
   textActive: {
     color: light,
     fontWeight: 'bold'
+  },
+  tabActiveAlternate: {
+    borderBottomWidth: 2,
+    borderBottomColor: lightGray
+  },
+  textAlternate: {
+    color: lightGray
+  },
+  textActiveAlternate: {
+    color: charcoal
   }
 } as any)

@@ -7,11 +7,11 @@ import Engine from 'lndr/engine'
 import Alert from 'ui/components/alert'
 import Logo from 'ui/components/logo'
 
-import LoginView from 'ui/views/login'
-import CreateAccountView from 'ui/views/create-account'
-import RecoverAccountView from 'ui/views/recover-account'
-import RemoveAccountView from 'ui/views/remove-account'
-import ConfirmAccountView from 'ui/views/confirm-account'
+import LoginView from './login'
+import CreateAccountView from './create-account'
+import RecoverAccountView from './recover-account'
+import RemoveAccountView from './remove-account'
+import ConfirmAccountView from './confirm-account'
 
 import style from 'theme/general'
 

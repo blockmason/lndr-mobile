@@ -13,3 +13,8 @@ export const thinBorder = {
   borderWidth: 1,
   borderColor: lightGray
 }
+
+export const thinBottomBorder = {
+  borderBottomWidth: 1,
+  borderBottomColor: lightGray
+}
