@@ -2,7 +2,7 @@ import React, { Component } from 'react'
 
 import Engine from 'lndr/engine'
 
-import { Text } from 'react-native'
+import { Text, View } from 'react-native'
 
 import Button from 'ui/components/button'
 import Tabs, { Tab } from 'ui/components/tabs'
@@ -15,6 +15,9 @@ import ActivityView from './activity'
 import AddDebt from 'ui/dialogs/add-debt'
 
 import style from 'theme/account'
+import general from 'theme/general'
+
+import { accountViewLanguage } from 'language'
 
 interface Props {
   engine: Engine
@@ -50,13 +53,13 @@ export default class AccountView extends Component<Props, State> {
     const { engine } = this.props
 
     return <Tabs tabContainerStyle={style.tabs}>
-      <Tab reference='home' text='Home'>
+      <Tab reference='home' text={accountViewLanguage.home}>
         <HomeView engine={engine} />
       </Tab>
-      <Tab reference='friends' text='Friends'>
+      <Tab reference='friends' text={accountViewLanguage.friends}>
         <FriendsView engine={engine} />
       </Tab>
-      <Tab reference='activity' text='Activity'>
+      <Tab reference='activity' text={accountViewLanguage.activity}>
         <ActivityView engine={engine} />
       </Tab>
     </Tabs>

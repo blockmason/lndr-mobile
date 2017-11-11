@@ -7,6 +7,7 @@ import Engine, { EngineState } from 'lndr/engine'
 import AuthenticateView from 'ui/views/authenticate'
 import AccountView from 'ui/views/account'
 
+import Alert from 'ui/components/alert'
 import { PopupTarget } from 'ui/components/popup'
 import Logo from 'ui/components/logo'
 
@@ -31,7 +32,19 @@ export default class AppView extends Component<Props, EngineState> {
     return <View style={style.flex}>
       <PopupTarget />
       {this.renderContents()}
+      {this.renderErrorMessage()}
+      {this.renderSuccessMessage()}
     </View>
+  }
+
+  renderErrorMessage() {
+    const { errorMessage } = this.state
+    return errorMessage ? <Alert error text={errorMessage} /> : null
+  }
+
+  renderSuccessMessage() {
+    const { successMessage } = this.state
+    return successMessage ? <Alert success text={successMessage} /> : null
   }
 
   renderContents() {
@@ -42,8 +55,7 @@ export default class AppView extends Component<Props, EngineState> {
       hasStoredUser,
       shouldRecoverAccount,
       shouldRemoveAccount,
-      shouldConfirmAccount,
-      errorMessage
+      shouldConfirmAccount
     } = this.state
 
     if (isInitializing) {
@@ -54,13 +66,15 @@ export default class AppView extends Component<Props, EngineState> {
       return <AuthenticateView
         engine={engine}
         mnemonic={mnemonicInstance ? mnemonicInstance.toString() : null}
-        errorMessage={errorMessage}
         shouldRecoverAccount={shouldRecoverAccount}
         shouldRemoveAccount={shouldRemoveAccount}
         shouldConfirmAccount={shouldConfirmAccount}
-        hasStoredUser={hasStoredUser} />
+        hasStoredUser={hasStoredUser}
+      />
     }
 
-    return <AccountView engine={engine} />
+    return <AccountView
+      engine={engine}
+    />
   }
 }

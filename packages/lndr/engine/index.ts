@@ -1,10 +1,14 @@
 // This file is over 50 lines and needs to be split up
 
-import User, { CreateAccountData, RecoverAccountData, LoginAccountData } from 'lndr/user'
+import ethUtil from 'ethereumjs-util'
+
+import User, { CreateAccountData, RecoverAccountData, LoginAccountData, UpdateAccountData } from 'lndr/user'
 
 import CreditProtocol from 'credit-protocol'
 
 import Storage from 'lndr/storage'
+
+import { accountManagement } from 'language'
 
 const mnemonicStorage = new Storage('mnemonic')
 const hashedPasswordStorage = new Storage('hashed-password')
@@ -23,6 +27,7 @@ export interface EngineState {
   mnemonicInstance?: any
   password?: string
   errorMessage?: string
+  successMessage?: string
 }
 
 interface EngineStateListener {
@@ -33,6 +38,8 @@ export default class Engine {
   engineState: EngineState
   listeners: EngineStateListener[]
   clearErrorTimeout: number
+  clearSuccessTimeout: number
+  privateKeyBuffer: any
 
   constructor() {
     this.listeners = []
@@ -76,12 +83,22 @@ export default class Engine {
     this.clearErrorTimeout = setTimeout(() => this.clearError(), 3000)
   }
 
+  clearSuccess() {
+    this.state = { successMessage: undefined }
+  }
+
+  setSuccessMessage(successMessage) {
+    this.state = { successMessage }
+    clearTimeout(this.clearSuccessTimeout)
+    this.clearErrorTimeout = setTimeout(() => this.clearSuccess(), 3000)
+  }
+
   createAccount(accountData: CreateAccountData) {
     if (accountData.password.length < 8) {
-      return this.setErrorMessage('Password should be at least 8 characters.')
+      return this.setErrorMessage(accountManagement.password.lengthViolation)
     }
     if (accountData.password !== accountData.confirmPassword) {
-      return this.setErrorMessage('Passwords should match.')
+      return this.setErrorMessage(accountManagement.password.matchViolation)
     }
 
     const password = accountData.password
@@ -89,8 +106,39 @@ export default class Engine {
     this.state = { shouldConfirmAccount: true, password, mnemonicInstance }
   }
 
+  updateAccount(accountData: UpdateAccountData) {
+    const { address, privateKeyBuffer } = this.engineState.user as User
+    const { nickname } = accountData
+
+    // @todo - add additional functions here depending on changed data
+    return creditProtocol.setNickname(address, nickname, privateKeyBuffer)
+      .then(() => this.setSuccessMessage(accountManagement.setNickname.success))
+      .catch(error => {
+        this.setErrorMessage(accountManagement.setNickname.error)
+        throw error
+      })
+  }
+
   cancelConfirmAccount() {
     this.state = { shouldConfirmAccount: false }
+  }
+
+  createUserFromCredentials(mnemonicInstance, password) {
+    const mnemonic = mnemonicInstance.toString()
+    const hashedPassword = Array.from(mnemonicInstance.toSeed(PASSWORD_SALT + password)).join('.')
+    const privateKey = mnemonicInstance.toHDPrivateKey(password)
+    const privateKeyBuffer = privateKey.privateKey.toBuffer()
+    const ethAddress = ethUtil.privateToAddress(privateKeyBuffer)
+    const address = ethUtil.bufferToHex(ethAddress)
+
+    return new User(
+      mnemonic,
+      hashedPassword,
+      privateKey,
+      privateKeyBuffer,
+      ethAddress,
+      address
+    )
   }
 
   async storeUserSession(user: User) {
@@ -100,8 +148,7 @@ export default class Engine {
 
   async confirmAccount() {
     const { password, mnemonicInstance } = this.state
-    const hashedPassword = mnemonicInstance.toSeed(PASSWORD_SALT + password).join('.')
-    const user = new User(mnemonicInstance.toString(), hashedPassword)
+    const user = this.createUserFromCredentials(mnemonicInstance, password)
     await this.storeUserSession(user)
     this.state = { user, hasStoredUser: true, shouldConfirmAccount: false }
   }
@@ -113,13 +160,13 @@ export default class Engine {
     const mnemonicInstance = creditProtocol.getMnemonic(mnemonic)
 
     const hashedPasswordReference = await hashedPasswordStorage.get()
-    const hashedPassword = mnemonicInstance.toSeed(PASSWORD_SALT + confirmPassword).join('.')
+    const hashedPassword = Array.from(mnemonicInstance.toSeed(PASSWORD_SALT + confirmPassword)).join('.')
 
     if (hashedPassword !== hashedPasswordReference) {
-      return this.setErrorMessage('Password is not valid, please try again.')
+      return this.setErrorMessage(accountManagement.password.failedHashComparison)
     }
 
-    const user = new User(mnemonicInstance.toString(), hashedPassword)
+    const user = this.createUserFromCredentials(mnemonicInstance, confirmPassword)
     this.state = { user, hasStoredUser: true }
   }
 
@@ -127,11 +174,11 @@ export default class Engine {
     const { confirmPassword, mnemonic } = recoverData
 
     if (mnemonic.split(' ').length < 12) {
-      return this.setErrorMessage('Mnemonic should have at least 12 words.')
+      return this.setErrorMessage(accountManagement.mnemonic.lengthViolation)
     }
-    
+
     if (confirmPassword.length < 8) {
-      return this.setErrorMessage('Password should be at least 8 characters.')
+      return this.setErrorMessage(accountManagement.password.lengthViolation)
     }
 
     try {
@@ -141,8 +188,7 @@ export default class Engine {
     }
 
     catch (e) {
-      const message = 'The entered mnemonic was not valid, please try again.'
-      return this.setErrorMessage(message)
+      return this.setErrorMessage(accountManagement.mnemonic.unableToValidate)
     }
   }
 

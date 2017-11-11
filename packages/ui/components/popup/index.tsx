@@ -9,6 +9,9 @@ import style from 'theme/popup'
 let popupTarget
 let popupContents
 let popupOnClose
+let closeCurrentPopup
+
+export const closePopup = () => closeCurrentPopup()
 
 interface TargetProps {}
 
@@ -49,10 +52,12 @@ export class PopupTarget extends Component<TargetProps, TargetState> {
       return null
     }
 
+    closeCurrentPopup = () => this.closePopup()
+
     return <ScrollView style={style.wrap}>
       <View style={style.container}>
         <View style={style.popup}>
-          <Button round onPress={() => this.closePopup()} icon='md-close' style={style.closeButton} />
+          <Button round onPress={closeCurrentPopup} icon='md-close' style={style.closeButton} />
           {popupContents}
         </View>
       </View>

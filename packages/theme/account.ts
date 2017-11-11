@@ -6,4 +6,4 @@ export default StyleSheet.create({
   tabs: {
     paddingTop: xxl
   }
-})
+} as any)

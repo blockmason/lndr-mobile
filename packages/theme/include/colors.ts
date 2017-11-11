@@ -5,6 +5,8 @@ export const gray = '#777'
 export const charcoal = '#222'
 export const dark = '#128333'
 export const danger = '#c00'
+export const good = '#ace'
 
 export const transparent = 'transparent'
 export const shade = 'rgba(0, 0, 0, 0.5)'
+export const whiteout = 'rgba(255, 255, 255, 0.9)'

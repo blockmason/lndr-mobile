@@ -5,18 +5,26 @@ import { dropShadow } from 'theme/include/shadows'
 import { center } from 'theme/include/align'
 import { radius } from 'theme/include/borders'
 import { medium, bold } from 'theme/include/fonts'
-import { light, danger } from 'theme/include/colors'
+import { light, danger, good } from 'theme/include/colors'
 
 export default StyleSheet.create({
   alert: {
+    zIndex: 2,
     position: 'absolute',
     top: xxl,
     left: l,
     right: l,
     ...mediumPad,
-    backgroundColor: danger,
     ...radius,
     ...dropShadow
+  },
+
+  alertError: {
+    backgroundColor: danger
+  },
+
+  alertSuccess: {
+    backgroundColor: good
   },
 
   text: {

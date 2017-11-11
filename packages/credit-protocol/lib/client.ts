@@ -18,7 +18,8 @@ export default class Client {
         throw new Error(`HTTP Response ${response.status}`)
       })
       .catch(error => {
-        console.error(`[fetch] ERROR ${error.message}`)
+        console.warn(`[fetch] ERROR ${error.message}`)
+        throw error
       })
   }
 

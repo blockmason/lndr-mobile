@@ -7,6 +7,10 @@ export function hexToBuffer(value) {
   return Buffer.from(value.substr(2), 'hex')
 }
 
+export function stringToBuffer(value) {
+  return Buffer.from(value)
+}
+
 export function bufferToHex(buffer) {
   return '0x' + buffer.toString('hex')
 }

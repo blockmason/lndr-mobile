@@ -1,3 +1,5 @@
+const generalCommunicationError = 'There was a problem communicating with the server, please try again later.'
+
 export const applicationName = 'LNDR'
 export const helloWorld = 'Hello world'
 
@@ -7,6 +9,7 @@ export const confirmAccount = 'Confirm'
 export const createAccount = 'Create Account'
 export const recoverAccount = 'Restore Account'
 export const removeAccount = 'Remove Account'
+export const updateAccount = 'Update Account'
 export const loginAction = 'Unlock'
 
 export const newPassword = 'New Password (minimum 8 chars)'
@@ -23,3 +26,28 @@ export const errorTitle = 'Error'
 export const mnemonicExhortation = 'Record these 12 words somewhere safe and secret'
 export const removeAccountTitle = 'Are you sure you would like to remove your account from this device?'
 export const removeAccountExhortation = 'Be sure that you have access to your mnemonic to restore your account later, as this is a permanent removal of your account information from this device.'
+
+export const setNickname = 'Set a nickname so your friends can find you'
+export const nickname = 'Nickname'
+
+export const accountManagement = {
+  password: {
+    lengthViolation: 'Password should be at least 8 characters.',
+    matchViolation: 'Passwords should match.',
+    failedHashComparison: 'Password is not valid, please try again.'
+  },
+  mnemonic: {
+    lengthViolation: 'Mnemonic should have at least 12 words.',
+    unableToValidate: 'The entered mnemonic was not valid, please try again.'
+  },
+  setNickname: {
+    success: 'Your nickname has been saved.',
+    error: generalCommunicationError
+  }
+}
+
+export const accountViewLanguage = {
+  home: 'Home',
+  friends: 'Friends',
+  activity: 'Activity'
+}
