@@ -85,7 +85,7 @@ export default class FriendsView extends Component<Props, State> {
 
       <Section text='Current Friends' contentContainerStyle={style.list}>
         <Loading context={loadingFriends} />
-        {friends.map(friend => <FriendRow friend={friend} onPress={() => {}} />)}
+        {friends.map(friend => <FriendRow key={friend.address} friend={friend} onPress={() => {}} />)}
       </Section>
     </View>
   }

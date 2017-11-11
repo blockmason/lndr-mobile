@@ -66,7 +66,7 @@ export default class AddFriend extends Component<Props, State> {
       />
       <View style={style.list}>
         <Loading context={loadingContext} />
-        {matches.map(match => <FriendRow friend={match} onPress={() => {}} />)}
+        {matches.map(match => <FriendRow key={match.address} friend={match} onPress={() => {}} />)}
       </View>
       <Button alternate onPress={closePopup} text={cancel} />
     </View>
