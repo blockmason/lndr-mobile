@@ -41,6 +41,7 @@ export class LoadingContext {
         })
       }))
       .catch(error => new Promise((resolve, reject) => {
+        resolve // do nothing
         delay(DELAY).then(() => {
           this.stop()
           reject(error)
@@ -54,7 +55,7 @@ interface Props {
 }
 
 interface State {
-  context: isLoading
+  isLoading: boolean
 }
 
 export default class Loading extends Component<Props, State> {
@@ -65,12 +66,12 @@ export default class Loading extends Component<Props, State> {
     }
   }
 
-  componentWillMount() {
+  componentDidMount() {
     const { context } = this.props
     context.register(this)
   }
 
-  componentWillUnMount() {
+  componentWillUnmount() {
     const { context } = this.props
     context.unregister(this)
   }
