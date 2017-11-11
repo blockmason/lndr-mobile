@@ -6,7 +6,7 @@ import style from 'theme/loading'
 
 const delay = time => new Promise(resolve => setTimeout(resolve, time))
 
-const DELAY = 2500
+const DELAY = 250
 
 export class LoadingContext {
   registry: any[]
