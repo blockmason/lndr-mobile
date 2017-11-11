@@ -1,7 +1,5 @@
 import React, { Component } from 'react'
 
-import { defaultUpdateAccountData } from 'lndr/user'
-
 import { Text, TextInput, View } from 'react-native'
 
 import Engine from 'lndr/engine'
@@ -12,7 +10,7 @@ const loadingContext = new LoadingContext()
 
 import style from 'theme/form'
 
-import { nickname, setNickname, updateAccount, cancel } from 'language'
+import { searchUsersByNickname, nickname, cancel } from 'language'
 
 interface Props {
   engine: Engine
@@ -23,10 +21,12 @@ interface State {
   nickname: string
 }
 
-export default class MyAccount extends Component<Props, State> {
+export default class AddFriend extends Component<Props, State> {
   constructor() {
     super()
-    this.state = defaultUpdateAccountData()
+    this.state = {
+      nickname: ''
+    }
   }
 
   render() {
@@ -34,19 +34,18 @@ export default class MyAccount extends Component<Props, State> {
 
     const submit = () =>
       loadingContext.wrap(
-        engine.updateAccount(this.state)
+        engine.searchUsers(this.state)
       ).then(closePopup)
 
     return <View>
       <Loading context={loadingContext} />
-      <Text style={style.firstText}>{setNickname}</Text>
+      <Text style={style.firstText}>{searchUsersByNickname}</Text>
       <TextInput
         autoCapitalize='none'
         style={style.textInput}
         placeholder={nickname}
         onChangeText={nickname => this.setState({ nickname })}
       />
-      <Button onPress={submit} text={updateAccount} />
       <Button alternate onPress={closePopup} text={cancel} />
     </View>
   }

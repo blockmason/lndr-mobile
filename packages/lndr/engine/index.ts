@@ -3,6 +3,7 @@
 import ethUtil from 'ethereumjs-util'
 
 import User, { CreateAccountData, RecoverAccountData, LoginAccountData, UpdateAccountData } from 'lndr/user'
+import Friend from 'lndr/friend'
 
 import CreditProtocol from 'credit-protocol'
 
@@ -117,6 +118,16 @@ export default class Engine {
         this.setErrorMessage(accountManagement.setNickname.error)
         throw error
       })
+  }
+
+  async searchUsers(searchData) {
+    const { nickname } = searchData
+    return [
+      new Friend('0x2127836871263', 'tim'),
+      new Friend('0xab897b8a97a97', 'rich'),
+      new Friend('0xc78cf9cf78fc7', 'roy'),
+      new Friend('0x0980989080988', nickname)
+    ]
   }
 
   cancelConfirmAccount() {

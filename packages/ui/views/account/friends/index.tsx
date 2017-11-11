@@ -6,13 +6,18 @@ import Friend from 'lndr/friend'
 
 import { Text, TouchableHighlight, View } from 'react-native'
 
+import Button from 'ui/components/button'
 import Section from 'ui/components/section'
-
+import Popup, { closePopup } from 'ui/components/popup'
 import Loading, { LoadingContext } from 'ui/components/loading'
+
+import AddFriend from 'ui/dialogs/add-friend'
 
 import { lightGray } from 'theme/include/colors'
 
 import style from 'theme/account'
+
+import { addFriend } from 'language'
 
 const delay = time => new Promise(resolve => setTimeout(resolve, time))
 
@@ -32,8 +37,23 @@ export default class HomeView extends Component<Props, State> {
   constructor() {
     super()
     this.state = {
+      shouldShowAddFriend: false,
       friends: []
     }
+  }
+
+  renderAddFriendDialog() {
+    const { shouldShowAddFriend } = this.state
+
+    if (!shouldShowAddFriend) {
+      return null
+    }
+
+    const { engine } = this.props
+
+    return <Popup onClose={() => this.setState({ shouldShowAddFriend: false })}>
+      <AddFriend closePopup={closePopup} engine={engine} />
+    </Popup>
   }
 
   componentDidMount() {
@@ -58,8 +78,10 @@ export default class HomeView extends Component<Props, State> {
     const { friends } = this.state
 
     return <View>
+      { this.renderAddFriendDialog() }
+
       <Section>
-        <Text>Add a new friend</Text>
+        <Button text={addFriend} onPress={() => this.setState({ shouldShowAddFriend: true })} />
       </Section>
 
       <Section text='Current Friends' contentContainerStyle={style.list}>

@@ -12,6 +12,8 @@ export const removeAccount = 'Remove Account'
 export const updateAccount = 'Update Account'
 export const loginAction = 'Unlock'
 
+export const addFriend = 'Add Friend'
+
 export const newPassword = 'New Password (minimum 8 chars)'
 export const confirmPassword = 'Confirm Password'
 export const newAccount = 'Create a new account'
@@ -29,6 +31,8 @@ export const removeAccountExhortation = 'Be sure that you have access to your mn
 
 export const setNickname = 'Set a nickname so your friends can find you'
 export const nickname = 'Nickname'
+
+export const searchUsersByNickname = 'Search for your friends by nickname'
 
 export const accountManagement = {
   password: {

@@ -11,6 +11,7 @@ export default StyleSheet.create({
   popup: {
     width: '100%',
     ...largePad,
+    paddingBottom: s,
     backgroundColor: white,
     ...radius,
     ...dropShadow
