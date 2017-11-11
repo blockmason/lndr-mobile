@@ -11,6 +11,8 @@ import Section from 'ui/components/section'
 import AddDebt from 'ui/dialogs/add-debt'
 import MyAccount from 'ui/dialogs/my-account'
 
+import formStyle from 'theme/form'
+
 interface Props {
   engine: Engine
 }
@@ -60,7 +62,7 @@ export default class HomeView extends Component<Props, State> {
   render() {
     return <View>
       <Section>
-        <Text>Home View</Text>
+        <Text style={formStyle.text}>Home View</Text>
         <Button text='Add Debt' onPress={() => this.setState({ shouldShowAddDebt: true })} />
         { this.renderAddDebtDialog() }
         <Button text='My Account' onPress={() => this.setState({ shouldShowMyAccount: true })} />
@@ -68,7 +70,7 @@ export default class HomeView extends Component<Props, State> {
       </Section>
 
       <Section text='My Balances'>
-        <Text>List of balances to go here #todo</Text>
+        <Text style={formStyle.text}>List of balances to go here #todo</Text>
       </Section>
     </View>
   }

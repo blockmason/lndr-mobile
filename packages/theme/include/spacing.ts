@@ -4,39 +4,32 @@ export const l = 30
 export const m = 15
 export const s = 10
 
-export const irregularPad = {
-  paddingLeft: l,
-  paddingRight: l,
-  paddingTop: xxl,
-  paddingBottom: xxl
-}
-
 export const xLargePad = {
   paddingLeft: xl,
   paddingRight: xl,
-  paddingTop: xl,
-  paddingBottom: xl
+  paddingTop: xl - s,
+  paddingBottom: xl - s
 }
 
 export const largePad = {
   paddingLeft: l,
   paddingRight: l,
-  paddingTop: l,
-  paddingBottom: l
+  paddingTop: l - s,
+  paddingBottom: l - s
 }
 
 export const mediumPad = {
   paddingLeft: m,
   paddingRight: m,
-  paddingTop: m,
-  paddingBottom: m
+  paddingTop: m - s,
+  paddingBottom: m - s
 }
 
 export const smallPad = {
   paddingLeft: s,
   paddingRight: s,
-  paddingTop: s,
-  paddingBottom: s
+  paddingTop: 0,
+  paddingBottom: 0
 }
 
 export const verticalMargin = {

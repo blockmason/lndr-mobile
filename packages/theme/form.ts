@@ -12,11 +12,6 @@ export default StyleSheet.create({
     ...medium,
     ...verticalMargin
   },
-  firstText: {
-    ...medium,
-    ...verticalMargin,
-    marginTop: 0
-  },
   header: {
     ...medium,
     ...bold,

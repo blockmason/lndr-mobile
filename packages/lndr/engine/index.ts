@@ -2,6 +2,7 @@
 
 import ethUtil from 'ethereumjs-util'
 
+import { longTimePeriod } from 'lndr/time'
 import User, { CreateAccountData, RecoverAccountData, LoginAccountData, UpdateAccountData } from 'lndr/user'
 import Friend from 'lndr/friend'
 
@@ -81,7 +82,7 @@ export default class Engine {
   setErrorMessage(errorMessage) {
     this.state = { errorMessage }
     clearTimeout(this.clearErrorTimeout)
-    this.clearErrorTimeout = setTimeout(() => this.clearError(), 3000)
+    this.clearErrorTimeout = setTimeout(() => this.clearError(), longTimePeriod)
   }
 
   clearSuccess() {
@@ -91,7 +92,7 @@ export default class Engine {
   setSuccessMessage(successMessage) {
     this.state = { successMessage }
     clearTimeout(this.clearSuccessTimeout)
-    this.clearErrorTimeout = setTimeout(() => this.clearSuccess(), 3000)
+    this.clearErrorTimeout = setTimeout(() => this.clearSuccess(), longTimePeriod)
   }
 
   createAccount(accountData: CreateAccountData) {

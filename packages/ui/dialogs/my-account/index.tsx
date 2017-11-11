@@ -39,7 +39,7 @@ export default class MyAccount extends Component<Props, State> {
 
     return <View>
       <Loading context={loadingContext} />
-      <Text style={style.firstText}>{setNickname}</Text>
+      <Text style={style.text}>{setNickname}</Text>
       <TextInput
         autoCapitalize='none'
         style={style.textInput}

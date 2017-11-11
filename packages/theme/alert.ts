@@ -1,6 +1,6 @@
 import { StyleSheet } from 'react-native'
 
-import { xxl, l, s, mediumPad } from 'theme/include/spacing'
+import { xxl, l, s, mediumPad, verticalMargin } from 'theme/include/spacing'
 import { dropShadow } from 'theme/include/shadows'
 import { center } from 'theme/include/align'
 import { radius } from 'theme/include/borders'
@@ -28,6 +28,7 @@ export default StyleSheet.create({
   },
 
   text: {
+    ...verticalMargin,
     ...medium,
     color: light
   },
@@ -35,7 +36,7 @@ export default StyleSheet.create({
   header: {
     ...medium,
     ...bold,
-    marginBottom: s,
+    marginTop: s,
     color: light
   }
 } as any)

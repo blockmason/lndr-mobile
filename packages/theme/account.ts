@@ -1,6 +1,9 @@
 import { StyleSheet } from 'react-native'
 
-import { xxl, smallPad } from 'theme/include/spacing'
+import { bold, medium, small, monospace } from 'theme/include/fonts'
+import { xxl, m, verticalMargin } from 'theme/include/spacing'
+
+import { gray } from 'theme/include/colors'
 
 export default StyleSheet.create({
   tabs: {
@@ -17,8 +20,23 @@ export default StyleSheet.create({
     justifyContent: 'space-between'
   },
 
+  address: {
+    ...monospace,
+    ...small,
+    marginTop: m,
+    color: gray
+  },
+
   fact: {
     flex: 1,
-    ...smallPad
+    ...medium,
+    ...bold,
+    ...verticalMargin
+  },
+
+  factWide: {
+    flex: 2,
+    ...medium,
+    ...verticalMargin
   }
 } as any)

@@ -2,9 +2,10 @@ import React, { Component } from 'react'
 
 import Engine from 'lndr/engine'
 
+import { delay } from 'lndr/time'
 import Friend from 'lndr/friend'
 
-import { Text, TouchableHighlight, View } from 'react-native'
+import { View } from 'react-native'
 
 import Button from 'ui/components/button'
 import Section from 'ui/components/section'
@@ -12,14 +13,11 @@ import Popup, { closePopup } from 'ui/components/popup'
 import Loading, { LoadingContext } from 'ui/components/loading'
 
 import AddFriend from 'ui/dialogs/add-friend'
-
-import { lightGray } from 'theme/include/colors'
+import FriendRow from 'ui/components/friend-row'
 
 import style from 'theme/account'
 
 import { addFriend } from 'language'
-
-const delay = time => new Promise(resolve => setTimeout(resolve, time))
 
 const loadingFriends = new LoadingContext()
 
@@ -28,10 +26,11 @@ interface Props {
 }
 
 interface State {
+  shouldShowAddFriend: boolean
   friends: Friend[]
 }
 
-export default class HomeView extends Component<Props, State> {
+export default class FriendsView extends Component<Props, State> {
   stillRelevant?: boolean
 
   constructor() {
@@ -86,14 +85,7 @@ export default class HomeView extends Component<Props, State> {
 
       <Section text='Current Friends' contentContainerStyle={style.list}>
         <Loading context={loadingFriends} />
-        {friends.map(friend =>
-          <TouchableHighlight onPress={() => {}} underlayColor={lightGray} activeOpacity={0.5} key={friend.nickname}>
-            <View style={style.listItem}>
-              <Text style={style.fact}>{friend.nickname}</Text>
-              <Text style={style.fact}>{friend.address}</Text>
-            </View>
-          </TouchableHighlight>
-        )}
+        {friends.map(friend => <FriendRow friend={friend} onPress={() => {}} />)}
       </Section>
     </View>
   }

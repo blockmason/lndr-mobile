@@ -1,6 +1,6 @@
 import { StyleSheet } from 'react-native'
 
-import { xxl, l, s, irregularPad, largePad } from 'theme/include/spacing'
+import { xxl, l, s, largePad } from 'theme/include/spacing'
 import { dropShadow } from 'theme/include/shadows'
 import { center } from 'theme/include/align'
 import { radius, thinBorder } from 'theme/include/borders'
@@ -31,13 +31,16 @@ export default StyleSheet.create({
     flexDirection:'column',
     alignItems:'center',
     justifyContent:'center',
-    ...irregularPad
+    paddingLeft: l,
+    paddingRight: l,
+    paddingTop: xxl,
+    paddingBottom: xxl
   },
   closeButton: {
     position: 'absolute',
     marginTop: 0,
     marginBottom: 0,
-    top: -45,
+    top: -35,
     left: -45,
     width: 40,
     height: 40,

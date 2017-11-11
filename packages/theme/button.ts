@@ -27,10 +27,10 @@ export default StyleSheet.create({
   },
 
   buttonAlternate: {
-    ...verticalMargin,
   },
 
   text: {
+    ...verticalMargin,
     ...small,
     ...wide,
     ...bold,
@@ -39,6 +39,7 @@ export default StyleSheet.create({
   },
 
   textAlternate: {
+    ...verticalMargin,
     ...small,
     ...wide,
     ...bold,
@@ -47,7 +48,7 @@ export default StyleSheet.create({
   },
 
   icon: {
-    marginTop: -7,
+    marginTop: 3,
     marginLeft: -7,
     paddingLeft: 5,
     fontSize: 22,

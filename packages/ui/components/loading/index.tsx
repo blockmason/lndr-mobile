@@ -2,11 +2,9 @@ import React, { Component } from 'react'
 
 import { ActivityIndicator, View } from 'react-native'
 
+import { delay, shortTimePeriod } from 'lndr/time'
+
 import style from 'theme/loading'
-
-const delay = time => new Promise(resolve => setTimeout(resolve, time))
-
-const MINIMUM_DELAY = 250
 
 export class LoadingContext {
   registry: any[]
@@ -37,7 +35,7 @@ export class LoadingContext {
     return promise
       .then(value => new Promise(resolve => {
         const elapsedTime = Date.now() - startedAt
-        const timeRemaining = Math.max(0, MINIMUM_DELAY - elapsedTime)
+        const timeRemaining = Math.max(0, shortTimePeriod - elapsedTime)
         delay(timeRemaining).then(() => {
           this.stop()
           resolve(value)
@@ -46,7 +44,7 @@ export class LoadingContext {
       .catch(error => new Promise((resolve, reject) => {
         resolve // do nothing
         const elapsedTime = Date.now() - startedAt
-        const timeRemaining = Math.max(0, MINIMUM_DELAY - elapsedTime)
+        const timeRemaining = Math.max(0, shortTimePeriod - elapsedTime)
         delay(timeRemaining).then(() => {
           this.stop()
           reject(error)
