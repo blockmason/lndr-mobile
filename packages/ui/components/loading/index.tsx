@@ -6,7 +6,7 @@ import style from 'theme/loading'
 
 const delay = time => new Promise(resolve => setTimeout(resolve, time))
 
-const DELAY = 250
+const MINIMUM_DELAY = 250
 
 export class LoadingContext {
   registry: any[]
@@ -33,16 +33,21 @@ export class LoadingContext {
 
   wrap(promise) {
     this.start()
+    const startedAt = Date.now()
     return promise
       .then(value => new Promise(resolve => {
-        delay(DELAY).then(() => {
+        const elapsedTime = Date.now() - startedAt
+        const timeRemaining = Math.max(0, MINIMUM_DELAY - elapsedTime)
+        delay(timeRemaining).then(() => {
           this.stop()
           resolve(value)
         })
       }))
       .catch(error => new Promise((resolve, reject) => {
         resolve // do nothing
-        delay(DELAY).then(() => {
+        const elapsedTime = Date.now() - startedAt
+        const timeRemaining = Math.max(0, MINIMUM_DELAY - elapsedTime)
+        delay(timeRemaining).then(() => {
           this.stop()
           reject(error)
         })

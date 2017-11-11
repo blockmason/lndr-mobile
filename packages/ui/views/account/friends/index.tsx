@@ -4,11 +4,13 @@ import Engine from 'lndr/engine'
 
 import Friend from 'lndr/friend'
 
-import { Text, View } from 'react-native'
+import { Text, TouchableHighlight, View } from 'react-native'
 
 import Section from 'ui/components/section'
 
 import Loading, { LoadingContext } from 'ui/components/loading'
+
+import { lightGray } from 'theme/include/colors'
 
 import style from 'theme/account'
 
@@ -38,7 +40,7 @@ export default class HomeView extends Component<Props, State> {
     this.stillRelevant = true
 
     loadingFriends.wrap(
-      delay(2000).then(() => this.stillRelevant && this.setState({
+      delay(1000).then(() => this.stillRelevant && this.setState({
         friends: [
           new Friend('0x2127836871263', 'tim'),
           new Friend('0xab897b8a97a97', 'rich'),
@@ -63,10 +65,12 @@ export default class HomeView extends Component<Props, State> {
       <Section text='Current Friends' contentContainerStyle={style.list}>
         <Loading context={loadingFriends} />
         {friends.map(friend =>
-          <View key={friend.nickname} style={style.listItem}>
-            <Text style={style.fact}>{friend.nickname}</Text>
-            <Text style={style.fact}>{friend.address}</Text>
-          </View>
+          <TouchableHighlight onPress={() => {}} underlayColor={lightGray} activeOpacity={0.5} key={friend.nickname}>
+            <View style={style.listItem}>
+              <Text style={style.fact}>{friend.nickname}</Text>
+              <Text style={style.fact}>{friend.address}</Text>
+            </View>
+          </TouchableHighlight>
         )}
       </Section>
     </View>
