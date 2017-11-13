@@ -6,6 +6,7 @@
       { "src": "./lib/packages/language/en", "expose": "language" },
       { "src": "./lib/packages/lndr", "expose": "lndr" },
       { "src": "./lib/packages/theme", "expose": "theme" },
+      { "src": "./lib/packages/dimen", "expose": "dimen" },
       { "src": "./lib/packages/ui", "expose": "ui" },
       { "src": "./packages/images", "expose": "images" }
     ]]
