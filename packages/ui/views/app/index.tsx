@@ -6,9 +6,10 @@ import Engine, { EngineState } from 'lndr/engine'
 
 import AuthenticateView from 'ui/views/authenticate'
 import AccountView from 'ui/views/account'
+import WelcomeView from 'ui/views/welcome'
 
 import { PopupTarget } from 'ui/components/popup'
-import Logo from 'ui/components/logo'
+import Logo from 'ui/components/images/logo'
 
 import style from 'theme/general'
 
@@ -48,6 +49,10 @@ export default class AppView extends Component<Props, EngineState> {
 
     if (isInitializing) {
       return <Logo />
+    }
+
+    if (!hasStoredUser) {
+      return <WelcomeView />
     }
 
     if (!user) {
