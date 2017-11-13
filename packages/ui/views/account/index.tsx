@@ -8,7 +8,6 @@ import Button from 'ui/components/button'
 import Tabs, { Tab } from 'ui/components/tabs'
 import ActionButton from 'ui/components/action'
 import Popup from 'ui/components/popup'
-import Tabs, { Tab } from 'ui/components/tabs'
 
 import HomeView from './home'
 import FriendsView from './friends'
@@ -25,7 +24,7 @@ interface Props {
 export default class AccountView extends Component<Props> {
   render() {
     const { engine } = this.props
-    
+
     return <View style={{flex: 1}}>
       <Tabs tabContainerStyle={style.tabs}>
         <Tab reference='home' text={accountViewLanguage.home}>
