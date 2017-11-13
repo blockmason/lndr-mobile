@@ -7,7 +7,7 @@ import { calculateImageSize } from 'ui/components/images/lib/image-size'
 import style from 'theme/image'
 
 interface Props {
-  size: number
+  size?: number
 }
 
 export default ({size} : Props) => (
