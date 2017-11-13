@@ -4,7 +4,7 @@ import { View, Text } from 'react-native'
 
 import style from 'theme/slide'
 
-import Logo from 'ui/components/images/logo'
+import ThemeImage from 'ui/components/images/theme-image'
 
 import { largeImage } from 'theme/include/dimensions'
 
@@ -14,7 +14,7 @@ export default class WelcomeStepOneView extends Component {
   render() {
     return (
       <View style={[style.topView, style.topSpacing]}>
-        <Logo size={largeImage}/>
+        <ThemeImage size={largeImage} name='logo'/>
         <Text style={style.text}>{welcomeView.makeItEasy}</Text>
         <Text style={style.text}>{welcomeView.weHelpFriends}</Text>
         <View style={style.horizontial}>

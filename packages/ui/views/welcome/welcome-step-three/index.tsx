@@ -8,19 +8,18 @@ import { mediumImage } from 'theme/include/dimensions'
 
 import { welcomeView } from 'language'
 
-import Lndr from 'ui/components/images/lndr-text'
-import Travel from 'ui/components/images/travel'
-import Concert from 'ui/components/images/concert'
+import TextLogo from 'ui/components/images/text-logo'
+import ThemeImage from 'ui/components/images/theme-image'
 
 export default class WelcomeStepThreeView extends Component {
   render() {
     return (
       <View style={style.topView}>
-        <Lndr />
+        <TextLogo />
         <Text style={style.text}>{welcomeView.youPlayWithFriends}</Text>
-        <Travel size={mediumImage} />
+        <ThemeImage size={mediumImage} name='travel'/>
         <Text style={style.text}>{welcomeView.travelTogether}</Text>
-        <Concert size={mediumImage}/>
+        <ThemeImage size={mediumImage} name={'concert'}/>
         <Text style={style.text}>{welcomeView.greatConcert}</Text>
       </View>
     )

@@ -8,19 +8,18 @@ import { mediumImage } from 'theme/include/dimensions'
 
 import { welcomeView } from 'language'
 
-import Lndr from 'ui/components/images/lndr-text'
-import Dinner from 'ui/components/images/dinner'
-import Tank from 'ui/components/images/tank'
+import TextLogo from 'ui/components/images/text-logo'
+import ThemeImage from 'ui/components/images/theme-image'
 
 export default class WelcomeStepTwoView extends Component {
   render() {
     return (
       <View style={style.topView}>
-        <Lndr />
+        <TextLogo />
         <Text style={style.text}>{welcomeView.youPlayWithFriends}</Text>
-        <Dinner size={mediumImage}/>
+        <ThemeImage size={mediumImage} name={'dinner'}/>
         <Text style={style.text}>{welcomeView.shareDinner}</Text>
-        <Tank size={mediumImage}/>
+        <ThemeImage size={mediumImage} name={'tank'}/>
         <Text style={style.text}>{welcomeView.fillTank}</Text>
       </View>
     )

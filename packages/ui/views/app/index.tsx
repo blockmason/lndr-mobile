@@ -10,7 +10,7 @@ import WelcomeView from 'ui/views/welcome'
 
 import Alert from 'ui/components/alert'
 import { PopupTarget } from 'ui/components/popup'
-import Logo from 'ui/components/images/logo'
+import ThemeImage from 'ui/components/images/theme-image'
 
 import style from 'theme/general'
 
@@ -60,7 +60,7 @@ export default class AppView extends Component<Props, EngineState> {
     } = this.state
 
     if (isInitializing) {
-      return <Logo />
+      return <ThemeImage name={'logo'} />
     }
 
     if (!hasStoredUser) {

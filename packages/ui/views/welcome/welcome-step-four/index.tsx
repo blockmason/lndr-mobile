@@ -8,16 +8,16 @@ import { largeImage } from 'theme/include/dimensions'
 
 import { welcomeView } from 'language'
 
-import Lndr from 'ui/components/images/lndr-text'
-import Blockchain from 'ui/components/images/blockchain'
+import TextLogo from 'ui/components/images/text-logo'
+import ThemeImage from 'ui/components/images/theme-image'
 
 export default class WelcomeStepFourView extends Component {
   render() {
     return (
       <View style={style.topView}>
-        <Lndr/>
+        <TextLogo/>
         <Text style={[style.text, style.topSpacing]}>{welcomeView.firstLendingApp}</Text>
-        <Blockchain size={largeImage}/>
+        <ThemeImage size={largeImage} name={'blockchain'}/>
         <Text style={style.text}>{welcomeView.runEthereum}</Text>
       </View>
     )

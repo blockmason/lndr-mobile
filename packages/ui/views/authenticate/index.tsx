@@ -5,7 +5,7 @@ import { ScrollView } from 'react-native'
 import Engine from 'lndr/engine'
 
 import Alert from 'ui/components/alert'
-import Logo from 'ui/components/images/logo'
+import ThemeImage from 'ui/components/images/theme-image'
 
 import LoginView from './login'
 import CreateAccountView from './create-account'
@@ -27,7 +27,7 @@ interface Props {
 export default class AuthenticateView extends Component<Props> {
   render() {
     return <ScrollView contentContainerStyle={style.flex}>
-      <Logo />
+      <ThemeImage name={'logo'}/>
       {this.renderView()}
     </ScrollView>
   }
