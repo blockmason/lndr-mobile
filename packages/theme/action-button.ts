@@ -2,12 +2,12 @@ import { StyleSheet } from 'react-native'
 
 import { large } from 'theme/include/fonts'
 import { white } from 'theme/include/colors'
-import { mediumHeight } from 'theme/include/icon'
+import { mediumHeightIcon } from 'theme/include/dimensions'
 
 export default StyleSheet.create({
   icon: {
     ...large,
-    ...mediumHeight,
+    ...mediumHeightIcon,
     color: white
   }
 } as any)
