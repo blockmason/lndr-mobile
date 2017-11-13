@@ -4,7 +4,7 @@ declare const Buffer
 import Mnemonic from 'bitcore-mnemonic'
 import ethUtil from 'ethereumjs-util'
 
-import { bufferToHex } from './lib/buffer-utils'
+import { bufferToHex, stringToBuffer } from './lib/buffer-utils'
 import Client from './lib/client'
 import CreditRecord from './lib/credit-record'
 
@@ -16,6 +16,10 @@ export default class CreditProtocol {
   }
 
   sign(message, privateKeyBuffer) {
+    if (typeof message === 'string') {
+      message = stringToBuffer(message)
+    }
+
     const { r, s, v } = ethUtil.ecsign(
       ethUtil.hashPersonalMessage(message),
       privateKeyBuffer
@@ -28,7 +32,7 @@ export default class CreditProtocol {
     )
   }
 
-  setNickname(addr, nick, privateKeyBuffer) {
+  setNickname(addr: string, nick: string, privateKeyBuffer: any) {
     return this.client.post('/nick', {
       addr,
       nick,

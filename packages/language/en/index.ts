@@ -1,3 +1,5 @@
+const generalCommunicationError = 'There was a problem communicating with the server, please try again later.'
+
 export const applicationName = 'LNDR'
 export const helloWorld = 'Hello world'
 
@@ -7,7 +9,10 @@ export const confirmAccount = 'Confirm'
 export const createAccount = 'Create Account'
 export const recoverAccount = 'Restore Account'
 export const removeAccount = 'Remove Account'
+export const updateAccount = 'Update Account'
 export const loginAction = 'Unlock'
+
+export const addFriend = 'Add Friend'
 
 export const newPassword = 'New Password (minimum 8 chars)'
 export const confirmPassword = 'Confirm Password'
@@ -38,3 +43,30 @@ export const welcomeRunEthereum = 'We run on Ethereum!'
 export const welcomeFirstLendingApp = 'The first lending app secured on the blockchain.'
 export const welcomeGreatConcert = 'See a great concert...'
 export const welcomeYouPlayWithFriends = "You play with friends; we'll keep the tab..."
+
+export const setNickname = 'Set a nickname so your friends can find you'
+export const nickname = 'Nickname'
+
+export const searchUsersByNickname = 'Search for your friends by nickname'
+
+export const accountManagement = {
+  password: {
+    lengthViolation: 'Password should be at least 8 characters.',
+    matchViolation: 'Passwords should match.',
+    failedHashComparison: 'Password is not valid, please try again.'
+  },
+  mnemonic: {
+    lengthViolation: 'Mnemonic should have at least 12 words.',
+    unableToValidate: 'The entered mnemonic was not valid, please try again.'
+  },
+  setNickname: {
+    success: 'Your nickname has been saved.',
+    error: generalCommunicationError
+  }
+}
+
+export const accountViewLanguage = {
+  home: 'Home',
+  friends: 'Friends',
+  activity: 'Activity'
+}

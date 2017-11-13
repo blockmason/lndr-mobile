@@ -29,8 +29,22 @@ const showText = (text: string, alternate?: boolean) => {
   return <Text style={style.text}>{text}</Text>
 }
 
+const getAlertStyle = (success?: boolean, error?: boolean) => {
+  const styles = [ style.alert ]
+
+  if (success) {
+    styles.push(style.alertSuccess)
+  }
+
+  if (error) {
+    styles.push(style.alertError)
+  }
+
+  return styles
+}
+
 export default ({ text, success, error }: Props) => (
-  <View style={style.alert}>
+  <View style={getAlertStyle(success, error)}>
     <Text style={style.header}>{headerText(success, error)}</Text>
     <Text style={style.text}>{text}</Text>
   </View>

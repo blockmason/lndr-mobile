@@ -1,3 +1,5 @@
+import { Platform } from 'react-native'
+
 export const large = {
   fontSize: 20
 }
@@ -16,4 +18,8 @@ export const wide = {
 
 export const bold = {
   fontWeight: 'bold'
+}
+
+export const monospace = {
+  fontFamily: Platform.OS === 'ios' ? 'Courier New' : 'monospace'
 }

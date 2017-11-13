@@ -5,6 +5,8 @@ import { View, Text } from 'react-native'
 import Engine from 'lndr/engine'
 import Logo from 'ui/components/images/logo'
 
+import formStyle from 'theme/form'
+
 interface Props {
   engine: Engine
 }
@@ -12,7 +14,7 @@ interface Props {
 export default class AddDebt extends Component<Props> {
   render() {
     return <View>
-      <Text>This is the add debt dialog, just edit this</Text>
+      <Text style={formStyle.text}>This is the add debt dialog, just edit this</Text>
       <Logo />
     </View>
   }

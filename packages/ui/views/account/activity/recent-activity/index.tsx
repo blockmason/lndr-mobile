@@ -6,6 +6,8 @@ import { Text } from 'react-native'
 
 import Section from 'ui/components/section'
 
+import formStyle from 'theme/form'
+
 interface Props {
   engine: Engine
 }
@@ -24,7 +26,7 @@ export default class RecentActivityView extends Component<Props, State> {
     const { engine } = this.props
 
     return <Section>
-      <Text>Recent activity will go here #todo</Text>
+      <Text style={formStyle.text}>Recent activity will go here #todo</Text>
     </Section>
   }
 }

@@ -21,7 +21,6 @@ interface Props {
   shouldRecoverAccount?: boolean
   shouldRemoveAccount?: boolean
   shouldConfirmAccount?: boolean
-  errorMessage?: string
   mnemonic?: string
 }
 
@@ -30,13 +29,7 @@ export default class AuthenticateView extends Component<Props> {
     return <ScrollView contentContainerStyle={style.flex}>
       <Logo />
       {this.renderView()}
-      {this.renderErrorMessage()}
     </ScrollView>
-  }
-
-  renderErrorMessage() {
-    const { errorMessage } = this.props
-    return errorMessage ? <Alert error text={errorMessage} /> : null
   }
 
   renderView() {
