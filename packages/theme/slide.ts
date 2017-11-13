@@ -19,12 +19,6 @@ export default StyleSheet.create({
     fontWeight: '200'
   },
   italic: {
-    textAlign: 'center',
-    marginTop: 35,
-    fontSize: 24,
-    fontWeight: '200'
-  },
-  italicOnly: {
     fontStyle: 'italic'
   },
   horizontial: {

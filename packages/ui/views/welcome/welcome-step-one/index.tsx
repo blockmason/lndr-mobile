@@ -19,7 +19,7 @@ export default class WelcomeStepOneView extends Component {
         <Text style={style.text}>{welcomeView.weHelpFriends}</Text>
         <View style={style.horizontial}>
           <Text style={style.text}>[</Text>
-          <Text style={[style.text, style.italicOnly]}>{welcomeView.lender}</Text>
+          <Text style={[style.text, style.italic]}>{welcomeView.lender}</Text>
           <Text style={style.text}>]</Text>
         </View>
       </View>
