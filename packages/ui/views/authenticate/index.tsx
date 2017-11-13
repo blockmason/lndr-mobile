@@ -5,7 +5,7 @@ import { ScrollView } from 'react-native'
 import Engine from 'lndr/engine'
 
 import Alert from 'ui/components/alert'
-import Logo from 'ui/components/logo'
+import Logo from 'ui/components/images/logo'
 
 import LoginView from './login'
 import CreateAccountView from './create-account'
