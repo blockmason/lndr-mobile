@@ -27,3 +27,14 @@ export const removeAccountExhortation = 'Be sure that you have access to your mn
 export const myAccount = 'My account'
 export const addNewFriend = 'Add new friend'
 export const addNewDebt = 'Add new debt'
+
+export const welcomeMakeItEasy = 'Lndr makes it easy to track simple debts'
+export const welcomeWeHelpFriends = 'We help friends live, work, and play together.'
+export const welcomeLender = 'Len.der'
+export const welcomeShareDinner = 'Share dinner...'
+export const welcomeFillTank = 'Fill your tank...'
+export const welcomeTravelTogether = 'Travel together...'
+export const welcomeRunEthereum = 'We run on Ethereum!'
+export const welcomeFirstLendingApp = 'The first lending app secured on the blockchain.'
+export const welcomeGreatConcert = 'See a great concert...'
+export const welcomeYouPlayWithFriends = "You play with friends; we'll keep the tab..."
