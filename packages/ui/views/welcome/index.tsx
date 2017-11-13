@@ -20,14 +20,7 @@ const welcomeViews = [
 ]
 
 export default class WelcomeView extends Component {
-
-  constructor() {
-    super()
-  }
-
   render() {
-    return <View style={general.flex}>
-      <Slideshow views={welcomeViews}/>
-    </View>
+    return <Slideshow views={welcomeViews}/>
   }
 }

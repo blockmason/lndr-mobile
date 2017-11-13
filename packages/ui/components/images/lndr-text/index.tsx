@@ -13,7 +13,7 @@ export default () => (
   <View>
     <Image
       style={{height: size, width: 100}}
-      source={require('images/lndr_text.jpg')}
+      source={require('images/text-logo.jpg')}
     />
   </View>
 )

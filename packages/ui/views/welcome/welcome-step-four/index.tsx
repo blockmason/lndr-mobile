@@ -4,9 +4,9 @@ import { View, Text, Dimensions } from 'react-native'
 
 import style from 'theme/slide'
 
-import { largeImage } from 'dimen/image'
+import { largeImage } from 'theme/include/dimensions'
 
-import { welcomeRunEthereum, welcomeFirstLendingApp } from 'language'
+import { welcomeView } from 'language'
 
 import Lndr from 'ui/components/images/lndr-text'
 import Blockchain from 'ui/components/images/blockchain'
@@ -16,9 +16,9 @@ export default class WelcomeStepFourView extends Component {
     return (
       <View style={style.topView}>
         <Lndr/>
-        <Text style={[style.text, style.topSpacing]}>{welcomeFirstLendingApp}</Text>
+        <Text style={[style.text, style.topSpacing]}>{welcomeView.firstLendingApp}</Text>
         <Blockchain size={largeImage}/>
-        <Text style={style.text}>{welcomeRunEthereum}</Text>
+        <Text style={style.text}>{welcomeView.runEthereum}</Text>
       </View>
     )
   }

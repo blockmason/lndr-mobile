@@ -5,7 +5,7 @@ import { white } from 'theme/include/colors'
 import { mediumHeight } from 'theme/include/icon'
 
 export default StyleSheet.create({
-  actionButtonIcon: {
+  icon: {
     ...large,
     ...mediumHeight,
     color: white

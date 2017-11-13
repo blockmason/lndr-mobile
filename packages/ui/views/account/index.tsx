@@ -6,7 +6,7 @@ import { View, Text } from 'react-native'
 
 import Button from 'ui/components/button'
 import Tabs, { Tab } from 'ui/components/tabs'
-import ActionButton from 'ui/components/action'
+import ActionButton from 'ui/components/action-button'
 import Popup from 'ui/components/popup'
 
 import HomeView from './home'

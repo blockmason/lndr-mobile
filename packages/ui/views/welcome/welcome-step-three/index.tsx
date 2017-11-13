@@ -4,9 +4,9 @@ import { View, Text } from 'react-native'
 
 import style from 'theme/slide'
 
-import { mediumImage } from 'dimen/image'
+import { mediumImage } from 'theme/include/dimensions'
 
-import { welcomeYouPlayWithFriends, welcomeTravelTogether, welcomeGreatConcert } from 'language'
+import { welcomeView } from 'language'
 
 import Lndr from 'ui/components/images/lndr-text'
 import Travel from 'ui/components/images/travel'
@@ -17,11 +17,11 @@ export default class WelcomeStepThreeView extends Component {
     return (
       <View style={style.topView}>
         <Lndr />
-        <Text style={style.text}>{welcomeYouPlayWithFriends}</Text>
+        <Text style={style.text}>{welcomeView.youPlayWithFriends}</Text>
         <Travel size={mediumImage} />
-        <Text style={style.text}>{welcomeTravelTogether}</Text>
+        <Text style={style.text}>{welcomeView.travelTogether}</Text>
         <Concert size={mediumImage}/>
-        <Text style={style.text}>{welcomeGreatConcert}</Text>
+        <Text style={style.text}>{welcomeView.greatConcert}</Text>
       </View>
     )
   }

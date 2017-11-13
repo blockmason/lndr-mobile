@@ -33,17 +33,6 @@ export const myAccount = 'My account'
 export const addNewFriend = 'Add new friend'
 export const addNewDebt = 'Add new debt'
 
-export const welcomeMakeItEasy = 'Lndr makes it easy to track simple debts'
-export const welcomeWeHelpFriends = 'We help friends live, work, and play together.'
-export const welcomeLender = 'Len.der'
-export const welcomeShareDinner = 'Share dinner...'
-export const welcomeFillTank = 'Fill your tank...'
-export const welcomeTravelTogether = 'Travel together...'
-export const welcomeRunEthereum = 'We run on Ethereum!'
-export const welcomeFirstLendingApp = 'The first lending app secured on the blockchain.'
-export const welcomeGreatConcert = 'See a great concert...'
-export const welcomeYouPlayWithFriends = "You play with friends; we'll keep the tab..."
-
 export const setNickname = 'Set a nickname so your friends can find you'
 export const nickname = 'Nickname'
 
@@ -63,6 +52,19 @@ export const accountManagement = {
     success: 'Your nickname has been saved.',
     error: generalCommunicationError
   }
+}
+
+export const welcomeView = {
+  makeItEasy: 'Lndr makes it easy to track simple debts',
+  weHelpFriends: 'We help friends live, work, and play together.',
+  lender: 'Len.der',
+  shareDinner: 'Share dinner...',
+  fillTank: 'Fill your tank...',
+  travelTogether: 'Travel together...',
+  runEthereum: 'We run on Ethereum!',
+  firstLendingApp: 'The first lending app secured on the blockchain.',
+  greatConcert: 'See a great concert...',
+  youPlayWithFriends: "You play with friends; we'll keep the tab..."
 }
 
 export const accountViewLanguage = {

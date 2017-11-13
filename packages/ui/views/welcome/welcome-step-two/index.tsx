@@ -4,9 +4,9 @@ import { View, Text } from 'react-native'
 
 import style from 'theme/slide'
 
-import { mediumImage } from 'dimen/image'
+import { mediumImage } from 'theme/include/dimensions'
 
-import { welcomeYouPlayWithFriends, welcomeShareDinner, welcomeFillTank } from 'language'
+import { welcomeView } from 'language'
 
 import Lndr from 'ui/components/images/lndr-text'
 import Dinner from 'ui/components/images/dinner'
@@ -17,11 +17,11 @@ export default class WelcomeStepTwoView extends Component {
     return (
       <View style={style.topView}>
         <Lndr />
-        <Text style={style.text}>{welcomeYouPlayWithFriends}</Text>
+        <Text style={style.text}>{welcomeView.youPlayWithFriends}</Text>
         <Dinner size={mediumImage}/>
-        <Text style={style.text}>{welcomeShareDinner}</Text>
+        <Text style={style.text}>{welcomeView.shareDinner}</Text>
         <Tank size={mediumImage}/>
-        <Text style={style.text}>{welcomeFillTank}</Text>
+        <Text style={style.text}>{welcomeView.fillTank}</Text>
       </View>
     )
   }
