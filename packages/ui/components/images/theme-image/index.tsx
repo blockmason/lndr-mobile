@@ -13,13 +13,6 @@ const calculateImageSize = (percent) => {
   return {height: size, width: size }
 }
 
-/*
- * React native's require doesn't allow dynamic strings for filenames.
- * See:
- * https://github.com/facebook/react-native/issues/2481
- * If you (Nate/future maintainer) discover secrets or workarounds
- * that yield to require('images/{name}.jpg') that'll be preferred
- */
 const getImageFromName = {
   'logo': require('images/logo.jpg'),
   'blockchain': require('images/blockchain.jpg'),

@@ -27,7 +27,7 @@ interface Props {
 export default class AuthenticateView extends Component<Props> {
   render() {
     return <ScrollView contentContainerStyle={style.flex}>
-      <ThemeImage name={'logo'}/>
+      <ThemeImage name='logo'/>
       {this.renderView()}
     </ScrollView>
   }

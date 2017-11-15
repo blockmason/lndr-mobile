@@ -319,7 +319,7 @@ export default class Engine {
     const mnemonicInstance = creditProtocol.getMnemonic(mnemonic)
     const hashedPasswordReference = await hashedPasswordStorage.get()
     const hashedPassword = Array.from(mnemonicInstance.toSeed(PASSWORD_SALT + confirmPassword)).join('.')
-    
+
     if (hashedPassword !== hashedPasswordReference) {
       return this.setErrorMessage(accountManagement.password.failedHashComparison)
     }

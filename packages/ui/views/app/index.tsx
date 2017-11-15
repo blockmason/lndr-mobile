@@ -60,7 +60,7 @@ export default class AppView extends Component<Props, EngineState> {
     } = this.state
 
     if (isInitializing) {
-      return <ThemeImage name={'logo'} />
+      return <ThemeImage name='logo' />
     }
 
     if (!hasStoredUser) {
