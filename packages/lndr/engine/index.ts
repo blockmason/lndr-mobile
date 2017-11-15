@@ -112,8 +112,14 @@ export default class Engine {
 
   async getAccountInformation() {
     const { address } = this.engineState.user as User
-    const nickname = await creditProtocol.getNickname(address)
-    return { nickname }
+    try {
+      const nickname = await creditProtocol.getNickname(address)
+      return { nickname }
+    }
+
+    catch (e) {
+      return {}
+    }
   }
 
   async updateAccount(accountData: UpdateAccountData) {
@@ -164,10 +170,27 @@ export default class Engine {
     return new Friend(addr, nick)
   }
 
+  async ensureNicknames(friends: Friend[]) {
+    const needNicknamesFor = friends.filter(
+      friend => !friend.nickname || friend.nickname === 'N/A'
+    )
+
+    await Promise.all(
+      needNicknamesFor.map(
+        async (friend) => {
+          const nickname = await creditProtocol.getNickname(friend.address)
+          friend.nickname = nickname
+        }
+      )
+    )
+  }
+
   async getFriends() {
     const { address } = this.engineState.user as User
     const friends = await creditProtocol.getFriends(address)
-    return friends.map(this.jsonToFriend)
+    const result = friends.map(this.jsonToFriend)
+    await this.ensureNicknames(result)
+    return result
   }
 
   async searchUsers(searchData) {
