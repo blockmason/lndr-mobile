@@ -123,3 +123,7 @@ export const pendingTransactionsLanguage = {
   confirmationQuestion: 'Are you sure you want to confirm this transaction?',
   confirm: 'Confirm Transaction'
 }
+
+export const transactionHistoryLanguage = {
+  none: 'You have no previous transactions'
+}
