@@ -9,7 +9,6 @@ import { currency } from 'lndr/format'
 
 import Button from 'ui/components/button'
 import Checkbox from 'ui/components/checkbox'
-import Logo from 'ui/components/logo'
 import Loading, { LoadingContext } from 'ui/components/loading'
 import FriendRow from 'ui/components/friend-row'
 

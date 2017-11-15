@@ -76,7 +76,6 @@ export const accountManagement = {
   }
 }
 
-<<<<<<< HEAD
 export const welcomeView = {
   makeItEasy: 'Lndr makes it easy to track simple debts',
   weHelpFriends: 'We help friends live, work, and play together.',
@@ -88,7 +87,8 @@ export const welcomeView = {
   firstLendingApp: 'The first lending app secured on the blockchain.',
   greatConcert: 'See a great concert...',
   youPlayWithFriends: "You play with friends; we'll keep the tab..."
-=======
+}
+
 export const debtManagement = {
   add: 'Add Debt',
   selectFriend: 'Select Friend',
@@ -109,7 +109,6 @@ export const debtManagement = {
     success: friend => `Pending debt submitted to @${friend.nickname}`,
     error: generalCommunicationError
   }
->>>>>>> 46e601c741d52f5f9adb376cb5f5abc3beceb31e
 }
 
 export const accountViewLanguage = {
