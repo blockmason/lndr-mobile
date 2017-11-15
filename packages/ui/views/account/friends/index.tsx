@@ -5,7 +5,7 @@ import Engine from 'lndr/engine'
 import { delay } from 'lndr/time'
 import Friend from 'lndr/friend'
 
-import { View } from 'react-native'
+import { Text, View } from 'react-native'
 
 import Button from 'ui/components/button'
 import Section from 'ui/components/section'
@@ -17,7 +17,7 @@ import FriendRow from 'ui/components/friend-row'
 
 import style from 'theme/account'
 
-import { addFriend } from 'language'
+import { addFriend, noFriends } from 'language'
 
 const loadingFriends = new LoadingContext()
 
@@ -27,6 +27,7 @@ interface Props {
 
 interface State {
   shouldShowAddFriend: boolean
+  friendsLoaded: boolean
   friends: Friend[]
 }
 
@@ -37,8 +38,24 @@ export default class FriendsView extends Component<Props, State> {
     super()
     this.state = {
       shouldShowAddFriend: false,
+      friendsLoaded: false,
       friends: []
     }
+  }
+
+  async componentDidMount() {
+    this.stillRelevant = true
+    const { engine } = this.props
+    const friends = await loadingFriends.wrap(engine.getFriends())
+    this.stillRelevant && this.setState({ friendsLoaded: true, friends })
+  }
+
+  refresh() {
+    this.componentDidMount()
+  }
+
+  componentWillUnmount() {
+    this.stillRelevant = false
   }
 
   renderAddFriendDialog() {
@@ -55,26 +72,8 @@ export default class FriendsView extends Component<Props, State> {
     </Popup>
   }
 
-  componentDidMount() {
-    this.stillRelevant = true
-
-    loadingFriends.wrap(
-      delay(1000).then(() => this.stillRelevant && this.setState({
-        friends: [
-          new Friend('0x2127836871263', 'tim'),
-          new Friend('0xab897b8a97a97', 'rich'),
-          new Friend('0xc78cf9cf78fc7', 'roy')
-        ]
-      }))
-    )
-  }
-
-  componentWillUnmount() {
-    this.stillRelevant = false
-  }
-
   render() {
-    const { friends } = this.state
+    const { friendsLoaded, friends } = this.state
 
     return <View>
       { this.renderAddFriendDialog() }
@@ -85,6 +84,7 @@ export default class FriendsView extends Component<Props, State> {
 
       <Section text='Current Friends' contentContainerStyle={style.list}>
         <Loading context={loadingFriends} />
+        {friendsLoaded && friends.length === 0 ? <Text style={style.emptyState}>{noFriends}</Text> : null}
         {friends.map(friend => <FriendRow key={friend.address} friend={friend} onPress={() => {}} />)}
       </Section>
     </View>

@@ -1,5 +1,9 @@
 import { Platform } from 'react-native'
 
+export const large = {
+  fontSize: 20
+}
+
 export const medium = {
   fontSize: 16
 }
@@ -8,8 +12,8 @@ export const small = {
   fontSize: 14
 }
 
-export const large = {
-  fontSize: 20
+export const xsmall = {
+  fontSize: 12
 }
 
 export const wide = {

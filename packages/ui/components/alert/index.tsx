@@ -22,11 +22,18 @@ const headerText = (success?: boolean, error?: boolean) => {
   return errorTitle
 }
 
-const showText = (text: string, alternate?: boolean) => {
-  if (alternate) {
-    return <Text style={style.textAlternate}>{text}</Text>
+const getTextStyle = (success?: boolean) => {
+  if (success) {
+    return [ style.text, style.successText ]
   }
-  return <Text style={style.text}>{text}</Text>
+  return style.text
+}
+
+const getHeaderStyle = (success?: boolean) => {
+  if (success) {
+    return [ style.header, style.successText ]
+  }
+  return style.header
 }
 
 const getAlertStyle = (success?: boolean, error?: boolean) => {
@@ -44,8 +51,10 @@ const getAlertStyle = (success?: boolean, error?: boolean) => {
 }
 
 export default ({ text, success, error }: Props) => (
-  <View style={getAlertStyle(success, error)}>
-    <Text style={style.header}>{headerText(success, error)}</Text>
-    <Text style={style.text}>{text}</Text>
+  <View pointerEvents='none' style={style.container}>
+    <View style={getAlertStyle(success, error)}>
+      <Text style={getHeaderStyle(success)}>{headerText(success, error)}</Text>
+      <Text style={getTextStyle(success)}>{text}</Text>
+    </View>
   </View>
 )

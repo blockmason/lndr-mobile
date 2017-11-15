@@ -22,8 +22,7 @@ export default StyleSheet.create({
     top: 0,
     bottom: 0,
     left: 0,
-    right: 0,
-    backgroundColor: shade
+    right: 0
   },
   container: {
     minHeight: '100%',

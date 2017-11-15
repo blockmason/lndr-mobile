@@ -108,27 +108,59 @@ export default class Engine {
     this.state = { shouldConfirmAccount: true, password, mnemonicInstance }
   }
 
-  updateAccount(accountData: UpdateAccountData) {
+  async getAccountInformation() {
+    const { address } = this.engineState.user as User
+    const nickname = await creditProtocol.getNickname(address)
+    return { nickname }
+  }
+
+  async updateAccount(accountData: UpdateAccountData) {
     const { address, privateKeyBuffer } = this.engineState.user as User
     const { nickname } = accountData
 
-    // @todo - add additional functions here depending on changed data
-    return creditProtocol.setNickname(address, nickname, privateKeyBuffer)
-      .then(() => this.setSuccessMessage(accountManagement.setNickname.success))
-      .catch(error => {
-        this.setErrorMessage(accountManagement.setNickname.error)
-        throw error
-      })
+    try {
+      await creditProtocol.setNickname(address, nickname, privateKeyBuffer)
+      this.setSuccessMessage(accountManagement.setNickname.success)
+    } catch (error) {
+      this.setErrorMessage(accountManagement.setNickname.error)
+      throw error
+    }
+  }
+
+  async addFriend(friend: Friend) {
+    const { address, privateKeyBuffer } = this.engineState.user as User
+    try {
+      await creditProtocol.addFriend(address, friend.address, privateKeyBuffer)
+      this.setSuccessMessage(accountManagement.addFriend.success(friend.nickname))
+    } catch (error) {
+      this.setErrorMessage(accountManagement.addFriend.error)
+      throw error
+    }
+  }
+
+  jsonToFriend(data) {
+    let addr, nick
+    if (typeof data === 'string') {
+      addr = data
+      nick = addr.substr(2, 8)
+    }
+    else {
+      addr = data.addr
+      nick = data.nick || addr.substr(2, 8)
+    }
+    return new Friend(addr, nick)
+  }
+
+  async getFriends() {
+    const { address } = this.engineState.user as User
+    const friends = await creditProtocol.getFriends(address)
+    return friends.map(this.jsonToFriend)
   }
 
   async searchUsers(searchData) {
     const { nickname } = searchData
-    return [
-      new Friend('0x2127836871263', 'tim'),
-      new Friend('0xab897b8a97a97', 'rich'),
-      new Friend('0xc78cf9cf78fc7', 'roy'),
-      new Friend('0x0980989080988', nickname)
-    ]
+    const users = await creditProtocol.searchUsers(nickname)
+    return users.map(this.jsonToFriend)
   }
 
   cancelConfirmAccount() {

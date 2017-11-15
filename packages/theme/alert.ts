@@ -5,38 +5,49 @@ import { dropShadow } from 'theme/include/shadows'
 import { center } from 'theme/include/align'
 import { radius } from 'theme/include/borders'
 import { medium, bold } from 'theme/include/fonts'
-import { light, danger, good } from 'theme/include/colors'
+import { light, dangerShade, goodShade, goodDark, transparent } from 'theme/include/colors'
 
 export default StyleSheet.create({
-  alert: {
+  container: {
+    backgroundColor: transparent,
     zIndex: 2,
     position: 'absolute',
     top: xxl,
     left: l,
     right: l,
+    ...dropShadow,
+    ...radius
+  },
+
+  alert: {
     ...mediumPad,
-    ...radius,
-    ...dropShadow
+    ...radius
   },
 
   alertError: {
-    backgroundColor: danger
+    backgroundColor: dangerShade
   },
 
   alertSuccess: {
-    backgroundColor: good
+    backgroundColor: goodShade
   },
 
   text: {
     ...verticalMargin,
     ...medium,
+    backgroundColor: transparent,
     color: light
+  },
+
+  successText: {
+    color: goodDark
   },
 
   header: {
     ...medium,
     ...bold,
     marginTop: s,
+    backgroundColor: transparent,
     color: light
   }
 } as any)

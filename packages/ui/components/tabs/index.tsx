@@ -1,6 +1,6 @@
 import React, { Component } from 'react'
 
-import { TouchableHighlight, ScrollView, View, Text } from 'react-native'
+import { RefreshControl, TouchableHighlight, ScrollView, View, Text } from 'react-native'
 
 import { lightGray, dark } from 'theme/include/colors'
 
@@ -9,9 +9,41 @@ import style from 'theme/tabs'
 interface TabProps {
   reference: string
   text: string
+  onRefresh?: () => void
 }
 
-export class Tab extends Component<TabProps> {
+interface TabState {
+  refreshing: boolean
+}
+
+export class Tab extends Component<TabProps, TabState> {
+  constructor() {
+    super()
+    this.state = { refreshing: false }
+  }
+
+  async refresh() {
+    const { onRefresh } = this.props
+    if (!onRefresh) {
+      return
+    }
+    this.setState({ refreshing: true })
+    await onRefresh()
+    this.setState({ refreshing: false })
+  }
+
+  render() {
+    const { children, onRefresh } = this.props
+    const { refreshing } = this.state
+
+    const refreshControl = onRefresh ? (
+      <RefreshControl refreshing={refreshing} onRefresh={() => this.refresh()} />
+    ) : undefined
+
+    return <ScrollView style={style.content} refreshControl={refreshControl}>
+      {children}
+    </ScrollView>
+  }
 }
 
 const getTextStyle = (alternate?: boolean, active?: boolean) => {
@@ -99,9 +131,7 @@ export default class Tabs extends Component<Props, State> {
     return (
       <View style={style.topView}>
         <View style={getTabContainerStyle(alternate, tabContainerStyle)}>{tabList}</View>
-        <ScrollView style={style.content}>
-          {activeTab ? activeTab.props.children : null}
-        </ScrollView>
+        {activeTab}
       </View>
     )
   }

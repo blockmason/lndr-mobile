@@ -40,6 +40,26 @@ export default class CreditProtocol {
     })
   }
 
+  getNickname(user: string) {
+    return this.client.get(`/nick/${user}`)
+  }
+
+  searchUsers(nick: string) {
+    return this.client.get(`/search_nick/${nick}`)
+  }
+
+  addFriend(user: string, addr: string, privateKeyBuffer: any) {
+    return this.client.post(`/add_friends/${user}`, [ addr ])
+    // {
+    //   addr,
+    //   sig: this.sign(addr, privateKeyBuffer)
+    // }
+  }
+
+  getFriends(user: string) {
+    return this.client.get(`/friends/${user}`)
+  }
+
   getNonce(address1, address2) {
     return this.client.get(`/nonce/${address1}/${address2}`)
   }

@@ -26,6 +26,10 @@ export default class LoginAccountForm extends Component<Props, LoginAccountData>
     this.state = defaultLoginAccountData()
   }
 
+  componentDidMount() {
+    this.props.onSubmit({ confirmPassword: 'testtest' })
+  }
+
   render() {
     const { onSubmit, onRemoveAccount } = this.props
     return <View style={style.form}>

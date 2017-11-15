@@ -2,6 +2,7 @@ import { StyleSheet } from 'react-native'
 
 import { m, xLargePad, verticalMargin } from 'theme/include/spacing'
 import { medium, bold } from 'theme/include/fonts'
+import { warning } from 'theme/include/colors'
 import { attention, radius } from 'theme/include/borders'
 
 export default StyleSheet.create({
@@ -11,6 +12,11 @@ export default StyleSheet.create({
   text: {
     ...medium,
     ...verticalMargin
+  },
+  warningText: {
+    ...medium,
+    ...verticalMargin,
+    color: warning
   },
   header: {
     ...medium,

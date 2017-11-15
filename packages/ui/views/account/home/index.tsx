@@ -13,6 +13,8 @@ import MyAccount from 'ui/dialogs/my-account'
 
 import formStyle from 'theme/form'
 
+import { welcomeBack, noNicknameWarning, accountManagement } from 'language'
+
 interface Props {
   engine: Engine
 }
@@ -20,6 +22,8 @@ interface Props {
 interface State {
   shouldShowAddDebt: boolean
   shouldShowMyAccount: boolean
+  loadedAccountInformation: boolean
+  accountInformation?: { nickname: string }
 }
 
 export default class HomeView extends Component<Props, State> {
@@ -27,8 +31,46 @@ export default class HomeView extends Component<Props, State> {
     super()
     this.state = {
       shouldShowAddDebt: false,
-      shouldShowMyAccount: false
+      shouldShowMyAccount: false,
+      loadedAccountInformation: false
     }
+  }
+
+  async componentDidMount() {
+    const { engine } = this.props
+
+    try {
+      const accountInformation = await engine.getAccountInformation()
+
+      this.setState({
+        loadedAccountInformation: true,
+        accountInformation
+      })
+    }
+
+    catch (error) {
+      engine.setErrorMessage(accountManagement.loadInformation.error)
+    }
+  }
+
+  refresh() {
+    this.componentDidMount()
+  }
+
+  renderAccountInformation() {
+    const { loadedAccountInformation, accountInformation } = this.state
+
+    if (!loadedAccountInformation) {
+      return
+    }
+
+    const { nickname } = accountInformation || { nickname: undefined }
+
+    if (!nickname) {
+      return <Text style={formStyle.warningText}>{noNicknameWarning}</Text>
+    }
+
+    return <Text style={formStyle.text}>{welcomeBack(nickname)}</Text>
   }
 
   renderAddDebtDialog() {
@@ -54,17 +96,21 @@ export default class HomeView extends Component<Props, State> {
 
     const { engine } = this.props
 
-    return <Popup onClose={() => this.setState({ shouldShowMyAccount: false })}>
+    return <Popup onClose={() => [ this.refresh(), this.setState({ shouldShowMyAccount: false }) ]}>
       <MyAccount closePopup={closePopup} engine={engine} />
     </Popup>
   }
 
   render() {
+    const { accountInformation } = this.state
+
     return <View>
       <Section>
-        <Text style={formStyle.text}>Home View</Text>
+        { this.renderAccountInformation() }
+
         <Button text='Add Debt' onPress={() => this.setState({ shouldShowAddDebt: true })} />
         { this.renderAddDebtDialog() }
+
         <Button text='My Account' onPress={() => this.setState({ shouldShowMyAccount: true })} />
         { this.renderMyAccountDialog() }
       </Section>

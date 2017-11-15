@@ -14,7 +14,15 @@ import { lightGray } from 'theme/include/colors'
 import style from 'theme/account'
 import formStyle from 'theme/form'
 
-import { searchUsersByNickname, nickname, cancel } from 'language'
+import {
+  searchUsersByNickname,
+  nickname,
+  cancel,
+  back,
+  noMatches,
+  addFriend,
+  addFriendConfirmationQuestion
+} from 'language'
 
 const loadingContext = new LoadingContext()
 
@@ -24,6 +32,7 @@ interface Props {
 }
 
 interface State {
+  candidateForFriendship?: Friend
   hasSearchTerm: boolean
   matches: Friend[]
 }
@@ -33,27 +42,57 @@ export default class AddFriend extends Component<Props, State> {
 
   constructor() {
     super()
+
     this.state = {
       hasSearchTerm: false,
       matches: []
     }
   }
 
-  render() {
-    const { engine, closePopup } = this.props
-    const { matches } = this.state
+  componentDidMount() {
+    const { engine } = this.props
 
-    if (!this.searchAction) {
-      this.searchAction = debounce(
-        nickname =>
-          loadingContext.wrap(
-            engine.searchUsers({
-              nickname
-            })
-          ).then(
-            matches => this.setState({ hasSearchTerm: nickname.length > 0, matches })
+    this.searchAction = debounce(
+      async (nickname) => {
+        try {
+          const matches = await loadingContext.wrap(
+            engine.searchUsers({ nickname })
           )
-      )
+          this.setState({ hasSearchTerm: nickname.length > 0, matches })
+        }
+
+        catch (error) {
+          this.setState({ hasSearchTerm: nickname.length > 0, matches: [] })
+        }
+      }
+    )
+  }
+
+  async confirmFriend(friend: Friend) {
+    const { engine, closePopup } = this.props
+
+    await loadingContext.wrap(
+      engine.addFriend(friend)
+    )
+
+    closePopup()
+  }
+
+  render() {
+    const { closePopup } = this.props
+    const { matches, hasSearchTerm, candidateForFriendship } = this.state
+
+    if (candidateForFriendship) {
+      return <View>
+        <Text style={formStyle.text}>{addFriendConfirmationQuestion}</Text>
+          <Loading context={loadingContext} />
+          <FriendRow
+            key={candidateForFriendship.address}
+            friend={candidateForFriendship}
+          />
+          <Button onPress={() => this.confirmFriend(candidateForFriendship)} text={addFriend} />
+          <Button alternate onPress={() => this.setState({ candidateForFriendship: undefined })} text={back} />
+      </View>
     }
 
     return <View>
@@ -62,11 +101,20 @@ export default class AddFriend extends Component<Props, State> {
         autoCapitalize='none'
         style={formStyle.textInput}
         placeholder={nickname}
-        onChangeText={this.searchAction}
+        onChangeText={text => this.searchAction(text)}
       />
       <View style={style.list}>
         <Loading context={loadingContext} />
-        {matches.map(match => <FriendRow key={match.address} friend={match} onPress={() => {}} />)}
+        {hasSearchTerm && matches.length === 0 ? <Text style={style.emptyState}>{noMatches}</Text> : null}
+        {matches.map(
+          match => (
+            <FriendRow
+              key={match.address}
+              friend={match}
+              onPress={() => this.setState({ candidateForFriendship: match })}
+            />
+          )
+        )}
       </View>
       <Button alternate onPress={closePopup} text={cancel} />
     </View>
