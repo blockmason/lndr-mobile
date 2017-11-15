@@ -13,19 +13,19 @@ import WelcomeStepThreeView from './welcome-step-three'
 import WelcomeStepFourView from './welcome-step-four'
 
 interface Props {
-  engine: Engine
+  onComplete: () => void
 }
 
 export default class WelcomeView extends Component<Props> {
   render () {
-    const { engine } = this.props
+    const { onComplete } = this.props
 
     return <Slideshow
       views={[
         <WelcomeStepOneView />,
         <WelcomeStepTwoView />,
         <WelcomeStepThreeView />,
-        <WelcomeStepFourView onSlideshowComplete={ () => { engine.welcomeComplete() } } />
+        <WelcomeStepFourView onComplete={ () => { onComplete() } } />
       ]}/>
   }
 }

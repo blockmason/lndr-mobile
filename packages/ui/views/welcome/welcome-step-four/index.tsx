@@ -13,7 +13,7 @@ import ThemeImage from 'ui/components/images/theme-image'
 import Button from 'ui/components/button'
 
 interface Props {
-  onSlideshowComplete: () => void
+  onComplete: () => void
 }
 
 export default class WelcomeStepFourView extends Component<Props> {
@@ -24,7 +24,7 @@ export default class WelcomeStepFourView extends Component<Props> {
         <Text style={[style.text, style.topSpacing]}>{welcomeView.firstLendingApp}</Text>
         <ThemeImage size={largeImage} name='blockchain'/>
         <Text style={style.text}>{welcomeView.runEthereum}</Text>
-        <Button round style={style.completeButton} onPress={this.props.onSlideshowComplete} text={welcomeView.start} />
+        <Button round style={style.completeButton} onPress={this.props.onComplete} text={welcomeView.start} />
       </View>
     )
   }

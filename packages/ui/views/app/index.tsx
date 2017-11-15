@@ -65,7 +65,7 @@ export default class AppView extends Component<Props, EngineState> {
     }
 
     if (!welcomeComplete) {
-      return <WelcomeView engine={engine}/>
+      return <WelcomeView onComplete={ () => { this.setState({ welcomeComplete: true }) } }/>
     }
 
     if (!user) {

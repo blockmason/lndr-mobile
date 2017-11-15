@@ -112,10 +112,6 @@ export default class Engine {
     this.state = { shouldConfirmAccount: true, password, mnemonicInstance }
   }
 
-  welcomeComplete() {
-    this.state = { welcomeComplete: true }
-  }
-
   async getAccountInformation() {
     const { address } = this.engineState.user as User
     try {
