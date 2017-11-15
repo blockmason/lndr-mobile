@@ -15,6 +15,8 @@ export const loginAction = 'Unlock'
 
 export const addFriend = 'Add Friend'
 export const addFriendConfirmationQuestion = 'Are you sure you would like to add this user as a friend?'
+export const removeFriend = 'Remove Friend'
+export const removeFriendConfirmationQuestion = 'Are you sure you would like to remove this user as a friend?'
 export const noFriends = 'You have no friends'
 export const noMatches = 'No matching users found'
 
@@ -58,6 +60,10 @@ export const accountManagement = {
   },
   addFriend: {
     success: nickname => `Added to friends: @${nickname}`,
+    error: generalCommunicationError
+  },
+  removeFriend: {
+    success: nickname => `Removed from friends: @${nickname}`,
     error: generalCommunicationError
   },
   loadInformation: {

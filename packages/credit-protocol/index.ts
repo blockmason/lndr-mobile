@@ -56,6 +56,14 @@ export default class CreditProtocol {
     // }
   }
 
+  removeFriend(user: string, addr: string, privateKeyBuffer: any) {
+    return this.client.post(`/remove_friends/${user}`, [ addr ])
+    // {
+    //   addr,
+    //   sig: this.sign(addr, privateKeyBuffer)
+    // }
+  }
+
   getFriends(user: string) {
     return this.client.get(`/friends/${user}`)
   }

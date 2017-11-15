@@ -138,6 +138,17 @@ export default class Engine {
     }
   }
 
+  async removeFriend(friend: Friend) {
+    const { address, privateKeyBuffer } = this.engineState.user as User
+    try {
+      await creditProtocol.removeFriend(address, friend.address, privateKeyBuffer)
+      this.setSuccessMessage(accountManagement.removeFriend.success(friend.nickname))
+    } catch (error) {
+      this.setErrorMessage(accountManagement.removeFriend.error)
+      throw error
+    }
+  }
+
   jsonToFriend(data) {
     let addr, nick
     if (typeof data === 'string') {
