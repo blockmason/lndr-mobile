@@ -4,6 +4,7 @@ export const applicationName = 'LNDR'
 export const helloWorld = 'Hello world'
 
 export const cancel = 'Cancel'
+export const back = 'Go Back'
 
 export const confirmAccount = 'Confirm'
 export const createAccount = 'Create Account'
@@ -13,6 +14,15 @@ export const updateAccount = 'Update Account'
 export const loginAction = 'Unlock'
 
 export const addFriend = 'Add Friend'
+export const addFriendConfirmationQuestion = 'Are you sure you would like to add this user as a friend?'
+export const removeFriend = 'Remove Friend'
+export const removeFriendConfirmationQuestion = 'Are you sure you would like to remove this user as a friend?'
+export const noFriends = 'You have no friends'
+export const noMatches = 'No matching users found'
+
+
+export const welcomeBack = nickname => `Welcome back, ${nickname}!`
+export const noNicknameWarning = 'You don\'t have a nickname set and your friends won\'t be able to find you!'
 
 export const newPassword = 'New Password (minimum 8 chars)'
 export const confirmPassword = 'Confirm Password'
@@ -50,6 +60,17 @@ export const accountManagement = {
   },
   setNickname: {
     success: 'Your nickname has been saved.',
+    error: generalCommunicationError
+  },
+  addFriend: {
+    success: nickname => `Added to friends: @${nickname}`,
+    error: generalCommunicationError
+  },
+  removeFriend: {
+    success: nickname => `Removed from friends: @${nickname}`,
+    error: generalCommunicationError
+  },
+  loadInformation: {
     error: generalCommunicationError
   }
 }

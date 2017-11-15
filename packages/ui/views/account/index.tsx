@@ -22,22 +22,23 @@ interface Props {
 }
 
 export default class AccountView extends Component<Props> {
+  home: any
+  friends: any
+
   render() {
     const { engine } = this.props
 
-    return <View style={{flex: 1}}>
-      <Tabs tabContainerStyle={style.tabs}>
-        <Tab reference='home' text={accountViewLanguage.home}>
-          <HomeView engine={engine} />
-        </Tab>
-        <Tab reference='friends' text={accountViewLanguage.friends}>
-          <FriendsView engine={engine} />
-        </Tab>
-        <Tab reference='activity' text={accountViewLanguage.activity}>
-          <ActivityView engine={engine} />
-        </Tab>
-      </Tabs>
-      <ActionButton/>
-    </View>
+    return <Tabs tabContainerStyle={style.tabs}>
+      <Tab reference='home' text={accountViewLanguage.home} onRefresh={() => this.home.refresh()}>
+        <HomeView engine={engine} ref={home => this.home = home} />
+        <ActionButton/>
+      </Tab>
+      <Tab reference='friends' text={accountViewLanguage.friends} onRefresh={() => this.friends.refresh()}>
+        <FriendsView engine={engine} ref={friends => this.friends = friends} />
+      </Tab>
+      <Tab reference='activity' text={accountViewLanguage.activity}>
+        <ActivityView engine={engine} />
+      </Tab>
+    </Tabs>
   }
 }

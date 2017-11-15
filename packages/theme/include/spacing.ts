@@ -3,6 +3,7 @@ export const xl = 50
 export const l = 30
 export const m = 15
 export const s = 10
+export const xs = 4
 
 export const xLargePad = {
   paddingLeft: xl,

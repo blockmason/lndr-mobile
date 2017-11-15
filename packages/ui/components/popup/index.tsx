@@ -1,6 +1,7 @@
 import React, { Component } from 'react'
 
 import { ScrollView, View } from 'react-native'
+import { BlurView } from 'react-native-blur'
 
 import Button from 'ui/components/button'
 
@@ -54,14 +55,16 @@ export class PopupTarget extends Component<TargetProps, TargetState> {
 
     closeCurrentPopup = () => this.closePopup()
 
-    return <ScrollView style={style.wrap}>
-      <View style={style.container}>
-        <View style={style.popup}>
-          <Button round onPress={closeCurrentPopup} icon='md-close' style={style.closeButton} />
-          {popupContents}
+    return <BlurView blurType='dark' style={style.wrap}>
+      <ScrollView>
+        <View style={style.container}>
+          <View style={style.popup}>
+            <Button round onPress={closeCurrentPopup} icon='md-close' style={style.closeButton} />
+            {popupContents}
+          </View>
         </View>
-      </View>
-    </ScrollView>
+      </ScrollView>
+    </BlurView>
   }
 }
 

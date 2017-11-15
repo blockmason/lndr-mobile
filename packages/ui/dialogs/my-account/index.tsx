@@ -29,13 +29,24 @@ export default class MyAccount extends Component<Props, State> {
     this.state = defaultUpdateAccountData()
   }
 
+  async componentDidMount() {
+    const { engine } = this.props
+    this.setState(
+      await loadingContext.wrap(
+        engine.getAccountInformation()
+      )
+    )
+  }
+
   render() {
     const { engine, closePopup } = this.props
 
-    const submit = () =>
-      loadingContext.wrap(
+    const submit = async () => {
+      await loadingContext.wrap(
         engine.updateAccount(this.state)
-      ).then(closePopup)
+      )
+      closePopup()
+    }
 
     return <View>
       <Loading context={loadingContext} />
@@ -44,6 +55,7 @@ export default class MyAccount extends Component<Props, State> {
         autoCapitalize='none'
         style={style.textInput}
         placeholder={nickname}
+        value={this.state.nickname}
         onChangeText={nickname => this.setState({ nickname })}
       />
       <Button onPress={submit} text={updateAccount} />

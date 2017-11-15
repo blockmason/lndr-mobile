@@ -9,18 +9,25 @@ export default class Client {
     this.fetch = fetch || global.fetch
   }
 
-  handleResponse(promise) {
-    return promise
-      .then(response => {
-        if (response.status < 300) {
-          return response.json()
-        }
-        throw new Error(`HTTP Response ${response.status}`)
-      })
-      .catch(error => {
-        console.warn(`[fetch] ERROR ${error.message}`)
-        throw error
-      })
+  async handleResponse(promise) {
+    try {
+      const response = await promise
+
+      if (response.status === 204) {
+        return
+      }
+
+      if (response.status < 300) {
+        return response.json()
+      }
+
+      throw new Error(`HTTP Response ${response.status}`)
+    }
+
+    catch(error) {
+      console.warn(`[fetch] ERROR ${error.message}`)
+      throw error
+    }
   }
 
   get(path) {

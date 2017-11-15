@@ -5,7 +5,7 @@ import Engine from 'lndr/engine'
 import { delay } from 'lndr/time'
 import Friend from 'lndr/friend'
 
-import { View } from 'react-native'
+import { Text, View } from 'react-native'
 
 import Button from 'ui/components/button'
 import Section from 'ui/components/section'
@@ -13,11 +13,12 @@ import Popup, { closePopup } from 'ui/components/popup'
 import Loading, { LoadingContext } from 'ui/components/loading'
 
 import AddFriend from 'ui/dialogs/add-friend'
+import RemoveFriend from 'ui/dialogs/remove-friend'
 import FriendRow from 'ui/components/friend-row'
 
 import style from 'theme/account'
 
-import { addFriend } from 'language'
+import { addFriend, noFriends } from 'language'
 
 const loadingFriends = new LoadingContext()
 
@@ -27,6 +28,7 @@ interface Props {
 
 interface State {
   shouldShowAddFriend: boolean
+  friendsLoaded: boolean
   friends: Friend[]
 }
 
@@ -37,8 +39,29 @@ export default class FriendsView extends Component<Props, State> {
     super()
     this.state = {
       shouldShowAddFriend: false,
+      friendsLoaded: false,
       friends: []
     }
+  }
+
+  async componentDidMount() {
+    this.stillRelevant = true
+    const { engine } = this.props
+    const friends = await loadingFriends.wrap(engine.getFriends())
+    this.stillRelevant && this.setState({ friendsLoaded: true, friends })
+  }
+
+  refresh() {
+    this.componentDidMount()
+  }
+
+  componentWillUnmount() {
+    this.stillRelevant = false
+  }
+
+  closePopupAndRefresh() {
+    closePopup()
+    this.refresh()
   }
 
   renderAddFriendDialog() {
@@ -51,33 +74,30 @@ export default class FriendsView extends Component<Props, State> {
     const { engine } = this.props
 
     return <Popup onClose={() => this.setState({ shouldShowAddFriend: false })}>
-      <AddFriend closePopup={closePopup} engine={engine} />
+      <AddFriend closePopup={() => this.closePopupAndRefresh()} engine={engine} />
     </Popup>
   }
 
-  componentDidMount() {
-    this.stillRelevant = true
+  renderRemoveFriendDialog() {
+    const { friendToRemove } = this.state
 
-    loadingFriends.wrap(
-      delay(1000).then(() => this.stillRelevant && this.setState({
-        friends: [
-          new Friend('0x2127836871263', 'tim'),
-          new Friend('0xab897b8a97a97', 'rich'),
-          new Friend('0xc78cf9cf78fc7', 'roy')
-        ]
-      }))
-    )
-  }
+    if (!friendToRemove) {
+      return null
+    }
 
-  componentWillUnmount() {
-    this.stillRelevant = false
+    const { engine } = this.props
+
+    return <Popup onClose={() => this.setState({ friendToRemove: undefined })}>
+      <RemoveFriend friend={friendToRemove} closePopup={() => this.closePopupAndRefresh()} engine={engine} />
+    </Popup>
   }
 
   render() {
-    const { friends } = this.state
+    const { friendsLoaded, friends } = this.state
 
     return <View>
       { this.renderAddFriendDialog() }
+      { this.renderRemoveFriendDialog() }
 
       <Section>
         <Button text={addFriend} onPress={() => this.setState({ shouldShowAddFriend: true })} />
@@ -85,7 +105,16 @@ export default class FriendsView extends Component<Props, State> {
 
       <Section text='Current Friends' contentContainerStyle={style.list}>
         <Loading context={loadingFriends} />
-        {friends.map(friend => <FriendRow key={friend.address} friend={friend} onPress={() => {}} />)}
+        {friendsLoaded && friends.length === 0 ? <Text style={style.emptyState}>{noFriends}</Text> : null}
+        {friends.map(
+          friend => (
+            <FriendRow
+              key={friend.address}
+              friend={friend}
+              onPress={() => this.setState({ friendToRemove: friend })}
+            />
+          )
+        )}
       </Section>
     </View>
   }
