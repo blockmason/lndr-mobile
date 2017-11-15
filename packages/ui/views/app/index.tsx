@@ -54,6 +54,7 @@ export default class AppView extends Component<Props, EngineState> {
       mnemonicInstance,
       isInitializing,
       hasStoredUser,
+      welcomeComplete,
       shouldRecoverAccount,
       shouldRemoveAccount,
       shouldConfirmAccount
@@ -63,8 +64,8 @@ export default class AppView extends Component<Props, EngineState> {
       return <ThemeImage name='logo' />
     }
 
-    if (!hasStoredUser) {
-      return <WelcomeView />
+    if (!welcomeComplete) {
+      return <WelcomeView engine={engine}/>
     }
 
     if (!user) {

@@ -12,15 +12,20 @@ import WelcomeStepTwoView from './welcome-step-two'
 import WelcomeStepThreeView from './welcome-step-three'
 import WelcomeStepFourView from './welcome-step-four'
 
-const welcomeViews = [
-  <WelcomeStepOneView />,
-  <WelcomeStepTwoView />,
-  <WelcomeStepThreeView />,
-  <WelcomeStepFourView />
-]
+interface Props {
+  engine: Engine
+}
 
-export default class WelcomeView extends Component {
-  render() {
-    return <Slideshow views={welcomeViews}/>
+export default class WelcomeView extends Component<Props> {
+  render () {
+    const { engine } = this.props
+
+    return <Slideshow
+      views={[
+        <WelcomeStepOneView />,
+        <WelcomeStepTwoView />,
+        <WelcomeStepThreeView />,
+        <WelcomeStepFourView onSlideshowComplete={ () => { engine.welcomeComplete() } } />
+      ]}/>
   }
 }

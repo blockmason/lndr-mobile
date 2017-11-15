@@ -28,6 +28,7 @@ export interface EngineState {
   shouldRecoverAccount?: boolean
   shouldRemoveAccount?: boolean
   shouldConfirmAccount?: boolean
+  welcomeComplete?: boolean
   mnemonicInstance?: any
   password?: string
   errorMessage?: string
@@ -49,6 +50,7 @@ export default class Engine {
     this.listeners = []
     this.engineState = {
       hasStoredUser: false,
+      welcomeComplete: false,
       shouldRecoverAccount: false,
       shouldRemoveAccount: false,
       shouldConfirmAccount: false
@@ -59,7 +61,7 @@ export default class Engine {
     this.state = { isInitializing: true }
     const storedMnemonic = await mnemonicStorage.get()
     if (storedMnemonic) {
-      this.state = { hasStoredUser: true }
+      this.state = { hasStoredUser: true, welcomeComplete: true }
     }
     this.state = { isInitializing: false }
   }
@@ -108,6 +110,10 @@ export default class Engine {
     const password = accountData.password
     const mnemonicInstance = creditProtocol.getRandomMnemonic()
     this.state = { shouldConfirmAccount: true, password, mnemonicInstance }
+  }
+
+  welcomeComplete() {
+    this.state = { welcomeComplete: true }
   }
 
   async getAccountInformation() {

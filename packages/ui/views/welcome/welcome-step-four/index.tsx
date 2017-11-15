@@ -10,15 +10,21 @@ import { welcomeView } from 'language'
 
 import TextLogo from 'ui/components/images/text-logo'
 import ThemeImage from 'ui/components/images/theme-image'
+import Button from 'ui/components/button'
 
-export default class WelcomeStepFourView extends Component {
+interface Props {
+  onSlideshowComplete: () => void
+}
+
+export default class WelcomeStepFourView extends Component<Props> {
   render() {
     return (
       <View style={style.topView}>
         <TextLogo/>
         <Text style={[style.text, style.topSpacing]}>{welcomeView.firstLendingApp}</Text>
-        <ThemeImage size={largeImage} name={'blockchain'}/>
+        <ThemeImage size={largeImage} name='blockchain'/>
         <Text style={style.text}>{welcomeView.runEthereum}</Text>
+        <Button onPress={this.props.onSlideshowComplete} text="Start" />
       </View>
     )
   }
