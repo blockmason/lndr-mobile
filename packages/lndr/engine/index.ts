@@ -112,8 +112,12 @@ export default class Engine {
     this.state = { shouldConfirmAccount: true, password, mnemonicInstance }
   }
 
+  getUser(): User {
+    return this.engineState.user as User
+  }
+  
   async getAccountInformation() {
-    const { address } = this.engineState.user as User
+    const { address } = this.getUser()
     try {
       const nickname = await creditProtocol.getNickname(address)
       return { nickname }
@@ -125,7 +129,7 @@ export default class Engine {
   }
 
   async updateAccount(accountData: UpdateAccountData) {
-    const { address, privateKeyBuffer } = this.engineState.user as User
+    const { address, privateKeyBuffer } = this.getUser()
     const { nickname } = accountData
 
     try {
@@ -138,7 +142,7 @@ export default class Engine {
   }
 
   async addFriend(friend: Friend) {
-  const { address/*, privateKeyBuffer*/ } = this.engineState.user as User
+  const { address/*, privateKeyBuffer*/ } = this.getUser()
     try {
       await creditProtocol.addFriend(address, friend.address/*, privateKeyBuffer*/)
       this.setSuccessMessage(accountManagement.addFriend.success(friend.nickname))
@@ -149,7 +153,7 @@ export default class Engine {
   }
 
   async removeFriend(friend: Friend) {
-  const { address/*, privateKeyBuffer*/ } = this.engineState.user as User
+  const { address/*, privateKeyBuffer*/ } = this.getUser()
     try {
       await creditProtocol.removeFriend(address, friend.address/*, privateKeyBuffer*/)
       this.setSuccessMessage(accountManagement.removeFriend.success(friend.nickname))
@@ -188,7 +192,7 @@ export default class Engine {
   }
 
   async getFriends() {
-    const { address } = this.engineState.user as User
+    const { address } = this.getUser()
     const friends = await creditProtocol.getFriends(address)
     const result = friends.map(this.jsonToFriend)
     await this.ensureNicknames(result)
@@ -216,7 +220,7 @@ export default class Engine {
   }
 
   async addDebt(friend: Friend, amount: string, memo: string, direction: string) {
-    const { address, privateKeyBuffer } = this.engineState.user as User
+    const { address, privateKeyBuffer } = this.getUser()
 
     if (!friend) {
       return this.setErrorMessage('Friend must be selected')
