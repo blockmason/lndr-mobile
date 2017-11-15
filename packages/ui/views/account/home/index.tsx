@@ -31,7 +31,7 @@ export default class HomeView extends Component<Props, State> {
   constructor() {
     super()
     this.state = {
-      shouldShowAddDebt: true,
+      shouldShowAddDebt: false,
       shouldShowMyAccount: false,
       loadedAccountInformation: false
     }

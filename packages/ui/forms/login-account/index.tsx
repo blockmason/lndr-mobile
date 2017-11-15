@@ -27,7 +27,7 @@ export default class LoginAccountForm extends Component<Props, LoginAccountData>
   }
 
   componentDidMount() {
-    this.props.onSubmit({ confirmPassword: 'testtest' })
+    // this.props.onSubmit({ confirmPassword: 'testtest' })
   }
 
   render() {

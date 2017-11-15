@@ -226,6 +226,10 @@ export default class Engine {
       return this.setErrorMessage('Please choose the correct statement to determine the creditor and debtor')
     }
 
+    if (address === friend.address) {
+      return this.setErrorMessage('You can\'t create debt with yourself, choose another friend')
+    }
+
     const [ creditorAddress, debtorAddress ] = {
       lend: [ address, friend.address ],
       borrow: [ friend.address, address ]
