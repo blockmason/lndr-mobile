@@ -7,6 +7,7 @@ import ethUtil from 'ethereumjs-util'
 import { bufferToHex, stringToBuffer } from './lib/buffer-utils'
 import Client from './lib/client'
 import CreditRecord from './lib/credit-record'
+export { default as CreditRecord } from './lib/credit-record'
 
 export default class CreditProtocol {
   client: Client
@@ -48,7 +49,7 @@ export default class CreditProtocol {
     return this.client.get(`/search_nick/${nick}`)
   }
 
-  addFriend(user: string, addr: string, privateKeyBuffer: any) {
+  addFriend(user: string, addr: string/*, privateKeyBuffer: any*/) {
     return this.client.post(`/add_friends/${user}`, [ addr ])
     // {
     //   addr,
@@ -56,7 +57,7 @@ export default class CreditProtocol {
     // }
   }
 
-  removeFriend(user: string, addr: string, privateKeyBuffer: any) {
+  removeFriend(user: string, addr: string/*, privateKeyBuffer: any*/) {
     return this.client.post(`/remove_friends/${user}`, [ addr ])
     // {
     //   addr,
@@ -68,12 +69,20 @@ export default class CreditProtocol {
     return this.client.get(`/friends/${user}`)
   }
 
+  getPendingTransactions(user: string) {
+    return this.client.get(`/pending?user=${user}`)
+  }
+
   getNonce(address1, address2) {
     return this.client.get(`/nonce/${address1}/${address2}`)
   }
 
   pendingTransactions() {
     return this.client.get('/pending')
+  }
+
+  confirmPendingTransaction(pendingTransaction) {
+    return this.client.post('/pending-fix-me-todo', pendingTransaction)
   }
 
   async createCreditRecord(ucac, address1, address2, amount, memo) {

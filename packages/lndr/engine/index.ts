@@ -5,6 +5,7 @@ import ethUtil from 'ethereumjs-util'
 import { longTimePeriod } from 'lndr/time'
 import User, { CreateAccountData, RecoverAccountData, LoginAccountData, UpdateAccountData } from 'lndr/user'
 import Friend from 'lndr/friend'
+import PendingTransaction from 'lndr/pending-transaction'
 
 import CreditProtocol from 'credit-protocol'
 
@@ -128,9 +129,9 @@ export default class Engine {
   }
 
   async addFriend(friend: Friend) {
-    const { address, privateKeyBuffer } = this.engineState.user as User
+  const { address/*, privateKeyBuffer*/ } = this.engineState.user as User
     try {
-      await creditProtocol.addFriend(address, friend.address, privateKeyBuffer)
+      await creditProtocol.addFriend(address, friend.address/*, privateKeyBuffer*/)
       this.setSuccessMessage(accountManagement.addFriend.success(friend.nickname))
     } catch (error) {
       this.setErrorMessage(accountManagement.addFriend.error)
@@ -139,9 +140,9 @@ export default class Engine {
   }
 
   async removeFriend(friend: Friend) {
-    const { address, privateKeyBuffer } = this.engineState.user as User
+  const { address/*, privateKeyBuffer*/ } = this.engineState.user as User
     try {
-      await creditProtocol.removeFriend(address, friend.address, privateKeyBuffer)
+      await creditProtocol.removeFriend(address, friend.address/*, privateKeyBuffer*/)
       this.setSuccessMessage(accountManagement.removeFriend.success(friend.nickname))
     } catch (error) {
       this.setErrorMessage(accountManagement.removeFriend.error)
@@ -172,6 +173,20 @@ export default class Engine {
     const { nickname } = searchData
     const users = await creditProtocol.searchUsers(nickname)
     return users.map(this.jsonToFriend)
+  }
+
+  jsonToPendingTransaction(data) {
+    return new PendingTransaction(data)
+  }
+
+  async getPendingTransactions() {
+    const { address } = this.engineState.user as User
+    const pendingTransactions = await creditProtocol.getPendingTransactions(address)
+    return pendingTransactions.map(this.jsonToPendingTransaction)
+  }
+
+  async confirmPendingTransaction(pendingTransaction: PendingTransaction) {
+    await creditProtocol.confirmPendingTransaction(pendingTransaction)
   }
 
   cancelConfirmAccount() {

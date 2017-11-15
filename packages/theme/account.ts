@@ -1,6 +1,6 @@
 import { StyleSheet } from 'react-native'
 
-import { bold, medium, xsmall, monospace } from 'theme/include/fonts'
+import { bold, medium, small, xsmall, monospace } from 'theme/include/fonts'
 import { xxl, s, xs, verticalMargin } from 'theme/include/spacing'
 
 import { gray } from 'theme/include/colors'
@@ -34,10 +34,21 @@ export default StyleSheet.create({
     color: gray
   },
 
+  text: {
+    ...medium
+  },
+
+  title: {
+    padding: xs,
+    flex: 1,
+    ...xsmall,
+    ...verticalMargin
+  },
+
   fact: {
     padding: xs,
     flex: 1,
-    ...medium,
+    ...small,
     ...bold,
     ...verticalMargin
   }

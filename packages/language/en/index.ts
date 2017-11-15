@@ -20,7 +20,6 @@ export const removeFriendConfirmationQuestion = 'Are you sure you would like to 
 export const noFriends = 'You have no friends'
 export const noMatches = 'No matching users found'
 
-
 export const welcomeBack = nickname => `Welcome back, ${nickname}!`
 export const noNicknameWarning = 'You don\'t have a nickname set and your friends won\'t be able to find you!'
 
@@ -75,4 +74,10 @@ export const accountViewLanguage = {
   home: 'Home',
   friends: 'Friends',
   activity: 'Activity'
+}
+
+export const pendingTransactionsLanguage = {
+  none: 'You have no pending transactions',
+  confirmationQuestion: 'Are you sure you want to confirm this transaction?',
+  confirm: 'Confirm Transaction'
 }

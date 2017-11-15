@@ -1,6 +1,6 @@
 import { StyleSheet } from 'react-native'
 
-import { s, mediumPad, smallPad, verticalMargin } from 'theme/include/spacing'
+import { s, mediumPad } from 'theme/include/spacing'
 import { thinBottomBorder } from 'theme/include/borders'
 import { large } from 'theme/include/fonts'
 import { charcoal } from 'theme/include/colors'
