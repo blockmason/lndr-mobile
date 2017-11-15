@@ -26,13 +26,17 @@ export default class ActivityView extends Component<Props, State> {
   render() {
     const { engine } = this.props
 
-    return <Tabs alternate>
-      <Tab reference='pending' text='Pending'>
-        <PendingView engine={engine} />
-      </Tab>
-      <Tab reference='recent' text='Recent'>
-        <RecentActivityView engine={engine} />
-      </Tab>
-    </Tabs>
+    return <PendingView engine={engine} />
+
+    // For later, when we have recent activity logs:
+    //
+    // return <Tabs alternate>
+    //   <Tab reference='pending' text='Pending'>
+    //     <PendingView engine={engine} />
+    //   </Tab>
+    //   <Tab reference='recent' text='Recent'>
+    //     <RecentActivityView engine={engine} />
+    //   </Tab>
+    // </Tabs>
   }
 }

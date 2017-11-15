@@ -2,7 +2,6 @@ import React, { Component } from 'react'
 
 import Engine from 'lndr/engine'
 
-import { delay } from 'lndr/time'
 import Friend from 'lndr/friend'
 
 import { Text, View } from 'react-native'
@@ -30,6 +29,7 @@ interface State {
   shouldShowAddFriend: boolean
   friendsLoaded: boolean
   friends: Friend[]
+  friendToRemove?: Friend
 }
 
 export default class FriendsView extends Component<Props, State> {
@@ -100,7 +100,7 @@ export default class FriendsView extends Component<Props, State> {
       { this.renderRemoveFriendDialog() }
 
       <Section>
-        <Button text={addFriend} onPress={() => this.setState({ shouldShowAddFriend: true })} />
+        <Button icon='md-person-add' text={addFriend} onPress={() => this.setState({ shouldShowAddFriend: true })} />
       </Section>
 
       <Section text='Current Friends' contentContainerStyle={style.list}>

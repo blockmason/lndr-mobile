@@ -5,12 +5,14 @@ import ethUtil from 'ethereumjs-util'
 import { longTimePeriod } from 'lndr/time'
 import User, { CreateAccountData, RecoverAccountData, LoginAccountData, UpdateAccountData } from 'lndr/user'
 import Friend from 'lndr/friend'
+import PendingTransaction from 'lndr/pending-transaction'
+import ucac from 'lndr/ucac'
 
 import CreditProtocol from 'credit-protocol'
 
 import Storage from 'lndr/storage'
 
-import { accountManagement } from 'language'
+import { accountManagement, debtManagement } from 'language'
 
 const mnemonicStorage = new Storage('mnemonic')
 const hashedPasswordStorage = new Storage('hashed-password')
@@ -110,8 +112,14 @@ export default class Engine {
 
   async getAccountInformation() {
     const { address } = this.engineState.user as User
-    const nickname = await creditProtocol.getNickname(address)
-    return { nickname }
+    try {
+      const nickname = await creditProtocol.getNickname(address)
+      return { nickname }
+    }
+
+    catch (e) {
+      return {}
+    }
   }
 
   async updateAccount(accountData: UpdateAccountData) {
@@ -128,9 +136,9 @@ export default class Engine {
   }
 
   async addFriend(friend: Friend) {
-    const { address, privateKeyBuffer } = this.engineState.user as User
+  const { address/*, privateKeyBuffer*/ } = this.engineState.user as User
     try {
-      await creditProtocol.addFriend(address, friend.address, privateKeyBuffer)
+      await creditProtocol.addFriend(address, friend.address/*, privateKeyBuffer*/)
       this.setSuccessMessage(accountManagement.addFriend.success(friend.nickname))
     } catch (error) {
       this.setErrorMessage(accountManagement.addFriend.error)
@@ -139,9 +147,9 @@ export default class Engine {
   }
 
   async removeFriend(friend: Friend) {
-    const { address, privateKeyBuffer } = this.engineState.user as User
+  const { address/*, privateKeyBuffer*/ } = this.engineState.user as User
     try {
-      await creditProtocol.removeFriend(address, friend.address, privateKeyBuffer)
+      await creditProtocol.removeFriend(address, friend.address/*, privateKeyBuffer*/)
       this.setSuccessMessage(accountManagement.removeFriend.success(friend.nickname))
     } catch (error) {
       this.setErrorMessage(accountManagement.removeFriend.error)
@@ -162,16 +170,113 @@ export default class Engine {
     return new Friend(addr, nick)
   }
 
+  async ensureNicknames(friends: Friend[]) {
+    const needNicknamesFor = friends.filter(
+      friend => !friend.nickname || friend.nickname === 'N/A'
+    )
+
+    await Promise.all(
+      needNicknamesFor.map(
+        async (friend) => {
+          const nickname = await creditProtocol.getNickname(friend.address)
+          friend.nickname = nickname
+        }
+      )
+    )
+  }
+
   async getFriends() {
     const { address } = this.engineState.user as User
     const friends = await creditProtocol.getFriends(address)
-    return friends.map(this.jsonToFriend)
+    const result = friends.map(this.jsonToFriend)
+    await this.ensureNicknames(result)
+    return result
   }
 
   async searchUsers(searchData) {
     const { nickname } = searchData
     const users = await creditProtocol.searchUsers(nickname)
     return users.map(this.jsonToFriend)
+  }
+
+  jsonToPendingTransaction(data) {
+    return new PendingTransaction(data)
+  }
+
+  async getPendingTransactions() {
+    const { address } = this.engineState.user as User
+    const pendingTransactions = await creditProtocol.getPendingTransactions(address)
+    return pendingTransactions.map(this.jsonToPendingTransaction)
+  }
+
+  async confirmPendingTransaction(pendingTransaction: PendingTransaction) {
+    await creditProtocol.confirmPendingTransaction(pendingTransaction)
+  }
+
+  async addDebt(friend: Friend, amount: string, memo: string, direction: string) {
+    const { address, privateKeyBuffer } = this.engineState.user as User
+
+    if (!friend) {
+      return this.setErrorMessage('Friend must be selected')
+    }
+
+    if (!amount) {
+      return this.setErrorMessage('Amount must be entered')
+    }
+
+    const sanitizedAmount = parseInt(
+      amount
+        .replace(/[^.\d]/g, '')
+        .replace(/^\d+\.?$/, x => `${x}00`)
+        .replace(/\.\d$/, x => `${x.substr(1)}0`)
+        .replace(/\.\d\d$/, x => `${x.substr(1)}`)
+        .replace(/\./, () => '')
+    )
+
+    if (sanitizedAmount <= 0) {
+      return this.setErrorMessage('Amount must be greater than $0')
+    }
+
+    if (sanitizedAmount >= 1e11) {
+      return this.setErrorMessage('Amount must be less than $1,000,000,000')
+    }
+
+    if (!memo) {
+      return this.setErrorMessage('Memo must be entered')
+    }
+
+    if (!direction) {
+      return this.setErrorMessage('Please choose the correct statement to determine the creditor and debtor')
+    }
+
+    if (address === friend.address) {
+      return this.setErrorMessage('You can\'t create debt with yourself, choose another friend')
+    }
+
+    const [ creditorAddress, debtorAddress ] = {
+      lend: [ address, friend.address ],
+      borrow: [ friend.address, address ]
+    }[direction]
+
+    try {
+      const creditRecord = await creditProtocol.createCreditRecord(
+        ucac,
+        creditorAddress,
+        debtorAddress,
+        sanitizedAmount,
+        memo
+      )
+
+      const signature = creditRecord.sign(privateKeyBuffer)
+      await creditProtocol.submitCreditRecord(creditRecord, direction, signature)
+
+      this.setSuccessMessage(debtManagement.pending.success(friend))
+      return true
+    }
+
+    catch (e) {
+      this.setErrorMessage(debtManagement.pending.error)
+    }
   }
 
   cancelConfirmAccount() {
