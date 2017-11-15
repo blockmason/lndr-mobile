@@ -1,6 +1,7 @@
 import { StyleSheet } from 'react-native'
 
 import { dark, light, white, gray } from 'theme/include/colors'
+import { percent } from 'theme/include/dimensions'
 
 export default StyleSheet.create({
   topView: {
@@ -20,6 +21,9 @@ export default StyleSheet.create({
   },
   italic: {
     fontStyle: 'italic'
+  },
+  completeButton: {
+    marginTop: percent.ten
   },
   horizontial: {
     flexDirection: 'row'

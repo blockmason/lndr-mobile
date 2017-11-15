@@ -24,7 +24,7 @@ export default class WelcomeStepFourView extends Component<Props> {
         <Text style={[style.text, style.topSpacing]}>{welcomeView.firstLendingApp}</Text>
         <ThemeImage size={largeImage} name='blockchain'/>
         <Text style={style.text}>{welcomeView.runEthereum}</Text>
-        <Button onPress={this.props.onSlideshowComplete} text="Start" />
+        <Button round style={style.completeButton} onPress={this.props.onSlideshowComplete} text={welcomeView.start} />
       </View>
     )
   }

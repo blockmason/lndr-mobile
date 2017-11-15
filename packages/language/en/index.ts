@@ -86,7 +86,8 @@ export const welcomeView = {
   runEthereum: 'We run on Ethereum!',
   firstLendingApp: 'The first lending app secured on the blockchain.',
   greatConcert: 'See a great concert...',
-  youPlayWithFriends: "You play with friends; we'll keep the tab..."
+  youPlayWithFriends: "You play with friends; we'll keep the tab...",
+  start: 'Start'
 }
 
 export const debtManagement = {
