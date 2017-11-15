@@ -17,9 +17,9 @@ export default class WelcomeStepTwoView extends Component {
       <View style={style.topView}>
         <TextLogo />
         <Text style={style.text}>{welcomeView.youPlayWithFriends}</Text>
-        <ThemeImage size={mediumImage} name={'dinner'}/>
+        <ThemeImage size={mediumImage} name='dinner'/>
         <Text style={style.text}>{welcomeView.shareDinner}</Text>
-        <ThemeImage size={mediumImage} name={'tank'}/>
+        <ThemeImage size={mediumImage} name='tank'/>
         <Text style={style.text}>{welcomeView.fillTank}</Text>
       </View>
     )
