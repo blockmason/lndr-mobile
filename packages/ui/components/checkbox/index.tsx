@@ -3,43 +3,43 @@ import Icon from 'react-native-vector-icons/Ionicons'
 
 import { TouchableHighlight, View, Text } from 'react-native'
 
-import buttonStyle from 'theme/button'
+import checkboxStyle from 'theme/checkbox'
 
 interface Props {
+  checked: boolean
   alternate?: boolean
   danger?: boolean
   round?: boolean
   onPress: () => void
   text?: string
-  icon?: string
   containerStyle?: any
   style?: any
 }
 
 const showText = (text?: string, alternate?: boolean) => {
   if (alternate) {
-    return <Text style={buttonStyle.textAlternate}>{text}</Text>
+    return <Text style={checkboxStyle.textAlternate}>{text}</Text>
   }
-  return <Text style={buttonStyle.text}>{text}</Text>
+  return <Text style={checkboxStyle.text}>{text}</Text>
 }
 
 const getStyle = (danger?: boolean, round?: boolean, alternate?: boolean, customStyle?: any) => {
   let styles: any[] = []
 
   if (alternate) {
-    styles.push(buttonStyle.buttonAlternate)
+    styles.push(checkboxStyle.checkboxAlternate)
   }
 
   else {
-    styles.push(buttonStyle.button)
+    styles.push(checkboxStyle.checkbox)
   }
 
   if (round) {
-    styles.push(buttonStyle.round)
+    styles.push(checkboxStyle.round)
   }
 
   if (danger) {
-    styles.push(buttonStyle.danger)
+    styles.push(checkboxStyle.danger)
   }
 
   if (customStyle) {
@@ -49,23 +49,25 @@ const getStyle = (danger?: boolean, round?: boolean, alternate?: boolean, custom
   return styles
 }
 
-const getIconStyle = (round?: boolean) => {
+const getCheckmark = (round?: boolean) => {
   if (round) {
-    return buttonStyle.iconRound
+    return <Icon style={checkboxStyle.roundCheckmark} />
   }
 
-  return buttonStyle.icon
+  return <Icon style={checkboxStyle.checkmark} name='ios-checkmark' />
 }
 
-export default ({ danger, round, alternate, containerStyle, style, icon, text, onPress }: Props) => (
+export default ({ danger, round, alternate, containerStyle, style, checked, text, onPress }: Props) => (
   <TouchableHighlight
     underlayColor='#fff'
     activeOpacity={0.5}
     onPress={onPress}
     style={containerStyle}
   >
-    <View style={getStyle(danger, round, alternate, style)}>
-      {icon ? <Icon style={getIconStyle(round)} name={icon} /> : null}
+    <View style={checkboxStyle.layout}>
+      <View style={getStyle(danger, round, alternate, style)}>
+        {checked ? getCheckmark(round) : null}
+      </View>
       {showText(text, alternate)}
     </View>
   </TouchableHighlight>

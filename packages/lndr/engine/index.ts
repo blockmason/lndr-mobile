@@ -6,12 +6,13 @@ import { longTimePeriod } from 'lndr/time'
 import User, { CreateAccountData, RecoverAccountData, LoginAccountData, UpdateAccountData } from 'lndr/user'
 import Friend from 'lndr/friend'
 import PendingTransaction from 'lndr/pending-transaction'
+import ucac from 'lndr/ucac'
 
 import CreditProtocol from 'credit-protocol'
 
 import Storage from 'lndr/storage'
 
-import { accountManagement } from 'language'
+import { accountManagement, debtManagement } from 'language'
 
 const mnemonicStorage = new Storage('mnemonic')
 const hashedPasswordStorage = new Storage('hashed-password')
@@ -187,6 +188,68 @@ export default class Engine {
 
   async confirmPendingTransaction(pendingTransaction: PendingTransaction) {
     await creditProtocol.confirmPendingTransaction(pendingTransaction)
+  }
+
+  async addDebt(friend: Friend, amount: string, memo: string, direction: string) {
+    const { address, privateKeyBuffer } = this.engineState.user as User
+
+    if (!friend) {
+      return this.setErrorMessage('Friend must be selected')
+    }
+
+    if (!amount) {
+      return this.setErrorMessage('Amount must be entered')
+    }
+
+    const sanitizedAmount = parseInt(
+      amount
+        .replace(/[^.\d]/g, '')
+        .replace(/^\d+\.?$/, x => `${x}00`)
+        .replace(/\.\d$/, x => `${x.substr(1)}0`)
+        .replace(/\.\d\d$/, x => `${x.substr(1)}`)
+        .replace(/\./, () => '')
+    )
+
+    if (sanitizedAmount <= 0) {
+      return this.setErrorMessage('Amount must be greater than $0')
+    }
+
+    if (sanitizedAmount >= 1e11) {
+      return this.setErrorMessage('Amount must be less than $1,000,000,000')
+    }
+
+    if (!memo) {
+      return this.setErrorMessage('Memo must be entered')
+    }
+
+    if (!direction) {
+      return this.setErrorMessage('Please choose the correct statement to determine the creditor and debtor')
+    }
+
+    const [ creditorAddress, debtorAddress ] = {
+      lend: [ address, friend.address ],
+      borrow: [ friend.address, address ]
+    }[direction]
+
+    try {
+      const creditRecord = await creditProtocol.createCreditRecord(
+        ucac,
+        creditorAddress,
+        debtorAddress,
+        sanitizedAmount,
+        memo
+      )
+
+      const signature = creditRecord.sign(privateKeyBuffer)
+      await creditProtocol.submitCreditRecord(creditRecord, direction, signature)
+
+      this.setSuccessMessage(debtManagement.pending.success(friend))
+      return true
+    }
+
+    catch (e) {
+      this.setErrorMessage(debtManagement.pending.error)
+    }
   }
 
   cancelConfirmAccount() {

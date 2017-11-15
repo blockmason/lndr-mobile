@@ -100,7 +100,7 @@ export default class FriendsView extends Component<Props, State> {
       { this.renderRemoveFriendDialog() }
 
       <Section>
-        <Button text={addFriend} onPress={() => this.setState({ shouldShowAddFriend: true })} />
+        <Button icon='md-person-add' text={addFriend} onPress={() => this.setState({ shouldShowAddFriend: true })} />
       </Section>
 
       <Section text='Current Friends' contentContainerStyle={style.list}>

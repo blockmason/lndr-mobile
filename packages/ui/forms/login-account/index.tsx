@@ -40,7 +40,7 @@ export default class LoginAccountForm extends Component<Props, LoginAccountData>
         placeholder={confirmPassword}
         onChangeText={confirmPassword => this.setState({ confirmPassword })}
       />
-      <Button onPress={() => onSubmit(this.state)} text={loginAction} />
+      <Button icon='md-lock' onPress={() => onSubmit(this.state)} text={loginAction} />
       <Button alternate onPress={() => onRemoveAccount()} text={removeAccount} />
     </View>
   }

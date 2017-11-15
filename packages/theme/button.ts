@@ -11,19 +11,37 @@ export default StyleSheet.create({
     ...mediumPad,
     ...verticalMargin,
     backgroundColor: dark,
-    ...radius
+    ...radius,
+    minHeight: 47,
+    minWidth: 45
+  },
+
+  icon: {
+    position: 'absolute',
+    padding: 10,
+    top: 2,
+    right: 4,
+    fontSize: 22,
+    color: light,
+    backgroundColor: transparent
   },
 
   round: {
     borderRadius: 100
   },
 
-  danger: {
-    backgroundColor: danger
+  iconRound: {
+    marginTop: 2,
+    marginLeft: -4,
+    padding: 5,
+    fontSize: 22,
+    width: 23,
+    height: 23,
+    backgroundColor: transparent
   },
 
-  buttonAbsolute: {
-    position: 'absolute'
+  danger: {
+    backgroundColor: danger
   },
 
   buttonAlternate: {
@@ -45,15 +63,5 @@ export default StyleSheet.create({
     ...bold,
     ...center,
     color: gray
-  },
-
-  icon: {
-    marginTop: 3,
-    marginLeft: -7,
-    paddingLeft: 5,
-    fontSize: 22,
-    width: 23,
-    height: 23,
-    backgroundColor: transparent
   }
 } as any)

@@ -11,7 +11,7 @@ export default StyleSheet.create({
   },
 
   list: {
-    minHeight: 100
+    minHeight: 80
   },
 
   listItem: {

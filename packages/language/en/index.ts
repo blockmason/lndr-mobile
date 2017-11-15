@@ -3,6 +3,7 @@ const generalCommunicationError = 'There was a problem communicating with the se
 export const applicationName = 'LNDR'
 export const helloWorld = 'Hello world'
 
+export const submit = 'Submit'
 export const cancel = 'Cancel'
 export const back = 'Go Back'
 
@@ -20,8 +21,9 @@ export const removeFriendConfirmationQuestion = 'Are you sure you would like to 
 export const noFriends = 'You have no friends'
 export const noMatches = 'No matching users found'
 
+export const tip = 'Tip: '
 export const welcomeBack = nickname => `Welcome back, ${nickname}!`
-export const noNicknameWarning = 'You don\'t have a nickname set and your friends won\'t be able to find you!'
+export const noNicknameWarning = 'Choose a nickname by tapping on the settings icon so your friends can find you.'
 
 export const newPassword = 'New Password (minimum 8 chars)'
 export const confirmPassword = 'Confirm Password'
@@ -66,6 +68,28 @@ export const accountManagement = {
     error: generalCommunicationError
   },
   loadInformation: {
+    error: generalCommunicationError
+  }
+}
+
+export const debtManagement = {
+  add: 'Add Debt',
+  selectFriend: 'Select Friend',
+  fields: {
+    amount: 'AMOUNT',
+    selectFriend: 'SELECT FRIEND',
+    memo: 'MEMO',
+    direction: 'SELECT THE CORRECT STATEMENT'
+  },
+  memo: {
+    example: 'Thanks for dinner.'
+  },
+  direction: {
+    lend: (friend, amount) => `@${friend.nickname} owes me ${amount || ''}`,
+    borrow: (friend, amount) => `I owe @${friend.nickname} ${amount || ''}`
+  },
+  pending: {
+    success: friend => `Pending debt submitted to @${friend.nickname}`,
     error: generalCommunicationError
   }
 }

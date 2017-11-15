@@ -11,9 +11,10 @@ import Section from 'ui/components/section'
 import AddDebt from 'ui/dialogs/add-debt'
 import MyAccount from 'ui/dialogs/my-account'
 
+import general from 'theme/general'
 import formStyle from 'theme/form'
 
-import { welcomeBack, noNicknameWarning, accountManagement } from 'language'
+import { tip, welcomeBack, noNicknameWarning, accountManagement } from 'language'
 
 interface Props {
   engine: Engine
@@ -30,7 +31,7 @@ export default class HomeView extends Component<Props, State> {
   constructor() {
     super()
     this.state = {
-      shouldShowAddDebt: false,
+      shouldShowAddDebt: true,
       shouldShowMyAccount: false,
       loadedAccountInformation: false
     }
@@ -67,7 +68,10 @@ export default class HomeView extends Component<Props, State> {
     const { nickname } = accountInformation || { nickname: undefined }
 
     if (!nickname) {
-      return <Text style={formStyle.warningText}>{noNicknameWarning}</Text>
+      return <Text style={formStyle.warningText}>
+        <Text style={formStyle.bold}>{tip}</Text>
+        {noNicknameWarning}
+      </Text>
     }
 
     return <Text style={formStyle.text}>{welcomeBack(nickname)}</Text>
@@ -83,7 +87,7 @@ export default class HomeView extends Component<Props, State> {
     const { engine } = this.props
 
     return <Popup onClose={() => this.setState({ shouldShowAddDebt: false })}>
-      <AddDebt engine={engine} />
+      <AddDebt closePopup={closePopup} engine={engine} />
     </Popup>
   }
 
@@ -106,13 +110,23 @@ export default class HomeView extends Component<Props, State> {
 
     return <View>
       <Section>
-        { this.renderAccountInformation() }
-
-        <Button text='Add Debt' onPress={() => this.setState({ shouldShowAddDebt: true })} />
         { this.renderAddDebtDialog() }
-
-        <Button text='My Account' onPress={() => this.setState({ shouldShowMyAccount: true })} />
         { this.renderMyAccountDialog() }
+
+        <View style={general.horizontalFlex}>
+          <Button
+            icon='ios-cash'
+            containerStyle={general.stretch}
+            text='Add Debt'
+            onPress={() => this.setState({ shouldShowAddDebt: true })}
+          />
+          <Button
+            icon='ios-settings'
+            onPress={() => this.setState({ shouldShowMyAccount: true })}
+          />
+        </View>
+
+        { this.renderAccountInformation() }
       </Section>
 
       <Section text='My Balances'>

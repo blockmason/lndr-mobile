@@ -1,8 +1,8 @@
 import { StyleSheet } from 'react-native'
 
-import { m, xLargePad, verticalMargin } from 'theme/include/spacing'
-import { medium, bold } from 'theme/include/fonts'
-import { warning } from 'theme/include/colors'
+import { m, s, xLargePad, verticalMargin } from 'theme/include/spacing'
+import { medium, xsmall, bold } from 'theme/include/fonts'
+import { gray, warning, warningDark } from 'theme/include/colors'
 import { attention, radius } from 'theme/include/borders'
 
 export default StyleSheet.create({
@@ -14,14 +14,25 @@ export default StyleSheet.create({
     ...verticalMargin
   },
   warningText: {
+    paddingVertical: s,
+    paddingHorizontal: m,
     ...medium,
+    ...radius,
     ...verticalMargin,
-    color: warning
+    backgroundColor: warning,
+    color: warningDark,
+    overflow: 'hidden'
   },
   header: {
     ...medium,
     ...bold,
     ...verticalMargin
+  },
+  title: {
+    ...xsmall,
+    ...bold,
+    color: gray,
+    marginTop: s
   },
   textInput: {
     ...medium,
@@ -39,4 +50,7 @@ export default StyleSheet.create({
     ...attention,
     ...radius
   },
+  bold: {
+    ...bold
+  }
 } as any)
