@@ -77,6 +77,10 @@ export default class CreditProtocol {
     return this.client.get(`/nonce/${address1}/${address2}`)
   }
 
+  getTransactions(user: string) {
+    return this.client.get(`/transactions?value=${user}`)
+  }
+
   pendingTransactions() {
     return this.client.get('/pending')
   }

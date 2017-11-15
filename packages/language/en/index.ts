@@ -40,6 +40,10 @@ export const mnemonicExhortation = 'Record these 12 words somewhere safe and sec
 export const removeAccountTitle = 'Are you sure you would like to remove your account from this device?'
 export const removeAccountExhortation = 'Be sure that you have access to your mnemonic to restore your account later, as this is a permanent removal of your account information from this device.'
 
+export const myAccount = 'My account'
+export const addNewFriend = 'Add new friend'
+export const addNewDebt = 'Add new debt'
+
 export const setNickname = 'Set a nickname so your friends can find you'
 export const nickname = 'Nickname'
 
@@ -70,6 +74,20 @@ export const accountManagement = {
   loadInformation: {
     error: generalCommunicationError
   }
+}
+
+export const welcomeView = {
+  makeItEasy: 'Lndr makes it easy to track simple debts',
+  weHelpFriends: 'We help friends live, work, and play together.',
+  lender: 'Len.der',
+  shareDinner: 'Share dinner...',
+  fillTank: 'Fill your tank...',
+  travelTogether: 'Travel together...',
+  runEthereum: 'We run on Ethereum!',
+  firstLendingApp: 'The first lending app secured on the blockchain.',
+  greatConcert: 'See a great concert...',
+  youPlayWithFriends: "You play with friends; we'll keep the tab...",
+  start: 'Start'
 }
 
 export const debtManagement = {
@@ -104,4 +122,8 @@ export const pendingTransactionsLanguage = {
   none: 'You have no pending transactions',
   confirmationQuestion: 'Are you sure you want to confirm this transaction?',
   confirm: 'Confirm Transaction'
+}
+
+export const transactionHistoryLanguage = {
+  none: 'You have no previous transactions'
 }

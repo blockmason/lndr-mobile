@@ -6,6 +6,7 @@ import { longTimePeriod } from 'lndr/time'
 import User, { CreateAccountData, RecoverAccountData, LoginAccountData, UpdateAccountData } from 'lndr/user'
 import Friend from 'lndr/friend'
 import PendingTransaction from 'lndr/pending-transaction'
+import TransactionHistory from 'lndr/transaction-history'
 import ucac from 'lndr/ucac'
 
 import CreditProtocol from 'credit-protocol'
@@ -28,6 +29,7 @@ export interface EngineState {
   shouldRecoverAccount?: boolean
   shouldRemoveAccount?: boolean
   shouldConfirmAccount?: boolean
+  welcomeComplete?: boolean
   mnemonicInstance?: any
   password?: string
   errorMessage?: string
@@ -49,6 +51,7 @@ export default class Engine {
     this.listeners = []
     this.engineState = {
       hasStoredUser: false,
+      welcomeComplete: false,
       shouldRecoverAccount: false,
       shouldRemoveAccount: false,
       shouldConfirmAccount: false
@@ -59,7 +62,7 @@ export default class Engine {
     this.state = { isInitializing: true }
     const storedMnemonic = await mnemonicStorage.get()
     if (storedMnemonic) {
-      this.state = { hasStoredUser: true }
+      this.state = { hasStoredUser: true, welcomeComplete: true }
     }
     this.state = { isInitializing: false }
   }
@@ -110,8 +113,12 @@ export default class Engine {
     this.state = { shouldConfirmAccount: true, password, mnemonicInstance }
   }
 
+  getUser(): User {
+    return this.engineState.user as User
+  }
+  
   async getAccountInformation() {
-    const { address } = this.engineState.user as User
+    const { address } = this.getUser()
     try {
       const nickname = await creditProtocol.getNickname(address)
       return { nickname }
@@ -123,7 +130,7 @@ export default class Engine {
   }
 
   async updateAccount(accountData: UpdateAccountData) {
-    const { address, privateKeyBuffer } = this.engineState.user as User
+    const { address, privateKeyBuffer } = this.getUser()
     const { nickname } = accountData
 
     try {
@@ -136,7 +143,7 @@ export default class Engine {
   }
 
   async addFriend(friend: Friend) {
-  const { address/*, privateKeyBuffer*/ } = this.engineState.user as User
+  const { address/*, privateKeyBuffer*/ } = this.getUser()
     try {
       await creditProtocol.addFriend(address, friend.address/*, privateKeyBuffer*/)
       this.setSuccessMessage(accountManagement.addFriend.success(friend.nickname))
@@ -147,7 +154,7 @@ export default class Engine {
   }
 
   async removeFriend(friend: Friend) {
-  const { address/*, privateKeyBuffer*/ } = this.engineState.user as User
+  const { address/*, privateKeyBuffer*/ } = this.getUser()
     try {
       await creditProtocol.removeFriend(address, friend.address/*, privateKeyBuffer*/)
       this.setSuccessMessage(accountManagement.removeFriend.success(friend.nickname))
@@ -186,7 +193,7 @@ export default class Engine {
   }
 
   async getFriends() {
-    const { address } = this.engineState.user as User
+    const { address } = this.getUser()
     const friends = await creditProtocol.getFriends(address)
     const result = friends.map(this.jsonToFriend)
     await this.ensureNicknames(result)
@@ -203,8 +210,20 @@ export default class Engine {
     return new PendingTransaction(data)
   }
 
+  jsonToTransactionHistory(address, data) {
+    return new TransactionHistory(address, data)
+  }
+
+  async getTransactions() {
+    const { address } = this.getUser()
+    const pendingTransactions = await creditProtocol.getTransactions(address)
+    return pendingTransactions.map((elem) => {
+      return this.jsonToTransactionHistory(address, elem)
+    })
+  }
+
   async getPendingTransactions() {
-    const { address } = this.engineState.user as User
+    const { address } = this.getUser()
     const pendingTransactions = await creditProtocol.getPendingTransactions(address)
     return pendingTransactions.map(this.jsonToPendingTransaction)
   }
@@ -214,7 +233,7 @@ export default class Engine {
   }
 
   async addDebt(friend: Friend, amount: string, memo: string, direction: string) {
-    const { address, privateKeyBuffer } = this.engineState.user as User
+    const { address, privateKeyBuffer } = this.getUser()
 
     if (!friend) {
       return this.setErrorMessage('Friend must be selected')
@@ -315,10 +334,8 @@ export default class Engine {
 
   async loginAccount(loginData: LoginAccountData) {
     const { confirmPassword } = loginData
-
     const mnemonic = await mnemonicStorage.get()
     const mnemonicInstance = creditProtocol.getMnemonic(mnemonic)
-
     const hashedPasswordReference = await hashedPasswordStorage.get()
     const hashedPassword = Array.from(mnemonicInstance.toSeed(PASSWORD_SALT + confirmPassword)).join('.')
 

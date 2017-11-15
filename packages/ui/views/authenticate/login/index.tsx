@@ -7,7 +7,6 @@ import { View, Text } from 'react-native'
 import LoginAccountForm from 'ui/forms/login-account'
 
 import Popup from 'ui/components/popup'
-import Logo from 'ui/components/logo'
 
 interface Props {
   engine: Engine

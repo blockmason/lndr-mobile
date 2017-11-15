@@ -14,4 +14,10 @@ export const goodShade = 'rgba(200, 225, 250, 1)'
 
 export const transparent = 'transparent'
 export const shade = 'rgba(0, 0, 0, 0.5)'
-export const whiteout = 'rgba(255, 255, 255, 0.7)'
+
+export const cinnabar = '#e74c3c'
+export const scooter = '#26c6da'
+export const persianGreen = '#00aa8d'
+export const wisteria = '#9b59b6'
+
+export const whiteout = 'rgba(255, 255, 255, 0.9)'
