@@ -160,7 +160,7 @@ export default class AddDebt extends Component<Props, State> {
         style={formStyle.textInput}
         placeholder={debtManagement.memo.example}
         value={memo}
-        maxLength={255}
+        maxLength={32}
         onChangeText={memo => this.setState({ memo })}
       />
       <Text style={formStyle.title}>{debtManagement.fields.selectFriend}</Text>
