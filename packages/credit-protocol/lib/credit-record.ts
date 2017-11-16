@@ -31,6 +31,8 @@ export default class CreditRecord {
     ])
 
     this.hash = ethUtil.sha3(buffer)
+
+    debugger
   }
 
   sign(privateKeyBuffer): String {

@@ -21,6 +21,10 @@ export default class Client {
         return response.json()
       }
 
+      if (response.status === 400 || response.status === 500) {
+        debugger
+      }
+
       throw new Error(`HTTP Response ${response.status}`)
     }
 
