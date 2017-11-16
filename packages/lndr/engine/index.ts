@@ -1,6 +1,7 @@
 // This file is over 50 lines and needs to be split up
 
 import ethUtil from 'ethereumjs-util'
+import { bufferToHex } from 'credit-protocol/lib/buffer-utils'
 
 import { longTimePeriod } from 'lndr/time'
 import User, { CreateAccountData, RecoverAccountData, LoginAccountData, UpdateAccountData } from 'lndr/user'
@@ -116,7 +117,7 @@ export default class Engine {
   getUser(): User {
     return this.engineState.user as User
   }
-  
+
   async getAccountInformation() {
     const { address } = this.getUser()
     try {
@@ -308,7 +309,7 @@ export default class Engine {
     const privateKey = mnemonicInstance.toHDPrivateKey(password)
     const privateKeyBuffer = privateKey.privateKey.toBuffer()
     const ethAddress = ethUtil.privateToAddress(privateKeyBuffer)
-    const address = ethUtil.bufferToHex(ethAddress)
+    const address = bufferToHex(ethAddress)
 
     return new User(
       mnemonic,

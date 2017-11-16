@@ -1,10 +1,11 @@
 declare const Buffer
 
 export function hexToBuffer(value) {
-  if (value.substr(0, 2) !== '0x') {
-    throw new Error('Invalid hex string')
+  if (value.substr(0, 2) === '0x') {
+    value = value.substr(2)
   }
-  return Buffer.from(value.substr(2), 'hex')
+
+  return Buffer.from(value, 'hex')
 }
 
 export function stringToBuffer(value) {
@@ -12,7 +13,7 @@ export function stringToBuffer(value) {
 }
 
 export function bufferToHex(buffer) {
-  return '0x' + buffer.toString('hex')
+  return buffer.toString('hex')
 }
 
 export function int32ToBuffer(value) {
