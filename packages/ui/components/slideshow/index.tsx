@@ -6,6 +6,8 @@ import { View, Image, ScrollView, Dimensions, Animated } from 'react-native';
 import style from 'theme/slideshow'
 import general from 'theme/general'
 
+import AndroidStatusBar from 'ui/components/android-status-bar'
+
 const { width } = Dimensions.get('window');
 
 const sixtyFpsInMs = 16
@@ -58,6 +60,7 @@ export default class Slideshow extends Component<Props> {
   render () {
     return (
     <View style={style.slideContent}>
+      <AndroidStatusBar hidden/>
       <View style={ [ { width }, style.slideHeight ] }>
         <ScrollView
           horizontal={true}
