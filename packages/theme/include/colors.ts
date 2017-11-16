@@ -21,3 +21,7 @@ export const persianGreen = '#00aa8d'
 export const wisteria = '#9b59b6'
 
 export const whiteout = 'rgba(255, 255, 255, 0.9)'
+
+export const whiteBackground = {
+  backgroundColor: white
+}
