@@ -7,7 +7,7 @@ export default class RecentTransaction {
   doesUserOweFriend: boolean
 
   constructor (address, elem) {
-    const { creditRecord: { creditor, debtor, amount, ucac } } = elem
+    const { creditor, debtor, amount, ucac } = elem
     this.creditor = creditor
     this.debtor = debtor
     this.amount = amount
