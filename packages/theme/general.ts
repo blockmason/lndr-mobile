@@ -1,11 +1,8 @@
 import { StyleSheet } from 'react-native'
 
-import { whiteBackground } from 'theme/include/colors'
-
 export default StyleSheet.create({
   flex: {
-    flex: 1,
-    ...whiteBackground
+    flex: 1
   },
   horizontalFlex: {
     flexDirection: 'row'

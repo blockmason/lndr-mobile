@@ -2,12 +2,17 @@ import { StyleSheet, Platform } from 'react-native'
 
 import { bold, medium, small, xsmall, monospace } from 'theme/include/fonts'
 import { xxl, l, m, s, xs, verticalMargin } from 'theme/include/spacing'
+import { white } from 'theme/include/colors'
 
 import { gray } from 'theme/include/colors'
 
 export default StyleSheet.create({
   tabs: {
     paddingTop: Platform.OS === 'ios' ? l : m,
+  },
+
+  whiteBackground: {
+    backgroundColor: white
   },
 
   list: {
@@ -35,8 +40,11 @@ export default StyleSheet.create({
   },
 
   text: {
-    ...medium,
     ...bold
+  },
+
+  header: {
+    ...medium
   },
 
   title: {
