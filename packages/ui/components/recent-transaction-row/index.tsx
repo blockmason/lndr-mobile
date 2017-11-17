@@ -14,6 +14,15 @@ interface Props {
 }
 
 export default class RecentTransactionRow extends Component<Props> {
+
+  calculateDebtContent({ doesUserOweFriend, amount, creditor, debtor }) {
+    if (doesUserOweFriend) {
+      return `You owe @${creditor.substr(0, 8)} ${amount} USD`
+    }
+
+    return `@${debtor.substr(0, 8)} owes you ${amount} USD`
+  }
+
   render() {
     const { recentTransaction, onPress } = this.props
 
@@ -21,22 +30,7 @@ export default class RecentTransactionRow extends Component<Props> {
       <TouchableHighlight onPress={onPress} underlayColor={lightGray} activeOpacity={0.5} key={recentTransaction.ucac}>
         <View>
           <View style={style.listItem}>
-            <Text style={style.title}>Creditor</Text>
-          </View>
-          <View style={style.listItem}>
-            <Text style={style.fact}>@{recentTransaction.creditor.substr(0, 8)}</Text>
-            <Text style={style.address}>{recentTransaction.creditor}</Text>
-          </View>
-          <View style={style.listItem}>
-            <Text style={style.title}>Debtor (owes the debt)</Text>
-          </View>
-          <View style={style.listItem}>
-          <Text style={style.fact}>@{recentTransaction.debtor.substr(0, 8)}</Text>
-          <Text style={style.address}>{recentTransaction.debtor}</Text>
-          </View>
-          <View style={style.listItem}>
-            <Text style={style.title}>Amount</Text>
-            <Text style={style.text}>{recentTransaction.amount} US cents</Text>
+            <Text style={style.fact}>{this.calculateDebtContent(recentTransaction)}</Text>
           </View>
         </View>
       </TouchableHighlight>
