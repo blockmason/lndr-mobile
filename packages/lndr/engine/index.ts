@@ -210,7 +210,7 @@ export default class Engine {
     return new PendingTransaction(data)
   }
 
-  jsonToTransactionHistory(address, data) {
+  jsonToRecentTransaction(address, data) {
     return new RecentTransaction(address, data)
   }
 
@@ -218,7 +218,7 @@ export default class Engine {
     const { address } = this.getUser()
     const pendingTransactions = await creditProtocol.getTransactions(address)
     return pendingTransactions.map((elem) => {
-      return this.jsonToTransactionHistory(address, elem)
+      return this.jsonToRecentTransaction(address, elem)
     })
   }
 
