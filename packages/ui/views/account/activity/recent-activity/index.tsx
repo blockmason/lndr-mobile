@@ -80,6 +80,7 @@ export default class RecentTransactionsView extends Component<Props, State> {
 
   render() {
     const { recentTransactionsLoaded, recentTransactions } = this.state
+    const { engine } = this.props
 
     return <View>
       { this.renderRecentTransactionDetailDialog() }
@@ -92,6 +93,7 @@ export default class RecentTransactionsView extends Component<Props, State> {
             <RecentTransactionRow
               key={recentTransaction.ucac}
               recentTransaction={recentTransaction}
+              engine={engine}
               onPress={() => this.setState({ recentTransaction })}
             />
           )

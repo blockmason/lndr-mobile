@@ -5,13 +5,17 @@ export default class RecentTransaction {
   amount: number
   ucac: string
   doesUserOweFriend: boolean
+  friendAddress: string
 
   constructor (address, elem) {
     const { creditor, debtor, amount, ucac } = elem
+    const doesUserOweFriend = address === debtor
+
     this.creditor = creditor
     this.debtor = debtor
     this.amount = amount
     this.ucac = ucac
-    this.doesUserOweFriend = address === debtor
+    this.doesUserOweFriend = doesUserOweFriend
+    this.friendAddress = doesUserOweFriend ? creditor : debtor
   }
 }

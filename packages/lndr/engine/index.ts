@@ -129,6 +129,17 @@ export default class Engine {
     }
   }
 
+  async getFriendNickname(address) {
+    try {
+      const nickname = await creditProtocol.getNickname(address)
+      return { nickname }
+    }
+
+    catch (e) {
+      return address.substr(0, 8)
+    }
+  }
+
   async updateAccount(accountData: UpdateAccountData) {
     const { address, privateKeyBuffer } = this.getUser()
     const { nickname } = accountData
@@ -216,8 +227,8 @@ export default class Engine {
 
   async getRecentTransactions() {
     const { address } = this.getUser()
-    const pendingTransactions = await creditProtocol.getTransactions(address)
-    return pendingTransactions.map((elem) => {
+    const recentTransactions = await creditProtocol.getTransactions(address)
+    return recentTransactions.map((elem) => {
       return this.jsonToRecentTransaction(address, elem)
     })
   }

@@ -38,13 +38,14 @@ export default class RecentTransactionDetail extends Component<Props> {
   }*/
 
   render() {
-    const { recentTransaction, closePopup } = this.props
+    const { engine, recentTransaction, closePopup } = this.props
 
     return <View>
       <Text style={formStyle.text}>details</Text>
         <Loading context={loadingContext} />
         <RecentTransactionRow
           key={recentTransaction.ucac}
+          engine={engine}
           recentTransaction={recentTransaction}
         />
         <Button alternate onPress={closePopup} text={cancel} />

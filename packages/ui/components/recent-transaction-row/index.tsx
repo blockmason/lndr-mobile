@@ -2,35 +2,53 @@ import React, { Component } from 'react'
 
 import { Text, TouchableHighlight, View } from 'react-native'
 
+import Engine from 'lndr/engine'
+
 import RecentTransaction from 'lndr/recent-transaction'
 
 import { lightGray } from 'theme/include/colors'
 
+import { recentTransactionsLanguage } from 'language'
+
 import style from 'theme/account'
 
 interface Props {
+  engine: Engine
   onPress?: () => void
   recentTransaction: RecentTransaction
 }
 
-export default class RecentTransactionRow extends Component<Props> {
+interface State {
+  debtTransaction: string
+}
 
-  calculateDebtContent({ doesUserOweFriend, amount, creditor, debtor }) {
-    if (doesUserOweFriend) {
-      return `You owe @${creditor.substr(0, 8)} ${amount} USD`
+export default class RecentTransactionRow extends Component<Props, State> {
+
+  constructor() {
+    super()
+    this.state = {
+      debtTransaction: ''
     }
+  }
 
-    return `@${debtor.substr(0, 8)} owes you ${amount} USD`
+  async componentDidMount() {
+    const { engine, recentTransaction: { doesUserOweFriend, friendAddress, amount } } = this.props
+    const { direction } = recentTransactionsLanguage
+    const displayDirection = doesUserOweFriend ? direction.borrow : direction.lend
+    const friendNick = await engine.getFriendNickname(friendAddress)
+    const content = displayDirection(friendNick, amount)
+
+    this.setState({ debtTransaction: content})
   }
 
   render() {
-    const { recentTransaction, onPress } = this.props
+    const { onPress, recentTransaction } = this.props
 
     return (
       <TouchableHighlight onPress={onPress} underlayColor={lightGray} activeOpacity={0.5} key={recentTransaction.ucac}>
         <View>
           <View style={style.listItem}>
-            <Text style={style.fact}>{this.calculateDebtContent(recentTransaction)}</Text>
+            <Text style={style.fact}>{this.state.debtTransaction}</Text>
           </View>
         </View>
       </TouchableHighlight>
