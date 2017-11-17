@@ -2,62 +2,101 @@ import React, { Component } from 'react'
 
 import Engine from 'lndr/engine'
 
-import TransactionHistory from 'lndr/transaction-history'
+import RecentTransaction from 'lndr/recent-transaction'
 
-import { Text } from 'react-native'
+import { Text, View } from 'react-native'
 
 import Section from 'ui/components/section'
+import Popup, { closePopup } from 'ui/components/popup'
 import Loading, { LoadingContext } from 'ui/components/loading'
 
-import TransactionHistoryRow from 'ui/components/transaction-history-row'
+import RecentTransactionDetail from 'ui/dialogs/recent-transaction-detail'
+import RecentTransactionRow from 'ui/components/recent-transaction-row'
 
-import { transactionHistoryLanguage } from 'language'
+import style from 'theme/account'
 
-const loadingTransactionHistory = new LoadingContext()
+import { recentTransactionsLanguage } from 'language'
+
+const loadingRecentTransactions = new LoadingContext()
 
 interface Props {
   engine: Engine
 }
 
 interface State {
-  transactionHistory?: TransactionHistory
-  transactionHistoryLoaded: boolean
-  transactionHistoryItems: TransactionHistory[]
+  recentTransaction?: RecentTransaction
+  recentTransactionsLoaded: boolean
+  recentTransactions: RecentTransaction[]
 }
 
-export default class RecentActivityView extends Component<Props, State> {
+export default class RecentTransactionsView extends Component<Props, State> {
+  stillRelevant?: boolean
+
   constructor() {
     super()
     this.state = {
-      transactionHistoryLoaded: false,
-      transactionHistoryItems: []
+      recentTransactionsLoaded: false,
+      recentTransactions: []
     }
   }
 
   async componentDidMount() {
+    this.stillRelevant = true
     const { engine } = this.props
-    const transactionHistory = await loadingTransactionHistory.wrap(engine.getTransactions())
-    this.setState({ transactionHistoryLoaded: true, transactionHistory })
+    const recentTransactions = await loadingRecentTransactions.wrap(engine.getRecentTransactions())
+    this.stillRelevant && this.setState({ recentTransactionsLoaded: true, recentTransactions })
   }
 
   refresh() {
     this.componentDidMount()
   }
 
-  render() {
-    const { engine } = this.props
-    const { transactionHistoryLoaded, transactionHistoryItems } = this.state
+  componentWillUnmount() {
+    this.stillRelevant = false
+  }
 
-    return <Section>
-      <Loading context={loadingTransactionHistory} />
-      {transactionHistoryLoaded && transactionHistoryItems.length === 0 ? <Text>{transactionHistoryLanguage.none}</Text> : null}
-      {transactionHistoryItems.map(
-        item => (
-          <TransactionHistoryRow
-            transactionHistory={item}
-          />
-        )
-      )}
-    </Section>
+  closePopupAndRefresh() {
+    closePopup()
+    this.refresh()
+  }
+
+  renderRecentTransactionDetailDialog() {
+    const { recentTransaction } = this.state
+
+    if (!recentTransaction) {
+      return null
+    }
+
+    const { engine } = this.props
+
+    return <Popup onClose={() => this.setState({ recentTransaction: undefined })}>
+      <RecentTransactionDetail
+        recentTransaction={recentTransaction}
+        closePopup={() => this.closePopupAndRefresh()}
+        engine={engine}
+      />
+    </Popup>
+  }
+
+  render() {
+    const { recentTransactionsLoaded, recentTransactions } = this.state
+
+    return <View>
+      { this.renderRecentTransactionDetailDialog() }
+
+      <Section contentContainerStyle={style.list}>
+        <Loading context={loadingRecentTransactions} />
+        {recentTransactionsLoaded && recentTransactions.length === 0 ? <Text style={style.emptyState}>{recentTransactionsLanguage.none}</Text> : null}
+        {recentTransactions.map(
+          recentTransaction => (
+            <RecentTransactionRow
+              key={recentTransaction.ucac}
+              recentTransaction={recentTransaction}
+              onPress={() => this.setState({ recentTransaction })}
+            />
+          )
+        )}
+      </Section>
+    </View>
   }
 }

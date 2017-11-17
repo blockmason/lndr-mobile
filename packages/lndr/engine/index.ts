@@ -6,7 +6,7 @@ import { longTimePeriod } from 'lndr/time'
 import User, { CreateAccountData, RecoverAccountData, LoginAccountData, UpdateAccountData } from 'lndr/user'
 import Friend from 'lndr/friend'
 import PendingTransaction from 'lndr/pending-transaction'
-import TransactionHistory from 'lndr/transaction-history'
+import RecentTransaction from 'lndr/recent-transaction'
 import ucac from 'lndr/ucac'
 
 import CreditProtocol from 'credit-protocol'
@@ -211,10 +211,10 @@ export default class Engine {
   }
 
   jsonToTransactionHistory(address, data) {
-    return new TransactionHistory(address, data)
+    return new RecentTransaction(address, data)
   }
 
-  async getTransactions() {
+  async getRecentTransactions() {
     const { address } = this.getUser()
     const pendingTransactions = await creditProtocol.getTransactions(address)
     return pendingTransactions.map((elem) => {

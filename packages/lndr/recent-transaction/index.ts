@@ -1,5 +1,5 @@
 //Using transactions?values={x}
-export default class TransactionHistory {
+export default class RecentTransaction {
   debtor: string
   creditor: string
   amount: number

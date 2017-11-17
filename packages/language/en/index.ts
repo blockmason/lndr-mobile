@@ -125,6 +125,6 @@ export const pendingTransactionsLanguage = {
   confirm: 'Confirm Transaction'
 }
 
-export const transactionHistoryLanguage = {
+export const recentTransactionsLanguage = {
   none: 'You have no previous transactions'
 }
