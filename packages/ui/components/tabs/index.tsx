@@ -9,6 +9,7 @@ import style from 'theme/tabs'
 interface TabProps {
   reference: string
   text: string
+  noscroll?: boolean
   onRefresh?: () => void
 }
 
@@ -33,8 +34,14 @@ export class Tab extends Component<TabProps, TabState> {
   }
 
   render() {
-    const { children, onRefresh } = this.props
+    const { children, onRefresh, noscroll } = this.props
     const { refreshing } = this.state
+
+    if (noscroll) {
+      return <View style={style.content}>
+        {children}
+      </View>
+    }
 
     const refreshControl = onRefresh ? (
       <RefreshControl refreshing={refreshing} onRefresh={() => this.refresh()} />

@@ -38,7 +38,7 @@ export default class AccountView extends Component<Props> {
         <Tab reference='friends' text={accountViewLanguage.friends} onRefresh={() => this.friends.refresh()}>
           <FriendsView engine={engine} ref={friends => this.friends = friends} />
         </Tab>
-        <Tab reference='activity' text={accountViewLanguage.activity}>
+        <Tab noscroll reference='activity' text={accountViewLanguage.activity}>
           <ActivityView engine={engine} />
         </Tab>
       </Tabs>

@@ -85,10 +85,6 @@ export default class CreditProtocol {
     return this.client.get('/pending')
   }
 
-  confirmPendingTransactionByHash(hash: string) {
-    return this.client.post('/pending-fix-me-todo', hash)
-  }
-
   rejectPendingTransactionByHash(hash: string, privateKeyBuffer: any) {
     return this.client.postExpectNotFound('/reject', {
       hash,

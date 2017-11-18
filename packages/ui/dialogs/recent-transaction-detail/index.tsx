@@ -14,7 +14,7 @@ import style from 'theme/account'
 import formStyle from 'theme/form'
 
 import {
-  cancel,
+  acknowledge,
   recentTransactionsLanguage
 } from 'language'
 
@@ -27,28 +27,20 @@ interface Props {
 }
 
 export default class RecentTransactionDetail extends Component<Props> {
-  /*async confirmRecentTransaction(recentTransaction: RecentTransaction) {
-    const { engine, closePopup } = this.props
-
-    await loadingContext.wrap(
-      engine.confirmRecentTransaction(recentTransaction)
-    )
-
-    closePopup()
-  }*/
-
   render() {
     const { engine, recentTransaction, closePopup } = this.props
+    const { user } = engine
 
     return <View>
-      <Text style={formStyle.text}>details</Text>
+      <Text style={formStyle.header}>{recentTransactionsLanguage.title}</Text>
         <Loading context={loadingContext} />
         <RecentTransactionRow
-          key={recentTransaction.ucac}
+          user={user}
+          key={recentTransaction.hash}
           engine={engine}
           recentTransaction={recentTransaction}
         />
-        <Button alternate onPress={closePopup} text={cancel} />
+        <Button style={formStyle.lastButton} onPress={closePopup} text={acknowledge} />
     </View>
   }
 }

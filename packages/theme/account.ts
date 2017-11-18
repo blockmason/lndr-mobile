@@ -94,6 +94,16 @@ export default StyleSheet.create({
     ...verticalMargin
   },
 
+  recentTransaction: {
+    ...radius,
+    backgroundColor: softGray,
+    paddingLeft: m,
+    paddingRight: m,
+    paddingTop: s,
+    paddingBottom: m - xs,
+    ...verticalMargin
+  },
+
   transactionIcon: {
     position: 'absolute',
     color: gray,

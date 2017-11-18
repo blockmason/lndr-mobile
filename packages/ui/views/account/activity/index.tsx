@@ -17,6 +17,9 @@ interface State {
 }
 
 export default class ActivityView extends Component<Props, State> {
+  pending: any
+  recent: any
+
   constructor() {
     super()
     this.state = {
@@ -25,14 +28,14 @@ export default class ActivityView extends Component<Props, State> {
 
   render() {
     const { engine } = this.props
-    
+
     return <Tabs alternate>
-      <Tab reference='pending' text='Pending'>
-        <PendingView engine={engine} />
+      <Tab reference='recent' text='Recent' onRefresh={() => this.recent.refresh()}>
+        <RecentActivityView engine={engine} ref={recent => this.recent = recent} />
       </Tab>
-      <Tab reference='recent' text='Recent'>
-        <RecentActivityView engine={engine} />
-     </Tab>
+      <Tab reference='pending' text='Pending' onRefresh={() => this.pending.refresh()}>
+        <PendingView engine={engine} ref={pending => this.pending = pending} />
+      </Tab>
     </Tabs>
   }
 }

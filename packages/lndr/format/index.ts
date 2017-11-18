@@ -17,7 +17,7 @@ export const leftPad = (pad, length, value) => {
 export const cents = value => {
   const raw = String(value)
   const [ left, right ] = [ raw.substr(0, raw.length - 2), raw.substr(-2) ]
-  return `$${commas(left)}.${right}`
+  return `$${commas(left) || '0'}.${leftPad('0', 2, right)}`
 }
 
 export const currency = value => {

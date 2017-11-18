@@ -21,7 +21,7 @@ export default class FriendRow extends Component<Props> {
       <TouchableHighlight onPress={onPress} underlayColor={lightGray} activeOpacity={0.5} key={friend.nickname}>
         <View style={style.listItem}>
           <Text style={style.fact}>@{friend.nickname}</Text>
-          <Text style={style.address}>{friend.address}</Text>
+          <Text selectable style={style.address}>{friend.address}</Text>
         </View>
       </TouchableHighlight>
     )

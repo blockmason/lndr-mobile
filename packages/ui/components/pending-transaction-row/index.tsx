@@ -73,11 +73,11 @@ export default class PendingTransactionRow extends Component<Props> {
           <Text style={formStyle.header}>{this.getTitle()}</Text>
           <View style={style.listItem}>
             <Text style={style.fact}>Creditor: @{pendingTransaction.creditorNickname}</Text>
-            <Text style={style.address}>{pendingTransaction.creditorAddress}</Text>
+            <Text selectable style={style.address}>{pendingTransaction.creditorAddress}</Text>
           </View>
           <View style={style.listItem}>
             <Text style={style.fact}>Debtor: @{pendingTransaction.debtorNickname}</Text>
-            <Text style={style.address}>{pendingTransaction.debtorAddress}</Text>
+            <Text selectable style={style.address}>{pendingTransaction.debtorAddress}</Text>
           </View>
           <View style={style.listItem}>
             <Text style={style.title}>Memo</Text>

@@ -111,6 +111,14 @@ export const debtManagement = {
   pending: {
     success: friend => `Pending debt submitted to @${friend.nickname}`,
     error: generalCommunicationError
+  },
+  confirmation: {
+    success: 'Transaction has been successfully confirmed',
+    error: 'Unable to confirm transaction at this time, please try again later'
+  },
+  rejection: {
+    success: 'Transaction has been rejected',
+    error: 'Unable to reject transaction at this time, please try again later'
   }
 }
 
@@ -130,9 +138,10 @@ export const pendingTransactionsLanguage = {
 }
 
 export const recentTransactionsLanguage = {
+  title: 'Transaction Details',
   none: 'You have no previous transactions',
   direction: {
-    lend: (nickname, amount) => `@${nickname} owes you ${amount} USD`,
-    borrow: (nickname, amount) => `You owe @${nickname} ${amount} USD`
+    lend: (nickname, amount) => `@${nickname} owes you ${amount}`,
+    borrow: (nickname, amount) => `You owe @${nickname} ${amount}`
   }
 }

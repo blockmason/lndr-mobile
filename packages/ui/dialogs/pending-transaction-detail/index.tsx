@@ -31,21 +31,25 @@ export default class PendingTransactionDetail extends Component<Props> {
   async confirmPendingTransaction(pendingTransaction: PendingTransaction) {
     const { engine, closePopup } = this.props
 
-    await loadingContext.wrap(
+    const success = await loadingContext.wrap(
       engine.confirmPendingTransaction(pendingTransaction)
     )
 
-    closePopup()
+    if (success) {
+      closePopup()
+    }
   }
 
   async rejectPendingTransaction(pendingTransaction: PendingTransaction) {
     const { engine, closePopup } = this.props
 
-    await loadingContext.wrap(
+    const success = await loadingContext.wrap(
       engine.rejectPendingTransaction(pendingTransaction)
     )
 
-    closePopup()
+    if (success) {
+      closePopup()
+    }
   }
 
   render() {

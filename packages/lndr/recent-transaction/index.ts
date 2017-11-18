@@ -1,21 +1,18 @@
 //Using transactions?values={x}
 export default class RecentTransaction {
-  debtor: string
-  creditor: string
+  debtorAddress: string
+  debtorNickname: string
+  creditorAddress: string
+  creditorNickname: string
   amount: number
   ucac: string
-  doesUserOweFriend: boolean
-  friendAddress: string
+  memo: string
 
-  constructor (address, elem) {
-    const { creditor, debtor, amount, ucac } = elem
-    const doesUserOweFriend = address === debtor
-
-    this.creditor = creditor
-    this.debtor = debtor
+  constructor ({ creditor, debtor, amount, ucac, memo }) {
+    this.creditorAddress = creditor.replace('0x', '')
+    this.debtorAddress = debtor.replace('0x', '')
     this.amount = amount
-    this.ucac = ucac
-    this.doesUserOweFriend = doesUserOweFriend
-    this.friendAddress = doesUserOweFriend ? creditor : debtor
+    this.ucac = ucac.replace('0x', '')
+    this.memo = memo
   }
 }

@@ -81,6 +81,7 @@ export default class RecentTransactionsView extends Component<Props, State> {
   render() {
     const { recentTransactionsLoaded, recentTransactions } = this.state
     const { engine } = this.props
+    const { user } = engine
 
     return <View>
       { this.renderRecentTransactionDetailDialog() }
@@ -89,9 +90,10 @@ export default class RecentTransactionsView extends Component<Props, State> {
         <Loading context={loadingRecentTransactions} />
         {recentTransactionsLoaded && recentTransactions.length === 0 ? <Text style={style.emptyState}>{recentTransactionsLanguage.none}</Text> : null}
         {recentTransactions.map(
-          recentTransaction => (
+          (recentTransaction, i) => (
             <RecentTransactionRow
-              key={recentTransaction.ucac}
+              user={user}
+              key={i}
               recentTransaction={recentTransaction}
               engine={engine}
               onPress={() => this.setState({ recentTransaction })}

@@ -202,16 +202,16 @@ export default class Engine {
     )
   }
 
-  async ensurePendingTransactionNicknames(pendingTransactions: PendingTransaction[]) {
-    const needNicknamesFor = pendingTransactions.filter(
-      pendingTransaction => !pendingTransaction.creditorNickname || !pendingTransaction.debtorNickname
+  async ensureTransactionNicknames(transactions: Array<PendingTransaction|RecentTransaction>) {
+    const needNicknamesFor = transactions.filter(
+      transaction => !transaction.creditorNickname || !transaction.debtorNickname
     )
 
     await Promise.all(
       needNicknamesFor.map(
-        async (pendingTransaction) => {
-          pendingTransaction.creditorNickname = await this.getNicknameForAddress(pendingTransaction.creditorAddress)
-          pendingTransaction.debtorNickname = await this.getNicknameForAddress(pendingTransaction.debtorAddress)
+        async (transaction) => {
+          transaction.creditorNickname = await this.getNicknameForAddress(transaction.creditorAddress)
+          transaction.debtorNickname = await this.getNicknameForAddress(transaction.debtorAddress)
         }
       )
     )
@@ -240,35 +240,64 @@ export default class Engine {
     return new PendingTransaction(data)
   }
 
-  jsonToRecentTransaction(address, data) {
-    return new RecentTransaction(address, data)
+  jsonToRecentTransaction(data) {
+    return new RecentTransaction(data)
   }
 
   async getRecentTransactions() {
     const { address } = this.user
-    const recentTransactions = await creditProtocol.getTransactions(address)
-    return recentTransactions.map((elem) => {
-      return this.jsonToRecentTransaction(address, elem)
-    })
+    const rawRecentTransactions = await creditProtocol.getTransactions(address)
+    const recentTransactions = rawRecentTransactions.map(this.jsonToRecentTransaction)
+    await this.ensureTransactionNicknames(recentTransactions)
+    return recentTransactions
   }
 
   async getPendingTransactions() {
     const { address } = this.user
     const rawPendingTransactions = await creditProtocol.getPendingTransactions(address)
     const pendingTransactions = rawPendingTransactions.map(this.jsonToPendingTransaction)
-    await this.ensurePendingTransactionNicknames(pendingTransactions)
+    await this.ensureTransactionNicknames(pendingTransactions)
     return pendingTransactions
   }
 
   async confirmPendingTransaction(pendingTransaction: PendingTransaction) {
-    const { hash } = pendingTransaction
-    await creditProtocol.confirmPendingTransactionByHash(hash)
+    const { creditorAddress, debtorAddress, amount, memo } = pendingTransaction
+    const { address, privateKeyBuffer } = this.user
+    const direction = address === creditorAddress ? 'lend' : 'borrow'
+
+    try {
+      const creditRecord = await creditProtocol.createCreditRecord(
+        ucac,
+        creditorAddress,
+        debtorAddress,
+        amount,
+        memo
+      )
+
+      const signature = creditRecord.sign(privateKeyBuffer)
+      await creditProtocol.submitCreditRecord(creditRecord, direction, signature)
+
+      this.setSuccessMessage(debtManagement.confirmation.success)
+      return true
+    }
+
+    catch (e) {
+      this.setErrorMessage(debtManagement.confirmation.error)
+    }
   }
 
   async rejectPendingTransaction(pendingTransaction: PendingTransaction) {
     const { address, privateKeyBuffer } = this.user
     const { hash } = pendingTransaction
-    await creditProtocol.rejectPendingTransactionByHash(hash, privateKeyBuffer)
+    try {
+      await creditProtocol.rejectPendingTransactionByHash(hash, privateKeyBuffer)
+
+      this.setSuccessMessage(debtManagement.rejection.success)
+      return true
+    }
+    catch (e) {
+      this.setErrorMessage(debtManagement.rejection.error)
+    }
   }
 
   async addDebt(friend: Friend, amount: string, memo: string, direction: string) {
