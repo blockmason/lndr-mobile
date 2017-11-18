@@ -24,7 +24,7 @@ interface State {
   shouldShowAddDebt: boolean
   shouldShowMyAccount: boolean
   loadedAccountInformation: boolean
-  accountInformation?: { nickname: string }
+  accountInformation?: { nickname?: string }
 }
 
 export default class HomeView extends Component<Props, State> {
@@ -59,13 +59,13 @@ export default class HomeView extends Component<Props, State> {
   }
 
   renderAccountInformation() {
-    const { loadedAccountInformation, accountInformation } = this.state
+    const { loadedAccountInformation, accountInformation = {} } = this.state
 
     if (!loadedAccountInformation) {
       return
     }
 
-    const { nickname } = accountInformation || { nickname: undefined }
+    const { nickname } = accountInformation
 
     if (!nickname) {
       return <Text style={formStyle.warningText}>
@@ -105,6 +105,14 @@ export default class HomeView extends Component<Props, State> {
     </Popup>
   }
 
+  showMyAccount() {
+    this.setState({ shouldShowMyAccount: true })
+  }
+
+  showAddDebt() {
+    this.setState({ shouldShowAddDebt: true })
+  }
+
   render() {
     const { accountInformation } = this.state
 
@@ -118,11 +126,11 @@ export default class HomeView extends Component<Props, State> {
             icon='ios-cash'
             containerStyle={general.stretch}
             text='Add Debt'
-            onPress={() => this.setState({ shouldShowAddDebt: true })}
+            onPress={() => this.showAddDebt()}
           />
           <Button
             icon='ios-settings'
-            onPress={() => this.setState({ shouldShowMyAccount: true })}
+            onPress={() => this.showMyAccount()}
           />
         </View>
 

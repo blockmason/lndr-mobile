@@ -92,6 +92,10 @@ export default class FriendsView extends Component<Props, State> {
     </Popup>
   }
 
+  showAddFriend() {
+    this.setState({ shouldShowAddFriend: true })
+  }
+
   render() {
     const { friendsLoaded, friends } = this.state
 
@@ -100,7 +104,7 @@ export default class FriendsView extends Component<Props, State> {
       { this.renderRemoveFriendDialog() }
 
       <Section>
-        <Button icon='md-person-add' text={addFriend} onPress={() => this.setState({ shouldShowAddFriend: true })} />
+        <Button icon='md-person-add' text={addFriend} onPress={() => this.showAddFriend()} />
       </Section>
 
       <Section text='Current Friends' contentContainerStyle={style.list}>

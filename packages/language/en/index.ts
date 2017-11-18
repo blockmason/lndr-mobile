@@ -1,6 +1,6 @@
 const generalCommunicationError = 'There was a problem communicating with the server, please try again later.'
 
-export const applicationName = 'LNDR'
+export const applicationName = 'Lndr'
 export const helloWorld = 'Hello world'
 
 export const submit = 'Submit'
@@ -13,6 +13,7 @@ export const recoverAccount = 'Restore Account'
 export const removeAccount = 'Remove Account'
 export const updateAccount = 'Update Account'
 export const loginAction = 'Unlock'
+export const logoutAction = 'Lock Account'
 
 export const addFriend = 'Add Friend'
 export const addFriendConfirmationQuestion = 'Are you sure you would like to add this user as a friend?'
@@ -40,9 +41,9 @@ export const mnemonicExhortation = 'Record these 12 words somewhere safe and sec
 export const removeAccountTitle = 'Are you sure you would like to remove your account from this device?'
 export const removeAccountExhortation = 'Be sure that you have access to your mnemonic to restore your account later, as this is a permanent removal of your account information from this device.'
 
-export const myAccount = 'My account'
-export const addNewFriend = 'Add new friend'
-export const addNewDebt = 'Add new debt'
+export const myAccount = 'My Account'
+export const addNewFriend = 'Add Friend'
+export const addNewDebt = 'Add Debt'
 
 export const setNickname = 'Set a nickname so your friends can find you'
 export const nickname = 'Nickname'

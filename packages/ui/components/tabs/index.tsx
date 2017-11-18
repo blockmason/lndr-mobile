@@ -91,6 +91,12 @@ export default class Tabs extends Component<Props, State> {
     }
   }
 
+  async switchTo(activeReference: string) {
+    return new Promise(resolve => {
+      this.setState({ activeReference }, resolve)
+    })
+  }
+
   render() {
     const { children: tabs, tabContainerStyle, alternate } = this.props
     let { activeReference } = this.state
@@ -115,7 +121,7 @@ export default class Tabs extends Component<Props, State> {
           underlayColor={alternate ? lightGray : dark}
           activeOpacity={0.5}
           key={reference}
-          onPress={() => this.setState({ activeReference: reference })}
+          onPress={() => this.switchTo(reference)}
         >
           <View style={tabStyle}>
             <Text style={textStyle}>{tab.props.text}</Text>
