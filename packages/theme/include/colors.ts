@@ -1,5 +1,6 @@
 export const white = '#fff'
 export const light = '#f8f8f8'
+export const softGray = '#e4e4e4'
 export const lightGray = '#bbb'
 export const gray = '#777'
 export const charcoal = '#222'

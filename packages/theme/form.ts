@@ -1,6 +1,6 @@
 import { StyleSheet } from 'react-native'
 
-import { m, s, xLargePad, verticalMargin } from 'theme/include/spacing'
+import { l, m, s, xLargePad, verticalMargin } from 'theme/include/spacing'
 import { medium, xsmall, bold } from 'theme/include/fonts'
 import { gray, warning, warningDark } from 'theme/include/colors'
 import { attention, radius } from 'theme/include/borders'
@@ -52,5 +52,16 @@ export default StyleSheet.create({
   },
   bold: {
     ...bold
+  },
+  leftButton: {
+    flex: 1,
+    marginRight: s
+  },
+  rightButton: {
+    flex: 1,
+    marginLeft: s
+  },
+  lastButton: {
+    marginBottom: l - s
   }
 } as any)

@@ -80,6 +80,9 @@ export default class PendingTransactionsView extends Component<Props, State> {
 
   render() {
     const { pendingTransactionsLoaded, pendingTransactions } = this.state
+    
+    const { engine } = this.props
+    const { user } = engine
 
     return <View>
       { this.renderPendingTransactionDetailDialog() }
@@ -90,6 +93,7 @@ export default class PendingTransactionsView extends Component<Props, State> {
         {pendingTransactions.map(
           pendingTransaction => (
             <PendingTransactionRow
+              user={user}
               key={pendingTransaction.hash}
               pendingTransaction={pendingTransaction}
               onPress={() => this.setState({ pendingTransaction })}

@@ -6,6 +6,7 @@ import Engine from 'lndr/engine'
 
 import Alert from 'ui/components/alert'
 import ThemeImage from 'ui/components/images/theme-image'
+import FadeInView from 'ui/components/fade-in-view'
 
 import LoginView from './login'
 import CreateAccountView from './create-account'
@@ -13,8 +14,8 @@ import RecoverAccountView from './recover-account'
 import RemoveAccountView from './remove-account'
 import ConfirmAccountView from './confirm-account'
 
-import style from 'theme/general'
-import account from 'theme/account'
+import general from 'theme/general'
+import style from 'theme/authenticate'
 
 interface Props {
   engine: Engine,
@@ -27,9 +28,11 @@ interface Props {
 
 export default class AuthenticateView extends Component<Props> {
   render() {
-    return <ScrollView contentContainerStyle={[style.flex, account.whiteBackground]}>
-      <ThemeImage name='logo'/>
-      {this.renderView()}
+    return <ScrollView contentContainerStyle={general.flex}>
+      <FadeInView style={style.main}>
+        <ThemeImage name='logo' />
+        {this.renderView()}
+      </FadeInView>
     </ScrollView>
   }
 

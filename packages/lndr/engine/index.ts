@@ -113,12 +113,12 @@ export default class Engine {
     this.state = { shouldConfirmAccount: true, password, mnemonicInstance }
   }
 
-  getUser(): User {
+  get user(): User {
     return this.engineState.user as User
   }
 
   async getAccountInformation() {
-    const { address } = this.getUser()
+    const { address } = this.user
     try {
       const nickname = await creditProtocol.getNickname(address)
       return { nickname }
@@ -129,10 +129,9 @@ export default class Engine {
     }
   }
 
-  async getFriendNickname(address) {
+  async getNicknameForAddress(address) {
     try {
-      const nickname = await creditProtocol.getNickname(address)
-      return { nickname }
+      return await creditProtocol.getNickname(address)
     }
 
     catch (e) {
@@ -141,7 +140,7 @@ export default class Engine {
   }
 
   async updateAccount(accountData: UpdateAccountData) {
-    const { address, privateKeyBuffer } = this.getUser()
+    const { address, privateKeyBuffer } = this.user
     const { nickname } = accountData
 
     try {
@@ -154,7 +153,7 @@ export default class Engine {
   }
 
   async addFriend(friend: Friend) {
-  const { address/*, privateKeyBuffer*/ } = this.getUser()
+  const { address/*, privateKeyBuffer*/ } = this.user
     try {
       await creditProtocol.addFriend(address, friend.address/*, privateKeyBuffer*/)
       this.setSuccessMessage(accountManagement.addFriend.success(friend.nickname))
@@ -165,7 +164,7 @@ export default class Engine {
   }
 
   async removeFriend(friend: Friend) {
-  const { address/*, privateKeyBuffer*/ } = this.getUser()
+  const { address/*, privateKeyBuffer*/ } = this.user
     try {
       await creditProtocol.removeFriend(address, friend.address/*, privateKeyBuffer*/)
       this.setSuccessMessage(accountManagement.removeFriend.success(friend.nickname))
@@ -203,8 +202,23 @@ export default class Engine {
     )
   }
 
+  async ensurePendingTransactionNicknames(pendingTransactions: PendingTransaction[]) {
+    const needNicknamesFor = pendingTransactions.filter(
+      pendingTransaction => !pendingTransaction.creditorNickname || !pendingTransaction.debtorNickname
+    )
+
+    await Promise.all(
+      needNicknamesFor.map(
+        async (pendingTransaction) => {
+          pendingTransaction.creditorNickname = await this.getNicknameForAddress(pendingTransaction.creditorAddress)
+          pendingTransaction.debtorNickname = await this.getNicknameForAddress(pendingTransaction.debtorAddress)
+        }
+      )
+    )
+  }
+
   async getFriends() {
-    const { address } = this.getUser()
+    const { address } = this.user
     const friends = await creditProtocol.getFriends(address)
     const result = friends.map(this.jsonToFriend)
     await this.ensureNicknames(result)
@@ -217,6 +231,11 @@ export default class Engine {
     return users.map(this.jsonToFriend)
   }
 
+  submitterIsMe(pendingTransaction: PendingTransaction) {
+    const { address } = this.user
+    return pendingTransaction.submitter === address
+  }
+
   jsonToPendingTransaction(data) {
     return new PendingTransaction(data)
   }
@@ -226,7 +245,7 @@ export default class Engine {
   }
 
   async getRecentTransactions() {
-    const { address } = this.getUser()
+    const { address } = this.user
     const recentTransactions = await creditProtocol.getTransactions(address)
     return recentTransactions.map((elem) => {
       return this.jsonToRecentTransaction(address, elem)
@@ -234,17 +253,26 @@ export default class Engine {
   }
 
   async getPendingTransactions() {
-    const { address } = this.getUser()
-    const pendingTransactions = await creditProtocol.getPendingTransactions(address)
-    return pendingTransactions.map(this.jsonToPendingTransaction)
+    const { address } = this.user
+    const rawPendingTransactions = await creditProtocol.getPendingTransactions(address)
+    const pendingTransactions = rawPendingTransactions.map(this.jsonToPendingTransaction)
+    await this.ensurePendingTransactionNicknames(pendingTransactions)
+    return pendingTransactions
   }
 
   async confirmPendingTransaction(pendingTransaction: PendingTransaction) {
-    await creditProtocol.confirmPendingTransaction(pendingTransaction)
+    const { hash } = pendingTransaction
+    await creditProtocol.confirmPendingTransactionByHash(hash)
+  }
+
+  async rejectPendingTransaction(pendingTransaction: PendingTransaction) {
+    const { address, privateKeyBuffer } = this.user
+    const { hash } = pendingTransaction
+    await creditProtocol.rejectPendingTransactionByHash(hash, privateKeyBuffer)
   }
 
   async addDebt(friend: Friend, amount: string, memo: string, direction: string) {
-    const { address, privateKeyBuffer } = this.getUser()
+    const { address, privateKeyBuffer } = this.user
 
     if (!friend) {
       return this.setErrorMessage('Friend must be selected')

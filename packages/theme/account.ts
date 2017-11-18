@@ -1,10 +1,9 @@
 import { StyleSheet, Platform } from 'react-native'
 
-import { bold, medium, small, xsmall, monospace } from 'theme/include/fonts'
+import { radius } from 'theme/include/borders'
+import { bold, large, medium, small, xsmall, monospace } from 'theme/include/fonts'
 import { xxl, l, m, s, xs, verticalMargin } from 'theme/include/spacing'
-import { white } from 'theme/include/colors'
-
-import { gray } from 'theme/include/colors'
+import { softGray, gray, white, dark, danger } from 'theme/include/colors'
 
 export default StyleSheet.create({
   tabs: {
@@ -26,7 +25,7 @@ export default StyleSheet.create({
   },
 
   address: {
-    width: 154,
+    width: 150,
     ...monospace,
     ...xsmall,
     marginTop: s,
@@ -48,10 +47,33 @@ export default StyleSheet.create({
   },
 
   title: {
-    padding: xs,
+    paddingLeft: xs,
+
     flex: 1,
     ...xsmall,
-    ...verticalMargin
+    marginTop: s
+  },
+
+  titledFact: {
+    padding: xs,
+    flex: 1,
+    ...medium
+  },
+
+  titledFactAmountGood: {
+    padding: xs,
+    flex: 1,
+    ...bold,
+    ...medium,
+    color: dark
+  },
+
+  titledFactAmountDanger: {
+    padding: xs,
+    flex: 1,
+    ...bold,
+    ...medium,
+    color: danger
   },
 
   fact: {
@@ -60,5 +82,24 @@ export default StyleSheet.create({
     ...small,
     ...bold,
     ...verticalMargin
+  },
+
+  pendingTransaction: {
+    ...radius,
+    backgroundColor: softGray,
+    paddingLeft: m,
+    paddingRight: m,
+    paddingTop: s,
+    paddingBottom: m - xs,
+    ...verticalMargin
+  },
+
+  transactionIcon: {
+    position: 'absolute',
+    color: gray,
+    top: 5,
+    right: 3,
+    zIndex: 1,
+    ...large
   }
 } as any)

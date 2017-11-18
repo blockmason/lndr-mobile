@@ -35,7 +35,7 @@ export default class RecentTransactionRow extends Component<Props, State> {
     const { engine, recentTransaction: { doesUserOweFriend, friendAddress, amount } } = this.props
     const { direction } = recentTransactionsLanguage
     const displayDirection = doesUserOweFriend ? direction.borrow : direction.lend
-    const friendNick = await engine.getFriendNickname(friendAddress)
+    const friendNick = await engine.getNicknameForAddress(friendAddress)
     const content = displayDirection(friendNick, amount)
 
     this.setState({ debtTransaction: content})

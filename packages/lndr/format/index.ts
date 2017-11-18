@@ -14,6 +14,12 @@ export const leftPad = (pad, length, value) => {
   return value
 }
 
+export const cents = value => {
+  const raw = String(value)
+  const [ left, right ] = [ raw.substr(0, raw.length - 2), raw.substr(-2) ]
+  return `$${commas(left)}.${right}`
+}
+
 export const currency = value => {
   const raw = value
     .replace(/[^\.\d]/g, '')
@@ -25,6 +31,7 @@ export const currency = value => {
     .replace(/\.\d{3,}/, x => `.${x.substr(-2)}`)
 
   const hasDecimal = value.indexOf('.') !== -1
+
   if (hasDecimal) {
     let [ left, right ] = raw.split('.')
     while (right.length > 2) {
@@ -33,5 +40,6 @@ export const currency = value => {
     }
     return `$${commas(left)}.${right}`
   }
+
   return `$${commas(raw)}`
 }

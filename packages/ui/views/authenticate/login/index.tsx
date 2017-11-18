@@ -13,11 +13,6 @@ interface Props {
 }
 
 export default class LoginView extends Component<Props> {
-
-  componentDidMount() {
-    // this.props.engine.loginAccount({ confirmPassword: 'testtest' })
-  }
-
   render() {
     const { engine } = this.props
 

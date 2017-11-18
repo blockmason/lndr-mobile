@@ -85,8 +85,15 @@ export default class CreditProtocol {
     return this.client.get('/pending')
   }
 
-  confirmPendingTransaction(pendingTransaction) {
-    return this.client.post('/pending-fix-me-todo', pendingTransaction)
+  confirmPendingTransactionByHash(hash: string) {
+    return this.client.post('/pending-fix-me-todo', hash)
+  }
+
+  rejectPendingTransactionByHash(hash: string, privateKeyBuffer: any) {
+    return this.client.postExpectNotFound('/reject', {
+      hash,
+      rejectSig: this.sign(hash, privateKeyBuffer)
+    })
   }
 
   async createCreditRecord(ucac, address1, address2, amount, memo) {

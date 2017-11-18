@@ -3,6 +3,7 @@ const generalCommunicationError = 'There was a problem communicating with the se
 export const applicationName = 'Lndr'
 export const helloWorld = 'Hello world'
 
+export const acknowledge = 'Acknowledge'
 export const submit = 'Submit'
 export const cancel = 'Cancel'
 export const back = 'Go Back'
@@ -104,8 +105,8 @@ export const debtManagement = {
     example: 'Thanks for dinner.'
   },
   direction: {
-    lend: (friend, amount) => `@${friend.nickname} owes me ${amount || ''}`,
-    borrow: (friend, amount) => `I owe @${friend.nickname} ${amount || ''}`
+    lend: (nickname, amount) => `@${nickname} owes me ${amount || ''}`,
+    borrow: (nickname, amount) => `I owe @${nickname} ${amount || ''}`
   },
   pending: {
     success: friend => `Pending debt submitted to @${friend.nickname}`,
@@ -120,9 +121,12 @@ export const accountViewLanguage = {
 }
 
 export const pendingTransactionsLanguage = {
+  title: 'Pending Transaction',
   none: 'You have no pending transactions',
   confirmationQuestion: 'Are you sure you want to confirm this transaction?',
-  confirm: 'Confirm Transaction'
+  pendingAnnouncement: 'This transaction is waiting for confirmation by the other party.',
+  confirm: 'Confirm',
+  reject: 'Reject'
 }
 
 export const recentTransactionsLanguage = {

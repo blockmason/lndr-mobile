@@ -124,13 +124,13 @@ export default class AddDebt extends Component<Props, State> {
         round
         onPress={() => this.setState({ direction: 'lend' })}
         checked={direction === 'lend'}
-        text={debtManagement.direction.lend(friend, amount)}
+        text={debtManagement.direction.lend(friend.nickname, amount)}
       />
       <Checkbox
         round
         onPress={() => this.setState({ direction: 'borrow' })}
         checked={direction === 'borrow'}
-        text={debtManagement.direction.borrow(friend, amount)}
+        text={debtManagement.direction.borrow(friend.nickname, amount)}
       />
     </View>
   }
