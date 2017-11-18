@@ -1,11 +1,11 @@
 import { StyleSheet } from 'react-native'
 
-import { xxl, l, s, largePad } from 'theme/include/spacing'
+import { xxl, l, s, m, largePad, mediumPad } from 'theme/include/spacing'
 import { dropShadow } from 'theme/include/shadows'
 import { center } from 'theme/include/align'
 import { radius, thinBorder } from 'theme/include/borders'
 import { medium, bold } from 'theme/include/fonts'
-import { white, shade } from 'theme/include/colors'
+import { white, shade, transparent } from 'theme/include/colors'
 
 export default StyleSheet.create({
   popup: {
@@ -34,6 +34,13 @@ export default StyleSheet.create({
     paddingRight: l,
     paddingTop: xxl,
     paddingBottom: xxl
+  },
+  androidContainer: {
+    minHeight: '100%',
+    paddingLeft: m,
+    paddingRight: m,
+    paddingTop: xxl,
+    elevation: 2
   },
   closeButton: {
     position: 'absolute',

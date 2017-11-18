@@ -11,6 +11,7 @@ import WelcomeView from 'ui/views/welcome'
 import Alert from 'ui/components/alert'
 import { PopupTarget } from 'ui/components/popup'
 import ThemeImage from 'ui/components/images/theme-image'
+import AndroidStatusBar from 'ui/components/android-status-bar'
 
 import style from 'theme/general'
 
@@ -31,6 +32,7 @@ export default class AppView extends Component<Props, EngineState> {
 
   render() {
     return <View style={style.flex}>
+      <AndroidStatusBar />
       <PopupTarget />
       {this.renderContents()}
       {this.renderErrorMessage()}

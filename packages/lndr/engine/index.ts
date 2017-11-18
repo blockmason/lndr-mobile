@@ -6,7 +6,7 @@ import { longTimePeriod } from 'lndr/time'
 import User, { CreateAccountData, RecoverAccountData, LoginAccountData, UpdateAccountData } from 'lndr/user'
 import Friend from 'lndr/friend'
 import PendingTransaction from 'lndr/pending-transaction'
-import TransactionHistory from 'lndr/transaction-history'
+import RecentTransaction from 'lndr/recent-transaction'
 import ucac from 'lndr/ucac'
 
 import CreditProtocol from 'credit-protocol'
@@ -129,6 +129,17 @@ export default class Engine {
     }
   }
 
+  async getFriendNickname(address) {
+    try {
+      const nickname = await creditProtocol.getNickname(address)
+      return { nickname }
+    }
+
+    catch (e) {
+      return address.substr(0, 8)
+    }
+  }
+
   async updateAccount(accountData: UpdateAccountData) {
     const { address, privateKeyBuffer } = this.getUser()
     const { nickname } = accountData
@@ -210,15 +221,15 @@ export default class Engine {
     return new PendingTransaction(data)
   }
 
-  jsonToTransactionHistory(address, data) {
-    return new TransactionHistory(address, data)
+  jsonToRecentTransaction(address, data) {
+    return new RecentTransaction(address, data)
   }
 
-  async getTransactions() {
+  async getRecentTransactions() {
     const { address } = this.getUser()
-    const pendingTransactions = await creditProtocol.getTransactions(address)
-    return pendingTransactions.map((elem) => {
-      return this.jsonToTransactionHistory(address, elem)
+    const recentTransactions = await creditProtocol.getTransactions(address)
+    return recentTransactions.map((elem) => {
+      return this.jsonToRecentTransaction(address, elem)
     })
   }
 

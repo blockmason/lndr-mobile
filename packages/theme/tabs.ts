@@ -1,5 +1,7 @@
 import { StyleSheet } from 'react-native'
 
+import { medium } from 'theme/include/fonts'
+
 import { charcoal, lightGray, gray, dark, light } from 'theme/include/colors'
 
 export default StyleSheet.create({
@@ -30,7 +32,8 @@ export default StyleSheet.create({
     borderBottomColor: light
   },
   text: {
-    color: charcoal
+    color: charcoal,
+    ...medium
   },
   textActive: {
     color: light,

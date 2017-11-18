@@ -14,6 +14,7 @@ import RemoveAccountView from './remove-account'
 import ConfirmAccountView from './confirm-account'
 
 import style from 'theme/general'
+import account from 'theme/account'
 
 interface Props {
   engine: Engine,
@@ -26,7 +27,7 @@ interface Props {
 
 export default class AuthenticateView extends Component<Props> {
   render() {
-    return <ScrollView contentContainerStyle={style.flex}>
+    return <ScrollView contentContainerStyle={[style.flex, account.whiteBackground]}>
       <ThemeImage name='logo'/>
       {this.renderView()}
     </ScrollView>

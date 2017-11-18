@@ -125,6 +125,10 @@ export const pendingTransactionsLanguage = {
   confirm: 'Confirm Transaction'
 }
 
-export const transactionHistoryLanguage = {
-  none: 'You have no previous transactions'
+export const recentTransactionsLanguage = {
+  none: 'You have no previous transactions',
+  direction: {
+    lend: (nickname, amount) => `@${nickname} owes you ${amount} USD`,
+    borrow: (nickname, amount) => `You owe @${nickname} ${amount} USD`
+  }
 }
