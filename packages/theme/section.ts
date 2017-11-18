@@ -12,6 +12,7 @@ export default StyleSheet.create({
   },
 
   title: {
+    marginTop: s,
     marginBottom: s,
     ...large,
     color: charcoal

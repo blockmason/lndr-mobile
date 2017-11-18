@@ -33,6 +33,13 @@ export const smallPad = {
   paddingBottom: 0
 }
 
+export const xsmallPad = {
+  paddingLeft: xs,
+  paddingRight: xs,
+  paddingTop: xs,
+  paddingBottom: xs
+}
+
 export const verticalMargin = {
   marginTop: s,
   marginBottom: s

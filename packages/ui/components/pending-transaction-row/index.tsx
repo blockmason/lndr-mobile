@@ -67,7 +67,7 @@ export default class PendingTransactionRow extends Component<Props> {
     const { onPress, pendingTransaction } = this.props
 
     return (
-      <TouchableHighlight style={style.pendingTransaction} onPress={onPress} underlayColor={lightGray} activeOpacity={0.5} key={pendingTransaction.hash}>
+      <TouchableHighlight style={style.pendingTransaction} onPress={onPress} underlayColor={lightGray} activeOpacity={0.5}>
         <View>
           {this.getIcon()}
           <Text style={formStyle.header}>{this.getTitle()}</Text>

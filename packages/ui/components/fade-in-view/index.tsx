@@ -12,26 +12,45 @@ export default class FadeInView extends Component<Props> {
   }
 
   componentDidMount() {
-    Animated.timing(                  // Animate over time
-      this.state.fadeAnim,            // The animated value to drive
-      {
-        toValue: 1,                   // Animate to opacity: 1 (opaque)
-        duration: 500,                // Make it take a while
-      }
-    ).start()                         // Starts the animation
+    this.fadeIn()
+  }
+
+  fadeIn() {
+    return new Promise(resolve => {
+      Animated.timing(                // Animate over time
+        this.state.fadeAnim,          // The animated value to drive
+        {
+          toValue: 1,                 // Animate to opacity: 1 (opaque)
+          duration: 500,              // Make it take a while
+        }
+      ).start(resolve)                // Starts the animation
+    })
+  }
+
+  fadeOut() {
+    return new Promise(resolve => {
+      Animated.timing(                // Animate over time
+        this.state.fadeAnim,          // The animated value to drive
+        {
+          toValue: 0,                 // Animate to opacity: 1 (opaque)
+          duration: 500,              // Make it take a while
+        }
+      ).start(resolve)                // Starts the animation
+    })
   }
 
   render() {
-    let { fadeAnim } = this.state
+    const { fadeAnim } = this.state
+    const { style, children } = this.props
 
     return (
       <Animated.View                  // Special animatable View
         style={[
-          this.props.style,
+          style,
           { opacity: fadeAnim }       // Bind opacity to animated value
         ]}
       >
-        {this.props.children}
+        {children}
       </Animated.View>
     )
   }

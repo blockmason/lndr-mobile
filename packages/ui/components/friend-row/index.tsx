@@ -18,7 +18,7 @@ export default class FriendRow extends Component<Props> {
     const { onPress, friend } = this.props
 
     return (
-      <TouchableHighlight onPress={onPress} underlayColor={lightGray} activeOpacity={0.5} key={friend.nickname}>
+      <TouchableHighlight onPress={onPress} underlayColor={lightGray} activeOpacity={0.5}>
         <View style={style.listItem}>
           <Text style={style.fact}>@{friend.nickname}</Text>
           <Text selectable style={style.address}>{friend.address}</Text>

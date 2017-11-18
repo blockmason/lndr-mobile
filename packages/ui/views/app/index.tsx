@@ -20,6 +20,9 @@ interface Props {}
 const engine = new Engine()
 
 export default class AppView extends Component<Props, EngineState> {
+  alertElement: any
+  alert: any
+
   constructor() {
     super()
     this.state = engine.state
@@ -35,19 +38,37 @@ export default class AppView extends Component<Props, EngineState> {
       <AndroidStatusBar />
       <PopupTarget />
       {this.renderContents()}
-      {this.renderErrorMessage()}
-      {this.renderSuccessMessage()}
+      {this.renderAlert()}
     </View>
   }
 
-  renderErrorMessage() {
-    const { errorMessage } = this.state
-    return errorMessage ? <Alert error text={errorMessage} /> : null
+  async hideAlert() {
+    await this.alert.hide()
   }
 
-  renderSuccessMessage() {
-    const { successMessage } = this.state
-    return successMessage ? <Alert success text={successMessage} /> : null
+  async showAlert() {
+    await new Promise(resolve => setTimeout(resolve, 250))
+    await this.alert.show()
+  }
+
+  renderAlert() {
+    const { errorMessage, successMessage } = this.state
+
+    if (errorMessage) {
+      this.alertElement = <Alert ref={alert => this.alert = alert} error text={errorMessage} />
+      this.showAlert()
+    }
+
+    else if (successMessage) {
+      this.alertElement = <Alert ref={alert => this.alert = alert} success text={successMessage} />
+      this.showAlert()
+    }
+
+    else if (this.alert) {
+      this.hideAlert()
+    }
+
+    return this.alertElement
   }
 
   renderContents() {
@@ -59,7 +80,8 @@ export default class AppView extends Component<Props, EngineState> {
       welcomeComplete,
       shouldRecoverAccount,
       shouldRemoveAccount,
-      shouldConfirmAccount
+      shouldConfirmAccount,
+      pendingTransactionsCount
     } = this.state
 
     if (isInitializing) {
@@ -83,6 +105,7 @@ export default class AppView extends Component<Props, EngineState> {
 
     return <AccountView
       engine={engine}
+      pendingTransactionsCount={pendingTransactionsCount}
     />
   }
 }

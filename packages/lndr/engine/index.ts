@@ -3,6 +3,7 @@
 import ethUtil from 'ethereumjs-util'
 
 import { longTimePeriod } from 'lndr/time'
+import Balance from 'lndr/balance'
 import User, { CreateAccountData, RecoverAccountData, LoginAccountData, UpdateAccountData } from 'lndr/user'
 import Friend from 'lndr/friend'
 import PendingTransaction from 'lndr/pending-transaction'
@@ -34,6 +35,7 @@ export interface EngineState {
   password?: string
   errorMessage?: string
   successMessage?: string
+  pendingTransactionsCount?: number
 }
 
 interface EngineStateListener {
@@ -97,7 +99,7 @@ export default class Engine {
   setSuccessMessage(successMessage) {
     this.state = { successMessage }
     clearTimeout(this.clearSuccessTimeout)
-    this.clearErrorTimeout = setTimeout(() => this.clearSuccess(), longTimePeriod)
+    this.clearSuccessTimeout = setTimeout(() => this.clearSuccess(), longTimePeriod)
   }
 
   createAccount(accountData: CreateAccountData) {
@@ -117,16 +119,49 @@ export default class Engine {
     return this.engineState.user as User
   }
 
+  async getBalances() {
+    const { address } = this.user
+    const rawCounterparties = await creditProtocol.getCounterparties(address)
+    const uniqueCounterparties = {}
+    const balances: Balance[] = []
+
+    await Promise.all(
+      rawCounterparties.map(async (rawCounterparty) => {
+        const counterpartyAddress = rawCounterparty.replace('0x', '')
+        if (!(counterpartyAddress in uniqueCounterparties)) {
+          uniqueCounterparties[counterpartyAddress] = true
+          try {
+            const amount = await creditProtocol.getBalanceBetween(address, counterpartyAddress)
+            const relativeToNickname = await this.getNicknameForAddress(counterpartyAddress)
+            balances.push(new Balance({ relativeToNickname, relativeTo: counterpartyAddress, amount }))
+          }
+          catch (e) {
+            this.setErrorMessage(debtManagement.balances.error)
+          }
+        }
+      })
+    )
+
+    return balances
+  }
+
   async getAccountInformation() {
     const { address } = this.user
+    const accountInformation: { nickname?: string, balance?: number } = {}
+
     try {
-      const nickname = await creditProtocol.getNickname(address)
-      return { nickname }
+      accountInformation.nickname = await creditProtocol.getNickname(address)
     }
 
-    catch (e) {
-      return {}
+    catch (e) {}
+
+    try {
+      accountInformation.balance = await creditProtocol.getBalance(address)
     }
+
+    catch (e) {}
+
+    return accountInformation
   }
 
   async getNicknameForAddress(address) {
@@ -257,6 +292,7 @@ export default class Engine {
     const rawPendingTransactions = await creditProtocol.getPendingTransactions(address)
     const pendingTransactions = rawPendingTransactions.map(this.jsonToPendingTransaction)
     await this.ensureTransactionNicknames(pendingTransactions)
+    this.state = { pendingTransactionsCount: pendingTransactions.length }
     return pendingTransactions
   }
 
@@ -283,6 +319,7 @@ export default class Engine {
 
     catch (e) {
       this.setErrorMessage(debtManagement.confirmation.error)
+      return false
     }
   }
 
@@ -297,6 +334,7 @@ export default class Engine {
     }
     catch (e) {
       this.setErrorMessage(debtManagement.rejection.error)
+      return false
     }
   }
 
@@ -413,6 +451,7 @@ export default class Engine {
 
     const user = this.createUserFromCredentials(mnemonicInstance, confirmPassword)
     this.state = { user, hasStoredUser: true }
+    this.getPendingTransactions()
   }
 
   logoutAccount() {

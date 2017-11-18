@@ -11,6 +11,7 @@ interface TabProps {
   text: string
   noscroll?: boolean
   onRefresh?: () => void
+  badge?: any
 }
 
 interface TabState {
@@ -131,7 +132,10 @@ export default class Tabs extends Component<Props, State> {
           onPress={() => this.switchTo(reference)}
         >
           <View style={tabStyle}>
-            <Text style={textStyle}>{tab.props.text}</Text>
+            <View style={style.tabContent}>
+              <Text style={textStyle}>{tab.props.text}</Text>
+              {tab.props.badge}
+            </View>
           </View>
         </TouchableHighlight>
       )

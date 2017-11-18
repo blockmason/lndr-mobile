@@ -36,7 +36,6 @@ export default class RecentTransactionDetail extends Component<Props> {
         <Loading context={loadingContext} />
         <RecentTransactionRow
           user={user}
-          key={recentTransaction.hash}
           engine={engine}
           recentTransaction={recentTransaction}
         />

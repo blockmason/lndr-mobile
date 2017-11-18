@@ -22,10 +22,15 @@ export const removeFriend = 'Remove Friend'
 export const removeFriendConfirmationQuestion = 'Are you sure you would like to remove this user as a friend?'
 export const noFriends = 'You have no friends'
 export const noMatches = 'No matching users found'
+export const noBalances = 'You have no recorded debts'
 
 export const tip = 'Tip: '
-export const welcomeBack = nickname => `Welcome back, ${nickname}!`
+export const notice = 'Notice: '
+export const welcomeBack = nickname => `Welcome back, @${nickname}!`
 export const noNicknameWarning = 'Choose a nickname by tapping on the settings icon so your friends can find you.'
+export const noBalanceWarning = 'We were not able to load your balance at this time, please try again later.'
+export const totalBalance = 'Total Balance: '
+export const totalBalances = 'Total Counterparties: '
 
 export const newPassword = 'New Password (minimum 8 chars)'
 export const confirmPassword = 'Confirm Password'
@@ -119,6 +124,9 @@ export const debtManagement = {
   rejection: {
     success: 'Transaction has been rejected',
     error: 'Unable to reject transaction at this time, please try again later'
+  },
+  balances: {
+    error: 'Unable to load balances at this time, please try again later'
   }
 }
 

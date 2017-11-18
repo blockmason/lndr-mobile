@@ -22,7 +22,7 @@ interface Props {
   user: User
 }
 
-export default class RecentTransactionRow extends Component<Props, State> {
+export default class RecentTransactionRow extends Component<Props> {
   getTitle() {
     const { recentTransaction, user } = this.props
 
@@ -59,7 +59,7 @@ export default class RecentTransactionRow extends Component<Props, State> {
     const { onPress, recentTransaction } = this.props
 
     return (
-      <TouchableHighlight style={style.recentTransaction} onPress={onPress} underlayColor={lightGray} activeOpacity={0.5} key={recentTransaction.hash}>
+      <TouchableHighlight style={style.recentTransaction} onPress={onPress} underlayColor={lightGray} activeOpacity={0.5}>
         <View>
           <Text style={formStyle.header}>{this.getTitle()}</Text>
           <View style={style.listItem}>

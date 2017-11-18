@@ -10,10 +10,10 @@ import Button from 'ui/components/button'
 import Section from 'ui/components/section'
 import Popup, { closePopup } from 'ui/components/popup'
 import Loading, { LoadingContext } from 'ui/components/loading'
+import FriendRow from 'ui/components/friend-row'
 
 import AddFriend from 'ui/dialogs/add-friend'
 import RemoveFriend from 'ui/dialogs/remove-friend'
-import FriendRow from 'ui/components/friend-row'
 
 import style from 'theme/account'
 
@@ -102,10 +102,6 @@ export default class FriendsView extends Component<Props, State> {
     return <View>
       { this.renderAddFriendDialog() }
       { this.renderRemoveFriendDialog() }
-
-      <Section>
-        <Button icon='md-person-add' text={addFriend} onPress={() => this.showAddFriend()} />
-      </Section>
 
       <Section text='Current Friends' contentContainerStyle={style.list}>
         <Loading context={loadingFriends} />

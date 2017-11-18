@@ -41,6 +41,18 @@ export default class CreditProtocol {
     })
   }
 
+  getBalance(user: string) {
+    return this.client.get(`/balance/${user}`)
+  }
+
+  getBalanceBetween(user: string, counterpartyAddress: string) {
+    return this.client.get(`/balance/${user}/${counterpartyAddress}`)
+  }
+
+  getCounterparties(user: string) {
+    return this.client.get(`/counterparties/${user}`)
+  }
+
   getNickname(user: string) {
     return this.client.get(`/nick/${user}`)
   }
