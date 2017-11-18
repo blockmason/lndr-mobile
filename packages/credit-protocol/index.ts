@@ -90,7 +90,7 @@ export default class CreditProtocol {
   }
 
   getTransactions(user: string) {
-    return this.client.get(`/transactions?value=${user}`)
+    return this.client.get(`/transactions?user=${user}`)
   }
 
   pendingTransactions() {
