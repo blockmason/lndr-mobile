@@ -18,20 +18,18 @@ interface Props {
 }
 
 export default ({ onLogout, onMyAccount, onAddFriend, onAddDebt }: Props) => (
-  <View style={style.position}>
-    <ActionButton buttonColor={cinnabar}>
-      <ActionButton.Item buttonColor={gray} title={logoutAction} onPress={onLogout}>
-        <Icon name={'md-lock'} style={style.icon} />
-      </ActionButton.Item>
-      <ActionButton.Item buttonColor={scooter} title={myAccount} onPress={onMyAccount}>
-        <Icon name={'md-stats'} style={style.icon} />
-      </ActionButton.Item>
-      <ActionButton.Item buttonColor={persianGreen} title={addNewFriend} onPress={onAddFriend}>
-        <Icon name={'md-people'} style={style.icon} />
-      </ActionButton.Item>
-      <ActionButton.Item buttonColor={wisteria} title={addNewDebt} onPress={onAddDebt}>
-        <Icon name={'md-cash'} style={style.icon} />
-      </ActionButton.Item>
-    </ActionButton>
-  </View>
+  <ActionButton buttonColor={cinnabar}>
+    <ActionButton.Item buttonColor={gray} title={logoutAction} onPress={onLogout}>
+      <Icon name={'md-lock'} style={style.icon} />
+    </ActionButton.Item>
+    <ActionButton.Item buttonColor={scooter} title={myAccount} onPress={onMyAccount}>
+      <Icon name={'md-stats'} style={style.icon} />
+    </ActionButton.Item>
+    <ActionButton.Item buttonColor={persianGreen} title={addNewFriend} onPress={onAddFriend}>
+      <Icon name={'md-people'} style={style.icon} />
+    </ActionButton.Item>
+    <ActionButton.Item buttonColor={wisteria} title={addNewDebt} onPress={onAddDebt}>
+      <Icon name={'md-cash'} style={style.icon} />
+    </ActionButton.Item>
+  </ActionButton>
 )

@@ -10,10 +10,5 @@ export default StyleSheet.create({
     ...large,
     ...mediumHeightIcon,
     color: white
-  },
-  position: {
-    position: 'absolute',
-    bottom: 2 * xl,
-    right: xl - s
   }
 } as any)
