@@ -408,9 +408,15 @@ export default class Engine {
     this.state = { shouldConfirmAccount: false }
   }
 
-  createUserFromCredentials(mnemonicInstance, password) {
+  createUserFromCredentials(mnemonicInstance, password, hashed = '') {
+
+    var hashedPassword = hashed
+
+    if (hashed.length === 0) {
+      hashedPassword = Array.from(mnemonicInstance.toSeed(PASSWORD_SALT + password)).join('.')
+    }
+
     const mnemonic = mnemonicInstance.toString()
-    const hashedPassword = Array.from(mnemonicInstance.toSeed(PASSWORD_SALT + password)).join('.')
     const privateKey = mnemonicInstance.toHDPrivateKey(password)
     const privateKeyBuffer = privateKey.privateKey.toBuffer()
     const ethAddress = ethUtil.privateToAddress(privateKeyBuffer)
@@ -449,7 +455,7 @@ export default class Engine {
       return this.setErrorMessage(accountManagement.password.failedHashComparison)
     }
 
-    const user = this.createUserFromCredentials(mnemonicInstance, confirmPassword)
+    const user = this.createUserFromCredentials(mnemonicInstance, confirmPassword, hashedPassword)
     this.state = { user, hasStoredUser: true }
     this.getPendingTransactions()
   }
