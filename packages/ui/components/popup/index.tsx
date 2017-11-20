@@ -61,12 +61,14 @@ export class PopupTarget extends Component<TargetProps, TargetState> {
   }
 
   renderContent() {
-    return <View style={this.usePlatformContainer()}>
+    return <ScrollView>
+      <View style={style.contaier}>
         <View style={style.popup}>
           <Button round onPress={closeCurrentPopup} icon='md-close' style={style.closeButton} />
           {popupContents}
         </View>
       </View>
+    </ScrollView>
   }
 
   render() {
