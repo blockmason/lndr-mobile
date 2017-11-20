@@ -1,6 +1,6 @@
 import React, { Component } from 'react'
 
-import { ScrollView, View, Platform } from 'react-native'
+import { ScrollView, View, Platform, Modal } from 'react-native'
 import { BlurView } from 'react-native-blur'
 
 import Button from 'ui/components/button'
@@ -51,12 +51,18 @@ export class PopupTarget extends Component<TargetProps, TargetState> {
       return <BlurView blurType='dark' style={style.wrap}>{content}</BlurView>
     }
 
-    return <View style={style.androidContainer}>{content}</View>
+    return <Modal
+      animationType="slide"
+      transparent={false}
+      visible={this.state.isOpen}
+      onRequestClose={() => {}} >
+      {content}
+      </Modal>
   }
 
   renderContent() {
     return <ScrollView>
-      <View style={this.usePlatformContainer()}>
+      <View style={style.contaier}>
         <View style={style.popup}>
           <Button round onPress={closeCurrentPopup} icon='md-close' style={style.closeButton} />
           {popupContents}
