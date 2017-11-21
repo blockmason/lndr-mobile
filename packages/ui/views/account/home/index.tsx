@@ -24,9 +24,9 @@ import {
   notice,
   totalBalance,
   totalBalances,
+  welcome,
   welcomeBack,
   noBalances,
-  noNicknameWarning,
   noBalanceWarning,
   accountManagement
 } from 'language'
@@ -89,14 +89,11 @@ export default class HomeView extends Component<Props, State> {
 
     const { nickname } = accountInformation
 
-    if (!nickname) {
-      return <Text style={formStyle.warningText}>
-        <Text style={formStyle.bold}>{tip}</Text>
-        {noNicknameWarning}
-      </Text>
+    if (nickname) {
+      return <Text style={formStyle.infoText}>{welcomeBack(nickname)}</Text>
     }
 
-    return <Text style={formStyle.infoText}>{welcomeBack(nickname)}</Text>
+    return <Text style={formStyle.infoText}>{welcome}</Text>
   }
 
   renderBalance() {
