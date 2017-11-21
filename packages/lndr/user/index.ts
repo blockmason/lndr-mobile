@@ -1,4 +1,5 @@
 export interface CreateAccountData {
+  nickname: string
   password: string
   confirmPassword: string
 }
@@ -17,6 +18,7 @@ export interface UpdateAccountData {
 }
 
 export const defaultCreateAccountData = (): CreateAccountData => ({
+  nickname: '',
   password: '',
   confirmPassword: ''
 })
