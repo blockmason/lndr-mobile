@@ -27,7 +27,7 @@ export const noBalances = 'You have no recorded debts'
 export const tip = 'Tip: '
 export const notice = 'Notice: '
 export const welcomeBack = nickname => `Welcome back, @${nickname}!`
-export const noNicknameWarning = 'Choose a nickname by tapping on the settings icon so your friends can find you.'
+export const noNicknameWarning = 'Choose a nickname by tapping on the + icon below and selecting "My Account".'
 export const noBalanceWarning = 'We were not able to load your balance at this time, please try again later.'
 export const totalBalance = 'Total Balance: '
 export const totalBalances = 'Total Counterparties: '
