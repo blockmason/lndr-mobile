@@ -126,9 +126,9 @@ export default class CreditProtocol {
     return new CreditRecord(ucac, address1, address2, amount, memo, nonce)
   }
 
-  async submitCreditRecord(creditRecord, type, signature) {
-    if (type !== 'lend' && type !== 'borrow') {
-      throw new Error('Type is invalid')
+  async submitCreditRecord(creditRecord, action, signature) {
+    if (action !== 'lend' && action !== 'borrow') {
+      throw new Error('Action is invalid')
     }
 
     const {
@@ -139,12 +139,12 @@ export default class CreditProtocol {
       nonce
     } = creditRecord
 
-    return this.client.post(`/${type}`, {
+    return this.client.post(`/${action}`, {
       creditor: creditor,
       debtor: debtor,
       amount: amount,
       memo: memo,
-      submitter: type == 'lend' ? creditor : debtor,
+      submitter: action == 'lend' ? creditor : debtor,
       hash: bufferToHex(creditRecord.hash),
       nonce: nonce,
       signature: signature
