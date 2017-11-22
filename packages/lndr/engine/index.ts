@@ -32,7 +32,7 @@ export interface EngineState {
   shouldRemoveAccount?: boolean
   shouldConfirmAccount?: boolean
   welcomeComplete?: boolean
-  mnemonicInstance?: any
+  mnemonicInstance?: any // TODO why is this any?
   password?: string
   errorMessage?: string
   successMessage?: string
@@ -104,7 +104,7 @@ export default class Engine {
     this.clearSuccessTimeout = setTimeout(() => this.clearSuccess(), longTimePeriod)
   }
 
-  createAccount(accountData: CreateAccountData) {
+  async createAccount(accountData: CreateAccountData) {
     if (accountData.password.length < 8) {
       return this.setErrorMessage(accountManagement.password.lengthViolation)
     }
@@ -114,7 +114,9 @@ export default class Engine {
 
     const password = accountData.password
     const mnemonicInstance = creditProtocol.getRandomMnemonic()
-    this.state = { shouldConfirmAccount: true, password, mnemonicInstance }
+    this.state = { password: password, mnemonicInstance: mnemonicInstance }
+    await this.confirmAccount()
+    this.updateAccount({nickname: accountData.nickname})
   }
 
   get user(): User {

@@ -14,7 +14,7 @@ import style from 'theme/account'
 import formStyle from 'theme/form'
 
 import {
-  acknowledge,
+  back,
   cancel,
   pendingTransactionsLanguage
 } from 'language'
@@ -62,7 +62,7 @@ export default class PendingTransactionDetail extends Component<Props> {
         <Text style={formStyle.text}>
           {pendingTransactionsLanguage.pendingAnnouncement}
         </Text>
-        <Button style={formStyle.lastButton} onPress={closePopup} text={acknowledge} />
+        <Button style={formStyle.lastButton} onPress={closePopup} text={back} />
       </View>
     }
 

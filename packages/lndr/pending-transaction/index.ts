@@ -10,7 +10,7 @@ export default class PendingTransaction {
   hash: string
 
   constructor(data) {
-    const { creditRecord: { creditor, debtor, amount, memo, nonce }, submitter, hash } = data
+    const { creditor, debtor, amount, memo, nonce , submitter, hash } = data
     this.creditRecord = new CreditRecord(ucac, creditor, debtor, amount, memo, 0)
     this.submitter = submitter.replace('0x', '')
     this.hash = hash
