@@ -33,6 +33,23 @@ export default class CreditProtocol {
     )
   }
 
+  serverSign(message, privateKeyBuffer) {
+    if (typeof message === 'string') {
+      message = stringToBuffer(message)
+    }
+
+    const { r, s, v } = ethUtil.ecsign(
+      message,
+      privateKeyBuffer
+    )
+
+    return bufferToHex(
+      Buffer.concat(
+        [ r, s, Buffer.from([ v ]) ]
+      )
+    )
+  }
+
   setNickname(addr: string, nick: string, privateKeyBuffer: any) {
     return this.client.post('/nick', {
       addr,
@@ -82,7 +99,7 @@ export default class CreditProtocol {
   }
 
   getPendingTransactions(user: string) {
-    return this.client.get(`/pending?user=${user}`)
+    return this.client.get(`/pending/${user}`)
   }
 
   getNonce(address1, address2) {
@@ -100,7 +117,7 @@ export default class CreditProtocol {
   rejectPendingTransactionByHash(hash: string, privateKeyBuffer: any) {
     return this.client.postExpectNotFound('/reject', {
       hash,
-      rejectSig: this.sign(hash, privateKeyBuffer)
+      rejectSig: this.serverSign(hash, privateKeyBuffer)
     })
   }
 
@@ -118,15 +135,19 @@ export default class CreditProtocol {
       creditorAddress: creditor,
       debtorAddress: debtor,
       amount,
-      memo
+      memo,
+      nonce
     } = creditRecord
 
     return this.client.post(`/${type}`, {
-      creditor,
-      debtor,
-      amount,
-      memo,
-      signature
+      creditor: creditor,
+      debtor: debtor,
+      amount: amount,
+      memo: memo,
+      submitter: type == 'lend' ? creditor : debtor,
+      hash: bufferToHex(creditRecord.hash),
+      nonce: nonce,
+      signature: signature
     })
   }
 

@@ -21,7 +21,7 @@ const hashedPasswordStorage = new Storage('hashed-password')
 
 export const PASSWORD_SALT = 'THIS_IS_A_SALT_5426892348596723645879243876'
 
-const creditProtocol = new CreditProtocol('http://34.202.214.156')
+const creditProtocol = new CreditProtocol('http://localhost')
 
 export interface EngineState {
   user?: User,
