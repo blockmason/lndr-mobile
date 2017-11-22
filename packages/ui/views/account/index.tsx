@@ -29,7 +29,9 @@ export default class AccountView extends Component<Props> {
 
   componentDidMount() {
     InteractionManager.runAfterInteractions(() => {
-      this.props.engine.checkPendingUser()
+      const { engine } = this.props
+      engine.checkPendingUser()
+      engine.clearSuccess()
     });
   }
 

@@ -69,7 +69,7 @@ export default class HomeView extends Component<Props, State> {
     }
 
     catch (error) {
-      engine.setErrorMessage(accountManagement.loadInformation.error)
+      engine.setSuccessMessage(accountManagement.loadInformation.setup)
     }
 
     const balances = await loadingBalances.wrap(engine.getBalances())

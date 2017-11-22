@@ -16,10 +16,13 @@ import Storage from 'lndr/storage'
 
 import { accountManagement, debtManagement } from 'language'
 
+const bcrypt = require('bcryptjs')
+
+const privateKeyStorage = new Storage('privateKey')
 const mnemonicStorage = new Storage('mnemonic')
 const hashedPasswordStorage = new Storage('hashed-password')
 
-export const PASSWORD_SALT = 'THIS_IS_A_SALT_5426892348596723645879243876'
+export const SALT_SIZE = 8
 
 const creditProtocol = new CreditProtocol('http://34.202.214.156')
 
@@ -430,28 +433,19 @@ export default class Engine {
     this.state = { shouldConfirmAccount: false }
   }
 
-  async getSeededPassword(mnemonicInstance, password) {
-    return await Array.from(mnemonicInstance.toSeed(PASSWORD_SALT + password)).join('.')
+  generateHashedPassword(password) {
+    const salt = bcrypt.genSaltSync(SALT_SIZE)
+    return bcrypt.hashSync(password, salt)
   }
 
-  async createUserFromCredentials(mnemonicInstance, password, hashed = '') {
-
-    var hashedPassword = hashed
-
-    if (hashed.length === 0) {
-      hashedPassword = await this.getSeededPassword(mnemonicInstance, password)
-    }
-
+  async createUserFromCredentials(mnemonicInstance, privateKeyBuffer, hashedPassword) {
     const mnemonic = mnemonicInstance.toString()
-    const privateKey = await mnemonicInstance.toHDPrivateKey(password)
-    const privateKeyBuffer = privateKey.privateKey.toBuffer()
     const ethAddress = ethUtil.privateToAddress(privateKeyBuffer)
     const address = ethAddress.toString('hex')
 
     return new User(
       mnemonic,
       hashedPassword,
-      privateKey,
       privateKeyBuffer,
       ethAddress,
       address
@@ -459,6 +453,7 @@ export default class Engine {
   }
 
   async storeUserSession(user: User) {
+    await privateKeyStorage.set(JSON.stringify(user.privateKeyBuffer))
     await mnemonicStorage.set(user.mnemonic)
     await hashedPasswordStorage.set(user.hashedPassword)
   }
@@ -467,13 +462,16 @@ export default class Engine {
     const { hasPendingUser } = this.state
 
     if (hasPendingUser) {
-      console.info("Starting user creation")
 
       const { password, mnemonicInstance } = this.state
-      const user = await this.createUserFromCredentials(mnemonicInstance, password)
-      this.storeUserSession(user)
 
-      console.info("User mnemonic data created!")
+      const hashedPassword = this.generateHashedPassword(password)
+      const privateKey = await mnemonicInstance.toHDPrivateKey(password)
+      const privateKeyBuffer = privateKey.privateKey.toBuffer()
+
+      const user = await this.createUserFromCredentials(mnemonicInstance, privateKeyBuffer, hashedPassword)
+
+      this.storeUserSession(user)
 
       this.state = { user, hasStoredUser: true, hasPendingUser: false }
     }
@@ -488,13 +486,15 @@ export default class Engine {
     const mnemonic = await mnemonicStorage.get()
     const mnemonicInstance = creditProtocol.getMnemonic(mnemonic)
     const hashedPasswordReference = await hashedPasswordStorage.get()
-    const hashedPassword = await this.getSeededPassword(mnemonicInstance, confirmPassword)
 
-    if (hashedPassword !== hashedPasswordReference) {
+    const isPasswordValid = await bcrypt.compareSync(confirmPassword, hashedPasswordReference)
+
+    if (!isPasswordValid) {
       return this.setErrorMessage(accountManagement.password.failedHashComparison)
     }
 
-    const user = await this.createUserFromCredentials(mnemonicInstance, confirmPassword, hashedPassword)
+    const privateKey = JSON.parse(await privateKeyStorage.get())
+    const user = await this.createUserFromCredentials(mnemonicInstance, privateKey.data, hashedPasswordReference)
     this.state = { user, hasStoredUser: true }
     this.getPendingTransactions()
   }
@@ -526,6 +526,7 @@ export default class Engine {
   }
 
   async removeAccount() {
+    await privateKeyStorage.remove()
     await mnemonicStorage.remove()
     await hashedPasswordStorage.remove()
     this.state = { hasStoredUser: false, shouldRemoveAccount: false }
