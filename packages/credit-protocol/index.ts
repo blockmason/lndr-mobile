@@ -4,7 +4,7 @@ declare const Buffer
 import Mnemonic from 'bitcore-mnemonic'
 import ethUtil from 'ethereumjs-util'
 
-import { bufferToHex, stringToBuffer } from './lib/buffer-utils'
+import { hexToBuffer, bufferToHex, stringToBuffer } from './lib/buffer-utils'
 import Client from './lib/client'
 import CreditRecord from './lib/credit-record'
 export { default as CreditRecord } from './lib/credit-record'
@@ -16,6 +16,8 @@ export default class CreditProtocol {
     this.client = new Client(baseUrl, fetch)
   }
 
+  // TODO this should go away once serverSign works and nick endpoint is
+  // changed
   sign(message, privateKeyBuffer) {
     if (typeof message === 'string') {
       message = stringToBuffer(message)
@@ -23,6 +25,20 @@ export default class CreditProtocol {
 
     const { r, s, v } = ethUtil.ecsign(
       ethUtil.hashPersonalMessage(message),
+      privateKeyBuffer
+    )
+
+    return bufferToHex(
+      Buffer.concat(
+        [ r, s, Buffer.from([ v ]) ]
+      )
+    )
+  }
+
+  serverSign(hash, privateKeyBuffer) {
+
+    const { r, s, v } = ethUtil.ecsign(
+      hexToBuffer(hash),
       privateKeyBuffer
     )
 
@@ -82,7 +98,7 @@ export default class CreditProtocol {
   }
 
   getPendingTransactions(user: string) {
-    return this.client.get(`/pending?user=${user}`)
+    return this.client.get(`/pending/${user}`)
   }
 
   getNonce(address1, address2) {
@@ -98,9 +114,9 @@ export default class CreditProtocol {
   }
 
   rejectPendingTransactionByHash(hash: string, privateKeyBuffer: any) {
-    return this.client.postExpectNotFound('/reject', {
+    return this.client.post('/reject', {
       hash,
-      rejectSig: this.sign(hash, privateKeyBuffer)
+      rejectSig: this.serverSign(hash, privateKeyBuffer)
     })
   }
 
@@ -109,24 +125,28 @@ export default class CreditProtocol {
     return new CreditRecord(ucac, address1, address2, amount, memo, nonce)
   }
 
-  async submitCreditRecord(creditRecord, type, signature) {
-    if (type !== 'lend' && type !== 'borrow') {
-      throw new Error('Type is invalid')
+  async submitCreditRecord(creditRecord, action, signature) {
+    if (action !== 'lend' && action !== 'borrow') {
+      throw new Error('Action is invalid')
     }
 
     const {
       creditorAddress: creditor,
       debtorAddress: debtor,
       amount,
-      memo
+      memo,
+      nonce
     } = creditRecord
 
-    return this.client.post(`/${type}`, {
-      creditor,
-      debtor,
-      amount,
-      memo,
-      signature
+    return this.client.post(`/${action}`, {
+      creditor: creditor,
+      debtor: debtor,
+      amount: amount,
+      memo: memo,
+      submitter: action === 'lend' ? creditor : debtor,
+      hash: bufferToHex(creditRecord.hash),
+      nonce: nonce,
+      signature: signature
     })
   }
 
