@@ -3,7 +3,6 @@ const generalCommunicationError = 'There was a problem communicating with the se
 export const applicationName = 'Lndr'
 export const helloWorld = 'Hello world'
 
-export const acknowledge = 'Acknowledge'
 export const submit = 'Submit'
 export const cancel = 'Cancel'
 export const back = 'Go Back'

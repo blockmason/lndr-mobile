@@ -14,7 +14,7 @@ import style from 'theme/account'
 import formStyle from 'theme/form'
 
 import {
-  acknowledge,
+  back,
   recentTransactionsLanguage
 } from 'language'
 
@@ -39,7 +39,7 @@ export default class RecentTransactionDetail extends Component<Props> {
           engine={engine}
           recentTransaction={recentTransaction}
         />
-        <Button style={formStyle.lastButton} onPress={closePopup} text={acknowledge} />
+        <Button style={formStyle.lastButton} onPress={closePopup} text={back} />
     </View>
   }
 }

@@ -55,15 +55,4 @@ export default class Client {
     )
   }
 
-  async postExpectNotFound(path, data) {
-    try {
-      await this.post(path, data)
-    }
-    catch(e) {
-      if (e.message === 'HTTP Response 404') {
-        return
-      }
-      throw e
-    }
-  }
 }
