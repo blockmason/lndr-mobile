@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-
+import KeyboardSpacer from 'react-native-keyboard-spacer'
 import { ScrollView } from 'react-native'
 
 import Engine from 'lndr/engine'
@@ -28,11 +28,12 @@ interface Props {
 
 export default class AuthenticateView extends Component<Props> {
   render() {
-    return <ScrollView contentContainerStyle={general.flex}>
+    return <ScrollView style={[general.flex, general.defaultBackground]}>
       <FadeInView style={style.main}>
         <ThemeImage name='logo' />
         {this.renderView()}
       </FadeInView>
+      <KeyboardSpacer />
     </ScrollView>
   }
 
