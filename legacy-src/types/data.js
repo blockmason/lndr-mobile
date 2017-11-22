@@ -1,0 +1,3 @@
+export const UPDATE_FRIENDS = 'UPDATE_FRIENDS'
+export const UPDATE_PENDING = 'UPDATE_PENDING'
+export const UPDATE_DEBT = 'UPDATE_DEBT'

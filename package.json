@@ -1,38 +1,79 @@
 {
-  "name": "fiddy-mobile",
-  "version": "0.1.0",
+  "name": "LNDR",
+  "version": "0.0.1",
   "private": true,
-  "devDependencies": {
-    "react-native-scripts": "1.5.0",
-    "jest-expo": "^21.0.2",
-    "react-test-renderer": "16.0.0-alpha.12"
-  },
-  "main": "./node_modules/react-native-scripts/build/bin/crna-entry.js",
   "scripts": {
-    "start": "react-native-scripts start",
-    "eject": "react-native-scripts eject",
-    "android": "react-native-scripts android",
-    "ios": "react-native-scripts ios",
-    "test": "node node_modules/jest/bin/jest.js --watch"
-  },
-  "jest": {
-    "preset": "jest-expo"
+    "typescript": "node_modules/.bin/tsc -w",
+    "start": "node node_modules/react-native/local-cli/cli.js start",
+    "postinstall": "node_modules/.bin/rn-nodeify --install stream,crypto --hack"
   },
   "dependencies": {
-    "expo": "^21.0.0",
-    "react": "16.0.0-alpha.12",
-    "react-native": "^0.48.4",
+    "assert": "^1.4.1",
+    "bitcore-mnemonic": "^1.5.0",
+    "ethereumjs-util": "^5.1.2",
+    "events": "^1.1.1",
+    "react": "16.0.0",
+    "react-native": "0.49.3",
     "react-native-action-button": "^2.8.1",
     "react-native-actionsheet": "^2.3.0",
+    "react-native-blur": "^3.2.2",
+    "react-native-crypto": "^2.1.1",
     "react-native-dropdownalert": "^3.1.2",
     "react-native-keyboard-spacer": "^0.4.1",
-    "react-native-masked-text": "^1.6.2",
-    "react-native-popup-dialog": "^0.9.37",
-    "react-navigation": "^1.0.0-beta.15",
+    "react-native-loading-spinner-overlay": "^0.5.2",
+    "react-native-local-storage": "^1.5.2",
+    "react-native-masked-text": "^1.6.3",
+    "react-native-popup-dialog": "^0.9.39",
+    "react-native-randombytes": "^3.0.0",
+    "react-native-sqlite-storage": "^3.3.3",
+    "react-native-vector-icons": "^4.4.2",
+    "react-navigation": "^1.0.0-beta.19",
     "react-redux": "^5.0.6",
+    "readable-stream": "^1.0.33",
     "redux": "^3.7.2",
-    "redux-actions": "^2.2.1",
+    "redux-logger": "^3.0.6",
     "redux-thunk": "^2.2.0",
-    "underscore": "^1.8.3"
+    "rn-nodeify": "^8.2.0",
+    "solidity-sha3": "^0.4.1",
+    "stream": "^0.0.2",
+    "stream-browserify": "^1.0.0",
+    "underscore": "^1.8.3",
+    "url": "^0.11.0",
+    "vm": "^0.1.0"
+  },
+  "devDependencies": {
+    "@types/jest": "^21.1.5",
+    "@types/react": "^15.6.6",
+    "@types/react-native": "^0.50.2",
+    "@types/react-redux": "^5.0.12",
+    "@types/react-test-renderer": "^16.0.0",
+    "babel-jest": "21.2.0",
+    "babel-plugin-module-alias": "^1.6.0",
+    "babel-preset-expo": "^4.0.0",
+    "babel-preset-react-native": "4.0.0",
+    "jest": "21.2.1",
+    "react-test-renderer": "16.0.0",
+    "typescript": "^2.6.1"
+  },
+  "jest": {
+    "preset": "react-native"
+  },
+  "react-native": {
+    "crypto": "react-native-crypto",
+    "_stream_transform": "readable-stream/transform",
+    "_stream_readable": "readable-stream/readable",
+    "_stream_writable": "readable-stream/writable",
+    "_stream_duplex": "readable-stream/duplex",
+    "_stream_passthrough": "readable-stream/passthrough",
+    "stream": "stream-browserify"
+  },
+  "browser": {
+    "crypto": "react-native-crypto",
+    "_stream_transform": "readable-stream/transform",
+    "_stream_readable": "readable-stream/readable",
+    "_stream_writable": "readable-stream/writable",
+    "_stream_duplex": "readable-stream/duplex",
+    "_stream_passthrough": "readable-stream/passthrough",
+    "stream": "stream-browserify"
   }
 }
