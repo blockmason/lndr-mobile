@@ -3,7 +3,7 @@ import { StyleSheet, Platform } from 'react-native'
 import { radius } from 'theme/include/borders'
 import { bold, large, medium, small, xsmall, monospace } from 'theme/include/fonts'
 import { xxl, l, m, s, xs, verticalMargin } from 'theme/include/spacing'
-import { softGray, gray, white, dark, goodDark, danger } from 'theme/include/colors'
+import { softGray, gray, white, moneyGreen, goodDark, danger } from 'theme/include/colors'
 
 export default StyleSheet.create({
   tabs: {
@@ -73,7 +73,7 @@ export default StyleSheet.create({
     flex: 1,
     ...bold,
     ...medium,
-    color: dark
+    color: moneyGreen
   },
 
   titledFactAmountDanger: {
@@ -97,7 +97,7 @@ export default StyleSheet.create({
     flex: 1,
     ...bold,
     ...large,
-    color: dark
+    color: moneyGreen
   },
 
   largeFactAmountDanger: {
