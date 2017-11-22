@@ -8,6 +8,7 @@ import { CreateAccountData, defaultCreateAccountData } from 'lndr/user'
 
 import {
   newAccount,
+  nickname,
   newPassword,
   confirmPassword,
   createAccount,
@@ -30,6 +31,13 @@ export default class CreateAccountForm extends Component<Props, CreateAccountDat
   render() {
     return <View style={style.form}>
       <Text style={style.text}>{newAccount}</Text>
+      <TextInput
+        autoCapitalize='none'
+        style={style.textInput}
+        placeholder={nickname}
+        value={this.state.nickname}
+        onChangeText={nickname => this.setState({ nickname })}
+      />
       <TextInput
         secureTextEntry
         style={style.textInput}
