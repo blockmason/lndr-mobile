@@ -32,12 +32,19 @@ interface Props {
 }
 
 interface State {
-  accountInformation?: { nickname?: string, balance?: number }
   balanceLoaded?: boolean
   balance: Balance
 }
 
 export default class RemoveFriend extends Component<Props, State> {
+  constructor() {
+    super()
+    this.state = {
+      balanceLoaded: false,
+      balance: new Balance({ relativeToNickname: "", relativeTo: "", amount: 0 })
+    }
+  }
+
   async removeFriend(friend: Friend) {
     const { engine, closePopup } = this.props
 
@@ -48,20 +55,23 @@ export default class RemoveFriend extends Component<Props, State> {
     closePopup()
   }
 
-  renderBalanceRow() {
+  async componentDidMount() {
     const { engine, friend } = this.props
+    const balance = await engine.getTwoPartyBalance(friend)
+    this.setState({ balance , balanceLoaded: true })
+  }
 
-    try {
-      // const balance = await engine.getBalance(friend)
-      const balance = new Balance({ relativeToNickname: friend.nickname, relativeTo: friend.address, amount: 0 })
+
+  renderBalanceRow() {
+    const { balance , balanceLoaded } = this.state
+    // TODO this must be changed, placed here for testing purposes
+    if (!balanceLoaded) {
+      return <Text>"wait"</Text>
+    } else {
       return <BalanceRow
               key={balance.relativeTo}
               balance={balance}
              />
-    }
-
-    catch (error) {
-      return <Text style={formStyle.text}>{noBalances}</Text>
     }
   }
 
