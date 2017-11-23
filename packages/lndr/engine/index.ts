@@ -128,31 +128,26 @@ export default class Engine {
 
   async getBalances() {
     const { address } = this.user
-
     const balances: Balance[] = []
+    const rawCounterparties = await creditProtocol.getCounterparties(address)
+    const uniqueCounterparties = {}
 
-    if (address) {
-
-      const rawCounterparties = await creditProtocol.getCounterparties(address)
-      const uniqueCounterparties = {}
-
-      await Promise.all(
-        rawCounterparties.map(async (rawCounterparty) => {
-          const counterpartyAddress = rawCounterparty.replace('0x', '')
-          if (!(counterpartyAddress in uniqueCounterparties)) {
-            uniqueCounterparties[counterpartyAddress] = true
-            try {
-              const amount = await creditProtocol.getBalanceBetween(address, counterpartyAddress)
-              const relativeToNickname = await this.getNicknameForAddress(counterpartyAddress)
-              balances.push(new Balance({ relativeToNickname, relativeTo: counterpartyAddress, amount }))
-            }
-            catch (e) {
-              this.setErrorMessage(debtManagement.balances.error)
-            }
+    await Promise.all(
+      rawCounterparties.map(async (rawCounterparty) => {
+        const counterpartyAddress = rawCounterparty.replace('0x', '')
+        if (!(counterpartyAddress in uniqueCounterparties)) {
+          uniqueCounterparties[counterpartyAddress] = true
+          try {
+            const amount = await creditProtocol.getBalanceBetween(address, counterpartyAddress)
+            const relativeToNickname = await this.getNicknameForAddress(counterpartyAddress)
+            balances.push(new Balance({ relativeToNickname, relativeTo: counterpartyAddress, amount }))
           }
-        })
-      )
-    }
+          catch (e) {
+            this.setErrorMessage(debtManagement.balances.error)
+          }
+        }
+      })
+    )
 
     return balances
   }
@@ -161,21 +156,17 @@ export default class Engine {
     const { address } = this.user
     const accountInformation: { nickname?: string, balance?: number } = {}
 
-    if (address) {
-
-      try {
-        accountInformation.nickname = await creditProtocol.getNickname(address)
-      }
-
-      catch (e) {}
-
-      try {
-        accountInformation.balance = await creditProtocol.getBalance(address)
-      }
-
-      catch (e) {}
-
+    try {
+      accountInformation.nickname = await creditProtocol.getNickname(address)
     }
+
+    catch (e) {}
+
+    try {
+      accountInformation.balance = await creditProtocol.getBalance(address)
+    }
+
+    catch (e) {}
 
     return accountInformation
   }
@@ -270,13 +261,10 @@ export default class Engine {
 
   async getFriends() {
     const { address } = this.user
-
-    if (address) {
-      const friends = await creditProtocol.getFriends(address)
-      const result = friends.map(this.jsonToFriend)
-      await this.ensureNicknames(result)
-      return result
-    }
+    const friends = await creditProtocol.getFriends(address)
+    const result = friends.map(this.jsonToFriend)
+    await this.ensureNicknames(result)
+    return result
   }
 
   async searchUsers(searchData) {
@@ -300,25 +288,19 @@ export default class Engine {
 
   async getRecentTransactions() {
     const { address } = this.user
-
-    if (address) {
-      const rawRecentTransactions = await creditProtocol.getTransactions(address)
-      const recentTransactions = rawRecentTransactions.map(this.jsonToRecentTransaction)
-      await this.ensureTransactionNicknames(recentTransactions)
-      return recentTransactions
-    }
+    const rawRecentTransactions = await creditProtocol.getTransactions(address)
+    const recentTransactions = rawRecentTransactions.map(this.jsonToRecentTransaction)
+    await this.ensureTransactionNicknames(recentTransactions)
+    return recentTransactions
   }
 
   async getPendingTransactions() {
     const { address } = this.user
-
-    if (address) {
-      const rawPendingTransactions = await creditProtocol.getPendingTransactions(address)
-      const pendingTransactions = rawPendingTransactions.map(this.jsonToPendingTransaction)
-      await this.ensureTransactionNicknames(pendingTransactions)
-      this.state = { pendingTransactionsCount: pendingTransactions.length }
-      return pendingTransactions
-    }
+    const rawPendingTransactions = await creditProtocol.getPendingTransactions(address)
+    const pendingTransactions = rawPendingTransactions.map(this.jsonToPendingTransaction)
+    await this.ensureTransactionNicknames(pendingTransactions)
+    this.state = { pendingTransactionsCount: pendingTransactions.length }
+    return pendingTransactions
   }
 
   async confirmPendingTransaction(pendingTransaction: PendingTransaction) {
