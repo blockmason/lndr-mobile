@@ -4,7 +4,7 @@ import { s } from 'theme/include/spacing'
 import { center } from 'theme/include/align'
 import { radius } from 'theme/include/borders'
 import { medium, wide, bold } from 'theme/include/fonts'
-import { gray, dark, charcoal, danger, transparent } from 'theme/include/colors'
+import { gray, moneyGreen, charcoal, danger, transparent } from 'theme/include/colors'
 
 export default StyleSheet.create({
   layout: {
@@ -15,7 +15,7 @@ export default StyleSheet.create({
   },
 
   checkbox: {
-    borderColor: dark,
+    borderColor: moneyGreen,
     borderWidth: 1.25,
     height: 18,
     width: 18,
@@ -29,7 +29,7 @@ export default StyleSheet.create({
     top: -23,
     left: -8,
     fontSize: 40,
-    color: dark,
+    color: moneyGreen,
     backgroundColor: transparent
   },
 
@@ -43,8 +43,8 @@ export default StyleSheet.create({
     left: 3,
     width: 9,
     height: 9,
-    backgroundColor: dark,
-    borderColor: dark,
+    backgroundColor: moneyGreen,
+    borderColor: moneyGreen,
     borderWidth: 2,
     borderRadius: 5,
     overflow: 'hidden'
