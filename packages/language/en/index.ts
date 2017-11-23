@@ -20,6 +20,7 @@ export const addFriendConfirmationQuestion = 'Are you sure you would like to add
 export const removeFriend = 'Remove Friend'
 export const currentFriends = 'Current Friends'
 export const removeFriendConfirmationQuestion = 'Are you sure you would like to remove this user as a friend?'
+export const friendInfo = 'More information about this friendship:'
 export const noFriends = 'You have no friends'
 export const noMatches = 'No matching users found'
 export const noBalances = 'You have no recorded debts'

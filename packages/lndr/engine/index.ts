@@ -121,6 +121,12 @@ export default class Engine {
     return this.engineState.user as User
   }
 
+  async getBalance(friend) {
+    const { address } = this.user
+    const amount = creditProtocol.getBalanceBetween(address, friend.address)
+    return new Balance({ relativeToNickname: friend.nickname, relativeTo: friend.address, amount })
+  }
+
   async getBalances() {
     const { address } = this.user
     const rawCounterparties = await creditProtocol.getCounterparties(address)

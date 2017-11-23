@@ -4,19 +4,23 @@ import { Text, TextInput, TouchableHighlight, View } from 'react-native'
 
 import { debounce } from 'lndr/time'
 import Engine from 'lndr/engine'
+import Balance from 'lndr/balance'
 import Friend from 'lndr/friend'
 
 import Button from 'ui/components/button'
 import Loading, { LoadingContext } from 'ui/components/loading'
+import Section from 'ui/components/section'
 import FriendRow from 'ui/components/friend-row'
-
+import BalanceRow from 'ui/components/balance-row'
 import style from 'theme/account'
 import formStyle from 'theme/form'
 
 import {
   cancel,
+  back,
   removeFriend,
-  removeFriendConfirmationQuestion
+  friendInfo,
+  noBalances
 } from 'language'
 
 const loadingContext = new LoadingContext()
@@ -27,7 +31,13 @@ interface Props {
   closePopup: () => void
 }
 
-export default class RemoveFriend extends Component<Props> {
+interface State {
+  accountInformation?: { nickname?: string, balance?: number }
+  balanceLoaded?: boolean
+  balance: Balance
+}
+
+export default class RemoveFriend extends Component<Props, State> {
   async removeFriend(friend: Friend) {
     const { engine, closePopup } = this.props
 
@@ -38,18 +48,32 @@ export default class RemoveFriend extends Component<Props> {
     closePopup()
   }
 
+  renderBalanceRow() {
+    const { engine, friend } = this.props
+
+    try {
+      // const balance = await engine.getBalance(friend)
+      const balance = new Balance({ relativeToNickname: friend.nickname, relativeTo: friend.address, amount: 0 })
+      return <BalanceRow
+              key={balance.relativeTo}
+              balance={balance}
+             />
+    }
+
+    catch (error) {
+      return <Text style={formStyle.text}>{noBalances}</Text>
+    }
+  }
+
   render() {
     const { friend, closePopup } = this.props
 
     return <View>
-      <Text style={formStyle.text}>{removeFriendConfirmationQuestion}</Text>
+      <Text style={formStyle.text}>{friendInfo}</Text>
         <Loading context={loadingContext} />
-        <FriendRow
-          key={friend.address}
-          friend={friend}
-        />
+        { this.renderBalanceRow() }
         <Button danger onPress={() => this.removeFriend(friend)} text={removeFriend} />
-        <Button alternate onPress={closePopup} text={cancel} />
+        <Button alternate onPress={closePopup} text={back} />
     </View>
   }
 }
