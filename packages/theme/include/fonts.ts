@@ -4,6 +4,10 @@ export const large = {
   fontSize: 20
 }
 
+export const lmedium = {
+  fontSize: 18
+}
+
 export const medium = {
   fontSize: 16
 }
