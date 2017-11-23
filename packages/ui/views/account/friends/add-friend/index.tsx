@@ -10,9 +10,8 @@ import Button from 'ui/components/button'
 import Loading, { LoadingContext } from 'ui/components/loading'
 import FriendRow from 'ui/components/friend-row'
 
-import { lightGray } from 'theme/include/colors'
-import style from 'theme/account'
-import formStyle from 'theme/form'
+import style from 'theme/form'
+import buttonAction from 'theme/button'
 
 import {
   lndrNickname,
@@ -88,25 +87,25 @@ export default class AddFriend extends Component<Props, State> {
     const { matches, hasSearchTerm, candidateForFriendship } = this.state
 
     if (candidateForFriendship) {
-      return <View>
-        <Text style={formStyle.text}>{addFriendConfirmationQuestion}</Text>
+      return <View style={style.form}>
+        <Text style={style.text}>{addFriendConfirmationQuestion}</Text>
           <Loading context={loadingContext} />
           <FriendRow
             key={candidateForFriendship.address}
             friend={candidateForFriendship}
           />
-          <Button onPress={() => this.confirmFriend(candidateForFriendship)} text={addFriend} />
+          <Button action onPress={() => this.confirmFriend(candidateForFriendship)} text={addFriend} />
           <Button alternate onPress={() => this.removeCandidateForFriendship()} text={back} />
       </View>
     }
 
     return <View>
-      <Text style={formStyle.formTitle}>{addANewFriend}</Text>
-      <View style={formStyle.horizontalView}>
-        <Text style={[ formStyle.text, formStyle.horizontalElem ]}>{lndrNickname}</Text>
+      <Text style={style.formTitle}>{addANewFriend}</Text>
+      <View style={style.horizontalView}>
+        <Text style={[ style.text, style.horizontalElem ]}>{lndrNickname}</Text>
         <TextInput
           autoCapitalize='none'
-          style={formStyle.borderTextInput}
+          style={style.borderTextInput}
           placeholder={nickname}
           onChangeText={text => this.searchAction(text)}
         />
