@@ -39,15 +39,13 @@ export const defaultUpdateAccountData = (): UpdateAccountData => ({
 export default class User {
   mnemonic: string
   hashedPassword: string
-  privateKey: any
   privateKeyBuffer: any
   ethAddress: any
   address: string
 
-  constructor(mnemonic: string, hashedPassword: string, privateKey: any, privateKeyBuffer: any, ethAddress: any, address: string) {
+  constructor(mnemonic: string, hashedPassword: string, privateKeyBuffer: any, ethAddress: any, address: string) {
     this.mnemonic = mnemonic
     this.hashedPassword = hashedPassword
-    this.privateKey = privateKey
     this.privateKeyBuffer = privateKeyBuffer
     this.ethAddress = ethAddress
     this.address = address

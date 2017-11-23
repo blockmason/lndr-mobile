@@ -1,3 +1,5 @@
+// This file is over 50 lines and needs to be split up
+
 import React, { Component } from 'react'
 
 import { Text, View } from 'react-native'
@@ -28,7 +30,8 @@ import {
   welcomeBack,
   noBalances,
   noBalanceWarning,
-  accountManagement
+  accountManagement,
+  addNewDebt
 } from 'language'
 
 const loadingBalances = new LoadingContext()
@@ -69,7 +72,7 @@ export default class HomeView extends Component<Props, State> {
     }
 
     catch (error) {
-      engine.setErrorMessage(accountManagement.loadInformation.error)
+      engine.setSuccessMessage(accountManagement.loadInformation.setup)
     }
 
     const balances = await loadingBalances.wrap(engine.getBalances())
@@ -188,7 +191,9 @@ export default class HomeView extends Component<Props, State> {
         { this.renderWelcomeMessage() }
         { this.renderBalanceInformation() }
       </Section>
-
+      <Section>
+        <Button action onPress={() => this.showAddDebt()} text={addNewDebt} />
+      </Section>
       <Section text='My Balances' contentContainerStyle={style.list}>
         <Loading context={loadingBalances} />
         {balancesLoaded && balances.length === 0 ? <Text style={style.emptyState}>{noBalances}</Text> : null}

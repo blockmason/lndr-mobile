@@ -15,7 +15,8 @@ import style from 'theme/account'
 import formStyle from 'theme/form'
 
 import {
-  searchUsersByNickname,
+  lndrNickname,
+  addANewFriend,
   nickname,
   cancel,
   back,
@@ -28,7 +29,7 @@ const loadingContext = new LoadingContext()
 
 interface Props {
   engine: Engine
-  closePopup: () => void
+  onSuccess: () => void
 }
 
 interface State {
@@ -68,18 +69,22 @@ export default class AddFriend extends Component<Props, State> {
     )
   }
 
+  removeCandidateForFriendship() {
+    this.setState({ candidateForFriendship: undefined, hasSearchTerm: false })
+  }
+
   async confirmFriend(friend: Friend) {
-    const { engine, closePopup } = this.props
+    const { engine, onSuccess } = this.props
 
     await loadingContext.wrap(
       engine.addFriend(friend)
     )
 
-    closePopup()
+    this.removeCandidateForFriendship()
+    onSuccess()
   }
 
   render() {
-    const { closePopup } = this.props
     const { matches, hasSearchTerm, candidateForFriendship } = this.state
 
     if (candidateForFriendship) {
@@ -91,32 +96,35 @@ export default class AddFriend extends Component<Props, State> {
             friend={candidateForFriendship}
           />
           <Button onPress={() => this.confirmFriend(candidateForFriendship)} text={addFriend} />
-          <Button alternate onPress={() => this.setState({ candidateForFriendship: undefined })} text={back} />
+          <Button alternate onPress={() => this.removeCandidateForFriendship()} text={back} />
       </View>
     }
 
     return <View>
-      <Text style={formStyle.text}>{searchUsersByNickname}</Text>
-      <TextInput
-        autoCapitalize='none'
-        style={formStyle.textInput}
-        placeholder={nickname}
-        onChangeText={text => this.searchAction(text)}
-      />
-      <View style={style.list}>
-        <Loading context={loadingContext} />
-        {hasSearchTerm && matches.length === 0 ? <Text style={style.emptyState}>{noMatches}</Text> : null}
-        {matches.map(
-          match => (
-            <FriendRow
-              key={match.address}
-              friend={match}
-              onPress={() => this.setState({ candidateForFriendship: match })}
-            />
-          )
-        )}
+      <Text style={formStyle.formTitle}>{addANewFriend}</Text>
+      <View style={formStyle.horizontalView}>
+        <Text style={[ formStyle.text, formStyle.horizontalElem ]}>{lndrNickname}</Text>
+        <TextInput
+          autoCapitalize='none'
+          style={formStyle.borderTextInput}
+          placeholder={nickname}
+          onChangeText={text => this.searchAction(text)}
+        />
       </View>
-      <Button alternate onPress={closePopup} text={cancel} />
+      { hasSearchTerm &&
+        <View style={style.list}>
+          <Loading context={loadingContext} />
+          {hasSearchTerm && matches.length === 0 ? <Text style={style.emptyState}>{noMatches}</Text> : null}
+          {matches.map(
+            match => (
+              <FriendRow
+                key={match.address}
+                friend={match}
+                onPress={() => this.setState({ candidateForFriendship: match })}
+              />
+            )
+          )}
+        </View>}
     </View>
   }
 }

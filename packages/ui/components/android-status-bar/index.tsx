@@ -2,7 +2,7 @@ import React from 'react'
 
 import { StatusBar } from 'react-native'
 
-import { dark } from 'theme/include/colors'
+import { white } from 'theme/include/colors'
 
 interface Props {
   color?: string
@@ -10,9 +10,9 @@ interface Props {
 }
 
 const getColor = ( color ) => {
-  return color ? color : dark
+  return color ? color : white
 }
 
 export default ({ color, hidden }: Props) => (
-  <StatusBar backgroundColor={getColor(color)} hidden={hidden} />
+  <StatusBar barStyle='dark-content' backgroundColor={getColor(color)} hidden={hidden} />
 )

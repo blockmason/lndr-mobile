@@ -1,5 +1,6 @@
 export const xxl = 60
 export const xl = 50
+export const ml = 40
 export const l = 30
 export const m = 15
 export const s = 10

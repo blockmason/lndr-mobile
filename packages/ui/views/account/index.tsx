@@ -2,11 +2,15 @@ import React, { Component } from 'react'
 
 import Engine from 'lndr/engine'
 
-import { View, Text } from 'react-native'
+import { View, Text, InteractionManager } from 'react-native'
 
 import Tabs, { Tab } from 'ui/components/tabs'
 import ActionButton from 'ui/components/action-button'
 import Badge from 'ui/components/badge'
+
+import AndroidStatusBar from 'ui/components/android-status-bar'
+
+import Loading, { LoadingContext } from 'ui/components/loading'
 
 import HomeView from './home'
 import FriendsView from './friends'
@@ -17,6 +21,8 @@ import style from 'theme/account'
 
 import { accountViewLanguage } from 'language'
 
+const loadingContext = new LoadingContext()
+
 interface Props {
   engine: Engine
   pendingTransactionsCount?: number
@@ -26,6 +32,16 @@ export default class AccountView extends Component<Props> {
   home: any
   friends: any
   tabs: any
+
+  async componentDidMount() {
+    await loadingContext.wrap(
+      InteractionManager.runAfterInteractions(() => {
+        const { engine } = this.props
+        engine.checkPendingUser()
+        engine.clearSuccess()
+      })
+    )
+  }
 
   getPendingBadge() {
     const { pendingTransactionsCount } = this.props
@@ -47,8 +63,11 @@ export default class AccountView extends Component<Props> {
     const { engine } = this.props
 
 
-    return <View style={general.flex}>
-      <Tabs tabContainerStyle={style.tabs} ref={tabs => this.tabs = tabs}>
+    return <View style={[general.flex, style.whiteBackground]}>
+      <AndroidStatusBar />
+      <Loading context={loadingContext} />
+      <Text style={style.topText}>{accountViewLanguage.lndr}</Text>
+      <Tabs ref={tabs => this.tabs = tabs}>
         <Tab reference='home' text={accountViewLanguage.home} onRefresh={() => this.home.refresh()}>
           <HomeView engine={engine} ref={home => this.home = home} />
         </Tab>
@@ -62,8 +81,8 @@ export default class AccountView extends Component<Props> {
       <ActionButton
         onLogout={() => engine.logoutAccount()}
         onMyAccount={() => this.tabs.switchTo('home').then(() => this.home.showMyAccount())}
-        onAddFriend={() => this.tabs.switchTo('friends').then(() => this.friends.showAddFriend())}
-        onAddDebt={() => this.tabs.switchTo('home').then(() => this.home.showAddDebt())}
+        onMyLndr={() => {}}
+        onGetHelp={() => {}}
       />
     </View>
   }
