@@ -5,7 +5,7 @@ import { white } from 'theme/include/colors'
 
 export default StyleSheet.create({
   main: {
-    paddingTop: 2 * xl,
+    paddingTop: xl,
     backgroundColor: white
   }
 } as any)
