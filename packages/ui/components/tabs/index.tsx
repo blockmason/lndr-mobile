@@ -63,7 +63,7 @@ const getTextStyle = (alternate?: boolean, active?: boolean) => {
 
 const getTabStyle = (alternate?: boolean, active?: boolean) => {
   if (alternate) {
-    return [ style.tab, active ? style.tabActiveAlternate : style.tabAlternate ]
+    return [ style.tab, active ? style.tabActive : style.tabAlternate ]
   }
   return [ style.tab, active ? style.tabActive : style.tab ]
 }
