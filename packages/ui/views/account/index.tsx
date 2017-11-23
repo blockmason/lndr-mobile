@@ -8,6 +8,8 @@ import Tabs, { Tab } from 'ui/components/tabs'
 import ActionButton from 'ui/components/action-button'
 import Badge from 'ui/components/badge'
 
+import AndroidStatusBar from 'ui/components/android-status-bar'
+
 import HomeView from './home'
 import FriendsView from './friends'
 import ActivityView from './activity'
@@ -55,8 +57,10 @@ export default class AccountView extends Component<Props> {
     const { engine } = this.props
 
 
-    return <View style={general.flex}>
-      <Tabs tabContainerStyle={style.tabs} ref={tabs => this.tabs = tabs}>
+    return <View style={[general.flex, style.whiteBackground]}>
+      <AndroidStatusBar />
+      <Text style={style.topText}>{accountViewLanguage.lndr}</Text>
+      <Tabs ref={tabs => this.tabs = tabs}>
         <Tab reference='home' text={accountViewLanguage.home} onRefresh={() => this.home.refresh()}>
           <HomeView engine={engine} ref={home => this.home = home} />
         </Tab>
