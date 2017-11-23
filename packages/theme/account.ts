@@ -1,14 +1,11 @@
 import { StyleSheet, Platform } from 'react-native'
 
 import { radius } from 'theme/include/borders'
-import { bold, large, medium, small, xsmall, monospace } from 'theme/include/fonts'
+import { wide, bold, lmedium, large, medium, small, xsmall, monospace } from 'theme/include/fonts'
 import { xxl, l, m, s, xs, verticalMargin } from 'theme/include/spacing'
-import { softGray, gray, white, moneyGreen, goodDark, danger } from 'theme/include/colors'
+import { softGray, black, gray, white, moneyGreen, goodDark, danger } from 'theme/include/colors'
 
 export default StyleSheet.create({
-  tabs: {
-    paddingTop: Platform.OS === 'ios' ? l : m,
-  },
 
   whiteBackground: {
     backgroundColor: white
@@ -44,6 +41,16 @@ export default StyleSheet.create({
 
   header: {
     ...medium
+  },
+
+  topText: {
+    alignSelf: 'center',
+    paddingTop: Platform.OS === 'ios' ? l : m,
+    paddingBottom: m,
+    color: black,
+    backgroundColor: white,
+    ...lmedium,
+    ...wide
   },
 
   title: {

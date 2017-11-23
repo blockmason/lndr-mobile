@@ -130,6 +130,7 @@ export const debtManagement = {
 }
 
 export const accountViewLanguage = {
+  lndr: 'L n d r',
   home: 'Home',
   friends: 'Friends',
   activity: 'Activity'
