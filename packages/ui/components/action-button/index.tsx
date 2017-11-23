@@ -1,6 +1,6 @@
 import React from 'react'
 
-import { View } from 'react-native'
+import { View, Platform } from 'react-native'
 import ActionButton from 'react-native-action-button'
 import Icon from 'react-native-vector-icons/Ionicons'
 
@@ -18,17 +18,24 @@ interface Props {
 }
 
 export default ({ onLogout, onMyAccount, onGetHelp, onMyLndr }: Props) => (
-  <ActionButton buttonColor={gray}>
-    <ActionButton.Item buttonColor={bluish} title={logoutAction} onPress={onLogout}>
+  <ActionButton
+    buttonColor={gray}
+    verticalOrientation='down'
+    spacing={10}
+    hideShadow={true}
+    offsetX={Platform.OS === 'ios' ? 20 : 10}
+    offsetY={Platform.OS === 'ios' ? 20 : 1}
+    >
+    <ActionButton.Item buttonColor={bluish} title={logoutAction} onPress={onLogout} textContainerStyle={style.textContainer} textStyle={style.text}>
       <Icon name={'md-lock'} style={style.icon} />
     </ActionButton.Item>
-    <ActionButton.Item buttonColor={bluish} title={myAccount} onPress={onMyAccount}>
+    <ActionButton.Item buttonColor={bluish} title={myAccount} onPress={onMyAccount} textContainerStyle={style.textContainer} textStyle={style.text}>
       <Icon name={'md-stats'} style={style.icon} />
     </ActionButton.Item>
-    <ActionButton.Item buttonColor={bluish} title={aboutLndr} onPress={onMyLndr}>
+    <ActionButton.Item buttonColor={bluish} title={aboutLndr} onPress={onMyLndr} textContainerStyle={style.textContainer} textStyle={style.text}>
       <Icon name={'md-moon'} style={style.icon} />
     </ActionButton.Item>
-    <ActionButton.Item buttonColor={bluish} title={getHelp} onPress={onGetHelp}>
+    <ActionButton.Item buttonColor={bluish} title={getHelp} onPress={onGetHelp} textContainerStyle={style.textContainer} textStyle={style.text}>
       <Icon name={'md-help'} style={style.icon} />
     </ActionButton.Item>
   </ActionButton>

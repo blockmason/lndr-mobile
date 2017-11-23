@@ -2,7 +2,7 @@ import { StyleSheet, Platform } from 'react-native'
 
 import { radius } from 'theme/include/borders'
 import { wide, bold, lmedium, large, medium, small, xsmall, monospace } from 'theme/include/fonts'
-import { xxl, l, m, s, xs, verticalMargin } from 'theme/include/spacing'
+import { xxl, ml, l, m, s, xs, verticalMargin } from 'theme/include/spacing'
 import { softGray, black, gray, white, moneyGreen, goodDark, danger } from 'theme/include/colors'
 
 export default StyleSheet.create({
@@ -45,7 +45,7 @@ export default StyleSheet.create({
 
   topText: {
     alignSelf: 'center',
-    paddingTop: Platform.OS === 'ios' ? l : m,
+    paddingTop: Platform.OS === 'ios' ? ml : m,
     paddingBottom: m,
     color: black,
     backgroundColor: white,
