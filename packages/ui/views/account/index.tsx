@@ -10,6 +10,8 @@ import Badge from 'ui/components/badge'
 
 import AndroidStatusBar from 'ui/components/android-status-bar'
 
+import Loading, { LoadingContext } from 'ui/components/loading'
+
 import HomeView from './home'
 import FriendsView from './friends'
 import ActivityView from './activity'
@@ -18,6 +20,8 @@ import general from 'theme/general'
 import style from 'theme/account'
 
 import { accountViewLanguage } from 'language'
+
+const loadingContext = new LoadingContext()
 
 interface Props {
   engine: Engine
@@ -29,12 +33,14 @@ export default class AccountView extends Component<Props> {
   friends: any
   tabs: any
 
-  componentDidMount() {
-    InteractionManager.runAfterInteractions(() => {
-      const { engine } = this.props
-      engine.checkPendingUser()
-      engine.clearSuccess()
-    });
+  async componentDidMount() {
+    await loadingContext.wrap(
+      InteractionManager.runAfterInteractions(() => {
+        const { engine } = this.props
+        engine.checkPendingUser()
+        engine.clearSuccess()
+      })
+    )
   }
 
   getPendingBadge() {
@@ -59,6 +65,7 @@ export default class AccountView extends Component<Props> {
 
     return <View style={[general.flex, style.whiteBackground]}>
       <AndroidStatusBar />
+      <Loading context={loadingContext} />
       <Text style={style.topText}>{accountViewLanguage.lndr}</Text>
       <Tabs ref={tabs => this.tabs = tabs}>
         <Tab reference='home' text={accountViewLanguage.home} onRefresh={() => this.home.refresh()}>
