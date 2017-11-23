@@ -194,19 +194,6 @@ export default class HomeView extends Component<Props, State> {
       <Section>
         <Button action onPress={() => this.showAddDebt()} text={addNewDebt} />
       </Section>
-      <Section text='My Balances' contentContainerStyle={style.list}>
-        <Loading context={loadingBalances} />
-        {balancesLoaded && balances.length === 0 ? <Text style={style.emptyState}>{noBalances}</Text> : null}
-        {balances.map(
-          balance => (
-            <BalanceRow
-              key={balance.relativeTo}
-              balance={balance}
-              onPress={() => this.setState({ balanceToView: balance })}
-            />
-          )
-        )}
-      </Section>
     </View>
   }
 }
