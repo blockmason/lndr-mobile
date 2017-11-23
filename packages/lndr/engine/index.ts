@@ -36,6 +36,7 @@ export interface EngineState {
   shouldConfirmAccount?: boolean
   welcomeComplete?: boolean
   mnemonicInstance?: any // TODO why is this any?
+  nickname?: string
   password?: string
   errorMessage?: string
   successMessage?: string
@@ -117,9 +118,8 @@ export default class Engine {
 
     const password = accountData.password
     const mnemonicInstance = creditProtocol.getRandomMnemonic()
-    this.state = { password: password, mnemonicInstance: mnemonicInstance }
+    this.state = { nickname: accountData.nickname, password: password, mnemonicInstance: mnemonicInstance }
     await this.confirmAccount()
-    this.updateAccount({nickname: accountData.nickname})
   }
 
   get user(): User {
@@ -459,9 +459,9 @@ export default class Engine {
   }
 
   async checkPendingUser() {
-    const { hasPendingUser } = this.state
+    const { hasPendingUser, nickname } = this.state
 
-    if (hasPendingUser) {
+    if (hasPendingUser && nickname) {
 
       const { password, mnemonicInstance } = this.state
 
@@ -471,9 +471,10 @@ export default class Engine {
 
       const user = await this.createUserFromCredentials(mnemonicInstance, privateKeyBuffer, hashedPassword)
 
-      this.storeUserSession(user)
-
       this.state = { user, hasStoredUser: true, hasPendingUser: false }
+
+      this.storeUserSession(user)
+      this.updateAccount({nickname: nickname!})
     }
   }
 
