@@ -3,6 +3,7 @@ import { StyleSheet } from 'react-native'
 import { medium } from 'theme/include/fonts'
 
 import { charcoal, gray, bluish, light } from 'theme/include/colors'
+import { smallPad } from 'theme/include/spacing'
 
 export default StyleSheet.create({
   topView: {
@@ -11,7 +12,8 @@ export default StyleSheet.create({
   },
   tabsContainer: {
     flexDirection: 'row',
-    backgroundColor: light
+    backgroundColor: light,
+    ...smallPad
   },
   tabContainer: {
     flex: 1
@@ -21,8 +23,9 @@ export default StyleSheet.create({
   },
   tab: {
     borderLeftWidth: 1,
-    borderTopWidth: 1,
-    borderBottomWidth: 1,
+    borderTopWidth: 2,
+    borderBottomWidth: 2,
+    borderRightWidth: 1,
     marginTop: 3,
     height: 50,
     alignItems: 'center',
