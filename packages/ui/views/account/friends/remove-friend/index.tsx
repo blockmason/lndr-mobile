@@ -66,7 +66,7 @@ export default class RemoveFriend extends Component<Props, State> {
     const { balance , balanceLoaded } = this.state
     // TODO this must be changed, placed here for testing purposes
     if (!balanceLoaded) {
-      return <Text>"wait"</Text>
+      return <Text>"Loading Friend Info..."</Text>
     } else {
       return <BalanceRow
               key={balance.relativeTo}

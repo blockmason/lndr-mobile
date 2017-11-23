@@ -12,7 +12,7 @@ import AndroidStatusBar from 'ui/components/android-status-bar'
 
 import HomeView from './home'
 import FriendsView from './friends'
-import ActivityView from './activity'
+import PendingView from './activity/pending'
 
 import general from 'theme/general'
 import style from 'theme/account'
@@ -27,6 +27,7 @@ interface Props {
 export default class AccountView extends Component<Props> {
   home: any
   friends: any
+  pending: any
   tabs: any
 
   getPendingBadge() {
@@ -59,8 +60,8 @@ export default class AccountView extends Component<Props> {
         <Tab reference='friends' text={accountViewLanguage.friends} onRefresh={() => this.friends.refresh()}>
           <FriendsView engine={engine} ref={friends => this.friends = friends} />
         </Tab>
-        <Tab noscroll reference='activity' text={accountViewLanguage.activity} badge={this.getPendingBadge()}>
-          <ActivityView engine={engine} />
+        <Tab reference='pending' text={accountViewLanguage.activity} badge={this.getPendingBadge()}>
+          <PendingView engine={engine} ref={pending => this.pending = pending} />
         </Tab>
       </Tabs>
       <ActionButton

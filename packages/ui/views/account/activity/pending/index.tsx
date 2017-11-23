@@ -30,7 +30,6 @@ interface State {
 }
 
 export default class PendingTransactionsView extends Component<Props, State> {
-  stillRelevant?: boolean
 
   constructor() {
     super()
@@ -41,18 +40,13 @@ export default class PendingTransactionsView extends Component<Props, State> {
   }
 
   async componentDidMount() {
-    this.stillRelevant = true
     const { engine } = this.props
     const pendingTransactions = await loadingPendingTransactions.wrap(engine.getPendingTransactions())
-    this.stillRelevant && this.setState({ pendingTransactionsLoaded: true, pendingTransactions })
+    this.setState({ pendingTransactionsLoaded: true, pendingTransactions })
   }
 
   refresh() {
     this.componentDidMount()
-  }
-
-  componentWillUnmount() {
-    this.stillRelevant = false
   }
 
   closePopupAndRefresh() {
@@ -80,14 +74,13 @@ export default class PendingTransactionsView extends Component<Props, State> {
 
   render() {
     const { pendingTransactionsLoaded, pendingTransactions } = this.state
-    
     const { engine } = this.props
     const { user } = engine
 
     return <View>
       { this.renderPendingTransactionDetailDialog() }
 
-      <Section contentContainerStyle={style.list}>
+      <Section text='Pending Transactions' contentContainerStyle={style.list}>
         <Loading context={loadingPendingTransactions} />
         {pendingTransactionsLoaded && pendingTransactions.length === 0 ? <Text style={style.emptyState}>{pendingTransactionsLanguage.none}</Text> : null}
         {pendingTransactions.map(
