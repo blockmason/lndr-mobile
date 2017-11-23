@@ -33,7 +33,7 @@ export default ({ onLogout, onMyAccount, onGetHelp, onMyLndr }: Props) => (
       <Icon name={'md-stats'} style={style.icon} />
     </ActionButton.Item>
     <ActionButton.Item buttonColor={bluish} title={aboutLndr} onPress={onMyLndr} textContainerStyle={style.textContainer} textStyle={style.text}>
-      <Icon name={'md-moon'} style={style.icon} />
+      <Icon name={'md-contacts'} style={style.icon} />
     </ActionButton.Item>
     <ActionButton.Item buttonColor={bluish} title={getHelp} onPress={onGetHelp} textContainerStyle={style.textContainer} textStyle={style.text}>
       <Icon name={'md-help'} style={style.icon} />
