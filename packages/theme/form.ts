@@ -2,7 +2,7 @@ import { StyleSheet } from 'react-native'
 
 import { l, m, s, xLargePad, smallPad, mediumPad, verticalMargin } from 'theme/include/spacing'
 import { xlarge, large, medium, xsmall, bold } from 'theme/include/fonts'
-import { gray, softGray, warning, warningDark } from 'theme/include/colors'
+import { gray, softGray, warning, warningDark, black } from 'theme/include/colors'
 import { attention, radius } from 'theme/include/borders'
 import { center } from 'theme/include/align'
 
@@ -17,7 +17,8 @@ export default StyleSheet.create({
   formTitle: {
     ...xlarge,
     ...verticalMargin,
-    ...center
+    ...center,
+    color: black
   },
   horizontalView: {
     flexDirection: 'row',
@@ -66,7 +67,8 @@ export default StyleSheet.create({
     ...verticalMargin,
     ...mediumPad,
     borderColor: gray,
-    borderWidth: 1
+    borderWidth: 1,
+    width: '50%'
   },
   multilineTextInput: {
     ...medium,
