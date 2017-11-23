@@ -1,6 +1,6 @@
 import { StyleSheet } from 'react-native'
 
-import { dark, light, white, gray } from 'theme/include/colors'
+import { light, white, gray } from 'theme/include/colors'
 
 export default StyleSheet.create({
   topView: {

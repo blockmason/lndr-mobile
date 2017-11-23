@@ -16,10 +16,13 @@ import Storage from 'lndr/storage'
 
 import { accountManagement, debtManagement } from 'language'
 
+const bcrypt = require('bcryptjs')
+
+const privateKeyStorage = new Storage('privateKey')
 const mnemonicStorage = new Storage('mnemonic')
 const hashedPasswordStorage = new Storage('hashed-password')
 
-export const PASSWORD_SALT = 'THIS_IS_A_SALT_5426892348596723645879243876'
+export const SALT_SIZE = 8
 
 const creditProtocol = new CreditProtocol('http://34.202.214.156')
 
@@ -27,6 +30,7 @@ export interface EngineState {
   user?: User,
   isInitializing?: boolean
   hasStoredUser?: boolean
+  hasPendingUser? :boolean
   shouldRecoverAccount?: boolean
   shouldRemoveAccount?: boolean
   shouldConfirmAccount?: boolean
@@ -56,7 +60,8 @@ export default class Engine {
       welcomeComplete: false,
       shouldRecoverAccount: false,
       shouldRemoveAccount: false,
-      shouldConfirmAccount: false
+      shouldConfirmAccount: false,
+      hasPendingUser: false
     }
   }
 
@@ -123,26 +128,31 @@ export default class Engine {
 
   async getBalances() {
     const { address } = this.user
-    const rawCounterparties = await creditProtocol.getCounterparties(address)
-    const uniqueCounterparties = {}
+
     const balances: Balance[] = []
 
-    await Promise.all(
-      rawCounterparties.map(async (rawCounterparty) => {
-        const counterpartyAddress = rawCounterparty.replace('0x', '')
-        if (!(counterpartyAddress in uniqueCounterparties)) {
-          uniqueCounterparties[counterpartyAddress] = true
-          try {
-            const amount = await creditProtocol.getBalanceBetween(address, counterpartyAddress)
-            const relativeToNickname = await this.getNicknameForAddress(counterpartyAddress)
-            balances.push(new Balance({ relativeToNickname, relativeTo: counterpartyAddress, amount }))
+    if (address) {
+
+      const rawCounterparties = await creditProtocol.getCounterparties(address)
+      const uniqueCounterparties = {}
+
+      await Promise.all(
+        rawCounterparties.map(async (rawCounterparty) => {
+          const counterpartyAddress = rawCounterparty.replace('0x', '')
+          if (!(counterpartyAddress in uniqueCounterparties)) {
+            uniqueCounterparties[counterpartyAddress] = true
+            try {
+              const amount = await creditProtocol.getBalanceBetween(address, counterpartyAddress)
+              const relativeToNickname = await this.getNicknameForAddress(counterpartyAddress)
+              balances.push(new Balance({ relativeToNickname, relativeTo: counterpartyAddress, amount }))
+            }
+            catch (e) {
+              this.setErrorMessage(debtManagement.balances.error)
+            }
           }
-          catch (e) {
-            this.setErrorMessage(debtManagement.balances.error)
-          }
-        }
-      })
-    )
+        })
+      )
+    }
 
     return balances
   }
@@ -151,17 +161,21 @@ export default class Engine {
     const { address } = this.user
     const accountInformation: { nickname?: string, balance?: number } = {}
 
-    try {
-      accountInformation.nickname = await creditProtocol.getNickname(address)
+    if (address) {
+
+      try {
+        accountInformation.nickname = await creditProtocol.getNickname(address)
+      }
+
+      catch (e) {}
+
+      try {
+        accountInformation.balance = await creditProtocol.getBalance(address)
+      }
+
+      catch (e) {}
+
     }
-
-    catch (e) {}
-
-    try {
-      accountInformation.balance = await creditProtocol.getBalance(address)
-    }
-
-    catch (e) {}
 
     return accountInformation
   }
@@ -256,10 +270,13 @@ export default class Engine {
 
   async getFriends() {
     const { address } = this.user
-    const friends = await creditProtocol.getFriends(address)
-    const result = friends.map(this.jsonToFriend)
-    await this.ensureNicknames(result)
-    return result
+
+    if (address) {
+      const friends = await creditProtocol.getFriends(address)
+      const result = friends.map(this.jsonToFriend)
+      await this.ensureNicknames(result)
+      return result
+    }
   }
 
   async searchUsers(searchData) {
@@ -283,19 +300,25 @@ export default class Engine {
 
   async getRecentTransactions() {
     const { address } = this.user
-    const rawRecentTransactions = await creditProtocol.getTransactions(address)
-    const recentTransactions = rawRecentTransactions.map(this.jsonToRecentTransaction)
-    await this.ensureTransactionNicknames(recentTransactions)
-    return recentTransactions
+
+    if (address) {
+      const rawRecentTransactions = await creditProtocol.getTransactions(address)
+      const recentTransactions = rawRecentTransactions.map(this.jsonToRecentTransaction)
+      await this.ensureTransactionNicknames(recentTransactions)
+      return recentTransactions
+    }
   }
 
   async getPendingTransactions() {
     const { address } = this.user
-    const rawPendingTransactions = await creditProtocol.getPendingTransactions(address)
-    const pendingTransactions = rawPendingTransactions.map(this.jsonToPendingTransaction)
-    await this.ensureTransactionNicknames(pendingTransactions)
-    this.state = { pendingTransactionsCount: pendingTransactions.length }
-    return pendingTransactions
+
+    if (address) {
+      const rawPendingTransactions = await creditProtocol.getPendingTransactions(address)
+      const pendingTransactions = rawPendingTransactions.map(this.jsonToPendingTransaction)
+      await this.ensureTransactionNicknames(pendingTransactions)
+      this.state = { pendingTransactionsCount: pendingTransactions.length }
+      return pendingTransactions
+    }
   }
 
   async confirmPendingTransaction(pendingTransaction: PendingTransaction) {
@@ -410,24 +433,19 @@ export default class Engine {
     this.state = { shouldConfirmAccount: false }
   }
 
-  createUserFromCredentials(mnemonicInstance, password, hashed = '') {
+  generateHashedPassword(password) {
+    const salt = bcrypt.genSaltSync(SALT_SIZE)
+    return bcrypt.hashSync(password, salt)
+  }
 
-    var hashedPassword = hashed
-
-    if (hashed.length === 0) {
-      hashedPassword = Array.from(mnemonicInstance.toSeed(PASSWORD_SALT + password)).join('.')
-    }
-
+  async createUserFromCredentials(mnemonicInstance, privateKeyBuffer, hashedPassword) {
     const mnemonic = mnemonicInstance.toString()
-    const privateKey = mnemonicInstance.toHDPrivateKey(password)
-    const privateKeyBuffer = privateKey.privateKey.toBuffer()
     const ethAddress = ethUtil.privateToAddress(privateKeyBuffer)
     const address = ethAddress.toString('hex')
 
     return new User(
       mnemonic,
       hashedPassword,
-      privateKey,
       privateKeyBuffer,
       ethAddress,
       address
@@ -435,15 +453,32 @@ export default class Engine {
   }
 
   async storeUserSession(user: User) {
+    await privateKeyStorage.set(JSON.stringify(user.privateKeyBuffer))
     await mnemonicStorage.set(user.mnemonic)
     await hashedPasswordStorage.set(user.hashedPassword)
   }
 
-  async confirmAccount() {
-    const { password, mnemonicInstance } = this.state
-    const user = this.createUserFromCredentials(mnemonicInstance, password)
-    await this.storeUserSession(user)
-    this.state = { user, hasStoredUser: true, shouldConfirmAccount: false }
+  async checkPendingUser() {
+    const { hasPendingUser } = this.state
+
+    if (hasPendingUser) {
+
+      const { password, mnemonicInstance } = this.state
+
+      const hashedPassword = this.generateHashedPassword(password)
+      const privateKey = await mnemonicInstance.toHDPrivateKey(password)
+      const privateKeyBuffer = privateKey.privateKey.toBuffer()
+
+      const user = await this.createUserFromCredentials(mnemonicInstance, privateKeyBuffer, hashedPassword)
+
+      this.storeUserSession(user)
+
+      this.state = { user, hasStoredUser: true, hasPendingUser: false }
+    }
+  }
+
+  confirmAccount() {
+    this.state = { hasPendingUser: true, shouldConfirmAccount: false }
   }
 
   async loginAccount(loginData: LoginAccountData) {
@@ -451,13 +486,15 @@ export default class Engine {
     const mnemonic = await mnemonicStorage.get()
     const mnemonicInstance = creditProtocol.getMnemonic(mnemonic)
     const hashedPasswordReference = await hashedPasswordStorage.get()
-    const hashedPassword = Array.from(mnemonicInstance.toSeed(PASSWORD_SALT + confirmPassword)).join('.')
 
-    if (hashedPassword !== hashedPasswordReference) {
+    const isPasswordValid = await bcrypt.compareSync(confirmPassword, hashedPasswordReference)
+
+    if (!isPasswordValid) {
       return this.setErrorMessage(accountManagement.password.failedHashComparison)
     }
 
-    const user = this.createUserFromCredentials(mnemonicInstance, confirmPassword, hashedPassword)
+    const privateKey = JSON.parse(await privateKeyStorage.get())
+    const user = await this.createUserFromCredentials(mnemonicInstance, privateKey.data, hashedPasswordReference)
     this.state = { user, hasStoredUser: true }
     this.getPendingTransactions()
   }
@@ -489,6 +526,7 @@ export default class Engine {
   }
 
   async removeAccount() {
+    await privateKeyStorage.remove()
     await mnemonicStorage.remove()
     await hashedPasswordStorage.remove()
     this.state = { hasStoredUser: false, shouldRemoveAccount: false }

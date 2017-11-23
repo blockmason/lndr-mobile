@@ -78,7 +78,8 @@ export const accountManagement = {
     error: generalCommunicationError
   },
   loadInformation: {
-    error: generalCommunicationError
+    error: generalCommunicationError,
+    setup: 'Securely setting up your LNDR account'
   }
 }
 

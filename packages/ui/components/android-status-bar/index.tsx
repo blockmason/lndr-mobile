@@ -2,7 +2,7 @@ import React from 'react'
 
 import { StatusBar } from 'react-native'
 
-import { dark } from 'theme/include/colors'
+import { gray } from 'theme/include/colors'
 
 interface Props {
   color?: string
@@ -10,7 +10,7 @@ interface Props {
 }
 
 const getColor = ( color ) => {
-  return color ? color : dark
+  return color ? color : gray
 }
 
 export default ({ color, hidden }: Props) => (

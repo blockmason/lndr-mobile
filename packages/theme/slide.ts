@@ -1,6 +1,6 @@
 import { StyleSheet } from 'react-native'
 
-import { dark, light, white, gray } from 'theme/include/colors'
+import { light, white, gray } from 'theme/include/colors'
 import { percent } from 'theme/include/dimensions'
 
 export default StyleSheet.create({

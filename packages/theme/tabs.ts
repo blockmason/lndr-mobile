@@ -2,7 +2,7 @@ import { StyleSheet } from 'react-native'
 
 import { medium } from 'theme/include/fonts'
 
-import { charcoal, lightGray, gray, dark, light, transparent } from 'theme/include/colors'
+import { charcoal, gray, bluish, light } from 'theme/include/colors'
 
 export default StyleSheet.create({
   topView: {
@@ -11,9 +11,6 @@ export default StyleSheet.create({
   },
   tabsContainer: {
     flexDirection: 'row',
-    backgroundColor: dark
-  },
-  tabsContainerAlternate: {
     backgroundColor: light
   },
   tabContainer: {
@@ -23,12 +20,12 @@ export default StyleSheet.create({
     flex: 1
   },
   tab: {
-    paddingTop: 5,
-    paddingBottom: 5,
+    borderLeftWidth: 1,
+    borderTopWidth: 1,
+    borderBottomWidth: 1,
+    marginTop: 3,
     height: 50,
     alignItems: 'center',
-    borderBottomWidth: 3,
-    borderBottomColor: transparent,
     justifyContent: 'center'
   },
   tabContent: {
@@ -36,25 +33,14 @@ export default StyleSheet.create({
     alignItems: 'center'
   },
   tabActive: {
-    borderBottomWidth: 3,
-    borderBottomColor: light
+    backgroundColor: bluish,
   },
   text: {
     color: charcoal,
     ...medium
   },
   textActive: {
-    color: light,
+    color: charcoal,
     fontWeight: 'bold'
-  },
-  tabActiveAlternate: {
-    borderBottomWidth: 2,
-    borderBottomColor: lightGray
-  },
-  textAlternate: {
-    color: lightGray
-  },
-  textActiveAlternate: {
-    color: charcoal
   }
 } as any)

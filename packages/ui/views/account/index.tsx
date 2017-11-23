@@ -2,7 +2,7 @@ import React, { Component } from 'react'
 
 import Engine from 'lndr/engine'
 
-import { View, Text } from 'react-native'
+import { View, Text, InteractionManager } from 'react-native'
 
 import Tabs, { Tab } from 'ui/components/tabs'
 import ActionButton from 'ui/components/action-button'
@@ -26,6 +26,14 @@ export default class AccountView extends Component<Props> {
   home: any
   friends: any
   tabs: any
+
+  componentDidMount() {
+    InteractionManager.runAfterInteractions(() => {
+      const { engine } = this.props
+      engine.checkPendingUser()
+      engine.clearSuccess()
+    });
+  }
 
   getPendingBadge() {
     const { pendingTransactionsCount } = this.props
