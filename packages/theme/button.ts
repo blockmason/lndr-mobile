@@ -4,7 +4,7 @@ import { mediumPad, verticalMargin } from 'theme/include/spacing'
 import { center } from 'theme/include/align'
 import { radius } from 'theme/include/borders'
 import { small, wide, bold } from 'theme/include/fonts'
-import { light, gray, danger, transparent } from 'theme/include/colors'
+import { light, gray, danger, transparent, moneyGreen } from 'theme/include/colors'
 
 export default StyleSheet.create({
   button: {
@@ -45,6 +45,10 @@ export default StyleSheet.create({
   },
 
   buttonAlternate: {
+  },
+
+  buttonAction: {
+    backgroundColor: moneyGreen
   },
 
   text: {

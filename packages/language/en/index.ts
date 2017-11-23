@@ -30,6 +30,7 @@ export const welcomeBack = nickname => `Welcome back, @${nickname}!`
 export const noBalanceWarning = 'We were not able to load your balance at this time, please try again later.'
 export const totalBalance = 'Total Balance: '
 export const totalBalances = 'Total Counterparties: '
+export const addNewDebt = 'Add New Debt'
 
 export const newPassword = 'New Password (minimum 8 chars)'
 export const confirmPassword = 'Confirm Password'
