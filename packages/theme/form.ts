@@ -1,9 +1,10 @@
 import { StyleSheet } from 'react-native'
 
-import { l, m, s, xLargePad, verticalMargin } from 'theme/include/spacing'
-import { medium, xsmall, bold } from 'theme/include/fonts'
+import { l, m, s, xLargePad, smallPad, mediumPad, verticalMargin } from 'theme/include/spacing'
+import { xlarge, large, medium, xsmall, bold } from 'theme/include/fonts'
 import { gray, softGray, warning, warningDark } from 'theme/include/colors'
 import { attention, radius } from 'theme/include/borders'
+import { center } from 'theme/include/align'
 
 export default StyleSheet.create({
   form: {
@@ -12,6 +13,18 @@ export default StyleSheet.create({
   text: {
     ...medium,
     ...verticalMargin
+  },
+  formTitle: {
+    ...xlarge,
+    ...verticalMargin,
+    ...center
+  },
+  horizontalView: {
+    flexDirection: 'row',
+    ...center
+  },
+  horizontalElem: {
+    ...mediumPad
   },
   warningText: {
     paddingVertical: s,
@@ -47,6 +60,13 @@ export default StyleSheet.create({
   textInput: {
     ...medium,
     ...verticalMargin
+  },
+  borderTextInput: {
+    ...medium,
+    ...verticalMargin,
+    ...mediumPad,
+    borderColor: gray,
+    borderWidth: 1
   },
   multilineTextInput: {
     ...medium,

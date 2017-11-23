@@ -12,12 +12,12 @@ import Popup, { closePopup } from 'ui/components/popup'
 import Loading, { LoadingContext } from 'ui/components/loading'
 import FriendRow from 'ui/components/friend-row'
 
-import AddFriend from 'ui/dialogs/add-friend'
-import RemoveFriend from 'ui/dialogs/remove-friend'
+import AddFriend from './add-friend'
+import RemoveFriend from './remove-friend'
 
 import style from 'theme/account'
 
-import { addFriend, noFriends } from 'language'
+import { addFriend, noFriends, currentFriends } from 'language'
 
 const loadingFriends = new LoadingContext()
 
@@ -26,7 +26,6 @@ interface Props {
 }
 
 interface State {
-  shouldShowAddFriend: boolean
   friendsLoaded: boolean
   friends: Friend[]
   friendToRemove?: Friend
@@ -38,7 +37,6 @@ export default class FriendsView extends Component<Props, State> {
   constructor() {
     super()
     this.state = {
-      shouldShowAddFriend: false,
       friendsLoaded: false,
       friends: []
     }
@@ -64,20 +62,6 @@ export default class FriendsView extends Component<Props, State> {
     this.refresh()
   }
 
-  renderAddFriendDialog() {
-    const { shouldShowAddFriend } = this.state
-
-    if (!shouldShowAddFriend) {
-      return null
-    }
-
-    const { engine } = this.props
-
-    return <Popup onClose={() => this.setState({ shouldShowAddFriend: false })}>
-      <AddFriend closePopup={() => this.closePopupAndRefresh()} engine={engine} />
-    </Popup>
-  }
-
   renderRemoveFriendDialog() {
     const { friendToRemove } = this.state
 
@@ -92,18 +76,16 @@ export default class FriendsView extends Component<Props, State> {
     </Popup>
   }
 
-  showAddFriend() {
-    this.setState({ shouldShowAddFriend: true })
-  }
-
   render() {
     const { friendsLoaded, friends } = this.state
+    const { engine } = this.props
 
     return <View>
-      { this.renderAddFriendDialog() }
       { this.renderRemoveFriendDialog() }
-
-      <Section text='Current Friends' contentContainerStyle={style.list}>
+      <Section>
+        <AddFriend onSuccess={() => this.refresh()} engine={engine} />
+      </Section>
+      <Section text={currentFriends} contentContainerStyle={style.list}>
         <Loading context={loadingFriends} />
         {friendsLoaded && friends.length === 0 ? <Text style={style.emptyState}>{noFriends}</Text> : null}
         {friends.map(

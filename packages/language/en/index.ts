@@ -18,6 +18,7 @@ export const logoutAction = 'Lock Account'
 export const addFriend = 'Add Friend'
 export const addFriendConfirmationQuestion = 'Are you sure you would like to add this user as a friend?'
 export const removeFriend = 'Remove Friend'
+export const currentFriends = 'Current Friends'
 export const removeFriendConfirmationQuestion = 'Are you sure you would like to remove this user as a friend?'
 export const noFriends = 'You have no friends'
 export const noMatches = 'No matching users found'
@@ -54,7 +55,8 @@ export const getHelp = 'Get Help'
 export const setNickname = 'Set a nickname so your friends can find you'
 export const nickname = 'Nickname'
 
-export const searchUsersByNickname = 'Search for your friends by nickname'
+export const addANewFriend = 'Add a New Friend'
+export const lndrNickname = 'Lndr Nickname:'
 
 export const accountManagement = {
   password: {
