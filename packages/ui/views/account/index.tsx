@@ -65,9 +65,9 @@ export default class AccountView extends Component<Props> {
       </Tabs>
       <ActionButton
         onLogout={() => engine.logoutAccount()}
-        onMyAccount={() => this.tabs.switchTo('home').then(() => this.home.showMyAccount())}
-        onAddFriend={() => this.tabs.switchTo('friends').then(() => this.friends.showAddFriend())}
-        onAddDebt={() => this.tabs.switchTo('home').then(() => this.home.showAddDebt())}
+        onMyAccount={() => this.home.showMyAccount()}
+        onMyLndr={() => {}}
+        onGetHelp={() => {}}
       />
     </View>
   }
