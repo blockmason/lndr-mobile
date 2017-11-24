@@ -18,7 +18,9 @@ export const logoutAction = 'Lock Account'
 export const addFriend = 'Add Friend'
 export const addFriendConfirmationQuestion = 'Are you sure you would like to add this user as a friend?'
 export const removeFriend = 'Remove Friend'
+export const currentFriends = 'Current Friends'
 export const removeFriendConfirmationQuestion = 'Are you sure you would like to remove this user as a friend?'
+export const friendInfo = 'More information about this friendship:'
 export const noFriends = 'You have no friends'
 export const noMatches = 'No matching users found'
 export const noBalances = 'You have no recorded debts'
@@ -30,6 +32,7 @@ export const welcomeBack = nickname => `Welcome back, @${nickname}!`
 export const noBalanceWarning = 'We were not able to load your balance at this time, please try again later.'
 export const totalBalance = 'Total Balance: '
 export const totalBalances = 'Total Counterparties: '
+export const addNewDebt = 'Add New Debt'
 
 export const newPassword = 'New Password (minimum 8 chars)'
 export const confirmPassword = 'Confirm Password'
@@ -47,13 +50,14 @@ export const removeAccountTitle = 'Are you sure you would like to remove your ac
 export const removeAccountExhortation = 'Be sure that you have access to your mnemonic to restore your account later, as this is a permanent removal of your account information from this device.'
 
 export const myAccount = 'My Account'
-export const addNewFriend = 'Add Friend'
-export const addNewDebt = 'Add Debt'
+export const aboutLndr = 'About Lndr'
+export const getHelp = 'Get Help'
 
 export const setNickname = 'Set a nickname so your friends can find you'
 export const nickname = 'Nickname'
 
-export const searchUsersByNickname = 'Search for your friends by nickname'
+export const addANewFriend = 'Add a New Friend'
+export const lndrNickname = 'Lndr Nickname:'
 
 export const accountManagement = {
   password: {
@@ -130,6 +134,7 @@ export const debtManagement = {
 }
 
 export const accountViewLanguage = {
+  lndr: 'L n d r',
   home: 'Home',
   friends: 'Friends',
   activity: 'Activity'

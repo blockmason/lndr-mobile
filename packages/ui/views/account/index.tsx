@@ -8,9 +8,11 @@ import Tabs, { Tab } from 'ui/components/tabs'
 import ActionButton from 'ui/components/action-button'
 import Badge from 'ui/components/badge'
 
+import AndroidStatusBar from 'ui/components/android-status-bar'
+
 import HomeView from './home'
 import FriendsView from './friends'
-import ActivityView from './activity'
+import PendingView from './activity/pending'
 
 import general from 'theme/general'
 import style from 'theme/account'
@@ -25,6 +27,7 @@ interface Props {
 export default class AccountView extends Component<Props> {
   home: any
   friends: any
+  pending: any
   tabs: any
 
   getPendingBadge() {
@@ -47,23 +50,25 @@ export default class AccountView extends Component<Props> {
     const { engine } = this.props
 
 
-    return <View style={general.flex}>
-      <Tabs tabContainerStyle={style.tabs} ref={tabs => this.tabs = tabs}>
+    return <View style={[general.flex, style.whiteBackground]}>
+      <AndroidStatusBar />
+      <Text style={style.topText}>{accountViewLanguage.lndr}</Text>
+      <Tabs ref={tabs => this.tabs = tabs}>
         <Tab reference='home' text={accountViewLanguage.home} onRefresh={() => this.home.refresh()}>
           <HomeView engine={engine} ref={home => this.home = home} />
         </Tab>
         <Tab reference='friends' text={accountViewLanguage.friends} onRefresh={() => this.friends.refresh()}>
           <FriendsView engine={engine} ref={friends => this.friends = friends} />
         </Tab>
-        <Tab noscroll reference='activity' text={accountViewLanguage.activity} badge={this.getPendingBadge()}>
-          <ActivityView engine={engine} />
+        <Tab reference='pending' text={accountViewLanguage.activity} badge={this.getPendingBadge()}>
+          <PendingView engine={engine} ref={pending => this.pending = pending} />
         </Tab>
       </Tabs>
       <ActionButton
         onLogout={() => engine.logoutAccount()}
         onMyAccount={() => this.tabs.switchTo('home').then(() => this.home.showMyAccount())}
-        onAddFriend={() => this.tabs.switchTo('friends').then(() => this.friends.showAddFriend())}
-        onAddDebt={() => this.tabs.switchTo('home').then(() => this.home.showAddDebt())}
+        onMyLndr={() => {}}
+        onGetHelp={() => {}}
       />
     </View>
   }

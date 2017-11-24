@@ -10,12 +10,12 @@ import Button from 'ui/components/button'
 import Loading, { LoadingContext } from 'ui/components/loading'
 import FriendRow from 'ui/components/friend-row'
 
-import { lightGray } from 'theme/include/colors'
-import style from 'theme/account'
-import formStyle from 'theme/form'
+import style from 'theme/form'
+import buttonAction from 'theme/button'
 
 import {
-  searchUsersByNickname,
+  lndrNickname,
+  addANewFriend,
   nickname,
   cancel,
   back,
@@ -28,7 +28,7 @@ const loadingContext = new LoadingContext()
 
 interface Props {
   engine: Engine
-  closePopup: () => void
+  onSuccess: () => void
 }
 
 interface State {
@@ -68,55 +68,62 @@ export default class AddFriend extends Component<Props, State> {
     )
   }
 
+  removeCandidateForFriendship() {
+    this.setState({ candidateForFriendship: undefined, hasSearchTerm: false })
+  }
+
   async confirmFriend(friend: Friend) {
-    const { engine, closePopup } = this.props
+    const { engine, onSuccess } = this.props
 
     await loadingContext.wrap(
       engine.addFriend(friend)
     )
 
-    closePopup()
+    this.removeCandidateForFriendship()
+    onSuccess()
   }
 
   render() {
-    const { closePopup } = this.props
     const { matches, hasSearchTerm, candidateForFriendship } = this.state
 
     if (candidateForFriendship) {
-      return <View>
-        <Text style={formStyle.text}>{addFriendConfirmationQuestion}</Text>
+      return <View style={style.form}>
+        <Text style={style.text}>{addFriendConfirmationQuestion}</Text>
           <Loading context={loadingContext} />
           <FriendRow
             key={candidateForFriendship.address}
             friend={candidateForFriendship}
           />
-          <Button onPress={() => this.confirmFriend(candidateForFriendship)} text={addFriend} />
-          <Button alternate onPress={() => this.setState({ candidateForFriendship: undefined })} text={back} />
+          <Button action onPress={() => this.confirmFriend(candidateForFriendship)} text={addFriend} />
+          <Button alternate onPress={() => this.removeCandidateForFriendship()} text={back} />
       </View>
     }
 
     return <View>
-      <Text style={formStyle.text}>{searchUsersByNickname}</Text>
-      <TextInput
-        autoCapitalize='none'
-        style={formStyle.textInput}
-        placeholder={nickname}
-        onChangeText={text => this.searchAction(text)}
-      />
-      <View style={style.list}>
-        <Loading context={loadingContext} />
-        {hasSearchTerm && matches.length === 0 ? <Text style={style.emptyState}>{noMatches}</Text> : null}
-        {matches.map(
-          match => (
-            <FriendRow
-              key={match.address}
-              friend={match}
-              onPress={() => this.setState({ candidateForFriendship: match })}
-            />
-          )
-        )}
+      <Text style={style.formTitle}>{addANewFriend}</Text>
+      <View style={style.horizontalView}>
+        <Text style={[ style.text, style.horizontalElem ]}>{lndrNickname}</Text>
+        <TextInput
+          autoCapitalize='none'
+          style={style.borderTextInput}
+          placeholder={nickname}
+          onChangeText={text => this.searchAction(text)}
+        />
       </View>
-      <Button alternate onPress={closePopup} text={cancel} />
+      { hasSearchTerm &&
+        <View style={style.list}>
+          <Loading context={loadingContext} />
+          {hasSearchTerm && matches.length === 0 ? <Text style={style.emptyState}>{noMatches}</Text> : null}
+          {matches.map(
+            match => (
+              <FriendRow
+                key={match.address}
+                friend={match}
+                onPress={() => this.setState({ candidateForFriendship: match })}
+              />
+            )
+          )}
+        </View>}
     </View>
   }
 }

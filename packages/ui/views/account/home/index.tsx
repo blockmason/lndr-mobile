@@ -1,3 +1,5 @@
+// This file is over 50 lines and needs to be split up
+
 import React, { Component } from 'react'
 
 import { Text, View } from 'react-native'
@@ -14,6 +16,9 @@ import BalanceRow from 'ui/components/balance-row'
 
 import AddDebt from 'ui/dialogs/add-debt'
 import MyAccount from 'ui/dialogs/my-account'
+import RecentTransaction from 'lndr/recent-transaction'
+import RecentTransactionDetail from 'ui/dialogs/recent-transaction-detail'
+import RecentTransactionRow from 'ui/components/recent-transaction-row'
 
 import general from 'theme/general'
 import style from 'theme/account'
@@ -28,10 +33,13 @@ import {
   welcomeBack,
   noBalances,
   noBalanceWarning,
-  accountManagement
+  accountManagement,
+  addNewDebt,
+  recentTransactionsLanguage
 } from 'language'
 
 const loadingBalances = new LoadingContext()
+const loadingRecentTransactions = new LoadingContext()
 
 interface Props {
   engine: Engine
@@ -45,6 +53,9 @@ interface State {
   balancesLoaded: boolean
   balances: Balance[]
   balanceToView?: Balance
+  recentTransaction?: RecentTransaction
+  recentTransactionsLoaded: boolean
+  recentTransactions: RecentTransaction[]
 }
 
 export default class HomeView extends Component<Props, State> {
@@ -55,7 +66,9 @@ export default class HomeView extends Component<Props, State> {
       shouldShowMyAccount: false,
       accountInformationLoaded: false,
       balancesLoaded: false,
-      balances: []
+      balances: [],
+      recentTransactionsLoaded: false,
+      recentTransactions: []
     }
   }
 
@@ -71,6 +84,9 @@ export default class HomeView extends Component<Props, State> {
     catch (error) {
       engine.setErrorMessage(accountManagement.loadInformation.error)
     }
+
+    const recentTransactions = await loadingRecentTransactions.wrap(engine.getRecentTransactions())
+    this.setState({ recentTransactionsLoaded: true, recentTransactions })
 
     const balances = await loadingBalances.wrap(engine.getBalances())
     this.setState({ balances, balancesLoaded: true })
@@ -178,7 +194,9 @@ export default class HomeView extends Component<Props, State> {
   }
 
   render() {
-    const { accountInformation, balancesLoaded, balances } = this.state
+    const { recentTransactionsLoaded, recentTransactions, accountInformation, balancesLoaded, balances } = this.state
+    const { engine } = this.props
+    const { user } = engine
 
     return <View>
       <Section>
@@ -188,20 +206,26 @@ export default class HomeView extends Component<Props, State> {
         { this.renderWelcomeMessage() }
         { this.renderBalanceInformation() }
       </Section>
+      <Section>
+        <Button action onPress={() => this.showAddDebt()} text={addNewDebt} />
+      </Section>
 
-      <Section text='My Balances' contentContainerStyle={style.list}>
-        <Loading context={loadingBalances} />
-        {balancesLoaded && balances.length === 0 ? <Text style={style.emptyState}>{noBalances}</Text> : null}
-        {balances.map(
-          balance => (
-            <BalanceRow
-              key={balance.relativeTo}
-              balance={balance}
-              onPress={() => this.setState({ balanceToView: balance })}
+      <Section text='Recent Transactions' contentContainerStyle={style.list}>
+        <Loading context={loadingRecentTransactions} />
+        {recentTransactionsLoaded && recentTransactions.length === 0 ? <Text style={style.emptyState}>{recentTransactionsLanguage.none}</Text> : null}
+        {recentTransactions.map(
+          (recentTransaction, i) => (
+            <RecentTransactionRow
+              user={user}
+              key={i}
+              recentTransaction={recentTransaction}
+              engine={engine}
+              onPress={() => this.setState({ recentTransaction })}
             />
           )
         )}
       </Section>
+
     </View>
   }
 }

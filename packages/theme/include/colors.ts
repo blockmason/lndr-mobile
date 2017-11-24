@@ -1,10 +1,11 @@
 export const white = '#fff'
+export const black = '#000'
 export const light = '#f8f8f8'
 export const softGray = '#e4e4e4'
 export const lightGray = '#bbb'
 export const gray = '#777'
+export const bluish = '#4d79ff'
 export const charcoal = '#222'
-export const dark = '#128333'
 export const danger = '#c00'
 export const dangerShade = 'rgba(200, 0, 0, 1)'
 export const warning = '#fd8'
@@ -22,3 +23,5 @@ export const persianGreen = '#00aa8d'
 export const wisteria = '#9b59b6'
 
 export const whiteout = 'rgba(255, 255, 255, 0.9)'
+
+export const moneyGreen = '#128333'

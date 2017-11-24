@@ -2,7 +2,7 @@ import React, { Component } from 'react'
 
 import { RefreshControl, TouchableHighlight, ScrollView, View, Text } from 'react-native'
 
-import { lightGray, dark } from 'theme/include/colors'
+import { lightGray, gray } from 'theme/include/colors'
 
 import style from 'theme/tabs'
 
@@ -63,7 +63,7 @@ const getTextStyle = (alternate?: boolean, active?: boolean) => {
 
 const getTabStyle = (alternate?: boolean, active?: boolean) => {
   if (alternate) {
-    return [ style.tab, active ? style.tabActiveAlternate : style.tabAlternate ]
+    return [ style.tab, active ? style.tabActive : style.tabAlternate ]
   }
   return [ style.tab, active ? style.tabActive : style.tab ]
 }
@@ -126,7 +126,7 @@ export default class Tabs extends Component<Props, State> {
       return (
         <TouchableHighlight
           style={style.tabContainer}
-          underlayColor={alternate ? lightGray : dark}
+          underlayColor={alternate ? lightGray : gray}
           activeOpacity={0.5}
           key={reference}
           onPress={() => this.switchTo(reference)}
