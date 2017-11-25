@@ -20,11 +20,12 @@ interface Props {
 export default ({ onLogout, onMyAccount, onGetHelp, onMyLndr }: Props) => (
   <ActionButton
     buttonColor={gray}
+    size={40}
     verticalOrientation='down'
     spacing={10}
     hideShadow={true}
-    offsetX={Platform.OS === 'ios' ? 20 : 10}
-    offsetY={Platform.OS === 'ios' ? 20 : 1}
+    offsetX={Platform.OS === 'ios' ? 15 : 15}
+    offsetY={Platform.OS === 'ios' ? 30 : 10}
     >
     <ActionButton.Item buttonColor={bluish} title={logoutAction} onPress={onLogout} textContainerStyle={style.textContainer} textStyle={style.text}>
       <Icon name={'md-lock'} style={style.icon} />
