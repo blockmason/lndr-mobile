@@ -1,14 +1,16 @@
 import React from 'react'
 
 import { View, Platform } from 'react-native'
+import { BlurView } from 'react-native-blur'
 import ActionButton from 'react-native-action-button'
 import Icon from 'react-native-vector-icons/Ionicons'
 
-import { bluish, scooter, persianGreen, wisteria, gray } from 'theme/include/colors'
+import { bluish, gray } from 'theme/include/colors'
 
 import { myAccount, aboutLndr, getHelp,logoutAction } from 'language'
 
 import style from 'theme/action-button'
+import popupStyle from 'theme/popup'
 
 interface Props {
   onLogout: () => void
@@ -20,10 +22,12 @@ interface Props {
 export default ({ onLogout, onMyAccount, onGetHelp, onMyLndr }: Props) => (
   <ActionButton
     buttonColor={gray}
+    bgColor={'rgba(70,70,70,0.5)'} // TODO hack for android until blurview issue is fixed
     size={40}
     verticalOrientation='down'
     spacing={10}
     hideShadow={true}
+    backdrop={Platform.OS === 'ios' ? <BlurView blurType='dark' style={popupStyle.wrap}></BlurView> : false}
     offsetX={Platform.OS === 'ios' ? 15 : 15}
     offsetY={Platform.OS === 'ios' ? 30 : 10}
     >
