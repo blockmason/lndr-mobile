@@ -1,7 +1,6 @@
-package com.friendindebt;
+package com.lndr;
 
 import com.facebook.react.ReactActivity;
-import com.cmcewen.blurview.BlurViewPackage;
 
 public class MainActivity extends ReactActivity {
 
@@ -11,6 +10,6 @@ public class MainActivity extends ReactActivity {
      */
     @Override
     protected String getMainComponentName() {
-        return "FriendInDebt";
+        return "LNDR";
     }
 }

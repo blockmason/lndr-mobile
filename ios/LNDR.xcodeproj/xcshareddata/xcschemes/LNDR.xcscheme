@@ -29,9 +29,9 @@
             <BuildableReference
                BuildableIdentifier = "primary"
                BlueprintIdentifier = "13B07F861A680F5B00A75B9A"
-               BuildableName = "FriendInDebt.app"
-               BlueprintName = "FriendInDebt"
-               ReferencedContainer = "container:FriendInDebt.xcodeproj">
+               BuildableName = "LNDR.app"
+               BlueprintName = "LNDR"
+               ReferencedContainer = "container:LNDR.xcodeproj">
             </BuildableReference>
          </BuildActionEntry>
          <BuildActionEntry
@@ -43,9 +43,9 @@
             <BuildableReference
                BuildableIdentifier = "primary"
                BlueprintIdentifier = "00E356ED1AD99517003FC87E"
-               BuildableName = "FriendInDebtTests.xctest"
-               BlueprintName = "FriendInDebtTests"
-               ReferencedContainer = "container:FriendInDebt.xcodeproj">
+               BuildableName = "LNDRTests.xctest"
+               BlueprintName = "LNDRTests"
+               ReferencedContainer = "container:LNDR.xcodeproj">
             </BuildableReference>
          </BuildActionEntry>
       </BuildActionEntries>
@@ -61,9 +61,9 @@
             <BuildableReference
                BuildableIdentifier = "primary"
                BlueprintIdentifier = "00E356ED1AD99517003FC87E"
-               BuildableName = "FriendInDebtTests.xctest"
-               BlueprintName = "FriendInDebtTests"
-               ReferencedContainer = "container:FriendInDebt.xcodeproj">
+               BuildableName = "LNDRTests.xctest"
+               BlueprintName = "LNDRTests"
+               ReferencedContainer = "container:LNDR.xcodeproj">
             </BuildableReference>
          </TestableReference>
       </Testables>
@@ -71,9 +71,9 @@
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "13B07F861A680F5B00A75B9A"
-            BuildableName = "FriendInDebt.app"
-            BlueprintName = "FriendInDebt"
-            ReferencedContainer = "container:FriendInDebt.xcodeproj">
+            BuildableName = "LNDR.app"
+            BlueprintName = "LNDR"
+            ReferencedContainer = "container:LNDR.xcodeproj">
          </BuildableReference>
       </MacroExpansion>
       <AdditionalOptions>
@@ -94,9 +94,9 @@
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "13B07F861A680F5B00A75B9A"
-            BuildableName = "FriendInDebt.app"
-            BlueprintName = "FriendInDebt"
-            ReferencedContainer = "container:FriendInDebt.xcodeproj">
+            BuildableName = "LNDR.app"
+            BlueprintName = "LNDR"
+            ReferencedContainer = "container:LNDR.xcodeproj">
          </BuildableReference>
       </BuildableProductRunnable>
       <AdditionalOptions>
@@ -113,9 +113,9 @@
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "13B07F861A680F5B00A75B9A"
-            BuildableName = "FriendInDebt.app"
-            BlueprintName = "FriendInDebt"
-            ReferencedContainer = "container:FriendInDebt.xcodeproj">
+            BuildableName = "LNDR.app"
+            BlueprintName = "LNDR"
+            ReferencedContainer = "container:LNDR.xcodeproj">
          </BuildableReference>
       </BuildableProductRunnable>
    </ProfileAction>

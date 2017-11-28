@@ -29,9 +29,9 @@
             <BuildableReference
                BuildableIdentifier = "primary"
                BlueprintIdentifier = "2D02E47A1E0B4A5D006451C7"
-               BuildableName = "FriendInDebt-tvOS.app"
-               BlueprintName = "FriendInDebt-tvOS"
-               ReferencedContainer = "container:FriendInDebt.xcodeproj">
+               BuildableName = "LNDR-tvOS.app"
+               BlueprintName = "LNDR-tvOS"
+               ReferencedContainer = "container:LNDR.xcodeproj">
             </BuildableReference>
          </BuildActionEntry>
          <BuildActionEntry
@@ -43,9 +43,9 @@
             <BuildableReference
                BuildableIdentifier = "primary"
                BlueprintIdentifier = "2D02E48F1E0B4A5D006451C7"
-               BuildableName = "FriendInDebt-tvOSTests.xctest"
-               BlueprintName = "FriendInDebt-tvOSTests"
-               ReferencedContainer = "container:FriendInDebt.xcodeproj">
+               BuildableName = "LNDR-tvOSTests.xctest"
+               BlueprintName = "LNDR-tvOSTests"
+               ReferencedContainer = "container:LNDR.xcodeproj">
             </BuildableReference>
          </BuildActionEntry>
       </BuildActionEntries>
@@ -61,9 +61,9 @@
             <BuildableReference
                BuildableIdentifier = "primary"
                BlueprintIdentifier = "2D02E48F1E0B4A5D006451C7"
-               BuildableName = "FriendInDebt-tvOSTests.xctest"
-               BlueprintName = "FriendInDebt-tvOSTests"
-               ReferencedContainer = "container:FriendInDebt.xcodeproj">
+               BuildableName = "LNDR-tvOSTests.xctest"
+               BlueprintName = "LNDR-tvOSTests"
+               ReferencedContainer = "container:LNDR.xcodeproj">
             </BuildableReference>
          </TestableReference>
       </Testables>
@@ -71,9 +71,9 @@
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "2D02E47A1E0B4A5D006451C7"
-            BuildableName = "FriendInDebt-tvOS.app"
-            BlueprintName = "FriendInDebt-tvOS"
-            ReferencedContainer = "container:FriendInDebt.xcodeproj">
+            BuildableName = "LNDR-tvOS.app"
+            BlueprintName = "LNDR-tvOS"
+            ReferencedContainer = "container:LNDR.xcodeproj">
          </BuildableReference>
       </MacroExpansion>
       <AdditionalOptions>
@@ -94,9 +94,9 @@
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "2D02E47A1E0B4A5D006451C7"
-            BuildableName = "FriendInDebt-tvOS.app"
-            BlueprintName = "FriendInDebt-tvOS"
-            ReferencedContainer = "container:FriendInDebt.xcodeproj">
+            BuildableName = "LNDR-tvOS.app"
+            BlueprintName = "LNDR-tvOS"
+            ReferencedContainer = "container:LNDR.xcodeproj">
          </BuildableReference>
       </BuildableProductRunnable>
       <AdditionalOptions>
@@ -113,9 +113,9 @@
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "2D02E47A1E0B4A5D006451C7"
-            BuildableName = "FriendInDebt-tvOS.app"
-            BlueprintName = "FriendInDebt-tvOS"
-            ReferencedContainer = "container:FriendInDebt.xcodeproj">
+            BuildableName = "LNDR-tvOS.app"
+            BlueprintName = "LNDR-tvOS"
+            ReferencedContainer = "container:LNDR.xcodeproj">
          </BuildableReference>
       </BuildableProductRunnable>
    </ProfileAction>
