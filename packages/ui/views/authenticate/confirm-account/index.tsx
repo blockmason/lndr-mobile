@@ -6,7 +6,7 @@ import Engine from 'lndr/engine'
 
 import Button from 'ui/components/button'
 
-import { cancel, confirmAccount, mnemonicExhortation } from 'language'
+import { next, mnemonicExhortation } from 'language'
 
 import style from 'theme/form'
 
@@ -23,8 +23,7 @@ export default class RecoverAccountView extends Component<Props> {
       <View style={style.form}>
         <Text style={style.header}>{mnemonicExhortation}</Text>
         <Text selectable style={style.displayText}>{mnemonic}</Text>
-        <Button onPress={() => engine.confirmAccount()} text={confirmAccount} />
-        <Button alternate onPress={() => engine.cancelConfirmAccount()} text={cancel} />
+        <Button onPress={() => engine.mnemonicDisplayed()} text={next} />
       </View>
     )
   }

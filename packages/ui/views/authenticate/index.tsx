@@ -22,7 +22,7 @@ interface Props {
   hasStoredUser?: boolean
   shouldRecoverAccount?: boolean
   shouldRemoveAccount?: boolean
-  shouldConfirmAccount?: boolean
+  shouldDisplayMnemonic?: boolean
   mnemonic?: string
 }
 
@@ -42,26 +42,20 @@ export default class AuthenticateView extends Component<Props> {
       hasStoredUser,
       shouldRecoverAccount,
       shouldRemoveAccount,
-      shouldConfirmAccount,
+      shouldDisplayMnemonic,
       mnemonic
     } = this.props
 
-    if (shouldRemoveAccount) {
-      return <RemoveAccountView engine={engine} />
-    }
-
-    if (hasStoredUser) {
-      return <LoginView engine={engine} />
-    }
-
-    if (shouldRecoverAccount) {
-      return <RecoverAccountView engine={engine} />
-    }
-
-    if (shouldConfirmAccount) {
+    if (shouldDisplayMnemonic) {
       return <ConfirmAccountView engine={engine} mnemonic={mnemonic} />
+    } else if (shouldRemoveAccount) {
+      return <RemoveAccountView engine={engine} />
+    } else if (hasStoredUser) {
+      return <LoginView engine={engine} />
+    } else if (shouldRecoverAccount) {
+      return <RecoverAccountView engine={engine} />
+    } else {
+      return <CreateAccountView engine={engine} />
     }
-
-    return <CreateAccountView engine={engine} />
   }
 }

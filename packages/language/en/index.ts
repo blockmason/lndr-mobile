@@ -4,6 +4,7 @@ export const applicationName = 'Lndr'
 export const helloWorld = 'Hello world'
 
 export const submit = 'Submit'
+export const next = 'Next'
 export const cancel = 'Cancel'
 export const back = 'Go Back'
 

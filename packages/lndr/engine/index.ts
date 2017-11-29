@@ -21,7 +21,7 @@ const hashedPasswordStorage = new Storage('hashed-password')
 
 export const PASSWORD_SALT = 'THIS_IS_A_SALT_5426892348596723645879243876'
 
-const creditProtocol = new CreditProtocol('http://34.202.214.156')
+const creditProtocol = new CreditProtocol('http://34.238.20.130')
 
 export interface EngineState {
   user?: User,
@@ -29,7 +29,7 @@ export interface EngineState {
   hasStoredUser?: boolean
   shouldRecoverAccount?: boolean
   shouldRemoveAccount?: boolean
-  shouldConfirmAccount?: boolean
+  shouldDisplayMnemonic?: boolean
   welcomeComplete?: boolean
   mnemonicInstance?: any // TODO why is this any?
   password?: string
@@ -56,7 +56,7 @@ export default class Engine {
       welcomeComplete: false,
       shouldRecoverAccount: false,
       shouldRemoveAccount: false,
-      shouldConfirmAccount: false
+      shouldDisplayMnemonic: false
     }
   }
 
@@ -102,6 +102,10 @@ export default class Engine {
     this.clearSuccessTimeout = setTimeout(() => this.clearSuccess(), longTimePeriod)
   }
 
+  mnemonicDisplayed() {
+    this.state = { shouldDisplayMnemonic: false }
+  }
+
   async createAccount(accountData: CreateAccountData) {
     if (accountData.password.length < 8) {
       return this.setErrorMessage(accountManagement.password.lengthViolation)
@@ -112,7 +116,7 @@ export default class Engine {
 
     const password = accountData.password
     const mnemonicInstance = creditProtocol.getRandomMnemonic()
-    this.state = { password: password, mnemonicInstance: mnemonicInstance }
+    this.state = { shouldDisplayMnemonic: true, password: password, mnemonicInstance: mnemonicInstance }
     await this.confirmAccount()
     this.updateAccount({nickname: accountData.nickname})
   }
@@ -412,10 +416,6 @@ export default class Engine {
     }
   }
 
-  cancelConfirmAccount() {
-    this.state = { shouldConfirmAccount: false }
-  }
-
   createUserFromCredentials(mnemonicInstance, password, hashed = '') {
 
     var hashedPassword = hashed
@@ -449,7 +449,7 @@ export default class Engine {
     const { password, mnemonicInstance } = this.state
     const user = this.createUserFromCredentials(mnemonicInstance, password)
     await this.storeUserSession(user)
-    this.state = { user, hasStoredUser: true, shouldConfirmAccount: false }
+    this.state = { user, hasStoredUser: true }
   }
 
   async loginAccount(loginData: LoginAccountData) {
