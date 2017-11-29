@@ -80,7 +80,7 @@ export default class AppView extends Component<Props, EngineState> {
       welcomeComplete,
       shouldRecoverAccount,
       shouldRemoveAccount,
-      shouldConfirmAccount,
+      shouldDisplayMnemonic,
       pendingTransactionsCount
     } = this.state
 
@@ -92,13 +92,13 @@ export default class AppView extends Component<Props, EngineState> {
       return <WelcomeView onComplete={ () => { this.setState({ welcomeComplete: true }) } }/>
     }
 
-    if (!user) {
+    if (!user || shouldDisplayMnemonic) {
       return <AuthenticateView
         engine={engine}
         mnemonic={mnemonicInstance ? mnemonicInstance.toString() : null}
         shouldRecoverAccount={shouldRecoverAccount}
         shouldRemoveAccount={shouldRemoveAccount}
-        shouldConfirmAccount={shouldConfirmAccount}
+        shouldDisplayMnemonic={shouldDisplayMnemonic}
         hasStoredUser={hasStoredUser}
       />
     }
