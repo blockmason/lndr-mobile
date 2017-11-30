@@ -63,18 +63,6 @@ export default class RecentTransactionRow extends Component<Props> {
         <View>
           <Text style={formStyle.header}>{this.getTitle()}</Text>
           <View style={style.listItem}>
-            <Text style={style.fact}>Creditor: @{recentTransaction.creditorNickname}</Text>
-            <Text selectable style={style.address}>{recentTransaction.creditorAddress}</Text>
-          </View>
-          <View style={style.listItem}>
-            <Text style={style.fact}>Debtor: @{recentTransaction.debtorNickname}</Text>
-            <Text selectable style={style.address}>{recentTransaction.debtorAddress}</Text>
-          </View>
-          <View style={style.listItem}>
-            <Text style={style.title}>Memo</Text>
-            <Text style={style.title}>Amount</Text>
-          </View>
-          <View style={style.listItem}>
             <Text style={style.titledFact}>{recentTransaction.memo}</Text>
             <Text style={this.getAmountStyle()}>{cents(recentTransaction.amount)}</Text>
           </View>
