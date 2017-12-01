@@ -5,7 +5,7 @@ import ethUtil from 'ethereumjs-util'
 import { hexToBuffer, int32ToBuffer, bufferToHex } from './buffer-utils'
 
 export default class CreditRecord {
-  ucac: string
+  ucacAddress: string
   creditorAddress: string
   debtorAddress: string
   amount: number
@@ -14,8 +14,8 @@ export default class CreditRecord {
 
   hash: any
 
-  constructor(ucac: string, creditorAddress: string, debtorAddress: string, amount: number, memo: string, nonce: number) {
-    this.ucac = ucac
+  constructor(ucacAddress: string, creditorAddress: string, debtorAddress: string, amount: number, memo: string, nonce: number) {
+    this.ucacAddress = ucacAddress
     this.creditorAddress = creditorAddress.replace('0x', '')
     this.debtorAddress = debtorAddress.replace('0x', '')
     this.amount = amount
@@ -23,7 +23,7 @@ export default class CreditRecord {
     this.nonce = nonce
 
     const buffer = Buffer.concat([
-      hexToBuffer(ucac),
+      hexToBuffer(ucacAddress),
       hexToBuffer(creditorAddress),
       hexToBuffer(debtorAddress),
       int32ToBuffer(amount),
