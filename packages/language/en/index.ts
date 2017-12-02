@@ -61,6 +61,9 @@ export const addANewFriend = 'Add a New Friend'
 export const lndrNickname = 'Lndr Nickname:'
 
 export const accountManagement = {
+  nickname: {
+    lengthViolation: 'Nickname should be at least 3 characters.',
+  },
   password: {
     lengthViolation: 'Password should be at least 8 characters.',
     matchViolation: 'Passwords should match.',
