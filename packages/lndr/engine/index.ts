@@ -5,6 +5,7 @@ import ethUtil from 'ethereumjs-util'
 import { longTimePeriod } from 'lndr/time'
 import Balance from 'lndr/balance'
 import User, { CreateAccountData, RecoverAccountData, LoginAccountData, UpdateAccountData } from 'lndr/user'
+import { minimumNicknameLength } from 'lndr/user'
 import Friend from 'lndr/friend'
 import PendingTransaction from 'lndr/pending-transaction'
 import RecentTransaction from 'lndr/recent-transaction'
@@ -279,8 +280,12 @@ export default class Engine {
 
   async searchUsers(searchData) {
     const { nickname } = searchData
-    const users = await creditProtocol.searchUsers(nickname)
-    return users.map(this.jsonToFriend)
+    if (nickname.length >= minimumNicknameLength) {
+      const users = await creditProtocol.searchUsers(nickname)
+      return users.map(this.jsonToFriend)
+    } else {
+      return []
+    }
   }
 
   submitterIsMe(pendingTransaction: PendingTransaction) {
