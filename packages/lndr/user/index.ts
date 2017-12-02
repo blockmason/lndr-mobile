@@ -53,3 +53,5 @@ export default class User {
     this.address = address
   }
 }
+
+export const minimumNicknameLength = 3

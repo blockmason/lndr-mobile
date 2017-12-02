@@ -3,6 +3,7 @@ import React, { Component } from 'react'
 import { Text, TextInput, TouchableHighlight, View } from 'react-native'
 
 import { debounce } from 'lndr/time'
+import { minimumNicknameLength } from 'lndr/user'
 import Engine from 'lndr/engine'
 import Friend from 'lndr/friend'
 
@@ -58,11 +59,11 @@ export default class AddFriend extends Component<Props, State> {
           const matches = await loadingContext.wrap(
             engine.searchUsers({ nickname })
           )
-          this.setState({ hasSearchTerm: nickname.length > 0, matches })
+          this.setState({ hasSearchTerm: nickname.length >= minimumNicknameLength, matches })
         }
 
         catch (error) {
-          this.setState({ hasSearchTerm: nickname.length > 0, matches: [] })
+          this.setState({ hasSearchTerm: nickname.length >= minimumNicknameLength, matches: [] })
         }
       }
     )

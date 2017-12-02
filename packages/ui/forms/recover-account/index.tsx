@@ -7,10 +7,7 @@ import Button from 'ui/components/button'
 import { RecoverAccountData, defaultRecoverAccountData } from 'lndr/user'
 
 import {
-  newAccount,
   newPassword,
-  confirmPassword,
-  createAccount,
   recoverAccount,
   recoverMnemonic,
   recoverExistingAccount,
@@ -42,7 +39,7 @@ export default class RecoverAccountForm extends Component<Props, RecoverAccountD
       <TextInput
         secureTextEntry
         style={style.textInput}
-        placeholder={confirmPassword}
+        placeholder={newPassword}
         onChangeText={confirmPassword => this.setState({ confirmPassword })}
       />
       <Button onPress={() => this.submit()} text={recoverAccount} />
