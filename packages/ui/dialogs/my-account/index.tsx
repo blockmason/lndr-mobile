@@ -12,10 +12,10 @@ const loadingContext = new LoadingContext()
 
 import style from 'theme/form'
 
-import { nickname, setNickname, updateAccount, cancel } from 'language'
+import { nickname, setNickname, updateAccount, cancel, mnemonicExhortation } from 'language'
 
 interface Props {
-  engine: Engine
+  engine: Engine,
   closePopup: () => void
 }
 
@@ -40,6 +40,7 @@ export default class MyAccount extends Component<Props, State> {
 
   render() {
     const { engine, closePopup } = this.props
+    const { user } = engine
 
     const submit = async () => {
       await loadingContext.wrap(
@@ -50,6 +51,8 @@ export default class MyAccount extends Component<Props, State> {
 
     return <View>
       <Loading context={loadingContext} />
+      <Text style={style.text}>{mnemonicExhortation}</Text>
+      <Text selectable style={style.displayText}>{user.mnemonic}</Text>
       <Text style={style.text}>{setNickname}</Text>
       <TextInput
         autoCapitalize='none'
