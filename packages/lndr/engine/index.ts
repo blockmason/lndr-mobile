@@ -113,6 +113,11 @@ export default class Engine {
     if (accountData.password !== accountData.confirmPassword) {
       return this.setErrorMessage(accountManagement.password.matchViolation)
     }
+    // TODO what do we want the requirements for nicknames to be?
+    // should whitespace be allowed?
+    if (accountData.nickname.length < 3) {
+      return this.setErrorMessage(accountManagement.nickname.lengthViolation)
+    }
 
     const password = accountData.password
     const mnemonicInstance = creditProtocol.getRandomMnemonic()
