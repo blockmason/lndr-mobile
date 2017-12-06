@@ -7,7 +7,7 @@ import Icon from 'react-native-vector-icons/Ionicons'
 
 import { bluish, gray } from 'theme/include/colors'
 
-import { myAccount, aboutLndr, getHelp,logoutAction } from 'language'
+import { myAccount, logoutAction } from 'language'
 
 import style from 'theme/action-button'
 import popupStyle from 'theme/popup'
@@ -15,11 +15,9 @@ import popupStyle from 'theme/popup'
 interface Props {
   onLogout: () => void
   onMyAccount: () => void
-  onMyLndr: () => void
-  onGetHelp: () => void
 }
 
-export default ({ onLogout, onMyAccount, onGetHelp, onMyLndr }: Props) => (
+export default ({ onLogout, onMyAccount }: Props) => (
   <ActionButton
     buttonColor={gray}
     bgColor={'rgba(70,70,70,0.5)'} // TODO hack for android until blurview issue is fixed
@@ -36,12 +34,6 @@ export default ({ onLogout, onMyAccount, onGetHelp, onMyLndr }: Props) => (
     </ActionButton.Item>
     <ActionButton.Item buttonColor={bluish} title={myAccount} onPress={onMyAccount} textContainerStyle={style.textContainer} textStyle={style.text}>
       <Icon name={'md-stats'} style={style.icon} />
-    </ActionButton.Item>
-    <ActionButton.Item buttonColor={bluish} title={aboutLndr} onPress={onMyLndr} textContainerStyle={style.textContainer} textStyle={style.text}>
-      <Icon name={'md-contacts'} style={style.icon} />
-    </ActionButton.Item>
-    <ActionButton.Item buttonColor={bluish} title={getHelp} onPress={onGetHelp} textContainerStyle={style.textContainer} textStyle={style.text}>
-      <Icon name={'md-help'} style={style.icon} />
     </ActionButton.Item>
   </ActionButton>
 )

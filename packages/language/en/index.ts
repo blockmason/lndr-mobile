@@ -51,8 +51,6 @@ export const removeAccountTitle = 'Are you sure you would like to remove your ac
 export const removeAccountExhortation = 'Be sure that you have access to your mnemonic to restore your account later, as this is a permanent removal of your account information from this device.'
 
 export const myAccount = 'My Account'
-export const aboutLndr = 'About Lndr'
-export const getHelp = 'Get Help'
 
 export const setNickname = 'Set a nickname so your friends can find you'
 export const nickname = 'Nickname'
