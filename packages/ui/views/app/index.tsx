@@ -1,6 +1,6 @@
 import React, { Component } from 'react'
 
-import { View } from 'react-native'
+import { View, ScrollView } from 'react-native'
 
 import Engine, { EngineState } from 'lndr/engine'
 
@@ -34,12 +34,12 @@ export default class AppView extends Component<Props, EngineState> {
   }
 
   render() {
-    return <View style={style.flex}>
+    return <ScrollView style={style.flex} contentContainerStyle={style.flexGrow}>
       <AndroidStatusBar />
       <PopupTarget />
       {this.renderContents()}
       {this.renderAlert()}
-    </View>
+    </ScrollView>
   }
 
   async hideAlert() {
