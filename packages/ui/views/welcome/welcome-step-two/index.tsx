@@ -21,6 +21,7 @@ export default class WelcomeStepTwoView extends Component {
         <Text style={style.text}>{welcomeView.shareDinner}</Text>
         <ThemeImage size={mediumImage} name='tank'/>
         <Text style={style.text}>{welcomeView.fillTank}</Text>
+        <View style={style.bottomSpacing}/>
       </View>
     )
   }

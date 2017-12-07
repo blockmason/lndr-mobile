@@ -6,13 +6,10 @@ import { applicationName } from 'language'
 
 import style from 'theme/image'
 
-const { height } = Dimensions.get('window');
-const size = height * 0.05;
-
 export default () => (
   <View>
     <Image
-      style={{height: size, width: 100}}
+      style={{height: 40, width: 100}}
       source={require('images/text-logo.jpg')}
     />
   </View>
