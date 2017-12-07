@@ -20,7 +20,6 @@ import RecentTransaction from 'lndr/recent-transaction'
 import RecentTransactionDetail from 'ui/dialogs/recent-transaction-detail'
 import RecentTransactionRow from 'ui/components/recent-transaction-row'
 
-import general from 'theme/general'
 import style from 'theme/account'
 import formStyle from 'theme/form'
 
