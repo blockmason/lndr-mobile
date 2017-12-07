@@ -17,10 +17,13 @@ import Storage from 'lndr/storage'
 
 import { accountManagement, debtManagement } from 'language'
 
+const bcrypt = require('bcryptjs')
+
 const mnemonicStorage = new Storage('mnemonic')
 const hashedPasswordStorage = new Storage('hashed-password')
 
 export const PASSWORD_SALT = 'THIS_IS_A_SALT_5426892348596723645879243876'
+export const SALT_SIZE = 10
 
 const creditProtocol = new CreditProtocol('http://34.238.20.130')
 
@@ -424,6 +427,11 @@ export default class Engine {
     catch (e) {
       this.setErrorMessage(debtManagement.pending.error)
     }
+  }
+
+  generateHashedPassword(password) {
+     const salt = bcrypt.genSaltSync(SALT_SIZE)
+     return bcrypt.hashSync(password, salt)
   }
 
   createUserFromCredentials(mnemonicInstance, password, hashed = '') {
