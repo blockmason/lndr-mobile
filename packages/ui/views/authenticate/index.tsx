@@ -28,7 +28,7 @@ interface Props {
 
 export default class AuthenticateView extends Component<Props> {
   render() {
-    return <ScrollView contentContainerStyle={general.flex}>
+    return <ScrollView contentContainerStyle={general.whiteFlex}>
       <FadeInView style={style.main}>
         <ThemeImage name='logo' />
         {this.renderView()}
