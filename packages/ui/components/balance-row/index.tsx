@@ -20,7 +20,7 @@ export default class BalanceRow extends Component<Props> {
     const { amount } = balance
 
     if (amount < 0) {
-      return <Text style={style.titledFactAmountBad}>{cents(amount)}</Text>
+      return <Text style={style.titledFactAmountDanger}>{cents(amount)}</Text>
     }
 
     else {
