@@ -23,8 +23,6 @@ const mnemonicStorage = new Storage('mnemonic')
 const hashedPasswordStorage = new Storage('hashed-password')
 const saltStorage = new Storage('salt')
 
-export const SALT_ROUNDS = 10
-
 const creditProtocol = new CreditProtocol('http://34.238.20.130')
 
 export interface EngineState {
@@ -429,11 +427,6 @@ export default class Engine {
     }
   }
 
-  generateHashedPassword(password) {
-     const salt = bcrypt.genSaltSync(SALT_ROUNDS)
-     return (bcrypt.hashSync(password, salt), salt)
-  }
-
   createUserFromCredentials(mnemonicInstance, hashedPassword) {
 
     const mnemonic = mnemonicInstance.toString()
@@ -459,22 +452,25 @@ export default class Engine {
 
   async confirmAccount() {
     const { password, mnemonicInstance } = this.state
-    const user = this.createUserFromCredentials(mnemonicInstance, password)
+    const salt = bcrypt.genSaltSync()
+    await mnemonicStorage.set(salt)
+    const hashedPassword = bcrypt.hashSync(password, salt);
+    const user = this.createUserFromCredentials(mnemonicInstance, hashedPassword)
     await this.storeUserSession(user)
     this.state = { user, hasStoredUser: true }
   }
 
   async loginAccount(loginData: LoginAccountData) {
     const { confirmPassword } = loginData
-    const mnemonic = await mnemonicStorage.get()
-    const mnemonicInstance = creditProtocol.getMnemonic(mnemonic)
+    const salt = await saltStorage.get()
+    const hashedPassword = bcrypt.hashSync(confirmPassword, salt);
     const hashedPasswordReference = await hashedPasswordStorage.get()
-    const hashedPassword = Array.from(mnemonicInstance.toSeed())
-
     if (hashedPassword !== hashedPasswordReference) {
       return this.setErrorMessage(accountManagement.password.failedHashComparison)
     }
 
+    const mnemonic = await mnemonicStorage.get()
+    const mnemonicInstance = creditProtocol.getMnemonic(mnemonic)
     const user = this.createUserFromCredentials(mnemonicInstance, hashedPassword)
     this.state = { user, hasStoredUser: true }
     this.getPendingTransactions()
