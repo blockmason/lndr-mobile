@@ -79,9 +79,19 @@ Running Android
 - `react-native log-ios`
 - `react-native log-android`
 
-## Building Android APK
+## Building Android APK for Testing
 - in separate terminal sessions, run `yarn start` and `yarn run typescript`
 - ```react-native run-android```
 - ```react-native bundle --dev false --platform android --entry-file index.android.js --bundle-output ./android/app/build/intermediates/assets/debug/index.android.bundle --assets-dest ./android/app/build/intermediates/res/merged/debug```
 - ```cd android```
 - ```./gradlew assembleDebug```
+
+## Building & Signing Android APK for Google Play
+
+1. Get the gradle.properties file with the keystore passwords and put it in the 'android' directory.
+
+2. Get the blockmason-lndr-android.keystore file and put it in the 'android/app' directory.
+
+3. Run 'cd android && ./gradlew assembleRelease' from the top-level directory.
+
+4. The signed APK will be at 'android/app/build/outputs/apk/app-release.apk'
