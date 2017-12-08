@@ -21,9 +21,9 @@ const bcrypt = require('bcryptjs')
 
 const mnemonicStorage = new Storage('mnemonic')
 const hashedPasswordStorage = new Storage('hashed-password')
+const saltStorage = new Storage('salt')
 
-export const PASSWORD_SALT = 'THIS_IS_A_SALT_5426892348596723645879243876'
-export const SALT_SIZE = 10
+export const SALT_ROUNDS = 10
 
 const creditProtocol = new CreditProtocol('http://34.238.20.130')
 
@@ -430,20 +430,14 @@ export default class Engine {
   }
 
   generateHashedPassword(password) {
-     const salt = bcrypt.genSaltSync(SALT_SIZE)
-     return bcrypt.hashSync(password, salt)
+     const salt = bcrypt.genSaltSync(SALT_ROUNDS)
+     return (bcrypt.hashSync(password, salt), salt)
   }
 
-  createUserFromCredentials(mnemonicInstance, password, hashed = '') {
-
-    var hashedPassword = hashed
-
-    if (hashed.length === 0) {
-      hashedPassword = Array.from(mnemonicInstance.toSeed(PASSWORD_SALT + password)).join('.')
-    }
+  createUserFromCredentials(mnemonicInstance, hashedPassword) {
 
     const mnemonic = mnemonicInstance.toString()
-    const privateKey = mnemonicInstance.toHDPrivateKey(password)
+    const privateKey = mnemonicInstance.toHDPrivateKey()
     const privateKeyBuffer = privateKey.privateKey.toBuffer()
     const ethAddress = ethUtil.privateToAddress(privateKeyBuffer)
     const address = ethAddress.toString('hex')
@@ -475,13 +469,13 @@ export default class Engine {
     const mnemonic = await mnemonicStorage.get()
     const mnemonicInstance = creditProtocol.getMnemonic(mnemonic)
     const hashedPasswordReference = await hashedPasswordStorage.get()
-    const hashedPassword = Array.from(mnemonicInstance.toSeed(PASSWORD_SALT + confirmPassword)).join('.')
+    const hashedPassword = Array.from(mnemonicInstance.toSeed())
 
     if (hashedPassword !== hashedPasswordReference) {
       return this.setErrorMessage(accountManagement.password.failedHashComparison)
     }
 
-    const user = this.createUserFromCredentials(mnemonicInstance, confirmPassword, hashedPassword)
+    const user = this.createUserFromCredentials(mnemonicInstance, hashedPassword)
     this.state = { user, hasStoredUser: true }
     this.getPendingTransactions()
   }
