@@ -54,3 +54,7 @@ buck-out/
 */fastlane/report.xml
 */fastlane/Preview.html
 */fastlane/screenshots
+
+#app signing .keystore file
+android/gradle.properties
+android/app/blockmason-lndr-android.keystore
