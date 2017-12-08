@@ -1,6 +1,7 @@
 // This file is over 50 lines and needs to be split up
 
 import ethUtil from 'ethereumjs-util'
+import { UrbanAirship } from 'urbanairship-react-native'
 
 import { longTimePeriod } from 'lndr/time'
 import Balance from 'lndr/balance'
@@ -68,6 +69,22 @@ export default class Engine {
       this.state = { hasStoredUser: true, welcomeComplete: true }
     }
     this.state = { isInitializing: false }
+  }
+
+  initalizePushNotifications() {
+    UrbanAirship.setUserNotificationsEnabled(true)
+    UrbanAirship.addListener("register", (event) => {
+      console.log('Channel registration updated: ', event.channelId);
+      console.log('Registration token: ', event.registrationToken);
+    });
+    UrbanAirship.addListener("pushReceived", (notification) => {
+        console.log('Received push: ', JSON.stringify(notification));
+    });
+    UrbanAirship.setForegroundPresentationOptions({
+      alert: true,
+      sound: true,
+      badge: true
+    });
   }
 
   subscribe(listener: EngineStateListener) {

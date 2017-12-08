@@ -3,6 +3,7 @@ package com.lndr;
 import android.app.Application;
 
 import com.facebook.react.ReactApplication;
+import com.urbanairship.reactnative.ReactAirshipPackage;
 import com.oblador.vectoricons.VectorIconsPackage;
 import com.bitgo.randombytes.RandomBytesPackage;
 import com.cmcewen.blurview.BlurViewPackage;
@@ -26,6 +27,7 @@ public class MainApplication extends Application implements ReactApplication {
     protected List<ReactPackage> getPackages() {
       return Arrays.<ReactPackage>asList(
           new MainReactPackage(),
+            new ReactAirshipPackage(),
             new VectorIconsPackage(),
             new RandomBytesPackage(),
             new BlurViewPackage()
