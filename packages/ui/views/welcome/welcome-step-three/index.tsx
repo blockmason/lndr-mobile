@@ -21,6 +21,7 @@ export default class WelcomeStepThreeView extends Component {
         <Text style={style.text}>{welcomeView.travelTogether}</Text>
         <ThemeImage size={mediumImage} name='concert'/>
         <Text style={style.text}>{welcomeView.greatConcert}</Text>
+        <View style={style.bottomSpacing}/>
       </View>
     )
   }

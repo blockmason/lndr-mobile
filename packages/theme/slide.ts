@@ -30,5 +30,8 @@ export default StyleSheet.create({
   },
   topSpacing: {
     marginTop: '10%'
+  },
+  bottomSpacing: {
+    paddingBottom: '7%'
   }
 } as any)

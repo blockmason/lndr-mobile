@@ -16,5 +16,8 @@ export default StyleSheet.create({
   stretch: {
     marginRight: 15,
     flex: 1
+  },
+  flexGrow: {
+    flexGrow: 1
   }
 } as any)
