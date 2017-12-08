@@ -21,7 +21,6 @@ const bcrypt = require('bcryptjs')
 
 const mnemonicStorage = new Storage('mnemonic')
 const hashedPasswordStorage = new Storage('hashed-password')
-const saltStorage = new Storage('salt')
 
 const creditProtocol = new CreditProtocol('http://34.238.20.130')
 
@@ -452,9 +451,7 @@ export default class Engine {
 
   async confirmAccount() {
     const { password, mnemonicInstance } = this.state
-    const salt = bcrypt.genSaltSync()
-    await mnemonicStorage.set(salt)
-    const hashedPassword = bcrypt.hashSync(password, salt);
+    const hashedPassword = bcrypt.hashSync(password)
     const user = this.createUserFromCredentials(mnemonicInstance, hashedPassword)
     await this.storeUserSession(user)
     this.state = { user, hasStoredUser: true }
@@ -462,10 +459,9 @@ export default class Engine {
 
   async loginAccount(loginData: LoginAccountData) {
     const { confirmPassword } = loginData
-    const salt = await saltStorage.get()
-    const hashedPassword = bcrypt.hashSync(confirmPassword, salt);
-    const hashedPasswordReference = await hashedPasswordStorage.get()
-    if (hashedPassword !== hashedPasswordReference) {
+    const hashedPassword = await hashedPasswordStorage.get()
+    const passwordMatch = bcrypt.compareSync(confirmPassword, hashedPassword)
+    if (!passwordMatch) {
       return this.setErrorMessage(accountManagement.password.failedHashComparison)
     }
 
