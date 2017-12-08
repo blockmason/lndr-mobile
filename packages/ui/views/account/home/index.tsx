@@ -120,7 +120,7 @@ export default class HomeView extends Component<Props, State> {
     }
 
     else if (balance < 0) {
-      return <Text style={style.largeFactAmountBad}>{cents(balance)}</Text>
+      return <Text style={style.largeFactAmountDanger}>{cents(balance)}</Text>
     }
 
     else {
