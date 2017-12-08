@@ -17,10 +17,10 @@ import Storage from 'lndr/storage'
 
 import { accountManagement, debtManagement } from 'language'
 
+const bcrypt = require('bcryptjs')
+
 const mnemonicStorage = new Storage('mnemonic')
 const hashedPasswordStorage = new Storage('hashed-password')
-
-export const PASSWORD_SALT = 'THIS_IS_A_SALT_5426892348596723645879243876'
 
 const creditProtocol = new CreditProtocol('http://34.238.20.130')
 
@@ -426,16 +426,10 @@ export default class Engine {
     }
   }
 
-  createUserFromCredentials(mnemonicInstance, password, hashed = '') {
-
-    var hashedPassword = hashed
-
-    if (hashed.length === 0) {
-      hashedPassword = Array.from(mnemonicInstance.toSeed(PASSWORD_SALT + password)).join('.')
-    }
+  createUserFromCredentials(mnemonicInstance, hashedPassword) {
 
     const mnemonic = mnemonicInstance.toString()
-    const privateKey = mnemonicInstance.toHDPrivateKey(password)
+    const privateKey = mnemonicInstance.toHDPrivateKey()
     const privateKeyBuffer = privateKey.privateKey.toBuffer()
     const ethAddress = ethUtil.privateToAddress(privateKeyBuffer)
     const address = ethAddress.toString('hex')
@@ -457,23 +451,23 @@ export default class Engine {
 
   async confirmAccount() {
     const { password, mnemonicInstance } = this.state
-    const user = this.createUserFromCredentials(mnemonicInstance, password)
+    const hashedPassword = bcrypt.hashSync(password)
+    const user = this.createUserFromCredentials(mnemonicInstance, hashedPassword)
     await this.storeUserSession(user)
     this.state = { user, hasStoredUser: true }
   }
 
   async loginAccount(loginData: LoginAccountData) {
     const { confirmPassword } = loginData
-    const mnemonic = await mnemonicStorage.get()
-    const mnemonicInstance = creditProtocol.getMnemonic(mnemonic)
-    const hashedPasswordReference = await hashedPasswordStorage.get()
-    const hashedPassword = Array.from(mnemonicInstance.toSeed(PASSWORD_SALT + confirmPassword)).join('.')
-
-    if (hashedPassword !== hashedPasswordReference) {
+    const hashedPassword = await hashedPasswordStorage.get()
+    const passwordMatch = bcrypt.compareSync(confirmPassword, hashedPassword)
+    if (!passwordMatch) {
       return this.setErrorMessage(accountManagement.password.failedHashComparison)
     }
 
-    const user = this.createUserFromCredentials(mnemonicInstance, confirmPassword, hashedPassword)
+    const mnemonic = await mnemonicStorage.get()
+    const mnemonicInstance = creditProtocol.getMnemonic(mnemonic)
+    const user = this.createUserFromCredentials(mnemonicInstance, hashedPassword)
     this.state = { user, hasStoredUser: true }
     this.getPendingTransactions()
   }

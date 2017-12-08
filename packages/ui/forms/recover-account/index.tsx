@@ -34,7 +34,7 @@ export default class RecoverAccountForm extends Component<Props, RecoverAccountD
         multiline
         style={style.multilineTextInput}
         placeholder={recoverMnemonic}
-        onChangeText={mnemonic => this.setState({ mnemonic })}
+        onChangeText={mnemonic => this.setState({ mnemonic: mnemonic.trim() })}
       />
       <TextInput
         secureTextEntry
