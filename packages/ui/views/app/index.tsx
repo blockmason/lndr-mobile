@@ -27,6 +27,7 @@ export default class AppView extends Component<Props, EngineState> {
     super()
     this.state = engine.state
     engine.subscribe(state => this.setState(state))
+    engine.initalizePushNotifications()
   }
 
   async componentDidMount() {
