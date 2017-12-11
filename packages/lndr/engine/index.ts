@@ -6,7 +6,7 @@ import { UrbanAirship } from 'urbanairship-react-native'
 import { longTimePeriod } from 'lndr/time'
 import Balance from 'lndr/balance'
 import User, { CreateAccountData, RecoverAccountData, LoginAccountData, UpdateAccountData } from 'lndr/user'
-import { minimumNicknameLength } from 'lndr/user'
+import { minimumNicknameLength, minimumPasswordLength } from 'lndr/user'
 import Friend from 'lndr/friend'
 import PendingTransaction from 'lndr/pending-transaction'
 import RecentTransaction from 'lndr/recent-transaction'
@@ -125,7 +125,7 @@ export default class Engine {
   }
 
   async createAccount(accountData: CreateAccountData) {
-    if (accountData.password.length < 8) {
+    if (accountData.password.length < minimumPasswordLength) {
       return this.setErrorMessage(accountManagement.password.lengthViolation)
     }
     if (accountData.password !== accountData.confirmPassword) {
@@ -133,7 +133,7 @@ export default class Engine {
     }
     // TODO what do we want the requirements for nicknames to be?
     // should whitespace be allowed?
-    if (accountData.nickname.length < 3) {
+    if (accountData.nickname.length < minimumNicknameLength) {
       return this.setErrorMessage(accountManagement.nickname.lengthViolation)
     }
 
@@ -500,7 +500,7 @@ export default class Engine {
       return this.setErrorMessage(accountManagement.mnemonic.lengthViolation)
     }
 
-    if (confirmPassword.length < 8) {
+    if (confirmPassword.length < minimumPasswordLength) {
       return this.setErrorMessage(accountManagement.password.lengthViolation)
     }
 
