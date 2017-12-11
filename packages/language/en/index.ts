@@ -53,7 +53,7 @@ export const removeAccountExhortation = 'Be sure that you have access to your mn
 export const myAccount = 'My Account'
 
 export const setNickname = 'Set a nickname so your friends can find you'
-export const nickname = 'Nickname'
+export const nickname = 'Nickname (lowercase & numbers)'
 
 export const addANewFriend = 'Add a New Friend'
 export const lndrNickname = 'Lndr Nickname:'
@@ -61,6 +61,7 @@ export const lndrNickname = 'Lndr Nickname:'
 export const accountManagement = {
   nickname: {
     lengthViolation: 'Nickname should be at least 3 characters.',
+    compositionViolation: 'Nickname can contain only numbers and lowercase letters.'
   },
   password: {
     lengthViolation: 'Password should be at least 8 characters.',

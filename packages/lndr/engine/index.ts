@@ -131,10 +131,11 @@ export default class Engine {
     if (accountData.password !== accountData.confirmPassword) {
       return this.setErrorMessage(accountManagement.password.matchViolation)
     }
-    // TODO what do we want the requirements for nicknames to be?
-    // should whitespace be allowed?
     if (accountData.nickname.length < minimumNicknameLength) {
       return this.setErrorMessage(accountManagement.nickname.lengthViolation)
+    }
+    if(accountData.nickname.match(/^[a-z0-9]*$/) === null) {
+      return this.setErrorMessage(accountManagement.nickname.compositionViolation)
     }
 
     const password = accountData.password
