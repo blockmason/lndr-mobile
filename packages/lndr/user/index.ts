@@ -55,3 +55,5 @@ export default class User {
 }
 
 export const minimumNicknameLength = 3
+
+export const minimumPasswordLength = 8
