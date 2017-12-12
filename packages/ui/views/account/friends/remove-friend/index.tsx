@@ -82,7 +82,7 @@ export default class RemoveFriend extends Component<Props, State> {
       <Text style={formStyle.text}>{friendInfo}</Text>
         <Loading context={loadingContext} />
         { this.renderBalanceRow() }
-        <Button danger onPress={() => this.removeFriend(friend)} text={removeFriend} />
+        { this.state.balance.amount === 0 && <Button danger onPress={() => this.removeFriend(friend)} text={removeFriend} /> }
         <Button alternate onPress={closePopup} text={back} />
     </View>
   }
