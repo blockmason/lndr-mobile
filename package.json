@@ -6,12 +6,14 @@
     "typescript": "node_modules/.bin/tsc -w",
     "preinstall": "cd ios && Pod install",
     "start": "node node_modules/react-native/local-cli/cli.js start",
+    "setup:env": "node scripts/env.js",
     "postinstall": "node_modules/.bin/rn-nodeify --install stream,crypto --hack"
   },
   "dependencies": {
     "assert": "^1.4.1",
     "bcryptjs": "^2.4.3",
     "bitcore-mnemonic": "^1.5.0",
+    "dotenv": "^4.0.0",
     "ethereumjs-util": "^5.1.2",
     "events": "^1.1.1",
     "react": "16.0.0",

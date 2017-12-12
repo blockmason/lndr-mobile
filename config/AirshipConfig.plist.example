@@ -3,13 +3,13 @@
 <plist version="1.0">
 <dict>
   <key>developmentAppKey</key>
-  <string>Your Development App Key</string>
+  <string><%= urbanAirshipDevAppKey %></string>
   <key>developmentAppSecret</key>
-  <string>Your Development App Secret</string>
+  <string><%= urbanAirshipDevAppSecret %></string>
   <key>productionAppKey</key>
-  <string>Your Production App Key</string>
+  <string><%= urbanAirshipProdAppKey %></string>
   <key>productionAppSecret</key>
-  <string>Your Production App Secret</string>
+  <string><%= urbanAirshipProdAppSecret %></string>
   <key>useWKWebView</key>
   <true/>
 </dict>

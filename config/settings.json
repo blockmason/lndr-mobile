@@ -1,0 +1,12 @@
+{
+  "paths": [
+    {
+      "origin": "config/AirshipConfig.plist.example",
+      "dest": "ios/AirshipConfig.plist"
+    },
+    {
+      "origin": "config/airshipconfig.properties.example",
+      "dest": "android/app/src/main/assets/airshipconfig.properties"
+    }
+  ]
+}

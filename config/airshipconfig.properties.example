@@ -1,8 +1,8 @@
-developmentAppKey = Your Development App Key
-developmentAppSecret = Your Development App Secret
+developmentAppKey = <%= urbanAirshipDevAppKey %>
+developmentAppSecret = <%= urbanAirshipDevAppSecret %>
 
-productionAppKey = Your Production App Key
-productionAppSecret = Your Production Secret
+productionAppKey = <%= urbanAirshipProdAppKey %>
+productionAppSecret = <%= urbanAirshipProdAppSecret %>
 
 # Toggles between the development and production app credentials
 # Before submitting your application to an app store set to true
@@ -13,4 +13,4 @@ developmentLogLevel = DEBUG
 productionLogLevel = ERROR
 
 # FCM/GCM Sender ID
-gcmSender = Your Google API Project Number
+gcmSender = <%= gcmSenderID %>
