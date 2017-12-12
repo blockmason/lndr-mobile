@@ -92,7 +92,17 @@ Running Android
 - ```cd android```
 - ```./gradlew assembleDebug```
 
-## Building & Signing Android APK for Google Play
+# Building
+
+### Prerequisites
+
+XCode 9.0 or higher is required, which in turn requires macOS Sierra (10.12) or higher.
+
+Private keys to sign the build: ios_dist_bm.p12 for iOS and blockmason-lndr-android.keystore for Android
+
+Copy, rename, and update the files `android/app/src/main/assets/airshipconfig.properties.example` and `ios/AirshipConfig.plist.example` with the proper UrbanAirship API key and secret from the Blockmason account on urbanairship.com
+
+## Building & Signing the Android APK for Google Play
 
 1. Get the gradle.properties file with the keystore passwords and put it in the 'android' directory.
 
@@ -101,3 +111,26 @@ Running Android
 3. Run 'cd android && ./gradlew assembleRelease' from the top-level directory.
 
 4. The signed APK will be at 'android/app/build/outputs/apk/app-release.apk'
+
+5. Upload the APK to the Play Store
+
+## Building, Signing, & Uploading for iOS through XCode 
+
+1. Navigate to directory ios/
+
+2. Run `sudo gem install cocoapods`
+
+3. Run `pod install`
+
+4. Open XCode, click `Open another project...` at bottom right, go to the directory ios/
+, select `LNDR.xcworkspace`
+
+5. Open the directory structure in the left side menu, go into `LNDR`, open `Info.plist`, click `App Transport Security Settings`, then `Exception Domains`, and delete `localhost` entry
+
+6. In top menu go to Product > Scheme > Edit Scheme (`LNDR` scheme should be selected), in Run > Info change the Build Configuration to 'Release'
+
+7. Run the command Product > Clean (command + shift + K), then Product > Build (command + B)
+
+8. Once the build finishes, run Product > Archive
+
+9. Click 'Upload to App Store' on the right side, and follow steps to upload.
