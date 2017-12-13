@@ -1,12 +1,12 @@
 import React, { Component } from 'react'
 
-import { View, Text } from 'react-native'
+import { View, Text, Clipboard } from 'react-native'
 
 import Engine from 'lndr/engine'
 
 import Button from 'ui/components/button'
 
-import { next, mnemonicExhortation } from 'language'
+import { next, copy, mnemonicExhortation } from 'language'
 
 import style from 'theme/form'
 
@@ -23,6 +23,7 @@ export default class RecoverAccountView extends Component<Props> {
       <View style={style.form}>
         <Text style={style.header}>{mnemonicExhortation}</Text>
         <Text selectable style={style.displayText}>{mnemonic}</Text>
+        <Button icon='md-copy' onPress={() => Clipboard.setString(mnemonic)} text={copy} />
         <Button onPress={() => engine.mnemonicDisplayed()} text={next} />
       </View>
     )

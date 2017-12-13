@@ -2,7 +2,7 @@ import React, { Component } from 'react'
 
 import { defaultUpdateAccountData } from 'lndr/user'
 
-import { Text, TextInput, View } from 'react-native'
+import { Text, TextInput, View, Clipboard } from 'react-native'
 
 import Engine from 'lndr/engine'
 import Button from 'ui/components/button'
@@ -12,7 +12,7 @@ const loadingContext = new LoadingContext()
 
 import style from 'theme/form'
 
-import { nickname, setNickname, updateAccount, cancel, mnemonicExhortation } from 'language'
+import { nickname, setNickname, updateAccount, copy, cancel, mnemonicExhortation } from 'language'
 
 interface Props {
   engine: Engine,
@@ -53,6 +53,7 @@ export default class MyAccount extends Component<Props, State> {
       <Loading context={loadingContext} />
       <Text style={style.text}>{mnemonicExhortation}</Text>
       <Text selectable style={style.displayText}>{user.mnemonic}</Text>
+      <Button icon='md-copy' onPress={() => Clipboard.setString(user.mnemonic)} text={copy} />
       <Text style={style.text}>{setNickname}</Text>
       <TextInput
         autoCapitalize='none'
