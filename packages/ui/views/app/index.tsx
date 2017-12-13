@@ -77,6 +77,7 @@ export default class AppView extends Component<Props, EngineState> {
       user,
       mnemonicInstance,
       isInitializing,
+      isAuthLoading,
       hasStoredUser,
       welcomeComplete,
       shouldRecoverAccount,
@@ -97,6 +98,7 @@ export default class AppView extends Component<Props, EngineState> {
       return <AuthenticateView
         engine={engine}
         mnemonic={mnemonicInstance ? mnemonicInstance.toString() : null}
+        isAuthLoading={isAuthLoading}
         shouldRecoverAccount={shouldRecoverAccount}
         shouldRemoveAccount={shouldRemoveAccount}
         shouldDisplayMnemonic={shouldDisplayMnemonic}

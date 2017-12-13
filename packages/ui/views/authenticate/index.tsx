@@ -1,6 +1,6 @@
 import React, { Component } from 'react'
 
-import { ScrollView } from 'react-native'
+import { View, ActivityIndicator, ScrollView } from 'react-native'
 
 import Engine from 'lndr/engine'
 
@@ -17,9 +17,12 @@ import ConfirmAccountView from './confirm-account'
 import general from 'theme/general'
 import style from 'theme/authenticate'
 
+import loadingStyle from 'theme/loading'
+
 interface Props {
   engine: Engine,
   hasStoredUser?: boolean
+  isAuthLoading?: boolean
   shouldRecoverAccount?: boolean
   shouldRemoveAccount?: boolean
   shouldDisplayMnemonic?: boolean
@@ -32,8 +35,21 @@ export default class AuthenticateView extends Component<Props> {
       <FadeInView style={style.main}>
         <ThemeImage name='logo' />
         {this.renderView()}
+        {this.renderLoadingView()}
       </FadeInView>
     </ScrollView>
+  }
+
+  renderLoadingView() {
+    const { isAuthLoading } = this.props
+    if (isAuthLoading === true) {
+      return (
+        <View style={loadingStyle.loading}>
+          <ActivityIndicator size='large' />
+        </View>
+      )
+    }
+    return null
   }
 
   renderView() {

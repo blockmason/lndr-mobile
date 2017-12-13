@@ -28,6 +28,7 @@ const creditProtocol = new CreditProtocol('http://34.238.20.130')
 export interface EngineState {
   user?: User,
   isInitializing?: boolean
+  isAuthLoading?: boolean
   hasStoredUser?: boolean
   shouldRecoverAccount?: boolean
   shouldRemoveAccount?: boolean
@@ -56,6 +57,7 @@ export default class Engine {
     this.engineState = {
       hasStoredUser: false,
       welcomeComplete: false,
+      isAuthLoading: false,
       shouldRecoverAccount: false,
       shouldRemoveAccount: false,
       shouldDisplayMnemonic: false
@@ -520,6 +522,10 @@ export default class Engine {
     await mnemonicStorage.remove()
     await hashedPasswordStorage.remove()
     this.state = { hasStoredUser: false, shouldRemoveAccount: false }
+  }
+
+  setAuthLoading(state) {
+    this.state = { isAuthLoading: state }
   }
 
   goToRecoverAccount() {
