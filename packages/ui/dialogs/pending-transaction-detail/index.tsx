@@ -62,7 +62,10 @@ export default class PendingTransactionDetail extends Component<Props> {
         <Text style={formStyle.text}>
           {pendingTransactionsLanguage.pendingAnnouncement}
         </Text>
-        <Button style={formStyle.lastButton} onPress={closePopup} text={back} />
+        <View style={style.listItem}>
+          <Button containerStyle={formStyle.leftButton} danger onPress={() => this.rejectPendingTransaction(pendingTransaction)} text={cancel} />
+          <Button containerStyle={formStyle.rightButton} onPress={closePopup} text={back} />
+        </View>
       </View>
     }
 
