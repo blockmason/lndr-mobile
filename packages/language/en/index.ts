@@ -7,6 +7,7 @@ export const submit = 'Submit'
 export const next = 'Next'
 export const cancel = 'Cancel'
 export const back = 'Go Back'
+export const copy = 'Copy to Clipboard'
 
 export const confirmAccount = 'Confirm'
 export const createAccount = 'Create Account'
