@@ -8,8 +8,6 @@ import LoginAccountForm from 'ui/forms/login-account'
 
 import { LoginAccountData } from 'lndr/user'
 
-import Popup from 'ui/components/popup'
-
 interface Props {
   engine: Engine
 }

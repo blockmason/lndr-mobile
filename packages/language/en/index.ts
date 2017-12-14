@@ -62,7 +62,8 @@ export const lndrNickname = 'Lndr Nickname:'
 export const accountManagement = {
   nickname: {
     lengthViolation: 'Nickname should be at least 3 characters.',
-    compositionViolation: 'Nickname can contain only numbers and lowercase letters.'
+    compositionViolation: 'Nickname can contain only numbers and lowercase letters.',
+    duplicationViolation: 'Nickname is already taken'
   },
   password: {
     lengthViolation: 'Password should be at least 8 characters.',

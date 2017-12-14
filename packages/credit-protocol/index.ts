@@ -77,6 +77,10 @@ export default class CreditProtocol {
     return this.client.get(`/search_nick/${nick}`)
   }
 
+  takenNick(nick: string) {
+    return this.client.get(`/taken_nick/${nick}`)
+  }
+
   addFriend(user: string, addr: string/*, privateKeyBuffer: any*/) {
     return this.client.post(`/add_friends/${user}`, [ addr ])
     // {

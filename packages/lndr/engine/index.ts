@@ -225,6 +225,14 @@ export default class Engine {
     }
   }
 
+  async takenNick(nickname: string) {
+    let result = false
+    if (nickname.length >= minimumNicknameLength) {
+      result = await creditProtocol.takenNick(nickname)
+    }
+    return result
+  }
+
   async addFriend(friend: Friend) {
   const { address/*, privateKeyBuffer*/ } = this.user
     try {
