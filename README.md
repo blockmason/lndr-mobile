@@ -49,14 +49,11 @@ _*Note:* this file is over 50 lines long because it contains a lot of relevant i
 ## ... on iOS
 
 - `yarn`
-- (only need to do this once or if native dependencies change) `react-native link` (note it may hang on `rnpm-install info Assets have been successfully linked to your project` - it's ok to kill it then)
-- _(optionally)_ kill the spawned terminal and run packager manually: `yarn start`
+- Fill in the `.env.example` with the proper information and save as `.env`.
+- `yarn run setup:env`
 - (in new terminal) `yarn run typescript`
+- (only need to do this once or if native dependencies change) `react-native link` (note it may hang on `rnpm-install info Assets have been successfully linked to your project` - it's ok to kill it then)
 - `react-native run-ios`
-
-Running on a device (Needed for push notifications)
-
-- Fill in the `ios/AirshipConfig.plist.example` with the proper information, save as a plist file, and target the application.
 
 ## ... on Android
 
@@ -70,12 +67,12 @@ Setting up ANDROID_HOME env variable
 
 <installation location> will be found in android studio (if installed) in Preferences -> Appearance & Behaviour -> System Settings -> Android SDK
 
-Fill in `android/app/src/main/assets/airshipconfig.properties.example` and save as a properties file.
-
+- Fill in the `.env.example` with the proper information and save as `.env`.
+- `yarn run setup:env`
 
 Running Android
 
-- `react-native run-android`
+- Run `react-native run-android`
 
 
 ## ... Logging apps

@@ -1,9 +1,13 @@
+# General
+.env
+
 # TypeScript
 /lib
 
 # OSX
 #
 .DS_Store
+
 
 # Xcode
 #
