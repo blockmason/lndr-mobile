@@ -30,6 +30,11 @@ export default class AccountView extends Component<Props> {
   pending: any
   tabs: any
 
+  constructor(props) {
+    super(props)
+    props.engine.initalizePushNotifications()
+  }
+
   getPendingBadge() {
     const { pendingTransactionsCount } = this.props
 

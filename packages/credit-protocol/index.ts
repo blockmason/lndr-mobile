@@ -77,6 +77,10 @@ export default class CreditProtocol {
     return this.client.get(`/search_nick/${nick}`)
   }
 
+  registerChannelID(user: string, channelID: string, platform: string) {
+    return this.client.post(`/register_push/${user}`, { channelID, platform })
+  }
+
   takenNick(nick: string) {
     return this.client.get(`/taken_nick/${nick}`)
   }

@@ -15,7 +15,7 @@ interface Props {
   mnemonic?: string
 }
 
-export default class RecoverAccountView extends Component<Props> {
+export default class ConfirmAccountView extends Component<Props> {
   render() {
     const { engine, mnemonic } = this.props
 
@@ -23,7 +23,7 @@ export default class RecoverAccountView extends Component<Props> {
       <View style={style.form}>
         <Text style={style.header}>{mnemonicExhortation}</Text>
         <Text selectable style={style.displayText}>{mnemonic}</Text>
-        <Button icon='md-copy' onPress={() => Clipboard.setString(mnemonic)} text={copy} />
+        <Button icon='md-copy' onPress={() => Clipboard.setString(mnemonic ? mnemonic : ' ')} text={copy} />
         <Button onPress={() => engine.mnemonicDisplayed()} text={next} />
       </View>
     )
