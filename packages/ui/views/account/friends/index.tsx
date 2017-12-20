@@ -19,10 +19,13 @@ import style from 'theme/account'
 
 import { addFriend, noFriends, currentFriends } from 'language'
 
+import { withNavigationFocus } from 'react-navigation-is-focused-hoc'
+
 const loadingFriends = new LoadingContext()
 
 interface Props {
   engine: Engine
+  isFocused: boolean
 }
 
 interface State {
@@ -31,7 +34,7 @@ interface State {
   friendToRemove?: Friend
 }
 
-export default class FriendsView extends Component<Props, State> {
+class FriendsView extends Component<Props, State> {
   stillRelevant?: boolean
 
   constructor() {
@@ -47,6 +50,12 @@ export default class FriendsView extends Component<Props, State> {
     const { engine } = this.props
     const friends = await loadingFriends.wrap(engine.getFriends())
     this.stillRelevant && this.setState({ friendsLoaded: true, friends })
+  }
+
+  componentWillReceiveProps(nextProps) {
+    if (!this.props.isFocused && nextProps.isFocused) {
+      this.refresh()
+    }
   }
 
   refresh() {
@@ -101,3 +110,5 @@ export default class FriendsView extends Component<Props, State> {
     </View>
   }
 }
+
+export default withNavigationFocus(FriendsView, 'Friends')

@@ -82,8 +82,7 @@ export default class AppView extends Component<Props, EngineState> {
       welcomeComplete,
       shouldRecoverAccount,
       shouldRemoveAccount,
-      shouldDisplayMnemonic,
-      pendingTransactionsCount
+      shouldDisplayMnemonic
     } = this.state
 
     if (isInitializing) {
@@ -106,9 +105,6 @@ export default class AppView extends Component<Props, EngineState> {
       />
     }
 
-    return <AccountView
-      engine={engine}
-      pendingTransactionsCount={pendingTransactionsCount}
-    />
+    return <AccountView engine={engine} />
   }
 }

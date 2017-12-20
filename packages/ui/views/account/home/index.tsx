@@ -37,11 +37,14 @@ import {
   recentTransactionsLanguage
 } from 'language'
 
+import { withNavigationFocus } from 'react-navigation-is-focused-hoc'
+
 const loadingBalances = new LoadingContext()
 const loadingRecentTransactions = new LoadingContext()
 
 interface Props {
   engine: Engine
+  isFocused: boolean
 }
 
 interface State {
@@ -57,7 +60,9 @@ interface State {
   recentTransactions: RecentTransaction[]
 }
 
-export default class HomeView extends Component<Props, State> {
+// TODO - Split up the HomeView into smaller Components (Screen/Settings/View Code)
+
+class HomeView extends Component<Props, State> {
   constructor() {
     super()
     this.state = {
@@ -76,7 +81,6 @@ export default class HomeView extends Component<Props, State> {
 
     try {
       const accountInformation = await engine.getAccountInformation()
-
       this.setState({ accountInformation, accountInformationLoaded: true })
     }
 
@@ -86,9 +90,14 @@ export default class HomeView extends Component<Props, State> {
 
     const recentTransactions = await loadingRecentTransactions.wrap(engine.getRecentTransactions())
     this.setState({ recentTransactionsLoaded: true, recentTransactions })
-
     const balances = await loadingBalances.wrap(engine.getBalances())
     this.setState({ balances, balancesLoaded: true })
+  }
+
+  componentWillReceiveProps(nextProps) {
+    if (!this.props.isFocused && nextProps.isFocused) {
+      this.refresh()
+    }
   }
 
   refresh() {
@@ -206,7 +215,7 @@ export default class HomeView extends Component<Props, State> {
         { this.renderBalanceInformation() }
       </Section>
       <Section>
-        <Button action onPress={() => this.showAddDebt()} text={addNewDebt} />
+        <Button action onPress={this.showAddDebt.bind(this)} text={addNewDebt} />
       </Section>
 
       <Section text='Recent Transactions' contentContainerStyle={style.list}>
@@ -228,3 +237,5 @@ export default class HomeView extends Component<Props, State> {
     </View>
   }
 }
+
+export default withNavigationFocus(HomeView, 'Home')
