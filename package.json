@@ -7,7 +7,8 @@
     "preinstall": "cd ios && Pod install",
     "start": "node node_modules/react-native/local-cli/cli.js start",
     "setup:env": "node scripts/env.js",
-    "postinstall": "node_modules/.bin/rn-nodeify --install stream,crypto --hack"
+    "postinstall": "node_modules/.bin/rn-nodeify --install stream,crypto --hack",
+    "debug": "open 'rndebugger://set-debugger-loc?host=localhost&port=8081'"
   },
   "dependencies": {
     "assert": "^1.4.1",
@@ -29,13 +30,15 @@
     "react-native-masked-text": "^1.6.3",
     "react-native-popup-dialog": "^0.9.39",
     "react-native-randombytes": "^3.0.0",
+    "react-native-redux-toast": "^1.0.1",
     "react-native-sqlite-storage": "^3.3.3",
     "react-native-vector-icons": "^4.4.2",
     "react-navigation": "^1.0.0-beta.21",
-    "react-navigation-is-focused-hoc": "^1.0.0",
     "react-redux": "^5.0.6",
     "readable-stream": "^1.0.33",
+    "reduce-reducers": "^0.1.2",
     "redux": "^3.7.2",
+    "redux-devtools-extension": "^2.13.2",
     "redux-logger": "^3.0.6",
     "redux-thunk": "^2.2.0",
     "rn-nodeify": "^8.2.0",

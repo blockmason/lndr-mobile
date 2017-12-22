@@ -2,30 +2,37 @@ import React, { Component } from 'react'
 
 import { View, Text } from 'react-native'
 
-import Engine from 'lndr/engine'
-
 import LoginAccountForm from 'ui/forms/login-account'
+
+import { connect } from 'react-redux'
+
+import { setAuthLoading, loginAccount, goToRemoveAccount } from 'actions'
 
 import { LoginAccountData } from 'lndr/user'
 
 interface Props {
-  engine: Engine
+  setAuthLoading: (state: boolean) => any
+  loginAccount: (formData: LoginAccountData) => any
+  goToRemoveAccount: () => any
 }
 
-export default class LoginView extends Component<Props> {
+class LoginView extends Component<Props> {
   async handleOnSubmitLoginAccount(formData: LoginAccountData) {
-    await this.props.engine.setAuthLoading(true)
-    await this.props.engine.loginAccount(formData)
-    this.props.engine.setAuthLoading(false)
+    this.props.setAuthLoading(true)
+    await this.props.loginAccount(formData)
+    this.props.setAuthLoading(false)
   }
 
   render() {
-    const { engine } = this.props
     return (
       <LoginAccountForm
         onSubmit={this.handleOnSubmitLoginAccount.bind(this)}
-        onRemoveAccount={() => engine.goToRemoveAccount()}
+        onRemoveAccount={this.props.goToRemoveAccount}
       />
     )
   }
 }
+
+const mapDispatchToProps = { setAuthLoading, loginAccount, goToRemoveAccount }
+
+export default connect(null, mapDispatchToProps)(LoginView)

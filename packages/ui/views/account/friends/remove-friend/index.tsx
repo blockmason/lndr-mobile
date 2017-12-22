@@ -3,9 +3,9 @@ import React, { Component } from 'react'
 import { Text, TextInput, TouchableHighlight, View } from 'react-native'
 
 import { debounce } from 'lndr/time'
-import Engine from 'lndr/engine'
 import Balance from 'lndr/balance'
 import Friend from 'lndr/friend'
+import { UserData } from 'lndr/user'
 
 import Button from 'ui/components/button'
 import Loading, { LoadingContext } from 'ui/components/loading'
@@ -18,16 +18,21 @@ import formStyle from 'theme/form'
 import {
   cancel,
   back,
-  removeFriend,
+  removeFriend as removeFriendText,
   friendInfo,
   noBalances
 } from 'language'
+
+import { getUser } from 'reducers/app'
+import { getTwoPartyBalance, removeFriend } from 'actions'
+import { connect } from 'react-redux'
 
 const loadingContext = new LoadingContext()
 
 interface Props {
   friend: Friend
-  engine: Engine
+  user: UserData
+  removeFriend: (friend: Friend) => any
   closePopup: () => void
 }
 
@@ -36,7 +41,7 @@ interface State {
   balance: Balance
 }
 
-export default class RemoveFriend extends Component<Props, State> {
+class RemoveFriend extends Component<Props, State> {
   constructor() {
     super()
     this.state = {
@@ -46,21 +51,20 @@ export default class RemoveFriend extends Component<Props, State> {
   }
 
   async removeFriend(friend: Friend) {
-    const { engine, closePopup } = this.props
+    const { closePopup } = this.props
 
     await loadingContext.wrap(
-      engine.removeFriend(friend)
+      this.props.removeFriend(friend)
     )
 
     closePopup()
   }
 
   async componentDidMount() {
-    const { engine, friend } = this.props
-    const balance = await engine.getTwoPartyBalance(friend)
-    this.setState({ balance , balanceLoaded: true })
+    const { user, friend } = this.props
+    const balance = await getTwoPartyBalance(user, friend)
+    this.setState({ balance, balanceLoaded: true })
   }
-
 
   renderBalanceRow() {
     const { balance , balanceLoaded } = this.state
@@ -82,8 +86,10 @@ export default class RemoveFriend extends Component<Props, State> {
       <Text style={formStyle.text}>{friendInfo}</Text>
         <Loading context={loadingContext} />
         { this.renderBalanceRow() }
-        { this.state.balance.amount === 0 && <Button danger onPress={() => this.removeFriend(friend)} text={removeFriend} /> }
+        { this.state.balance.amount === 0 && <Button danger onPress={() => this.removeFriend(friend)} text={removeFriendText} /> }
         <Button alternate onPress={closePopup} text={back} />
     </View>
   }
 }
+
+export default connect((state) => ({ user: getUser(state)() }),{ removeFriend })(RemoveFriend)

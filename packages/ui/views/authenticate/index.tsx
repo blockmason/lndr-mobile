@@ -2,9 +2,6 @@ import React, { Component } from 'react'
 
 import { View, ActivityIndicator, ScrollView } from 'react-native'
 
-import Engine from 'lndr/engine'
-
-import Alert from 'ui/components/alert'
 import ThemeImage from 'ui/components/images/theme-image'
 import FadeInView from 'ui/components/fade-in-view'
 
@@ -17,19 +14,16 @@ import ConfirmAccountView from './confirm-account'
 import general from 'theme/general'
 import style from 'theme/authenticate'
 
+import { connect } from 'react-redux'
+import { getStore } from 'reducers/app'
+
 import loadingStyle from 'theme/loading'
 
 interface Props {
-  engine: Engine,
-  hasStoredUser?: boolean
-  isAuthLoading?: boolean
-  shouldRecoverAccount?: boolean
-  shouldRemoveAccount?: boolean
-  shouldDisplayMnemonic?: boolean
-  mnemonic?: string
+  state: any
 }
 
-export default class AuthenticateView extends Component<Props> {
+class AuthenticateView extends Component<Props> {
   render() {
     return <ScrollView contentContainerStyle={general.whiteFlex}>
       <FadeInView style={style.main}>
@@ -41,7 +35,7 @@ export default class AuthenticateView extends Component<Props> {
   }
 
   renderLoadingView() {
-    const { isAuthLoading } = this.props
+    const { isAuthLoading } = this.props.state
     if (isAuthLoading === true) {
       return (
         <View style={loadingStyle.loading}>
@@ -54,24 +48,26 @@ export default class AuthenticateView extends Component<Props> {
 
   renderView() {
     const {
-      engine,
       hasStoredUser,
       shouldRecoverAccount,
       shouldRemoveAccount,
       shouldDisplayMnemonic,
-      mnemonic
-    } = this.props
+    } = this.props.state
 
     if (shouldDisplayMnemonic) {
-      return <ConfirmAccountView engine={engine} mnemonic={mnemonic} />
+      return <ConfirmAccountView />
     } else if (shouldRemoveAccount) {
-      return <RemoveAccountView engine={engine} />
+      return <RemoveAccountView />
     } else if (hasStoredUser) {
-      return <LoginView engine={engine} />
+      return <LoginView />
     } else if (shouldRecoverAccount) {
-      return <RecoverAccountView engine={engine} />
+      return <RecoverAccountView />
     } else {
-      return <CreateAccountView engine={engine} />
+      return <CreateAccountView />
     }
   }
 }
+
+const mapStateToProps = (state) => ({ state: getStore(state)() })
+
+export default connect(mapStateToProps)(AuthenticateView)

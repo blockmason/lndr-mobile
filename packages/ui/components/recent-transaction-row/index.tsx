@@ -3,7 +3,6 @@ import React, { Component } from 'react'
 import { Text, TouchableHighlight, View } from 'react-native'
 
 import { cents } from 'lndr/format'
-import Engine from 'lndr/engine'
 import User from 'lndr/user'
 
 import RecentTransaction from 'lndr/recent-transaction'
@@ -16,7 +15,6 @@ import style from 'theme/account'
 import formStyle from 'theme/form'
 
 interface Props {
-  engine: Engine
   onPress?: () => void
   recentTransaction: RecentTransaction,
   user: User

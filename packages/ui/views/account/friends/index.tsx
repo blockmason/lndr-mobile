@@ -1,7 +1,5 @@
 import React, { Component } from 'react'
 
-import Engine from 'lndr/engine'
-
 import Friend from 'lndr/friend'
 
 import { Text, View } from 'react-native'
@@ -19,18 +17,20 @@ import style from 'theme/account'
 
 import { addFriend, noFriends, currentFriends } from 'language'
 
-import { withNavigationFocus } from 'react-navigation-is-focused-hoc'
+import { isFocusingOn } from 'reducers/nav'
+import { getStore } from 'reducers/app'
+import { getFriends } from 'actions'
+import { connect } from 'react-redux'
 
 const loadingFriends = new LoadingContext()
 
 interface Props {
-  engine: Engine
   isFocused: boolean
+  getFriends: () => any
+  state: any
 }
 
 interface State {
-  friendsLoaded: boolean
-  friends: Friend[]
   friendToRemove?: Friend
 }
 
@@ -39,17 +39,13 @@ class FriendsView extends Component<Props, State> {
 
   constructor() {
     super()
-    this.state = {
-      friendsLoaded: false,
-      friends: []
-    }
+    this.state = {}
   }
 
   async componentDidMount() {
     this.stillRelevant = true
-    const { engine } = this.props
-    const friends = await loadingFriends.wrap(engine.getFriends())
-    this.stillRelevant && this.setState({ friendsLoaded: true, friends })
+    const friends = await loadingFriends.wrap(this.props.getFriends())
+    this.stillRelevant
   }
 
   componentWillReceiveProps(nextProps) {
@@ -78,21 +74,18 @@ class FriendsView extends Component<Props, State> {
       return null
     }
 
-    const { engine } = this.props
-
     return <Popup onClose={() => this.setState({ friendToRemove: undefined })}>
-      <RemoveFriend friend={friendToRemove} closePopup={() => this.closePopupAndRefresh()} engine={engine} />
+      <RemoveFriend friend={friendToRemove} closePopup={() => this.closePopupAndRefresh()} />
     </Popup>
   }
 
   render() {
-    const { friendsLoaded, friends } = this.state
-    const { engine } = this.props
+    const { friendsLoaded, friends } = this.props.state
 
     return <View>
       { this.renderRemoveFriendDialog() }
       <Section>
-        <AddFriend onSuccess={() => this.refresh()} engine={engine} />
+        <AddFriend onSuccess={() => this.refresh()} />
       </Section>
       <Section text={currentFriends} contentContainerStyle={style.list}>
         <Loading context={loadingFriends} />
@@ -111,4 +104,4 @@ class FriendsView extends Component<Props, State> {
   }
 }
 
-export default withNavigationFocus(FriendsView, 'Friends')
+export default connect((state) => ({ state: getStore(state)(), isFocused: isFocusingOn(state)('Friends') }), { getFriends })(FriendsView)

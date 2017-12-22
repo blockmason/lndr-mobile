@@ -4,7 +4,6 @@ import { Text, TextInput, TouchableHighlight, View } from 'react-native'
 
 import { debounce } from 'lndr/time'
 import { minimumNicknameLength } from 'lndr/user'
-import Engine from 'lndr/engine'
 import Friend from 'lndr/friend'
 
 import Button from 'ui/components/button'
@@ -21,15 +20,18 @@ import {
   cancel,
   back,
   noMatches,
-  addFriend,
+  addFriend as addFriendText,
   addFriendConfirmationQuestion
 } from 'language'
+
+import { searchUsers, addFriend } from 'actions'
+import { connect } from 'react-redux'
 
 const loadingContext = new LoadingContext()
 
 interface Props {
-  engine: Engine
   onSuccess: () => void
+  addFriend: (friend: Friend) => any
 }
 
 interface State {
@@ -38,7 +40,7 @@ interface State {
   matches: Friend[]
 }
 
-export default class AddFriend extends Component<Props, State> {
+class AddFriend extends Component<Props, State> {
   searchAction: (string) => void
 
   constructor() {
@@ -51,13 +53,11 @@ export default class AddFriend extends Component<Props, State> {
   }
 
   componentDidMount() {
-    const { engine } = this.props
-
     this.searchAction = debounce(
       async (nickname) => {
         try {
           const matches = await loadingContext.wrap(
-            engine.searchUsers({ nickname })
+            searchUsers({ nickname })
           )
           this.setState({ hasSearchTerm: nickname.length >= minimumNicknameLength, matches })
         }
@@ -70,14 +70,14 @@ export default class AddFriend extends Component<Props, State> {
   }
 
   removeCandidateForFriendship() {
-    this.setState({ candidateForFriendship: undefined, hasSearchTerm: false })
-  }
+      this.setState({ candidateForFriendship: undefined, hasSearchTerm: false })
+    }
 
-  async confirmFriend(friend: Friend) {
-    const { engine, onSuccess } = this.props
+    async confirmFriend(friend: Friend) {
+      const { onSuccess } = this.props
 
-    await loadingContext.wrap(
-      engine.addFriend(friend)
+      await loadingContext.wrap(
+        this.props.addFriend(friend)
     )
 
     this.removeCandidateForFriendship()
@@ -95,7 +95,7 @@ export default class AddFriend extends Component<Props, State> {
             key={candidateForFriendship.address}
             friend={candidateForFriendship}
           />
-          <Button action onPress={() => this.confirmFriend(candidateForFriendship)} text={addFriend} />
+          <Button action onPress={() => this.confirmFriend(candidateForFriendship)} text={addFriendText} />
           <Button alternate onPress={() => this.removeCandidateForFriendship()} text={back} />
       </View>
     }
@@ -128,3 +128,5 @@ export default class AddFriend extends Component<Props, State> {
     </View>
   }
 }
+
+export default connect(null, { addFriend })(AddFriend)

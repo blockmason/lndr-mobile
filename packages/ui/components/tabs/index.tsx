@@ -18,27 +18,13 @@ interface Props {
   text: string
   badge?: any
   onPress: () => void
-}
-
-interface State {
   active: boolean
 }
 
-export class Tab extends Component<Props, State> {
-  constructor() {
-    super()
-    this.state = {
-      active: false
-    }
-  }
-
-  setActive(active) {
-    this.setState({ active })
-  }
-
+export class Tab extends Component<Props> {
   render() {
-    const tabStyle = getTabStyle(this.state.active)
-    const textStyle = getTextStyle(this.state.active)
+    const tabStyle = getTabStyle(this.props.active)
+    const textStyle = getTextStyle(this.props.active)
 
     return (
       <TouchableHighlight

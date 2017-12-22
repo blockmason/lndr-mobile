@@ -17,6 +17,15 @@ export interface UpdateAccountData {
   nickname: string
 }
 
+export interface UserData {
+  mnemonic: string
+  hashedPassword: string
+  privateKey: any
+  privateKeyBuffer: any
+  ethAddress: any
+  address: string
+}
+
 export const defaultCreateAccountData = (): CreateAccountData => ({
   nickname: '',
   password: '',

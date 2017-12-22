@@ -2,8 +2,6 @@ import React, { Component } from 'react'
 
 import { View, Text, TextInput } from 'react-native'
 
-import Engine from 'lndr/engine'
-
 import Friend from 'lndr/friend'
 import { currency } from 'lndr/format'
 
@@ -17,50 +15,55 @@ import formStyle from 'theme/form'
 
 import { debtManagement, noFriends, submit, cancel, back } from 'language'
 
+import { getStore } from 'reducers/app'
+import { addDebt, getFriends } from 'actions'
+import { connect } from 'react-redux'
+
 const loadingFriends = new LoadingContext()
 const submittingTransaction = new LoadingContext()
 
 interface Props {
   closePopup: () => void
-  engine: Engine
+  getFriends: () => any
+  addDebt: (
+    friend: Friend,
+    amount: string,
+    memo: string,
+    direction: string
+  ) => any
+  state: any
 }
 
 interface State {
   shouldSelectFriend: boolean
-  friends: Friend[]
-  friendsLoaded: boolean
-
   friend?: Friend
   amount?: string
   memo?: string
   direction?: string
 }
 
-export default class AddDebt extends Component<Props, State> {
+class AddDebt extends Component<Props, State> {
   stillRelevant?: boolean
 
   constructor() {
     super()
     this.state = {
-      shouldSelectFriend: false,
-      friendsLoaded: false,
-      friends: []
+      shouldSelectFriend: false
     }
   }
 
   async componentDidMount() {
     this.stillRelevant = true
-    const { engine } = this.props
-    const friends = await loadingFriends.wrap(engine.getFriends())
-    this.stillRelevant && this.setState({ friendsLoaded: true, friends })
+    const friends = await loadingFriends.wrap(this.props.getFriends())
+    this.stillRelevant
   }
 
   async submit() {
-    const { engine, closePopup } = this.props
+    const { closePopup } = this.props
     const { friend, amount, memo, direction } = this.state
 
     const success = await submittingTransaction.wrap(
-      engine.addDebt(
+      this.props.addDebt(
         friend as Friend,
         amount as string,
         memo as string,
@@ -89,7 +92,7 @@ export default class AddDebt extends Component<Props, State> {
   }
 
   renderSelectFriend() {
-    const { friendsLoaded, friends } = this.state
+    const { friendsLoaded, friends } = this.props.state
     const goBack = () => this.setState({ shouldSelectFriend: false })
 
     return <View>
@@ -171,3 +174,5 @@ export default class AddDebt extends Component<Props, State> {
     </View>
   }
 }
+
+export default connect((state) => ({ state: getStore(state)() }), { addDebt, getFriends })(AddDebt)
