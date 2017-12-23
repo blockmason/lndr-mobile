@@ -428,6 +428,11 @@ export default class Engine {
       return this.setErrorMessage('You can\'t create debt with yourself, choose another friend')
     }
 
+    const pendingTransactions = await this.getPendingTransactions()
+    if(pendingTransactions.some( ele => ele.creditorAddress === this.user.address || ele.debtorAddress === this.user.address ) ) {
+      return this.setErrorMessage('Please resolve your pending transaction with this user before creating another')
+    }
+
     const [ creditorAddress, debtorAddress ] = {
       lend: [ address, friend.address ],
       borrow: [ friend.address, address ]
