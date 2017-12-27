@@ -2,6 +2,7 @@
 
 import ethUtil from 'ethereumjs-util'
 import { UrbanAirship } from 'urbanairship-react-native'
+import { Platform } from 'react-native';
 
 import { longTimePeriod } from 'lndr/time'
 import Balance from 'lndr/balance'
@@ -74,13 +75,15 @@ export default class Engine {
   }
 
   initalizePushNotifications() {
+    if (!this.state.hasStoredUser) {
+      return
+    }
     UrbanAirship.setUserNotificationsEnabled(true)
     UrbanAirship.addListener("register", (event) => {
-      console.log('Channel registration updated: ', event.channelId);
-      console.log('Registration token: ', event.registrationToken);
+      this.registerChannelID(event.channelId, Platform.OS)
     });
     UrbanAirship.addListener("pushReceived", (notification) => {
-        console.log('Received push: ', JSON.stringify(notification));
+      console.log('Received push: ', JSON.stringify(notification));
     });
     UrbanAirship.setForegroundPresentationOptions({
       alert: true,
@@ -231,6 +234,11 @@ export default class Engine {
       result = await creditProtocol.takenNick(nickname)
     }
     return result
+  }
+
+  registerChannelID(channelID: string, platform: string) {
+    const { address } = this.user
+    creditProtocol.registerChannelID(address, channelID, platform)
   }
 
   async addFriend(friend: Friend) {
