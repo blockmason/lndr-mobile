@@ -17,10 +17,13 @@ import style from 'theme/account'
 
 import { pendingTransactionsLanguage } from 'language'
 
+import { withNavigationFocus } from 'react-navigation-is-focused-hoc'
+
 const loadingPendingTransactions = new LoadingContext()
 
 interface Props {
   engine: Engine
+  isFocused: boolean
 }
 
 interface State {
@@ -29,7 +32,7 @@ interface State {
   pendingTransactions: PendingTransaction[]
 }
 
-export default class PendingTransactionsView extends Component<Props, State> {
+class PendingTransactionsView extends Component<Props, State> {
 
   constructor() {
     super()
@@ -43,6 +46,12 @@ export default class PendingTransactionsView extends Component<Props, State> {
     const { engine } = this.props
     const pendingTransactions = await loadingPendingTransactions.wrap(engine.getPendingTransactions())
     this.setState({ pendingTransactionsLoaded: true, pendingTransactions })
+  }
+
+  componentWillReceiveProps(nextProps) {
+    if (!this.props.isFocused && nextProps.isFocused) {
+      this.refresh()
+    }
   }
 
   refresh() {
@@ -97,3 +106,5 @@ export default class PendingTransactionsView extends Component<Props, State> {
     </View>
   }
 }
+
+export default withNavigationFocus(PendingTransactionsView, 'Activity')

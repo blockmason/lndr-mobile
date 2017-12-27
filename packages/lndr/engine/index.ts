@@ -38,7 +38,6 @@ export interface EngineState {
   password?: string
   errorMessage?: string
   successMessage?: string
-  pendingTransactionsCount?: number
 }
 
 interface EngineStateListener {
@@ -342,7 +341,6 @@ export default class Engine {
     const rawPendingTransactions = await creditProtocol.getPendingTransactions(address)
     const pendingTransactions = rawPendingTransactions.map(this.jsonToPendingTransaction)
     await this.ensureTransactionNicknames(pendingTransactions)
-    this.state = { pendingTransactionsCount: pendingTransactions.length }
     return pendingTransactions
   }
 
