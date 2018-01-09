@@ -1,52 +1,60 @@
 import React, { Component } from 'react'
 
-import { defaultUpdateAccountData } from 'lndr/user'
+import { defaultUpdateAccountData, UpdateAccountData, UserData } from 'lndr/user'
 
 import { Text, TextInput, View, Clipboard } from 'react-native'
 
-import Engine from 'lndr/engine'
 import Button from 'ui/components/button'
 import Loading, { LoadingContext } from 'ui/components/loading'
+
+import { getAccountInformation, updateAccount } from 'actions'
+import { getUser } from 'reducers/app'
+import { connect } from 'react-redux'
 
 const loadingContext = new LoadingContext()
 
 import style from 'theme/form'
 
-import { nickname, setNickname, updateAccount, copy, cancel, mnemonicExhortation } from 'language'
+import { nickname, setNickname, updateAccount as updateAccountText, copy, cancel, mnemonicExhortation } from 'language'
 
 interface Props {
-  engine: Engine,
   closePopup: () => void
+  navigation: any
+  getAccountInformation: () => any
+  user: UserData
+  updateAccount: (accountData: UpdateAccountData) => any
 }
 
 interface State {
   nickname: string
 }
 
-export default class MyAccount extends Component<Props, State> {
+class MyAccount extends Component<Props, State> {
   constructor() {
     super()
     this.state = defaultUpdateAccountData()
   }
 
   async componentDidMount() {
-    const { engine } = this.props
     this.setState(
       await loadingContext.wrap(
-        engine.getAccountInformation()
+        this.props.getAccountInformation()
       )
     )
   }
 
+  handleOnCancel() {
+    this.props.navigation.goBack()
+  }
+
   render() {
-    const { engine, closePopup } = this.props
-    const { user } = engine
+    const { user, closePopup } = this.props
 
     const submit = async () => {
       await loadingContext.wrap(
-        engine.updateAccount(this.state)
+        this.props.updateAccount(this.state)
       )
-      closePopup()
+      this.props.navigation.goBack()
     }
 
     return <View>
@@ -62,8 +70,10 @@ export default class MyAccount extends Component<Props, State> {
         value={this.state.nickname}
         onChangeText={nickname => this.setState({ nickname })}
       />
-      <Button onPress={submit} text={updateAccount} />
-      <Button alternate onPress={closePopup} text={cancel} />
+      <Button onPress={submit} text={updateAccountText} />
+      <Button alternate onPress={this.handleOnCancel.bind(this)} text={cancel} />
     </View>
   }
 }
+
+export default connect((state) => ({ user: getUser(state)() }), { updateAccount, getAccountInformation })(MyAccount)

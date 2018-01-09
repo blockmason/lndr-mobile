@@ -1,9 +1,9 @@
 import React, { Component } from 'react'
 
 import { Text, TextInput, TouchableHighlight, View } from 'react-native'
+import { UserData } from 'lndr/user'
 
 import { debounce } from 'lndr/time'
-import Engine from 'lndr/engine'
 import PendingTransaction from 'lndr/pending-transaction'
 
 import Button from 'ui/components/button'
@@ -19,20 +19,27 @@ import {
   pendingTransactionsLanguage
 } from 'language'
 
+import { getUser, submitterIsMe } from 'reducers/app'
+import { confirmPendingTransaction, rejectPendingTransaction } from 'actions'
+import { connect } from 'react-redux'
+
 const loadingContext = new LoadingContext()
 
 interface Props {
   pendingTransaction: PendingTransaction
-  engine: Engine
   closePopup: () => void
+  confirmPendingTransaction: (pendingTransaction: PendingTransaction) => any
+  rejectPendingTransaction: (pendingTransaction: PendingTransaction) => any
+  user: UserData
+  submitterIsMe: (pendingTransaction: PendingTransaction) => boolean
 }
 
-export default class PendingTransactionDetail extends Component<Props> {
+class PendingTransactionDetail extends Component<Props> {
   async confirmPendingTransaction(pendingTransaction: PendingTransaction) {
-    const { engine, closePopup } = this.props
+    const { closePopup } = this.props
 
     const success = await loadingContext.wrap(
-      engine.confirmPendingTransaction(pendingTransaction)
+      this.props.confirmPendingTransaction(pendingTransaction)
     )
 
     if (success) {
@@ -41,10 +48,10 @@ export default class PendingTransactionDetail extends Component<Props> {
   }
 
   async rejectPendingTransaction(pendingTransaction: PendingTransaction) {
-    const { engine, closePopup } = this.props
+    const { closePopup } = this.props
 
     const success = await loadingContext.wrap(
-      engine.rejectPendingTransaction(pendingTransaction)
+      this.props.rejectPendingTransaction(pendingTransaction)
     )
 
     if (success) {
@@ -53,10 +60,9 @@ export default class PendingTransactionDetail extends Component<Props> {
   }
 
   render() {
-    const { engine, pendingTransaction, closePopup } = this.props
-    const { user } = engine
+    const { user, pendingTransaction, closePopup, submitterIsMe } = this.props
 
-    if (engine.submitterIsMe(pendingTransaction)) {
+    if (submitterIsMe(pendingTransaction)) {
       return <View>
         <Text style={formStyle.header}>{pendingTransactionsLanguage.title}</Text>
         <Text style={formStyle.text}>
@@ -86,3 +92,6 @@ export default class PendingTransactionDetail extends Component<Props> {
     </View>
   }
 }
+
+export default connect((state) => ({ user: getUser(state)(), submitterIsMe: submitterIsMe(state) }),
+{ confirmPendingTransaction, rejectPendingTransaction })(PendingTransactionDetail)

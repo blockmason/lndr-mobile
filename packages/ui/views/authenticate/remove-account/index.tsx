@@ -2,11 +2,13 @@ import React, { Component } from 'react'
 
 import { View, Text } from 'react-native'
 
-import Engine from 'lndr/engine'
+import { connect } from 'react-redux'
+
+import { removeAccount, cancelRemoveAccount } from 'actions'
 
 import {
   cancel,
-  removeAccount,
+  removeAccount as removeAccountText,
   removeAccountTitle,
   removeAccountExhortation
 } from 'language'
@@ -16,19 +18,23 @@ import Button from 'ui/components/button'
 import style from 'theme/form'
 
 interface Props {
-  engine: Engine
+  removeAccount: () => any
+  cancelRemoveAccount: () => any
 }
 
-export default class RemoveAccountView extends Component<Props> {
+class RemoveAccountView extends Component<Props> {
   render() {
-    const { engine } = this.props
     return (
       <View style={style.form}>
         <Text style={style.header}>{removeAccountTitle}</Text>
         <Text style={style.text}>{removeAccountExhortation}</Text>
-        <Button danger onPress={() => engine.removeAccount()} text={removeAccount} />
-        <Button alternate onPress={() => engine.cancelRemoveAccount()} text={cancel} />
+        <Button danger onPress={this.props.removeAccount} text={removeAccountText} />
+        <Button alternate onPress={this.props.cancelRemoveAccount} text={cancel} />
       </View>
     )
   }
 }
+
+const mapDispatchToProps = { removeAccount, cancelRemoveAccount }
+
+export default connect(null, mapDispatchToProps)(RemoveAccountView)

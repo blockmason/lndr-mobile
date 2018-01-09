@@ -2,11 +2,10 @@
 
 import React, { Component } from 'react'
 
-import { Text, View } from 'react-native'
+import { Text, View, Platform } from 'react-native'
 
 import { cents } from 'lndr/format'
 import Balance from 'lndr/balance'
-import Engine from 'lndr/engine'
 
 import Button from 'ui/components/button'
 import Loading, { LoadingContext } from 'ui/components/loading'
@@ -19,6 +18,13 @@ import MyAccount from 'ui/dialogs/my-account'
 import RecentTransaction from 'lndr/recent-transaction'
 import RecentTransactionDetail from 'ui/dialogs/recent-transaction-detail'
 import RecentTransactionRow from 'ui/components/recent-transaction-row'
+import { UserData } from 'lndr/user'
+
+import { isFocusingOn } from 'reducers/nav'
+import { getStore, getUser } from 'reducers/app'
+import { getAccountInformation, displayError, getRecentTransactions, getBalances, registerChannelID } from 'actions'
+import { connect } from 'react-redux'
+import { UrbanAirship } from 'urbanairship-react-native'
 
 import style from 'theme/account'
 import formStyle from 'theme/form'
@@ -41,54 +47,63 @@ const loadingBalances = new LoadingContext()
 const loadingRecentTransactions = new LoadingContext()
 
 interface Props {
-  engine: Engine
+  isFocused: boolean
+  getRecentTransactions: () => any
+  getBalances: () => any
+  getAccountInformation: () => any
+  displayError: (errorMsg: string) => any
+  registerChannelID: (channelID: string, platform: string) => any
+  user: UserData
+  state: any
 }
 
 interface State {
   shouldShowAddDebt: boolean
-  shouldShowMyAccount: boolean
-  accountInformationLoaded: boolean
-  accountInformation?: { nickname?: string, balance?: number }
-  balancesLoaded: boolean
-  balances: Balance[]
   balanceToView?: Balance
   recentTransaction?: RecentTransaction
-  recentTransactionsLoaded: boolean
-  recentTransactions: RecentTransaction[]
 }
 
-export default class HomeView extends Component<Props, State> {
+class HomeView extends Component<Props, State> {
   constructor() {
     super()
     this.state = {
-      shouldShowAddDebt: false,
-      shouldShowMyAccount: false,
-      accountInformationLoaded: false,
-      balancesLoaded: false,
-      balances: [],
-      recentTransactionsLoaded: false,
-      recentTransactions: []
+      shouldShowAddDebt: false
     }
   }
 
   async componentDidMount() {
-    const { engine } = this.props
-
+    this.initializePushNotifications()
     try {
-      const accountInformation = await engine.getAccountInformation()
-
-      this.setState({ accountInformation, accountInformationLoaded: true })
+      const accountInformation = await this.props.getAccountInformation()
     }
 
     catch (error) {
-      engine.setErrorMessage(accountManagement.loadInformation.error)
+      this.props.displayError(accountManagement.loadInformation.error)
     }
 
-    const recentTransactions = await loadingRecentTransactions.wrap(engine.getRecentTransactions())
-    this.setState({ recentTransactionsLoaded: true, recentTransactions })
+    await loadingRecentTransactions.wrap(this.props.getRecentTransactions())
+    await loadingBalances.wrap(this.props.getBalances())
+  }
 
-    const balances = await loadingBalances.wrap(engine.getBalances())
-    this.setState({ balances, balancesLoaded: true })
+  componentWillReceiveProps(nextProps) {
+    if (!this.props.isFocused && nextProps.isFocused) {
+      this.refresh()
+    }
+  }
+
+  initializePushNotifications() {
+    UrbanAirship.setUserNotificationsEnabled(true)
+    UrbanAirship.addListener("register", (event) => {
+      this.props.registerChannelID(event.channelId, Platform.OS)
+    })
+    UrbanAirship.addListener("pushReceived", (notification) => {
+      console.log('Received push: ', JSON.stringify(notification));
+    })
+    UrbanAirship.setForegroundPresentationOptions({
+      alert: true,
+      sound: true,
+      badge: true
+    })
   }
 
   refresh() {
@@ -96,7 +111,7 @@ export default class HomeView extends Component<Props, State> {
   }
 
   renderWelcomeMessage() {
-    const { accountInformationLoaded, accountInformation = {} } = this.state
+    const { accountInformationLoaded, accountInformation = {} } = this.props.state
 
     if (!accountInformationLoaded) {
       return
@@ -112,7 +127,7 @@ export default class HomeView extends Component<Props, State> {
   }
 
   renderBalance() {
-    const { accountInformation = {} } = this.state
+    const { accountInformation = {} } = this.props.state
     const { balance } = accountInformation
 
     if (typeof balance === 'undefined') {
@@ -129,7 +144,7 @@ export default class HomeView extends Component<Props, State> {
   }
 
   renderBalanceInformation() {
-    const { accountInformationLoaded, accountInformation = {}, balances, balancesLoaded } = this.state
+    const { accountInformationLoaded, accountInformation = {}, balances, balancesLoaded } = this.props.state
 
     if (!accountInformationLoaded) {
       return
@@ -163,29 +178,9 @@ export default class HomeView extends Component<Props, State> {
       return null
     }
 
-    const { engine } = this.props
-
     return <Popup onClose={() => this.setState({ shouldShowAddDebt: false })}>
-      <AddDebt closePopup={closePopup} engine={engine} />
+      <AddDebt closePopup={closePopup} />
     </Popup>
-  }
-
-  renderMyAccountDialog() {
-    const { shouldShowMyAccount } = this.state
-
-    if (!shouldShowMyAccount) {
-      return null
-    }
-
-    const { engine } = this.props
-
-    return <Popup onClose={() => [ this.refresh(), this.setState({ shouldShowMyAccount: false }) ]}>
-      <MyAccount closePopup={closePopup} engine={engine} />
-    </Popup>
-  }
-
-  showMyAccount() {
-    this.setState({ shouldShowMyAccount: true })
   }
 
   showAddDebt() {
@@ -193,20 +188,18 @@ export default class HomeView extends Component<Props, State> {
   }
 
   render() {
-    const { recentTransactionsLoaded, recentTransactions, accountInformation, balancesLoaded, balances } = this.state
-    const { engine } = this.props
-    const { user } = engine
+    const { recentTransactionsLoaded, recentTransactions, accountInformation, balancesLoaded, balances } = this.props.state
+    const { user } = this.props
 
     return <View>
       <Section>
         { this.renderAddDebtDialog() }
-        { this.renderMyAccountDialog() }
 
         { this.renderWelcomeMessage() }
         { this.renderBalanceInformation() }
       </Section>
       <Section>
-        <Button action onPress={() => this.showAddDebt()} text={addNewDebt} />
+        <Button action onPress={this.showAddDebt.bind(this)} text={addNewDebt} />
       </Section>
 
       <Section text='Recent Transactions' contentContainerStyle={style.list}>
@@ -218,7 +211,6 @@ export default class HomeView extends Component<Props, State> {
               user={user}
               key={i}
               recentTransaction={recentTransaction}
-              engine={engine}
               onPress={() => this.setState({ recentTransaction })}
             />
           )
@@ -228,3 +220,6 @@ export default class HomeView extends Component<Props, State> {
     </View>
   }
 }
+
+export default connect((state) => ({ state: getStore(state)(), user: getUser(state)(), isFocused: isFocusingOn(state)('Home') }),
+{ getAccountInformation, displayError, getRecentTransactions, getBalances, registerChannelID })(HomeView)

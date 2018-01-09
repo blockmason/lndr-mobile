@@ -2,32 +2,39 @@ import React, { Component } from 'react'
 
 import { View } from 'react-native'
 
-import Engine from 'lndr/engine'
+import { connect } from 'react-redux'
+
+import { setAuthLoading, recoverAccount, cancelRecoverAccount } from 'actions'
 
 import RecoverAccountForm from 'ui/forms/recover-account'
 
 import { RecoverAccountData } from 'lndr/user'
 
 interface Props {
-  engine: Engine
+  setAuthLoading: (state: boolean) => any
+  recoverAccount: (formData: RecoverAccountData) => any
+  cancelRecoverAccount: () => any
 }
 
-export default class RecoverAccountView extends Component<Props> {
+class RecoverAccountView extends Component<Props> {
   async handleOnSubmitRecoverUser(formData: RecoverAccountData) {
-    await this.props.engine.setAuthLoading(true)
-    await this.props.engine.recoverAccount(formData)
-    this.props.engine.setAuthLoading(false)
+    this.props.setAuthLoading(true)
+    await this.props.recoverAccount(formData)
+    this.props.setAuthLoading(false)
   }
 
   render() {
-    const { engine } = this.props
     return (
       <View>
         <RecoverAccountForm
           onSubmitRecoverUser={this.handleOnSubmitRecoverUser.bind(this)}
-          onCancel={() => engine.cancelRecoverAccount()}
+          onCancel={this.props.cancelRecoverAccount}
         />
       </View>
     )
   }
 }
+
+const mapDispatchToProps = { setAuthLoading, recoverAccount, cancelRecoverAccount }
+
+export default connect(null, mapDispatchToProps)(RecoverAccountView)

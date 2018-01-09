@@ -1,7 +1,5 @@
 import React, { Component } from 'react'
 
-import Engine from 'lndr/engine'
-
 import { View, Text } from 'react-native'
 
 import Slideshow from 'ui/components/slideshow'

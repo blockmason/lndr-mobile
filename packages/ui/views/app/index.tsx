@@ -1,114 +1,104 @@
 import React, { Component } from 'react'
 
-import { View, ScrollView } from 'react-native'
-
-import Engine, { EngineState } from 'lndr/engine'
+// TODO Remove button / go through the entire import dependecy list
+import { View, ScrollView, Button } from 'react-native'
 
 import AuthenticateView from 'ui/views/authenticate'
-import AccountView from 'ui/views/account'
 import WelcomeView from 'ui/views/welcome'
 
-import Alert from 'ui/components/alert'
 import { PopupTarget } from 'ui/components/popup'
 import ThemeImage from 'ui/components/images/theme-image'
 import AndroidStatusBar from 'ui/components/android-status-bar'
+import { UserData } from 'lndr/user'
+
+import { Provider } from 'react-redux'
+import createStore from 'store'
+import { setWelcomeComplete, initializeStorage } from 'actions'
+import { getStore, getUser } from 'reducers/app'
+import AppWithNavigationState from 'navigators'
+import { connect } from 'react-redux'
+import { Toast, ToastActionsCreators } from 'react-native-redux-toast'
 
 import style from 'theme/general'
 
 interface Props {}
 
-const engine = new Engine()
+interface AppContentsProps {
+  initializeStorage: () => any
+  setWelcomeComplete: () => any
+  user: UserData
+  state: any
+}
 
-export default class AppView extends Component<Props, EngineState> {
-  alertElement: any
-  alert: any
+const initialState = {
+  hasStoredUser: false,
+  welcomeComplete: false,
+  isAuthLoading: false,
+  shouldRecoverAccount: false,
+  shouldRemoveAccount: false,
+  shouldDisplayMnemonic: false,
+  isInitializing: true,
+  friendsLoaded: false,
+  friends: [],
+  balancesLoaded: false,
+  balances: [],
+  recentTransactionsLoaded: false,
+  recentTransactions: [],
+  accountInformationLoaded: false,
+  pendingTransactionsLoaded: false,
+  pendingTransactions: []
+}
 
-  constructor() {
-    super()
-    this.state = engine.state
-    engine.subscribe(state => this.setState(state))
-    engine.initalizePushNotifications()
-  }
+const store = createStore(initialState)
 
-  async componentDidMount() {
-    await engine.initialize()
+// TODO Move this route based code into navigators
+class AppContentsView extends Component<AppContentsProps> {
+  componentDidMount() {
+    this.props.initializeStorage()
   }
 
   render() {
-    return <ScrollView style={style.flex} contentContainerStyle={style.flexGrow}>
-      <AndroidStatusBar />
-      <PopupTarget />
-      {this.renderContents()}
-      {this.renderAlert()}
-    </ScrollView>
-  }
-
-  async hideAlert() {
-    await this.alert.hide()
-  }
-
-  async showAlert() {
-    await new Promise(resolve => setTimeout(resolve, 250))
-    await this.alert.show()
-  }
-
-  renderAlert() {
-    const { errorMessage, successMessage } = this.state
-
-    if (errorMessage) {
-      this.alertElement = <Alert ref={alert => this.alert = alert} error text={errorMessage} />
-      this.showAlert()
-    }
-
-    else if (successMessage) {
-      this.alertElement = <Alert ref={alert => this.alert = alert} success text={successMessage} />
-      this.showAlert()
-    }
-
-    else if (this.alert) {
-      this.hideAlert()
-    }
-
-    return this.alertElement
-  }
-
-  renderContents() {
     const {
-      user,
-      mnemonicInstance,
       isInitializing,
-      isAuthLoading,
-      hasStoredUser,
       welcomeComplete,
-      shouldRecoverAccount,
-      shouldRemoveAccount,
-      shouldDisplayMnemonic,
-      pendingTransactionsCount
-    } = this.state
+      shouldDisplayMnemonic
+    } = this.props.state
 
     if (isInitializing) {
       return <View />
     }
 
     if (!welcomeComplete) {
-      return <WelcomeView onComplete={ () => { this.setState({ welcomeComplete: true }) } }/>
+      return <WelcomeView onComplete={this.props.setWelcomeComplete}/>
     }
 
-    if (!user || shouldDisplayMnemonic) {
-      return <AuthenticateView
-        engine={engine}
-        mnemonic={mnemonicInstance ? mnemonicInstance.toString() : null}
-        isAuthLoading={isAuthLoading}
-        shouldRecoverAccount={shouldRecoverAccount}
-        shouldRemoveAccount={shouldRemoveAccount}
-        shouldDisplayMnemonic={shouldDisplayMnemonic}
-        hasStoredUser={hasStoredUser}
-      />
+    if (!this.props.user || shouldDisplayMnemonic) {
+      return <AuthenticateView />
     }
 
-    return <AccountView
-      engine={engine}
-      pendingTransactionsCount={pendingTransactionsCount}
-    />
+    return <AppWithNavigationState />
+  }
+}
+
+const mapStateToProps = (state) => ({ state: getStore(state)(), user: getUser(state)() })
+const mapDispatchToProps = (dispatch) => ({
+  setWelcomeComplete: () => dispatch(setWelcomeComplete(true)),
+  initializeStorage: () => dispatch(initializeStorage())
+})
+
+const AppContents = connect(mapStateToProps, mapDispatchToProps)(AppContentsView)
+
+export default class AppView extends Component {
+  render() {
+    return (
+      <Provider store={store}>
+        <ScrollView style={style.flex} contentContainerStyle={style.flexGrow}>
+          <AndroidStatusBar />
+          <PopupTarget />
+          <AppContents />
+          <Toast />
+        </ScrollView>
+      </Provider>
+    )
   }
 }

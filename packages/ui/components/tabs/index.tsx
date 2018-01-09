@@ -6,150 +6,40 @@ import { lightGray, gray, clear } from 'theme/include/colors'
 
 import style from 'theme/tabs'
 
-interface TabProps {
-  reference: string
-  text: string
-  noscroll?: boolean
-  onRefresh?: () => void
-  badge?: any
-}
-
-interface TabState {
-  refreshing: boolean
-}
-
-export class Tab extends Component<TabProps, TabState> {
-  constructor() {
-    super()
-    this.state = { refreshing: false }
-  }
-
-  async refresh() {
-    const { onRefresh } = this.props
-    if (!onRefresh) {
-      return
-    }
-    this.setState({ refreshing: true })
-    await onRefresh()
-    this.setState({ refreshing: false })
-  }
-
-  render() {
-    const { children, onRefresh, noscroll } = this.props
-    const { refreshing } = this.state
-
-    if (noscroll) {
-      return <View style={style.content}>
-        {children}
-      </View>
-    }
-
-    const refreshControl = onRefresh ? (
-      <RefreshControl refreshing={refreshing} onRefresh={() => this.refresh()} />
-    ) : undefined
-
-    return <ScrollView style={style.content} refreshControl={refreshControl}>
-      {children}
-    </ScrollView>
-  }
-}
-
-const getTextStyle = (alternate?: boolean, active?: boolean) => {
-  if (alternate) {
-    return [ style.text, active ? style.textActiveAlternate : style.textAlternate ]
-  }
+const getTextStyle = (active?: boolean) => {
   return [ style.text, active ? style.textActive : style.text ]
 }
 
-const getTabStyle = (alternate?: boolean, active?: boolean) => {
-  if (alternate) {
-    return [ style.tab, active ? style.tabActive : style.tabAlternate ]
-  }
+const getTabStyle = (active?: boolean) => {
   return [ style.tab, active ? style.tabActive : style.tab ]
 }
 
 interface Props {
-  alternate?: boolean
-  tabContainerStyle?: any
+  text: string
+  badge?: any
+  onPress: () => void
+  active: boolean
 }
 
-interface State {
-  activeReference?: string
-}
-
-const getTabContainerStyle = (alternate?: boolean, tabContainerStyle?: any) => {
-  const styles: any[] = [style.tabsContainer]
-
-  if (alternate) {
-    styles.push(style.tabsContainerAlternate)
-  }
-
-  if (tabContainerStyle) {
-    styles.push(tabContainerStyle)
-  }
-
-  return styles
-}
-
-export default class Tabs extends Component<Props, State> {
-  constructor() {
-    super()
-    this.state = {
-      activeReference: undefined
-    }
-  }
-
-  async switchTo(activeReference: string) {
-    return new Promise(resolve => {
-      this.setState({ activeReference }, resolve)
-    })
-  }
-
+export class Tab extends Component<Props> {
   render() {
-    const { children: tabs, tabContainerStyle, alternate } = this.props
-    let { activeReference } = this.state
-
-    const tabList = (tabs as any[]).map(tab => {
-      const { reference } = tab.props
-
-      if (typeof reference !== 'string') {
-        throw new Error('Property "reference" must be a string when constructing <Tab />')
-      }
-
-      if (!activeReference) {
-        activeReference = reference
-      }
-
-      const tabStyle = getTabStyle(alternate, reference === activeReference)
-      const textStyle = getTextStyle(alternate, reference === activeReference)
-
-      return (
-        <TouchableHighlight
-          style={style.tabContainer}
-          underlayColor={clear}
-          activeOpacity={0.5}
-          key={reference}
-          onPress={() => this.switchTo(reference)}
-        >
-          <View style={tabStyle}>
-            <View style={style.tabContent}>
-              <Text style={textStyle}>{tab.props.text}</Text>
-              {tab.props.badge}
-            </View>
-          </View>
-        </TouchableHighlight>
-      )
-    })
-
-    const activeTab = (tabs as any[])
-      .filter(tab => tab.props.reference === activeReference)
-      .pop()
+    const tabStyle = getTabStyle(this.props.active)
+    const textStyle = getTextStyle(this.props.active)
 
     return (
-      <View style={style.topView}>
-        <View style={getTabContainerStyle(alternate, tabContainerStyle)}>{tabList}</View>
-        {activeTab}
+      <TouchableHighlight
+        style={style.tabContainer}
+        underlayColor={clear}
+        activeOpacity={0.5}
+        onPress={this.props.onPress}
+      >
+        <View style={tabStyle}>
+          <View style={style.tabContent}>
+            <Text style={textStyle}>{this.props.text}</Text>
+            {this.props.badge}
       </View>
-    )
+    </View>
+  </TouchableHighlight>
+  )
   }
 }
