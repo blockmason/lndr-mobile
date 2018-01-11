@@ -293,7 +293,10 @@ export const getFriends = () => {
 
 //Not a redux action
 export async function searchUsers(searchData) {
-  const { nickname } = searchData
+  let nickname = searchData.nickname
+  if (nickname.substring(0, 1) === '@') {
+    nickname = nickname.substring(1);
+  }
   if (nickname.length >= minimumNicknameLength) {
     const users = await creditProtocol.searchUsers(nickname)
     return users.map(jsonToFriend)
