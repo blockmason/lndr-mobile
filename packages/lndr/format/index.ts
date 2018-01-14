@@ -18,7 +18,13 @@ export const cents = value => {
   const sign = value < 0 ? '-' : ''
   const raw = String(Math.abs(value))
   const [ left, right ] = [ raw.substr(0, raw.length - 2), raw.substr(-2) ]
-  return `${sign}$${commas(left) || '0'}.${leftPad('0', 2, right)}`
+  return `${sign}${commas(left) || '0'}.${leftPad('0', 2, right)}`
+}
+
+export const dollars = value => {
+  const sign = value < 0 ? '-' : ''
+  const raw = String(Math.round(Math.abs(value / 100)))
+  return `${sign}${commas(raw) || '0'}`
 }
 
 export const currency = value => {

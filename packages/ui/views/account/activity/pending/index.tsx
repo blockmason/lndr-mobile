@@ -13,6 +13,7 @@ import PendingTransactionDetail from 'ui/dialogs/pending-transaction-detail'
 import PendingTransactionRow from 'ui/components/pending-transaction-row'
 
 import style from 'theme/account'
+import general from 'theme/general'
 
 import { pendingTransactionsLanguage } from 'language'
 
@@ -81,7 +82,7 @@ class PendingTransactionsView extends Component<Props, State> {
     return <View>
       { this.renderPendingTransactionDetailDialog() }
 
-      <Section text='Pending Transactions' contentContainerStyle={style.list}>
+      <Section contentContainerStyle={style.list}>
         <Loading context={loadingPendingTransactions} />
         {pendingTransactionsLoaded && pendingTransactions.length === 0 ? <Text style={style.emptyState}>{pendingTransactionsLanguage.none}</Text> : null}
         {pendingTransactions.map(

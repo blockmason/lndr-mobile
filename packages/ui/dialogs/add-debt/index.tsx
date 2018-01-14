@@ -16,7 +16,7 @@ import formStyle from 'theme/form'
 import { debtManagement, noFriends, submit, cancel, back } from 'language'
 
 import { getStore } from 'reducers/app'
-import { addDebt, getFriends } from 'actions'
+import { addDebt, getFriends, getPendingTransactions, getRecentTransactions } from 'actions'
 import { connect } from 'react-redux'
 
 const loadingFriends = new LoadingContext()
@@ -127,13 +127,13 @@ class AddDebt extends Component<Props, State> {
         round
         onPress={() => this.setState({ direction: 'lend' })}
         checked={direction === 'lend'}
-        text={debtManagement.direction.lend(friend.nickname, amount)}
+        text={debtManagement.direction.lend(friend.nickname)}
       />
       <Checkbox
         round
         onPress={() => this.setState({ direction: 'borrow' })}
         checked={direction === 'borrow'}
-        text={debtManagement.direction.borrow(friend.nickname, amount)}
+        text={debtManagement.direction.borrow(friend.nickname)}
       />
     </View>
   }

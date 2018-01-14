@@ -3,7 +3,7 @@ import { StyleSheet } from 'react-native'
 import { medium } from 'theme/include/fonts'
 
 import { smallPad } from 'theme/include/spacing'
-import { charcoal, gray, bluish, light } from 'theme/include/colors'
+import { charcoal, gray, aqua, white, alert } from 'theme/include/colors'
 
 export default StyleSheet.create({
   topView: {
@@ -11,39 +11,66 @@ export default StyleSheet.create({
     flex: 1
   },
   tabsContainer: {
+    marginTop: 25,
     flexDirection: 'row',
-    backgroundColor: light,
-    ...smallPad
+    backgroundColor: white,
+    flex: 1
   },
   tabContainer: {
-    flex: 1
+    marginRight: '5%'
   },
   content: {
     flex: 1
   },
   tab: {
-    borderLeftWidth: 1,
-    borderTopWidth: 2,
-    borderBottomWidth: 2,
-    borderRightWidth: 1,
     marginTop: 3,
     height: 50,
-    alignItems: 'center',
+    alignItems: 'flex-start',
     justifyContent: 'center'
   },
   tabContent: {
-    flexDirection: 'row',
+    flexDirection: 'column',
     alignItems: 'center'
   },
   tabActive: {
-    backgroundColor: bluish,
+    
   },
   text: {
     color: charcoal,
-    ...medium
+    ...medium,
+    borderBottomColor: 'transparent',
+    borderBottomWidth: 2
   },
   textActive: {
     color: charcoal,
-    fontWeight: 'bold'
+    fontWeight: 'bold',
+    borderBottomColor: aqua,
+    borderBottomWidth: 2
+  },
+  leftTriangle: {
+    width: 35,
+    height: 0,
+    marginTop: 25,
+    borderBottomColor: white,
+    borderBottomWidth: 60,
+    borderLeftWidth: 35,
+    borderRightWidth: 0,
+    borderRightColor: 'transparent',
+    borderLeftColor: 'transparent',
+  },
+  alert: {
+    backgroundColor: alert,
+    height: 16,
+    width: 16,
+    borderRadius: 8,
+    alignItems: 'center',
+    justifyContent: 'center'
+  },
+  none: {
+    backgroundColor: 'transparent'
+  },
+  alertText: {
+    fontSize: 12,
+    color: white
   }
 } as any)

@@ -2,7 +2,7 @@ import { StyleSheet } from 'react-native'
 
 import { xl, s } from 'theme/include/spacing'
 import { large, medium } from 'theme/include/fonts'
-import { white, bluish, black } from 'theme/include/colors'
+import { white, bluish, black, aqua } from 'theme/include/colors'
 import { mediumHeightIcon } from 'theme/include/dimensions'
 
 export default StyleSheet.create({
@@ -13,7 +13,7 @@ export default StyleSheet.create({
   },
   textContainer: {
     flex: 1,
-    backgroundColor: bluish,
+    backgroundColor: aqua,
     borderColor: black,
     borderWidth: 1
   },

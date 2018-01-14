@@ -6,11 +6,12 @@ import { Tab } from 'ui/components/tabs'
 import AndroidStatusBar from 'ui/components/android-status-bar'
 import HomeView from 'ui/views/account/home'
 import FriendsView from 'ui/views/account/friends'
-import PendingView from 'ui/views/account/activity/pending'
+import ActivityView from 'ui/views/account/activity'
 import ActionButton from 'ui/components/action-button'
+import TextLogo from 'ui/components/images/text-logo'
 
 import { isFocusingOn } from 'reducers/nav'
-import { logoutAccount } from 'actions'
+import { logoutAccount, getPendingTransactions } from 'actions'
 
 import { connect } from 'react-redux'
 
@@ -20,9 +21,9 @@ import general from 'theme/general'
 import style from 'theme/account'
 import TabStyle from 'theme/tabs'
 
-const HomeScreen = () => <HomeView />;
-const FriendsScreen = () => <FriendsView />;
-const ActivityScreen = () => <PendingView />;
+const HomeScreen = (props) => <HomeView {...props}/>;
+const FriendsScreen = (props) => <FriendsView {...props} />;
+const ActivityScreen = (props) => <ActivityView {...props} />;
 
 const RouteConfig = {
   Home: { screen: HomeScreen },
@@ -45,23 +46,33 @@ interface Props {
 }
 
 class DashboardNavigatorWithHeader extends Component<Props> {
-  static router = DashboardNavigator.router;
+  static router = DashboardNavigator.router
 
   render() {
+    const alerts = getPendingTransactions().length === undefined ? 0 : getPendingTransactions().length
+
     return (
-      <View style={[general.flex, style.whiteBackground]}>
+      <View style={[general.whiteFlex]}>
         <AndroidStatusBar />
-        <Text style={style.topText}>{accountViewLanguage.lndr}</Text>
-        <View style={[TabStyle.tabsContainer]}>
-          <Tab onPress={() => this.props.navigation.navigate('Home')} text="Home" active={this.props.isFocusingOn('Home')} />
-          <Tab onPress={() => this.props.navigation.navigate('Friends')} text="Friends" active={this.props.isFocusingOn('Friends')} />
-          <Tab onPress={() => this.props.navigation.navigate('Activity')} text="Activity" active={this.props.isFocusingOn('Activity')} />
+        <View style={{backgroundColor: '#242424', height: 80, flexDirection: 'row'}}>
+          <View style={{marginTop: 30, marginBottom: 20, marginLeft: 15, width: 90}}>
+            <TextLogo name='white'/>
+          </View>
+          <View style={TabStyle.leftTriangle}/>
+          <View style={[TabStyle.tabsContainer]}>
+            <Tab onPress={() => this.props.navigation.navigate('Home')} text="HOME" alerts={alerts} active={this.props.isFocusingOn('Home')} />
+            <Tab onPress={() => this.props.navigation.navigate('Friends')} text="FRIENDS" active={this.props.isFocusingOn('Friends')} />
+            <Tab onPress={() => this.props.navigation.navigate('Activity')} text="ACTIVITY" active={this.props.isFocusingOn('Activity')} />
+          </View>
         </View>
-        <DashboardNavigator navigation={this.props.navigation}/>
+        <View style={style.settingsTriangleLeft}/>
+        <View style={style.settingsBackground}/>
+        <View style={style.settingsTriangleRight}/>
         <ActionButton
           onLogout={this.props.logoutAccount}
           onMyAccount={() => this.props.navigation.navigate('MyAccount')}
         />
+        <DashboardNavigator navigation={this.props.navigation}/>
       </View>
     )
   }

@@ -422,7 +422,7 @@ export const addDebt = (friend: Friend, amount: string, memo: string, direction:
     // TODO - Please move this to validation check to the view layer and in favor of using the getPendingTransaction action
     const rawPendingTransactions = await creditProtocol.getPendingTransactions(address)
     const pendingTransactions = rawPendingTransactions.map(jsonToPendingTransaction)
-    if(pendingTransactions.some( ele => ele.creditorAddress === address || ele.debtorAddress === address ) ) {
+    if(pendingTransactions.some( ele => ele.creditorAddress === friend.address || ele.debtorAddress === friend.address ) ) {
       return dispatch(displayError('Please resolve your pending transaction with this user before creating another'))
     }
 

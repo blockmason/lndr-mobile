@@ -8,14 +8,15 @@ import Friend from 'lndr/friend'
 
 import Button from 'ui/components/button'
 import Loading, { LoadingContext } from 'ui/components/loading'
-import FriendRow from 'ui/components/friend-row'
+import AddFriendRow from 'ui/components/add-friend-row'
+import InputImage from 'ui/components/images/input-image'
+import { getPendingTransactions, getRecentTransactions } from 'actions'
 
 import style from 'theme/form'
-import buttonAction from 'theme/button'
+import friendStyle from 'theme/friend'
+import general from 'theme/general'
 
 import {
-  lndrNickname,
-  addANewFriend,
   nickname,
   cancel,
   back,
@@ -88,43 +89,47 @@ class AddFriend extends Component<Props, State> {
     const { matches, hasSearchTerm, candidateForFriendship } = this.state
 
     if (candidateForFriendship) {
-      return <View style={style.form}>
-        <Text style={style.text}>{addFriendConfirmationQuestion}</Text>
+      return <View style={[style.form, general.centeredColumn]}>
+        <Text style={[style.text, style.center]}>{addFriendConfirmationQuestion}</Text>
           <Loading context={loadingContext} />
-          <FriendRow
-            key={candidateForFriendship.address}
-            friend={candidateForFriendship}
-          />
-          <Button action onPress={() => this.confirmFriend(candidateForFriendship)} text={addFriendText} />
-          <Button alternate onPress={() => this.removeCandidateForFriendship()} text={back} />
+          <AddFriendRow
+              key={candidateForFriendship.address}
+              friend={candidateForFriendship}
+              onPress={() => null}
+              selected
+            />
+          <Button round onPress={() => this.confirmFriend(candidateForFriendship)} text={addFriendText} />
+          <Button alternate small arrow onPress={() => this.removeCandidateForFriendship()} text={back} />
       </View>
     }
 
     return <View>
-      <Text style={style.formTitle}>{addANewFriend}</Text>
       <View style={style.horizontalView}>
-        <Text style={[ style.text, style.horizontalElem ]}>{lndrNickname}</Text>
-        <TextInput
-          autoCapitalize='none'
-          style={style.borderTextInput}
-          placeholder={nickname}
-          onChangeText={text => this.searchAction(text)}
-        />
+        <View style={[style.textInputContainer]}>
+          <InputImage name='search' />
+          <TextInput
+            style={style.textInput}
+            underlineColorAndroid='transparent'
+            autoCapitalize='none'
+            placeholder={nickname}
+            onChangeText={text => this.searchAction(text)}
+          />
+        </View>
       </View>
       { hasSearchTerm &&
-        <View style={style.list}>
-          <Loading context={loadingContext} />
-          {hasSearchTerm && matches.length === 0 ? <Text style={style.emptyState}>{noMatches}</Text> : null}
-          {matches.map(
-            match => (
-              <FriendRow
-                key={match.address}
-                friend={match}
-                onPress={() => this.setState({ candidateForFriendship: match })}
-              />
-            )
-          )}
-        </View>}
+      <View style={friendStyle.searchList}>
+        <Loading context={loadingContext} />
+        {hasSearchTerm && matches.length === 0 ? <Text style={style.emptyState}>{noMatches}</Text> : null}
+        {matches.map(
+          match => (
+            <AddFriendRow
+              key={match.address}
+              friend={match}
+              onPress={() => this.setState({ candidateForFriendship: match })}
+            />
+          )
+        )}
+      </View>}
     </View>
   }
 }

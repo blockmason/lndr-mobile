@@ -1,16 +1,17 @@
 import React, { Component } from 'react'
 
-import { Text, TouchableHighlight, View } from 'react-native'
+import { Text, TouchableHighlight, View, Image } from 'react-native'
 import Icon from 'react-native-vector-icons/Ionicons'
 
-import { cents } from 'lndr/format'
+import { dollars } from 'lndr/format'
 import PendingTransaction from 'lndr/pending-transaction'
 import User from 'lndr/user'
 
-import { lightGray } from 'theme/include/colors'
+import { white } from 'theme/include/colors'
 
 import formStyle from 'theme/form'
 import style from 'theme/account'
+import general from 'theme/general'
 
 import { debtManagement } from 'language'
 
@@ -25,11 +26,11 @@ export default class PendingTransactionRow extends Component<Props> {
     const { pendingTransaction, user } = this.props
 
     if (user.address === pendingTransaction.creditorAddress) {
-      return debtManagement.direction.lend(pendingTransaction.debtorNickname, cents(pendingTransaction.amount))
+      return debtManagement.direction.pendingLend(pendingTransaction.debtorNickname)
     }
 
     else if (user.address === pendingTransaction.debtorAddress) {
-      return debtManagement.direction.borrow(pendingTransaction.creditorNickname, cents(pendingTransaction.amount))
+      return debtManagement.direction.pendingBorrow(pendingTransaction.creditorNickname)
     }
 
     else {
@@ -37,44 +38,34 @@ export default class PendingTransactionRow extends Component<Props> {
     }
   }
 
-  getIcon() {
+  getAmount() {
     const { pendingTransaction, user } = this.props
 
-    if (user.address === pendingTransaction.submitter) {
-      return <Icon name={'md-time'} style={style.transactionIcon} />
-    }
-
-    return <Icon name={'md-alert'} style={style.transactionIcon} />
-  }
-
-  getAmountStyle() {
-    const { pendingTransaction, user } = this.props
+    let sign = ''
 
     if (user.address === pendingTransaction.creditorAddress) {
-      return style.titledFactAmountGood
+      sign = '+'
+    } else if (user.address === pendingTransaction.debtorAddress) {
+      sign = '-'
     }
 
-    else if (user.address === pendingTransaction.debtorAddress) {
-      return style.titledFactAmountDanger
-    }
-
-    else {
-      return style.titledFact
-    }
+    return `${sign} $${dollars(pendingTransaction.amount)}`
   }
 
   render() {
     const { onPress, pendingTransaction } = this.props
 
     return (
-      <TouchableHighlight style={style.pendingTransaction} onPress={onPress} underlayColor={lightGray} activeOpacity={0.5}>
-        <View>
-          {this.getIcon()}
-          <Text style={formStyle.header}>{this.getTitle()}</Text>
-          <View style={style.listItem}>
-            <Text style={style.titledFact}>{pendingTransaction.memo}</Text>
-            <Text style={this.getAmountStyle()}>{cents(pendingTransaction.amount)}</Text>
+      <TouchableHighlight style={style.pendingTransaction} onPress={onPress} underlayColor={white} activeOpacity={1}>
+        <View style={style.pendingTransactionRow}>
+          <View style={general.flexRow}>
+            <Image source={require('images/person-outline-dark.png')} style={style.pendingIcon}/>
+            <View style={general.flexColumn}>
+              <Text style={style.titledPending}>{this.getTitle()}</Text>
+              <Text style={style.pendingMemo}>{debtManagement.for(pendingTransaction.memo)}</Text>
+            </View>
           </View>
+          <Text style={style.pendingAmount}>{this.getAmount()}</Text>
         </View>
       </TouchableHighlight>
     )

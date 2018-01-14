@@ -16,6 +16,7 @@ const getTabStyle = (active?: boolean) => {
 
 interface Props {
   text: string
+  alerts?: number
   badge?: any
   onPress: () => void
   active: boolean
@@ -35,11 +36,14 @@ export class Tab extends Component<Props> {
       >
         <View style={tabStyle}>
           <View style={style.tabContent}>
+            <View style={[style.alert, !this.props.alerts ? style.none : null]}>
+              <Text style={style.alertText}>{this.props.alerts}</Text>
+            </View>
             <Text style={textStyle}>{this.props.text}</Text>
             {this.props.badge}
-      </View>
-    </View>
-  </TouchableHighlight>
+          </View>
+        </View>
+      </TouchableHighlight>
   )
   }
 }

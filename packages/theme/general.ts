@@ -10,8 +10,11 @@ export default StyleSheet.create({
     flex: 1,
     backgroundColor: white
   },
-  horizontalFlex: {
+  flexRow: {
     flexDirection: 'row'
+  },
+  flexColumn: {
+    flexDirection: 'column'
   },
   stretch: {
     marginRight: 15,
@@ -19,5 +22,20 @@ export default StyleSheet.create({
   },
   flexGrow: {
     flexGrow: 1
+  },
+  view: {
+    backgroundColor: white,
+    marginTop: 50
+  },
+  alignCenter: {
+    alignItems: 'center'
+  },
+  justifyEnd: {
+    justifyContent: 'flex-end'
+  },
+  centeredColumn: {
+    flexDirection: 'column',
+    alignItems: 'center'
   }
+
 } as any)

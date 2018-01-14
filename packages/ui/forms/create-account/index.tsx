@@ -6,6 +6,8 @@ import Button from 'ui/components/button'
 
 import { CreateAccountData, defaultCreateAccountData } from 'lndr/user'
 
+import InputImage from 'ui/components/images/input-image'
+
 import {
   newAccount,
   nickname,
@@ -33,30 +35,42 @@ export default class CreateAccountForm extends Component<Props, CreateAccountDat
   render() {
     const { onNickTextInputBlur, nickTextInputErrorText } = this.props
     return <View style={style.form}>
-      <Text style={style.text}>{newAccount}</Text>
-      <TextInput
-        autoCapitalize='none'
-        style={style.textInput}
-        placeholder={nickname}
-        value={this.state.nickname}
-        onChangeText={nickname => this.setState({ nickname })}
-        onBlur={(): void => onNickTextInputBlur(this.state.nickname)}
-      />
+      <Text style={[style.text, style.spaceBottom]}>{newAccount}</Text>
+      <View style={style.textInputContainer}>
+        <InputImage name='person'/>
+        <TextInput
+          autoCapitalize='none'
+          style={style.textInput}
+          placeholder={nickname}
+          value={this.state.nickname}
+          underlineColorAndroid='transparent'
+          onChangeText={nickname => this.setState({ nickname })}
+          onBlur={(): void => onNickTextInputBlur(this.state.nickname)}
+        />
+      </View>
       { nickTextInputErrorText && <Text style={style.warningText}>{nickTextInputErrorText}</Text>}
-      <TextInput
-        secureTextEntry
-        style={style.textInput}
-        placeholder={newPassword}
-        onChangeText={password => this.setState({ password })}
-      />
-      <TextInput
-        secureTextEntry
-        style={style.textInput}
-        placeholder={confirmPassword}
-        onChangeText={confirmPassword => this.setState({ confirmPassword })}
-      />
-      <Button onPress={() => this.submit()} text={createAccount} />
-      <Button alternate onPress={() => this.recover()} text={recoverAccount} />
+      <View style={style.textInputContainer}>
+        <InputImage name='lock'/>
+        <TextInput
+          secureTextEntry
+          style={style.textInput}
+          placeholder={newPassword}
+          underlineColorAndroid='transparent'
+          onChangeText={password => this.setState({ password })}
+        />
+      </View>
+      <View style={[style.textInputContainer, style.spaceBottom]}>
+        <InputImage name='lock'/>
+        <TextInput
+          secureTextEntry
+          style={style.textInput}
+          placeholder={confirmPassword}
+          underlineColorAndroid='transparent'
+          onChangeText={confirmPassword => this.setState({ confirmPassword })}
+        />
+      </View>
+      <Button round fat onPress={() => this.submit()} style={style.submitButton} text={createAccount} />
+      <Button alternate small arrow onPress={() => this.recover()} style={style.submitButton} text={recoverAccount} />
     </View>
   }
 

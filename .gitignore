@@ -41,6 +41,9 @@ local.properties
 *.iml
 android/app/src/main/assets/airshipconfig.properties
 
+android/app/src/main/assets/index.android.bundle
+android/app/src/main/assets/index.android.bundle.meta
+
 # node.js
 #
 node_modules/

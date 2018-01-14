@@ -2,7 +2,7 @@ import React, { Component } from 'react'
 
 import Friend from 'lndr/friend'
 
-import { Text, View } from 'react-native'
+import { Text, View, ScrollView } from 'react-native'
 
 import Button from 'ui/components/button'
 import Section from 'ui/components/section'
@@ -14,12 +14,13 @@ import AddFriend from './add-friend'
 import RemoveFriend from './remove-friend'
 
 import style from 'theme/account'
+import general from 'theme/general'
 
 import { addFriend, noFriends, currentFriends } from 'language'
 
 import { isFocusingOn } from 'reducers/nav'
 import { getStore } from 'reducers/app'
-import { getFriends } from 'actions'
+import { getFriends, getRecentTransactions, getPendingTransactions } from 'actions'
 import { connect } from 'react-redux'
 
 const loadingFriends = new LoadingContext()
@@ -80,14 +81,14 @@ class FriendsView extends Component<Props, State> {
   }
 
   render() {
-    const { friendsLoaded, friends } = this.props.state
+    const { friendsLoaded, friends, recentTransactions, pendingTransactions } = this.props.state
 
-    return <View>
+    return <ScrollView style={general.view}>
       { this.renderRemoveFriendDialog() }
       <Section>
         <AddFriend onSuccess={() => this.refresh()} />
       </Section>
-      <Section text={currentFriends} contentContainerStyle={style.list}>
+      <Section contentContainerStyle={[style.list, style.friendList]}>
         <Loading context={loadingFriends} />
         {friendsLoaded && friends.length === 0 ? <Text style={style.emptyState}>{noFriends}</Text> : null}
         {friends.map(
@@ -96,11 +97,13 @@ class FriendsView extends Component<Props, State> {
               key={friend.address}
               friend={friend}
               onPress={() => this.setState({ friendToRemove: friend })}
+              pendingTransactions={pendingTransactions}
+              recentTransactions={recentTransactions}
             />
           )
         )}
       </Section>
-    </View>
+    </ScrollView>
   }
 }
 
