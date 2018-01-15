@@ -1,5 +1,4 @@
 import ethUtil from 'ethereumjs-util'
-import { UrbanAirship } from 'urbanairship-react-native'
 
 import { longTimePeriod } from 'lndr/time'
 import Balance from 'lndr/balance'
