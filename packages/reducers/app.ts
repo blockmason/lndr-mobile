@@ -34,3 +34,5 @@ export const getStore = (state) => () => (state.store)
 export default reduceReducers(
   reducer
 )
+
+export const getPendingTransactionsCount = (state) => state.store.pendingTransactions.length

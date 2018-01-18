@@ -22,9 +22,8 @@ export const cents = value => {
 }
 
 export const dollars = value => {
-  const sign = value < 0 ? '-' : ''
   const raw = String(Math.round(Math.abs(value / 100)))
-  return `${sign}${commas(raw) || '0'}`
+  return `${commas(raw) || '0'}`
 }
 
 export const currency = value => {

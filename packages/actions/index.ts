@@ -73,7 +73,9 @@ export const updateAccount = (accountData: UpdateAccountData) => {
 
 export const registerChannelID = (channelID: string, platform: string) => {
   return async (_dispatch, getState) => {
+    console.log('CHANNEL ID: ', channelID)
     const { address } = getUser(getState())()
+    console.log('ADDRESS: ', address)
     creditProtocol.registerChannelID(address, channelID, platform)
   }
 }
@@ -132,9 +134,13 @@ export const createAccount = (accountData: CreateAccountData) => {
     const password = accountData.password
     const mnemonic = creditProtocol.getRandomMnemonic().toString()
     const payload = { shouldDisplayMnemonic: true, password: password, mnemonic }
+
     dispatch(setState(payload))
     dispatch(await confirmAccount())
-    dispatch(await updateAccount({nickname: accountData.nickname}))
+    //hacky, need to update this
+    setTimeout( async () => {
+      dispatch(await updateAccount({nickname: accountData.nickname}))
+    }, 1000)
   }
 }
 
@@ -349,8 +355,10 @@ export const confirmPendingTransaction = (pendingTransaction: PendingTransaction
 
       const signature = creditRecord.sign(privateKeyBuffer)
       await creditProtocol.submitCreditRecord(creditRecord, direction, signature)
+      refreshTransactions()
 
       dispatch(displaySuccess(debtManagement.confirmation.success))
+
       return true
     }
 
@@ -367,6 +375,7 @@ export const rejectPendingTransaction = (pendingTransaction: PendingTransaction)
     const { hash } = pendingTransaction
     try {
       await creditProtocol.rejectPendingTransactionByHash(hash, privateKeyBuffer)
+      refreshTransactions()
 
       dispatch(displaySuccess(debtManagement.rejection.success))
       return true
@@ -418,10 +427,10 @@ export const addDebt = (friend: Friend, amount: string, memo: string, direction:
     if (address === friend.address) {
       return dispatch(displayError('You can\'t create debt with yourself, choose another friend'))
     }
-
     // TODO - Please move this to validation check to the view layer and in favor of using the getPendingTransaction action
-    const rawPendingTransactions = await creditProtocol.getPendingTransactions(address)
-    const pendingTransactions = rawPendingTransactions.map(jsonToPendingTransaction)
+    console.log('PENDING TRANSACTIONS: ', getState().store.pendingTransactions)
+    // const rawPendingTransactions = await creditProtocol.getPendingTransactions(address)
+    const pendingTransactions = getState().store.pendingTransactions
     if(pendingTransactions.some( ele => ele.creditorAddress === friend.address || ele.debtorAddress === friend.address ) ) {
       return dispatch(displayError('Please resolve your pending transaction with this user before creating another'))
     }
@@ -430,7 +439,7 @@ export const addDebt = (friend: Friend, amount: string, memo: string, direction:
       lend: [ address, friend.address ],
       borrow: [ friend.address, address ]
     }[direction]
-
+    
     try {
       const creditRecord = await creditProtocol.createCreditRecord(
         ucac,
@@ -442,8 +451,10 @@ export const addDebt = (friend: Friend, amount: string, memo: string, direction:
 
       const signature = creditRecord.sign(privateKeyBuffer)
       await creditProtocol.submitCreditRecord(creditRecord, direction, signature)
+      refreshTransactions()
 
       dispatch(displaySuccess(debtManagement.pending.success(friend)))
+
       return true
     }
 
@@ -536,4 +547,9 @@ export const cancelRemoveAccount = () => {
 export const setWelcomeComplete = (state) => {
   const payload = { welcomeComplete: state }
   return setState(payload)
+}
+
+const refreshTransactions = () => {
+  getPendingTransactions()
+  getRecentTransactions()
 }

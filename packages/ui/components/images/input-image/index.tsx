@@ -17,7 +17,8 @@ const calculateImageSize = (percent, imageName) => {
 const getImageFromName = {
   'lock': require('images/lock.png'),
   'person': require('images/person-outline.png'),
-  'search': require('images/search.png')
+  'search': require('images/search.png'),
+  'dollar-sign': require('images/dollar-sign.png')
 }
 
 const getBorderStyle = (imageName) => {

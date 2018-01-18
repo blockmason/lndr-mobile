@@ -19,6 +19,7 @@ interface Props {
   onPress?: () => void
   pendingTransaction: PendingTransaction
   user: User
+  friend?: boolean
 }
 
 export default class PendingTransactionRow extends Component<Props> {
@@ -53,16 +54,16 @@ export default class PendingTransactionRow extends Component<Props> {
   }
 
   render() {
-    const { onPress, pendingTransaction } = this.props
+    const { onPress, pendingTransaction, friend } = this.props
 
     return (
       <TouchableHighlight style={style.pendingTransaction} onPress={onPress} underlayColor={white} activeOpacity={1}>
         <View style={style.pendingTransactionRow}>
           <View style={general.flexRow}>
-            <Image source={require('images/person-outline-dark.png')} style={style.pendingIcon}/>
+          {!friend ? <Image source={require('images/person-outline-dark.png')} style={style.pendingIcon}/> : null }
             <View style={general.flexColumn}>
-              <Text style={style.titledPending}>{this.getTitle()}</Text>
-              <Text style={style.pendingMemo}>{debtManagement.for(pendingTransaction.memo)}</Text>
+              {!friend ? <Text style={style.titledPending}>{this.getTitle()}</Text> : null }
+              <Text style={style.pendingMemo}>{friend ? pendingTransaction.memo : debtManagement.for(pendingTransaction.memo)}</Text>
             </View>
           </View>
           <Text style={style.pendingAmount}>{this.getAmount()}</Text>

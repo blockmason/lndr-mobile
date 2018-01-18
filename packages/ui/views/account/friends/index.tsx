@@ -11,7 +11,7 @@ import Loading, { LoadingContext } from 'ui/components/loading'
 import FriendRow from 'ui/components/friend-row'
 
 import AddFriend from './add-friend'
-import RemoveFriend from './remove-friend'
+import FriendDetail from './friend-detail'
 
 import style from 'theme/account'
 import general from 'theme/general'
@@ -68,7 +68,7 @@ class FriendsView extends Component<Props, State> {
     this.refresh()
   }
 
-  renderRemoveFriendDialog() {
+  renderFriendDetailDialog() {
     const { friendToRemove } = this.state
 
     if (!friendToRemove) {
@@ -76,17 +76,21 @@ class FriendsView extends Component<Props, State> {
     }
 
     return <Popup onClose={() => this.setState({ friendToRemove: undefined })}>
-      <RemoveFriend friend={friendToRemove} closePopup={() => this.closePopupAndRefresh()} />
+      <FriendDetail friend={friendToRemove} closePopup={() => this.closePopupAndRefresh()} recentTransactions={this.props.state.recentTransactions} pendingTransactions={this.props.state.pendingTransactions} />
     </Popup>
   }
 
   render() {
     const { friendsLoaded, friends, recentTransactions, pendingTransactions } = this.props.state
 
-    return <ScrollView style={general.view}>
-      { this.renderRemoveFriendDialog() }
+    return <ScrollView style={general.view} keyboardShouldPersistTaps='handled'>
+      { this.renderFriendDetailDialog() }
       <Section>
-        <AddFriend onSuccess={() => this.refresh()} />
+        <AddFriend 
+          onSuccess={() => this.refresh()}
+          removeFriend={(friend) => this.setState({ friendToRemove: friend })}
+          state={this.props.state}
+         />
       </Section>
       <Section contentContainerStyle={[style.list, style.friendList]}>
         <Loading context={loadingFriends} />

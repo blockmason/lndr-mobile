@@ -1,10 +1,10 @@
-import { StyleSheet } from 'react-native'
+import { StyleSheet, Platform } from 'react-native'
 
 import { mediumPad, largePad, verticalMargin, verticalMarginXS } from 'theme/include/spacing'
 import { center } from 'theme/include/align'
 import { radius } from 'theme/include/borders'
 import { small, medium, large, wide, bold } from 'theme/include/fonts'
-import { light, gray, danger, transparent, moneyGreen, aqua, darkGray } from 'theme/include/colors'
+import { light, gray, danger, transparent, moneyGreen, aqua, darkGray, black } from 'theme/include/colors'
 
 export default StyleSheet.create({
   button: {
@@ -13,7 +13,10 @@ export default StyleSheet.create({
     backgroundColor: aqua,
     ...radius,
     minHeight: 40,
-    minWidth: 45
+    minWidth: 45,
+    flexDirection: 'row',
+    justifyContent: 'center',
+    alignItems: 'center'
   },
   icon: {
     position: 'absolute',
@@ -41,6 +44,11 @@ export default StyleSheet.create({
     width: 16,
     paddingLeft: 10
   },
+  check: {
+    height: 24,
+    width: 24,
+    paddingLeft: 10
+  },
   danger: {
     backgroundColor: danger
   },
@@ -60,6 +68,11 @@ export default StyleSheet.create({
     color: light,
     paddingLeft: 10,
     paddingRight: 10
+  },
+  blackText: {
+    color: black,
+    paddingLeft: 4,
+    paddingRight: 4
   },
   textAlternate: {
     ...verticalMarginXS,
@@ -92,5 +105,17 @@ export default StyleSheet.create({
   },
   darkGray: {
     backgroundColor: darkGray
+  },
+  close: {
+    width: 30,
+    height: 30,
+    marginLeft: 15,
+    marginTop: Platform.OS === 'ios' ? 43 : 15
+  },
+  black: {
+    backgroundColor: black
+  },
+  friend: {
+    width: 140
   }
 } as any)

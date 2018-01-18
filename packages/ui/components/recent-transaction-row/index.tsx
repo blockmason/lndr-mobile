@@ -19,6 +19,7 @@ interface Props {
   onPress?: () => void
   recentTransaction: RecentTransaction,
   user: User
+  friend?: boolean
 }
 
 export default class RecentTransactionRow extends Component<Props> {
@@ -53,14 +54,14 @@ export default class RecentTransactionRow extends Component<Props> {
   }
 
   render() {
-    const { onPress, recentTransaction } = this.props
+    const { onPress, recentTransaction, friend } = this.props
 
     return (
       <TouchableHighlight style={style.pendingTransaction} onPress={onPress} underlayColor={white} activeOpacity={1}>
         <View style={style.pendingTransactionRow}>
           <View style={general.flexRow}>
-            <Image source={require('images/person-outline-dark.png')} style={style.recentIcon}/>
-            <Text style={style.titledPending}>{this.getTitle()}</Text>
+            {!friend ? <Image source={require('images/person-outline-dark.png')} style={style.recentIcon}/> : null }
+            <Text style={style.titledPending}>{friend ? recentTransaction.memo : this.getTitle()}</Text>
           </View>
           <Text style={style.pendingAmount}>{this.getAmount()}</Text>
         </View>

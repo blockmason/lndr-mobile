@@ -26,8 +26,8 @@ export default ({ onLogout, onMyAccount }: Props) => (
     spacing={20}
     hideShadow={true}
     backdrop={Platform.OS === 'ios' ? <BlurView blurType='dark' style={popupStyle.wrap}></BlurView> : false}
-    offsetX={Platform.OS === 'ios' ? 15 : 30}
-    offsetY={Platform.OS === 'ios' ? 15 : 0}
+    offsetX={30}
+    offsetY={Platform.OS === 'ios' ? 28 : 0}
     icon={<Image source={require('images/settings.png')}/>}
     >
     <ActionButton.Item buttonColor={aqua} title={logoutAction} onPress={onLogout} textContainerStyle={style.textContainer} textStyle={style.text}>
@@ -38,3 +38,4 @@ export default ({ onLogout, onMyAccount }: Props) => (
     </ActionButton.Item>
   </ActionButton>
 )
+

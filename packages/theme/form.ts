@@ -1,8 +1,8 @@
-import { StyleSheet } from 'react-native'
+import { StyleSheet, Platform } from 'react-native'
 
 import { l, m, s, largePad, smallPad, mediumPad, verticalMargin, verticalMarginXS, verticalMarginXXS } from 'theme/include/spacing'
 import { xlarge, large, medium, small, xsmall, bold } from 'theme/include/fonts'
-import { gray, softGray, warning, warningDark, black, white } from 'theme/include/colors'
+import { gray, softGray, warning, warningDark, black, white, aqua, lightGray } from 'theme/include/colors'
 import { attention, radius, thinSoftBorder } from 'theme/include/borders'
 import { center } from 'theme/include/align'
 
@@ -139,5 +139,25 @@ export default StyleSheet.create({
   },
   center: {
     textAlign: 'center'
+  },
+  jumboInput: {
+    fontSize: 36,
+    color: black,
+    fontWeight: 'bold',
+    minWidth: 150,
+    textAlign: 'center',
+    textAlignVertical: 'center'
+  },
+  memoBorder: {
+    borderColor: lightGray,
+    borderWidth: 1,
+    marginTop: 20,
+    marginBottom: 20,
+    borderRadius: 10
+  },
+  memoInput: {
+    width: 300,
+    ...large,
+    paddingHorizontal: m
   }
 } as any)

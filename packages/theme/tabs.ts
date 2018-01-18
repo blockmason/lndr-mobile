@@ -43,9 +43,14 @@ export default StyleSheet.create({
   },
   textActive: {
     color: charcoal,
-    fontWeight: 'bold',
+    fontWeight: 'bold'
+  },
+  underlineActive: {
     borderBottomColor: aqua,
     borderBottomWidth: 2
+  },
+  noUnderline: {
+
   },
   leftTriangle: {
     width: 35,

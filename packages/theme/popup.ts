@@ -10,8 +10,6 @@ import { white, shade, transparent } from 'theme/include/colors'
 export default StyleSheet.create({
   popup: {
     width: '100%',
-    ...largePad,
-    paddingBottom: s,
     backgroundColor: white,
     ...radius,
     ...dropShadow
@@ -30,10 +28,10 @@ export default StyleSheet.create({
     flexDirection:'column',
     alignItems:'center',
     justifyContent:'center',
-    paddingLeft: l,
-    paddingRight: l,
-    paddingTop: xxl,
-    paddingBottom: xxl
+    paddingLeft: m,
+    paddingRight: m,
+    paddingTop: m,
+    paddingBottom: s
   },
   androidContainer: {
     minHeight: '100%',

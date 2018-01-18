@@ -24,6 +24,31 @@ export default StyleSheet.create({
     paddingLeft: -15,
     paddingRight: -15
   },
+  dashboardBackground: {
+    backgroundColor: white,
+    height: Platform.OS === 'ios' ? 158 : 130
+  },
+  dashboardContainer: {
+    backgroundColor: '#242424', 
+    height: 80, 
+    flexDirection: 'row', 
+    marginTop: Platform.OS === 'ios' ? 28 : 0
+  },
+  dashboardLogo: {
+    marginTop: 30,
+    marginBottom: 20,
+    marginLeft: 15,
+    width: 90
+  },
+  dashboardTextContainer: {
+    alignItems: 'center',
+    justifyContent: 'center'
+  },
+  dashboardText: {
+    ...large,
+    color: black,
+    textAlign: 'center'
+  },
   friendList: {
     borderTopColor: softAqua,
     borderBottomColor: softAqua
@@ -44,7 +69,7 @@ export default StyleSheet.create({
     marginTop: -20,
   },
   balanceRow: {
-    width: '100%',
+    width: '80%',
     flexDirection: 'row',
     justifyContent: 'center'
   },
@@ -70,7 +95,9 @@ export default StyleSheet.create({
     ...bold
   },
   header: {
-    ...medium
+    fontSize: 36,
+    fontWeight: 'bold',
+    color: black
   },
   topText: {
     alignSelf: 'center',
@@ -82,10 +109,8 @@ export default StyleSheet.create({
     ...wide
   },
   title: {
-    paddingLeft: xs,
-    flex: 1,
-    ...xsmall,
-    marginTop: s
+    ...large,
+    fontWeight: 'bold'
   },
   titledFact: {
     padding: xs,
@@ -140,6 +165,7 @@ export default StyleSheet.create({
     ...verticalMargin
   },
   pendingTransaction: {
+    minHeight: 70,
     borderColor: softGray,
     borderBottomWidth: 1,
     borderTopWidth: 1,
@@ -184,7 +210,7 @@ export default StyleSheet.create({
   },
   settingsBackground: {
     position: 'absolute',
-    top: 0,
+    top: Platform.OS === 'ios' ? 28 : 0,
     right: 30,
     backgroundColor: aqua,
     height: 25,
@@ -192,7 +218,7 @@ export default StyleSheet.create({
   },
   settingsTriangleLeft: {
     position: 'absolute',
-    top: 0,
+    top: Platform.OS === 'ios' ? 28 : 0,
     right: 55,
     width: 15,
     height: 0,
@@ -205,7 +231,7 @@ export default StyleSheet.create({
   },
   settingsTriangleRight: {
     position: 'absolute',
-    top: 0,
+    top: Platform.OS === 'ios' ? 28 : 0,
     right: 15,
     width: 15,
     height: 0,
@@ -289,6 +315,16 @@ export default StyleSheet.create({
     paddingLeft: m,
     paddingRight: m,
     paddingVertical: s
+  },
+  imageMedium: {
+    width: 60,
+    height: 60
+  },
+  nickname: {
+    fontSize: 32,
+    fontWeight: 'bold',
+    marginVertical: 10,
+    color: aqua
   }
 
 } as any)

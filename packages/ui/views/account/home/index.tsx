@@ -14,7 +14,6 @@ import Section from 'ui/components/section'
 import BalanceRow from 'ui/components/balance-row'
 
 import AddDebt from 'ui/dialogs/add-debt'
-import MyAccount from 'ui/dialogs/my-account'
 import PendingView from 'ui/views/account/activity/pending'
 import { UserData } from 'lndr/user'
 import PendingTransaction from 'lndr/pending-transaction'
@@ -65,7 +64,6 @@ interface Props {
 }
 
 interface State {
-  shouldShowAddDebt: boolean
   balanceToView?: Balance
   pendingTransaction?: PendingTransaction
 }
@@ -73,9 +71,7 @@ interface State {
 class HomeView extends Component<Props, State> {
   constructor() {
     super()
-    this.state = {
-      shouldShowAddDebt: false
-    }
+    this.state = {}
   }
 
   async componentDidMount() {
@@ -99,10 +95,12 @@ class HomeView extends Component<Props, State> {
   }
 
   initializePushNotifications() {
-    UrbanAirship.setUserNotificationsEnabled(true)
-    UrbanAirship.addListener("register", (event) => {
-      this.props.registerChannelID(event.channelId, Platform.OS)
+    UrbanAirship.getChannelId().then(channelId => {
+      console.log('Channel: ', channelId);
+      this.props.registerChannelID(channelId, Platform.OS)
     })
+
+    UrbanAirship.setUserNotificationsEnabled(true)
     UrbanAirship.addListener("pushReceived", (notification) => {
       console.log('Received push: ', JSON.stringify(notification));
     })
@@ -115,19 +113,6 @@ class HomeView extends Component<Props, State> {
 
   refresh() {
     this.componentDidMount()
-  }
-
-  renderBalance() {
-    const { accountInformation = {} } = this.props.state
-    const { balance } = accountInformation
-
-    return <View style={style.negativeMargin}>
-      <View style={style.balanceRow}>
-        <Text style={style.balanceInfo}>$</Text>
-        <Text style={style.largeFactAmount}>{cents(balance)}</Text>
-        <Text style={style.balanceInfo}>USD</Text>
-      </View>
-    </View>
   }
 
   renderBalanceInformation() {
@@ -147,11 +132,19 @@ class HomeView extends Component<Props, State> {
     }
 
     return <Section contentContainerStyle={style.column}>
-      {this.renderBalance()}
+      <View style={style.negativeMargin}>
+        <View style={style.balanceRow}>
+          <Text style={style.balanceInfo}>$</Text>
+          <Text style={style.largeFactAmount}>{cents(balance)}</Text>
+          <Text style={style.balanceInfo}>USD</Text>
+        </View>
+      </View>
       <View style={[style.balanceRow]}>
         <Text style={[style.balance, {marginLeft: '2%'}]}>{recentTransactionsLanguage.balance}</Text>
-        <Text style={style.friends}>{recentTransactionsLanguage.friends(balancesLoaded ? balances.length : 0)}{}</Text>
-        <Image source={require('images/button-arrow.png')} style={style.friendsArrow} />
+        <Button alternate blackText narrow arrow small onPress={() => {this.props.navigation.navigate('Friends')}}
+          text={recentTransactionsLanguage.friends(balancesLoaded ? balances.length : 0)}
+          containerStyle={{marginTop: -6}}
+        />
       </View>
       <View>
         <Text style={style.largeFactAmount}></Text>
@@ -159,41 +152,29 @@ class HomeView extends Component<Props, State> {
     </Section>
   }
 
-  renderAddDebtDialog() {
-    const { shouldShowAddDebt } = this.state
-
-    if (!shouldShowAddDebt) {
-      return null
-    }
-
-    return <Popup onClose={() => this.setState({ shouldShowAddDebt: false })}>
-      <AddDebt closePopup={closePopup} />
-    </Popup>
-  }
-
-  showAddDebt() {
-    this.setState({ shouldShowAddDebt: true })
+  showAddDebt(direction) {
+    console.log('BOO', direction)
+    this.props.navigation.navigate('AddDebt')
   }
 
   render() {
     const { pendingTransactionsLoaded, pendingTransactions, accountInformation, balancesLoaded, balances } = this.props.state
     const { user } = this.props
 
-    return <ScrollView style={[general.view]}>
+    return <ScrollView style={general.view}>
       <Section>
-        { this.renderAddDebtDialog() }
         { this.renderBalanceInformation() }
       </Section>
       <Section>
         <Text style={[formStyle.title, formStyle.center, formStyle.spaceBottomS]}>{startNewDebt}</Text>
         <View style={style.newTransactionButtonContainer}>
-          <Button fat small round onPress={this.showAddDebt.bind(this)} text={owesMe} style={{minWidth: width / 2 - 22}} />
-          <Button fat small round dark onPress={this.showAddDebt.bind(this)} text={iOwe} style={{minWidth: width / 2 - 22}} />
+          <Button fat small round onPress={() => this.props.navigation.navigate('AddDebt', { direction: 'lend' })} text={owesMe} style={{minWidth: width / 2 - 25}} />
+          <Button fat small round dark onPress={() => this.props.navigation.navigate('AddDebt', {direction: 'borrow'})} text={iOwe} style={{minWidth: width / 2 - 25}} />
         </View>
       </Section>
 
       <Text style={[formStyle.title, formStyle.center, formStyle.spaceBottom, formStyle.spaceTop]}>{needsReview}</Text>
-      <PendingView />
+      <PendingView navigation={this.props.navigation} />
 
       <TouchableHighlight onPress={() => this.props.navigation.navigate('Activity')}>
         <View style={style.seeAllActivityButton}>

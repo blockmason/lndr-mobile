@@ -3,7 +3,7 @@ const generalCommunicationError = 'There was a problem communicating with the se
 export const applicationName = 'Lndr'
 export const helloWorld = 'Hello world'
 
-export const submit = 'Submit'
+export const submit = 'SUBMIT'
 export const next = 'Next'
 export const cancel = 'Cancel'
 export const back = 'Go Back'
@@ -24,9 +24,11 @@ export const removeFriend = 'Remove Friend'
 export const currentFriends = 'Current Friends'
 export const removeFriendConfirmationQuestion = 'Are you sure you would like to remove this user as a friend?'
 export const friendInfo = 'More information about this friendship:'
-export const noFriends = 'You have no friends'
+export const noFriends = 'Add some friends to get started!'
 export const noMatches = 'No matching users found'
 export const noBalances = 'You have no recorded debts'
+export const addFriendButton = '+ ADD FRIEND'
+export const alreadyFriendsButton = 'FRIENDS'
 
 export const tip = 'Tip: '
 export const notice = 'Notice: '
@@ -109,15 +111,19 @@ export const welcomeView = {
 
 export const debtManagement = {
   add: 'Add Debt',
-  selectFriend: 'Select Friend',
+  selectFriend: 'SELECT',
+  lend: 'New Loan',
+  borrow: 'New Debt',
   fields: {
     amount: 'AMOUNT',
-    selectFriend: 'SELECT FRIEND',
+    selectFriend: 'FRIEND',
     memo: 'MEMO',
-    direction: 'SELECT THE CORRECT STATEMENT'
+    direction: 'SELECT THE CORRECT STATEMENT',
+    to: 'to',
+    for: 'for'
   },
   memo: {
-    example: 'Thanks for dinner.'
+    example: 'Type memo here'
   },
   direction: {
     lend: nickname => `${nickname} owes me`,
@@ -143,7 +149,8 @@ export const debtManagement = {
   balances: {
     error: 'Unable to load balances at this time, please try again later'
   },
-  for: (memo) => `for ${memo}`
+  for: (memo) => `for ${memo}`,
+  settleUp: 'SETTLE UP'
 }
 
 export const accountViewLanguage = {
@@ -158,8 +165,9 @@ export const pendingTransactionsLanguage = {
   none: 'You have no pending transactions',
   confirmationQuestion: 'Are you sure you want to confirm this transaction?',
   pendingAnnouncement: 'This transaction is waiting for confirmation by the other party.',
-  confirm: 'Confirm',
-  reject: 'Reject',
+  confirm: 'CONFIRM',
+  reject: 'Reject Transaction',
+  cancel: 'Cancel Transaction',
   direction: {
     lend: (nickname, amount) => `@${nickname} owes you ${amount}`,
     borrow: (nickname, amount) => `You owe @${nickname} ${amount}`
@@ -168,11 +176,35 @@ export const pendingTransactionsLanguage = {
 
 export const recentTransactionsLanguage = {
   title: 'Completed',
-  none: 'You have no previous transactions',
+  none: 'You have no completed transactions',
   direction: {
     lend: (nickname, amount) => `@${nickname} owes you ${amount}`,
     borrow: (nickname, amount) => `You owe @${nickname} ${amount}`
   },
   balance: 'Balance ',
-  friends: (friends) => `(from ${friends} friends)`
+  friends: (friends) => `(from ${friends} friend${friends === 1 ? '' : 's'})`
+}
+
+export const tabs = {
+  home: 'HOME',
+  friends: 'FRIENDS',
+  activity: 'ACTIVITY'
+}
+
+export const confirmation = {
+  done: 'DONE',
+  create: {
+    start: "We've sent the record over to ",
+    end: ' for confirmation.'
+  },
+  confirm: {
+    start: "You've confirmed this record from ",
+    end: '.'
+  },
+  reject: {
+    start: "We've let ",
+    end: " know that you rejected this record."
+  },
+  status: 'You can see the status of this transaction in the ',
+  activity: 'activity tab.'
 }

@@ -11,6 +11,7 @@ import { UserData } from 'lndr/user'
 
 import RecentTransactionDetail from 'ui/dialogs/recent-transaction-detail'
 import RecentTransactionRow from 'ui/components/recent-transaction-row'
+import Friend from 'lndr/friend'
 
 import style from 'theme/account'
 import general from 'theme/general'
@@ -29,6 +30,8 @@ interface Props {
   isFocused: boolean
   user: UserData
   state: any
+  friend?: Friend
+  navigation: any
 }
 
 interface State {
@@ -77,7 +80,7 @@ class RecentTransactionsView extends Component<Props, State> {
 
   render() {
     const { recentTransactionsLoaded, recentTransactions } = this.props.state
-    const { user } = this.props
+    const { user, friend } = this.props
 
     return <View>
       { this.renderRecentTransactionDetailDialog() }
@@ -86,13 +89,17 @@ class RecentTransactionsView extends Component<Props, State> {
         <Loading context={loadingRecentTransactions} />
         {recentTransactionsLoaded && recentTransactions.length === 0 ? <Text style={style.emptyState}>{recentTransactionsLanguage.none}</Text> : null}
         {recentTransactions.map(
-          (recentTransaction, index) => (
-            <RecentTransactionRow 
+          (recentTransaction, index) => {
+            if(friend && friend.address !== recentTransaction.creditorAddress && friend.address !== recentTransaction.debtorAddress) {
+                return null
+            }
+            return <RecentTransactionRow 
               user={user}
               key={`${recentTransaction.creditorAddress}${index}` }
               recentTransaction={recentTransaction}
+              friend={friend ? true : false }
             />
-          )
+          }
         )}
       </Section>
     </View>

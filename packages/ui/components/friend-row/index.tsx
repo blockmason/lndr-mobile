@@ -12,6 +12,8 @@ import { dollars } from 'lndr/format'
 import style from 'theme/account'
 import general from 'theme/general'
 
+import { debtManagement } from 'language'
+
 interface Props {
   onPress?: () => void
   friend: Friend
@@ -31,7 +33,11 @@ export default class FriendRow extends Component<Props> {
 
     if(recentTransactions !== undefined) {
       recentTransactions.map( transaction => {
-        total += (transaction.creditorAddress === friend.address || transaction.debtorAddress === friend.address) ? transaction.amount : 0
+        if(transaction.creditorAddress === friend.address) {
+          total -= transaction.amount
+        } else if(transaction.debtorAddress === friend.address) {
+          total += transaction.amount
+        }
       })
     }
     return total
@@ -44,7 +50,11 @@ export default class FriendRow extends Component<Props> {
 
     if(pendingTransactions !== undefined) {
       pendingTransactions.map( transaction => {
-        total += (transaction.creditorAddress === friend.address || transaction.debtorAddress === friend.address) ? transaction.amount : 0
+        if(transaction.creditorAddress === friend.address) {
+          total -= transaction.amount
+        } else if(transaction.debtorAddress === friend.address) {
+          total += transaction.amount
+        }
       })
     }
 
@@ -81,7 +91,7 @@ export default class FriendRow extends Component<Props> {
   }
 
   showSettleUp() {
-    return this.getRecentTotal() > 0 ? <Button narrow small round onPress={() => null} text='SETTLE UP' style={{marginRight: 10}} /> : null
+    return this.getRecentTotal() < 0 ? <Button narrow small round onPress={() => null} text={debtManagement.settleUp} style={{marginRight: 10}} /> : null
   }
 
   render() {

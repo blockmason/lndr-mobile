@@ -1,6 +1,8 @@
-import { StyleSheet } from 'react-native'
+import { StyleSheet, Dimensions } from 'react-native'
 
 import { white } from 'theme/include/colors'
+
+const { height } = Dimensions.get('window')
 
 export default StyleSheet.create({
   flex: {
@@ -24,8 +26,7 @@ export default StyleSheet.create({
     flexGrow: 1
   },
   view: {
-    backgroundColor: white,
-    marginTop: 50
+    backgroundColor: white
   },
   alignCenter: {
     alignItems: 'center'
@@ -36,6 +37,13 @@ export default StyleSheet.create({
   centeredColumn: {
     flexDirection: 'column',
     alignItems: 'center'
+  },
+  fullHeight: {
+    minHeight: height
+  },
+  betweenRow: {
+    flexDirection: 'row',
+    justifyContent: 'space-between'
   }
 
 } as any)

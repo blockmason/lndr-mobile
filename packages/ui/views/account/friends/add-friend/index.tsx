@@ -1,6 +1,6 @@
 import React, { Component } from 'react'
 
-import { Text, TextInput, TouchableHighlight, View } from 'react-native'
+import { Text, TextInput, TouchableHighlight, View, ScrollView } from 'react-native'
 
 import { debounce } from 'lndr/time'
 import { minimumNicknameLength } from 'lndr/user'
@@ -33,6 +33,8 @@ const loadingContext = new LoadingContext()
 interface Props {
   onSuccess: () => void
   addFriend: (friend: Friend) => any
+  removeFriend: (friend: Friend) => any
+  state: any
 }
 
 interface State {
@@ -46,7 +48,6 @@ class AddFriend extends Component<Props, State> {
 
   constructor() {
     super()
-
     this.state = {
       hasSearchTerm: false,
       matches: []
@@ -85,8 +86,20 @@ class AddFriend extends Component<Props, State> {
     onSuccess()
   }
 
+  isFriend(candidate) {
+    const { friends } = this.props.state
+    //see if the friend is in the friends list
+    let isFriend = false
+    friends.map( (friend) => {
+      isFriend = isFriend || friend.address === candidate.address
+    })
+    return isFriend
+  }
+
   render() {
     const { matches, hasSearchTerm, candidateForFriendship } = this.state
+
+    const { address }  = this.props.state.user.address
 
     if (candidateForFriendship) {
       return <View style={[style.form, general.centeredColumn]}>
@@ -103,7 +116,7 @@ class AddFriend extends Component<Props, State> {
       </View>
     }
 
-    return <View>
+    return <ScrollView keyboardShouldPersistTaps='handled'>
       <View style={style.horizontalView}>
         <View style={[style.textInputContainer]}>
           <InputImage name='search' />
@@ -122,15 +135,16 @@ class AddFriend extends Component<Props, State> {
         {hasSearchTerm && matches.length === 0 ? <Text style={style.emptyState}>{noMatches}</Text> : null}
         {matches.map(
           match => (
-            <AddFriendRow
+            match.address === address ? null : <AddFriendRow
               key={match.address}
               friend={match}
-              onPress={() => this.setState({ candidateForFriendship: match })}
+              onPress={this.isFriend(match) ? () => this.props.removeFriend(match) : () => this.setState({ candidateForFriendship: match })}
+              isFriend={this.isFriend(match)}
             />
           )
         )}
       </View>}
-    </View>
+    </ScrollView>
   }
 }
 

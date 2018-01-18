@@ -17,6 +17,7 @@ interface Props {
     isFocused: boolean
     user: UserData
     state: any
+    navigation: any
 }
   
 export default class ActivityView extends Component<Props> {
@@ -29,9 +30,9 @@ export default class ActivityView extends Component<Props> {
         return (
             <ScrollView style={general.view}>
                 <Text style={style.transactionHeader}>{pendingTransactionsLanguage.title}</Text>
-                <PendingView />
+                <PendingView navigation={this.props.navigation}/>
                 <Text style={style.transactionHeader}>{recentTransactionsLanguage.title}</Text>
-                <RecentView />
+                <RecentView navigation={this.props.navigation}/>
             </ScrollView>
         )
     }
