@@ -4,7 +4,8 @@ export const ml = 40
 export const l = 30
 export const m = 15
 export const s = 10
-export const xs = 4
+export const xs = 6
+export const xxs = 4
 
 export const xLargePad = {
   paddingLeft: xl,
@@ -44,4 +45,14 @@ export const xsmallPad = {
 export const verticalMargin = {
   marginTop: s,
   marginBottom: s
+}
+
+export const verticalMarginXS = {
+  marginTop: xs,
+  marginBottom: xs
+}
+
+export const verticalMarginXXS = {
+  marginTop: xxs,
+  marginBottom: xxs
 }

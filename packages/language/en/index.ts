@@ -3,19 +3,20 @@ const generalCommunicationError = 'There was a problem communicating with the se
 export const applicationName = 'Lndr'
 export const helloWorld = 'Hello world'
 
-export const submit = 'Submit'
+export const submit = 'SUBMIT'
 export const next = 'Next'
 export const cancel = 'Cancel'
 export const back = 'Go Back'
 export const copy = 'Copy to Clipboard'
 
-export const confirmAccount = 'Confirm'
-export const createAccount = 'Create Account'
-export const recoverAccount = 'Restore Account'
-export const removeAccount = 'Remove Account'
-export const updateAccount = 'Update Account'
-export const loginAction = 'Unlock'
-export const logoutAction = 'Lock Account'
+export const confirmAccount = 'CONFIRM'
+export const createAccount = 'CREATE ACCOUNT'
+export const recoverAccount = 'RESTORE ACCOUNT'
+export const removeAccount = 'REMOVE ACCOUNT'
+export const updateAccount = 'UPDATE ACCOUNT'
+export const loginAction = 'UNLOCK'
+export const logoutAction = 'LOCK ACCOUNT'
+export const seeAllActivity = 'See All Activity'
 
 export const addFriend = 'Add Friend'
 export const addFriendConfirmationQuestion = 'Are you sure you would like to add this user as a friend?'
@@ -23,18 +24,22 @@ export const removeFriend = 'Remove Friend'
 export const currentFriends = 'Current Friends'
 export const removeFriendConfirmationQuestion = 'Are you sure you would like to remove this user as a friend?'
 export const friendInfo = 'More information about this friendship:'
-export const noFriends = 'You have no friends'
+export const noFriends = 'Add some friends to get started!'
 export const noMatches = 'No matching users found'
 export const noBalances = 'You have no recorded debts'
+export const addFriendButton = '+ ADD FRIEND'
+export const alreadyFriendsButton = 'FRIENDS'
 
 export const tip = 'Tip: '
 export const notice = 'Notice: '
 export const welcome = 'Welcome to your LNDR'
-export const welcomeBack = nickname => `Welcome back, @${nickname}!`
 export const noBalanceWarning = 'We were not able to load your balance at this time, please try again later.'
 export const totalBalance = 'Total Balance: '
 export const totalBalances = 'Total Counterparties: '
-export const addNewDebt = 'Add New Debt'
+export const startNewDebt = 'Start New Debt'
+export const needsReview = 'Needs Review'
+export const owesMe = 'I AM OWED'
+export const iOwe = 'I OWE SOMEONE'
 
 export const newPassword = 'New Password (minimum 8 chars)'
 export const confirmPassword = 'Confirm Password'
@@ -53,11 +58,8 @@ export const removeAccountExhortation = 'Be sure that you have access to your mn
 
 export const myAccount = 'My Account'
 
-export const setNickname = 'Set a nickname so your friends can find you'
+export const setNickname = 'Set a nickname so your friends can search for you'
 export const nickname = 'Nickname (lowercase & numbers)'
-
-export const addANewFriend = 'Add a New Friend'
-export const lndrNickname = 'Lndr Nickname:'
 
 export const accountManagement = {
   nickname: {
@@ -94,37 +96,48 @@ export const accountManagement = {
 export const welcomeView = {
   makeItEasy: 'Lndr makes it easy to track simple debts',
   weHelpFriends: 'We help friends live, work, and play together.',
-  lender: 'Len.der',
-  shareDinner: 'Share dinner...',
-  fillTank: 'Fill your tank...',
-  travelTogether: 'Travel together...',
-  runEthereum: 'We run on Ethereum!',
-  firstLendingApp: 'The first lending app secured on the blockchain.',
-  greatConcert: 'See a great concert...',
-  youPlayWithFriends: "You play with friends; we'll keep the tab...",
-  start: 'Start'
+  len: 'Len',
+  dot: '.',
+  der: 'der',
+  shareDinner: 'SHARE DINNER',
+  fillTank: 'FILL YOUR TANK',
+  travelTogether: 'TRAVEL TOGETHER',
+  runEthereum: 'WE RUN ON ETHEREUM!',
+  firstLendingApp: 'The first mobile lending app secured on the blockchain.',
+  greatConcert: 'SEE A GREAT CONCERT',
+  youPlayWithFriends: "You play with friends;\nwe'll keep the tab...",
+  start: 'GET STARTED'
 }
 
 export const debtManagement = {
   add: 'Add Debt',
-  selectFriend: 'Select Friend',
+  selectFriend: 'SELECT',
+  lend: 'New Loan',
+  borrow: 'New Debt',
   fields: {
     amount: 'AMOUNT',
-    selectFriend: 'SELECT FRIEND',
+    selectFriend: 'FRIEND',
     memo: 'MEMO',
-    direction: 'SELECT THE CORRECT STATEMENT'
+    direction: 'SELECT THE CORRECT STATEMENT',
+    to: 'to',
+    for: 'for'
   },
   memo: {
-    example: 'Thanks for dinner.'
+    example: 'Type memo here'
   },
   direction: {
-    lend: (nickname, amount) => `@${nickname} owes me ${amount || ''}`,
-    borrow: (nickname, amount) => `I owe @${nickname} ${amount || ''}`
+    lend: nickname => `${nickname} owes me`,
+    borrow: nickname => `I owe ${nickname}`,
+    initiatedLend: nickname => `${nickname} says he/she owes`,
+    initiatedBorrow: nickname => `${nickname} says he/she owes`,
+    pendingLend: nickname => `${nickname} owes you`,
+    pendingBorrow: nickname => `${nickname} is owed`
   },
   pending: {
     success: friend => `Pending debt submitted to @${friend.nickname}`,
     error: generalCommunicationError
   },
+  pendingParens: ' (pending)',
   confirmation: {
     success: 'Transaction has been successfully confirmed',
     error: 'Unable to confirm transaction at this time, please try again later'
@@ -135,7 +148,9 @@ export const debtManagement = {
   },
   balances: {
     error: 'Unable to load balances at this time, please try again later'
-  }
+  },
+  for: (memo) => `for ${memo}`,
+  settleUp: 'SETTLE UP'
 }
 
 export const accountViewLanguage = {
@@ -146,19 +161,50 @@ export const accountViewLanguage = {
 }
 
 export const pendingTransactionsLanguage = {
-  title: 'Pending Transaction',
+  title: 'Pending',
   none: 'You have no pending transactions',
   confirmationQuestion: 'Are you sure you want to confirm this transaction?',
   pendingAnnouncement: 'This transaction is waiting for confirmation by the other party.',
-  confirm: 'Confirm',
-  reject: 'Reject'
-}
-
-export const recentTransactionsLanguage = {
-  title: 'Transaction Details',
-  none: 'You have no previous transactions',
+  confirm: 'CONFIRM',
+  reject: 'Reject Transaction',
+  cancel: 'Cancel Transaction',
   direction: {
     lend: (nickname, amount) => `@${nickname} owes you ${amount}`,
     borrow: (nickname, amount) => `You owe @${nickname} ${amount}`
   }
+}
+
+export const recentTransactionsLanguage = {
+  title: 'Completed',
+  none: 'You have no completed transactions',
+  direction: {
+    lend: (nickname, amount) => `@${nickname} owes you ${amount}`,
+    borrow: (nickname, amount) => `You owe @${nickname} ${amount}`
+  },
+  balance: 'Balance ',
+  friends: (friends) => `(from ${friends} friend${friends === 1 ? '' : 's'})`
+}
+
+export const tabs = {
+  home: 'HOME',
+  friends: 'FRIENDS',
+  activity: 'ACTIVITY'
+}
+
+export const confirmation = {
+  done: 'DONE',
+  create: {
+    start: "We've sent the record over to ",
+    end: ' for confirmation.'
+  },
+  confirm: {
+    start: "You've confirmed this record from ",
+    end: '.'
+  },
+  reject: {
+    start: "We've let ",
+    end: " know that you rejected this record."
+  },
+  status: 'You can see the status of this transaction in the ',
+  activity: 'activity tab.'
 }

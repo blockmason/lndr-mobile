@@ -14,8 +14,13 @@ const getTabStyle = (active?: boolean) => {
   return [ style.tab, active ? style.tabActive : style.tab ]
 }
 
+const getUnderlineTextStyle = (active?: boolean) => {
+  return active ? style.underlineActive : style.noUnderline
+}
+
 interface Props {
   text: string
+  alerts?: number
   badge?: any
   onPress: () => void
   active: boolean
@@ -23,23 +28,31 @@ interface Props {
 
 export class Tab extends Component<Props> {
   render() {
+    const { alerts, onPress, badge, text } = this.props
+
     const tabStyle = getTabStyle(this.props.active)
     const textStyle = getTextStyle(this.props.active)
+    const underlineStyle = getUnderlineTextStyle(this.props.active)
 
     return (
       <TouchableHighlight
         style={style.tabContainer}
         underlayColor={clear}
         activeOpacity={0.5}
-        onPress={this.props.onPress}
+        onPress={onPress}
       >
         <View style={tabStyle}>
           <View style={style.tabContent}>
-            <Text style={textStyle}>{this.props.text}</Text>
-            {this.props.badge}
-      </View>
-    </View>
-  </TouchableHighlight>
+            <View style={[style.alert, alerts === undefined || alerts < 1 ? style.none : null]}>
+              <Text style={style.alertText}>{alerts}</Text>
+            </View>
+            <View style={underlineStyle}>
+              <Text style={textStyle}>{text}</Text>
+            </View>
+            {badge}
+          </View>
+        </View>
+      </TouchableHighlight>
   )
   }
 }

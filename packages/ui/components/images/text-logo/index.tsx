@@ -6,11 +6,16 @@ import { applicationName } from 'language'
 
 import style from 'theme/image'
 
-export default () => (
+const getImageFromName = {
+  'black': require('images/text-logo.png'),
+  'white': require('images/text-logo-white.png')
+}
+
+export default ({name}) => (
   <View>
     <Image
-      style={{height: 40, width: 100}}
-      source={require('images/text-logo.jpg')}
+      style={name === 'white' ? {height: 30, width: 90} : {height: 40, width: 120}}
+      source={getImageFromName[name]}
     />
   </View>
 )

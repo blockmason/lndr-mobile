@@ -8,11 +8,13 @@ import Section from 'ui/components/section'
 import Popup, { closePopup } from 'ui/components/popup'
 import Loading, { LoadingContext } from 'ui/components/loading'
 import { UserData } from 'lndr/user'
+import Friend from 'lndr/friend'
 
 import PendingTransactionDetail from 'ui/dialogs/pending-transaction-detail'
 import PendingTransactionRow from 'ui/components/pending-transaction-row'
 
 import style from 'theme/account'
+import general from 'theme/general'
 
 import { pendingTransactionsLanguage } from 'language'
 
@@ -28,6 +30,9 @@ interface Props {
   isFocused: boolean
   user: UserData
   state: any
+  friend?: Friend
+  onTransition?: () => any
+  navigation: any
 }
 
 interface State {
@@ -70,29 +75,63 @@ class PendingTransactionsView extends Component<Props, State> {
       <PendingTransactionDetail
         pendingTransaction={pendingTransaction}
         closePopup={() => this.closePopupAndRefresh()}
+        navigation={this.props.navigation}
       />
     </Popup>
   }
 
+  showNoneMessage() {
+    const { pendingTransactionsLoaded, pendingTransactions } = this.props.state
+    const { friend } = this.props
+
+    let showNone = false
+
+    if (!pendingTransactionsLoaded) {
+      showNone = true
+    } else if (!friend) {
+      showNone = pendingTransactions.length === 0
+    } else if (friend) {
+      showNone = true
+      pendingTransactions.map( (pending) => {
+        showNone = showNone && friend.address !== pending.creditorAddress && friend.address !== pending.debtorAddress
+      })
+    }
+
+    return showNone ? <Text style={style.emptyState}>{pendingTransactionsLanguage.none}</Text> : null
+  }
+
+  closeAndView(pendingTransaction) {
+    const { onTransition } = this.props
+    if (onTransition) {
+      
+    } else {
+      this.setState({ pendingTransaction })
+    }
+  }
+
   render() {
     const { pendingTransactionsLoaded, pendingTransactions } = this.props.state
-    const { user } = this.props
+    const { user, friend } = this.props
 
     return <View>
       { this.renderPendingTransactionDetailDialog() }
 
-      <Section text='Pending Transactions' contentContainerStyle={style.list}>
+      <Section contentContainerStyle={style.list}>
         <Loading context={loadingPendingTransactions} />
-        {pendingTransactionsLoaded && pendingTransactions.length === 0 ? <Text style={style.emptyState}>{pendingTransactionsLanguage.none}</Text> : null}
+        {this.showNoneMessage()}
         {pendingTransactions.map(
-          pendingTransaction => (
-            <PendingTransactionRow
+          pendingTransaction => {
+            if(friend && friend.address !== pendingTransaction.creditorAddress && friend.address !== pendingTransaction.debtorAddress) {
+                return null
+            }
+            return<PendingTransactionRow
               user={user}
               key={pendingTransaction.hash}
               pendingTransaction={pendingTransaction}
-              onPress={() => this.setState({ pendingTransaction })}
+              friend={friend ? true : false }
+              onPress={() => this.closeAndView(pendingTransaction)}
             />
-          )
+          }
         )}
       </Section>
     </View>

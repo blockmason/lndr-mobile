@@ -1,6 +1,6 @@
 import React, { Component } from 'react'
 
-import { Text, TextInput, TouchableHighlight, View } from 'react-native'
+import { Text, TextInput, TouchableHighlight, View, ScrollView } from 'react-native'
 
 import { debounce } from 'lndr/time'
 import { minimumNicknameLength } from 'lndr/user'
@@ -8,14 +8,15 @@ import Friend from 'lndr/friend'
 
 import Button from 'ui/components/button'
 import Loading, { LoadingContext } from 'ui/components/loading'
-import FriendRow from 'ui/components/friend-row'
+import AddFriendRow from 'ui/components/add-friend-row'
+import InputImage from 'ui/components/images/input-image'
+import { getPendingTransactions, getRecentTransactions } from 'actions'
 
 import style from 'theme/form'
-import buttonAction from 'theme/button'
+import friendStyle from 'theme/friend'
+import general from 'theme/general'
 
 import {
-  lndrNickname,
-  addANewFriend,
   nickname,
   cancel,
   back,
@@ -32,6 +33,8 @@ const loadingContext = new LoadingContext()
 interface Props {
   onSuccess: () => void
   addFriend: (friend: Friend) => any
+  removeFriend: (friend: Friend) => any
+  state: any
 }
 
 interface State {
@@ -45,7 +48,6 @@ class AddFriend extends Component<Props, State> {
 
   constructor() {
     super()
-
     this.state = {
       hasSearchTerm: false,
       matches: []
@@ -84,48 +86,65 @@ class AddFriend extends Component<Props, State> {
     onSuccess()
   }
 
+  isFriend(candidate) {
+    const { friends } = this.props.state
+    //see if the friend is in the friends list
+    let isFriend = false
+    friends.map( (friend) => {
+      isFriend = isFriend || friend.address === candidate.address
+    })
+    return isFriend
+  }
+
   render() {
     const { matches, hasSearchTerm, candidateForFriendship } = this.state
 
+    const { address }  = this.props.state.user.address
+
     if (candidateForFriendship) {
-      return <View style={style.form}>
-        <Text style={style.text}>{addFriendConfirmationQuestion}</Text>
+      return <View style={[style.form, general.centeredColumn]}>
+        <Text style={[style.text, style.center]}>{addFriendConfirmationQuestion}</Text>
           <Loading context={loadingContext} />
-          <FriendRow
-            key={candidateForFriendship.address}
-            friend={candidateForFriendship}
-          />
-          <Button action onPress={() => this.confirmFriend(candidateForFriendship)} text={addFriendText} />
-          <Button alternate onPress={() => this.removeCandidateForFriendship()} text={back} />
+          <AddFriendRow
+              key={candidateForFriendship.address}
+              friend={candidateForFriendship}
+              onPress={() => null}
+              selected
+            />
+          <Button round onPress={() => this.confirmFriend(candidateForFriendship)} text={addFriendText} />
+          <Button alternate small arrow onPress={() => this.removeCandidateForFriendship()} text={back} />
       </View>
     }
 
-    return <View>
-      <Text style={style.formTitle}>{addANewFriend}</Text>
+    return <ScrollView keyboardShouldPersistTaps='handled'>
       <View style={style.horizontalView}>
-        <Text style={[ style.text, style.horizontalElem ]}>{lndrNickname}</Text>
-        <TextInput
-          autoCapitalize='none'
-          style={style.borderTextInput}
-          placeholder={nickname}
-          onChangeText={text => this.searchAction(text)}
-        />
+        <View style={[style.textInputContainer]}>
+          <InputImage name='search' />
+          <TextInput
+            style={style.textInput}
+            underlineColorAndroid='transparent'
+            autoCapitalize='none'
+            placeholder={nickname}
+            onChangeText={text => this.searchAction(text)}
+          />
+        </View>
       </View>
       { hasSearchTerm &&
-        <View style={style.list}>
-          <Loading context={loadingContext} />
-          {hasSearchTerm && matches.length === 0 ? <Text style={style.emptyState}>{noMatches}</Text> : null}
-          {matches.map(
-            match => (
-              <FriendRow
-                key={match.address}
-                friend={match}
-                onPress={() => this.setState({ candidateForFriendship: match })}
-              />
-            )
-          )}
-        </View>}
-    </View>
+      <View style={friendStyle.searchList}>
+        <Loading context={loadingContext} />
+        {hasSearchTerm && matches.length === 0 ? <Text style={style.emptyState}>{noMatches}</Text> : null}
+        {matches.map(
+          match => (
+            match.address === address ? null : <AddFriendRow
+              key={match.address}
+              friend={match}
+              onPress={this.isFriend(match) ? () => this.props.removeFriend(match) : () => this.setState({ candidateForFriendship: match })}
+              isFriend={this.isFriend(match)}
+            />
+          )
+        )}
+      </View>}
+    </ScrollView>
   }
 }
 

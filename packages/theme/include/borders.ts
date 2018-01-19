@@ -1,4 +1,4 @@
-import { lightGray, danger } from 'theme/include/colors'
+import { lightGray, danger, softGray } from 'theme/include/colors'
 
 export const radius = {
   borderRadius: 4
@@ -17,4 +17,10 @@ export const thinBorder = {
 export const thinBottomBorder = {
   borderBottomWidth: 1,
   borderBottomColor: lightGray
+}
+
+export const thinSoftBorder = {
+  borderWidth: 1,
+  borderColor: softGray,
+  borderRadius: 10
 }

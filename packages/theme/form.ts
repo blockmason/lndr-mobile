@@ -1,18 +1,39 @@
-import { StyleSheet } from 'react-native'
+import { StyleSheet, Platform } from 'react-native'
 
-import { l, m, s, xLargePad, smallPad, mediumPad, verticalMargin } from 'theme/include/spacing'
-import { xlarge, large, medium, xsmall, bold } from 'theme/include/fonts'
-import { gray, softGray, warning, warningDark, black } from 'theme/include/colors'
-import { attention, radius } from 'theme/include/borders'
+import { l, m, s, largePad, smallPad, mediumPad, verticalMargin, verticalMarginXS, verticalMarginXXS } from 'theme/include/spacing'
+import { xlarge, large, medium, small, xsmall, bold } from 'theme/include/fonts'
+import { gray, softGray, warning, warningDark, black, white, aqua, lightGray } from 'theme/include/colors'
+import { attention, radius, thinSoftBorder } from 'theme/include/borders'
 import { center } from 'theme/include/align'
 
 export default StyleSheet.create({
   form: {
-    ...xLargePad
+    ...largePad
+  },
+  account: {
+    flexDirection: 'column',
+    alignItems: 'center',
+    ...largePad,
+    backgroundColor: white
   },
   text: {
-    ...medium,
-    ...verticalMargin
+    ...large,
+    ...verticalMarginXXS,
+    color: black,
+    ...center,
+    fontWeight: '100'
+  },
+  spaceBottom: {
+    marginBottom: 20
+  },
+  spaceBottomS: {
+    marginBottom: 10
+  },
+  spaceTopL: {
+    marginTop: 30
+  },
+  spaceTop: {
+    marginTop: 20
   },
   formTitle: {
     ...xlarge,
@@ -48,19 +69,33 @@ export default StyleSheet.create({
     overflow: 'hidden'
   },
   header: {
-    ...medium,
-    ...bold,
-    ...verticalMargin
+    ...xlarge,
+    ...verticalMargin,
+    color: black
   },
   title: {
-    ...xsmall,
+    ...small,
     ...bold,
-    color: gray,
+    color: black,
     marginTop: s
   },
+  textInputContainer: {
+    width: '100%', 
+    borderRadius: 30, 
+    borderWidth: 1, 
+    borderColor: softGray, 
+    flexDirection: 'row',
+    alignItems: 'center', 
+    ...center,
+    paddingLeft: 8,
+    ...verticalMarginXS
+  },
   textInput: {
-    ...medium,
-    ...verticalMargin
+    ...small,
+    ...verticalMarginXS,
+    ...smallPad,
+    ...center,
+    width: '100%'
   },
   borderTextInput: {
     ...medium,
@@ -71,16 +106,18 @@ export default StyleSheet.create({
     width: '50%'
   },
   multilineTextInput: {
-    ...medium,
-    ...verticalMargin,
-    minHeight: 42
+    ...small,
+    minHeight: 60,
+    textAlignVertical: 'top',
+    paddingLeft: 35,
+    paddingRight: 35,
+    width: '100%'
   },
   displayText: {
     ...medium,
     ...verticalMargin,
     padding: m,
-    ...attention,
-    ...radius
+    ...thinSoftBorder
   },
   bold: {
     ...bold
@@ -95,5 +132,32 @@ export default StyleSheet.create({
   },
   lastButton: {
     marginBottom: l - s
+  },
+  submitButton: {
+    width: '70%',
+    ...center
+  },
+  center: {
+    textAlign: 'center'
+  },
+  jumboInput: {
+    fontSize: 36,
+    color: black,
+    fontWeight: 'bold',
+    minWidth: 150,
+    textAlign: 'center',
+    textAlignVertical: 'center'
+  },
+  memoBorder: {
+    borderColor: lightGray,
+    borderWidth: 1,
+    marginTop: 20,
+    marginBottom: 20,
+    borderRadius: 10
+  },
+  memoInput: {
+    width: 300,
+    ...large,
+    paddingHorizontal: m
   }
 } as any)

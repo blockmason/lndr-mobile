@@ -18,9 +18,9 @@ export default class WelcomeStepOneView extends Component {
         <Text style={style.text}>{welcomeView.makeItEasy}</Text>
         <Text style={style.text}>{welcomeView.weHelpFriends}</Text>
         <View style={style.horizontial}>
-          <Text style={style.text}>[</Text>
-          <Text style={[style.text, style.italic]}>{welcomeView.lender}</Text>
-          <Text style={style.text}>]</Text>
+          <Text style={[style.text, style.bold]}>[ {welcomeView.len}</Text>
+          <View style={style.dot}></View>
+          <Text style={[style.text, style.bold]}>{welcomeView.der} ]</Text>
         </View>
       </View>
     )

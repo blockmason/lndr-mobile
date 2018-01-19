@@ -78,6 +78,7 @@ export default class CreditProtocol {
   }
 
   registerChannelID(user: string, channelID: string, platform: string) {
+    console.log('REGISTER CHANNEL ID: ', channelID)
     return this.client.post(`/register_push/${user}`, { channelID, platform })
   }
 

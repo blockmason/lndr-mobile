@@ -20,11 +20,11 @@ export default class WelcomeStepFourView extends Component<Props> {
   render() {
     return (
       <View style={style.topView}>
-        <TextLogo/>
+        <TextLogo name='black'/>
         <Text style={[style.text, style.topSpacing]}>{welcomeView.firstLendingApp}</Text>
         <ThemeImage size={largeImage} name='blockchain'/>
-        <Text style={style.text}>{welcomeView.runEthereum}</Text>
-        <Button round style={style.completeButton} onPress={this.props.onComplete} text={welcomeView.start} />
+        <Text style={[style.caption, style.boldCaption]}>{welcomeView.runEthereum}</Text>
+        <Button large round wide onPress={this.props.onComplete} style={style.completeButton} text={welcomeView.start} />
       </View>
     )
   }

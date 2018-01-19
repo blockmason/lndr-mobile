@@ -2,7 +2,7 @@ import React, { Component } from 'react'
 
 import { defaultUpdateAccountData, UpdateAccountData, UserData } from 'lndr/user'
 
-import { Text, TextInput, View, Clipboard } from 'react-native'
+import { Text, TextInput, View, Clipboard, Dimensions } from 'react-native'
 
 import Button from 'ui/components/button'
 import Loading, { LoadingContext } from 'ui/components/loading'
@@ -11,7 +11,13 @@ import { getAccountInformation, updateAccount } from 'actions'
 import { getUser } from 'reducers/app'
 import { connect } from 'react-redux'
 
+import TextLogo from 'ui/components/images/text-logo'
+
+import InputImage from 'ui/components/images/input-image'
+
 const loadingContext = new LoadingContext()
+
+const { height } = Dimensions.get('window');
 
 import style from 'theme/form'
 
@@ -57,21 +63,27 @@ class MyAccount extends Component<Props, State> {
       this.props.navigation.goBack()
     }
 
-    return <View>
+    return <View style={[style.account, {minHeight: height}]}>
       <Loading context={loadingContext} />
-      <Text style={style.text}>{mnemonicExhortation}</Text>
+      <TextLogo name='black'/>
+      <View style={{marginTop: 20}}/>
+      <Text style={[style.text, style.center]}>{mnemonicExhortation}</Text>
       <Text selectable style={style.displayText}>{user.mnemonic}</Text>
-      <Button icon='md-copy' onPress={() => Clipboard.setString(user.mnemonic)} text={copy} />
-      <Text style={style.text}>{setNickname}</Text>
-      <TextInput
-        autoCapitalize='none'
-        style={style.textInput}
-        placeholder={nickname}
-        value={this.state.nickname}
-        onChangeText={nickname => this.setState({ nickname })}
-      />
-      <Button onPress={submit} text={updateAccountText} />
-      <Button alternate onPress={this.handleOnCancel.bind(this)} text={cancel} />
+      <Button round onPress={() => Clipboard.setString(user.mnemonic)} style={style.submitButton} text={copy} />
+      <Text style={[style.text, style.spaceTopL, style.center]}>{setNickname}</Text>
+      <View style={style.textInputContainer}>
+        <InputImage name='person'/>
+        <TextInput
+          autoCapitalize='none'
+          style={style.textInput}
+          placeholder={nickname}
+          value={this.state.nickname}
+          underlineColorAndroid='transparent'
+          onChangeText={nickname => this.setState({ nickname })}
+        />
+      </View>
+      <Button round onPress={submit} style={style.submitButton} text={updateAccountText} />
+      <Button alternate arrow onPress={this.handleOnCancel.bind(this)} text={cancel} />
     </View>
   }
 }

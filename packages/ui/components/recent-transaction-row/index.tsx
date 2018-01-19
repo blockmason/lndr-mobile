@@ -1,23 +1,25 @@
 import React, { Component } from 'react'
 
-import { Text, TouchableHighlight, View } from 'react-native'
+import { Text, TouchableHighlight, View, Image } from 'react-native'
 
-import { cents } from 'lndr/format'
+import { dollars } from 'lndr/format'
 import User from 'lndr/user'
 
 import RecentTransaction from 'lndr/recent-transaction'
 
-import { lightGray } from 'theme/include/colors'
+import { white } from 'theme/include/colors'
 
 import { debtManagement } from 'language'
 
 import style from 'theme/account'
 import formStyle from 'theme/form'
+import general from 'theme/general'
 
 interface Props {
   onPress?: () => void
   recentTransaction: RecentTransaction,
   user: User
+  friend?: boolean
 }
 
 export default class RecentTransactionRow extends Component<Props> {
@@ -25,11 +27,11 @@ export default class RecentTransactionRow extends Component<Props> {
     const { recentTransaction, user } = this.props
 
     if (user.address === recentTransaction.creditorAddress) {
-      return debtManagement.direction.lend(recentTransaction.debtorNickname, cents(recentTransaction.amount))
+      return recentTransaction.debtorNickname
     }
 
     else if (user.address === recentTransaction.debtorAddress) {
-      return debtManagement.direction.borrow(recentTransaction.creditorNickname, cents(recentTransaction.amount))
+      return recentTransaction.creditorNickname
     }
 
     else {
@@ -37,33 +39,31 @@ export default class RecentTransactionRow extends Component<Props> {
     }
   }
 
-  getAmountStyle() {
+  getAmount() {
     const { recentTransaction, user } = this.props
 
+    let sign = ''
+
     if (user.address === recentTransaction.creditorAddress) {
-      return style.titledFactAmountGood
+      sign = '+'
+    } else if (user.address === recentTransaction.debtorAddress) {
+      sign = '-'
     }
 
-    else if (user.address === recentTransaction.debtorAddress) {
-      return style.titledFactAmountDanger
-    }
-
-    else {
-      return style.titledFact
-    }
+    return `${sign} $${dollars(recentTransaction.amount)}`
   }
 
   render() {
-    const { onPress, recentTransaction } = this.props
+    const { onPress, recentTransaction, friend } = this.props
 
     return (
-      <TouchableHighlight style={style.recentTransaction} onPress={onPress} underlayColor={lightGray} activeOpacity={0.5}>
-        <View>
-          <Text style={formStyle.header}>{this.getTitle()}</Text>
-          <View style={style.listItem}>
-            <Text style={style.titledFact}>{recentTransaction.memo}</Text>
-            <Text style={this.getAmountStyle()}>{cents(recentTransaction.amount)}</Text>
+      <TouchableHighlight style={style.pendingTransaction} onPress={onPress} underlayColor={white} activeOpacity={1}>
+        <View style={style.pendingTransactionRow}>
+          <View style={general.flexRow}>
+            {!friend ? <Image source={require('images/person-outline-dark.png')} style={style.recentIcon}/> : null }
+            <Text style={style.titledPending}>{friend ? recentTransaction.memo : this.getTitle()}</Text>
           </View>
+          <Text style={style.pendingAmount}>{this.getAmount()}</Text>
         </View>
       </TouchableHighlight>
     )

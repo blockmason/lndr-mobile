@@ -6,6 +6,8 @@ import Button from 'ui/components/button'
 
 import { RecoverAccountData, defaultRecoverAccountData } from 'lndr/user'
 
+import InputImage from 'ui/components/images/input-image'
+
 import {
   newPassword,
   recoverAccount,
@@ -29,21 +31,28 @@ export default class RecoverAccountForm extends Component<Props, RecoverAccountD
 
   render() {
     return <View style={style.form}>
-      <Text style={style.text}>{recoverExistingAccount}</Text>
-      <TextInput
-        multiline
-        style={style.multilineTextInput}
-        placeholder={recoverMnemonic}
-        onChangeText={mnemonic => this.setState({ mnemonic: mnemonic.trim() })}
-      />
-      <TextInput
-        secureTextEntry
-        style={style.textInput}
-        placeholder={newPassword}
-        onChangeText={confirmPassword => this.setState({ confirmPassword })}
-      />
-      <Button onPress={() => this.submit()} text={recoverAccount} />
-      <Button alternate onPress={() => this.cancel()} text={cancel} />
+      <Text style={[style.text, style.spaceBottom]}>{recoverExistingAccount}</Text>
+      <View style={style.textInputContainer}>
+        <TextInput
+          multiline
+          style={style.multilineTextInput}
+          placeholder={recoverMnemonic}
+          underlineColorAndroid='transparent'
+          onChangeText={mnemonic => this.setState({ mnemonic: mnemonic.trim() })}
+        />
+      </View>
+      <View style={[style.textInputContainer, style.spaceBottom]}>
+        <InputImage name='lock'/>
+        <TextInput
+          secureTextEntry
+          style={style.textInput}
+          placeholder={newPassword}
+          underlineColorAndroid='transparent'
+          onChangeText={confirmPassword => this.setState({ confirmPassword })}
+        />
+      </View>
+      <Button round fat style={style.submitButton} onPress={() => this.submit()} text={recoverAccount} />
+      <Button alternate small arrow style={style.submitButton} onPress={() => this.cancel()} text={cancel} />
     </View>
   }
 

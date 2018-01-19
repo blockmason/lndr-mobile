@@ -4,6 +4,8 @@ import { View, Text, TextInput } from 'react-native'
 
 import Button from 'ui/components/button'
 
+import InputImage from 'ui/components/images/input-image'
+
 import { LoginAccountData, defaultLoginAccountData } from 'lndr/user'
 
 import {
@@ -29,15 +31,19 @@ export default class LoginAccountForm extends Component<Props, LoginAccountData>
   render() {
     const { onSubmit, onRemoveAccount } = this.props
     return <View style={style.form}>
-      <Text style={style.text}>{loginAccount}</Text>
-      <TextInput
-        secureTextEntry
-        style={style.textInput}
-        placeholder={confirmPassword}
-        onChangeText={confirmPassword => this.setState({ confirmPassword })}
-      />
-      <Button icon='md-lock' onPress={() => onSubmit(this.state)} text={loginAction} />
-      <Button alternate onPress={() => onRemoveAccount()} text={removeAccount} />
+      <Text style={[style.text, style.spaceBottom]}>{loginAccount}</Text>
+      <View style={[style.textInputContainer, style.spaceBottom]}>
+        <InputImage name='lock'/>
+        <TextInput
+          secureTextEntry
+          style={style.textInput}
+          placeholder={confirmPassword}
+          underlineColorAndroid='transparent'
+          onChangeText={confirmPassword => this.setState({ confirmPassword })}
+        />
+      </View>
+      <Button round fat onPress={() => onSubmit(this.state)} style={style.submitButton} text={loginAction} />
+      <Button alternate small arrow onPress={() => onRemoveAccount()} style={style.submitButton} text={removeAccount} />
     </View>
   }
 }

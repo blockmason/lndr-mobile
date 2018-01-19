@@ -1,7 +1,7 @@
 import { Platform } from 'react-native'
 
 export const xlarge = {
-  fontSize: 20
+  fontSize: 22
 }
 
 export const large = {

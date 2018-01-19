@@ -6,5 +6,6 @@ export const mediumHeightIcon = {
 }
 
 export const percent = {
-  ten: '10%'
+  ten: '10%',
+  five: '5%'
 }

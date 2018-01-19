@@ -26,10 +26,10 @@ class RemoveAccountView extends Component<Props> {
   render() {
     return (
       <View style={style.form}>
-        <Text style={style.header}>{removeAccountTitle}</Text>
-        <Text style={style.text}>{removeAccountExhortation}</Text>
-        <Button danger onPress={this.props.removeAccount} text={removeAccountText} />
-        <Button alternate onPress={this.props.cancelRemoveAccount} text={cancel} />
+        <Text style={[style.header, style.center, style.spaceTop]}>{removeAccountTitle}</Text>
+        <Text style={[style.text, style.center, style.spaceTop]}>{removeAccountExhortation}</Text>
+        <Button round fat style={style.submitButton} onPress={this.props.removeAccount} text={removeAccountText} />
+        <Button alternate small arrow style={style.submitButton} onPress={this.props.cancelRemoveAccount} text={cancel} />
       </View>
     )
   }

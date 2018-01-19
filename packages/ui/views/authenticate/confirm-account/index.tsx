@@ -22,10 +22,10 @@ class ConfirmAccountView extends Component<Props, {}> {
   render() {
     return (
       <View style={style.form}>
-        <Text style={style.header}>{mnemonicExhortation}</Text>
+        <Text style={[style.header, style.center]}>{mnemonicExhortation}</Text>
         <Text selectable style={style.displayText}>{this.props.mnemonic}</Text>
-        <Button icon='md-copy' onPress={() => Clipboard.setString(this.props.mnemonic || ' ')} text={copy} />
-        <Button onPress={this.props.mnemonicDisplayed} text={next} />
+        <Button round fat onPress={() => Clipboard.setString(this.props.mnemonic || ' ')} style={style.submitButton} text={copy} />
+        <Button alternate arrow onPress={this.props.mnemonicDisplayed} style={style.submitButton} text={next} />
       </View>
     )
   }

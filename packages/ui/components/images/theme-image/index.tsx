@@ -14,13 +14,13 @@ const calculateImageSize = (percent) => {
 }
 
 const getImageFromName = {
-  'logo': require('images/logo.jpg'),
-  'blockchain': require('images/blockchain.jpg'),
-  'concert': require('images/concert.jpg'),
-  'dinner': require('images/dinner.jpg'),
-  'text-logo': require('images/text-logo.jpg'),
-  'tank': require('images/tank.jpg'),
-  'travel': require('images/travel.jpg')
+  'logo': require('images/logo+text.png'),
+  'blockchain': require('images/blockchain.png'),
+  'concert': require('images/concert.png'),
+  'dinner': require('images/dinner.png'),
+  'text-logo': require('images/text-logo.png'),
+  'tank': require('images/tank.png'),
+  'travel': require('images/travel.png')
 }
 
 interface Props {

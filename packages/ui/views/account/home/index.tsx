@@ -2,7 +2,7 @@
 
 import React, { Component } from 'react'
 
-import { Text, View, Platform } from 'react-native'
+import { Text, View, ScrollView, Platform, Dimensions, Image, TouchableHighlight } from 'react-native'
 
 import { cents } from 'lndr/format'
 import Balance from 'lndr/balance'
@@ -14,20 +14,19 @@ import Section from 'ui/components/section'
 import BalanceRow from 'ui/components/balance-row'
 
 import AddDebt from 'ui/dialogs/add-debt'
-import MyAccount from 'ui/dialogs/my-account'
-import RecentTransaction from 'lndr/recent-transaction'
-import RecentTransactionDetail from 'ui/dialogs/recent-transaction-detail'
-import RecentTransactionRow from 'ui/components/recent-transaction-row'
+import PendingView from 'ui/views/account/activity/pending'
 import { UserData } from 'lndr/user'
+import PendingTransaction from 'lndr/pending-transaction'
 
 import { isFocusingOn } from 'reducers/nav'
 import { getStore, getUser } from 'reducers/app'
-import { getAccountInformation, displayError, getRecentTransactions, getBalances, registerChannelID } from 'actions'
+import { getAccountInformation, displayError, getPendingTransactions, getBalances, registerChannelID } from 'actions'
 import { connect } from 'react-redux'
 import { UrbanAirship } from 'urbanairship-react-native'
 
 import style from 'theme/account'
 import formStyle from 'theme/form'
+import general from 'theme/general'
 
 import {
   tip,
@@ -35,20 +34,27 @@ import {
   totalBalance,
   totalBalances,
   welcome,
-  welcomeBack,
   noBalances,
   noBalanceWarning,
   accountManagement,
-  addNewDebt,
-  recentTransactionsLanguage
+  owesMe,
+  iOwe,
+  startNewDebt,
+  needsReview,
+  recentTransactionsLanguage,
+  pendingTransactionsLanguage,
+  seeAllActivity
 } from 'language'
 
+const { width } = Dimensions.get('window')
+
 const loadingBalances = new LoadingContext()
-const loadingRecentTransactions = new LoadingContext()
+const loadingPendingTransactions = new LoadingContext()
 
 interface Props {
+  navigation: any
   isFocused: boolean
-  getRecentTransactions: () => any
+  getPendingTransactions: () => any
   getBalances: () => any
   getAccountInformation: () => any
   displayError: (errorMsg: string) => any
@@ -58,17 +64,14 @@ interface Props {
 }
 
 interface State {
-  shouldShowAddDebt: boolean
   balanceToView?: Balance
-  recentTransaction?: RecentTransaction
+  pendingTransaction?: PendingTransaction
 }
 
 class HomeView extends Component<Props, State> {
   constructor() {
     super()
-    this.state = {
-      shouldShowAddDebt: false
-    }
+    this.state = {}
   }
 
   async componentDidMount() {
@@ -81,7 +84,7 @@ class HomeView extends Component<Props, State> {
       this.props.displayError(accountManagement.loadInformation.error)
     }
 
-    await loadingRecentTransactions.wrap(this.props.getRecentTransactions())
+    await loadingPendingTransactions.wrap(this.props.getPendingTransactions())
     await loadingBalances.wrap(this.props.getBalances())
   }
 
@@ -92,10 +95,12 @@ class HomeView extends Component<Props, State> {
   }
 
   initializePushNotifications() {
-    UrbanAirship.setUserNotificationsEnabled(true)
-    UrbanAirship.addListener("register", (event) => {
-      this.props.registerChannelID(event.channelId, Platform.OS)
+    UrbanAirship.getChannelId().then(channelId => {
+      console.log('Channel: ', channelId);
+      this.props.registerChannelID(channelId, Platform.OS)
     })
+
+    UrbanAirship.setUserNotificationsEnabled(true)
     UrbanAirship.addListener("pushReceived", (notification) => {
       console.log('Received push: ', JSON.stringify(notification));
     })
@@ -108,39 +113,6 @@ class HomeView extends Component<Props, State> {
 
   refresh() {
     this.componentDidMount()
-  }
-
-  renderWelcomeMessage() {
-    const { accountInformationLoaded, accountInformation = {} } = this.props.state
-
-    if (!accountInformationLoaded) {
-      return
-    }
-
-    const { nickname } = accountInformation
-
-    if (nickname) {
-      return <Text style={formStyle.infoText}>{welcomeBack(nickname)}</Text>
-    }
-
-    return <Text style={formStyle.infoText}>{welcome}</Text>
-  }
-
-  renderBalance() {
-    const { accountInformation = {} } = this.props.state
-    const { balance } = accountInformation
-
-    if (typeof balance === 'undefined') {
-      return null
-    }
-
-    else if (balance < 0) {
-      return <Text style={style.largeFactAmountDanger}>{cents(balance)}</Text>
-    }
-
-    else {
-      return <Text style={style.largeFactAmountGood}>{cents(balance)}</Text>
-    }
   }
 
   renderBalanceInformation() {
@@ -159,67 +131,60 @@ class HomeView extends Component<Props, State> {
       </Text>
     }
 
-    return <Section contentContainerStyle={style.listItem}>
-      <View>
-        <Text style={style.paddedHeader}>{totalBalance}</Text>
-        {this.renderBalance()}
+    return <Section contentContainerStyle={style.column}>
+      <View style={style.negativeMargin}>
+        <View style={style.balanceRow}>
+          <Text style={style.balanceInfo}>$</Text>
+          <Text style={style.largeFactAmount}>{cents(balance)}</Text>
+          <Text style={style.balanceInfo}>USD</Text>
+        </View>
+      </View>
+      <View style={[style.balanceRow]}>
+        <Text style={[style.balance, {marginLeft: '2%'}]}>{recentTransactionsLanguage.balance}</Text>
+        <Button alternate blackText narrow arrow small onPress={() => {this.props.navigation.navigate('Friends')}}
+          text={recentTransactionsLanguage.friends(balancesLoaded ? balances.length : 0)}
+          containerStyle={{marginTop: -6}}
+        />
       </View>
       <View>
-        <Text style={style.paddedHeader}>{totalBalances}</Text>
-        <Text style={style.largeFactAmount}>{balancesLoaded ? String(balances.length) : '-'}</Text>
+        <Text style={style.largeFactAmount}></Text>
       </View>
     </Section>
   }
 
-  renderAddDebtDialog() {
-    const { shouldShowAddDebt } = this.state
-
-    if (!shouldShowAddDebt) {
-      return null
-    }
-
-    return <Popup onClose={() => this.setState({ shouldShowAddDebt: false })}>
-      <AddDebt closePopup={closePopup} />
-    </Popup>
-  }
-
-  showAddDebt() {
-    this.setState({ shouldShowAddDebt: true })
+  showAddDebt(direction) {
+    console.log('BOO', direction)
+    this.props.navigation.navigate('AddDebt')
   }
 
   render() {
-    const { recentTransactionsLoaded, recentTransactions, accountInformation, balancesLoaded, balances } = this.props.state
+    const { pendingTransactionsLoaded, pendingTransactions, accountInformation, balancesLoaded, balances } = this.props.state
     const { user } = this.props
 
-    return <View>
+    return <ScrollView style={general.view}>
       <Section>
-        { this.renderAddDebtDialog() }
-
-        { this.renderWelcomeMessage() }
         { this.renderBalanceInformation() }
       </Section>
       <Section>
-        <Button action onPress={this.showAddDebt.bind(this)} text={addNewDebt} />
+        <Text style={[formStyle.title, formStyle.center, formStyle.spaceBottomS]}>{startNewDebt}</Text>
+        <View style={style.newTransactionButtonContainer}>
+          <Button fat small round onPress={() => this.props.navigation.navigate('AddDebt', { direction: 'lend' })} text={owesMe} style={{minWidth: width / 2 - 25}} />
+          <Button fat small round dark onPress={() => this.props.navigation.navigate('AddDebt', {direction: 'borrow'})} text={iOwe} style={{minWidth: width / 2 - 25}} />
+        </View>
       </Section>
 
-      <Section text='Recent Transactions' contentContainerStyle={style.list}>
-        <Loading context={loadingRecentTransactions} />
-        {recentTransactionsLoaded && recentTransactions.length === 0 ? <Text style={style.emptyState}>{recentTransactionsLanguage.none}</Text> : null}
-        {recentTransactions.map(
-          (recentTransaction, i) => (
-            <RecentTransactionRow
-              user={user}
-              key={i}
-              recentTransaction={recentTransaction}
-              onPress={() => this.setState({ recentTransaction })}
-            />
-          )
-        )}
-      </Section>
+      <Text style={[formStyle.title, formStyle.center, formStyle.spaceBottom, formStyle.spaceTop]}>{needsReview}</Text>
+      <PendingView navigation={this.props.navigation} />
 
-    </View>
+      <TouchableHighlight onPress={() => this.props.navigation.navigate('Activity')}>
+        <View style={style.seeAllActivityButton}>
+          <Text style={style.seeAllActivity}>{seeAllActivity}</Text>
+          <Image source={require('images/blue-chevron.png')} style={style.seeAllActivityArrow} />
+        </View>
+      </TouchableHighlight>
+    </ScrollView>
   }
 }
 
 export default connect((state) => ({ state: getStore(state)(), user: getUser(state)(), isFocused: isFocusingOn(state)('Home') }),
-{ getAccountInformation, displayError, getRecentTransactions, getBalances, registerChannelID })(HomeView)
+{ getAccountInformation, displayError, getPendingTransactions, getBalances, registerChannelID })(HomeView)

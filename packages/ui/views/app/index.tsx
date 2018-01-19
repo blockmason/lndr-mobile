@@ -92,7 +92,7 @@ export default class AppView extends Component {
   render() {
     return (
       <Provider store={store}>
-        <ScrollView style={style.flex} contentContainerStyle={style.flexGrow}>
+        <ScrollView style={style.flex} contentContainerStyle={style.flexGrow} keyboardShouldPersistTaps='handled'>
           <AndroidStatusBar />
           <PopupTarget />
           <AppContents />
