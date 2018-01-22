@@ -46,7 +46,9 @@ const initialState = {
   recentTransactions: [],
   accountInformationLoaded: false,
   pendingTransactionsLoaded: false,
-  pendingTransactions: []
+  pendingTransactions: [],
+  pendingSettlements: [],
+  bilateralSettlements: []
 }
 
 const store = createStore(initialState)

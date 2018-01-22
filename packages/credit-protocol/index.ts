@@ -7,6 +7,7 @@ import ethUtil from 'ethereumjs-util'
 import { hexToBuffer, bufferToHex, stringToBuffer } from './lib/buffer-utils'
 import Client from './lib/client'
 import CreditRecord from './lib/credit-record'
+
 export { default as CreditRecord } from './lib/credit-record'
 
 export default class CreditProtocol {
@@ -110,6 +111,10 @@ export default class CreditProtocol {
     return this.client.get(`/pending/${user}`)
   }
 
+  getPendingSettlements(user: string) {
+    return this.client.get(`/pending_settlements/${user}`)
+  }
+
   getNonce(address1, address2) {
     return this.client.get(`/nonce/${address1}/${address2}`)
   }
@@ -123,6 +128,13 @@ export default class CreditProtocol {
   }
 
   rejectPendingTransactionByHash(hash: string, privateKeyBuffer: any) {
+    return this.client.post('/reject', {
+      hash,
+      rejectSig: this.serverSign(hash, privateKeyBuffer)
+    })
+  }
+
+  rejectPendingSettlementByHash(hash: string, privateKeyBuffer: any) {
     return this.client.post('/reject', {
       hash,
       rejectSig: this.serverSign(hash, privateKeyBuffer)
@@ -159,11 +171,44 @@ export default class CreditProtocol {
     })
   }
 
+  async submitSettlementRecord(creditRecord, action, signature, denomination) {
+    if (action !== 'lend' && action !== 'borrow') {
+      throw new Error('Action is invalid')
+    }
+
+    const {
+      creditorAddress: creditor,
+      debtorAddress: debtor,
+      amount,
+      memo,
+      nonce
+    } = creditRecord
+
+    return this.client.post(`/${action}`, {
+      creditor: creditor,
+      debtor: debtor,
+      amount: amount,
+      memo: memo,
+      submitter: action === 'lend' ? creditor : debtor,
+      hash: bufferToHex(creditRecord.hash),
+      nonce: nonce,
+      signature: signature,
+      settlementCurrency: denomination
+    })
+  }
+
   getRandomMnemonic() {
     return new Mnemonic()
   }
 
   getMnemonic(mnemonic: string) {
     return new Mnemonic(mnemonic)
+  }
+
+  storeSettlementHash(hash: any) {
+    return this.client.post('/verify_settlement', {
+      hash,
+
+    })
   }
 }

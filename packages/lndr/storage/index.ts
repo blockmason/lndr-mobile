@@ -1,4 +1,4 @@
-import localStorage from 'react-native-local-storage'
+import { AsyncStorage } from 'react-native'
 
 export default class Storage {
   key: string
@@ -8,19 +8,16 @@ export default class Storage {
   }
 
   async get() {
-    const buffer = await localStorage.get(this.key)
-    return buffer ? buffer.toString() : null
+    const string = await AsyncStorage.getItem(this.key)
+    return JSON.parse(string)
   }
 
-  async set(value: string) {
-    if (typeof value !== 'string') {
-      throw new Error('can only set string values')
-    }
-
-    await localStorage.save(this.key, value)
+  async set(value: any) {
+    const jsonValue = JSON.stringify(value)
+    await AsyncStorage.setItem(this.key, jsonValue)
   }
 
   async remove() {
-    await localStorage.remove(this.key)
+    await AsyncStorage.removeItem(this.key)
   }
 }

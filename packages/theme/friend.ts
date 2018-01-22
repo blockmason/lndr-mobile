@@ -41,5 +41,57 @@ export default StyleSheet.create({
   settleUpButton: {
     width: '70%',
     textAlign: 'center'
+  },
+  header: {
+    ...xlarge,
+    fontWeight: 'bold',
+    color: aqua,
+    marginVertical: m
+  },
+  title: {
+    ...medium,
+    fontWeight: 'bold',
+    color: black
+  },
+  total: {
+    ...xlarge,
+    color: aqua,
+    textAlign: 'left'
+  },
+  totalAmount: {
+    fontSize: 32,
+    color: aqua,
+    textAlign: 'right'
+  },
+  settleImage: {
+    width: 100,
+    height: 100
+  },
+  transactions: {
+    flex: 1,
+    alignSelf: 'stretch',
+    paddingHorizontal: 30
+  },
+  totalRow: {
+    borderTopColor: black,
+    borderTopWidth: 4,
+    paddingTop: s,
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    alignSelf: 'stretch',
+    flexDirection: 'row',
+    flex: 1
+  },
+  recent: {
+    paddingVertical: s,
+    flexDirection: 'row',
+    alignSelf: 'stretch',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    flex: 1
+  },
+  recentText: {
+    color: aqua,
+    ...medium
   }
 })

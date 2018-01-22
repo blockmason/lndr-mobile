@@ -153,7 +153,8 @@ export default StyleSheet.create({
     borderWidth: 1,
     marginTop: 20,
     marginBottom: 20,
-    borderRadius: 10
+    borderRadius: 10,
+    paddingVertical: Platform.OS === 'ios' ? s : 0
   },
   memoInput: {
     width: 300,

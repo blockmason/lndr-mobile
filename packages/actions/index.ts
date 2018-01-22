@@ -1,5 +1,6 @@
 import ethUtil from 'ethereumjs-util'
 import { UrbanAirship } from 'urbanairship-react-native'
+import moment from 'moment'
 
 import { longTimePeriod } from 'lndr/time'
 import Balance from 'lndr/balance'
@@ -8,13 +9,16 @@ import { minimumNicknameLength, minimumPasswordLength } from 'lndr/user'
 import Friend from 'lndr/friend'
 import PendingTransaction from 'lndr/pending-transaction'
 import RecentTransaction from 'lndr/recent-transaction'
+import PendingSettlement from 'lndr/pending-settlement'
+import EthTransaction from 'lndr/eth-transaction'
 import ucac from 'lndr/ucac'
+import { getGasPrice, settleWithEth } from 'lndr/settlement'
 
 import CreditProtocol from 'credit-protocol'
 
 import Storage from 'lndr/storage'
 
-import { accountManagement, debtManagement } from 'language'
+import { accountManagement, debtManagement, settlementManagement } from 'language'
 
 import { ToastActionsCreators } from 'react-native-redux-toast'
 import { getUser, getStore } from 'reducers/app'
@@ -32,10 +36,19 @@ const setState = (payload) => (
   { type: 'SET_STATE', payload: payload }
 )
 
+const sessionStorage = new Storage('session')
+const userStorage = new Storage('user')
+
 export const initializeStorage = () => {
   return async (dispatch) => {
     const storedMnemonic = await mnemonicStorage.get()
-    if (storedMnemonic) {
+    const storedSession = await sessionStorage.get()
+    const storedUser = await userStorage.get()
+
+    if ( storedUser && moment(storedSession).add(1, 'day') > moment() ) {
+      await sessionStorage.set(moment())
+      dispatch(setState({ hasStoredUser: true, welcomeComplete: true, user: storedUser }))
+    } else if (storedMnemonic) {
       dispatch(setState({ hasStoredUser: true, welcomeComplete: true }))
     }
     dispatch(setState({ isInitializing: false }))
@@ -73,9 +86,7 @@ export const updateAccount = (accountData: UpdateAccountData) => {
 
 export const registerChannelID = (channelID: string, platform: string) => {
   return async (_dispatch, getState) => {
-    console.log('CHANNEL ID: ', channelID)
     const { address } = getUser(getState())()
-    console.log('ADDRESS: ', address)
     creditProtocol.registerChannelID(address, channelID, platform)
   }
 }
@@ -84,6 +95,9 @@ export const registerChannelID = (channelID: string, platform: string) => {
 export async function storeUserSession(user: User) {
   await mnemonicStorage.set(user.mnemonic)
   await hashedPasswordStorage.set(user.hashedPassword)
+
+  await userStorage.set(user)
+  await sessionStorage.set(moment())
 }
 
 //Not a redux action
@@ -218,6 +232,7 @@ export async function takenNick(nickname: string) {
 export const addFriend = (friend: Friend) => {
   return async (dispatch, getState) => {
     const { address/*, privateKeyBuffer*/ } = getUser(getState())()
+    console.log('ADDING A FRIEND 1')
     try {
       await creditProtocol.addFriend(address, friend.address/*, privateKeyBuffer*/)
       dispatch(displaySuccess(accountManagement.addFriend.success(friend.nickname)))
@@ -321,6 +336,11 @@ export const jsonToRecentTransaction = (data) => {
   return new RecentTransaction(data)
 }
 
+//Not a redux action
+export const jsonToPendingSettlement = (data) => {
+  return new PendingSettlement(data)
+}
+
 export const getRecentTransactions = () => {
   return async (dispatch, getState) => {
     const { address } = getUser(getState())()
@@ -338,6 +358,21 @@ export const getPendingTransactions = () => {
     const pendingTransactions = rawPendingTransactions.map(jsonToPendingTransaction)
     await ensureTransactionNicknames(pendingTransactions)
     dispatch(setState({ pendingTransactions, pendingTransactionsLoaded: true }))
+  }
+}
+
+export const getPendingSettlements = () => {
+  return async (dispatch, getState) => {
+    const user = getUser(getState())()
+
+    const rawPendingSettlements = await creditProtocol.getPendingSettlements(user.address)
+    console.log('RAW PENDING SETTLEMENTS: ', rawPendingSettlements)
+    const pendingSettlements = rawPendingSettlements.unilateralSettlements.map(jsonToPendingSettlement)
+    const bilateralSettlements = rawPendingSettlements.bilateralSettlements.map(jsonToPendingSettlement)
+    // settleBilateral(user, bilateralSettlements, dispatch)
+    await ensureTransactionNicknames(pendingSettlements)
+    await ensureTransactionNicknames(bilateralSettlements)
+    dispatch(setState({ pendingSettlements, pendingSettlementsLoaded: true, bilateralSettlements }))
   }
 }
 
@@ -372,12 +407,61 @@ export const confirmPendingTransaction = (pendingTransaction: PendingTransaction
   }
 }
 
+export const confirmPendingSettlement = (pendingTransaction: PendingTransaction, denomination: string) => {
+  return async (dispatch, getState) => {
+    const { creditorAddress, debtorAddress, amount, memo } = pendingTransaction
+    const { address, privateKeyBuffer } = getUser(getState())()
+    const direction = address === creditorAddress ? 'lend' : 'borrow'
+
+    try {
+      const creditRecord = await creditProtocol.createCreditRecord(
+        ucac,
+        creditorAddress,
+        debtorAddress,
+        amount,
+        memo
+      )
+
+      const signature = creditRecord.sign(privateKeyBuffer)
+      await creditProtocol.submitSettlementRecord(creditRecord, direction, signature, denomination)
+      refreshTransactions()
+
+      dispatch(displaySuccess(debtManagement.confirmation.success))
+
+      return true
+    }
+
+    catch (e) {
+      dispatch(displayError(debtManagement.confirmation.error))
+      return false
+    }
+  }
+}
+
 export const rejectPendingTransaction = (pendingTransaction: PendingTransaction) => {
   return async (dispatch, getState) => {
     const { address, privateKeyBuffer } = getUser(getState())()
     const { hash } = pendingTransaction
     try {
       await creditProtocol.rejectPendingTransactionByHash(hash, privateKeyBuffer)
+      dispatch(displaySuccess(debtManagement.rejection.success))
+      refreshTransactions()
+
+      return true
+    }
+    catch (e) {
+      dispatch(displayError(debtManagement.rejection.error))
+      return false
+    }
+  }
+}
+
+export const rejectPendingSettlement = (pendingSettlement: PendingSettlement) => {
+  return async (dispatch, getState) => {
+    const { address, privateKeyBuffer } = getUser(getState())()
+    const { hash } = pendingSettlement
+    try {
+      await creditProtocol.rejectPendingSettlementByHash(hash, privateKeyBuffer)
       refreshTransactions()
 
       dispatch(displaySuccess(debtManagement.rejection.success))
@@ -431,10 +515,7 @@ export const addDebt = (friend: Friend, amount: string, memo: string, direction:
       return dispatch(displayError('You can\'t create debt with yourself, choose another friend'))
     }
     // TODO - Please move this to validation check to the view layer and in favor of using the getPendingTransaction action
-    console.log('PENDING TRANSACTIONS: ', getState().store.pendingTransactions)
-    // const rawPendingTransactions = await creditProtocol.getPendingTransactions(address)
-    const pendingTransactions = getState().store.pendingTransactions
-    if(pendingTransactions.some( ele => ele.creditorAddress === friend.address || ele.debtorAddress === friend.address ) ) {
+    if (hasPendingTransaction(getState, friend)) {
       return dispatch(displayError('Please resolve your pending transaction with this user before creating another'))
     }
 
@@ -467,6 +548,80 @@ export const addDebt = (friend: Friend, amount: string, memo: string, direction:
   }
 }
 
+export const settleUp = (friend: Friend, amount: string, memo: string, direction: string, denomination: string) => {
+  return async (dispatch, getState) => {
+    const { address, privateKeyBuffer } = getUser(getState())()
+
+    if (!friend) {
+      return dispatch(displayError('Friend must be selected'))
+    }
+
+    if (!amount) {
+      return dispatch(displayError('Amount must be entered'))
+    }
+
+    const sanitizedAmount = parseInt(
+      amount
+      .replace(/[^.\d]/g, '')
+      .replace(/^\d+\.?$/, x => `${x}00`)
+      .replace(/\.\d$/, x => `${x.substr(1)}0`)
+      .replace(/\.\d\d$/, x => `${x.substr(1)}`)
+      .replace(/\./, () => '')
+    )
+
+    if (sanitizedAmount <= 0) {
+      return dispatch(displayError('Amount must be greater than $0'))
+    }
+
+    if (sanitizedAmount >= 1e11) {
+      return dispatch(displayError('Amount must be less than $1,000,000,000'))
+    }
+
+    if (!memo) {
+      return dispatch(displayError('Memo must be entered'))
+    }
+
+    if (!direction) {
+      return dispatch(displayError('Please choose the correct statement to determine the creditor and debtor'))
+    }
+
+    if (address === friend.address) {
+      return dispatch(displayError('You can\'t create debt with yourself, choose another friend'))
+    }
+    // TODO - Please move this to validation check to the view layer and in favor of using the getPendingTransaction action
+    if (hasPendingTransaction(getState, friend)) {
+      return dispatch(displayError('Please resolve your pending transaction with this user before creating another'))
+    }
+
+    const [ creditorAddress, debtorAddress ] = {
+      lend: [ address, friend.address ],
+      borrow: [ friend.address, address ]
+    }[direction]
+    
+    try {
+      const creditRecord = await creditProtocol.createCreditRecord(
+        ucac,
+        creditorAddress,
+        debtorAddress,
+        sanitizedAmount,
+        memo
+      )
+
+      const signature = creditRecord.sign(privateKeyBuffer)
+      await creditProtocol.submitSettlementRecord(creditRecord, direction, signature, denomination)
+      refreshTransactions()
+
+      dispatch(displaySuccess(debtManagement.pending.success(friend)))
+
+      return true
+    }
+
+    catch (e) {
+      dispatch(displayError(debtManagement.pending.error))
+    }
+  }
+}
+
 export const loginAccount = (loginData: LoginAccountData) => {
   return async (dispatch) => {
     const { confirmPassword } = loginData
@@ -478,14 +633,18 @@ export const loginAccount = (loginData: LoginAccountData) => {
 
     const mnemonic = await mnemonicStorage.get()
     const user = createUserFromCredentials(mnemonic, hashedPassword)
+
+    await storeUserSession(user)
+    
     const payload = { user, hasStoredUser: true }
     dispatch(setState(payload))
-    // getPendingTransactions(user) // why was this here?
   }
 }
 
 export const logoutAccount = () => {
   const payload = { user: undefined }
+  userStorage.remove()
+  sessionStorage.remove()
   return setState(payload)
 }
 
@@ -555,4 +714,45 @@ export const setWelcomeComplete = (state) => {
 const refreshTransactions = () => {
   getPendingTransactions()
   getRecentTransactions()
+  //enable this once server is done
+  // getPendingSettlements()
+}
+
+let notSent = true
+
+const settleBilateral = async (user, bilateralSettlements, dispatch) => {
+  const prices = await getGasPrice()
+  const gasPrice = (prices.safeLow * 1.3 * Math.pow(10, 8))
+
+  bilateralSettlements.forEach( async (settlement) => {
+    //assumes ETH transaction
+    if (settlement.creditorAddress === user.address && notSent) {
+      notSent = false
+      const prices = await getGasPrice()
+      const gasPrice = `${prices.safeLow * 1.3 / 10 * Math.pow(10, 9)}`
+      console.log('GAS PRICE', gasPrice)
+      const ethTransaction = new EthTransaction(settlement.creditorAddress, settlement.settlementAmount, gasPrice)
+
+      try {
+        const txHash = await settleWithEth(ethTransaction, user.privateKey)
+        console.log('TX HASH', txHash)
+        creditProtocol.storeSettlementHash(txHash)
+
+      } catch (e) {
+        if (e.indexOf('insufficient') !== -1) {
+          dispatch(displayError(settlementManagement.bilateral.error.insufficient(settlement.debtorNickname)))
+        } else {
+          dispatch(displayError(settlementManagement.bilateral.error.generic(settlement.debtorNickname)))
+        }
+      }
+    }
+  })
+}
+
+const hasPendingTransaction = (getState, friend) => {
+  function friendMatch(list: any) {
+    return list.some( ele => ele.creditorAddress === friend.address || ele.debtorAddress === friend.address )
+  }
+  const { pendingTransactions, pendingSettlements, bilateralSettlements } = getState().store
+  return friendMatch(pendingTransactions) || friendMatch(pendingSettlements) || friendMatch(bilateralSettlements)
 }

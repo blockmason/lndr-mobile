@@ -10,17 +10,17 @@ import Popup, { closePopup } from 'ui/components/popup'
 import Loading, { LoadingContext } from 'ui/components/loading'
 import FriendRow from 'ui/components/friend-row'
 
-import AddFriend from './add-friend'
+import SearchFriend from './search-friend'
 import FriendDetail from './friend-detail'
 
 import style from 'theme/account'
 import general from 'theme/general'
 
-import { addFriend, noFriends, currentFriends } from 'language'
+import { noFriends, currentFriends } from 'language'
 
 import { isFocusingOn } from 'reducers/nav'
-import { getStore } from 'reducers/app'
-import { getFriends, getRecentTransactions, getPendingTransactions } from 'actions'
+import { getStore, pendingTransactions, recentTransactions } from 'reducers/app'
+import { getFriends, getRecentTransactions, getPendingTransactions, addFriend } from 'actions'
 import { connect } from 'react-redux'
 
 const loadingFriends = new LoadingContext()
@@ -28,7 +28,11 @@ const loadingFriends = new LoadingContext()
 interface Props {
   isFocused: boolean
   getFriends: () => any
+  addFriend: (friend: Friend) => any
   state: any
+  pendingTransactions: any
+  recentTransactions: any
+  navigation: any
 }
 
 interface State {
@@ -76,7 +80,7 @@ class FriendsView extends Component<Props, State> {
     }
 
     return <Popup onClose={() => this.setState({ friendToRemove: undefined })}>
-      <FriendDetail friend={friendToRemove} closePopup={() => this.closePopupAndRefresh()} recentTransactions={this.props.state.recentTransactions} pendingTransactions={this.props.state.pendingTransactions} />
+      <FriendDetail friend={friendToRemove} closePopup={() => this.closePopupAndRefresh()} navigation={this.props.navigation} />
     </Popup>
   }
 
@@ -86,9 +90,10 @@ class FriendsView extends Component<Props, State> {
     return <ScrollView style={general.view} keyboardShouldPersistTaps='handled'>
       { this.renderFriendDetailDialog() }
       <Section>
-        <AddFriend 
+        <SearchFriend 
           onSuccess={() => this.refresh()}
           removeFriend={(friend) => this.setState({ friendToRemove: friend })}
+          selectFriend={(friend) => {this.props.addFriend(friend)}}
           state={this.props.state}
          />
       </Section>
@@ -103,6 +108,7 @@ class FriendsView extends Component<Props, State> {
               onPress={() => this.setState({ friendToRemove: friend })}
               pendingTransactions={pendingTransactions}
               recentTransactions={recentTransactions}
+              navigation={this.props.navigation}
             />
           )
         )}
@@ -111,4 +117,4 @@ class FriendsView extends Component<Props, State> {
   }
 }
 
-export default connect((state) => ({ state: getStore(state)(), isFocused: isFocusingOn(state)('Friends') }), { getFriends })(FriendsView)
+export default connect((state) => ({ state: getStore(state)(), isFocused: isFocusingOn(state)('Friends'), pendingTransactions: pendingTransactions(state), recentTransactions: recentTransactions(state) }), { getFriends, addFriend })(FriendsView)

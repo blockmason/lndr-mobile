@@ -53,6 +53,7 @@ export const successTitle = 'Success'
 export const errorTitle = 'Error'
 
 export const mnemonicExhortation = 'Record these 12 words somewhere safe and secret'
+export const addressExhortation = 'Send Ethereum to your address so you can settle debts on Lndr'
 export const removeAccountTitle = 'Are you sure you would like to remove your account from this device?'
 export const removeAccountExhortation = 'Be sure that you have access to your mnemonic to restore your account later, as this is a permanent removal of your account information from this device.'
 
@@ -114,6 +115,9 @@ export const debtManagement = {
   selectFriend: 'SELECT',
   lend: 'New Loan',
   borrow: 'New Debt',
+  settleUpLower: 'Settle Up',
+  amountToSettle: 'Amount to Settle',
+  total: 'Total',
   fields: {
     amount: 'AMOUNT',
     selectFriend: 'FRIEND',
@@ -130,8 +134,12 @@ export const debtManagement = {
     borrow: nickname => `I owe ${nickname}`,
     initiatedLend: nickname => `${nickname} says he/she owes`,
     initiatedBorrow: nickname => `${nickname} says he/she owes`,
-    pendingLend: nickname => `${nickname} owes you`,
-    pendingBorrow: nickname => `${nickname} is owed`
+    pendingLend: nickname => `@${nickname} owes you`,
+    pendingBorrow: nickname => `You owe @${nickname}`,
+    pendingLendSettlement: settlement => `@${settlement.debtorNickname} wants to settle with you in ${settlement.settlementCurrency}`,
+    pendingBorrowSettlement: settlement => `@${settlement.creditorNickname} requests a settlement in ${settlement.settlementCurrency}`,
+    pendingLendSettlementMe: settlement => `You requested to settle with @${settlement.creditorNickname} in ${settlement.settlementCurrency}`,
+    pendingBorrowSettlementMe: settlement => `You requested that @${settlement.creditorNickname} settle with in ${settlement.settlementCurrency}`
   },
   pending: {
     success: friend => `Pending debt submitted to @${friend.nickname}`,
@@ -150,7 +158,18 @@ export const debtManagement = {
     error: 'Unable to load balances at this time, please try again later'
   },
   for: (memo) => `for ${memo}`,
-  settleUp: 'SETTLE UP'
+  settleUp: 'SETTLE UP',
+  settleTotal: 'SETTLE TOTAL',
+  settleUpMemo: (direction, amount) => direction === 'lend' ? `Settling up for ${amount}` : `Requesting to settle up for ${amount} `
+}
+
+export const settlementManagement = {
+  bilateral: {
+    error: {
+      insufficient: (nickname) => `Your settlement to ${nickname} failed due to insufficient funds`,
+      generic: (nickname) => `There was an error processing your settlement to ${nickname}`
+    }
+  }
 }
 
 export const accountViewLanguage = {
@@ -172,6 +191,14 @@ export const pendingTransactionsLanguage = {
     lend: (nickname, amount) => `@${nickname} owes you ${amount}`,
     borrow: (nickname, amount) => `You owe @${nickname} ${amount}`
   }
+}
+
+export const pendingSettlementsLanguage = {
+  title: 'Pending',
+  none: 'You have no pending settlements',
+  confirm: 'CONFIRM',
+  reject: 'Reject Settlement',
+  cancel: 'Cancel Settlement',
 }
 
 export const recentTransactionsLanguage = {

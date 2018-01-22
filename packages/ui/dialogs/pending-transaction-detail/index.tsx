@@ -9,7 +9,6 @@ import PendingTransaction from 'lndr/pending-transaction'
 
 import Button from 'ui/components/button'
 import Loading, { LoadingContext } from 'ui/components/loading'
-import PendingTransactionRow from 'ui/components/pending-transaction-row'
 import DashboardShell from 'ui/components/dashboard-shell'
 
 import style from 'theme/pending'
@@ -47,6 +46,8 @@ class PendingTransactionDetail extends Component<Props> {
 
     if (success) {
       this.closePopup('confirm')
+    } else {
+      this.props.closePopup()
     }
   }
 
@@ -57,6 +58,8 @@ class PendingTransactionDetail extends Component<Props> {
 
     if (success) {
       this.closePopup('reject')
+    } else {
+      this.props.closePopup()
     }
   }
 
@@ -81,9 +84,9 @@ class PendingTransactionDetail extends Component<Props> {
     const { pendingTransaction, user } = this.props
 
     if (user.address === pendingTransaction.creditorAddress) {
-      return `@${debtManagement.direction.pendingLend(pendingTransaction.debtorNickname)}`
+      return debtManagement.direction.pendingLend(pendingTransaction.debtorNickname)
     } else if (user.address === pendingTransaction.debtorAddress) {
-      return `@${debtManagement.direction.pendingBorrow(pendingTransaction.creditorNickname)}`
+      return debtManagement.direction.pendingBorrow(pendingTransaction.creditorNickname)
     } else {
       return 'Unknown Transaction'
     }
@@ -117,7 +120,7 @@ class PendingTransactionDetail extends Component<Props> {
 
     return <ScrollView style={general.fullHeight}>
       <Loading context={loadingContext} />
-      <DashboardShell text='Pending' />
+      <DashboardShell text='Pending Transaction' />
       <Button close onPress={() => this.closePopup(null)} />
       <View style={general.centeredColumn}>
         <Image source={require('images/person-outline-dark.png')} style={style.image}/>

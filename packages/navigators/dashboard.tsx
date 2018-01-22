@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import { View, Text, Platform } from 'react-native'
+import { View, Text, Platform, TouchableHighlight, Image } from 'react-native'
 import { TabNavigator } from 'react-navigation'
 
 import { Tab } from 'ui/components/tabs'
@@ -9,11 +9,10 @@ import FriendsView from 'ui/views/account/friends'
 import ActivityView from 'ui/views/account/activity'
 import AddDebt from 'ui/dialogs/add-debt'
 import Confirmation from 'ui/dialogs/confirmation-screen'
-import ActionButton from 'ui/components/action-button'
 import TextLogo from 'ui/components/images/text-logo'
 
 import { isFocusingOn } from 'reducers/nav'
-import { getPendingTransactionsCount } from 'reducers/app'
+import { getNeedsReviewCount } from 'reducers/app'
 import { logoutAccount } from 'actions'
 
 import { connect } from 'react-redux'
@@ -53,7 +52,7 @@ interface Props {
   navigation: any
   logoutAccount: () => any
   isFocusingOn: (screenName: string) => boolean
-  pendingTransactionsCount: number
+  needsReviewTransactionsCount: number
 }
 
 class DashboardNavigatorWithHeader extends Component<Props> {
@@ -72,23 +71,25 @@ class DashboardNavigatorWithHeader extends Component<Props> {
             </View>
             <View style={TabStyle.leftTriangle}/>
             <View style={[TabStyle.tabsContainer]}>
-              <Tab onPress={() => this.props.navigation.navigate('Home')} text={tabs.home} alerts={this.props.pendingTransactionsCount} active={this.props.isFocusingOn('Home')} />
+              <Tab onPress={() => this.props.navigation.navigate('Home')} text={tabs.home} alerts={this.props.needsReviewTransactionsCount} active={this.props.isFocusingOn('Home')} />
               <Tab onPress={() => this.props.navigation.navigate('Friends')} text={tabs.friends} active={this.props.isFocusingOn('Friends')} />
               <Tab onPress={() => this.props.navigation.navigate('Activity')} text={tabs.activity} active={this.props.isFocusingOn('Activity')} />
             </View>
           </View>
         </View>
         <View style={style.settingsTriangleLeft}/>
-        <View style={style.settingsBackground}/>
+        <View style={style.settingsBackground}>
+          <TouchableHighlight onPress={() => this.props.navigation.navigate('MyAccount')}>
+            <Image source={require('images/settings.png')} style={TabStyle.settingsButton} />
+          </TouchableHighlight>
+        </View>
         <View style={style.settingsTriangleRight}/>
-        <ActionButton
-          onLogout={this.props.logoutAccount}
-          onMyAccount={() => this.props.navigation.navigate('MyAccount')}
-        />
+        
+        
         <DashboardNavigator navigation={this.props.navigation}/>
       </View>
     )
   }
 }
 
-export default connect((state) => ({ isFocusingOn: isFocusingOn(state), pendingTransactionsCount: getPendingTransactionsCount(state) }), { logoutAccount })(DashboardNavigatorWithHeader)
+export default connect((state) => ({ isFocusingOn: isFocusingOn(state), needsReviewTransactionsCount: getNeedsReviewCount(state) }), { logoutAccount })(DashboardNavigatorWithHeader)
