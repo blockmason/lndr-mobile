@@ -1,4 +1,4 @@
-import { StyleSheet } from 'react-native'
+import { StyleSheet, Platform } from 'react-native'
 
 import { medium } from 'theme/include/fonts'
 
@@ -77,5 +77,11 @@ export default StyleSheet.create({
   alertText: {
     fontSize: 12,
     color: white
+  },
+  settingsButton: {
+    marginTop: 2,
+    marginLeft: 2,
+    height: 20,
+    width: 20
   }
 } as any)

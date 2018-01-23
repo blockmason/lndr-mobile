@@ -2,12 +2,12 @@ import React, { Component } from 'react'
 
 import { defaultUpdateAccountData, UpdateAccountData, UserData } from 'lndr/user'
 
-import { Text, TextInput, View, Clipboard, Dimensions } from 'react-native'
+import { Text, TextInput, View, Clipboard, Dimensions, ScrollView } from 'react-native'
 
 import Button from 'ui/components/button'
 import Loading, { LoadingContext } from 'ui/components/loading'
 
-import { getAccountInformation, updateAccount } from 'actions'
+import { getAccountInformation, updateAccount, logoutAccount } from 'actions'
 import { getUser } from 'reducers/app'
 import { connect } from 'react-redux'
 
@@ -21,9 +21,10 @@ const { height } = Dimensions.get('window');
 
 import style from 'theme/form'
 
-import { nickname, setNickname, updateAccount as updateAccountText, copy, cancel, mnemonicExhortation } from 'language'
+import { nickname, setNickname, updateAccount as updateAccountText, copy, cancel, mnemonicExhortation, addressExhortation, logoutAction } from 'language'
 
 interface Props {
+  logoutAccount: () => any
   closePopup: () => void
   navigation: any
   getAccountInformation: () => any
@@ -63,29 +64,35 @@ class MyAccount extends Component<Props, State> {
       this.props.navigation.goBack()
     }
 
-    return <View style={[style.account, {minHeight: height}]}>
-      <Loading context={loadingContext} />
-      <TextLogo name='black'/>
-      <View style={{marginTop: 20}}/>
-      <Text style={[style.text, style.center]}>{mnemonicExhortation}</Text>
-      <Text selectable style={style.displayText}>{user.mnemonic}</Text>
-      <Button round onPress={() => Clipboard.setString(user.mnemonic)} style={style.submitButton} text={copy} />
-      <Text style={[style.text, style.spaceTopL, style.center]}>{setNickname}</Text>
-      <View style={style.textInputContainer}>
-        <InputImage name='person'/>
-        <TextInput
-          autoCapitalize='none'
-          style={style.textInput}
-          placeholder={nickname}
-          value={this.state.nickname}
-          underlineColorAndroid='transparent'
-          onChangeText={nickname => this.setState({ nickname })}
-        />
+    return <ScrollView keyboardShouldPersistTaps='handled'>
+      <View style={[style.account, {minHeight: height}]}>
+        <Loading context={loadingContext} />
+        <TextLogo name='black'/>
+        <View style={{marginTop: 20}}/>
+        <Button round danger onPress={() => this.props.logoutAccount()} style={style.submitButton} text={logoutAction} />
+        <Text style={[style.text, style.center]}>{mnemonicExhortation}</Text>
+        <Text selectable style={style.displayText}>{user.mnemonic}</Text>
+        <Button round onPress={() => Clipboard.setString(user.mnemonic)} style={style.submitButton} text={copy} />
+        <Text style={[style.text, style.center]}>{addressExhortation}</Text>
+        <Text selectable style={style.displayText}>{user.address}</Text>
+        <Button round onPress={() => Clipboard.setString(user.address)} style={style.submitButton} text={copy} />
+        <Text style={[style.text, style.spaceTopL, style.center]}>{setNickname}</Text>
+        <View style={style.textInputContainer}>
+          <InputImage name='person'/>
+          <TextInput
+            autoCapitalize='none'
+            style={style.textInput}
+            placeholder={nickname}
+            value={this.state.nickname}
+            underlineColorAndroid='transparent'
+            onChangeText={nickname => this.setState({ nickname })}
+          />
+        </View>
+        <Button round onPress={submit} style={style.submitButton} text={updateAccountText} />
+        <Button alternate arrow onPress={this.handleOnCancel.bind(this)} text={cancel} />
       </View>
-      <Button round onPress={submit} style={style.submitButton} text={updateAccountText} />
-      <Button alternate arrow onPress={this.handleOnCancel.bind(this)} text={cancel} />
-    </View>
+    </ScrollView>
   }
 }
 
-export default connect((state) => ({ user: getUser(state)() }), { updateAccount, getAccountInformation })(MyAccount)
+export default connect((state) => ({ user: getUser(state)() }), { updateAccount, getAccountInformation, logoutAccount })(MyAccount)

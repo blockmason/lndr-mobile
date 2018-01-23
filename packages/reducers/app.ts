@@ -1,5 +1,6 @@
 import reduceReducers from 'reduce-reducers'
 import PendingTransaction from 'lndr/pending-transaction'
+import PendingSettlement from 'lndr/pending-settlement'
 
 export const initialState = ({})
 
@@ -19,10 +20,17 @@ const reducer = (state = initialState, action) => {
 // TODO - Organize selectors.  We are in the middle of a transistional stage
 // so all selectors will be here for now.
 
+
 export const getUser = (state) => () => state.store.user
+
 export const submitterIsMe = (state) => (pendingTransaction: PendingTransaction) => {
   const { address } = getUser(state)()
   return pendingTransaction.submitter === address
+}
+
+export const settlerIsMe = (state) => (pendingSettlement: PendingSettlement) => {
+  const { address } = getUser(state)()
+  return pendingSettlement.submitter === address
 }
 
 // TODO - Remove this function.  It is not decriptive and only is here for temp
@@ -36,3 +44,16 @@ export default reduceReducers(
 )
 
 export const getPendingTransactionsCount = (state) => state.store.pendingTransactions.length
+
+export const getNeedsReviewCount = (state) => {
+  return (
+    state.store.pendingTransactions.filter( (transaction) => !submitterIsMe(state)(transaction) ).length + 
+    pendingSettlements(state).filter( (settlement) => !settlerIsMe(state)(settlement) ) 
+  )
+}
+
+export const recentTransactions = (state) => state.store.recentTransactions
+
+export const pendingTransactions = (state) => state.store.pendingTransactions
+
+export const pendingSettlements = (state) => state.store.pendingSettlements

@@ -11,6 +11,8 @@ import Loading, { LoadingContext } from 'ui/components/loading'
 import FriendRow from 'ui/components/friend-row'
 import DashboardShell from 'ui/components/dashboard-shell'
 import InputImage from 'ui/components/images/input-image'
+import Section from 'ui/components/section'
+import SearchFriend from 'ui/views/account/friends/search-friend'
 
 import style from 'theme/account'
 import formStyle from 'theme/form'
@@ -102,8 +104,22 @@ class AddDebt extends Component<Props, State> {
     const { friendsLoaded, friends } = this.props.state
     const goBack = () => this.setState({ shouldSelectFriend: false })
 
-    return <View>
-      <Text style={formStyle.header}>{debtManagement.selectFriend}</Text>
+    return <ScrollView keyboardShouldPersistTaps='handled'>
+      <Section>
+        <SearchFriend 
+          onSuccess={() => null}
+          selectFriend={(friend) => {
+            console.log('FRIEND', friend)
+            this.setState({ shouldSelectFriend: false, friend })
+          }}
+          removeFriend={(friend) => {
+            console.log('FRIEND', friend)
+            this.setState({ shouldSelectFriend: false, friend })
+          }}
+          state={this.props.state}
+          addDebt
+         />
+      </Section>
       <View style={style.list}>
         <Loading context={loadingFriends} />
         {friendsLoaded && friends.length === 0 ? <Text style={style.emptyState}>{noFriends}</Text> : null}
@@ -117,8 +133,8 @@ class AddDebt extends Component<Props, State> {
           )
         )}
       </View>
-      <Button alternate onPress={goBack} text={back} />
-    </View>
+      <Button alternate fat onPress={goBack} text={back} />
+    </ScrollView>
   }
 
   clear() {
@@ -164,7 +180,7 @@ class AddDebt extends Component<Props, State> {
         
         <View style={formStyle.memoBorder} >
           <TextInput
-            style={[formStyle.formInput, formStyle.memoInput]}
+            style={formStyle.memoInput}
             placeholder={debtManagement.memo.example}
             value={memo}
             maxLength={32}
@@ -172,7 +188,7 @@ class AddDebt extends Component<Props, State> {
             onChangeText={memo => this.setState({ memo })}
           />
         </View>
-        { friend && amount ? <Button large round wide onPress={() => this.submit()} text={submit} /> : null }
+        { friend && amount && memo ? <Button large round wide onPress={() => this.submit()} text={submit} /> : null }
         <Button alternate arrowRed large onPress={() => this.cancel()} text={cancel} />
       </View>
     </ScrollView>

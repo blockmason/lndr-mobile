@@ -7,7 +7,6 @@ import AndroidStatusBar from 'ui/components/android-status-bar'
 import HomeView from 'ui/views/account/home'
 import FriendsView from 'ui/views/account/friends'
 import ActivityView from 'ui/views/account/activity'
-import ActionButton from 'ui/components/action-button'
 import TextLogo from 'ui/components/images/text-logo'
 
 import { isFocusingOn } from 'reducers/nav'
@@ -67,10 +66,6 @@ class DashboardShell extends Component<Props> {
         <View style={style.settingsTriangleLeft}/>
         <View style={style.settingsBackground}/>
         <View style={style.settingsTriangleRight}/>
-        {/* <ActionButton
-          onLogout={this.props.logoutAccount}
-          onMyAccount={() => this.props.navigation.navigate('MyAccount')}
-        /> */}
       </View>
     )
   }

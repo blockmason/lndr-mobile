@@ -25,16 +25,17 @@ import {
   addFriendConfirmationQuestion
 } from 'language'
 
-import { searchUsers, addFriend } from 'actions'
+import { searchUsers } from 'actions'
 import { connect } from 'react-redux'
 
 const loadingContext = new LoadingContext()
 
 interface Props {
   onSuccess: () => void
-  addFriend: (friend: Friend) => any
+  selectFriend: (friend: Friend) => any
   removeFriend: (friend: Friend) => any
   state: any
+  addDebt?: boolean
 }
 
 interface State {
@@ -43,7 +44,7 @@ interface State {
   matches: Friend[]
 }
 
-class AddFriend extends Component<Props, State> {
+export default class SearchFriend extends Component<Props, State> {
   searchAction: (string) => void
 
   constructor() {
@@ -57,6 +58,7 @@ class AddFriend extends Component<Props, State> {
   componentDidMount() {
     this.searchAction = debounce(
       async (nickname) => {
+        nickname = nickname.toLowerCase()
         try {
           const matches = await loadingContext.wrap(
             searchUsers({ nickname })
@@ -72,14 +74,14 @@ class AddFriend extends Component<Props, State> {
   }
 
   removeCandidateForFriendship() {
-      this.setState({ candidateForFriendship: undefined, hasSearchTerm: false })
-    }
+    this.setState({ candidateForFriendship: undefined, hasSearchTerm: false })
+  }
 
-    async confirmFriend(friend: Friend) {
-      const { onSuccess } = this.props
+  async confirmFriend(friend: Friend) {
+    const { onSuccess } = this.props
 
-      await loadingContext.wrap(
-        this.props.addFriend(friend)
+    await loadingContext.wrap(
+      this.props.selectFriend(friend)
     )
 
     this.removeCandidateForFriendship()
@@ -98,21 +100,22 @@ class AddFriend extends Component<Props, State> {
 
   render() {
     const { matches, hasSearchTerm, candidateForFriendship } = this.state
+    const { addDebt, selectFriend } = this.props
 
     const { address }  = this.props.state.user.address
 
-    if (candidateForFriendship) {
+    if (!addDebt && candidateForFriendship) {
       return <View style={[style.form, general.centeredColumn]}>
         <Text style={[style.text, style.center]}>{addFriendConfirmationQuestion}</Text>
-          <Loading context={loadingContext} />
-          <AddFriendRow
-              key={candidateForFriendship.address}
-              friend={candidateForFriendship}
-              onPress={() => null}
-              selected
-            />
-          <Button round onPress={() => this.confirmFriend(candidateForFriendship)} text={addFriendText} />
-          <Button alternate small arrow onPress={() => this.removeCandidateForFriendship()} text={back} />
+        <Loading context={loadingContext} />
+        <AddFriendRow
+            key={candidateForFriendship.address}
+            friend={candidateForFriendship}
+            onPress={() => null}
+            selected
+          />
+        <Button round onPress={() => this.confirmFriend(candidateForFriendship)} text={addFriendText} />
+        <Button alternate small arrow onPress={() => this.removeCandidateForFriendship()} text={back} />
       </View>
     }
 
@@ -138,7 +141,10 @@ class AddFriend extends Component<Props, State> {
             match.address === address ? null : <AddFriendRow
               key={match.address}
               friend={match}
-              onPress={this.isFriend(match) ? () => this.props.removeFriend(match) : () => this.setState({ candidateForFriendship: match })}
+              onPress={
+                addDebt ? () => selectFriend(match) :
+                this.isFriend(match) ? () => this.props.removeFriend(match) : () => this.setState({ candidateForFriendship: match })
+              }
               isFriend={this.isFriend(match)}
             />
           )
@@ -147,5 +153,3 @@ class AddFriend extends Component<Props, State> {
     </ScrollView>
   }
 }
-
-export default connect(null, { addFriend })(AddFriend)

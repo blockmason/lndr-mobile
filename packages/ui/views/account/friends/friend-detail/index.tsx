@@ -31,7 +31,7 @@ import {
   recentTransactionsLanguage
 } from 'language'
 
-import { getUser } from 'reducers/app'
+import { getUser, pendingTransactions, recentTransactions } from 'reducers/app'
 import { getTwoPartyBalance, removeFriend } from 'actions'
 import { connect } from 'react-redux'
 
@@ -44,6 +44,7 @@ interface Props {
   closePopup: () => void
   recentTransactions: any
   pendingTransactions: any
+  navigation: any
 }
 
 interface State {
@@ -123,7 +124,7 @@ class RemoveFriend extends Component<Props, State> {
           <Text style={pendingStyle.amount}>{cents(this.getRecentTotal())}</Text>
           <Text style={pendingStyle.balanceInfo}>USD</Text>
         </View>
-        { this.getRecentTotal() < 0 ? <Button round large fat wide onPress={() => null} text={debtManagement.settleUp} containerStyle={style.spaceBottom} /> : null }
+        { this.getRecentTotal() < 0 ? <Button round large fat wide onPress={() => this.props.navigation.navigate('SettleUp', { friend: friend })} text={debtManagement.settleUp} containerStyle={style.spaceBottom} /> : null }
         { this.getTransactionNumber() === 0 ? <Button round large danger wide onPress={() => this.removeFriend(friend)} text={removeFriendText} containerStyle={style.spaceBottom} /> : null }
         <View style={style.fullWidth}>
           <Text style={accountStyle.transactionHeader}>{pendingTransactionsLanguage.title}</Text>
@@ -136,4 +137,4 @@ class RemoveFriend extends Component<Props, State> {
   }
 }
 
-export default connect((state) => ({ user: getUser(state)() }),{ removeFriend })(RemoveFriend)
+export default connect((state) => ({ user: getUser(state)(), pendingTransactions: pendingTransactions(state), recentTransactions: recentTransactions(state) }),{ removeFriend })(RemoveFriend)

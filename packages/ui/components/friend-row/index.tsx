@@ -19,6 +19,7 @@ interface Props {
   friend: Friend
   recentTransactions?: any
   pendingTransactions?: any
+  navigation: any
 }
 
 export default class FriendRow extends Component<Props> {
@@ -91,7 +92,8 @@ export default class FriendRow extends Component<Props> {
   }
 
   showSettleUp() {
-    return this.getRecentTotal() < 0 ? <Button narrow small round onPress={() => null} text={debtManagement.settleUp} style={{marginRight: 10}} /> : null
+    const { friend } = this.props
+    return this.getRecentTotal() < 0 ? <Button narrow small round onPress={() => this.props.navigation.navigate('SettleUp', { friend: friend })} text={debtManagement.settleUp} style={{marginRight: 10}} /> : null
   }
 
   render() {

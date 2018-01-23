@@ -14,7 +14,7 @@ export default StyleSheet.create({
     backgroundColor: white
   },
   list: {
-    minHeight: 70,
+    minHeight: 40,
     borderTopWidth: 1,
     borderTopColor: softGray,
     borderBottomWidth: 1,
@@ -26,7 +26,7 @@ export default StyleSheet.create({
   },
   dashboardBackground: {
     backgroundColor: white,
-    height: Platform.OS === 'ios' ? 158 : 130
+    height: Platform.OS === 'ios' ? 148 : 120
   },
   dashboardContainer: {
     backgroundColor: '#242424', 
@@ -69,7 +69,7 @@ export default StyleSheet.create({
     marginTop: -20,
   },
   balanceRow: {
-    width: '80%',
+    minWidth: '80%',
     flexDirection: 'row',
     justifyContent: 'center'
   },
@@ -165,7 +165,7 @@ export default StyleSheet.create({
     ...verticalMargin
   },
   pendingTransaction: {
-    minHeight: 70,
+    minHeight: 40,
     borderColor: softGray,
     borderBottomWidth: 1,
     borderTopWidth: 1,

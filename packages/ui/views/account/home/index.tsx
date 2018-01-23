@@ -20,7 +20,7 @@ import PendingTransaction from 'lndr/pending-transaction'
 
 import { isFocusingOn } from 'reducers/nav'
 import { getStore, getUser } from 'reducers/app'
-import { getAccountInformation, displayError, getPendingTransactions, getBalances, registerChannelID } from 'actions'
+import { getAccountInformation, displayError, getPendingTransactions, getBalances, registerChannelID, getPendingSettlements } from 'actions'
 import { connect } from 'react-redux'
 import { UrbanAirship } from 'urbanairship-react-native'
 
@@ -50,12 +50,14 @@ const { width } = Dimensions.get('window')
 
 const loadingBalances = new LoadingContext()
 const loadingPendingTransactions = new LoadingContext()
+const loadingPendingSettlements = new LoadingContext()
 
 interface Props {
   navigation: any
   isFocused: boolean
   getPendingTransactions: () => any
   getBalances: () => any
+  getPendingSettlements: () => any
   getAccountInformation: () => any
   displayError: (errorMsg: string) => any
   registerChannelID: (channelID: string, platform: string) => any
@@ -85,6 +87,7 @@ class HomeView extends Component<Props, State> {
     }
 
     await loadingPendingTransactions.wrap(this.props.getPendingTransactions())
+    await loadingPendingSettlements.wrap(this.props.getPendingSettlements())
     await loadingBalances.wrap(this.props.getBalances())
   }
 
@@ -153,7 +156,6 @@ class HomeView extends Component<Props, State> {
   }
 
   showAddDebt(direction) {
-    console.log('BOO', direction)
     this.props.navigation.navigate('AddDebt')
   }
 
@@ -174,7 +176,7 @@ class HomeView extends Component<Props, State> {
       </Section>
 
       <Text style={[formStyle.title, formStyle.center, formStyle.spaceBottom, formStyle.spaceTop]}>{needsReview}</Text>
-      <PendingView navigation={this.props.navigation} />
+      <PendingView navigation={this.props.navigation} homeScreen />
 
       <TouchableHighlight onPress={() => this.props.navigation.navigate('Activity')}>
         <View style={style.seeAllActivityButton}>
@@ -187,4 +189,4 @@ class HomeView extends Component<Props, State> {
 }
 
 export default connect((state) => ({ state: getStore(state)(), user: getUser(state)(), isFocused: isFocusingOn(state)('Home') }),
-{ getAccountInformation, displayError, getPendingTransactions, getBalances, registerChannelID })(HomeView)
+{ getAccountInformation, displayError, getPendingTransactions, getBalances, registerChannelID, getPendingSettlements })(HomeView)
