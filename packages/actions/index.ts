@@ -1,6 +1,7 @@
 import ethUtil from 'ethereumjs-util'
 import { UrbanAirship } from 'urbanairship-react-native'
 import moment from 'moment'
+import { Platform } from 'react-native'
 
 import { longTimePeriod } from 'lndr/time'
 import Balance from 'lndr/balance'
@@ -23,10 +24,14 @@ import { accountManagement, debtManagement, settlementManagement } from 'languag
 import { ToastActionsCreators } from 'react-native-redux-toast'
 import { getUser, getStore } from 'reducers/app'
 
+import { isTouchIdSupported } from 'lndr/touch-id'
+import TouchID from 'react-native-touch-id'
+
 const bcrypt = require('bcryptjs')
 
 const mnemonicStorage = new Storage('mnemonic')
 const hashedPasswordStorage = new Storage('hashed-password')
+const notificationsEnabledStorage = new Storage('notifications-enabled')
 
 const creditProtocol = new CreditProtocol('http://34.238.20.130')
 
@@ -40,18 +45,30 @@ const sessionStorage = new Storage('session')
 const userStorage = new Storage('user')
 
 export const initializeStorage = () => {
-  return async (dispatch) => {
+  return async (dispatch, getState) => {
     const storedMnemonic = await mnemonicStorage.get()
     const storedSession = await sessionStorage.get()
     const storedUser = await userStorage.get()
 
-    if ( storedUser && moment(storedSession).add(1, 'day') > moment() ) {
-      await sessionStorage.set(moment())
-      dispatch(setState({ hasStoredUser: true, welcomeComplete: true, user: storedUser }))
-    } else if (storedMnemonic) {
-      dispatch(setState({ hasStoredUser: true, welcomeComplete: true }))
+    //put this in separate section
+    const storedNotificationPreference = await notificationsEnabledStorage.get()
+    let { notificationsEnabled } = getState().store
+    if (storedNotificationPreference !== undefined && storedNotificationPreference !== null) {
+      notificationsEnabled = storedNotificationPreference
     }
-    dispatch(setState({ isInitializing: false }))
+
+    const touchIdSupported = isTouchIdSupported()
+
+    if (storedUser && moment(storedSession).add(1, 'day') > moment()) {
+      await sessionStorage.set(moment())
+      dispatch(setState({ hasStoredUser: true, welcomeComplete: true, user: storedUser, notificationsEnabled }))
+    } else if (touchIdSupported && storedMnemonic && storedUser) {
+      const payload = await triggerTouchId(storedUser, notificationsEnabled)
+      dispatch(setState(payload))
+    } else if (storedMnemonic) {
+      dispatch(setState({ hasStoredUser: true, welcomeComplete: true, notificationsEnabled }))
+    }
+    dispatch(setState({ isInitializing: false, notificationsEnabled }))
   }
 }
 
@@ -681,6 +698,16 @@ export const removeAccount = () => {
   }
 }
 
+export const toggleNotifications = () => {
+  return async (dispatch, getState) => {
+    const oldSetting = getState().store.notificationsEnabled
+    const notificationsEnabled = !oldSetting
+    await notificationsEnabledStorage.set(notificationsEnabled)
+    await UrbanAirship.setUserNotificationsEnabled(notificationsEnabled)
+    dispatch(setState({ notificationsEnabled }))
+  }
+}
+
 export const setAuthLoading = (state) => {
   const payload = { isAuthLoading: state }
   return setState(payload)
@@ -755,4 +782,17 @@ const hasPendingTransaction = (getState, friend) => {
   }
   const { pendingTransactions, pendingSettlements, bilateralSettlements } = getState().store
   return friendMatch(pendingTransactions) || friendMatch(pendingSettlements) || friendMatch(bilateralSettlements)
+}
+
+const triggerTouchId = (user, notificationsEnabled) => {
+  const optionalConfigObject = { title: 'Authentication Required', color: '#e00606' }
+  return TouchID.authenticate('Please sign in using your fingerprint', optionalConfigObject)
+  .then(success => {
+    sessionStorage.set(moment())
+    return { hasStoredUser: true, welcomeComplete: true, notificationsEnabled, user }
+  })
+  .catch(error => {
+    console.log('Touch ID login Error: ', error)
+    return { hasStoredUser: true, welcomeComplete: true, notificationsEnabled }
+  })
 }

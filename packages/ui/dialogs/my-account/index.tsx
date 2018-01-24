@@ -7,8 +7,8 @@ import { Text, TextInput, View, Clipboard, Dimensions, ScrollView } from 'react-
 import Button from 'ui/components/button'
 import Loading, { LoadingContext } from 'ui/components/loading'
 
-import { getAccountInformation, updateAccount, logoutAccount } from 'actions'
-import { getUser } from 'reducers/app'
+import { getAccountInformation, updateAccount, logoutAccount, toggleNotifications } from 'actions'
+import { getUser, getStore } from 'reducers/app'
 import { connect } from 'react-redux'
 
 import TextLogo from 'ui/components/images/text-logo'
@@ -21,7 +21,8 @@ const { height } = Dimensions.get('window');
 
 import style from 'theme/form'
 
-import { nickname, setNickname, updateAccount as updateAccountText, copy, cancel, mnemonicExhortation, addressExhortation, logoutAction } from 'language'
+import { nickname, setNickname, updateAccount as updateAccountText, copy, 
+  cancel, mnemonicExhortation, addressExhortation, logoutAction, notifications } from 'language'
 
 interface Props {
   logoutAccount: () => any
@@ -30,6 +31,8 @@ interface Props {
   getAccountInformation: () => any
   user: UserData
   updateAccount: (accountData: UpdateAccountData) => any
+  state: any
+  toggleNotifications: () => any
 }
 
 interface State {
@@ -56,6 +59,7 @@ class MyAccount extends Component<Props, State> {
 
   render() {
     const { user, closePopup } = this.props
+    const { notificationsEnabled } = this.props.state
 
     const submit = async () => {
       await loadingContext.wrap(
@@ -68,14 +72,16 @@ class MyAccount extends Component<Props, State> {
       <View style={[style.account, {minHeight: height}]}>
         <Loading context={loadingContext} />
         <TextLogo name='black'/>
-        <View style={{marginTop: 20}}/>
-        <Button round danger onPress={() => this.props.logoutAccount()} style={style.submitButton} text={logoutAction} />
-        <Text style={[style.text, style.center]}>{mnemonicExhortation}</Text>
+        <View style={style.spaceTopL}/>
+        <Button round danger onPress={() => this.props.logoutAccount()} text={logoutAction} />
+        <Text style={[style.text, style.spaceTopL, style.center]}>{notifications.toggleNotifications}</Text>
+        <Button round onPress={() => this.props.toggleNotifications()} text={notificationsEnabled ? notifications.disable : notifications.enable} />
+        <Text style={[style.text, style.spaceTopL, style.center]}>{mnemonicExhortation}</Text>
         <Text selectable style={style.displayText}>{user.mnemonic}</Text>
-        <Button round onPress={() => Clipboard.setString(user.mnemonic)} style={style.submitButton} text={copy} />
-        <Text style={[style.text, style.center]}>{addressExhortation}</Text>
+        <Button round onPress={() => Clipboard.setString(user.mnemonic)} text={copy} />
+        <Text style={[style.text, style.spaceTopL, style.center]}>{addressExhortation}</Text>
         <Text selectable style={style.displayText}>{user.address}</Text>
-        <Button round onPress={() => Clipboard.setString(user.address)} style={style.submitButton} text={copy} />
+        <Button round onPress={() => Clipboard.setString(user.address)} text={copy} />
         <Text style={[style.text, style.spaceTopL, style.center]}>{setNickname}</Text>
         <View style={style.textInputContainer}>
           <InputImage name='person'/>
@@ -88,11 +94,11 @@ class MyAccount extends Component<Props, State> {
             onChangeText={nickname => this.setState({ nickname })}
           />
         </View>
-        <Button round onPress={submit} style={style.submitButton} text={updateAccountText} />
+        <Button round onPress={submit} text={updateAccountText} />
         <Button alternate arrow onPress={this.handleOnCancel.bind(this)} text={cancel} />
       </View>
     </ScrollView>
   }
 }
 
-export default connect((state) => ({ user: getUser(state)() }), { updateAccount, getAccountInformation, logoutAccount })(MyAccount)
+export default connect((state) => ({ user: getUser(state)(), state: getStore(state)() }), { updateAccount, getAccountInformation, logoutAccount, toggleNotifications })(MyAccount)

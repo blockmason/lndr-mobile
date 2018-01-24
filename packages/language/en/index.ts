@@ -179,6 +179,12 @@ export const accountViewLanguage = {
   activity: 'Activity'
 }
 
+export const notifications = {
+  toggleNotifications: 'Toggle Notifications',
+  enable: 'TURN ON',
+  disable: 'TURN OFF'
+}
+
 export const pendingTransactionsLanguage = {
   title: 'Pending',
   none: 'You have no pending transactions',
