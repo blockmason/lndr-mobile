@@ -15,7 +15,7 @@ export const recoverAccount = 'RESTORE ACCOUNT'
 export const removeAccount = 'REMOVE ACCOUNT'
 export const updateAccount = 'UPDATE ACCOUNT'
 export const loginAction = 'UNLOCK'
-export const logoutAction = 'LOCK ACCOUNT'
+export const logoutAction = 'LOG OUT'
 export const seeAllActivity = 'See All Activity'
 
 export const addFriend = 'Add Friend'
@@ -157,7 +157,7 @@ export const debtManagement = {
   balances: {
     error: 'Unable to load balances at this time, please try again later'
   },
-  for: (memo) => `for ${memo}`,
+  for: memo => `for ${memo}`,
   settleUp: 'SETTLE UP',
   settleTotal: 'SETTLE TOTAL',
   settleUpMemo: (direction, amount) => direction === 'lend' ? `Settling up for ${amount}` : `Requesting to settle up for ${amount} `
@@ -166,8 +166,8 @@ export const debtManagement = {
 export const settlementManagement = {
   bilateral: {
     error: {
-      insufficient: (nickname) => `Your settlement to ${nickname} failed due to insufficient funds`,
-      generic: (nickname) => `There was an error processing your settlement to ${nickname}`
+      insufficient: nickname => `Your settlement to ${nickname} failed due to insufficient funds`,
+      generic: nickname => `There was an error processing your settlement to ${nickname}`
     }
   }
 }

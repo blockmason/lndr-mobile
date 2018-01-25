@@ -59,7 +59,7 @@ export const initializeStorage = () => {
 
     const touchIdSupported = isTouchIdSupported()
 
-    if (storedUser && moment(storedSession).add(1, 'day') > moment()) {
+    if (storedUser && moment(storedSession).add(15, 'minute') > moment()) {
       await sessionStorage.set(moment())
       dispatch(setState({ hasStoredUser: true, welcomeComplete: true, user: storedUser, notificationsEnabled }))
     } else if (touchIdSupported && storedMnemonic && storedUser) {
@@ -249,9 +249,9 @@ export async function takenNick(nickname: string) {
 export const addFriend = (friend: Friend) => {
   return async (dispatch, getState) => {
     const { address/*, privateKeyBuffer*/ } = getUser(getState())()
-    console.log('ADDING A FRIEND 1')
     try {
       await creditProtocol.addFriend(address, friend.address/*, privateKeyBuffer*/)
+      console.log('FRIEND ADDED')
       dispatch(displaySuccess(accountManagement.addFriend.success(friend.nickname)))
     } catch (error) {
       dispatch(displayError(accountManagement.addFriend.error))

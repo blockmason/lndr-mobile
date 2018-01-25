@@ -102,7 +102,7 @@ export default class SearchFriend extends Component<Props, State> {
     const { matches, hasSearchTerm, candidateForFriendship } = this.state
     const { addDebt, selectFriend } = this.props
 
-    const { address }  = this.props.state.user.address
+    const { address }  = this.props.state.user
 
     if (!addDebt && candidateForFriendship) {
       return <View style={[style.form, general.centeredColumn]}>

@@ -38,10 +38,8 @@ import { connect } from 'react-redux'
 const loadingContext = new LoadingContext()
 
 interface Props {
-  friend: Friend
   user: UserData
   removeFriend: (friend: Friend) => any
-  closePopup: () => void
   recentTransactions: any
   pendingTransactions: any
   navigation: any
@@ -62,23 +60,21 @@ class RemoveFriend extends Component<Props, State> {
   }
 
   async removeFriend(friend: Friend) {
-    const { closePopup } = this.props
+    await loadingContext.wrap(this.props.removeFriend(friend))
 
-    await loadingContext.wrap(
-      this.props.removeFriend(friend)
-    )
-
-    closePopup()
+    this.props.navigation.goBack()
   }
 
   async componentDidMount() {
-    const { user, friend } = this.props
+    const { user } = this.props
+    const friend = this.props.navigation ? this.props.navigation.state.params.friend : {}
     const balance = await getTwoPartyBalance(user, friend)
     this.setState({ balance, balanceLoaded: true })
   }
 
   getRecentTotal() {
-    const { friend, recentTransactions } = this.props
+    const { recentTransactions } = this.props
+    const friend = this.props.navigation ? this.props.navigation.state.params.friend : {}
     let total = 0
 
     recentTransactions.map( transaction => {
@@ -93,7 +89,8 @@ class RemoveFriend extends Component<Props, State> {
   }
 
   getTransactionNumber() {
-    const { friend, recentTransactions, pendingTransactions } = this.props
+    const { recentTransactions, pendingTransactions } = this.props
+    const friend = this.props.navigation ? this.props.navigation.state.params.friend : {}
 
     let total = 0
 
@@ -109,12 +106,13 @@ class RemoveFriend extends Component<Props, State> {
   }
 
   render() {
-    const { friend, closePopup } = this.props
+    const friend = this.props.navigation ? this.props.navigation.state.params.friend : {}
+    console.log('FRIEND', friend)
 
-    return <ScrollView>
+    return <ScrollView style={general.view}>
       <DashboardShell text='Friend' />
       <Loading context={loadingContext} />
-      <Button close onPress={closePopup} />
+      <Button close onPress={() => this.props.navigation.goBack(null)} />
       <View style={general.centeredColumn}>
         <Image source={require('images/person-outline-dark.png')} style={pendingStyle.image}/>
         <Text style={pendingStyle.title}>{`@${friend.nickname}`}</Text>
@@ -128,7 +126,7 @@ class RemoveFriend extends Component<Props, State> {
         { this.getTransactionNumber() === 0 ? <Button round large danger wide onPress={() => this.removeFriend(friend)} text={removeFriendText} containerStyle={style.spaceBottom} /> : null }
         <View style={style.fullWidth}>
           <Text style={accountStyle.transactionHeader}>{pendingTransactionsLanguage.title}</Text>
-          <PendingView friend={friend} onTransition={closePopup} />
+          <PendingView friend={friend} />
           <Text style={accountStyle.transactionHeader}>{recentTransactionsLanguage.title}</Text>
           <RecentView friend={friend} />
         </View>

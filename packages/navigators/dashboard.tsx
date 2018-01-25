@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import { View, Text, Platform, TouchableHighlight, Image } from 'react-native'
+import { View, Text, Platform, TouchableHighlight, Image, BackHandler } from 'react-native'
 import { TabNavigator } from 'react-navigation'
 
 import { Tab } from 'ui/components/tabs'
@@ -58,6 +58,15 @@ interface Props {
 class DashboardNavigatorWithHeader extends Component<Props> {
 
   static router = DashboardNavigator.router
+
+  componentWillMount() {
+    const { navigation } = this.props
+    BackHandler.addEventListener('hardwareBackPress', () => navigation.goBack(null));
+  }
+
+  componentWillUnmount() {
+    BackHandler.removeEventListener('hardwareBackPress', () => null);
+  }
 
   render() {
 

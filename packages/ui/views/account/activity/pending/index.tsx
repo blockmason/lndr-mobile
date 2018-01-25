@@ -37,7 +37,6 @@ interface Props {
   user: UserData
   state: any
   friend?: Friend
-  onTransition?: () => any
   navigation: any
   homeScreen?: boolean
   pendingSettlements: any
@@ -110,12 +109,7 @@ class PendingTransactionsView extends Component<Props, State> {
   }
 
   closeAndView(pendingTransaction) {
-    const { onTransition } = this.props
-    if (onTransition) {
-      
-    } else {
-      this.setState({ pendingTransaction })
-    }
+    this.setState({ pendingTransaction })
   }
 
   render() {
