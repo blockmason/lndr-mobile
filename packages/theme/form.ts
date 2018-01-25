@@ -142,7 +142,7 @@ export default StyleSheet.create({
     textAlign: 'center'
   },
   jumboInput: {
-    fontSize: 36,
+    fontSize: 24,
     color: black,
     fontWeight: 'bold',
     minWidth: 150,

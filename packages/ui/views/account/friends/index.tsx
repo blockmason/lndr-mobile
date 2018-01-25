@@ -11,7 +11,6 @@ import Loading, { LoadingContext } from 'ui/components/loading'
 import FriendRow from 'ui/components/friend-row'
 
 import SearchFriend from './search-friend'
-import FriendDetail from './friend-detail'
 
 import style from 'theme/account'
 import general from 'theme/general'
@@ -24,6 +23,7 @@ import { getFriends, getRecentTransactions, getPendingTransactions, addFriend } 
 import { connect } from 'react-redux'
 
 const loadingFriends = new LoadingContext()
+const loadingAddFriend = new LoadingContext()
 
 interface Props {
   isFocused: boolean
@@ -72,28 +72,19 @@ class FriendsView extends Component<Props, State> {
     this.refresh()
   }
 
-  renderFriendDetailDialog() {
-    const { friendToRemove } = this.state
-
-    if (!friendToRemove) {
-      return null
-    }
-
-    return <Popup onClose={() => this.setState({ friendToRemove: undefined })}>
-      <FriendDetail friend={friendToRemove} closePopup={() => this.closePopupAndRefresh()} navigation={this.props.navigation} />
-    </Popup>
+  async addFriend(friend) {
+    await loadingAddFriend.wrap(this.props.addFriend(friend))
   }
 
   render() {
     const { friendsLoaded, friends, recentTransactions, pendingTransactions } = this.props.state
 
     return <ScrollView style={general.view} keyboardShouldPersistTaps='handled'>
-      { this.renderFriendDetailDialog() }
       <Section>
         <SearchFriend 
           onSuccess={() => this.refresh()}
-          removeFriend={(friend) => this.setState({ friendToRemove: friend })}
-          selectFriend={(friend) => {this.props.addFriend(friend)}}
+          removeFriend={(friend) => this.props.navigation.navigate('FriendDetail', { friend })}
+          selectFriend={(friend) => this.addFriend(friend)}
           state={this.props.state}
          />
       </Section>
@@ -105,7 +96,7 @@ class FriendsView extends Component<Props, State> {
             <FriendRow
               key={friend.address}
               friend={friend}
-              onPress={() => this.setState({ friendToRemove: friend })}
+              onPress={() => this.props.navigation.navigate('FriendDetail', { friend })}
               pendingTransactions={pendingTransactions}
               recentTransactions={recentTransactions}
               navigation={this.props.navigation}

@@ -1,5 +1,4 @@
 import React, { Component } from 'react'
-
 import { View, Text, TextInput } from 'react-native'
 
 import Button from 'ui/components/button'
@@ -7,6 +6,7 @@ import Button from 'ui/components/button'
 import { RecoverAccountData, defaultRecoverAccountData } from 'lndr/user'
 
 import InputImage from 'ui/components/images/input-image'
+import Loading, { LoadingContext } from 'ui/components/loading'
 
 import {
   newPassword,
@@ -18,6 +18,8 @@ import {
 
 import style from 'theme/form'
 
+const loadingContext = new LoadingContext()
+
 interface Props {
   onSubmitRecoverUser: (formData: RecoverAccountData) => void
   onCancel: () => void
@@ -27,6 +29,14 @@ export default class RecoverAccountForm extends Component<Props, RecoverAccountD
   constructor() {
     super()
     this.state = defaultRecoverAccountData()
+  }
+
+  async submit() {
+    await loadingContext.wrap(this.props.onSubmitRecoverUser(this.state))
+  }
+
+  cancel() {
+    this.props.onCancel()
   }
 
   render() {
@@ -54,13 +64,5 @@ export default class RecoverAccountForm extends Component<Props, RecoverAccountD
       <Button round fat style={style.submitButton} onPress={() => this.submit()} text={recoverAccount} />
       <Button alternate small arrow style={style.submitButton} onPress={() => this.cancel()} text={cancel} />
     </View>
-  }
-
-  submit() {
-    this.props.onSubmitRecoverUser(this.state)
-  }
-
-  cancel() {
-    this.props.onCancel()
   }
 }
