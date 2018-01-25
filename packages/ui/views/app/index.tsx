@@ -48,7 +48,8 @@ const initialState = {
   pendingTransactionsLoaded: false,
   pendingTransactions: [],
   pendingSettlements: [],
-  bilateralSettlements: []
+  bilateralSettlements: [],
+  notificationsEnabled: true
 }
 
 const store = createStore(initialState)
@@ -63,7 +64,8 @@ class AppContentsView extends Component<AppContentsProps> {
     const {
       isInitializing,
       welcomeComplete,
-      shouldDisplayMnemonic
+      shouldDisplayMnemonic,
+      displayTouchID
     } = this.props.state
 
     if (isInitializing) {

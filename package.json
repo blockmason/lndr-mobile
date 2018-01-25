@@ -34,6 +34,7 @@
     "react-native-randombytes": "^3.0.0",
     "react-native-redux-toast": "^1.0.1",
     "react-native-sqlite-storage": "^3.3.3",
+    "react-native-touch-id": "^4.0.0",
     "react-native-vector-icons": "^4.4.2",
     "react-navigation": "^1.0.0-beta.21",
     "react-redux": "^5.0.6",

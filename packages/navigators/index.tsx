@@ -38,4 +38,3 @@ export default connect(
     nav: state.nav }))(({ dispatch, nav }) => (
   <AppNavigator navigation={addNavigationHelpers({ dispatch, state: nav })} />
 ))
-

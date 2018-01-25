@@ -97,13 +97,15 @@ class HomeView extends Component<Props, State> {
     }
   }
 
-  initializePushNotifications() {
+  async initializePushNotifications() {
     UrbanAirship.getChannelId().then(channelId => {
       console.log('Channel: ', channelId);
       this.props.registerChannelID(channelId, Platform.OS)
     })
 
-    UrbanAirship.setUserNotificationsEnabled(true)
+    const { notificationsEnabled } = this.props.state
+
+    UrbanAirship.setUserNotificationsEnabled(notificationsEnabled)
     UrbanAirship.addListener("pushReceived", (notification) => {
       console.log('Received push: ', JSON.stringify(notification));
     })

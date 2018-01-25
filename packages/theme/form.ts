@@ -135,7 +135,8 @@ export default StyleSheet.create({
   },
   submitButton: {
     width: '70%',
-    ...center
+    ...center,
+    alignSelf: 'center'
   },
   center: {
     textAlign: 'center'
