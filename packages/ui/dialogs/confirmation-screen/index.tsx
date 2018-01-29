@@ -16,7 +16,7 @@ interface Props {
 export default class ConfirmationScreen extends Component<Props> {
   getConfirmationImage(type) {
     let imageName = 'create'
-    if (type === 'create' || type === 'confirm') {
+    if (type === 'create' || type === 'confirm' || type === 'ethSent') {
       return <Image source={require('images/check-circle.png')} style={style.image} />
     } else if (type === 'reject') {
       return <Image source={require('images/thumbs-down.png')} style={style.image} />
@@ -26,16 +26,25 @@ export default class ConfirmationScreen extends Component<Props> {
   }
 
   render() {
-    const friend = this.props.navigation.state.params ? this.props.navigation.state.params.friend : {}
     const type = this.props.navigation.state.params ? this.props.navigation.state.params.type : 'create'
+    let friend = { nickname: '' }
+    let txHash = ''
+    let amount = ''
+    if (this.props.navigation.state.params) {
+      friend = this.props.navigation.state.params.friend
+      txHash = this.props.navigation.state.params.txHash
+      amount = this.props.navigation.state.params.amount
+    }
+    
 
     return <ScrollView>
       <View style={general.centeredColumn}>
         {this.getConfirmationImage(type)}
         <Text style={style.text}>
           <Text>{confirmation[type].start}</Text>
-          <Text style={style.nickname}>{friend.nickname}</Text>
+          <Text style={style.nickname}>{type !== 'ethSent' ? friend.nickname : amount}</Text>
           <Text>{confirmation[type].end}</Text>
+          {type !== 'ethSent' ? <Text>{txHash}</Text> : null}
         </Text>
         <TouchableHighlight onPress={() => this.props.navigation.navigate('Activity')}>
           <Text style={[style.text, style.spacing]}>

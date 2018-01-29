@@ -2,7 +2,7 @@
 
 import React, { Component } from 'react'
 
-import { Text, View, ScrollView, Platform, Dimensions, Image, TouchableHighlight } from 'react-native'
+import { Text, View, ScrollView, Platform, Dimensions, Image, TouchableHighlight, BackHandler, BackAndroid } from 'react-native'
 
 import { cents } from 'lndr/format'
 import Balance from 'lndr/balance'

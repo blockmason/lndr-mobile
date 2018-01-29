@@ -7,9 +7,12 @@ import PendingTransactionDetail from 'ui/dialogs/pending-transaction-detail'
 import PendingSettlementDetail from 'ui/dialogs/pending-settlement-detail'
 import SettleUp from 'ui/dialogs/settle-up'
 import FriendDetail from 'ui/dialogs/friend-detail'
+import TransferEth from 'ui/dialogs/transfer-eth'
 import { addNavigationHelpers, StackNavigator } from 'react-navigation';
 import { connect } from 'react-redux';
 import { View, ScrollView, Text, StyleSheet, Button, BackHandler } from 'react-native';
+import { getCurrentRoute } from 'reducers/nav'
+import { getStore } from 'reducers/app'
 
 export const AppNavigator = StackNavigator({
   Dashboard: {
@@ -29,16 +32,23 @@ export const AppNavigator = StackNavigator({
   },
   FriendDetail: {
     screen: FriendDetail
+  },
+  TransferEth: {
+    screen: TransferEth
   }
 },
   {
     mode: 'modal',
-    headerMode: 'none'
+    headerMode: 'none',
+    navigationOptions: {
+      gesturesEnabled: false
+    }
   }
 )
 
 interface Props {
   navigation: any
+  state: any
 }
 
 class AppWithNavigationState extends React.Component<Props> {
@@ -47,8 +57,10 @@ class AppWithNavigationState extends React.Component<Props> {
   }
 
   componentWillMount() {
-    const { navigation } = this.props
-    BackHandler.addEventListener('hardwareBackPress', () => navigation.goBack(null));
+    const { navigation, state } = this.props
+    BackHandler.addEventListener('hardwareBackPress', () => {
+      return navigation.goBack(null)
+    });
   }
 
   componentWillUnmount() {
@@ -62,6 +74,6 @@ class AppWithNavigationState extends React.Component<Props> {
 
 export default connect(
   state => ({
-    nav: state.nav }))(({ dispatch, nav }) => (
-  <AppWithNavigationState navigation={addNavigationHelpers({ dispatch, state: nav })} />
+    nav: state.nav, state: getStore(state)() }))(({ dispatch, nav, state }) => (
+  <AppWithNavigationState navigation={addNavigationHelpers({ dispatch, state: nav })} state={state} />
 ))

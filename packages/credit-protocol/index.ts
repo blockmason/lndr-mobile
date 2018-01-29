@@ -4,11 +4,18 @@ declare const Buffer
 import Mnemonic from 'bitcore-mnemonic'
 import ethUtil from 'ethereumjs-util'
 
-import { hexToBuffer, bufferToHex, stringToBuffer } from './lib/buffer-utils'
+import { hexToBuffer, utf8ToBuffer, bufferToHex, stringToBuffer } from './lib/buffer-utils'
 import Client from './lib/client'
 import CreditRecord from './lib/credit-record'
-
 export { default as CreditRecord } from './lib/credit-record'
+
+import GasPrice from 'lndr/gas-price'
+import EthTransaction from 'lndr/eth-transaction'
+import Tx from 'ethereumjs-tx'
+import Web3 from 'web3'
+
+const gasPrice = new GasPrice(fetch)
+const web3 = new Web3(new Web3.providers.HttpProvider('https://mainnet.infura.io/EoLr1OVfUMDqq3N2KaKA'))
 
 export default class CreditProtocol {
   client: Client
@@ -20,6 +27,9 @@ export default class CreditProtocol {
   // TODO this should go away once serverSign works and nick endpoint is
   // changed
   sign(message, privateKeyBuffer) {
+    if (privateKeyBuffer.type === 'Buffer') {
+      privateKeyBuffer = Buffer.from(privateKeyBuffer.data)
+    }
     if (typeof message === 'string') {
       message = stringToBuffer(message)
     }
@@ -37,6 +47,9 @@ export default class CreditProtocol {
   }
 
   serverSign(hash, privateKeyBuffer) {
+    if (privateKeyBuffer.type === 'Buffer') {
+      privateKeyBuffer = Buffer.from(privateKeyBuffer.data)
+    }
 
     const { r, s, v } = ethUtil.ecsign(
       hexToBuffer(hash),
@@ -50,11 +63,19 @@ export default class CreditProtocol {
     )
   }
 
-  setNickname(addr: string, nick: string, privateKeyBuffer: any) {
+  setNickname(addr: string, nick: string, privateKeyBuffer: string) {
+    //hash the nickname
+    const hashBuffer = Buffer.concat([
+      hexToBuffer(addr),
+      utf8ToBuffer(nick)
+    ])
+    const hash = bufferToHex(ethUtil.sha3(hashBuffer))
+    const signature = this.serverSign(hash, privateKeyBuffer)
+
     return this.client.post('/nick', {
       addr,
       nick,
-      sig: this.sign(nick, privateKeyBuffer)
+      signature
     })
   }
 
@@ -78,9 +99,17 @@ export default class CreditProtocol {
     return this.client.get(`/search_nick/${nick}`)
   }
 
-  registerChannelID(user: string, channelID: string, platform: string) {
+  registerChannelID(address: string, channelID: string, platform: string, privateKeyBuffer: any) {
+    const hashBuffer = Buffer.concat([
+      utf8ToBuffer(platform),
+      utf8ToBuffer(channelID),
+      hexToBuffer(address)
+    ])
+    const hash = bufferToHex(ethUtil.sha3(hashBuffer))
+    const signature = this.serverSign(hash, privateKeyBuffer)
+
     console.log('REGISTER CHANNEL ID: ', channelID)
-    return this.client.post(`/register_push/${user}`, { channelID, platform })
+    return this.client.post(`/register_push`, { channelID, platform, address, signature })
   }
 
   takenNick(nick: string) {
@@ -130,14 +159,14 @@ export default class CreditProtocol {
   rejectPendingTransactionByHash(hash: string, privateKeyBuffer: any) {
     return this.client.post('/reject', {
       hash,
-      rejectSig: this.serverSign(hash, privateKeyBuffer)
+      signature: this.serverSign(hash, privateKeyBuffer)
     })
   }
 
   rejectPendingSettlementByHash(hash: string, privateKeyBuffer: any) {
     return this.client.post('/reject', {
       hash,
-      rejectSig: this.serverSign(hash, privateKeyBuffer)
+      signature: this.serverSign(hash, privateKeyBuffer)
     })
   }
 
@@ -205,10 +234,67 @@ export default class CreditProtocol {
     return new Mnemonic(mnemonic)
   }
 
-  storeSettlementHash(hash: any) {
-    return this.client.post('/verify_settlement', {
-      hash,
+  getGasPrice() {
+    return gasPrice.get('https://ethgasstation.info/json/ethgasAPI.json')
+  }
 
+  async settleWithEth(transaction: EthTransaction, privateKey: any) {
+    if (transaction.from === transaction.to) {
+      throw new Error('You cannot send ETH to yourself')
+    }
+
+    const privateKeyBuffer = new Buffer(privateKey.privateKey, 'hex')
+    const nonce = await new Promise((resolve, reject) => {
+      web3.eth.getTransactionCount(`0x${transaction.from}`, (e, data) => e ? reject(e) : resolve(data))
+    })
+    console.log('NONCE OF TX:', nonce)
+
+    const rawTx = {
+      nonce: web3.toHex(12),
+      gasPrice: web3.toHex(transaction.gasPrice),
+      gasLimit: web3.toHex(transaction.gas),
+      to: '0x' + transaction.to,
+      value: web3.toHex(transaction.value),
+      from: '0x' + transaction.from
+    }
+    console.log(rawTx, rawTx.to, rawTx.to.length)
+    const tx = new Tx(rawTx)
+    tx.sign(privateKeyBuffer)
+    const serializedTx = tx.serialize();
+
+    console.log('TOTAL ETH TO BE SETTLED: ', Number(transaction.value) + Number(transaction.gas * transaction.gasPrice) )
+    
+    return new Promise((resolve, reject) => {
+      web3.eth.sendRawTransaction(('0x' + serializedTx.toString('hex')), (e, data) => e ? reject(e) : resolve(data))
+    })
+  }
+
+  storeSettlementHash(txHash: any, settlement: any, privateKeyBuffer: any) {
+    const hashBuffer = Buffer.concat([
+      hexToBuffer(settlement.hash),
+      hexToBuffer(txHash),
+      hexToBuffer(settlement.creditorAddress)
+    ])
+    const hash = bufferToHex(ethUtil.sha3(hashBuffer))
+    const signature = this.serverSign(hash, privateKeyBuffer)
+
+    return this.client.post('/verify_settlement', {
+      txHash,
+      creditHash: settlement.hash,
+      creditorAddress: settlement.creditorAddress,
+      signature
+    })
+  }
+
+  getEthTxHash(hash: string) {
+    return this.client.get(`/tx_hash/${hash}`)
+  }
+}
+
+function web3AsyncWrapper (web3Fun) {
+  return function (arg) {
+    return new Promise((resolve, reject) => {
+      web3Fun(arg, (e, data) => e ? reject(e) : resolve(data))
     })
   }
 }

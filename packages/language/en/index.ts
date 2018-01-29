@@ -91,7 +91,26 @@ export const accountManagement = {
   },
   loadInformation: {
     error: generalCommunicationError
+  },
+  ethBalance: {
+    getError: 'Unable to retrieve Eth balance'
+  },
+  sendEth: {
+    error: {
+      insufficient: 'The transfer failed due to insufficient funds',
+      generic: 'There was an error with the transfer, please try again later'
+    },
+    amount: 'AMOUNT TO SEND',
+    address: 'DESTINATION ADDRESS',
+    transfer: 'TRANSFER ETH',
+    transferAll: 'TRANSFER EVERYTHING',
+    balance: (balance) => `Your current ETH balance is ${typeof balance === 'string' ? balance.slice(0,8) : ''}`,
+    ethAddress: 'Ethereum Address'
   }
+}
+
+export const currentBalance = {
+  eth: 'Your current Eth balance is:'
 }
 
 export const welcomeView = {
@@ -138,7 +157,7 @@ export const debtManagement = {
     pendingBorrow: nickname => `You owe @${nickname}`,
     pendingLendSettlement: settlement => `@${settlement.debtorNickname} wants to settle with you in ${settlement.settlementCurrency}`,
     pendingBorrowSettlement: settlement => `@${settlement.creditorNickname} requests a settlement in ${settlement.settlementCurrency}`,
-    pendingLendSettlementMe: settlement => `You requested to settle with @${settlement.creditorNickname} in ${settlement.settlementCurrency}`,
+    pendingLendSettlementMe: settlement => `You requested to settle with @${settlement.debtorNickname} in ${settlement.settlementCurrency}`,
     pendingBorrowSettlementMe: settlement => `You requested that @${settlement.creditorNickname} settle with in ${settlement.settlementCurrency}`
   },
   pending: {
@@ -160,14 +179,14 @@ export const debtManagement = {
   for: memo => `for ${memo}`,
   settleUp: 'SETTLE UP',
   settleTotal: 'SETTLE TOTAL',
-  settleUpMemo: (direction, amount) => direction === 'lend' ? `Settling up for ${amount}` : `Requesting to settle up for ${amount} `
+  settleUpMemo: (direction, amount) => direction === 'lend' ? `Settling up for ${amount}` : `Request to settle for ${amount} `
 }
 
 export const settlementManagement = {
   bilateral: {
     error: {
-      insufficient: nickname => `Your settlement to ${nickname} failed due to insufficient funds`,
-      generic: nickname => `There was an error processing your settlement to ${nickname}`
+      insufficient: nickname => `Your settlement with ${nickname} failed due to insufficient funds`,
+      generic: nickname => `There was an error processing your settlement with ${nickname}`
     }
   }
 }
@@ -237,6 +256,10 @@ export const confirmation = {
   reject: {
     start: "We've let ",
     end: " know that you rejected this record."
+  },
+  ethSent: {
+    start: "You have successfully sent ",
+    end: " ETH and your transaction hash is "
   },
   status: 'You can see the status of this transaction in the ',
   activity: 'activity tab.'

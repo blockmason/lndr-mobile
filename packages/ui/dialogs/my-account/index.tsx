@@ -20,9 +20,10 @@ const loadingContext = new LoadingContext()
 const { height } = Dimensions.get('window');
 
 import style from 'theme/form'
+import general from 'theme/general'
 
-import { nickname, setNickname, updateAccount as updateAccountText, copy, 
-  cancel, mnemonicExhortation, addressExhortation, logoutAction, notifications } from 'language'
+import { nickname, setNickname, updateAccount as updateAccountText, copy, accountManagement,
+  cancel, mnemonicExhortation, addressExhortation, logoutAction, notifications, currentBalance } from 'language'
 
 interface Props {
   logoutAccount: () => any
@@ -59,7 +60,7 @@ class MyAccount extends Component<Props, State> {
 
   render() {
     const { user, closePopup } = this.props
-    const { notificationsEnabled } = this.props.state
+    const { notificationsEnabled, ethBalance } = this.props.state
 
     const submit = async () => {
       await loadingContext.wrap(
@@ -68,7 +69,8 @@ class MyAccount extends Component<Props, State> {
       this.props.navigation.goBack()
     }
 
-    return <ScrollView keyboardShouldPersistTaps='handled'>
+    return <ScrollView style={general.view} keyboardShouldPersistTaps='handled'>
+      <Button close onPress={() => this.props.navigation.goBack()} />
       <View style={[style.account, {minHeight: height}]}>
         <Loading context={loadingContext} />
         <TextLogo name='black'/>
@@ -79,6 +81,9 @@ class MyAccount extends Component<Props, State> {
         <Text style={[style.text, style.spaceTopL, style.center]}>{mnemonicExhortation}</Text>
         <Text selectable style={style.displayText}>{user.mnemonic}</Text>
         <Button round onPress={() => Clipboard.setString(user.mnemonic)} text={copy} />
+        <Text style={[style.text, style.spaceTopL, style.center]}>{currentBalance.eth}</Text>
+        <Text selectable style={style.displayText}>{ethBalance}</Text>
+        <Button round onPress={() => this.props.navigation.navigate('TransferEth')} text={accountManagement.sendEth.transfer} />
         <Text style={[style.text, style.spaceTopL, style.center]}>{addressExhortation}</Text>
         <Text selectable style={style.displayText}>{user.address}</Text>
         <Button round onPress={() => Clipboard.setString(user.address)} text={copy} />
@@ -91,6 +96,7 @@ class MyAccount extends Component<Props, State> {
             placeholder={nickname}
             value={this.state.nickname}
             underlineColorAndroid='transparent'
+            maxLength={20}
             onChangeText={nickname => this.setState({ nickname })}
           />
         </View>

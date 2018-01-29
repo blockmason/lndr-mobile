@@ -114,7 +114,8 @@ class PendingSettlementDetail extends Component<Props> {
       sign = '-'
     }
 
-    return `${pendingSettlement.settlementAmount}`
+    //this is specific to ETH
+    return `${pendingSettlement.settlementAmount / Math.pow(10, 18)}`.slice(0, 9)
   }
 
   showButtons() {
@@ -124,7 +125,7 @@ class PendingSettlementDetail extends Component<Props> {
       return <Button alternate arrowRed onPress={() => this.rejectPendingSettlement(pendingSettlement)} text={pendingSettlementsLanguage.cancel} />
     }
 
-    return <View style={{marginBottom: 10}}>
+    return <View style={{marginBottom: 50}}>
       <Button round large onPress={() => this.confirmPendingSettlement(pendingSettlement)} text={pendingSettlementsLanguage.confirm} />
       <Button alternate arrowRed onPress={() => this.rejectPendingSettlement(pendingSettlement)} text={pendingSettlementsLanguage.reject} />
     </View>
