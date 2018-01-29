@@ -40,11 +40,12 @@ export default StyleSheet.create({
     color: aqua,
   },
   amount: {
-    fontSize: 50,
+    fontSize: 40,
     color: aqua,
     marginTop: -15,
     marginLeft: s,
-    marginRight: s
+    marginRight: s,
+    maxWidth: 250
   },
   pendingInfo: {
     ...medium,

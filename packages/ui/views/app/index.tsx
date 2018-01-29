@@ -49,7 +49,8 @@ const initialState = {
   pendingTransactions: [],
   pendingSettlements: [],
   bilateralSettlements: [],
-  notificationsEnabled: true
+  notificationsEnabled: true,
+  ethBalance: 0
 }
 
 const store = createStore(initialState)

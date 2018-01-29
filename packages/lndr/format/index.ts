@@ -49,3 +49,7 @@ export const currency = value => {
 
   return `$${commas(raw)}`
 }
+
+export const ethAddress = addr => addr.replace(/[g-z]/gi, '').replace(/[^a-z0-9]/gi, '').toLowerCase()
+
+export const ethAmount = amount => amount.replace(/[^0-9\.]/g, '')

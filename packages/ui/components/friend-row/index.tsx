@@ -93,7 +93,7 @@ export default class FriendRow extends Component<Props> {
 
   showSettleUp() {
     const { friend } = this.props
-    return this.getRecentTotal() < 0 ? <Button narrow small round onPress={() => this.props.navigation.navigate('SettleUp', { friend: friend })} text={debtManagement.settleUp} style={{marginRight: 10}} /> : null
+    return this.getRecentTotal() === 0 ? null : <Button narrow small round onPress={() => this.props.navigation.navigate('SettleUp', { friend: friend })} text={debtManagement.settleUp} style={{marginRight: 10}} />
   }
 
   render() {

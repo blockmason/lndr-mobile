@@ -59,15 +59,6 @@ class DashboardNavigatorWithHeader extends Component<Props> {
 
   static router = DashboardNavigator.router
 
-  componentWillMount() {
-    const { navigation } = this.props
-    BackHandler.addEventListener('hardwareBackPress', () => navigation.goBack(null));
-  }
-
-  componentWillUnmount() {
-    BackHandler.removeEventListener('hardwareBackPress', () => null);
-  }
-
   render() {
 
     return (

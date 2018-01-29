@@ -112,7 +112,7 @@ class SettleUp extends Component<Props, State> {
   }
 
   setAmount(amount) {
-    return `${this.getRecentTotal() < 0 ? '-' : '+'}${currency(amount)}`
+    return `${currency(amount)}`
   }
 
   displayMessage() {
@@ -136,11 +136,10 @@ class SettleUp extends Component<Props, State> {
       <DashboardShell text={debtManagement.settleUpLower} />
       <Button close onPress={() => this.props.navigation.navigate('Friends')} />
       <View style={[general.centeredColumn, {marginBottom: 20}]}>
-
       {/* Remove this when Settlement code is done */}
-      <Text style={[style.header, {marginBottom: 20}]}>Coming Soon</Text>
-      <Button alternate arrowRed large onPress={() => this.cancel()} text='Go Back' />
-        {/* <Image source={require('images/person-outline-dark.png')} style={style.settleImage}/>
+      {/* <Text style={[style.header, {marginBottom: 20}]}>Coming Soon</Text> */}
+      {/* <Button alternate arrowRed large onPress={() => this.cancel()} text='Go Back' /> */}
+        <Image source={require('images/person-outline-dark.png')} style={style.settleImage}/>
         <Text style={[style.header, {marginBottom: 20}]}>{this.displayMessage()}</Text>
         <View style={style.transactions}>
           {
@@ -170,7 +169,7 @@ class SettleUp extends Component<Props, State> {
           </View>
         </View>
         { amount ? <Button large round wide onPress={() => this.submit()} text={debtManagement.settleUp} /> : <Button large round wide onPress={() => this.setState({ amount: currency(cents(Math.abs(balance))) })} text={debtManagement.settleTotal} />}
-        <Button alternate arrowRed large onPress={() => this.cancel()} text={cancel} /> */}
+        <Button alternate arrowRed large onPress={() => this.cancel()} text={cancel} />
       </View>
     </ScrollView>
   }

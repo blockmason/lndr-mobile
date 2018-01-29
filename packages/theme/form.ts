@@ -107,7 +107,7 @@ export default StyleSheet.create({
   },
   multilineTextInput: {
     ...small,
-    minHeight: 60,
+    minHeight: 75,
     textAlignVertical: 'top',
     paddingLeft: 35,
     paddingRight: 35,

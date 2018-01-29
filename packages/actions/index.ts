@@ -13,16 +13,16 @@ import RecentTransaction from 'lndr/recent-transaction'
 import PendingSettlement from 'lndr/pending-settlement'
 import EthTransaction from 'lndr/eth-transaction'
 import ucac from 'lndr/ucac'
-import { getGasPrice, settleWithEth } from 'lndr/settlement'
+import Storage from 'lndr/storage'
+import { getEthBalance, web3 } from 'lndr/settlement'
 
 import CreditProtocol from 'credit-protocol'
-
-import Storage from 'lndr/storage'
 
 import { accountManagement, debtManagement, settlementManagement } from 'language'
 
 import { ToastActionsCreators } from 'react-native-redux-toast'
 import { getUser, getStore } from 'reducers/app'
+import { hexToBuffer } from '../credit-protocol/lib/buffer-utils';
 
 import { isTouchIdSupported } from 'lndr/touch-id'
 import TouchID from 'react-native-touch-id'
@@ -57,13 +57,22 @@ export const initializeStorage = () => {
       notificationsEnabled = storedNotificationPreference
     }
 
+    let ethBalance
+    try {
+      ethBalance = await getEthBalance(storedUser.address)
+    } catch (e) {
+      ethBalance = '0'
+    }
+
     const touchIdSupported = isTouchIdSupported()
 
     if (storedUser && moment(storedSession).add(15, 'minute') > moment()) {
       await sessionStorage.set(moment())
-      dispatch(setState({ hasStoredUser: true, welcomeComplete: true, user: storedUser, notificationsEnabled }))
+      const payload = { hasStoredUser: true, welcomeComplete: true, user: storedUser, notificationsEnabled, ethBalance }
+      dispatch(setState(payload))
     } else if (touchIdSupported && storedMnemonic && storedUser) {
       const payload = await triggerTouchId(storedUser, notificationsEnabled)
+      payload.ethBalance = ethBalance
       dispatch(setState(payload))
     } else if (storedMnemonic) {
       dispatch(setState({ hasStoredUser: true, welcomeComplete: true, notificationsEnabled }))
@@ -88,6 +97,7 @@ export const displaySuccess = (success: string) => {
 export const updateAccount = (accountData: UpdateAccountData) => {
   return async (dispatch, getState) => {
     const { address, privateKeyBuffer } = getUser(getState())()
+    console.log('NICKNAME PRIVATE KEY HEX', privateKeyBuffer)
     const { nickname } = accountData
 
     try {
@@ -103,8 +113,8 @@ export const updateAccount = (accountData: UpdateAccountData) => {
 
 export const registerChannelID = (channelID: string, platform: string) => {
   return async (_dispatch, getState) => {
-    const { address } = getUser(getState())()
-    creditProtocol.registerChannelID(address, channelID, platform)
+    const { address, privateKeyBuffer } = getUser(getState())()
+    // creditProtocol.registerChannelID(address, channelID, platform, privateKeyBuffer)
   }
 }
 
@@ -251,7 +261,6 @@ export const addFriend = (friend: Friend) => {
     const { address/*, privateKeyBuffer*/ } = getUser(getState())()
     try {
       await creditProtocol.addFriend(address, friend.address/*, privateKeyBuffer*/)
-      console.log('FRIEND ADDED')
       dispatch(displaySuccess(accountManagement.addFriend.success(friend.nickname)))
     } catch (error) {
       dispatch(displayError(accountManagement.addFriend.error))
@@ -386,7 +395,7 @@ export const getPendingSettlements = () => {
     console.log('RAW PENDING SETTLEMENTS: ', rawPendingSettlements)
     const pendingSettlements = rawPendingSettlements.unilateralSettlements.map(jsonToPendingSettlement)
     const bilateralSettlements = rawPendingSettlements.bilateralSettlements.map(jsonToPendingSettlement)
-    // settleBilateral(user, bilateralSettlements, dispatch)
+    settleBilateral(user, bilateralSettlements, dispatch, getState)
     await ensureTransactionNicknames(pendingSettlements)
     await ensureTransactionNicknames(bilateralSettlements)
     dispatch(setState({ pendingSettlements, pendingSettlementsLoaded: true, bilateralSettlements }))
@@ -411,13 +420,14 @@ export const confirmPendingTransaction = (pendingTransaction: PendingTransaction
       const signature = creditRecord.sign(privateKeyBuffer)
       await creditProtocol.submitCreditRecord(creditRecord, direction, signature)
       refreshTransactions()
-
+      
       dispatch(displaySuccess(debtManagement.confirmation.success))
 
       return true
     }
 
     catch (e) {
+      console.log('----------------------ERROR CONFIRMING TRANSACTION', e)
       dispatch(displayError(debtManagement.confirmation.error))
       return false
     }
@@ -467,6 +477,7 @@ export const rejectPendingTransaction = (pendingTransaction: PendingTransaction)
       return true
     }
     catch (e) {
+      console.log('REJECTION ERROR', e)
       dispatch(displayError(debtManagement.rejection.error))
       return false
     }
@@ -560,6 +571,7 @@ export const addDebt = (friend: Friend, amount: string, memo: string, direction:
     }
 
     catch (e) {
+      console.log('WHY WONT THIS WORK', e)
       dispatch(displayError(debtManagement.pending.error))
     }
   }
@@ -652,6 +664,7 @@ export const loginAccount = (loginData: LoginAccountData) => {
     const user = createUserFromCredentials(mnemonic, hashedPassword)
 
     await storeUserSession(user)
+    await setEthBalance(user.address)
     
     const payload = { user, hasStoredUser: true }
     dispatch(setState(payload))
@@ -738,35 +751,81 @@ export const setWelcomeComplete = (state) => {
   return setState(payload)
 }
 
+export const setEthBalance = () => {
+  return async (dispatch, getState) => {
+    const { user } = getState().store
+    const ethBalance = await getEthBalance(user.address)
+    console.log('SETTING ETH BALANCE', ethBalance)
+    dispatch(setState({ ethBalance }))
+  }
+}
+
+//amount is in eth
+export const sendEth = (destAddr: string, amount: string) => {
+  return async (dispatch, getState) => {
+    try {
+      const { privateKey, address } = getState().store.user
+      const prices = await creditProtocol.getGasPrice()
+      //Safe Low is in 10^8 Wei (deciGigaWei)
+      const gasPrice = prices.safeLow * 1.3 * Math.pow(10, 8)
+      const ethTransaction = new EthTransaction(address, destAddr, Number(web3.toWei(Number(amount), 'ether')), gasPrice)
+      const txHash = await creditProtocol.settleWithEth(ethTransaction, privateKey)
+      console.log('SENDING ETH, TXHASH:', txHash)
+      return txHash
+    } catch (e) {
+      console.log('ERROR SENDING ETH', e)
+      if (typeof e === 'string' && e.indexOf('insufficient') !== -1) {
+        return dispatch(displayError(accountManagement.sendEth.error.insufficient))
+      } else {
+        return dispatch(displayError(accountManagement.sendEth.error.generic))
+      }
+    }
+  }
+}
+
 const refreshTransactions = () => {
   getPendingTransactions()
   getRecentTransactions()
+  setEthBalance()
   //enable this once server is done
   // getPendingSettlements()
 }
 
-let notSent = true
-
-const settleBilateral = async (user, bilateralSettlements, dispatch) => {
-  const prices = await getGasPrice()
-  const gasPrice = (prices.safeLow * 1.3 * Math.pow(10, 8))
+const settleBilateral = async (user, bilateralSettlements, dispatch, getState) => {
+  const prices = await creditProtocol.getGasPrice()
+  //Safe Low is in 10^8 Wei (deciGigaWei)
+  const gasPrice = prices.safeLow * 1.3 * Math.pow(10, 8)
+  const ethBalance = getState().store.ethBalance
 
   bilateralSettlements.forEach( async (settlement) => {
-    //assumes ETH transaction
-    if (settlement.creditorAddress === user.address && notSent) {
-      notSent = false
-      const prices = await getGasPrice()
-      const gasPrice = `${prices.safeLow * 1.3 / 10 * Math.pow(10, 9)}`
-      console.log('GAS PRICE', gasPrice)
-      const ethTransaction = new EthTransaction(settlement.creditorAddress, settlement.settlementAmount, gasPrice)
+    console.log(settlement.creditorAddress, user.address)
+    if (settlement.creditorAddress === user.address) {
+      let hasEthTxHash = false
+      try {
+        const ethTxHash = await creditProtocol.getEthTxHash(settlement.hash)
+        console.log('GOT TX HASH', ethTxHash)
+        hasEthTxHash = true
+      } catch (e) {
+        console.log('ERROR GETTING TX HASH', settlement.hash, e)
+      }
+      if (hasEthTxHash) {
+        return
+      }
+      console.log('ETH AMOUNTS FOR SETTLEMENT', Number(`${settlement.settlementAmount}`), Number(`${settlement.settlementAmount}`) > Number(web3.toWei(ethBalance, 'ether')), Number(web3.toWei(ethBalance, 'ether')) )
+      
+      if ( Number(`${settlement.settlementAmount}`) > Number(web3.toWei(ethBalance, 'ether')) ) {
+        return dispatch(displayError(settlementManagement.bilateral.error.insufficient(settlement.debtorNickname)))
+      }
+      const ethTransaction = new EthTransaction(settlement.creditorAddress, settlement.debtorAddress, settlement.settlementAmount, gasPrice)
 
       try {
-        const txHash = await settleWithEth(ethTransaction, user.privateKey)
+        const txHash = await creditProtocol.settleWithEth(ethTransaction, user.privateKey)
         console.log('TX HASH', txHash)
-        creditProtocol.storeSettlementHash(txHash)
+        creditProtocol.storeSettlementHash(txHash, settlement, user.privateKeyBuffer)
 
       } catch (e) {
-        if (e.indexOf('insufficient') !== -1) {
+        console.log('HAD AN ERROR', e)
+        if (typeof e === 'string' && e.indexOf('insufficient') !== -1) {
           dispatch(displayError(settlementManagement.bilateral.error.insufficient(settlement.debtorNickname)))
         } else {
           dispatch(displayError(settlementManagement.bilateral.error.generic(settlement.debtorNickname)))

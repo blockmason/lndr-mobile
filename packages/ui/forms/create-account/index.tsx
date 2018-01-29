@@ -24,12 +24,23 @@ interface Props {
   nickTextInputErrorText: string
   onSubmitCreateUser: (formData: CreateAccountData) => void
   onSubmitRecover: () => void
+  duplicationViolation?: boolean
 }
 
 export default class CreateAccountForm extends Component<Props, CreateAccountData> {
   constructor() {
     super()
     this.state = defaultCreateAccountData()
+  }
+
+  submit() {
+    if(!this.props.duplicationViolation) {
+      this.props.onSubmitCreateUser(this.state)
+    }
+  }
+
+  recover() {
+    this.props.onSubmitRecover()
   }
 
   render() {
@@ -43,6 +54,7 @@ export default class CreateAccountForm extends Component<Props, CreateAccountDat
           style={style.textInput}
           placeholder={nickname}
           value={this.state.nickname}
+          maxLength={20}
           underlineColorAndroid='transparent'
           onChangeText={nickname => this.setState({ nickname })}
           onBlur={(): void => onNickTextInputBlur(this.state.nickname)}
@@ -72,13 +84,5 @@ export default class CreateAccountForm extends Component<Props, CreateAccountDat
       <Button round fat onPress={() => this.submit()} style={style.submitButton} text={createAccount} />
       <Button alternate small arrow onPress={() => this.recover()} style={style.submitButton} text={recoverAccount} />
     </View>
-  }
-
-  submit() {
-    this.props.onSubmitCreateUser(this.state)
-  }
-
-  recover() {
-    this.props.onSubmitRecover()
   }
 }
