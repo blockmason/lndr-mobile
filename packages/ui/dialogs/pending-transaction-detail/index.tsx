@@ -29,10 +29,8 @@ import { connect } from 'react-redux'
 const loadingContext = new LoadingContext()
 
 interface Props {
-  pendingTransaction: PendingTransaction
   confirmPendingTransaction: (pendingTransaction: PendingTransaction) => any
   rejectPendingTransaction: (pendingTransaction: PendingTransaction) => any
-  closePopup: () => void
   user: UserData
   submitterIsMe: (pendingTransaction: PendingTransaction) => boolean
   navigation: any
@@ -47,7 +45,7 @@ class PendingTransactionDetail extends Component<Props> {
     if (success) {
       this.closePopup('confirm')
     } else {
-      this.props.closePopup()
+      this.props.navigation.goBack()
     }
   }
 
@@ -59,19 +57,17 @@ class PendingTransactionDetail extends Component<Props> {
     if (success) {
       this.closePopup('reject')
     } else {
-      this.props.closePopup()
+      this.props.navigation.goBack()
     }
   }
 
   closePopup(type) {
-    this.props.closePopup()
-    if (type) {
-      this.props.navigation.navigate('Confirmation', { type: type, friend: { nickname: this.getFriendNickname() } })
-    }
+    this.props.navigation.navigate('Confirmation', { type: type, friend: { nickname: this.getFriendNickname() } })
   }
 
   getFriendNickname() {
-    const { user, pendingTransaction } = this.props
+    const { user, navigation} = this.props
+    const pendingTransaction = navigation.state ? navigation.state.params.pendingTransaction : {}
 
     if (user.address === pendingTransaction.creditorAddress) {
       return pendingTransaction.debtorNickname
@@ -81,7 +77,8 @@ class PendingTransactionDetail extends Component<Props> {
   }
 
   getTitle() {
-    const { pendingTransaction, user } = this.props
+    const { user, navigation } = this.props
+    const pendingTransaction = navigation.state ? navigation.state.params.pendingTransaction : {}
 
     if (user.address === pendingTransaction.creditorAddress) {
       return debtManagement.direction.pendingLend(pendingTransaction.debtorNickname)
@@ -104,7 +101,8 @@ class PendingTransactionDetail extends Component<Props> {
   }
 
   showButtons() {
-    const { pendingTransaction, submitterIsMe } = this.props
+    const { submitterIsMe, navigation } = this.props
+    const pendingTransaction = navigation.state ? navigation.state.params.pendingTransaction : {}
     if (submitterIsMe(pendingTransaction)) {
       return <Button alternate arrowRed onPress={() => this.rejectPendingTransaction(pendingTransaction)} text={pendingTransactionsLanguage.cancel} />
     }
@@ -116,12 +114,13 @@ class PendingTransactionDetail extends Component<Props> {
   }
 
   render() {
-    const { user, pendingTransaction, submitterIsMe } = this.props
+    const { user, submitterIsMe, navigation } = this.props
+    const pendingTransaction = navigation.state ? navigation.state.params.pendingTransaction : {}
 
-    return <ScrollView style={general.fullHeight}>
+    return <ScrollView style={[general.fullHeight, general.view]}>
       <Loading context={loadingContext} />
       <DashboardShell text='Pending Transaction' />
-      <Button close onPress={() => this.closePopup(null)} />
+      <Button close onPress={() => this.props.navigation.goBack()} />
       <View style={general.centeredColumn}>
         <Image source={require('images/person-outline-dark.png')} style={style.image}/>
         <Text style={style.title}>{this.getTitle()}</Text>

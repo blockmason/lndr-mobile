@@ -62,3 +62,5 @@ export const pendingSettlements = (state) => state.store.pendingSettlements
 export const bilateralSettlements = (state) => state.store.bilateralSettlements
 
 export const getEthBalance = (state) => state.store.ethBalance
+
+export const getEthExchange = (state) => state.store.ethExchange

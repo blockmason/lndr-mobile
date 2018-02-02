@@ -9,19 +9,25 @@ import Client from './lib/client'
 import CreditRecord from './lib/credit-record'
 export { default as CreditRecord } from './lib/credit-record'
 
-import GasPrice from 'lndr/gas-price'
+import FetchUtil from 'lndr/fetch-util'
 import EthTransaction from 'lndr/eth-transaction'
 import Tx from 'ethereumjs-tx'
 import Web3 from 'web3'
 
-const gasPrice = new GasPrice(fetch)
+const fetchUtil = new FetchUtil(fetch)
 const web3 = new Web3(new Web3.providers.HttpProvider('https://mainnet.infura.io/EoLr1OVfUMDqq3N2KaKA'))
 
 export default class CreditProtocol {
   client: Client
+  tempStorage: any
 
   constructor(baseUrl: string, fetch?: any) {
     this.client = new Client(baseUrl, fetch)
+    this.tempStorage = {
+      nicknames: {},
+      registerId: {},
+      searchUsers: {}
+    }
   }
 
   // TODO this should go away once serverSign works and nick endpoint is
@@ -92,14 +98,27 @@ export default class CreditProtocol {
   }
 
   getNickname(user: string) {
-    return this.client.get(`/nick/${user}`)
+    const nickname = this.tempStorage.nicknames[user]
+    if (nickname) {
+      return nickname
+    }
+    return this.tempStorage.nicknames[user] = this.client.get(`/nick/${user}`)
   }
 
   searchUsers(nick: string) {
-    return this.client.get(`/search_nick/${nick}`)
+    const nickname = this.tempStorage.searchUsers[nick]
+    if (nickname) {
+      return nickname
+    }
+    return this.tempStorage.searchUsers[nick] = this.client.get(`/search_nick/${nick}`)
   }
 
   registerChannelID(address: string, channelID: string, platform: string, privateKeyBuffer: any) {
+    const registration = this.tempStorage.registerId[channelID]
+    if (registration) {
+      return registration
+    }
+
     const hashBuffer = Buffer.concat([
       utf8ToBuffer(platform),
       utf8ToBuffer(channelID),
@@ -109,7 +128,7 @@ export default class CreditProtocol {
     const signature = this.serverSign(hash, privateKeyBuffer)
 
     console.log('REGISTER CHANNEL ID: ', channelID)
-    return this.client.post(`/register_push`, { channelID, platform, address, signature })
+    return this.tempStorage.registerId[channelID] = this.client.post(`/register_push`, { channelID, platform, address, signature })
   }
 
   takenNick(nick: string) {
@@ -117,6 +136,7 @@ export default class CreditProtocol {
   }
 
   addFriend(user: string, addr: string/*, privateKeyBuffer: any*/) {
+    delete this.tempStorage.getFriends
     return this.client.post(`/add_friends/${user}`, [ addr ])
     // {
     //   addr,
@@ -125,6 +145,7 @@ export default class CreditProtocol {
   }
 
   removeFriend(user: string, addr: string/*, privateKeyBuffer: any*/) {
+    delete this.tempStorage.getFriends
     return this.client.post(`/remove_friends/${user}`, [ addr ])
     // {
     //   addr,
@@ -133,7 +154,11 @@ export default class CreditProtocol {
   }
 
   getFriends(user: string) {
-    return this.client.get(`/friends/${user}`)
+    const friendsPromise = this.tempStorage.getFriends
+    if (friendsPromise) {
+      return friendsPromise
+    }
+    return this.tempStorage.getFriends = this.client.get(`/friends/${user}`)
   }
 
   getPendingTransactions(user: string) {
@@ -234,23 +259,20 @@ export default class CreditProtocol {
     return new Mnemonic(mnemonic)
   }
 
-  getGasPrice() {
-    return gasPrice.get('https://ethgasstation.info/json/ethgasAPI.json')
-  }
-
-  async settleWithEth(transaction: EthTransaction, privateKey: any) {
+  async settleWithEth(transaction: EthTransaction, privateKeyBuffer: any) {
     if (transaction.from === transaction.to) {
-      throw new Error('You cannot send ETH to yourself')
+      throw new Error('selfError')
+    }
+    if (privateKeyBuffer.type === 'Buffer') {
+      privateKeyBuffer = Buffer.from(privateKeyBuffer.data)
     }
 
-    const privateKeyBuffer = new Buffer(privateKey.privateKey, 'hex')
     const nonce = await new Promise((resolve, reject) => {
       web3.eth.getTransactionCount(`0x${transaction.from}`, (e, data) => e ? reject(e) : resolve(data))
     })
-    console.log('NONCE OF TX:', nonce)
 
     const rawTx = {
-      nonce: web3.toHex(12),
+      nonce: web3.toHex(nonce),
       gasPrice: web3.toHex(transaction.gasPrice),
       gasLimit: web3.toHex(transaction.gas),
       to: '0x' + transaction.to,

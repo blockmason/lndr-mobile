@@ -54,8 +54,10 @@ class PendingTransactionsView extends Component<Props, State> {
   }
 
   async componentDidMount() {
-    await loadingPendingTransactions.wrap(this.props.getPendingTransactions())
-    await loadingPendingSettlements.wrap(this.props.getPendingSettlements())
+    if (this.props.homeScreen) {
+      await loadingPendingTransactions.wrap(this.props.getPendingTransactions())
+      await loadingPendingSettlements.wrap(this.props.getPendingSettlements())
+    }
   }
 
   componentWillReceiveProps(nextProps) {
@@ -71,22 +73,6 @@ class PendingTransactionsView extends Component<Props, State> {
   closePopupAndRefresh() {
     closePopup()
     this.refresh()
-  }
-
-  renderPendingTransactionDetailDialog() {
-    const { pendingTransaction } = this.state
-
-    if (!pendingTransaction) {
-      return null
-    }
-
-    return <Popup onClose={() => this.setState({ pendingTransaction: undefined })}>
-      <PendingTransactionDetail
-        pendingTransaction={pendingTransaction}
-        closePopup={() => this.closePopupAndRefresh()}
-        navigation={this.props.navigation}
-      />
-    </Popup>
   }
 
   showNoneMessage() {
@@ -122,11 +108,9 @@ class PendingTransactionsView extends Component<Props, State> {
   render() {
     const { pendingTransactionsLoaded, pendingTransactions, bilateralSettlements } = this.props.state
     const { pendingSettlements, settlerIsMe } = this.props
-    const { user, friend, homeScreen } = this.props
+    const { user, friend, homeScreen, navigation } = this.props
 
     return <View>
-      { this.renderPendingTransactionDetailDialog() }
-
       <Section contentContainerStyle={style.list}>
         <Loading context={loadingPendingTransactions} />
         {this.showNoneMessage()}
@@ -143,7 +127,7 @@ class PendingTransactionsView extends Component<Props, State> {
               key={pendingTransaction.hash}
               pendingTransaction={pendingTransaction}
               friend={friend ? true : false }
-              onPress={() => this.closeAndView(pendingTransaction)}
+              onPress={() => navigation.navigate('PendingTransaction', { pendingTransaction })}
             />
           }
         )}
@@ -157,7 +141,7 @@ class PendingTransactionsView extends Component<Props, State> {
               pendingSettlement={pendingSettlement}
               key={pendingSettlement.hash}
               friend={friend ? true : false}
-              onPress={() => this.props.navigation.navigate('PendingSettlement', { pendingSettlement } )}
+              onPress={() => this.props.navigation.navigate('PendingSettlement', { pendingSettlement })}
               settlerIsMe={settlerIsMe}
             />
           })}

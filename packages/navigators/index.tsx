@@ -8,11 +8,9 @@ import PendingSettlementDetail from 'ui/dialogs/pending-settlement-detail'
 import SettleUp from 'ui/dialogs/settle-up'
 import FriendDetail from 'ui/dialogs/friend-detail'
 import TransferEth from 'ui/dialogs/transfer-eth'
-import { addNavigationHelpers, StackNavigator } from 'react-navigation';
+import { addNavigationHelpers, StackNavigator, NavigationActions } from 'react-navigation';
 import { connect } from 'react-redux';
-import { View, ScrollView, Text, StyleSheet, Button, BackHandler } from 'react-native';
-import { getCurrentRoute } from 'reducers/nav'
-import { getStore } from 'reducers/app'
+import { View, ScrollView, Text, StyleSheet, Button, BackHandler, BackAndroid } from 'react-native';
 
 export const AppNavigator = StackNavigator({
   Dashboard: {
@@ -35,6 +33,12 @@ export const AppNavigator = StackNavigator({
   },
   TransferEth: {
     screen: TransferEth
+  },
+  AddDebt: {
+    screen: AddDebt
+  },
+  Confirmation: {
+    screen: ConfirmationScreen
   }
 },
   {
@@ -48,7 +52,8 @@ export const AppNavigator = StackNavigator({
 
 interface Props {
   navigation: any
-  state: any
+  swipeEnabled: boolean
+  nav: any
 }
 
 class AppWithNavigationState extends React.Component<Props> {
@@ -56,15 +61,26 @@ class AppWithNavigationState extends React.Component<Props> {
     super(props);
   }
 
-  componentWillMount() {
-    const { navigation, state } = this.props
-    BackHandler.addEventListener('hardwareBackPress', () => {
-      return navigation.goBack(null)
-    });
+  static navigationOptions = {
+    gesturesEnabled: false
   }
 
+  componentDidMount() {
+    BackHandler.addEventListener("hardwareBackPress", this.onBackPress);
+  }
   componentWillUnmount() {
-    BackHandler.removeEventListener('hardwareBackPress', () => null);
+    BackHandler.removeEventListener("hardwareBackPress", this.onBackPress);
+  }
+
+  onBackPress = () => {
+    const { nav, navigation } = this.props;
+    console.log('WHAT IS THIS NAV THING', nav)
+    if (nav.index === 0 && nav.routes[0].index === 0) {
+      BackAndroid.exitApp()
+      return false;
+    }
+    navigation.goBack()
+    return true
   }
 
   render() {
@@ -74,6 +90,6 @@ class AppWithNavigationState extends React.Component<Props> {
 
 export default connect(
   state => ({
-    nav: state.nav, state: getStore(state)() }))(({ dispatch, nav, state }) => (
-  <AppWithNavigationState navigation={addNavigationHelpers({ dispatch, state: nav })} state={state} />
+    nav: state.nav }))(({ dispatch, nav }) => (
+  <AppWithNavigationState navigation={addNavigationHelpers({ dispatch, state: nav })} nav={nav} swipeEnabled={false} />
 ))

@@ -1,3 +1,5 @@
+import { ethToUsd } from 'lndr/eth-price-utils'
+
 const generalCommunicationError = 'There was a problem communicating with the server, please try again later.'
 
 export const applicationName = 'Lndr'
@@ -15,6 +17,7 @@ export const recoverAccount = 'RESTORE ACCOUNT'
 export const removeAccount = 'REMOVE ACCOUNT'
 export const updateAccount = 'UPDATE ACCOUNT'
 export const loginAction = 'UNLOCK'
+export const enterPin = 'PLEASE ENTER YOUR PIN'
 export const logoutAction = 'LOG OUT'
 export const seeAllActivity = 'See All Activity'
 
@@ -43,6 +46,9 @@ export const iOwe = 'I OWE SOMEONE'
 
 export const newPassword = 'New Password (minimum 8 chars)'
 export const confirmPassword = 'Confirm Password'
+export const newPin = 'New 4-digit PIN'
+export const enterNewPin = 'PLEASE SET YOUR 4-DIGIT PIN'
+export const confirmPin = 'PLEASE CONFIRM YOUR PIN'
 export const newAccount = 'Create a new account'
 export const loginAccount = 'Unlock your account'
 
@@ -68,10 +74,10 @@ export const accountManagement = {
     compositionViolation: 'Nickname can contain only numbers and lowercase letters.',
     duplicationViolation: 'Nickname is already taken'
   },
-  password: {
-    lengthViolation: 'Password should be at least 8 characters.',
-    matchViolation: 'Passwords should match.',
-    failedHashComparison: 'Password is not valid, please try again.'
+  pin: {
+    lengthViolation: 'PIN should be at least 4 characters.',
+    matchViolation: 'PINs should match.',
+    failedHashComparison: 'PIN is not valid, please try again.'
   },
   mnemonic: {
     lengthViolation: 'Mnemonic should have at least 12 words.',
@@ -80,6 +86,12 @@ export const accountManagement = {
   setNickname: {
     success: 'Your nickname has been saved.',
     error: generalCommunicationError
+  },
+  lockTimeout: {
+    top: 'You must enter your PIN after',
+    bottom: 'minutes of inactivity',
+    update: 'UPDATE',
+    error: 'We were unable to update your account settings'
   },
   addFriend: {
     success: nickname => `Added to friends: @${nickname}`,
@@ -93,7 +105,10 @@ export const accountManagement = {
     error: generalCommunicationError
   },
   ethBalance: {
-    getError: 'Unable to retrieve Eth balance'
+    display: balance => `Your ETH balance is ${String(balance).slice(0,8)} `,
+    inUsd: (balance, exchange) => ` ($${ethToUsd(balance, exchange)})`,
+    getError: 'Unable to retrieve Eth balance',
+    manage: 'Manage ETH'
   },
   sendEth: {
     error: {
@@ -106,7 +121,15 @@ export const accountManagement = {
     transferAll: 'TRANSFER EVERYTHING',
     balance: (balance) => `Your current ETH balance is ${typeof balance === 'string' ? balance.slice(0,8) : ''}`,
     ethAddress: 'Ethereum Address'
-  }
+  },
+  panelHeaders: [
+    'Notifications',
+    'Mnemonic',
+    'ETH Balance',
+    'ETH Address',
+    'Change Nickname',
+    'Change Lock Timeout'
+  ]
 }
 
 export const currentBalance = {
@@ -137,8 +160,16 @@ export const debtManagement = {
   settleUpLower: 'Settle Up',
   amountToSettle: 'Amount to Settle',
   total: 'Total',
+  createError: {
+    amountTooLow: 'Amount must be greater than $0',
+    amountTooHigh: 'Amount must be less than $1,000,000,000',
+    selfAsFriend: 'You can\'t create debt with yourself, choose another friend',
+    pending: 'Please resolve your pending transaction with this user before creating another',
+    insufficientEth: eth => `You need at least ${eth} ETH to settle, go to Settings to see your balance`
+  },
   fields: {
     amount: 'AMOUNT',
+    settlementAmount: 'SETTLEMENT AMOUNT',
     selectFriend: 'FRIEND',
     memo: 'MEMO',
     direction: 'SELECT THE CORRECT STATEMENT',
@@ -155,8 +186,8 @@ export const debtManagement = {
     initiatedBorrow: nickname => `${nickname} says he/she owes`,
     pendingLend: nickname => `@${nickname} owes you`,
     pendingBorrow: nickname => `You owe @${nickname}`,
-    pendingLendSettlement: settlement => `@${settlement.debtorNickname} wants to settle with you in ${settlement.settlementCurrency}`,
-    pendingBorrowSettlement: settlement => `@${settlement.creditorNickname} requests a settlement in ${settlement.settlementCurrency}`,
+    pendingLendSettlement: settlement => `@${settlement.debtorNickname} requests a settlement in ${settlement.settlementCurrency}`,
+    pendingBorrowSettlement: settlement => `@${settlement.creditorNickname} wants to settle with you in ${settlement.settlementCurrency}`,
     pendingLendSettlementMe: settlement => `You requested to settle with @${settlement.debtorNickname} in ${settlement.settlementCurrency}`,
     pendingBorrowSettlementMe: settlement => `You requested that @${settlement.creditorNickname} settle with in ${settlement.settlementCurrency}`
   },
