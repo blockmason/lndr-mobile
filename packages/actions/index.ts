@@ -6,7 +6,7 @@ import { Platform } from 'react-native'
 import { longTimePeriod } from 'lndr/time'
 import Balance from 'lndr/balance'
 import User, { CreateAccountData, RecoverAccountData, LoginAccountData, UpdateAccountData } from 'lndr/user'
-import { minimumNicknameLength, minimumPasswordLength } from 'lndr/user'
+import { minimumNicknameLength, minimumPinLength } from 'lndr/user'
 import Friend from 'lndr/friend'
 import PendingTransaction from 'lndr/pending-transaction'
 import RecentTransaction from 'lndr/recent-transaction'
@@ -15,6 +15,7 @@ import EthTransaction from 'lndr/eth-transaction'
 import ucac from 'lndr/ucac'
 import Storage from 'lndr/storage'
 import { getEthBalance, web3 } from 'lndr/settlement'
+import { getGasPrice, settlementCost, getEthExchange } from 'lndr/eth-price-utils'
 
 import CreditProtocol from 'credit-protocol'
 
@@ -57,22 +58,18 @@ export const initializeStorage = () => {
       notificationsEnabled = storedNotificationPreference
     }
 
-    let ethBalance
-    try {
-      ethBalance = await getEthBalance(storedUser.address)
-    } catch (e) {
-      ethBalance = '0'
-    }
-
     const touchIdSupported = isTouchIdSupported()
 
-    if (storedUser && moment(storedSession).add(15, 'minute') > moment()) {
+    if (storedUser && moment(storedSession).add(storedUser.lockTimeout, 'minute') > moment()) {
       await sessionStorage.set(moment())
-      const payload = { hasStoredUser: true, welcomeComplete: true, user: storedUser, notificationsEnabled, ethBalance }
+      let { ethBalance, ethExchange } = await getEthInfo(storedUser)
+      const payload = { hasStoredUser: true, welcomeComplete: true, user: storedUser, notificationsEnabled, ethBalance, ethExchange }
       dispatch(setState(payload))
     } else if (touchIdSupported && storedMnemonic && storedUser) {
+      let { ethBalance, ethExchange } = await getEthInfo(storedUser)
       const payload = await triggerTouchId(storedUser, notificationsEnabled)
       payload.ethBalance = ethBalance
+      payload.ethExchange = ethExchange
       dispatch(setState(payload))
     } else if (storedMnemonic) {
       dispatch(setState({ hasStoredUser: true, welcomeComplete: true, notificationsEnabled }))
@@ -152,18 +149,19 @@ export const confirmAccount = () => {
 
     const user = createUserFromCredentials(mnemonic, hashedPassword)
     await storeUserSession(user)
-    const payload = { user, hasStoredUser: true }
+    let { ethBalance, ethExchange } = await getEthInfo(user)
+    const payload = { user, hasStoredUser: true, ethBalance, ethExchange }
     dispatch(setState(payload))
   }
 }
 
 export const createAccount = (accountData: CreateAccountData) => {
   return async (dispatch) => {
-    if (accountData.password.length < minimumPasswordLength) {
-      return dispatch(displayError(accountManagement.password.lengthViolation))
+    if (accountData.password.length < minimumPinLength) {
+      return dispatch(displayError(accountManagement.pin.lengthViolation))
     }
     if (accountData.password !== accountData.confirmPassword) {
-      return dispatch(displayError(accountManagement.password.matchViolation))
+      return dispatch(displayError(accountManagement.pin.matchViolation))
     }
     if (accountData.nickname.length < minimumNicknameLength) {
       return dispatch(displayError(accountManagement.nickname.lengthViolation))
@@ -188,6 +186,7 @@ export const createAccount = (accountData: CreateAccountData) => {
 //Not a redux action
 export async function getNicknameForAddress(address) {
   try {
+
     return await creditProtocol.getNickname(address)
   }
   catch (e) {
@@ -440,6 +439,15 @@ export const confirmPendingSettlement = (pendingTransaction: PendingTransaction,
     const { address, privateKeyBuffer } = getUser(getState())()
     const direction = address === creditorAddress ? 'lend' : 'borrow'
 
+    console.log(direction, pendingTransaction)
+    if (direction === 'lend') {
+      const ethRequired = await getEthRequired(getState, amount)
+      if (ethRequired) {
+        dispatch(displayError(debtManagement.createError.insufficientEth(ethRequired)))
+        return false
+      }
+    }
+
     try {
       const creditRecord = await creditProtocol.createCreditRecord(
         ucac,
@@ -506,45 +514,22 @@ export const addDebt = (friend: Friend, amount: string, memo: string, direction:
   return async (dispatch, getState) => {
     const { address, privateKeyBuffer } = getUser(getState())()
 
-    if (!friend) {
-      return dispatch(displayError('Friend must be selected'))
-    }
-
-    if (!amount) {
-      return dispatch(displayError('Amount must be entered'))
-    }
-
-    const sanitizedAmount = parseInt(
-      amount
-      .replace(/[^.\d]/g, '')
-      .replace(/^\d+\.?$/, x => `${x}00`)
-      .replace(/\.\d$/, x => `${x.substr(1)}0`)
-      .replace(/\.\d\d$/, x => `${x.substr(1)}`)
-      .replace(/\./, () => '')
-    )
+    const sanitizedAmount = sanitizeAmount(amount)
 
     if (sanitizedAmount <= 0) {
-      return dispatch(displayError('Amount must be greater than $0'))
+      return dispatch(displayError(debtManagement.createError.amountTooLow))
     }
 
     if (sanitizedAmount >= 1e11) {
-      return dispatch(displayError('Amount must be less than $1,000,000,000'))
-    }
-
-    if (!memo) {
-      return dispatch(displayError('Memo must be entered'))
-    }
-
-    if (!direction) {
-      return dispatch(displayError('Please choose the correct statement to determine the creditor and debtor'))
+      return dispatch(displayError(debtManagement.createError.amountTooHigh))
     }
 
     if (address === friend.address) {
-      return dispatch(displayError('You can\'t create debt with yourself, choose another friend'))
+      return dispatch(displayError(debtManagement.createError.selfAsFriend))
     }
     // TODO - Please move this to validation check to the view layer and in favor of using the getPendingTransaction action
     if (hasPendingTransaction(getState, friend)) {
-      return dispatch(displayError('Please resolve your pending transaction with this user before creating another'))
+      return dispatch(displayError(debtManagement.createError.pending))
     }
 
     const [ creditorAddress, debtorAddress ] = {
@@ -581,45 +566,29 @@ export const settleUp = (friend: Friend, amount: string, memo: string, direction
   return async (dispatch, getState) => {
     const { address, privateKeyBuffer } = getUser(getState())()
 
-    if (!friend) {
-      return dispatch(displayError('Friend must be selected'))
-    }
-
-    if (!amount) {
-      return dispatch(displayError('Amount must be entered'))
-    }
-
-    const sanitizedAmount = parseInt(
-      amount
-      .replace(/[^.\d]/g, '')
-      .replace(/^\d+\.?$/, x => `${x}00`)
-      .replace(/\.\d$/, x => `${x.substr(1)}0`)
-      .replace(/\.\d\d$/, x => `${x.substr(1)}`)
-      .replace(/\./, () => '')
-    )
+    const sanitizedAmount = sanitizeAmount(amount)
 
     if (sanitizedAmount <= 0) {
-      return dispatch(displayError('Amount must be greater than $0'))
+      return dispatch(displayError(debtManagement.createError.amountTooLow))
     }
 
     if (sanitizedAmount >= 1e11) {
-      return dispatch(displayError('Amount must be less than $1,000,000,000'))
-    }
-
-    if (!memo) {
-      return dispatch(displayError('Memo must be entered'))
-    }
-
-    if (!direction) {
-      return dispatch(displayError('Please choose the correct statement to determine the creditor and debtor'))
+      return dispatch(displayError(debtManagement.createError.amountTooHigh))
     }
 
     if (address === friend.address) {
-      return dispatch(displayError('You can\'t create debt with yourself, choose another friend'))
+      return dispatch(displayError(debtManagement.createError.selfAsFriend))
     }
     // TODO - Please move this to validation check to the view layer and in favor of using the getPendingTransaction action
     if (hasPendingTransaction(getState, friend)) {
-      return dispatch(displayError('Please resolve your pending transaction with this user before creating another'))
+      return dispatch(displayError(debtManagement.createError.pending))
+    }
+
+    if (direction === 'lend') {
+      const ethRequired = await getEthRequired(getState, sanitizedAmount)
+      if (ethRequired) {
+        return dispatch(displayError(debtManagement.createError.insufficientEth(ethRequired)))
+      }
     }
 
     const [ creditorAddress, debtorAddress ] = {
@@ -657,16 +626,17 @@ export const loginAccount = (loginData: LoginAccountData) => {
     const hashedPassword = await hashedPasswordStorage.get()
     const passwordMatch = bcrypt.compareSync(confirmPassword, hashedPassword)
     if (!passwordMatch) {
-      return dispatch(displayError(accountManagement.password.failedHashComparison))
+      dispatch(displayError(accountManagement.pin.failedHashComparison))
+      return false
     }
 
     const mnemonic = await mnemonicStorage.get()
     const user = createUserFromCredentials(mnemonic, hashedPassword)
 
     await storeUserSession(user)
-    await setEthBalance(user.address)
+    let { ethBalance, ethExchange } = await getEthInfo(user)
     
-    const payload = { user, hasStoredUser: true }
+    const payload = { user, hasStoredUser: true, ethBalance, ethExchange }
     dispatch(setState(payload))
   }
 }
@@ -680,14 +650,18 @@ export const logoutAccount = () => {
 
 export const recoverAccount = (recoverData: RecoverAccountData) => {
   return async (dispatch) => {
-    const { confirmPassword, mnemonic } = recoverData
+    const { password, confirmPassword, mnemonic } = recoverData
 
     if (mnemonic.split(' ').length < 12) {
       return dispatch(displayError(accountManagement.mnemonic.lengthViolation))
     }
 
-    if (confirmPassword.length < minimumPasswordLength) {
-      return dispatch(displayError(accountManagement.password.lengthViolation))
+    if (password !== confirmPassword) {
+      return dispatch(displayError(accountManagement.pin.matchViolation))
+    }
+
+    if (confirmPassword.length < minimumPinLength) {
+      return dispatch(displayError(accountManagement.pin.lengthViolation))
     }
 
     try {
@@ -755,8 +729,8 @@ export const setEthBalance = () => {
   return async (dispatch, getState) => {
     const { user } = getState().store
     const ethBalance = await getEthBalance(user.address)
-    console.log('SETTING ETH BALANCE', ethBalance)
-    dispatch(setState({ ethBalance }))
+    const ethExchange = await getEthExchange()
+    dispatch(setState({ ethBalance, ethExchange }))
   }
 }
 
@@ -765,9 +739,8 @@ export const sendEth = (destAddr: string, amount: string) => {
   return async (dispatch, getState) => {
     try {
       const { privateKey, address } = getState().store.user
-      const prices = await creditProtocol.getGasPrice()
       //Safe Low is in 10^8 Wei (deciGigaWei)
-      const gasPrice = prices.safeLow * 1.3 * Math.pow(10, 8)
+      const gasPrice = await getGasPrice()
       const ethTransaction = new EthTransaction(address, destAddr, Number(web3.toWei(Number(amount), 'ether')), gasPrice)
       const txHash = await creditProtocol.settleWithEth(ethTransaction, privateKey)
       console.log('SENDING ETH, TXHASH:', txHash)
@@ -783,6 +756,20 @@ export const sendEth = (destAddr: string, amount: string) => {
   }
 }
 
+export const updateLockTimeout = (timeout: number) => {
+  return async (dispatch, getState) => {
+    try {
+      const { user } = getState().store
+      console.log(user)
+      user.lockTimeout = timeout
+      await userStorage.set(user)
+      dispatch(setState({ user }))
+    } catch (e) {
+      dispatch(displayError(accountManagement.lockTimeout.error))
+    }
+  }
+}
+
 const refreshTransactions = () => {
   getPendingTransactions()
   getRecentTransactions()
@@ -791,10 +778,20 @@ const refreshTransactions = () => {
   // getPendingSettlements()
 }
 
+const sanitizeAmount = amount => {
+  return parseInt(
+    amount
+    .replace(/[^.\d]/g, '')
+    .replace(/^\d+\.?$/, x => `${x}00`)
+    .replace(/\.\d$/, x => `${x.substr(1)}0`)
+    .replace(/\.\d\d$/, x => `${x.substr(1)}`)
+    .replace(/\./, () => '')
+  )
+}
+
 const settleBilateral = async (user, bilateralSettlements, dispatch, getState) => {
-  const prices = await creditProtocol.getGasPrice()
+  const gasPrice = await getGasPrice()
   //Safe Low is in 10^8 Wei (deciGigaWei)
-  const gasPrice = prices.safeLow * 1.3 * Math.pow(10, 8)
   const ethBalance = getState().store.ethBalance
 
   bilateralSettlements.forEach( async (settlement) => {
@@ -819,7 +816,7 @@ const settleBilateral = async (user, bilateralSettlements, dispatch, getState) =
       const ethTransaction = new EthTransaction(settlement.creditorAddress, settlement.debtorAddress, settlement.settlementAmount, gasPrice)
 
       try {
-        const txHash = await creditProtocol.settleWithEth(ethTransaction, user.privateKey)
+        const txHash = await creditProtocol.settleWithEth(ethTransaction, user.privateKeyBuffer)
         console.log('TX HASH', txHash)
         creditProtocol.storeSettlementHash(txHash, settlement, user.privateKeyBuffer)
 
@@ -843,6 +840,17 @@ const hasPendingTransaction = (getState, friend) => {
   return friendMatch(pendingTransactions) || friendMatch(pendingSettlements) || friendMatch(bilateralSettlements)
 }
 
+const getEthRequired = async (getState, amount) => {
+  const { ethBalance } = getState().store
+  let ethAmount = 0
+  try {
+    ethAmount = await settlementCost(amount)
+  } catch (e) {
+    console.log('ERROR GETTING SETTLEMENT AMOUNT: ', e)
+  }
+  return ethAmount > Number(ethBalance) ? `${ethAmount}`.slice(0, 10) : 0
+}
+
 const triggerTouchId = (user, notificationsEnabled) => {
   const optionalConfigObject = { title: 'Authentication Required', color: '#e00606' }
   return TouchID.authenticate('Please sign in using your fingerprint', optionalConfigObject)
@@ -854,4 +862,16 @@ const triggerTouchId = (user, notificationsEnabled) => {
     console.log('Touch ID login Error: ', error)
     return { hasStoredUser: true, welcomeComplete: true, notificationsEnabled }
   })
+}
+
+const getEthInfo = async (user) => {
+  let ethBalance, ethExchange
+  try {
+    ethBalance = await getEthBalance(user.address)
+    ethExchange = await getEthExchange()
+  } catch (e) {
+    ethBalance = '0'
+    ethExchange = '1000'
+  }
+  return { ethBalance, ethExchange }
 }

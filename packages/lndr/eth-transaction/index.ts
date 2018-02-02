@@ -15,6 +15,12 @@ export default class EthTransaction {
   gas: number
 
   constructor(from: string, to: string, value: number, gasPrice: number) {
+    if (typeof from === 'string' && from.substr(0, 2) === '0x') {
+      from = from.substr(2)
+    }
+    if (typeof to === 'string' && to.substr(0, 2) === '0x') {
+      to = to.substr(2)
+    }
     this.from = from
     this.to = to
     this.value = value

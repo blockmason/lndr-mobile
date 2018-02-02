@@ -4,7 +4,7 @@ import { radius } from 'theme/include/borders'
 import { center } from 'theme/include/align'
 import { wide, bold, lmedium, xlarge, large, medium, small, xsmall, monospace } from 'theme/include/fonts'
 import { xxl, ml, l, m, s, xs, verticalMargin } from 'theme/include/spacing'
-import { softGray, black, gray, white, moneyGreen, goodDark, danger, aqua, darkGray, lightGray, softAqua } from 'theme/include/colors'
+import { softGray, black, gray, white, moneyGreen, goodDark, danger, aqua, darkGray, lightGray, softAqua, paleGray } from 'theme/include/colors'
 
 const { width } = Dimensions.get('window')
 
@@ -309,8 +309,7 @@ export default StyleSheet.create({
   },
   transactionHeader: {
     ...medium,
-    opacity: 0.5,
-    backgroundColor: softGray,
+    backgroundColor: paleGray,
     color: aqua,
     paddingLeft: m,
     paddingRight: m,

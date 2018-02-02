@@ -4,7 +4,7 @@ import { Text, TouchableHighlight, View, Image } from 'react-native'
 import Icon from 'react-native-vector-icons/Ionicons'
 import { connect } from 'react-redux'
 
-import { dollars } from 'lndr/format'
+import { dollars, cents } from 'lndr/format'
 import PendingSettlement from 'lndr/pending-settlement'
 import User from 'lndr/user'
 
@@ -59,7 +59,7 @@ export default class PendingSettlementRow extends Component<Props> {
       sign = '-'
     }
 
-    return `${sign} $${dollars(pendingSettlement.amount)}`
+    return `${sign} $${cents(pendingSettlement.amount)}`
   }
 
   render() {

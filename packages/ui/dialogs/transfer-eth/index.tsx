@@ -64,9 +64,7 @@ class TransferEth extends Component<Props, State> {
 
     this.clear()
 
-    console.log('SENDING ETH SUCCESS!')
-    
-    if (success && success.type === '@@TOAST/DISPLAY_ERROR') {
+    if (success && typeof success !== 'string' && success.type === '@@TOAST/DISPLAY_ERROR') {
       this.props.navigation.goBack()
     } else if (success) {
       this.props.navigation.navigate('Confirmation', { type: 'ethSent', txHash: success, amount: amount })
@@ -103,7 +101,7 @@ class TransferEth extends Component<Props, State> {
       <Loading context={sendingEthLoader} />
       <DashboardShell text={accountManagement.sendEth.transfer} />
       <Button close onPress={() => this.props.navigation.goBack()} />
-      <View style={{marginHorizontal: 20}} >
+      <View style={general.standardHMargin} >
         <View style={[general.centeredColumn, {marginBottom: 20}]}>
           <View style={general.centeredColumn} >
             <Text style={[formStyle.header, {textAlign: 'center'}]}>{accountManagement.sendEth.balance(ethBalance)}</Text>

@@ -3,6 +3,7 @@ import React, { Component } from 'react'
 import { Text, Image, View, ScrollView, TouchableHighlight } from 'react-native'
 
 import Button from 'ui/components/button'
+import DashboardShell from 'ui/components/dashboard-shell'
 
 import general from 'theme/general'
 import style from 'theme/confirmation'
@@ -37,14 +38,16 @@ export default class ConfirmationScreen extends Component<Props> {
     }
     
 
-    return <ScrollView>
+    return <ScrollView style={[general.fullHeight, general.view]} keyboardShouldPersistTaps='handled'>
+      <DashboardShell text='Confirmation' />
+      <Button close onPress={() => this.props.navigation.navigate('Home')} />
       <View style={general.centeredColumn}>
         {this.getConfirmationImage(type)}
         <Text style={style.text}>
           <Text>{confirmation[type].start}</Text>
           <Text style={style.nickname}>{type !== 'ethSent' ? friend.nickname : amount}</Text>
           <Text>{confirmation[type].end}</Text>
-          {type !== 'ethSent' ? <Text>{txHash}</Text> : null}
+          {type === 'ethSent' ? <Text style={style.nickname}>{txHash}</Text> : null}
         </Text>
         <TouchableHighlight onPress={() => this.props.navigation.navigate('Activity')}>
           <Text style={[style.text, style.spacing]}>

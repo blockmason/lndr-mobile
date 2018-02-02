@@ -1,10 +1,12 @@
-import { StyleSheet, Platform } from 'react-native'
+import { StyleSheet, Platform, Dimensions } from 'react-native'
 
 import { l, m, s, largePad, smallPad, mediumPad, verticalMargin, verticalMarginXS, verticalMarginXXS } from 'theme/include/spacing'
 import { xlarge, large, medium, small, xsmall, bold } from 'theme/include/fonts'
 import { gray, softGray, warning, warningDark, black, white, aqua, lightGray } from 'theme/include/colors'
 import { attention, radius, thinSoftBorder } from 'theme/include/borders'
 import { center } from 'theme/include/align'
+
+const { width } = Dimensions.get('window')
 
 export default StyleSheet.create({
   form: {
@@ -34,6 +36,12 @@ export default StyleSheet.create({
   },
   spaceTop: {
     marginTop: 20
+  },
+  spaceVertical: {
+    marginVertical: 15
+  },
+  spaceHorizontalL: {
+    marginHorizontal: 40
   },
   formTitle: {
     ...xlarge,
@@ -90,12 +98,29 @@ export default StyleSheet.create({
     paddingLeft: 8,
     ...verticalMarginXS
   },
+  textInputContainerMinor: {
+    width: '50%', 
+    borderRadius: 30, 
+    borderWidth: 1, 
+    borderColor: softGray, 
+    flexDirection: 'row',
+    alignItems: 'center', 
+    ...center,
+    paddingLeft: 8,
+    ...verticalMarginXS
+  },
   textInput: {
     ...small,
     ...verticalMarginXS,
     ...smallPad,
     ...center,
     width: '100%'
+  },
+  textInputMinor: {
+    ...small,
+    ...verticalMarginXS,
+    ...smallPad,
+    ...center
   },
   borderTextInput: {
     ...medium,
@@ -111,7 +136,8 @@ export default StyleSheet.create({
     textAlignVertical: 'top',
     paddingLeft: 35,
     paddingRight: 35,
-    width: '100%'
+    width: '100%',
+    paddingTop: 10
   },
   displayText: {
     ...medium,
@@ -161,5 +187,34 @@ export default StyleSheet.create({
     width: 300,
     ...large,
     paddingHorizontal: m
+  },
+  panelHeader: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    height: 60,
+    width: width,
+    borderTopColor: softGray,
+    borderTopWidth: 1,
+    borderBottomColor: softGray,
+    borderBottomWidth: 1
+  },
+  panelText: {
+    ...xlarge,
+    color: black,
+    marginLeft: 20
+  },
+  panelIconDown: {
+    height: 24,
+    width: 24,
+    marginRight: 20,
+    marginTop: 4,
+    transform: [{ rotate: '90deg'}]
+  },
+  panelIconRight: {
+    height: 24,
+    width: 24,
+    marginRight: 20,
+    marginTop: 4
   }
 } as any)

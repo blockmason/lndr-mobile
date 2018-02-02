@@ -44,6 +44,9 @@ export default StyleSheet.create({
   betweenRow: {
     flexDirection: 'row',
     justifyContent: 'space-between'
+  },
+  standardHMargin: {
+    marginHorizontal: 15
   }
 
 } as any)

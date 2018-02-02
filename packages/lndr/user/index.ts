@@ -6,6 +6,7 @@ export interface CreateAccountData {
 
 export interface RecoverAccountData {
   mnemonic: string
+  password: string
   confirmPassword: string
 }
 
@@ -24,6 +25,7 @@ export interface UserData {
   privateKeyBuffer: any
   ethAddress: any
   address: string
+  lockTimeout: number
 }
 
 export const defaultCreateAccountData = (): CreateAccountData => ({
@@ -34,6 +36,7 @@ export const defaultCreateAccountData = (): CreateAccountData => ({
 
 export const defaultRecoverAccountData = (): RecoverAccountData => ({
   mnemonic: '',
+  password: '',
   confirmPassword: ''
 })
 
@@ -52,6 +55,7 @@ export default class User {
   privateKeyBuffer: any
   ethAddress: any
   address: string
+  lockTimeout: number
 
   constructor(mnemonic: string, hashedPassword: string, privateKey: any, privateKeyBuffer: any, ethAddress: any, address: string) {
     this.mnemonic = mnemonic
@@ -60,9 +64,10 @@ export default class User {
     this.privateKeyBuffer = privateKeyBuffer
     this.ethAddress = ethAddress
     this.address = address
+    this.lockTimeout = 15
   }
 }
 
 export const minimumNicknameLength = 3
 
-export const minimumPasswordLength = 8
+export const minimumPinLength = 4

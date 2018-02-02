@@ -3,7 +3,7 @@ import React, { Component } from 'react'
 import { View, ScrollView, Text, TextInput, TouchableHighlight, Image, Platform } from 'react-native'
 
 import Friend from 'lndr/friend'
-import { currency } from 'lndr/format'
+import { currency, formatMemo } from 'lndr/format'
 
 import Button from 'ui/components/button'
 import Checkbox from 'ui/components/checkbox'
@@ -104,16 +104,14 @@ class AddDebt extends Component<Props, State> {
     const { friendsLoaded, friends } = this.props.state
     const goBack = () => this.setState({ shouldSelectFriend: false })
 
-    return <ScrollView keyboardShouldPersistTaps='handled'>
+    return <ScrollView style={[general.view, {paddingTop: 30}]} keyboardShouldPersistTaps='handled'>
       <Section>
         <SearchFriend 
           onSuccess={() => null}
           selectFriend={(friend) => {
-            console.log('FRIEND', friend)
             this.setState({ shouldSelectFriend: false, friend })
           }}
           removeFriend={(friend) => {
-            console.log('FRIEND', friend)
             this.setState({ shouldSelectFriend: false, friend })
           }}
           state={this.props.state}
@@ -143,7 +141,7 @@ class AddDebt extends Component<Props, State> {
 
   cancel() {
     this.clear()
-    this.props.navigation.navigate('Home')
+    this.props.navigation.goBack()
   }
 
   render() {
@@ -155,8 +153,10 @@ class AddDebt extends Component<Props, State> {
       return this.renderSelectFriend()
     }
 
-    return <ScrollView keyboardShouldPersistTaps='handled'>
+    return <ScrollView style={general.whiteFlex} keyboardShouldPersistTaps='handled'>
       <Loading context={submittingTransaction} />
+      <DashboardShell text='New Transaction' />
+      <Button close onPress={() => this.props.navigation.goBack()} />
       <View style={[general.centeredColumn, {marginBottom: 20}]}>
         <Text style={[style.header, {marginBottom: 20}]}>{debtManagement[direction]}</Text>
         <View style={general.betweenRow} >
@@ -185,7 +185,7 @@ class AddDebt extends Component<Props, State> {
             value={memo}
             maxLength={32}
             underlineColorAndroid='transparent'
-            onChangeText={memo => this.setState({ memo })}
+            onChangeText={memo => this.setState({ memo: formatMemo(memo) })}
           />
         </View>
         { friend && amount && memo ? <Button large round wide onPress={() => this.submit()} text={submit} /> : null }
