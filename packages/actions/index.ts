@@ -813,12 +813,9 @@ export const getProfilePic = (nickname: string) => {
 }
 
 export const setProfilePic = (nickname: string, imageURI: string) => {
-  console.log('-1')
   return async (dispatch) => {
     try {
-      console.log('-2')
       const userPic = await profilePic.set(nickname, imageURI)
-      console.log('-3', userPic)
       dispatch(displaySuccess(accountManagement.profilePic.setSuccess))
       dispatch(setState({ userPic }))
     } catch (e) {
@@ -852,7 +849,6 @@ const settleBilateral = async (user, bilateralSettlements, dispatch, getState) =
   const ethBalance = getState().store.ethBalance
 
   bilateralSettlements.forEach( async (settlement) => {
-    console.log(settlement.creditorAddress, user.address)
     if (settlement.creditorAddress === user.address) {
       let hasEthTxHash = false
       try {

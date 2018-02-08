@@ -6,11 +6,11 @@ declare const Buffer
 
 const region = 'us-east-2'
 
-AWS.config = new AWS.Config({
-  accessKeyId: 'AKIAJ3IQU3ADX26KKI6A', 
-  secretAccessKey: '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', 
-  region
-})
+// AWS.config = new AWS.Config({
+//   accessKeyId: Config.AWS_ACCESS_KEY_ID, 
+//   secretAccessKey: 'tYa6gOwZ+WF9dGcz0m9kTXTOtouOzHb5rr3GR2fu', 
+//   region
+// })
 
 const Bucket = 'lndr-profile-pics'
 const s3 = new AWS.S3( { params: { Bucket } } )
