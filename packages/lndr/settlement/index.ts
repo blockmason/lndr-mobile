@@ -6,11 +6,7 @@ import Tx from 'ethereumjs-tx'
 import Web3 from 'web3'
 
 const gasPrice = new GasPrice(fetch)
-const web3 = new Web3(new Web3.providers.HttpProvider('https://mainnet.infura.io/EoLr1OVfUMDqq3N2KaKA'))
-
-export const getGasPrice = () => {
-  return gasPrice.get('https://ethgasstation.info/json/ethgasAPI.json')
-}
+export const web3 = new Web3(new Web3.providers.HttpProvider('https://mainnet.infura.io/EoLr1OVfUMDqq3N2KaKA'))
 
 //post to infura using web3js
 export const settleWithEth = async (transaction: EthTransaction, privateKey: any) => {
@@ -39,6 +35,14 @@ export const settleWithEth = async (transaction: EthTransaction, privateKey: any
   // })
 
   return web3AsyncWrapper(web3.eth.sendRawTransaction('0x' + serializedTx.toString('hex')))
+}
+
+export const getEthBalance = async (address: string) => {
+  return new Promise((resolve, reject) => {
+    web3.eth.getBalance('0x' + address, (e, data) => {
+      e ? reject(e) : resolve(web3.fromWei(data.toString(), 'ether'))
+    })
+  })
 }
 
 function web3AsyncWrapper (web3Fun) {

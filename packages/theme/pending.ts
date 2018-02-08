@@ -15,8 +15,9 @@ export default StyleSheet.create({
   },
   image: {
     marginTop: 0,
-    width: 100,
-    height: 100
+    width: 120,
+    height: 120,
+    borderRadius: 60
   },
   title: {
     ...xlarge,
@@ -40,11 +41,12 @@ export default StyleSheet.create({
     color: aqua,
   },
   amount: {
-    fontSize: 50,
+    fontSize: 40,
     color: aqua,
     marginTop: -15,
     marginLeft: s,
-    marginRight: s
+    marginRight: s,
+    maxWidth: 250
   },
   pendingInfo: {
     ...medium,
@@ -55,8 +57,8 @@ export default StyleSheet.create({
     justifyContent: 'space-between',
     marginRight: m,
     marginLeft: m,
-    marginTop: m,
-    marginBottom: l,
+    marginTop: s,
+    marginBottom: s,
     width: '80%'
   },
   label: {

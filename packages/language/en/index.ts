@@ -1,3 +1,5 @@
+import { ethToUsd } from 'lndr/eth-price-utils'
+
 const generalCommunicationError = 'There was a problem communicating with the server, please try again later.'
 
 export const applicationName = 'Lndr'
@@ -15,6 +17,8 @@ export const recoverAccount = 'RESTORE ACCOUNT'
 export const removeAccount = 'REMOVE ACCOUNT'
 export const updateAccount = 'UPDATE ACCOUNT'
 export const loginAction = 'UNLOCK'
+export const enterPin = 'PLEASE ENTER YOUR PIN'
+export const changePin = 'CHANGE PIN'
 export const logoutAction = 'LOG OUT'
 export const seeAllActivity = 'See All Activity'
 
@@ -43,6 +47,9 @@ export const iOwe = 'I OWE SOMEONE'
 
 export const newPassword = 'New Password (minimum 8 chars)'
 export const confirmPassword = 'Confirm Password'
+export const newPin = 'New 4-digit PIN'
+export const enterNewPin = 'PLEASE SET A NEW 4-DIGIT PIN'
+export const confirmPin = 'PLEASE CONFIRM YOUR PIN'
 export const newAccount = 'Create a new account'
 export const loginAccount = 'Unlock your account'
 
@@ -68,10 +75,12 @@ export const accountManagement = {
     compositionViolation: 'Nickname can contain only numbers and lowercase letters.',
     duplicationViolation: 'Nickname is already taken'
   },
-  password: {
-    lengthViolation: 'Password should be at least 8 characters.',
-    matchViolation: 'Passwords should match.',
-    failedHashComparison: 'Password is not valid, please try again.'
+  pin: {
+    lengthViolation: 'PIN should be at least 4 characters.',
+    matchViolation: 'PINs should match.',
+    failedHashComparison: 'PIN is not valid, please try again.',
+    updateSuccess: 'Your PIN has been updated',
+    updateError: 'There was an error updating your PIN'
   },
   mnemonic: {
     lengthViolation: 'Mnemonic should have at least 12 words.',
@@ -80,6 +89,13 @@ export const accountManagement = {
   setNickname: {
     success: 'Your nickname has been saved.',
     error: generalCommunicationError
+  },
+  lockTimeout: {
+    top: 'You must enter your PIN after',
+    bottom: 'minutes of inactivity',
+    update: 'UPDATE',
+    error: 'We were unable to update your account settings',
+    success: 'Lock Timeout Updated'
   },
   addFriend: {
     success: nickname => `Added to friends: @${nickname}`,
@@ -91,7 +107,58 @@ export const accountManagement = {
   },
   loadInformation: {
     error: generalCommunicationError
+  },
+  ethBalance: {
+    display: balance => `Your ETH balance is ${String(balance).slice(0,8)} `,
+    inUsd: (balance, exchange) => ` ($${ethToUsd(balance, exchange)})`,
+    getError: 'Unable to retrieve Eth balance',
+    manage: 'Manage ETH'
+  },
+  sendEth: {
+    error: {
+      insufficient: 'The transfer failed due to insufficient funds',
+      generic: 'There was an error with the transfer, please try again later'
+    },
+    amount: 'AMOUNT TO SEND',
+    address: `DESTINATION ADDRESS (without '0x' prefix)`,
+    transfer: 'TRANSFER ETH',
+    transferAll: 'TRANSFER EVERYTHING',
+    balance: (balance) => `Your current ETH balance is ${typeof balance === 'string' ? balance.slice(0,8) : ''}`,
+    ethAddress: 'Ethereum Address'
+  },
+  sendBcpt: {
+    error: {
+      insufficient: 'The transfer failed due to insufficient funds',
+      generic: 'There was an error with the transfer, please try again later'
+    },
+    transfer: 'TRANSFER BCPT',
+    address: `DESTINATION ADDRESS (without '0x' prefix)`,
+    balance: (balance) => `Your current BCPT balance is ${typeof balance === 'string' ? balance.slice(0,8) : ''}`,
+    bcptAddress: 'BCPT Address'
+  },
+  changeProfilePic: 'Tap to Change',
+  addProfilePic: 'Use Picture from Phone',
+  panelHeaders: [
+    'ETH Address',
+    'ETH Balance',
+    'BCPT Balance',
+    'Change PIN',
+    'Change Nickname',
+    'Change Profile Picture',
+    'Change Lock Timeout',
+    'Mnemonic',
+    'Notifications'
+  ],
+  profilePic: {
+    setError: 'There was an error uploading your picture, please try again later',
+    getError: 'There was an error retrieving your profile picture',
+    setSuccess: 'Profile picture updated'
   }
+}
+
+export const currentBalance = {
+  eth: 'Your current Eth balance is:',
+  bcpt: 'Your current BCPT balance is:'
 }
 
 export const welcomeView = {
@@ -118,8 +185,16 @@ export const debtManagement = {
   settleUpLower: 'Settle Up',
   amountToSettle: 'Amount to Settle',
   total: 'Total',
+  createError: {
+    amountTooLow: 'Amount must be greater than $0',
+    amountTooHigh: 'Amount must be less than $1,000,000,000',
+    selfAsFriend: 'You can\'t create debt with yourself, choose another friend',
+    pending: 'Please resolve your pending transaction with this user before creating another',
+    insufficientEth: eth => `You need at least ${eth} ETH to settle, go to Settings to see your balance`
+  },
   fields: {
     amount: 'AMOUNT',
+    settlementAmount: 'SETTLEMENT AMOUNT',
     selectFriend: 'FRIEND',
     memo: 'MEMO',
     direction: 'SELECT THE CORRECT STATEMENT',
@@ -136,9 +211,9 @@ export const debtManagement = {
     initiatedBorrow: nickname => `${nickname} says he/she owes`,
     pendingLend: nickname => `@${nickname} owes you`,
     pendingBorrow: nickname => `You owe @${nickname}`,
-    pendingLendSettlement: settlement => `@${settlement.debtorNickname} wants to settle with you in ${settlement.settlementCurrency}`,
-    pendingBorrowSettlement: settlement => `@${settlement.creditorNickname} requests a settlement in ${settlement.settlementCurrency}`,
-    pendingLendSettlementMe: settlement => `You requested to settle with @${settlement.creditorNickname} in ${settlement.settlementCurrency}`,
+    pendingLendSettlement: settlement => `@${settlement.debtorNickname} requests a settlement in ${settlement.settlementCurrency}`,
+    pendingBorrowSettlement: settlement => `@${settlement.creditorNickname} wants to settle with you in ${settlement.settlementCurrency}`,
+    pendingLendSettlementMe: settlement => `You requested to settle with @${settlement.debtorNickname} in ${settlement.settlementCurrency}`,
     pendingBorrowSettlementMe: settlement => `You requested that @${settlement.creditorNickname} settle with in ${settlement.settlementCurrency}`
   },
   pending: {
@@ -147,7 +222,8 @@ export const debtManagement = {
   },
   pendingParens: ' (pending)',
   confirmation: {
-    success: 'Transaction has been successfully confirmed',
+    transaction: counterParty => `Transaction with ${counterParty} has been successfully confirmed`,
+    settlement: counterParty => `Settlement with ${counterParty} has been successfully confirmed`,
     error: 'Unable to confirm transaction at this time, please try again later'
   },
   rejection: {
@@ -160,14 +236,14 @@ export const debtManagement = {
   for: memo => `for ${memo}`,
   settleUp: 'SETTLE UP',
   settleTotal: 'SETTLE TOTAL',
-  settleUpMemo: (direction, amount) => direction === 'lend' ? `Settling up for ${amount}` : `Requesting to settle up for ${amount} `
+  settleUpMemo: (direction, amount) => direction === 'lend' ? `Settling up for ${amount}` : `Request to settle for ${amount} `
 }
 
 export const settlementManagement = {
   bilateral: {
     error: {
-      insufficient: nickname => `Your settlement to ${nickname} failed due to insufficient funds`,
-      generic: nickname => `There was an error processing your settlement to ${nickname}`
+      insufficient: nickname => `Your settlement with ${nickname} failed due to insufficient funds`,
+      generic: nickname => `There was an error processing your settlement with ${nickname}`
     }
   }
 }
@@ -237,6 +313,10 @@ export const confirmation = {
   reject: {
     start: "We've let ",
     end: " know that you rejected this record."
+  },
+  ethSent: {
+    start: "You have successfully sent ",
+    end: " ETH and your transaction hash is "
   },
   status: 'You can see the status of this transaction in the ',
   activity: 'activity tab.'

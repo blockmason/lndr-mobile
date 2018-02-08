@@ -1,11 +1,15 @@
 declare const Buffer
 
 export function hexToBuffer(value) {
-  if (value.substr(0, 2) === '0x') {
+  if (typeof value === 'string' && value.substr(0, 2) === '0x') {
     value = value.substr(2)
   }
 
   return Buffer.from(value, 'hex')
+}
+
+export function utf8ToBuffer(value) {
+  return Buffer.from(value, 'utf8')
 }
 
 export function stringToBuffer(value) {

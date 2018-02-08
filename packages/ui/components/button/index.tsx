@@ -119,7 +119,7 @@ export default ({ action, danger, black, blackText, friend, check, close, large,
       onPress={onPress}
       style={containerStyle}
     >
-      <Image source={require('images/close-button.png')} style={buttonStyle.close} />
+      <Image source={require('images/back-arrow.jpg')} style={buttonStyle.close} />
     </TouchableHighlight>)
   }
   return (<TouchableHighlight

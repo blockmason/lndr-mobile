@@ -15,6 +15,7 @@ export const good = '#ace'
 export const goodDark = '#036'
 export const goodShade = 'rgba(200, 225, 250, 1)'
 export const darkGray = '#252525'
+export const paleGray = '#f7f7f7'
 
 export const transparent = 'transparent'
 export const shade = 'rgba(0, 0, 0, 0.5)'
@@ -31,4 +32,5 @@ export const moneyGreen = '#128333'
 export const clear = 'rgba(0, 0, 0, 0)'
 
 export const aqua = '#01c5d9'
+export const darkAqua = '#0193b2'
 export const softAqua = '#e0f8ff'

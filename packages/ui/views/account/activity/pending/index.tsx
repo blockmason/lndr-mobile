@@ -20,7 +20,7 @@ import general from 'theme/general'
 
 import { pendingTransactionsLanguage } from 'language'
 
-import { getStore, getUser, submitterIsMe, settlerIsMe, pendingSettlements } from 'reducers/app'
+import { getStore, getUser, submitterIsMe, settlerIsMe, pendingSettlements, bilateralSettlements } from 'reducers/app'
 import { isFocusingOn } from 'reducers/nav'
 import { getPendingTransactions, getPendingSettlements } from 'actions'
 import { connect } from 'react-redux'
@@ -40,6 +40,7 @@ interface Props {
   navigation: any
   homeScreen?: boolean
   pendingSettlements: any
+  bilateralSettlements: any
 }
 
 interface State {
@@ -53,8 +54,10 @@ class PendingTransactionsView extends Component<Props, State> {
   }
 
   async componentDidMount() {
-    await loadingPendingTransactions.wrap(this.props.getPendingTransactions())
-    await loadingPendingSettlements.wrap(this.props.getPendingSettlements())
+    if (this.props.homeScreen) {
+      await loadingPendingTransactions.wrap(this.props.getPendingTransactions())
+      await loadingPendingSettlements.wrap(this.props.getPendingSettlements())
+    }
   }
 
   componentWillReceiveProps(nextProps) {
@@ -72,24 +75,8 @@ class PendingTransactionsView extends Component<Props, State> {
     this.refresh()
   }
 
-  renderPendingTransactionDetailDialog() {
-    const { pendingTransaction } = this.state
-
-    if (!pendingTransaction) {
-      return null
-    }
-
-    return <Popup onClose={() => this.setState({ pendingTransaction: undefined })}>
-      <PendingTransactionDetail
-        pendingTransaction={pendingTransaction}
-        closePopup={() => this.closePopupAndRefresh()}
-        navigation={this.props.navigation}
-      />
-    </Popup>
-  }
-
   showNoneMessage() {
-    const { pendingTransactionsLoaded, pendingTransactions } = this.props.state
+    const { pendingTransactionsLoaded, pendingTransactions, pendingSettlements, bilateralSettlements } = this.props.state
     const { friend } = this.props
 
     let showNone = false
@@ -97,11 +84,17 @@ class PendingTransactionsView extends Component<Props, State> {
     if (!pendingTransactionsLoaded) {
       showNone = true
     } else if (!friend) {
-      showNone = pendingTransactions.length === 0
+      showNone = pendingTransactions.length + pendingSettlements.length + bilateralSettlements.length === 0
     } else if (friend) {
       showNone = true
       pendingTransactions.map( (pending) => {
         showNone = showNone && friend.address !== pending.creditorAddress && friend.address !== pending.debtorAddress
+      })
+      pendingSettlements.map( (unilateral) => {
+        showNone = showNone && friend.address !== unilateral.creditorAddress && friend.address !== unilateral.debtorAddress
+      })
+      bilateralSettlements.map( (bilateral) => {
+        showNone = showNone && friend.address !== bilateral.creditorAddress && friend.address !== bilateral.debtorAddress
       })
     }
 
@@ -113,18 +106,16 @@ class PendingTransactionsView extends Component<Props, State> {
   }
 
   render() {
-    const { pendingTransactionsLoaded, pendingTransactions } = this.props.state
+    const { pendingTransactionsLoaded, pendingTransactions, bilateralSettlements } = this.props.state
     const { pendingSettlements, settlerIsMe } = this.props
-    const { user, friend, homeScreen } = this.props
+    const { user, friend, homeScreen, navigation } = this.props
 
     return <View>
-      { this.renderPendingTransactionDetailDialog() }
-
       <Section contentContainerStyle={style.list}>
         <Loading context={loadingPendingTransactions} />
         {this.showNoneMessage()}
-        {pendingTransactions.map(
-          pendingTransaction => {
+        {
+          pendingTransactions.map(pendingTransaction => {
             if (friend && friend.address !== pendingTransaction.creditorAddress && friend.address !== pendingTransaction.debtorAddress) {
                 return null
             }
@@ -136,7 +127,7 @@ class PendingTransactionsView extends Component<Props, State> {
               key={pendingTransaction.hash}
               pendingTransaction={pendingTransaction}
               friend={friend ? true : false }
-              onPress={() => this.closeAndView(pendingTransaction)}
+              onPress={() => navigation.navigate('PendingTransaction', { pendingTransaction })}
             />
           }
         )}
@@ -150,14 +141,27 @@ class PendingTransactionsView extends Component<Props, State> {
               pendingSettlement={pendingSettlement}
               key={pendingSettlement.hash}
               friend={friend ? true : false}
-              onPress={() => this.props.navigation.navigate('PendingSettlement', { pendingSettlement } )}
+              onPress={() => this.props.navigation.navigate('PendingSettlement', { pendingSettlement })}
               settlerIsMe={settlerIsMe}
             />
-          })
-        }
+          })}
+          { homeScreen ? null :
+          bilateralSettlements.map( bilateralSettlement => {
+            if (homeScreen && this.props.settlerIsMe(bilateralSettlement)) {
+              return null
+            }
+            return <PendingSettlementRow 
+              user={user}
+              pendingSettlement={bilateralSettlement}
+              key={bilateralSettlement.hash}
+              friend={friend ? true : false}
+              onPress={() => null}
+              settlerIsMe={settlerIsMe}
+            />
+          })}
       </Section>
     </View>
   }
 }
 
-export default connect((state) => ({ state: getStore(state)(), user: getUser(state)(), isFocused: isFocusingOn(state)('Activity'), pendingSettlements: pendingSettlements(state), submitterIsMe: submitterIsMe(state), settlerIsMe: settlerIsMe(state) }), { getPendingTransactions, getPendingSettlements })(PendingTransactionsView)
+export default connect((state) => ({ state: getStore(state)(), user: getUser(state)(), isFocused: isFocusingOn(state)('Activity'), pendingSettlements: pendingSettlements(state), bilateralSettlements: bilateralSettlements(state), submitterIsMe: submitterIsMe(state), settlerIsMe: settlerIsMe(state) }), { getPendingTransactions, getPendingSettlements })(PendingTransactionsView)
