@@ -116,6 +116,7 @@ class AddDebt extends Component<Props, State> {
           }}
           state={this.props.state}
           addDebt
+          navigation={this.props.navigation}
          />
       </Section>
       <View style={style.list}>
@@ -127,6 +128,7 @@ class AddDebt extends Component<Props, State> {
               key={friend.address}
               friend={friend}
               onPress={() => this.setState({ shouldSelectFriend: false, friend })}
+              navigation={this.props.navigation}
             />
           )
         )}
@@ -168,11 +170,12 @@ class AddDebt extends Component<Props, State> {
             <Text style={formStyle.title}>{debtManagement.fields.amount}</Text>
             <TextInput
               style={formStyle.jumboInput}
-              placeholder={'$0.00'}
+              placeholder={'$0'}
               placeholderTextColor='black'
               value={amount}
               maxLength={14}
               underlineColorAndroid='transparent'
+              keyboardType='numeric'
               onChangeText={amount => this.setState({ amount: currency(amount) })}
             />
           </View>

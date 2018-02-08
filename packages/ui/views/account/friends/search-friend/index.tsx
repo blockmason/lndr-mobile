@@ -9,6 +9,7 @@ import Friend from 'lndr/friend'
 import Button from 'ui/components/button'
 import Loading, { LoadingContext } from 'ui/components/loading'
 import AddFriendRow from 'ui/components/add-friend-row'
+import FriendRow from 'ui/components/friend-row'
 import InputImage from 'ui/components/images/input-image'
 import { getPendingTransactions, getRecentTransactions } from 'actions'
 
@@ -34,8 +35,10 @@ interface Props {
   onSuccess: () => void
   selectFriend: (friend: Friend) => any
   removeFriend: (friend: Friend) => any
+  scrollUp?: () => any
   state: any
   addDebt?: boolean
+  navigation: any
 }
 
 interface State {
@@ -98,9 +101,16 @@ export default class SearchFriend extends Component<Props, State> {
     return isFriend
   }
 
+  setFriendCandidate(match) {
+    if (this.props.scrollUp) {
+      this.props.scrollUp()
+    }
+    this.setState({ candidateForFriendship: match })
+  }
+
   render() {
     const { matches, hasSearchTerm, candidateForFriendship } = this.state
-    const { addDebt, selectFriend } = this.props
+    const { addDebt, selectFriend, removeFriend, navigation } = this.props
 
     const { address }  = this.props.state.user
 
@@ -137,19 +147,27 @@ export default class SearchFriend extends Component<Props, State> {
         <Loading context={loadingContext} />
         {hasSearchTerm && matches.length === 0 ? <Text style={[style.emptyState, {paddingLeft: 30}]}>{noMatches}</Text> : null}
         {matches.map(
-          match => (
-            match.address === address ? null : <AddFriendRow
-              key={match.address}
-              friend={match}
-              onPress={
-                addDebt ? () => selectFriend(match) :
-                this.isFriend(match) ? () => this.props.removeFriend(match) : () => this.setState({ candidateForFriendship: match })
-              }
-              isFriend={this.isFriend(match)}
-            />
-          )
+          match => {
+            if (match.address === address) {
+              return null
+            } else if (this.isFriend(match)) {
+              return <FriendRow
+                navigation={navigation}
+                key={match.address}
+                friend={match}
+                onPress={addDebt ? () => selectFriend(match) : () => removeFriend(match)}
+              />
+            } else {
+              return <AddFriendRow
+                key={match.address}
+                friend={match}
+                onPress={ () => this.setFriendCandidate(match) }
+              />
+            }
+          }
         )}
       </View>}
     </ScrollView>
   }
 }
+

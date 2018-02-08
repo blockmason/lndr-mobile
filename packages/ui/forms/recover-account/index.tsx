@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import { View, Text, TextInput, BackAndroid, BackHandler } from 'react-native'
+import { View, Text, TextInput, BackAndroid, BackHandler, KeyboardAvoidingView } from 'react-native'
 
 import ThemeImage from 'ui/components/images/theme-image'
 import Pinpad from 'ui/components/pinpad'
@@ -112,19 +112,21 @@ export default class RecoverAccountForm extends Component<Props, State> {
       </View>
     } else {
       return <View style={style.form}>
-        <ThemeImage name='logo' size={0.4} />
-        <Text style={[style.text, style.spaceBottom]}>{recoverExistingAccount}</Text>
-        <View style={style.textInputContainer}>
-          <TextInput
-            multiline
-            style={style.multilineTextInput}
-            placeholder={recoverMnemonic}
-            underlineColorAndroid='transparent'
-            onChangeText={mnemonic => this.setState({ mnemonic: mnemonic.trim() })}
-          />
-        </View>
-        <Button round fat style={style.submitButton} onPress={() => this.setState({ step: 2 })} text={recoverAccount} />
-        <Button alternate small arrow style={style.submitButton} onPress={() => this.cancel()} text={cancel} />
+        <KeyboardAvoidingView behavior='padding' keyboardVerticalOffset={300} >
+          <ThemeImage name='logo' size={0.4} />
+          <Text style={[style.text, style.spaceBottom]}>{recoverExistingAccount}</Text>
+          <View style={style.textInputContainer}>
+            <TextInput
+              multiline
+              style={style.multilineTextInput}
+              placeholder={recoverMnemonic}
+              underlineColorAndroid='transparent'
+              onChangeText={mnemonic => this.setState({ mnemonic: mnemonic.trim() })}
+            />
+          </View>
+          <Button round fat style={style.submitButton} onPress={() => this.setState({ step: 2 })} text={recoverAccount} />
+          <Button alternate small arrow style={style.submitButton} onPress={() => this.cancel()} text={cancel} />
+        </KeyboardAvoidingView>
       </View>
     }
   }

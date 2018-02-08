@@ -44,7 +44,6 @@ export default class LoginAccountForm extends Component<Props, State> {
   async submit(confirmPassword: string) {
     const success = await loadingContext.wrap(this.props.onSubmit({ confirmPassword }))
     if (!success) {
-      console.log('wrong')
       this.setState({ confirmPassword: '' })
     }
   }

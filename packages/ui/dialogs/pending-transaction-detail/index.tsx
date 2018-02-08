@@ -6,6 +6,7 @@ import { UserData } from 'lndr/user'
 import { debounce } from 'lndr/time'
 import { cents } from 'lndr/format'
 import PendingTransaction from 'lndr/pending-transaction'
+import { getProfilePic } from 'lndr/profile-pic'
 
 import Button from 'ui/components/button'
 import Loading, { LoadingContext } from 'ui/components/loading'
@@ -36,7 +37,26 @@ interface Props {
   navigation: any
 }
 
-class PendingTransactionDetail extends Component<Props> {
+interface State {
+  userPic: string
+}
+
+class PendingTransactionDetail extends Component<Props, State> {
+  constructor() {
+    super()
+    this.state = { userPic: '' }
+  }
+
+  async componentWillMount() {
+    const { user, navigation } = this.props
+    const pendingTransaction = navigation.state ? navigation.state.params.pendingTransaction : {}
+    if (pendingTransaction.creditorNickname !== undefined) {
+      const nicknameToGet = pendingTransaction.creditorAddress === user.address ? pendingTransaction.debtorNickname : pendingTransaction.creditorNickname
+      const userPic = await getProfilePic(nicknameToGet)
+      this.setState({ userPic })
+    }
+  }
+
   async confirmPendingTransaction(pendingTransaction: PendingTransaction) {
     const success = await loadingContext.wrap(
       this.props.confirmPendingTransaction(pendingTransaction)
@@ -115,14 +135,16 @@ class PendingTransactionDetail extends Component<Props> {
 
   render() {
     const { user, submitterIsMe, navigation } = this.props
+    const { userPic } = this.state
     const pendingTransaction = navigation.state ? navigation.state.params.pendingTransaction : {}
+    const imageSource = userPic ? {uri: userPic} : require('images/person-outline-dark.png')
 
     return <ScrollView style={[general.fullHeight, general.view]}>
       <Loading context={loadingContext} />
       <DashboardShell text='Pending Transaction' />
       <Button close onPress={() => this.props.navigation.goBack()} />
       <View style={general.centeredColumn}>
-        <Image source={require('images/person-outline-dark.png')} style={style.image}/>
+        <Image source={imageSource} style={style.image}/>
         <Text style={style.title}>{this.getTitle()}</Text>
         <View style={style.balanceRow}>
           <Text style={style.balanceInfo}>$</Text>

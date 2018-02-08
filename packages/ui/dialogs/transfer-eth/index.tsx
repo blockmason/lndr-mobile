@@ -126,6 +126,7 @@ class TransferEth extends Component<Props, State> {
                 value={amount}
                 maxLength={14}
                 underlineColorAndroid='transparent'
+                keyboardType='numeric'
                 onChangeText={amount => this.setState({ amount: this.setAmount(amount) })}
               />
             </View>

@@ -27,7 +27,7 @@ interface Props {
 class RemoveAccountView extends Component<Props> {
   render() {
     return (
-      <View style={[style.form, general.centeredColumn]}>
+      <View style={style.form}>
         <ThemeImage name='logo' size={0.4} />
         <Text style={[style.header, style.center, style.spaceTop]}>{removeAccountTitle}</Text>
         <Text style={[style.text, style.center, style.spaceTop]}>{removeAccountExhortation}</Text>

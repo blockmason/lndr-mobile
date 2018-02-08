@@ -4,6 +4,7 @@ import TextLogo from 'ui/components/images/text-logo'
 
 import general from 'theme/general'
 import style from 'theme/pinpad'
+import { underlayColor } from 'theme/general'
 
 interface Props {
   onNumPress: (string) => void
@@ -32,7 +33,7 @@ export default class Pinpad extends Component<Props> {
 
     return <View style={style.row} > 
       {numbers.map(number => (
-        <TouchableHighlight onPress={() => onNumPress(number)} style={style.button} key={number} >
+        <TouchableHighlight {...underlayColor} onPress={() => onNumPress(number)} style={style.button} key={number} >
           <View>
             <Text style={style.number}>{number}</Text>
           </View>
@@ -55,17 +56,17 @@ export default class Pinpad extends Component<Props> {
         {this.numberRow(['4', '5', '6'])}
         {this.numberRow(['7', '8', '9'])}
         <View style={style.row} >
-          <TouchableHighlight onPress={() => null} style={style.button} >
+          <TouchableHighlight {...underlayColor} onPress={() => null} style={style.button} >
             <View>
               <Text style={style.number}>{''}</Text>
             </View>
           </TouchableHighlight>
-          <TouchableHighlight onPress={() => onNumPress('0')} style={style.button} >
+          <TouchableHighlight {...underlayColor} onPress={() => onNumPress('0')} style={style.button} >
             <View>
               <Text style={style.number}>{'0'}</Text>
             </View>
           </TouchableHighlight>
-          <TouchableHighlight onPress={() => onBackspace()} style={style.button} >
+          <TouchableHighlight {...underlayColor} onPress={() => onBackspace()} style={style.button} >
             <View>
               <Text style={style.number}>{'<'}</Text>
             </View>

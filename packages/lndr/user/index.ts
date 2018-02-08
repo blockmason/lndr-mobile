@@ -16,6 +16,8 @@ export interface LoginAccountData {
 
 export interface UpdateAccountData {
   nickname: string
+  password: string
+  confirmPassword: string
 }
 
 export interface UserData {
@@ -26,6 +28,7 @@ export interface UserData {
   ethAddress: any
   address: string
   lockTimeout: number
+  nickname: string
 }
 
 export const defaultCreateAccountData = (): CreateAccountData => ({
@@ -45,7 +48,9 @@ export const defaultLoginAccountData = (): LoginAccountData => ({
 })
 
 export const defaultUpdateAccountData = (): UpdateAccountData => ({
-  nickname: ''
+  nickname: '',
+  password: '',
+  confirmPassword: ''
 })
 
 export default class User {
@@ -56,8 +61,9 @@ export default class User {
   ethAddress: any
   address: string
   lockTimeout: number
+  nickname: string
 
-  constructor(mnemonic: string, hashedPassword: string, privateKey: any, privateKeyBuffer: any, ethAddress: any, address: string) {
+  constructor(mnemonic: string, hashedPassword: string, privateKey: any, privateKeyBuffer: any, ethAddress: any, address: string, nickname: string) {
     this.mnemonic = mnemonic
     this.hashedPassword = hashedPassword
     this.privateKey = privateKey
@@ -65,6 +71,7 @@ export default class User {
     this.ethAddress = ethAddress
     this.address = address
     this.lockTimeout = 15
+    this.nickname = nickname
   }
 }
 
