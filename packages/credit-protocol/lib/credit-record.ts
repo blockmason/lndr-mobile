@@ -34,6 +34,12 @@ export default class CreditRecord {
   }
 
   sign(privateKeyBuffer): String {
+    console.log('SUBMITTING A SETTLEMENT', privateKeyBuffer)
+    if (privateKeyBuffer.type === 'Buffer') {
+      privateKeyBuffer = Buffer.from(privateKeyBuffer.data)
+    }
+    console.log('SUBMITTING A SETTLEMENT', privateKeyBuffer)
+
     const { r, s, v } = ethUtil.ecsign(
       ethUtil.hashPersonalMessage(this.hash),
       privateKeyBuffer

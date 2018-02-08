@@ -46,10 +46,11 @@ export default reduceReducers(
 export const getPendingTransactionsCount = (state) => state.store.pendingTransactions.length
 
 export const getNeedsReviewCount = (state) => {
-  return (
+  const result = (
     state.store.pendingTransactions.filter( (transaction) => !submitterIsMe(state)(transaction) ).length + 
-    pendingSettlements(state).filter( (settlement) => !settlerIsMe(state)(settlement) ) 
+    state.store.pendingSettlements.filter( (settlement) => !settlerIsMe(state)(settlement) ).length
   )
+  return result
 }
 
 export const recentTransactions = (state) => state.store.recentTransactions
@@ -57,3 +58,9 @@ export const recentTransactions = (state) => state.store.recentTransactions
 export const pendingTransactions = (state) => state.store.pendingTransactions
 
 export const pendingSettlements = (state) => state.store.pendingSettlements
+
+export const bilateralSettlements = (state) => state.store.bilateralSettlements
+
+export const getEthBalance = (state) => state.store.ethBalance
+
+export const getEthExchange = (state) => state.store.ethExchange

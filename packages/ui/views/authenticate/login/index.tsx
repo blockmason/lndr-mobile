@@ -19,8 +19,9 @@ interface Props {
 class LoginView extends Component<Props> {
   async handleOnSubmitLoginAccount(formData: LoginAccountData) {
     this.props.setAuthLoading(true)
-    await this.props.loginAccount(formData)
+    const loginSuccess = await this.props.loginAccount(formData)
     this.props.setAuthLoading(false)
+    return loginSuccess
   }
 
   render() {

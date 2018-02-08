@@ -69,3 +69,6 @@ buck-out/
 #app signing .keystore file
 android/gradle.properties
 android/app/blockmason-lndr-android.keystore
+
+#aws secrets
+packages/lndr/profile-pic/config.json
