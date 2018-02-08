@@ -12,6 +12,7 @@
   },
   "dependencies": {
     "assert": "^1.4.1",
+    "aws-sdk": "^2.188.0",
     "bcryptjs": "^2.4.3",
     "bitcore-mnemonic": "^1.5.0",
     "dotenv": "^4.0.0",
@@ -26,6 +27,8 @@
     "react-native-blur": "^3.2.2",
     "react-native-crypto": "^2.1.1",
     "react-native-dropdownalert": "^3.1.2",
+    "react-native-fetch-blob": "^0.10.8",
+    "react-native-image-resizer": "^1.0.0",
     "react-native-keyboard-spacer": "^0.4.1",
     "react-native-loading-spinner-overlay": "^0.5.2",
     "react-native-local-storage": "^1.5.2",

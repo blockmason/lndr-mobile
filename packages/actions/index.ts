@@ -16,6 +16,9 @@ import ucac from 'lndr/ucac'
 import Storage from 'lndr/storage'
 import { getEthBalance, web3 } from 'lndr/settlement'
 import { getGasPrice, settlementCost, getEthExchange } from 'lndr/eth-price-utils'
+import { isTouchIdSupported } from 'lndr/touch-id'
+import TouchID from 'react-native-touch-id'
+import profilePic from 'lndr/profile-pic'
 
 import CreditProtocol from 'credit-protocol'
 
@@ -24,9 +27,6 @@ import { accountManagement, debtManagement, settlementManagement } from 'languag
 import { ToastActionsCreators } from 'react-native-redux-toast'
 import { getUser, getStore } from 'reducers/app'
 import { hexToBuffer } from '../credit-protocol/lib/buffer-utils';
-
-import { isTouchIdSupported } from 'lndr/touch-id'
-import TouchID from 'react-native-touch-id'
 
 const bcrypt = require('bcryptjs')
 
@@ -58,7 +58,7 @@ export const initializeStorage = () => {
       notificationsEnabled = storedNotificationPreference
     }
 
-    const touchIdSupported = isTouchIdSupported()
+    const touchIdSupported = await isTouchIdSupported()
 
     if (storedUser && moment(storedSession).add(storedUser.lockTimeout, 'minute') > moment()) {
       await sessionStorage.set(moment())
@@ -91,10 +91,9 @@ export const displaySuccess = (success: string) => {
   return ToastActionsCreators.displayInfo(success)
 }
 
-export const updateAccount = (accountData: UpdateAccountData) => {
+export const updateAccount = (accountData: any) => {
   return async (dispatch, getState) => {
     const { address, privateKeyBuffer } = getUser(getState())()
-    console.log('NICKNAME PRIVATE KEY HEX', privateKeyBuffer)
     const { nickname } = accountData
 
     try {
@@ -105,6 +104,31 @@ export const updateAccount = (accountData: UpdateAccountData) => {
       dispatch(displayError(accountManagement.setNickname.error))
       throw error
     }
+  }
+}
+
+export const updatePin = (password: string, confirmPassword: string) =>  {
+  return async (dispatch, getState) => {
+    if (password !== confirmPassword) {
+      dispatch(displayError(accountManagement.pin.matchViolation))
+      return false
+    }
+
+    const { mnemonic, privateKey, privateKeyBuffer, ethAddress, address, nickname } = getUser(getState())()
+    const hashedPassword = bcrypt.hashSync(password)
+  
+    const user = new User(
+      mnemonic,
+      hashedPassword,
+      privateKey,
+      privateKeyBuffer,
+      ethAddress,
+      address,
+      nickname
+    )
+    await storeUserSession(user)
+    dispatch(displaySuccess(accountManagement.pin.updateSuccess))
+    return true
   }
 }
 
@@ -125,12 +149,16 @@ export async function storeUserSession(user: User) {
 }
 
 //Not a redux action
-export const createUserFromCredentials = (mnemonic, hashedPassword) => {
+export const createUserFromCredentials = async (mnemonic, hashedPassword) => {
   const mnemonicInstance = creditProtocol.getMnemonic(mnemonic)
   const privateKey = mnemonicInstance.toHDPrivateKey()
   const privateKeyBuffer = privateKey.privateKey.toBuffer()
   const ethAddress = ethUtil.privateToAddress(privateKeyBuffer)
   const address = ethAddress.toString('hex')
+  let nickname = ''
+  try {
+    nickname = await creditProtocol.getNickname(address)
+  } catch (e) {}
 
   return new User(
     mnemonic,
@@ -138,7 +166,8 @@ export const createUserFromCredentials = (mnemonic, hashedPassword) => {
     privateKey,
     privateKeyBuffer,
     ethAddress,
-    address
+    address,
+    nickname
   )
 }
 
@@ -147,7 +176,7 @@ export const confirmAccount = () => {
     const { password, mnemonic } = getStore(getState())()
     const hashedPassword = bcrypt.hashSync(password)
 
-    const user = createUserFromCredentials(mnemonic, hashedPassword)
+    const user = await createUserFromCredentials(mnemonic, hashedPassword)
     await storeUserSession(user)
     let { ethBalance, ethExchange } = await getEthInfo(user)
     const payload = { user, hasStoredUser: true, ethBalance, ethExchange }
@@ -403,7 +432,7 @@ export const getPendingSettlements = () => {
 
 export const confirmPendingTransaction = (pendingTransaction: PendingTransaction) => {
   return async (dispatch, getState) => {
-    const { creditorAddress, debtorAddress, amount, memo } = pendingTransaction
+    const { creditorAddress, debtorAddress, amount, memo, creditorNickname, debtorNickname } = pendingTransaction
     const { address, privateKeyBuffer } = getUser(getState())()
     const direction = address === creditorAddress ? 'lend' : 'borrow'
 
@@ -420,7 +449,7 @@ export const confirmPendingTransaction = (pendingTransaction: PendingTransaction
       await creditProtocol.submitCreditRecord(creditRecord, direction, signature)
       refreshTransactions()
       
-      dispatch(displaySuccess(debtManagement.confirmation.success))
+      dispatch(displaySuccess(debtManagement.confirmation.transaction(direction === 'lend' ? debtorNickname : creditorNickname)))
 
       return true
     }
@@ -435,7 +464,7 @@ export const confirmPendingTransaction = (pendingTransaction: PendingTransaction
 
 export const confirmPendingSettlement = (pendingTransaction: PendingTransaction, denomination: string) => {
   return async (dispatch, getState) => {
-    const { creditorAddress, debtorAddress, amount, memo } = pendingTransaction
+    const { creditorAddress, debtorAddress, amount, memo, debtorNickname, creditorNickname } = pendingTransaction
     const { address, privateKeyBuffer } = getUser(getState())()
     const direction = address === creditorAddress ? 'lend' : 'borrow'
 
@@ -461,7 +490,7 @@ export const confirmPendingSettlement = (pendingTransaction: PendingTransaction,
       await creditProtocol.submitSettlementRecord(creditRecord, direction, signature, denomination)
       refreshTransactions()
 
-      dispatch(displaySuccess(debtManagement.confirmation.success))
+      dispatch(displaySuccess(debtManagement.confirmation.settlement(direction === 'lend' ? debtorNickname : creditorNickname)))
 
       return true
     }
@@ -631,13 +660,14 @@ export const loginAccount = (loginData: LoginAccountData) => {
     }
 
     const mnemonic = await mnemonicStorage.get()
-    const user = createUserFromCredentials(mnemonic, hashedPassword)
+    const user = await createUserFromCredentials(mnemonic, hashedPassword)
 
     await storeUserSession(user)
     let { ethBalance, ethExchange } = await getEthInfo(user)
     
     const payload = { user, hasStoredUser: true, ethBalance, ethExchange }
     dispatch(setState(payload))
+    return true
   }
 }
 
@@ -764,8 +794,35 @@ export const updateLockTimeout = (timeout: number) => {
       user.lockTimeout = timeout
       await userStorage.set(user)
       dispatch(setState({ user }))
+      dispatch(displaySuccess(accountManagement.lockTimeout.success))
     } catch (e) {
       dispatch(displayError(accountManagement.lockTimeout.error))
+    }
+  }
+}
+
+export const getProfilePic = (nickname: string) => {
+  return async (dispatch) => {
+    try {
+      const userPic = await profilePic.get(nickname)
+      dispatch(setState({ userPic }))
+    } catch (e) {
+      dispatch(displayError(accountManagement.profilePic.getError))
+    }
+  }
+}
+
+export const setProfilePic = (nickname: string, imageURI: string) => {
+  console.log('-1')
+  return async (dispatch) => {
+    try {
+      console.log('-2')
+      const userPic = await profilePic.set(nickname, imageURI)
+      console.log('-3', userPic)
+      dispatch(displaySuccess(accountManagement.profilePic.setSuccess))
+      dispatch(setState({ userPic }))
+    } catch (e) {
+      dispatch(displayError(accountManagement.profilePic.setError))
     }
   }
 }

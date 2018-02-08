@@ -27,6 +27,7 @@ import { UrbanAirship } from 'urbanairship-react-native'
 import style from 'theme/account'
 import formStyle from 'theme/form'
 import general from 'theme/general'
+import { underlayColor } from 'theme/general'
 
 import {
   tip,
@@ -181,7 +182,7 @@ class HomeView extends Component<Props, State> {
       <Text style={[formStyle.title, formStyle.center, formStyle.spaceBottom, formStyle.spaceTop]}>{needsReview}</Text>
       <PendingView navigation={this.props.navigation} homeScreen />
 
-      <TouchableHighlight onPress={() => this.props.navigation.navigate('Activity')}>
+      <TouchableHighlight {...underlayColor} onPress={() => this.props.navigation.navigate('Activity')}>
         <View style={style.seeAllActivityButton}>
           <Text style={style.seeAllActivity}>{seeAllActivity}</Text>
           <Image source={require('images/blue-chevron.png')} style={style.seeAllActivityArrow} />

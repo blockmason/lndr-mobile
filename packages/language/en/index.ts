@@ -18,6 +18,7 @@ export const removeAccount = 'REMOVE ACCOUNT'
 export const updateAccount = 'UPDATE ACCOUNT'
 export const loginAction = 'UNLOCK'
 export const enterPin = 'PLEASE ENTER YOUR PIN'
+export const changePin = 'CHANGE PIN'
 export const logoutAction = 'LOG OUT'
 export const seeAllActivity = 'See All Activity'
 
@@ -47,7 +48,7 @@ export const iOwe = 'I OWE SOMEONE'
 export const newPassword = 'New Password (minimum 8 chars)'
 export const confirmPassword = 'Confirm Password'
 export const newPin = 'New 4-digit PIN'
-export const enterNewPin = 'PLEASE SET YOUR 4-DIGIT PIN'
+export const enterNewPin = 'PLEASE SET A NEW 4-DIGIT PIN'
 export const confirmPin = 'PLEASE CONFIRM YOUR PIN'
 export const newAccount = 'Create a new account'
 export const loginAccount = 'Unlock your account'
@@ -77,7 +78,9 @@ export const accountManagement = {
   pin: {
     lengthViolation: 'PIN should be at least 4 characters.',
     matchViolation: 'PINs should match.',
-    failedHashComparison: 'PIN is not valid, please try again.'
+    failedHashComparison: 'PIN is not valid, please try again.',
+    updateSuccess: 'Your PIN has been updated',
+    updateError: 'There was an error updating your PIN'
   },
   mnemonic: {
     lengthViolation: 'Mnemonic should have at least 12 words.',
@@ -91,7 +94,8 @@ export const accountManagement = {
     top: 'You must enter your PIN after',
     bottom: 'minutes of inactivity',
     update: 'UPDATE',
-    error: 'We were unable to update your account settings'
+    error: 'We were unable to update your account settings',
+    success: 'Lock Timeout Updated'
   },
   addFriend: {
     success: nickname => `Added to friends: @${nickname}`,
@@ -116,24 +120,45 @@ export const accountManagement = {
       generic: 'There was an error with the transfer, please try again later'
     },
     amount: 'AMOUNT TO SEND',
-    address: 'DESTINATION ADDRESS',
+    address: `DESTINATION ADDRESS (without '0x' prefix)`,
     transfer: 'TRANSFER ETH',
     transferAll: 'TRANSFER EVERYTHING',
     balance: (balance) => `Your current ETH balance is ${typeof balance === 'string' ? balance.slice(0,8) : ''}`,
     ethAddress: 'Ethereum Address'
   },
+  sendBcpt: {
+    error: {
+      insufficient: 'The transfer failed due to insufficient funds',
+      generic: 'There was an error with the transfer, please try again later'
+    },
+    transfer: 'TRANSFER BCPT',
+    address: `DESTINATION ADDRESS (without '0x' prefix)`,
+    balance: (balance) => `Your current BCPT balance is ${typeof balance === 'string' ? balance.slice(0,8) : ''}`,
+    bcptAddress: 'BCPT Address'
+  },
+  changeProfilePic: 'Tap to Change',
+  addProfilePic: 'Use Picture from Phone',
   panelHeaders: [
-    'Notifications',
-    'Mnemonic',
-    'ETH Balance',
     'ETH Address',
+    'ETH Balance',
+    'BCPT Balance',
+    'Change PIN',
     'Change Nickname',
-    'Change Lock Timeout'
-  ]
+    'Change Profile Picture',
+    'Change Lock Timeout',
+    'Mnemonic',
+    'Notifications'
+  ],
+  profilePic: {
+    setError: 'There was an error uploading your picture, please try again later',
+    getError: 'There was an error retrieving your profile picture',
+    setSuccess: 'Profile picture updated'
+  }
 }
 
 export const currentBalance = {
-  eth: 'Your current Eth balance is:'
+  eth: 'Your current Eth balance is:',
+  bcpt: 'Your current BCPT balance is:'
 }
 
 export const welcomeView = {
@@ -197,7 +222,8 @@ export const debtManagement = {
   },
   pendingParens: ' (pending)',
   confirmation: {
-    success: 'Transaction has been successfully confirmed',
+    transaction: counterParty => `Transaction with ${counterParty} has been successfully confirmed`,
+    settlement: counterParty => `Settlement with ${counterParty} has been successfully confirmed`,
     error: 'Unable to confirm transaction at this time, please try again later'
   },
   rejection: {

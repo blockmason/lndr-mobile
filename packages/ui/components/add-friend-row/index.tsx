@@ -17,7 +17,6 @@ interface Props {
   onPress: () => void
   friend: Friend
   selected? : boolean
-  isFriend? : boolean
 }
 
 export default class FriendRow extends Component<Props> {
@@ -27,16 +26,9 @@ export default class FriendRow extends Component<Props> {
   }
 
   addFriendButton() {
-    const { onPress, isFriend } = this.props
+    const { onPress } = this.props
     //need check to see if person is friend
-    if (isFriend === true) {
-      return <Button narrow small round black check friend onPress={onPress} text={alreadyFriendsButton} style={{marginRight: 10}} />
-    } else if(isFriend === false) {
-      return <Button narrow small round friend onPress={onPress} text={addFriendButton} style={{marginRight: 10}} />
-    } else {
-      return null
-    }
-    
+    return <Button narrow small round friend onPress={onPress} text={addFriendButton} style={{marginRight: 10}} />
   }
 
   render() {

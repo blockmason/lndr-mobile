@@ -4,6 +4,8 @@ import { white } from 'theme/include/colors'
 
 const { height } = Dimensions.get('window')
 
+export const underlayColor = { underlayColor: '#efefef' }
+
 export default StyleSheet.create({
   flex: {
     flex: 1

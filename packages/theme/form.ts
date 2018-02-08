@@ -10,7 +10,8 @@ const { width } = Dimensions.get('window')
 
 export default StyleSheet.create({
   form: {
-    ...largePad
+    ...largePad,
+    backgroundColor: white
   },
   account: {
     flexDirection: 'column',
@@ -33,6 +34,9 @@ export default StyleSheet.create({
   },
   spaceTopL: {
     marginTop: 30
+  },
+  spaceBottomL: {
+    marginBottom: 30
   },
   spaceTop: {
     marginTop: 20
@@ -216,5 +220,16 @@ export default StyleSheet.create({
     width: 24,
     marginRight: 20,
     marginTop: 4
+  },
+  image: {
+    height: 100,
+    width: 100,
+    borderRadius: 50
+  },
+  cameraImage: {
+    height: 100,
+    width: 100,
+    borderRadius: 50,
+    margin: 10
   }
 } as any)

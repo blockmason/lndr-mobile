@@ -51,7 +51,10 @@ const initialState = {
   bilateralSettlements: [],
   notificationsEnabled: true,
   ethBalance: '0',
-  ethExchange: '1000'
+  ethExchange: '1000',
+  bcptBalance: '0',
+  bcptExchange: '0.5',
+  userPic: ''
 }
 
 const store = createStore(initialState)

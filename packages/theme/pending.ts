@@ -15,8 +15,9 @@ export default StyleSheet.create({
   },
   image: {
     marginTop: 0,
-    width: 100,
-    height: 100
+    width: 120,
+    height: 120,
+    borderRadius: 60
   },
   title: {
     ...xlarge,
@@ -56,8 +57,8 @@ export default StyleSheet.create({
     justifyContent: 'space-between',
     marginRight: m,
     marginLeft: m,
-    marginTop: m,
-    marginBottom: l,
+    marginTop: s,
+    marginBottom: s,
     width: '80%'
   },
   label: {

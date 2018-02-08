@@ -167,11 +167,12 @@ class SettleUp extends Component<Props, State> {
             <Text style={formStyle.title}>{debtManagement.fields.settlementAmount}</Text>
             <TextInput
               style={formStyle.jumboInput}
-              placeholder={'$0.00'}
+              placeholder={'$0'}
               placeholderTextColor='black'
               value={amount}
               maxLength={14}
               underlineColorAndroid='transparent'
+              keyboardType='numeric'
               onChangeText={amount => this.setState({ amount: this.setAmount(amount) })}
             />
           </View>

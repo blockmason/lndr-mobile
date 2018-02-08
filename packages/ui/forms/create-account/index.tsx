@@ -1,6 +1,6 @@
 import React, { Component } from 'react'
 
-import { View, Text, TextInput, BackAndroid, BackHandler } from 'react-native'
+import { View, Text, TextInput, BackAndroid, BackHandler, KeyboardAvoidingView } from 'react-native'
 
 import Button from 'ui/components/button'
 import ThemeImage from 'ui/components/images/theme-image'
@@ -121,24 +121,26 @@ export default class CreateAccountForm extends Component<Props, State> {
       </View>
     } else {
       return (<View style={style.form}>
-        <ThemeImage name='logo' size={0.4} />
-        <Text style={[style.text, style.spaceBottom]}>{newAccount}</Text>
-        <View style={style.textInputContainer}>
-          <InputImage name='person'/>
-          <TextInput
-            autoCapitalize='none'
-            style={style.textInput}
-            placeholder={nickname}
-            value={this.state.nickname}
-            maxLength={20}
-            underlineColorAndroid='transparent'
-            onChangeText={nickname => this.setState({ nickname: formatNick(nickname) })}
-            onBlur={(): void => onNickTextInputBlur(this.state.nickname)}
-          />
-        </View>
-        { nickTextInputErrorText && <Text style={style.warningText}>{nickTextInputErrorText}</Text>}
-        <Button round fat onPress={() => this.submit()} style={style.submitButton} text={createAccount} />
-        <Button alternate small arrow onPress={() => this.recover()} style={style.submitButton} text={recoverAccount} />
+        <KeyboardAvoidingView behavior='padding' keyboardVerticalOffset={200} >
+          <ThemeImage name='logo' size={0.4} />
+          <Text style={[style.text, style.spaceBottom]}>{newAccount}</Text>
+          <View style={style.textInputContainer}>
+            <InputImage name='person'/>
+            <TextInput
+              autoCapitalize='none'
+              style={style.textInput}
+              placeholder={nickname}
+              value={this.state.nickname}
+              maxLength={20}
+              underlineColorAndroid='transparent'
+              onChangeText={nickname => this.setState({ nickname: formatNick(nickname) })}
+              onBlur={(): void => onNickTextInputBlur(this.state.nickname)}
+            />
+          </View>
+          { nickTextInputErrorText && <Text style={style.warningText}>{nickTextInputErrorText}</Text>}
+          <Button round fat onPress={() => this.submit()} style={style.submitButton} text={createAccount} />
+          <Button alternate small arrow onPress={() => this.recover()} style={style.submitButton} text={recoverAccount} />
+        </KeyboardAvoidingView>
       </View>)
     }
   }
