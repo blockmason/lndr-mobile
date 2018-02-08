@@ -10,7 +10,7 @@ export const isTouchIdSupported = async () => {
   try {
     isSupported = await TouchID.isSupported().then(type => type === 'TouchID')
   } catch (e) {
-    console.log('touch ID not supported')
+    console.log('not supported')
   }
 
   return isSupported

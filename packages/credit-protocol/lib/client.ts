@@ -22,8 +22,7 @@ export default class Client {
       }
 
       if (response.status === 400 || response.status === 500) {
-        // debugger
-        console.log(`${response.status} ERROR: `, response)
+        debugger
       }
 
       throw new Error(`HTTP Response ${response.status}`)
@@ -42,7 +41,7 @@ export default class Client {
   }
 
   post(path, data) {
-    console.log(`[fetch] POST ${this.baseUrl}${path} {${Object.keys(data).join(', ')}:${Object.values(data).join(', ')}}`)
+    console.log(`[fetch] POST ${this.baseUrl}${path} {${Object.keys(data).join(', ')}}`)
 
     return this.handleResponse(
       this.fetch(`${this.baseUrl}${path}`, {

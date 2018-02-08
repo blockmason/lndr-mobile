@@ -79,15 +79,13 @@ class FriendsView extends Component<Props, State> {
   render() {
     const { friendsLoaded, friends, recentTransactions, pendingTransactions } = this.props.state
 
-    return <ScrollView style={general.view} keyboardShouldPersistTaps='handled' ref='_friendScrollView'>
+    return <ScrollView style={general.view} keyboardShouldPersistTaps='handled'>
       <Section>
         <SearchFriend 
           onSuccess={() => this.refresh()}
           removeFriend={(friend) => this.props.navigation.navigate('FriendDetail', { friend })}
           selectFriend={(friend) => this.addFriend(friend)}
           state={this.props.state}
-          navigation={this.props.navigation}
-          scrollUp={() => this.refs._friendScrollView.scrollTo({ x: 0, y: 0, animated: true })}
          />
       </Section>
       <Section contentContainerStyle={[style.list, style.friendList]}>

@@ -7,6 +7,8 @@ import AndroidStatusBar from 'ui/components/android-status-bar'
 import HomeView from 'ui/views/account/home'
 import FriendsView from 'ui/views/account/friends'
 import ActivityView from 'ui/views/account/activity'
+import AddDebt from 'ui/dialogs/add-debt'
+import Confirmation from 'ui/dialogs/confirmation-screen'
 import TextLogo from 'ui/components/images/text-logo'
 
 import { isFocusingOn } from 'reducers/nav'
@@ -27,11 +29,15 @@ import TabStyle from 'theme/tabs'
 const HomeScreen = (props) => <HomeView {...props}/>;
 const FriendsScreen = (props) => <FriendsView {...props} />;
 const ActivityScreen = (props) => <ActivityView {...props} />;
+const AddDebtScreen = (props) => <AddDebt {...props} />;
+const ConfirmationScreen = (props) => <Confirmation {...props} />;
 
 const RouteConfig = {
   Home: { screen: HomeScreen },
   Friends: { screen: FriendsScreen },
-  Activity: { screen: ActivityScreen }
+  Activity: { screen: ActivityScreen },
+  AddDebt: { screen: AddDebtScreen },
+  Confirmation: { screen: ConfirmationScreen }
 }
 
 const TabNavigatorConfig = {
@@ -52,6 +58,15 @@ interface Props {
 class DashboardNavigatorWithHeader extends Component<Props> {
 
   static router = DashboardNavigator.router
+
+  componentWillMount() {
+    const { navigation } = this.props
+    BackHandler.addEventListener('hardwareBackPress', () => navigation.goBack(null));
+  }
+
+  componentWillUnmount() {
+    BackHandler.removeEventListener('hardwareBackPress', () => null);
+  }
 
   render() {
 

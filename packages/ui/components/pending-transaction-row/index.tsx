@@ -3,7 +3,7 @@ import React, { Component } from 'react'
 import { Text, TouchableHighlight, View, Image } from 'react-native'
 import Icon from 'react-native-vector-icons/Ionicons'
 
-import { dollars, cents } from 'lndr/format'
+import { dollars } from 'lndr/format'
 import PendingTransaction from 'lndr/pending-transaction'
 import User from 'lndr/user'
 
@@ -50,7 +50,7 @@ export default class PendingTransactionRow extends Component<Props> {
       sign = '-'
     }
 
-    return `${sign} $${cents(pendingTransaction.amount)}`
+    return `${sign} $${dollars(pendingTransaction.amount)}`
   }
 
   render() {

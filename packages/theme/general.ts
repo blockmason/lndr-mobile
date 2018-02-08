@@ -4,8 +4,6 @@ import { white } from 'theme/include/colors'
 
 const { height } = Dimensions.get('window')
 
-export const underlayColor = { underlayColor: '#efefef' }
-
 export default StyleSheet.create({
   flex: {
     flex: 1
@@ -46,9 +44,6 @@ export default StyleSheet.create({
   betweenRow: {
     flexDirection: 'row',
     justifyContent: 'space-between'
-  },
-  standardHMargin: {
-    marginHorizontal: 15
   }
 
 } as any)

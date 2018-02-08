@@ -44,8 +44,6 @@ class PendingSettlementDetail extends Component<Props> {
 
     if (success) {
       this.closePopup('confirm')
-    } else {
-      this.props.navigation.goBack()
     }
   }
 
@@ -116,8 +114,7 @@ class PendingSettlementDetail extends Component<Props> {
       sign = '-'
     }
 
-    //this is specific to ETH
-    return `${pendingSettlement.settlementAmount / Math.pow(10, 18)}`.slice(0, 9)
+    return `${pendingSettlement.settlementAmount}`
   }
 
   showButtons() {
@@ -127,7 +124,7 @@ class PendingSettlementDetail extends Component<Props> {
       return <Button alternate arrowRed onPress={() => this.rejectPendingSettlement(pendingSettlement)} text={pendingSettlementsLanguage.cancel} />
     }
 
-    return <View style={{marginBottom: 50}}>
+    return <View style={{marginBottom: 10}}>
       <Button round large onPress={() => this.confirmPendingSettlement(pendingSettlement)} text={pendingSettlementsLanguage.confirm} />
       <Button alternate arrowRed onPress={() => this.rejectPendingSettlement(pendingSettlement)} text={pendingSettlementsLanguage.reject} />
     </View>
@@ -140,8 +137,8 @@ class PendingSettlementDetail extends Component<Props> {
     return <ScrollView style={[general.fullHeight, general.view]}>
       <Loading context={loadingContext} />
       <DashboardShell text='Pending Settlement' />
-      <Button close onPress={() => this.props.navigation.goBack()} />
-      <View style={[general.centeredColumn, general.standardHMargin]}>
+      <Button close onPress={() => this.closePopup(null)} />
+      <View style={general.centeredColumn}>
         <Image source={require('images/person-outline-dark.png')} style={style.image}/>
         <Text style={[style.title, {alignSelf: 'center', textAlign: 'center'}]}>{this.getTitle()}</Text>
         <View style={style.balanceRow}>

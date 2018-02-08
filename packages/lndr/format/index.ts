@@ -49,15 +49,3 @@ export const currency = value => {
 
   return `$${commas(raw)}`
 }
-
-export const formatNick = nick => nick.replace(/[^A-Za-z0-9]/g, '')
-
-export const formatMemo = memo => memo.replace(/^\s/, '').replace(/\s\s$/, ' ')
-
-export const formatPin = pin => pin.replace(/[^0-9]/g, '')
-
-export const formatLockTimeout = timeout => timeout.replace(/[^0-9]/g, '')
-
-export const ethAddress = addr => addr.replace(/[g-z]/gi, '').replace(/[^a-z0-9]/gi, '').toLowerCase()
-
-export const ethAmount = amount => amount.replace(/[^0-9\.]/g, '')

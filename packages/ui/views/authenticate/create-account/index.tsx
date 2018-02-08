@@ -22,12 +22,14 @@ interface AccountViewState {
   duplicationViolation?: boolean
 }
 
+const defaultAccountViewState = (): AccountViewState => ({
+  duplicationViolation: false
+})
+
 class CreateAccountView extends Component<Props, AccountViewState> {
   constructor() {
     super()
-    this.state = {
-      duplicationViolation: false
-    }
+    this.state = defaultAccountViewState()
   }
 
   async handleOnSubmitCreateAccount(formData: CreateAccountData) {
@@ -61,7 +63,6 @@ class CreateAccountView extends Component<Props, AccountViewState> {
           onNickTextInputBlur={this.handleOnNickTextInputBlur.bind(this)}
           onSubmitCreateUser={this.handleOnSubmitCreateAccount.bind(this)}
           onSubmitRecover={this.props.goToRecoverAccount}
-          duplicationViolation={this.state.duplicationViolation}
         />
       </View>
     )

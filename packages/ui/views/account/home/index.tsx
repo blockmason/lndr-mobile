@@ -2,7 +2,7 @@
 
 import React, { Component } from 'react'
 
-import { Text, View, ScrollView, Platform, Dimensions, Image, TouchableHighlight, BackHandler, BackAndroid } from 'react-native'
+import { Text, View, ScrollView, Platform, Dimensions, Image, TouchableHighlight } from 'react-native'
 
 import { cents } from 'lndr/format'
 import Balance from 'lndr/balance'
@@ -20,14 +20,13 @@ import PendingTransaction from 'lndr/pending-transaction'
 
 import { isFocusingOn } from 'reducers/nav'
 import { getStore, getUser } from 'reducers/app'
-import { getAccountInformation, displayError, getPendingTransactions, getBalances, registerChannelID } from 'actions'
+import { getAccountInformation, displayError, getPendingTransactions, getBalances, registerChannelID, getPendingSettlements } from 'actions'
 import { connect } from 'react-redux'
 import { UrbanAirship } from 'urbanairship-react-native'
 
 import style from 'theme/account'
 import formStyle from 'theme/form'
 import general from 'theme/general'
-import { underlayColor } from 'theme/general'
 
 import {
   tip,
@@ -58,6 +57,7 @@ interface Props {
   isFocused: boolean
   getPendingTransactions: () => any
   getBalances: () => any
+  getPendingSettlements: () => any
   getAccountInformation: () => any
   displayError: (errorMsg: string) => any
   registerChannelID: (channelID: string, platform: string) => any
@@ -87,6 +87,7 @@ class HomeView extends Component<Props, State> {
     }
 
     await loadingPendingTransactions.wrap(this.props.getPendingTransactions())
+    await loadingPendingSettlements.wrap(this.props.getPendingSettlements())
     await loadingBalances.wrap(this.props.getBalances())
   }
 
@@ -98,6 +99,7 @@ class HomeView extends Component<Props, State> {
 
   async initializePushNotifications() {
     UrbanAirship.getChannelId().then(channelId => {
+      console.log('Channel: ', channelId);
       this.props.registerChannelID(channelId, Platform.OS)
     })
 
@@ -119,7 +121,7 @@ class HomeView extends Component<Props, State> {
   }
 
   renderBalanceInformation() {
-    const { accountInformationLoaded, accountInformation = {}, balances, balancesLoaded, ethBalance = '0', ethExchange = '1000' } = this.props.state
+    const { accountInformationLoaded, accountInformation = {}, balances, balancesLoaded } = this.props.state
 
     if (!accountInformationLoaded) {
       return
@@ -142,19 +144,15 @@ class HomeView extends Component<Props, State> {
           <Text style={style.balanceInfo}>USD</Text>
         </View>
       </View>
-      <View style={style.balanceRow}>
+      <View style={[style.balanceRow]}>
         <Text style={[style.balance, {marginLeft: '2%'}]}>{recentTransactionsLanguage.balance}</Text>
         <Button alternate blackText narrow arrow small onPress={() => {this.props.navigation.navigate('Friends')}}
           text={recentTransactionsLanguage.friends(balancesLoaded ? balances.length : 0)}
           containerStyle={{marginTop: -6}}
         />
       </View>
-      <View style={[style.balanceRow, {marginTop: 10}]}>
-        <Text style={[style.balance, {marginLeft: '2%'}]}>{accountManagement.ethBalance.display(ethBalance)}</Text>
-        <Button alternate blackText narrow arrow small onPress={() => {this.props.navigation.navigate('MyAccount')}}
-          text={accountManagement.ethBalance.inUsd(ethBalance, ethExchange)}
-          containerStyle={{marginTop: -6}}
-        />
+      <View>
+        <Text style={style.largeFactAmount}></Text>
       </View>
     </Section>
   }
@@ -182,7 +180,7 @@ class HomeView extends Component<Props, State> {
       <Text style={[formStyle.title, formStyle.center, formStyle.spaceBottom, formStyle.spaceTop]}>{needsReview}</Text>
       <PendingView navigation={this.props.navigation} homeScreen />
 
-      <TouchableHighlight {...underlayColor} onPress={() => this.props.navigation.navigate('Activity')}>
+      <TouchableHighlight onPress={() => this.props.navigation.navigate('Activity')}>
         <View style={style.seeAllActivityButton}>
           <Text style={style.seeAllActivity}>{seeAllActivity}</Text>
           <Image source={require('images/blue-chevron.png')} style={style.seeAllActivityArrow} />
@@ -193,4 +191,4 @@ class HomeView extends Component<Props, State> {
 }
 
 export default connect((state) => ({ state: getStore(state)(), user: getUser(state)(), isFocused: isFocusingOn(state)('Home') }),
-{ getAccountInformation, displayError, getPendingTransactions, getBalances, registerChannelID })(HomeView)
+{ getAccountInformation, displayError, getPendingTransactions, getBalances, registerChannelID, getPendingSettlements })(HomeView)

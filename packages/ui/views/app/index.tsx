@@ -49,12 +49,7 @@ const initialState = {
   pendingTransactions: [],
   pendingSettlements: [],
   bilateralSettlements: [],
-  notificationsEnabled: true,
-  ethBalance: '0',
-  ethExchange: '1000',
-  bcptBalance: '0',
-  bcptExchange: '0.5',
-  userPic: ''
+  notificationsEnabled: true
 }
 
 const store = createStore(initialState)

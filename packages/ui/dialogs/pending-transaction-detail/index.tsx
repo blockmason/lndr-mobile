@@ -6,7 +6,6 @@ import { UserData } from 'lndr/user'
 import { debounce } from 'lndr/time'
 import { cents } from 'lndr/format'
 import PendingTransaction from 'lndr/pending-transaction'
-import { getProfilePic } from 'lndr/profile-pic'
 
 import Button from 'ui/components/button'
 import Loading, { LoadingContext } from 'ui/components/loading'
@@ -30,33 +29,16 @@ import { connect } from 'react-redux'
 const loadingContext = new LoadingContext()
 
 interface Props {
+  pendingTransaction: PendingTransaction
   confirmPendingTransaction: (pendingTransaction: PendingTransaction) => any
   rejectPendingTransaction: (pendingTransaction: PendingTransaction) => any
+  closePopup: () => void
   user: UserData
   submitterIsMe: (pendingTransaction: PendingTransaction) => boolean
   navigation: any
 }
 
-interface State {
-  userPic: string
-}
-
-class PendingTransactionDetail extends Component<Props, State> {
-  constructor() {
-    super()
-    this.state = { userPic: '' }
-  }
-
-  async componentWillMount() {
-    const { user, navigation } = this.props
-    const pendingTransaction = navigation.state ? navigation.state.params.pendingTransaction : {}
-    if (pendingTransaction.creditorNickname !== undefined) {
-      const nicknameToGet = pendingTransaction.creditorAddress === user.address ? pendingTransaction.debtorNickname : pendingTransaction.creditorNickname
-      const userPic = await getProfilePic(nicknameToGet)
-      this.setState({ userPic })
-    }
-  }
-
+class PendingTransactionDetail extends Component<Props> {
   async confirmPendingTransaction(pendingTransaction: PendingTransaction) {
     const success = await loadingContext.wrap(
       this.props.confirmPendingTransaction(pendingTransaction)
@@ -65,7 +47,7 @@ class PendingTransactionDetail extends Component<Props, State> {
     if (success) {
       this.closePopup('confirm')
     } else {
-      this.props.navigation.goBack()
+      this.props.closePopup()
     }
   }
 
@@ -77,17 +59,19 @@ class PendingTransactionDetail extends Component<Props, State> {
     if (success) {
       this.closePopup('reject')
     } else {
-      this.props.navigation.goBack()
+      this.props.closePopup()
     }
   }
 
   closePopup(type) {
-    this.props.navigation.navigate('Confirmation', { type: type, friend: { nickname: this.getFriendNickname() } })
+    this.props.closePopup()
+    if (type) {
+      this.props.navigation.navigate('Confirmation', { type: type, friend: { nickname: this.getFriendNickname() } })
+    }
   }
 
   getFriendNickname() {
-    const { user, navigation} = this.props
-    const pendingTransaction = navigation.state ? navigation.state.params.pendingTransaction : {}
+    const { user, pendingTransaction } = this.props
 
     if (user.address === pendingTransaction.creditorAddress) {
       return pendingTransaction.debtorNickname
@@ -97,8 +81,7 @@ class PendingTransactionDetail extends Component<Props, State> {
   }
 
   getTitle() {
-    const { user, navigation } = this.props
-    const pendingTransaction = navigation.state ? navigation.state.params.pendingTransaction : {}
+    const { pendingTransaction, user } = this.props
 
     if (user.address === pendingTransaction.creditorAddress) {
       return debtManagement.direction.pendingLend(pendingTransaction.debtorNickname)
@@ -121,8 +104,7 @@ class PendingTransactionDetail extends Component<Props, State> {
   }
 
   showButtons() {
-    const { submitterIsMe, navigation } = this.props
-    const pendingTransaction = navigation.state ? navigation.state.params.pendingTransaction : {}
+    const { pendingTransaction, submitterIsMe } = this.props
     if (submitterIsMe(pendingTransaction)) {
       return <Button alternate arrowRed onPress={() => this.rejectPendingTransaction(pendingTransaction)} text={pendingTransactionsLanguage.cancel} />
     }
@@ -134,17 +116,14 @@ class PendingTransactionDetail extends Component<Props, State> {
   }
 
   render() {
-    const { user, submitterIsMe, navigation } = this.props
-    const { userPic } = this.state
-    const pendingTransaction = navigation.state ? navigation.state.params.pendingTransaction : {}
-    const imageSource = userPic ? {uri: userPic} : require('images/person-outline-dark.png')
+    const { user, pendingTransaction, submitterIsMe } = this.props
 
-    return <ScrollView style={[general.fullHeight, general.view]}>
+    return <ScrollView style={general.fullHeight}>
       <Loading context={loadingContext} />
       <DashboardShell text='Pending Transaction' />
-      <Button close onPress={() => this.props.navigation.goBack()} />
+      <Button close onPress={() => this.closePopup(null)} />
       <View style={general.centeredColumn}>
-        <Image source={imageSource} style={style.image}/>
+        <Image source={require('images/person-outline-dark.png')} style={style.image}/>
         <Text style={style.title}>{this.getTitle()}</Text>
         <View style={style.balanceRow}>
           <Text style={style.balanceInfo}>$</Text>
