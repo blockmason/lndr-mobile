@@ -8,23 +8,15 @@
 // gasPrice - String: (optional) The gas price set by this transaction, if empty, it will use web3.eth.gasPrice()
 
 export default class EthTransaction {
-  from: string
   to: string
-  value: number
-  gasPrice: number
-  gas: number
+  value: string
+  gasPrice: string
+  gas: string
 
-  constructor(from: string, to: string, value: number, gasPrice: number) {
-    if (typeof from === 'string' && from.substr(0, 2) === '0x') {
-      from = from.substr(2)
-    }
-    if (typeof to === 'string' && to.substr(0, 2) === '0x') {
-      to = to.substr(2)
-    }
-    this.from = from
+  constructor(to: string, value: string, gasPrice: string) {
     this.to = to
     this.value = value
     this.gasPrice = gasPrice
-    this.gas = 21000
+    this.gas = '21000'
   }
 }

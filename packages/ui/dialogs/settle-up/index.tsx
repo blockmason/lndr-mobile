@@ -15,17 +15,15 @@ import RecentView from 'ui/views/account/activity/recent'
 import style from 'theme/friend'
 import formStyle from 'theme/form'
 import general from 'theme/general'
-import accountStyle from 'theme/account'
 
 import {
   back,
   cancel,
   pendingTransactionsLanguage,
-  debtManagement,
-  accountManagement
+  debtManagement
 } from 'language'
 
-import { getUser, recentTransactions, getEthBalance, getEthExchange } from 'reducers/app'
+import { getUser, recentTransactions } from 'reducers/app'
 import { settleUp } from 'actions'
 import { connect } from 'react-redux'
 import { addNavigationHelpers } from 'react-navigation';
@@ -41,8 +39,6 @@ interface Props {
     denomination: string
   ) => any
   user: UserData
-  ethBalance: string
-  ethExchange: string
   recentTransactions: any
   navigation: any
 }
@@ -116,7 +112,7 @@ class SettleUp extends Component<Props, State> {
   }
 
   setAmount(amount) {
-    return `${currency(amount)}`
+    return `${this.getRecentTotal() < 0 ? '-' : '+'}${currency(amount)}`
   }
 
   displayMessage() {
@@ -132,7 +128,7 @@ class SettleUp extends Component<Props, State> {
 
   render() {
     const { amount, balance } = this.state
-    const { recentTransactions, ethBalance, ethExchange } = this.props
+    const { recentTransactions } = this.props
     const friend = this.props.navigation ? this.props.navigation.state.params.friend : {}
 
     return <ScrollView style={general.whiteFlex} keyboardShouldPersistTaps='handled'>
@@ -140,7 +136,11 @@ class SettleUp extends Component<Props, State> {
       <DashboardShell text={debtManagement.settleUpLower} />
       <Button close onPress={() => this.props.navigation.navigate('Friends')} />
       <View style={[general.centeredColumn, {marginBottom: 20}]}>
-        <Image source={require('images/person-outline-dark.png')} style={style.settleImage}/>
+
+      {/* Remove this when Settlement code is done */}
+      <Text style={[style.header, {marginBottom: 20}]}>Coming Soon</Text>
+      <Button alternate arrowRed large onPress={() => this.cancel()} text='Go Back' />
+        {/* <Image source={require('images/person-outline-dark.png')} style={style.settleImage}/>
         <Text style={[style.header, {marginBottom: 20}]}>{this.displayMessage()}</Text>
         <View style={style.transactions}>
           {
@@ -157,32 +157,24 @@ class SettleUp extends Component<Props, State> {
             <Text style={style.totalAmount}>{this.displayTotal(balance)}</Text>
           </View>
           <View style={general.centeredColumn}>
-            <View style={[accountStyle.balanceRow, {marginTop: 20}]}>
-              <Text style={[accountStyle.balance, {marginLeft: '2%'}]}>{accountManagement.ethBalance.display(ethBalance)}</Text>
-              <Button alternate blackText narrow arrow small onPress={() => {this.props.navigation.navigate('MyAccount')}}
-                text={accountManagement.ethBalance.inUsd(ethBalance, ethExchange)}
-                containerStyle={{marginTop: -6}}
-              />
-            </View>
-            <Text style={formStyle.title}>{debtManagement.fields.settlementAmount}</Text>
+            <Text style={formStyle.title}>{debtManagement.fields.amount}</Text>
             <TextInput
               style={formStyle.jumboInput}
-              placeholder={'$0'}
+              placeholder={'$0.00'}
               placeholderTextColor='black'
               value={amount}
               maxLength={14}
               underlineColorAndroid='transparent'
-              keyboardType='numeric'
               onChangeText={amount => this.setState({ amount: this.setAmount(amount) })}
             />
           </View>
         </View>
         { amount ? <Button large round wide onPress={() => this.submit()} text={debtManagement.settleUp} /> : <Button large round wide onPress={() => this.setState({ amount: currency(cents(Math.abs(balance))) })} text={debtManagement.settleTotal} />}
-        <Button alternate arrowRed large onPress={() => this.cancel()} text={cancel} />
+        <Button alternate arrowRed large onPress={() => this.cancel()} text={cancel} /> */}
       </View>
     </ScrollView>
   }
 }
 
-export default connect((state) => ({ user: getUser(state)(), ethBalance: getEthBalance(state), ethExchange: getEthExchange(state), recentTransactions: recentTransactions(state) }),
+export default connect((state) => ({ user: getUser(state)(), recentTransactions: recentTransactions(state) }),
 { settleUp })(SettleUp)

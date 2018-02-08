@@ -25,10 +25,9 @@ interface Props {
 
 class AuthenticateView extends Component<Props> {
   render() {
-    const { hasStoredUser, shouldRemoveAccount, shouldDisplayMnemonic } = this.props.state
-
     return <ScrollView contentContainerStyle={general.whiteFlex}>
       <FadeInView style={style.main}>
+        <ThemeImage name='logo' size={0.4} />
         {this.renderView()}
         {this.renderLoadingView()}
       </FadeInView>
