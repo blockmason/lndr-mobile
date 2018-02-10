@@ -91,6 +91,12 @@ export default StyleSheet.create({
     color: black,
     marginTop: s
   },
+  titleLarge: {
+    ...medium,
+    ...bold,
+    color: black,
+    marginTop: m
+  },
   textInputContainer: {
     width: '100%', 
     borderRadius: 30, 

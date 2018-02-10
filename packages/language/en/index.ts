@@ -124,7 +124,8 @@ export const accountManagement = {
     transfer: 'TRANSFER ETH',
     transferAll: 'TRANSFER EVERYTHING',
     balance: (balance) => `Your current ETH balance is ${typeof balance === 'string' ? balance.slice(0,8) : ''}`,
-    ethAddress: 'Ethereum Address'
+    ethAddress: 'Ethereum Address',
+    txCost: cost => `The current transaction cost is $${cost}`
   },
   sendBcpt: {
     error: {

@@ -29,6 +29,18 @@ export const getGasPrice = async () => {
   return tempStorage.gasPrice = prices.safeLow * 1.3 * Math.pow(10, 8)
 }
 
+export const getTxCost = async (currency: string) => {
+  try {
+    if (currency === 'dollar') {
+      const gasPrice = await getGasPrice()
+      const rate = await getEthExchange()
+      return `${gasPrice * Number(rate) * 21000 / Math.pow(10, 18)}`.slice(0,6)
+    }
+  } catch (e) {}
+
+  return '0.00'
+}
+
 export const getEthExchange = async () => {
   if (tempStorage.ethExchange) {
     return tempStorage.ethExchange
