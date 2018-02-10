@@ -247,6 +247,10 @@ export default StyleSheet.create({
     ...bold,
     ...small
   },
+  txCost: {
+    color: black,
+    ...small
+  },
   friends: {
     color: black,
     ...small

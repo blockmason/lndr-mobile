@@ -17,7 +17,6 @@ import SearchFriend from 'ui/views/account/friends/search-friend'
 import style from 'theme/account'
 import formStyle from 'theme/form'
 import general from 'theme/general'
-import aqua from 'theme/include/colors'
 import pendingStyle from 'theme/pending'
 
 import { debtManagement, noFriends, submit, cancel, back } from 'language'
@@ -192,7 +191,6 @@ class AddDebt extends Component<Props, State> {
           />
         </View>
         { friend && amount && memo ? <Button large round wide onPress={() => this.submit()} text={submit} /> : null }
-        <Button alternate arrowRed large onPress={() => this.cancel()} text={cancel} />
       </View>
     </ScrollView>
   }

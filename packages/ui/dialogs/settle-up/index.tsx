@@ -6,6 +6,7 @@ import { UserData } from 'lndr/user'
 import { debounce } from 'lndr/time'
 import { cents, currency } from 'lndr/format'
 import Friend from 'lndr/friend'
+import { getTxCost } from 'lndr/eth-price-utils'
 
 import Button from 'ui/components/button'
 import Loading, { LoadingContext } from 'ui/components/loading'
@@ -51,6 +52,7 @@ interface State {
   amount?: string
   balance: number
   direction: string
+  txCost: String
 }
 
 class SettleUp extends Component<Props, State> {
@@ -58,8 +60,14 @@ class SettleUp extends Component<Props, State> {
     super(props)
     this.state = {
       balance: this.getRecentTotal(),
-      direction: this.getRecentTotal() > 0 ? 'borrow' : 'lend'
+      direction: this.getRecentTotal() > 0 ? 'borrow' : 'lend',
+      txCost: '0.00'
     }
+  }
+
+  async componentWillMount() {
+    const txCost = await getTxCost('dollar')
+    this.setState({txCost})
   }
 
   async submit() {
@@ -131,7 +139,7 @@ class SettleUp extends Component<Props, State> {
   }
 
   render() {
-    const { amount, balance } = this.state
+    const { amount, balance, txCost } = this.state
     const { recentTransactions, ethBalance, ethExchange } = this.props
     const friend = this.props.navigation ? this.props.navigation.state.params.friend : {}
 
@@ -164,7 +172,8 @@ class SettleUp extends Component<Props, State> {
                 containerStyle={{marginTop: -6}}
               />
             </View>
-            <Text style={formStyle.title}>{debtManagement.fields.settlementAmount}</Text>
+            <Text style={[accountStyle.txCost, {marginLeft: '2%'}]}>{accountManagement.sendEth.txCost(txCost)}</Text>
+            <Text style={formStyle.titleLarge}>{debtManagement.fields.settlementAmount}</Text>
             <TextInput
               style={formStyle.jumboInput}
               placeholder={'$0'}
@@ -178,7 +187,6 @@ class SettleUp extends Component<Props, State> {
           </View>
         </View>
         { amount ? <Button large round wide onPress={() => this.submit()} text={debtManagement.settleUp} /> : <Button large round wide onPress={() => this.setState({ amount: currency(cents(Math.abs(balance))) })} text={debtManagement.settleTotal} />}
-        <Button alternate arrowRed large onPress={() => this.cancel()} text={cancel} />
       </View>
     </ScrollView>
   }

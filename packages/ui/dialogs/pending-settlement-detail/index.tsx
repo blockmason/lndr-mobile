@@ -6,6 +6,7 @@ import { UserData } from 'lndr/user'
 import { debounce } from 'lndr/time'
 import { cents } from 'lndr/format'
 import PendingSettlement from 'lndr/pending-transaction'
+import { getTxCost } from 'lndr/eth-price-utils'
 
 import Button from 'ui/components/button'
 import Loading, { LoadingContext } from 'ui/components/loading'
@@ -13,13 +14,15 @@ import DashboardShell from 'ui/components/dashboard-shell'
 
 import style from 'theme/pending'
 import formStyle from 'theme/form'
+import accountStyle from 'theme/account'
 import general from 'theme/general'
 
 import {
   back,
   cancel,
   pendingSettlementsLanguage,
-  debtManagement
+  debtManagement,
+  accountManagement
 } from 'language'
 
 import { getUser, settlerIsMe } from 'reducers/app'
@@ -36,7 +39,23 @@ interface Props {
   navigation: any
 }
 
-class PendingSettlementDetail extends Component<Props> {
+interface State {
+  txCost: string
+}
+
+class PendingSettlementDetail extends Component<Props, State> {
+  constructor() {
+    super()
+    this.state = {
+      txCost: '0.00'
+    }
+  }
+
+  async componentWillMount() {
+    const txCost = await getTxCost('dollar')
+    this.setState({txCost})
+  }
+
   async confirmPendingSettlement(pendingSettlement: PendingSettlement) {
     const success = await loadingContext.wrap(
       this.props.confirmPendingSettlement(pendingSettlement)
@@ -134,6 +153,7 @@ class PendingSettlementDetail extends Component<Props> {
   }
 
   render() {
+    const { txCost } = this.state
     const { user, settlerIsMe } = this.props
     const pendingSettlement = this.getPendingSettlement()
 
@@ -153,6 +173,7 @@ class PendingSettlementDetail extends Component<Props> {
           <Text style={style.amount}>{this.getSettlementAmount()}</Text>
           <Text style={style.balanceInfo}>{pendingSettlement.settlementCurrency}</Text>
         </View>
+        <Text style={[accountStyle.txCost, formStyle.spaceBottom, {marginLeft: '2%'}]}>{accountManagement.sendEth.txCost(txCost)}</Text>
         {this.showButtons()}
       </View>
     </ScrollView>
