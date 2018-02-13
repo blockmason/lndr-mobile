@@ -320,7 +320,7 @@ export default class CreditProtocol {
 
   storeSettlementHash(txHash: any, settlement: any, privateKeyBuffer: any) {
     const hashBuffer = Buffer.concat([
-      hexToBuffer(settlement.hash),
+      settlement.creditRecord.hash,
       hexToBuffer(txHash),
       hexToBuffer(settlement.creditorAddress)
     ])
@@ -329,7 +329,7 @@ export default class CreditProtocol {
 
     return this.client.post('/verify_settlement', {
       txHash,
-      creditHash: settlement.hash,
+      creditHash: bufferToHex(settlement.creditRecord.hash),
       creditorAddress: settlement.creditorAddress,
       signature
     })

@@ -2,7 +2,7 @@ import { CreditRecord } from 'credit-protocol'
 
 import ucac from 'lndr/ucac'
 
-export default class PendingSettlement {
+export default class PendingUnilateral {
   creditorNickname: string
   debtorNickname: string
   creditRecord: CreditRecord

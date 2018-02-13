@@ -5,7 +5,7 @@ import { UserData } from 'lndr/user'
 
 import { debounce } from 'lndr/time'
 import { cents } from 'lndr/format'
-import PendingSettlement from 'lndr/pending-transaction'
+import PendingUnilateral from 'lndr/pending-unilateral'
 import { getTxCost } from 'lndr/eth-price-utils'
 
 import Button from 'ui/components/button'
@@ -32,10 +32,10 @@ import { connect } from 'react-redux'
 const loadingContext = new LoadingContext()
 
 interface Props {
-  confirmPendingSettlement: (pendingSettlement: PendingSettlement) => any
-  rejectPendingSettlement: (pendingSettlement: PendingSettlement) => any
+  confirmPendingSettlement: (pendingSettlement: PendingUnilateral) => any
+  rejectPendingSettlement: (pendingSettlement: PendingUnilateral) => any
   user: UserData
-  settlerIsMe: (pendingSettlement: PendingSettlement) => boolean
+  settlerIsMe: (pendingSettlement: PendingUnilateral) => boolean
   navigation: any
 }
 
@@ -56,7 +56,7 @@ class PendingSettlementDetail extends Component<Props, State> {
     this.setState({txCost})
   }
 
-  async confirmPendingSettlement(pendingSettlement: PendingSettlement) {
+  async confirmPendingSettlement(pendingSettlement: PendingUnilateral) {
     const success = await loadingContext.wrap(
       this.props.confirmPendingSettlement(pendingSettlement)
     )
@@ -68,7 +68,7 @@ class PendingSettlementDetail extends Component<Props, State> {
     }
   }
 
-  async rejectPendingSettlement(pendingSettlement: PendingSettlement) {
+  async rejectPendingSettlement(pendingSettlement: PendingUnilateral) {
     const success = await loadingContext.wrap(
       this.props.rejectPendingSettlement(pendingSettlement)
     )
