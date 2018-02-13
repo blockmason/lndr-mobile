@@ -27,6 +27,7 @@ import { accountManagement, debtManagement, settlementManagement } from 'languag
 import { ToastActionsCreators } from 'react-native-redux-toast'
 import { getUser, getStore } from 'reducers/app'
 import { hexToBuffer } from '../credit-protocol/lib/buffer-utils';
+import account from 'theme/account';
 
 const bcrypt = require('bcryptjs')
 
@@ -91,7 +92,7 @@ export const displaySuccess = (success: string) => {
   return ToastActionsCreators.displayInfo(success)
 }
 
-export const updateAccount = (accountData: any) => {
+export const updateNickname = (accountData: any) => {
   return async (dispatch, getState) => {
     const { address, privateKeyBuffer } = getUser(getState())()
     const { nickname } = accountData
@@ -107,6 +108,22 @@ export const updateAccount = (accountData: any) => {
   }
 }
 
+export const updateEmail = (accountData: any) => {
+  return async (dispatch, getState) => {
+    const { address, privateKeyBuffer } = getUser(getState())()
+    const { email } = accountData
+
+    try {
+      await creditProtocol.setEmail(address, email, privateKeyBuffer)
+      dispatch(displaySuccess(accountManagement.setEmail.success))
+      dispatch(getAccountInformation())
+    } catch (error) {
+      dispatch(displayError(accountManagement.setEmail.error))
+      throw error
+    }
+  }
+}
+
 export const updatePin = (password: string, confirmPassword: string) =>  {
   return async (dispatch, getState) => {
     if (password !== confirmPassword) {
@@ -114,7 +131,7 @@ export const updatePin = (password: string, confirmPassword: string) =>  {
       return false
     }
 
-    const { mnemonic, privateKey, privateKeyBuffer, ethAddress, address, nickname } = getUser(getState())()
+    const { mnemonic, privateKey, privateKeyBuffer, ethAddress, address, nickname, email } = getUser(getState())()
     const hashedPassword = bcrypt.hashSync(password)
   
     const user = new User(
@@ -124,7 +141,8 @@ export const updatePin = (password: string, confirmPassword: string) =>  {
       privateKeyBuffer,
       ethAddress,
       address,
-      nickname
+      nickname,
+      email
     )
     await storeUserSession(user)
     dispatch(displaySuccess(accountManagement.pin.updateSuccess))
@@ -156,8 +174,10 @@ export const createUserFromCredentials = async (mnemonic, hashedPassword) => {
   const ethAddress = ethUtil.privateToAddress(privateKeyBuffer)
   const address = ethAddress.toString('hex')
   let nickname = ''
+  let email = ''
   try {
     nickname = await creditProtocol.getNickname(address)
+    email = await creditProtocol.getEmail(address)
   } catch (e) {}
 
   return new User(
@@ -167,7 +187,8 @@ export const createUserFromCredentials = async (mnemonic, hashedPassword) => {
     privateKeyBuffer,
     ethAddress,
     address,
-    nickname
+    nickname,
+    email
   )
 }
 
@@ -207,7 +228,8 @@ export const createAccount = (accountData: CreateAccountData) => {
     dispatch(await confirmAccount())
     //hacky, need to update this
     setTimeout( async () => {
-      dispatch(await updateAccount({nickname: accountData.nickname}))
+      dispatch(await updateNickname({nickname: accountData.nickname}))
+      dispatch(await updateEmail({email: accountData.email}))
     }, 1000)
   }
 }
@@ -260,12 +282,16 @@ export const getBalances = () => {
 //Needs a selector
 export const getAccountInformation = () => {
   return async (dispatch, getState) => {
-    const { address } = getUser(getState())()
-    const accountInformation: { nickname?: string, balance?: number } = {}
-    try {
-      accountInformation.nickname = await creditProtocol.getNickname(address)
+    let { address, nickname, email } = getUser(getState())()
+
+    if (nickname.length === 0 || email.length === 0) {
+      try {
+        nickname = await creditProtocol.getNickname(address)
+        email = await creditProtocol.getEmail(address)
+      } catch (e) {}
     }
-    catch (e) {}
+    
+    const accountInformation: { nickname?: string, email?: string, balance?: number } = { nickname, email }
     try {
       accountInformation.balance = await creditProtocol.getBalance(address)
     }
@@ -279,8 +305,25 @@ export const getAccountInformation = () => {
 export async function takenNick(nickname: string) {
   let result = false
   if (nickname.length >= minimumNicknameLength) {
-    result = await creditProtocol.takenNick(nickname)
+    try {
+      const response = await creditProtocol.takenNick(nickname)
+      result = true
+    } catch (e) {
+      result = false
+    }
   }
+  return result
+}
+//Not a redux action
+export async function takenEmail(email: string) {
+  let result = false
+  try {
+    const response = await creditProtocol.takenEmail(email)
+    result = true
+  } catch (e) {
+    result = false
+  }
+
   return result
 }
 
@@ -468,7 +511,6 @@ export const confirmPendingSettlement = (pendingTransaction: PendingTransaction,
     const { address, privateKeyBuffer } = getUser(getState())()
     const direction = address === creditorAddress ? 'lend' : 'borrow'
 
-    console.log(direction, pendingTransaction)
     if (direction === 'lend') {
       const ethRequired = await getEthRequired(getState, amount)
       if (ethRequired) {
@@ -585,7 +627,6 @@ export const addDebt = (friend: Friend, amount: string, memo: string, direction:
     }
 
     catch (e) {
-      console.log('WHY WONT THIS WORK', e)
       dispatch(displayError(debtManagement.pending.error))
     }
   }
@@ -790,7 +831,6 @@ export const updateLockTimeout = (timeout: number) => {
   return async (dispatch, getState) => {
     try {
       const { user } = getState().store
-      console.log(user)
       user.lockTimeout = timeout
       await userStorage.set(user)
       dispatch(setState({ user }))
@@ -853,7 +893,6 @@ const settleBilateral = async (user, bilateralSettlements, dispatch, getState) =
       let hasEthTxHash = false
       try {
         const ethTxHash = await creditProtocol.getEthTxHash(settlement.hash)
-        console.log('GOT TX HASH', ethTxHash)
         hasEthTxHash = true
       } catch (e) {
         console.log('ERROR GETTING TX HASH', settlement.hash, e)

@@ -25,6 +25,7 @@ export default class CreditProtocol {
     this.client = new Client(baseUrl, fetch)
     this.tempStorage = {
       nicknames: {},
+      emails: {},
       registerId: {},
       searchUsers: {}
     }
@@ -85,6 +86,22 @@ export default class CreditProtocol {
     })
   }
 
+  setEmail(addr: string, email: string, privateKeyBuffer: string) {
+    //hash the email
+    const hashBuffer = Buffer.concat([
+      hexToBuffer(addr),
+      utf8ToBuffer(email)
+    ])
+    const hash = bufferToHex(ethUtil.sha3(hashBuffer))
+    const signature = this.serverSign(hash, privateKeyBuffer)
+
+    return this.client.post('/email', {
+      addr,
+      email,
+      signature
+    })
+  }
+
   getBalance(user: string) {
     return this.client.get(`/balance/${user}`)
   }
@@ -103,6 +120,14 @@ export default class CreditProtocol {
       return nickname
     }
     return this.tempStorage.nicknames[user] = this.client.get(`/nick/${user}`)
+  }
+
+  getEmail(user: string) {
+    const email = this.tempStorage.emails[user]
+    if (email) {
+      return email
+    }
+    return this.tempStorage.emails[user] = this.client.get(`/email/${user}`)
   }
 
   searchUsers(nick: string) {
@@ -127,12 +152,15 @@ export default class CreditProtocol {
     const hash = bufferToHex(ethUtil.sha3(hashBuffer))
     const signature = this.serverSign(hash, privateKeyBuffer)
 
-    console.log('REGISTER CHANNEL ID: ', channelID)
     return this.tempStorage.registerId[channelID] = this.client.post(`/register_push`, { channelID, platform, address, signature })
   }
 
   takenNick(nick: string) {
-    return this.client.get(`/taken_nick/${nick}`)
+    return this.client.get(`/user?nick=${nick}`)
+  }
+
+  takenEmail(email: string) {
+    return this.client.get(`/user?email=${email}`)
   }
 
   addFriend(user: string, addr: string/*, privateKeyBuffer: any*/) {
@@ -279,10 +307,9 @@ export default class CreditProtocol {
       value: web3.toHex(transaction.value),
       from: '0x' + transaction.from
     }
-    console.log(rawTx, rawTx.to, rawTx.to.length)
     const tx = new Tx(rawTx)
     tx.sign(privateKeyBuffer)
-    const serializedTx = tx.serialize();
+    const serializedTx = tx.serialize()
 
     console.log('TOTAL ETH TO BE SETTLED: ', Number(transaction.value) + Number(transaction.gas * transaction.gasPrice) )
     

@@ -7,7 +7,7 @@ import ThemeImage from 'ui/components/images/theme-image'
 import TextLogo from 'ui/components/images/text-logo'
 import { CreateAccountData, defaultCreateAccountData } from 'lndr/user'
 
-import { formatNick, formatPin } from 'lndr/format'
+import { formatNick, formatEmail, formatPin } from 'lndr/format'
 import Pinpad from 'ui/components/pinpad'
 
 import InputImage from 'ui/components/images/input-image'
@@ -15,6 +15,7 @@ import InputImage from 'ui/components/images/input-image'
 import {
   newAccount,
   nickname,
+  email,
   newPin,
   enterNewPin,
   confirmPin,
@@ -28,14 +29,19 @@ import general from 'theme/general'
 interface Props {
   onNickTextInputBlur: (nickname: string) => void
   nickTextInputErrorText: string
+  onEmailTextInputBlur: (email: string) => void
+  emailTextInputErrorText: string
   onSubmitCreateUser: (formData: CreateAccountData) => void
   onSubmitRecover: () => void
-  duplicationViolation?: boolean
+  nickDuplicationViolation?: boolean
+  emailDuplicationViolation?: boolean
+  emailFormatViolation?: boolean
 }
 
 interface State {
   step: number
   nickname: string
+  email: string
   password: string
   confirmPassword: string
 }
@@ -76,7 +82,7 @@ export default class CreateAccountForm extends Component<Props, State> {
   }
 
   submit() {
-    if(!this.props.duplicationViolation) {
+    if(!this.props.nickDuplicationViolation && !this.props.emailDuplicationViolation) {
       this.setState({ step: 2 })
     }
   }
@@ -108,7 +114,7 @@ export default class CreateAccountForm extends Component<Props, State> {
   }
 
   render() {
-    const { onNickTextInputBlur, nickTextInputErrorText } = this.props
+    const { onNickTextInputBlur, nickTextInputErrorText, onEmailTextInputBlur, emailTextInputErrorText } = this.props
     const { password, confirmPassword, step } = this.state
 
     if (step === 3) {
@@ -138,6 +144,21 @@ export default class CreateAccountForm extends Component<Props, State> {
             />
           </View>
           { nickTextInputErrorText && <Text style={style.warningText}>{nickTextInputErrorText}</Text>}
+          <View style={style.textInputContainer}>
+            <InputImage name='email'/>
+            <TextInput
+              autoCapitalize='none'
+              style={style.textInput}
+              placeholder={email}
+              value={this.state.email}
+              maxLength={20}
+              underlineColorAndroid='transparent'
+              keyboardType='email-address'
+              onChangeText={email => this.setState({ email: formatEmail(email) })}
+              onBlur={(): void => onEmailTextInputBlur(this.state.email)}
+            />
+          </View>
+          { emailTextInputErrorText && <Text style={style.warningText}>{emailTextInputErrorText}</Text>}
           <Button round fat onPress={() => this.submit()} style={style.submitButton} text={createAccount} />
           <Button alternate small arrow onPress={() => this.recover()} style={style.submitButton} text={recoverAccount} />
         </KeyboardAvoidingView>

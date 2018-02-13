@@ -4,11 +4,12 @@ import { View } from 'react-native'
 
 import { connect } from 'react-redux'
 
-import { setAuthLoading, createAccount, goToRecoverAccount, takenNick } from 'actions'
+import { setAuthLoading, createAccount, goToRecoverAccount, takenNick, takenEmail } from 'actions'
 
 import CreateAccountForm from 'ui/forms/create-account'
 
 import { CreateAccountData } from 'lndr/user'
+import { emailFormatIncorrect } from 'lndr/format'
 
 import { accountManagement } from 'language'
 
@@ -19,14 +20,18 @@ interface Props {
 }
 
 interface AccountViewState {
-  duplicationViolation?: boolean
+  nickDuplicationViolation?: boolean
+  emailDuplicationViolation?: boolean
+  emailFormatViolation?: boolean
 }
 
 class CreateAccountView extends Component<Props, AccountViewState> {
   constructor() {
     super()
     this.state = {
-      duplicationViolation: false
+      nickDuplicationViolation: false,
+      emailDuplicationViolation: false,
+      emailFormatViolation: false
     }
   }
 
@@ -39,16 +44,40 @@ class CreateAccountView extends Component<Props, AccountViewState> {
   async handleOnNickTextInputBlur(nickname: string) {
     const duplicateNick = await takenNick(nickname)
     if (duplicateNick) {
-      this.setState({ duplicationViolation: true })
+      this.setState({ nickDuplicationViolation: true })
     } else {
-      this.setState({ duplicationViolation: false })
+      this.setState({ nickDuplicationViolation: false })
     }
   }
 
   renderNickTextInputErrorText() {
     let errorText
-    if (this.state.duplicationViolation) {
+    if (this.state.nickDuplicationViolation) {
       errorText = accountManagement.nickname.duplicationViolation
+    }
+    return errorText
+  }
+
+  async handleOnEmailTextInputBlur(email: string) {
+    if (emailFormatIncorrect(email)) {
+      this.setState({ emailFormatViolation: true })
+    } else {
+      const duplicateEmail = await takenEmail(email)
+
+      if (duplicateEmail) {
+        this.setState({ emailDuplicationViolation: true })
+      } else {
+        this.setState({ emailDuplicationViolation: false, emailFormatViolation: false })
+      }
+    }
+  }
+
+  renderEmailTextInputErrorText() {
+    let errorText
+    if (this.state.emailDuplicationViolation) {
+      errorText = accountManagement.email.duplicationViolation
+    } else if (this.state.emailFormatViolation) {
+      errorText = accountManagement.email.compositionViolation
     }
     return errorText
   }
@@ -59,9 +88,13 @@ class CreateAccountView extends Component<Props, AccountViewState> {
         <CreateAccountForm
           nickTextInputErrorText={this.renderNickTextInputErrorText()}
           onNickTextInputBlur={this.handleOnNickTextInputBlur.bind(this)}
+          emailTextInputErrorText={this.renderEmailTextInputErrorText()}
+          onEmailTextInputBlur={this.handleOnEmailTextInputBlur.bind(this)}
           onSubmitCreateUser={this.handleOnSubmitCreateAccount.bind(this)}
           onSubmitRecover={this.props.goToRecoverAccount}
-          duplicationViolation={this.state.duplicationViolation}
+          nickDuplicationViolation={this.state.nickDuplicationViolation}
+          emailDuplicationViolation={this.state.emailDuplicationViolation}
+          emailFormatViolation={this.state.emailDuplicationViolation}
         />
       </View>
     )
