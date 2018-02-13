@@ -67,13 +67,19 @@ export const removeAccountExhortation = 'Be sure that you have access to your mn
 export const myAccount = 'My Account'
 
 export const setNickname = 'Set a nickname so your friends can search for you'
+export const setEmail = 'Set an email to receive information on Lndr updates'
 export const nickname = 'Nickname (lowercase & numbers)'
+export const email = 'Email Address'
 
 export const accountManagement = {
   nickname: {
     lengthViolation: 'Nickname should be at least 3 characters.',
     compositionViolation: 'Nickname can contain only numbers and lowercase letters.',
     duplicationViolation: 'Nickname is already taken'
+  },
+  email: {
+    compositionViolation: 'Email format is incorrect',
+    duplicationViolation: 'Email is already taken'
   },
   pin: {
     lengthViolation: 'PIN should be at least 4 characters.',
@@ -88,6 +94,10 @@ export const accountManagement = {
   },
   setNickname: {
     success: 'Your nickname has been saved.',
+    error: generalCommunicationError
+  },
+  setEmail: {
+    success: 'Your email has been saved.',
     error: generalCommunicationError
   },
   lockTimeout: {
@@ -125,7 +135,8 @@ export const accountManagement = {
     transferAll: 'TRANSFER EVERYTHING',
     balance: (balance) => `Your current ETH balance is ${typeof balance === 'string' ? balance.slice(0,8) : ''}`,
     ethAddress: 'Ethereum Address',
-    txCost: cost => `The current transaction cost is $${cost}`
+    txCost: cost => `The current transaction cost is $${cost}`,
+    transferLowercase: 'Transfer Eth'
   },
   sendBcpt: {
     error: {
@@ -145,6 +156,7 @@ export const accountManagement = {
     'BCPT Balance',
     'Change PIN',
     'Change Nickname',
+    'Change Email',
     'Change Profile Picture',
     'Change Lock Timeout',
     'Mnemonic',

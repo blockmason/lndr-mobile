@@ -9,11 +9,11 @@ import Button from 'ui/components/button'
 import Pinpad from 'ui/components/pinpad'
 import Loading, { LoadingContext } from 'ui/components/loading'
 
-import { getAccountInformation, updateAccount, logoutAccount, toggleNotifications, 
-  setEthBalance, updateLockTimeout, updatePin, getProfilePic, setProfilePic } from 'actions'
+import { getAccountInformation, updateNickname, updateEmail, logoutAccount, toggleNotifications, 
+  setEthBalance, updateLockTimeout, updatePin, getProfilePic, setProfilePic, takenNick, takenEmail } from 'actions'
 import { getUser, getStore } from 'reducers/app'
 import { connect } from 'react-redux'
-import { formatNick, formatLockTimeout } from 'lndr/format'
+import { formatNick, formatLockTimeout, formatEmail, emailFormatIncorrect } from 'lndr/format'
 
 import TextLogo from 'ui/components/images/text-logo'
 import InputImage from 'ui/components/images/input-image'
@@ -26,7 +26,7 @@ import style from 'theme/form'
 import general from 'theme/general'
 import { underlayColor } from 'theme/general'
 
-import { nickname, setNickname, updateAccount as updateAccountText, copy, accountManagement, changePin, enterNewPin, confirmPin,
+import { nickname, setNickname, email, setEmail, updateAccount as updateAccountText, copy, accountManagement, changePin, enterNewPin, confirmPin,
   cancel, mnemonicExhortation, addressExhortation, logoutAction, notifications, currentBalance } from 'language'
 
 interface Props {
@@ -35,7 +35,8 @@ interface Props {
   navigation: any
   getAccountInformation: () => any
   user: UserData
-  updateAccount: (accountData: UpdateAccountData) => any
+  updateNickname: (accountData: UpdateAccountData) => any
+  updateEmail: (accountData: UpdateAccountData) => any
   state: any
   toggleNotifications: () => any
   setEthBalance: () => any
@@ -47,12 +48,15 @@ interface Props {
 
 interface State {
   nickname: string
+  email: string
   password: string
   confirmPassword: string
   lockTimeout: string
   hiddenPanels: any
   step: number
   photos: any
+  nickTextInputErrorText?: string
+  emailTextInputErrorText?: string
 }
 
 class MyAccount extends Component<Props, State> {
@@ -61,7 +65,7 @@ class MyAccount extends Component<Props, State> {
     this.state = {
       ...defaultUpdateAccountData(),
       lockTimeout: '',
-      hiddenPanels: [true, true, true, true, true, true, true, true, true],
+      hiddenPanels: [true, true, true, true, true, true, true, true, true, true],
       step: 1,
       photos: []
     }
@@ -149,6 +153,29 @@ class MyAccount extends Component<Props, State> {
     this.setState({ photos: [] })
   }
 
+  async onNickTextInputBlur(nickname: string) {
+    const duplicateNick = await takenNick(nickname)
+    if (duplicateNick) {
+      this.setState({ nickTextInputErrorText: accountManagement.nickname.duplicationViolation })
+    } else {
+      this.setState({ nickTextInputErrorText: '' })
+    }
+  }
+
+  async onEmailTextInputBlur(email: string) {
+    if (emailFormatIncorrect(email)) {
+      this.setState({ emailTextInputErrorText: accountManagement.email.compositionViolation})
+    } else {
+      const duplicateEmail = await takenEmail(email)
+
+      if (duplicateEmail) {
+        this.setState({ emailTextInputErrorText: accountManagement.email.duplicationViolation })
+      } else {
+        this.setState({ emailTextInputErrorText: '' })
+      }
+    }
+  }
+
   _keyExtractor = (item, index) => index
 
   renderPhoto = ({ item, index }) => {
@@ -159,13 +186,17 @@ class MyAccount extends Component<Props, State> {
   }
 
   renderPanels() {
-    const { user, closePopup, updateAccount } = this.props
+    const { user, closePopup, updateNickname, updateEmail } = this.props
     const { notificationsEnabled, ethBalance, bcptBalance, userPic } = this.props.state
-    const { lockTimeout, hiddenPanels, photos } = this.state
+    const { lockTimeout, hiddenPanels, photos, nickTextInputErrorText, emailTextInputErrorText } = this.state
     const imageSource = userPic ? { uri: userPic } : require('images/person-outline-dark.png')
 
-    const submit = async () => {
-      await loadingContext.wrap(updateAccount(this.state))
+    const submitNickname = async () => {
+      await loadingContext.wrap(updateNickname(this.state))
+    }
+
+    const submitEmail = async () => {
+      await loadingContext.wrap(updateEmail(this.state))
     }
 
     const panelContent = [
@@ -199,9 +230,30 @@ class MyAccount extends Component<Props, State> {
             underlineColorAndroid='transparent'
             maxLength={20}
             onChangeText={nickname => this.setState({ nickname: formatNick(nickname) })}
+            onBlur={(): any => this.onNickTextInputBlur(this.state.nickname)}
           />
         </View>
-        <Button round onPress={submit} text={updateAccountText} />
+        { !!nickTextInputErrorText && <Text style={style.warningText}>{nickTextInputErrorText}</Text>}
+        <Button round onPress={submitNickname} text={updateAccountText} />
+      </View>),
+      (<View style={style.spaceHorizontalL}>
+        <Text style={[style.text, style.spaceTopL, style.center]}>{setEmail}</Text>
+        <View style={style.textInputContainer}>
+          <InputImage name='email'/>
+          <TextInput
+            autoCapitalize='none'
+            style={style.textInput}
+            placeholder={email}
+            value={this.state.email}
+            underlineColorAndroid='transparent'
+            keyboardType='email-address'
+            maxLength={20}
+            onChangeText={email => this.setState({ email: formatEmail(email) })}
+            onBlur={(): any => this.onEmailTextInputBlur(this.state.email)}
+          />
+        </View>
+        { !!emailTextInputErrorText && <Text style={style.warningText}>{emailTextInputErrorText}</Text>}
+        <Button round onPress={submitEmail} text={updateAccountText} />
       </View>),
       (<View style={style.spaceHorizontalL}>
         <TouchableHighlight {...underlayColor} onPress={() => this.getCameraRoll()}>
@@ -293,6 +345,6 @@ class MyAccount extends Component<Props, State> {
   }
 }
 
-export default connect((state) => ({ user: getUser(state)(), state: getStore(state)() }), { updateAccount, 
+export default connect((state) => ({ user: getUser(state)(), state: getStore(state)() }), { updateEmail, updateNickname, 
   getAccountInformation, logoutAccount, toggleNotifications, setEthBalance, updateLockTimeout, updatePin, 
   getProfilePic, setProfilePic })(MyAccount)
