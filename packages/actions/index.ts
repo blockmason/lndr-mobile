@@ -10,7 +10,8 @@ import { minimumNicknameLength, minimumPinLength } from 'lndr/user'
 import Friend from 'lndr/friend'
 import PendingTransaction from 'lndr/pending-transaction'
 import RecentTransaction from 'lndr/recent-transaction'
-import PendingSettlement from 'lndr/pending-settlement'
+import PendingUnilateral from 'lndr/pending-unilateral'
+import PendingBilateral from 'lndr/pending-bilateral'
 import EthTransaction from 'lndr/eth-transaction'
 import ucac from 'lndr/ucac'
 import Storage from 'lndr/storage'
@@ -237,7 +238,6 @@ export const createAccount = (accountData: CreateAccountData) => {
 //Not a redux action
 export async function getNicknameForAddress(address) {
   try {
-
     return await creditProtocol.getNickname(address)
   }
   catch (e) {
@@ -434,8 +434,12 @@ export const jsonToRecentTransaction = (data) => {
 }
 
 //Not a redux action
-export const jsonToPendingSettlement = (data) => {
-  return new PendingSettlement(data)
+export const jsonToPendingUnilateral = (data) => {
+  return new PendingUnilateral(data)
+}
+
+export const jsonToPendingBilateral = (data) => {
+  return new PendingBilateral(data)
 }
 
 export const getRecentTransactions = () => {
@@ -464,8 +468,8 @@ export const getPendingSettlements = () => {
 
     const rawPendingSettlements = await creditProtocol.getPendingSettlements(user.address)
     console.log('RAW PENDING SETTLEMENTS: ', rawPendingSettlements)
-    const pendingSettlements = rawPendingSettlements.unilateralSettlements.map(jsonToPendingSettlement)
-    const bilateralSettlements = rawPendingSettlements.bilateralSettlements.map(jsonToPendingSettlement)
+    const pendingSettlements = rawPendingSettlements.unilateralSettlements.map(jsonToPendingUnilateral)
+    const bilateralSettlements = rawPendingSettlements.bilateralSettlements.map(jsonToPendingBilateral)
     settleBilateral(user, bilateralSettlements, dispatch, getState)
     await ensureTransactionNicknames(pendingSettlements)
     await ensureTransactionNicknames(bilateralSettlements)
@@ -563,7 +567,7 @@ export const rejectPendingTransaction = (pendingTransaction: PendingTransaction)
   }
 }
 
-export const rejectPendingSettlement = (pendingSettlement: PendingSettlement) => {
+export const rejectPendingSettlement = (pendingSettlement: PendingUnilateral) => {
   return async (dispatch, getState) => {
     const { address, privateKeyBuffer } = getUser(getState())()
     const { hash } = pendingSettlement
@@ -847,7 +851,7 @@ export const getProfilePic = (nickname: string) => {
       const userPic = await profilePic.get(nickname)
       dispatch(setState({ userPic }))
     } catch (e) {
-      dispatch(displayError(accountManagement.profilePic.getError))
+      // dispatch(displayError(accountManagement.profilePic.getError))
     }
   }
 }
@@ -889,36 +893,34 @@ const settleBilateral = async (user, bilateralSettlements, dispatch, getState) =
   const ethBalance = getState().store.ethBalance
 
   bilateralSettlements.forEach( async (settlement) => {
-    if (settlement.creditorAddress === user.address) {
-      let hasEthTxHash = false
-      try {
-        const ethTxHash = await creditProtocol.getEthTxHash(settlement.hash)
-        hasEthTxHash = true
-      } catch (e) {
-        console.log('ERROR GETTING TX HASH', settlement.hash, e)
-      }
-      if (hasEthTxHash) {
-        return
-      }
-      console.log('ETH AMOUNTS FOR SETTLEMENT', Number(`${settlement.settlementAmount}`), Number(`${settlement.settlementAmount}`) > Number(web3.toWei(ethBalance, 'ether')), Number(web3.toWei(ethBalance, 'ether')) )
+    // "bilateralSettlements":[
+    //   {
+    //     "txHash":"0x4358c649de5746c91673378dd4c40a78feda715166913e09ded45343ff76841c","creditRecord":{"creditor":"0x11edd217a875063583dd1b638d16810c5d34d54b","debtor":"0x6a362e5cee1cf5a5408ff1e12b0bc546618dffcb","amount":69,"memo":"test memo","submitter":"0x11edd217a875063583dd1b638d16810c5d34d54b","nonce":0,"hash":"0x4358c649de5746c91673378dd4c40a78feda715166913e09ded45343ff76841c","signature":"0x457b0db63b83199f305ef29ba2d7678820806d98abbe3f6aafe015957ecfc5892368b4432869830456c335ade4f561603499d0216cda3af7b6b6cadf6f273c101b"}
+    //   }
+    // ]
+    if (settlement.creditorAddress.indexOf(user.address) === -1 || settlement.txHash !== undefined) {
+      return
+    }
       
-      if ( Number(`${settlement.settlementAmount}`) > Number(web3.toWei(ethBalance, 'ether')) ) {
-        return dispatch(displayError(settlementManagement.bilateral.error.insufficient(settlement.debtorNickname)))
-      }
-      const ethTransaction = new EthTransaction(settlement.creditorAddress, settlement.debtorAddress, settlement.settlementAmount, gasPrice)
+    console.log('ETH AMOUNTS FOR SETTLEMENT', Number(`${settlement.settlementAmount}`), Number(`${settlement.settlementAmount}`) > Number(web3.toWei(ethBalance, 'ether')), Number(web3.toWei(ethBalance, 'ether')) )
+    
+    if ( Number(`${settlement.settlementAmount}`) > Number(web3.toWei(ethBalance, 'ether')) ) {
+      const debtorNickname = await getNicknameForAddress(settlement.debtorAddress)
+      return dispatch(displayError(settlementManagement.bilateral.error.insufficient(debtorNickname)))
+    }
+    const ethTransaction = new EthTransaction(settlement.creditorAddress, settlement.debtorAddress, settlement.settlementAmount, gasPrice)
+    try {
+      const txHash = await creditProtocol.settleWithEth(ethTransaction, user.privateKeyBuffer)
+      console.log('TX HASH', txHash)
+      creditProtocol.storeSettlementHash(txHash, settlement, user.privateKeyBuffer)
 
-      try {
-        const txHash = await creditProtocol.settleWithEth(ethTransaction, user.privateKeyBuffer)
-        console.log('TX HASH', txHash)
-        creditProtocol.storeSettlementHash(txHash, settlement, user.privateKeyBuffer)
-
-      } catch (e) {
-        console.log('HAD AN ERROR', e)
-        if (typeof e === 'string' && e.indexOf('insufficient') !== -1) {
-          dispatch(displayError(settlementManagement.bilateral.error.insufficient(settlement.debtorNickname)))
-        } else {
-          dispatch(displayError(settlementManagement.bilateral.error.generic(settlement.debtorNickname)))
-        }
+    } catch (e) {
+      console.log('HAD AN ERROR', e)
+      const debtorNickname = await getNicknameForAddress(settlement.debtorAddress)
+      if (typeof e === 'string' && e.indexOf('insufficient') !== -1) {
+        dispatch(displayError(settlementManagement.bilateral.error.insufficient(debtorNickname)))
+      } else {
+        dispatch(displayError(settlementManagement.bilateral.error.generic(debtorNickname)))
       }
     }
   })

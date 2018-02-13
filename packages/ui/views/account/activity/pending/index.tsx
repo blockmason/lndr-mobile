@@ -1,7 +1,7 @@
 import React, { Component } from 'react'
 
 import PendingTransaction from 'lndr/pending-transaction'
-import PendingSettlement from 'lndr/pending-settlement'
+import PendingUnilateral from 'lndr/pending-unilateral'
 
 import { Text, View } from 'react-native'
 
@@ -32,7 +32,7 @@ interface Props {
   getPendingTransactions: () => any
   getPendingSettlements: () => any
   submitterIsMe: (pendingTransaction: PendingTransaction) => any
-  settlerIsMe: (pendingSettlement: PendingSettlement) => any
+  settlerIsMe: (pendingSettlement: PendingUnilateral) => any
   isFocused: boolean
   user: UserData
   state: any
@@ -88,13 +88,13 @@ class PendingTransactionsView extends Component<Props, State> {
     } else if (friend) {
       showNone = true
       pendingTransactions.map( (pending) => {
-        showNone = showNone && friend.address !== pending.creditorAddress && friend.address !== pending.debtorAddress
+        showNone = showNone && pending.creditorAddress.indexOf(friend.address) === -1 && pending.debtorAddress.indexOf(friend.address) === -1
       })
       pendingSettlements.map( (unilateral) => {
-        showNone = showNone && friend.address !== unilateral.creditorAddress && friend.address !== unilateral.debtorAddress
+        showNone = showNone && unilateral.creditorAddress.indexOf(friend.address) === -1 && unilateral.debtorAddress.indexOf(friend.address) === -1
       })
       bilateralSettlements.map( (bilateral) => {
-        showNone = showNone && friend.address !== bilateral.creditorAddress && friend.address !== bilateral.debtorAddress
+        showNone = showNone && bilateral.creditorAddress.indexOf(friend.address) === -1 && bilateral.debtorAddress.indexOf(friend.address) === -1
       })
     }
 
@@ -153,7 +153,7 @@ class PendingTransactionsView extends Component<Props, State> {
             return <PendingSettlementRow 
               user={user}
               pendingSettlement={bilateralSettlement}
-              key={bilateralSettlement.hash}
+              key={bilateralSettlement.creditRecord.hash}
               friend={friend ? true : false}
               onPress={() => null}
               settlerIsMe={settlerIsMe}

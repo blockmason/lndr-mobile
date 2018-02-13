@@ -1,6 +1,5 @@
 import reduceReducers from 'reduce-reducers'
 import PendingTransaction from 'lndr/pending-transaction'
-import PendingSettlement from 'lndr/pending-settlement'
 
 export const initialState = ({})
 
@@ -28,7 +27,7 @@ export const submitterIsMe = (state) => (pendingTransaction: PendingTransaction)
   return pendingTransaction.submitter === address
 }
 
-export const settlerIsMe = (state) => (pendingSettlement: PendingSettlement) => {
+export const settlerIsMe = (state) => (pendingSettlement: any) => {
   const { address } = getUser(state)()
   return pendingSettlement.submitter === address
 }

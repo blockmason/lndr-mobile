@@ -5,7 +5,8 @@ import Icon from 'react-native-vector-icons/Ionicons'
 import { connect } from 'react-redux'
 
 import { dollars, cents } from 'lndr/format'
-import PendingSettlement from 'lndr/pending-settlement'
+import PendingUnilateral from 'lndr/pending-unilateral'
+import PendingBilateral from 'lndr/pending-bilateral'
 import User from 'lndr/user'
 
 import { white } from 'theme/include/colors'
@@ -20,10 +21,10 @@ import { debtManagement } from 'language'
 
 interface Props {
   onPress?: () => void
-  pendingSettlement: PendingSettlement
+  pendingSettlement: PendingUnilateral | PendingBilateral
   user: User
   friend?: boolean
-  settlerIsMe: (pendingSettlement: PendingSettlement) => boolean
+  settlerIsMe: (pendingSettlement: PendingUnilateral) => boolean
 }
 
 export default class PendingSettlementRow extends Component<Props> {
