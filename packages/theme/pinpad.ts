@@ -18,8 +18,9 @@ export default StyleSheet.create({
   },
   button: {
     height: 70,
-    width: 28,
-    marginHorizontal: 30
+    width: '33%',
+    flexDirection: 'column',
+    alignItems: 'center'
   },
   number: {
     fontSize: 50,

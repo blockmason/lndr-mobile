@@ -1,4 +1,4 @@
-import { StyleSheet, Dimensions } from 'react-native'
+import { StyleSheet, Dimensions, Platform } from 'react-native'
 
 import { white } from 'theme/include/colors'
 
@@ -49,6 +49,12 @@ export default StyleSheet.create({
   },
   standardHMargin: {
     marginHorizontal: 15
+  },
+  largeHMargin: {
+    marginHorizontal: 30
+  },
+  iosTopMargin: {
+    marginTop: Platform.OS === 'ios' ? 20 : 0
   }
 
 } as any)

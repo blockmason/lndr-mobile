@@ -130,7 +130,7 @@ export const accountManagement = {
       generic: 'There was an error with the transfer, please try again later'
     },
     amount: 'AMOUNT TO SEND',
-    address: `DESTINATION ADDRESS (without '0x' prefix)`,
+    address: `Destination Address (without '0x' prefix)`,
     transfer: 'TRANSFER ETH',
     transferAll: 'TRANSFER EVERYTHING',
     balance: (balance) => `Your current ETH balance is ${typeof balance === 'string' ? balance.slice(0,8) : ''}`,
@@ -140,11 +140,11 @@ export const accountManagement = {
   },
   sendBcpt: {
     error: {
-      insufficient: 'The transfer failed due to insufficient funds',
+      insufficient: 'You do not have enough BCPT for this transaction',
       generic: 'There was an error with the transfer, please try again later'
     },
     transfer: 'TRANSFER BCPT',
-    address: `DESTINATION ADDRESS (without '0x' prefix)`,
+    address: `Destination Address (without '0x' prefix)`,
     balance: (balance) => `Your current BCPT balance is ${typeof balance === 'string' ? balance.slice(0,8) : ''}`,
     bcptAddress: 'BCPT Address'
   },
@@ -330,6 +330,10 @@ export const confirmation = {
   ethSent: {
     start: "You have successfully sent ",
     end: " ETH and your transaction hash is "
+  },
+  bcptSent: {
+    start: "You have successfully sent ",
+    end: " BCPT and your transaction hash is "
   },
   status: 'You can see the status of this transaction in the ',
   activity: 'activity tab.'

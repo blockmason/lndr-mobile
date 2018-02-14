@@ -4,7 +4,7 @@ import { Text, TextInput, TouchableHighlight, View, Image, ScrollView } from 're
 import { UserData } from 'lndr/user'
 
 import { debounce } from 'lndr/time'
-import { ethAmount, ethAddress } from 'lndr/format'
+import { bcptAmount, ethAddress } from 'lndr/format'
 import Friend from 'lndr/friend'
 
 import Button from 'ui/components/button'
@@ -22,41 +22,46 @@ import {
   accountManagement
 } from 'language'
 
-import { getUser, getEthBalance } from 'reducers/app'
-import { sendEth } from 'actions'
+import { getUser, getBcptBalance } from 'reducers/app'
+import { sendBcpt } from 'actions'
 import { connect } from 'react-redux'
 import { addNavigationHelpers } from 'react-navigation';
 
-const sendingEthLoader = new LoadingContext()
+const sendingBcptLoader = new LoadingContext()
 
 interface Props {
-  sendEth: (address: string, amount: string) => any
+  sendBcpt: (address: string, amount: string) => any
   user: UserData
-  ethBalance: string
+  bcptBalance: string
   navigation: any
 }
 
 interface State {
   amount?: string
   address?: string
+  formInputError?: string
 }
 
-class TransferEth extends Component<Props, State> {
+class TransferBcpt extends Component<Props, State> {
   constructor(props) {
     super(props)
     this.state = {}
   }
 
   async submit() {
-    console.log('SUBMITTING ETH PAYMENT')
+    console.log('SUBMITTING BCPT PAYMENT')
     const { amount, address } = this.state
 
-    if (!amount || !this.validAddress()) {
+    if (!this.validAddress()) {
+      this.setState({ formInputError: 'Please enter a valid address' })
+      return
+    } else if (!amount || amount === '0') {
+      this.setState({ formInputError: 'Please enter an amount greater than 0' })
       return
     }
 
-    const success = await sendingEthLoader.wrap(
-      this.props.sendEth(
+    const success = await sendingBcptLoader.wrap(
+      this.props.sendBcpt(
         address as string,
         amount as string
       )
@@ -67,7 +72,7 @@ class TransferEth extends Component<Props, State> {
     if (success && typeof success !== 'string' && success.type === '@@TOAST/DISPLAY_ERROR') {
       this.props.navigation.goBack()
     } else if (success) {
-      this.props.navigation.navigate('Confirmation', { type: 'ethSent', txHash: success, amount: amount })
+      this.props.navigation.navigate('Confirmation', { type: 'bcptSent', txHash: success, amount: amount })
     }
   }
 
@@ -81,7 +86,7 @@ class TransferEth extends Component<Props, State> {
   }
 
   setAmount(amount) {
-    return `${ethAmount(amount)}`
+    return `${bcptAmount(amount)}`
   }
 
   setAddress(address) {
@@ -94,21 +99,21 @@ class TransferEth extends Component<Props, State> {
   }
 
   render() {
-    const { amount, address } = this.state
-    const { ethBalance } = this.props
+    const { amount, address, formInputError } = this.state
+    const { bcptBalance } = this.props
 
     return <ScrollView style={general.whiteFlex} keyboardShouldPersistTaps='handled'>
-      <Loading context={sendingEthLoader} />
-      <DashboardShell text={accountManagement.sendEth.transferLowercase} />
+      <Loading context={sendingBcptLoader} />
+      <DashboardShell text={accountManagement.sendBcpt.transfer} />
       <Button close onPress={() => this.props.navigation.goBack()} />
       <View style={general.largeHMargin} >
         <View style={[general.centeredColumn, {marginBottom: 20}]}>
           <View style={general.centeredColumn} >
-            <Text style={[formStyle.header, {textAlign: 'center'}]}>{accountManagement.sendEth.balance(ethBalance)}</Text>
+            <Text style={[formStyle.header, {textAlign: 'center'}]}>{accountManagement.sendBcpt.balance(bcptBalance)}</Text>
             <View style={formStyle.textInputContainer}>
               <TextInput
                 style={[formStyle.textInput,  {paddingVertical: 3}]}
-                placeholder={accountManagement.sendEth.address}
+                placeholder={accountManagement.sendBcpt.address}
                 placeholderTextColor='black'
                 value={address}
                 maxLength={40}
@@ -131,11 +136,12 @@ class TransferEth extends Component<Props, State> {
             </View>
           </View>
         </View>
-        <Button large round wide onPress={() => this.submit()} text={accountManagement.sendEth.transfer} />
+        { !!formInputError && <Text style={formStyle.warningText}>{formInputError}</Text>}
+        <Button large round wide onPress={() => this.submit()} text={accountManagement.sendBcpt.transfer} />
       </View>
     </ScrollView>
   }
 }
 
-export default connect((state) => ({ user: getUser(state)(), ethBalance: getEthBalance(state) }),
-{ sendEth })(TransferEth)
+export default connect((state) => ({ user: getUser(state)(), bcptBalance: getBcptBalance(state) }),
+{ sendBcpt })(TransferBcpt)

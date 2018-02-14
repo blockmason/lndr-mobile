@@ -182,6 +182,7 @@ export default StyleSheet.create({
     color: black,
     fontWeight: 'bold',
     minWidth: 150,
+    paddingVertical: 4,
     textAlign: 'center',
     textAlignVertical: 'center'
   },
