@@ -8,6 +8,7 @@ import PendingSettlementDetail from 'ui/dialogs/pending-settlement-detail'
 import SettleUp from 'ui/dialogs/settle-up'
 import FriendDetail from 'ui/dialogs/friend-detail'
 import TransferEth from 'ui/dialogs/transfer-eth'
+import TransferBcpt from 'ui/dialogs/transfer-bcpt'
 import { addNavigationHelpers, StackNavigator, NavigationActions } from 'react-navigation';
 import { connect } from 'react-redux';
 import { View, ScrollView, Text, StyleSheet, Button, BackHandler, BackAndroid } from 'react-native';
@@ -33,6 +34,9 @@ export const AppNavigator = StackNavigator({
   },
   TransferEth: {
     screen: TransferEth
+  },
+  TransferBcpt: {
+    screen: TransferBcpt
   },
   AddDebt: {
     screen: AddDebt

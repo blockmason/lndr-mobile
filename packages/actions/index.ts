@@ -13,6 +13,7 @@ import RecentTransaction from 'lndr/recent-transaction'
 import PendingUnilateral from 'lndr/pending-unilateral'
 import PendingBilateral from 'lndr/pending-bilateral'
 import EthTransaction from 'lndr/eth-transaction'
+import BcptTransaction from 'lndr/bcpt-transaction'
 import ucac from 'lndr/ucac'
 import Storage from 'lndr/storage'
 import { getEthBalance, web3 } from 'lndr/settlement'
@@ -20,6 +21,7 @@ import { getGasPrice, settlementCost, getEthExchange } from 'lndr/eth-price-util
 import { isTouchIdSupported } from 'lndr/touch-id'
 import TouchID from 'react-native-touch-id'
 import profilePic from 'lndr/profile-pic'
+import { getBcptBalance, transferBcpt } from 'lndr/bcpt-utils'
 
 import CreditProtocol from 'credit-protocol'
 
@@ -64,14 +66,15 @@ export const initializeStorage = () => {
 
     if (storedUser && moment(storedSession).add(storedUser.lockTimeout, 'minute') > moment()) {
       await sessionStorage.set(moment())
-      let { ethBalance, ethExchange } = await getEthInfo(storedUser)
-      const payload = { hasStoredUser: true, welcomeComplete: true, user: storedUser, notificationsEnabled, ethBalance, ethExchange }
+      let { ethBalance, ethExchange, bcptBalance } = await getEthInfo(storedUser)
+      const payload = { hasStoredUser: true, welcomeComplete: true, user: storedUser, notificationsEnabled, ethBalance, ethExchange, bcptBalance }
       dispatch(setState(payload))
     } else if (touchIdSupported && storedMnemonic && storedUser) {
-      let { ethBalance, ethExchange } = await getEthInfo(storedUser)
+      let { ethBalance, ethExchange, bcptBalance } = await getEthInfo(storedUser)
       const payload = await triggerTouchId(storedUser, notificationsEnabled)
       payload.ethBalance = ethBalance
       payload.ethExchange = ethExchange
+      payload.bcptBalance = bcptBalance
       dispatch(setState(payload))
     } else if (storedMnemonic) {
       dispatch(setState({ hasStoredUser: true, welcomeComplete: true, notificationsEnabled }))
@@ -200,8 +203,8 @@ export const confirmAccount = () => {
 
     const user = await createUserFromCredentials(mnemonic, hashedPassword)
     await storeUserSession(user)
-    let { ethBalance, ethExchange } = await getEthInfo(user)
-    const payload = { user, hasStoredUser: true, ethBalance, ethExchange }
+    let { ethBalance, ethExchange, bcptBalance } = await getEthInfo(user)
+    const payload = { user, hasStoredUser: true, ethBalance, ethExchange, bcptBalance }
     dispatch(setState(payload))
   }
 }
@@ -708,9 +711,9 @@ export const loginAccount = (loginData: LoginAccountData) => {
     const user = await createUserFromCredentials(mnemonic, hashedPassword)
 
     await storeUserSession(user)
-    let { ethBalance, ethExchange } = await getEthInfo(user)
+    let { ethBalance, ethExchange, bcptBalance } = await getEthInfo(user)
     
-    const payload = { user, hasStoredUser: true, ethBalance, ethExchange }
+    const payload = { user, hasStoredUser: true, ethBalance, ethExchange, bcptBalance }
     dispatch(setState(payload))
     return true
   }
@@ -826,6 +829,32 @@ export const sendEth = (destAddr: string, amount: string) => {
         return dispatch(displayError(accountManagement.sendEth.error.insufficient))
       } else {
         return dispatch(displayError(accountManagement.sendEth.error.generic))
+      }
+    }
+  }
+}
+
+export const sendBcpt = (destAddr: string, amount: string) => {
+  return async (dispatch, getState) => {
+    const { bcptBalance } = getState().store
+    if (Number(bcptBalance) < Number(amount)) {
+      return dispatch(displayError(accountManagement.sendBcpt.error.insufficient))
+    }
+
+    try {
+      const { privateKeyBuffer, address } = getState().store.user
+      //Safe Low is in 10^8 Wei (deciGigaWei)
+      const gasPrice = await getGasPrice()
+      const bcptTransaction = new BcptTransaction(address, destAddr, Number(amount), gasPrice)
+      const txHash = await transferBcpt(bcptTransaction, privateKeyBuffer)
+      console.log('SENDING BCPT, TXHASH:', txHash)
+      return txHash
+    } catch (e) {
+      console.log('ERROR SENDING BCPT', e)
+      if (typeof e === 'string' && e.indexOf('insufficient') !== -1) {
+        return dispatch(displayError(accountManagement.sendEth.error.insufficient))
+      } else {
+        return dispatch(displayError(accountManagement.sendBcpt.error.generic))
       }
     }
   }
@@ -959,13 +988,15 @@ const triggerTouchId = (user, notificationsEnabled) => {
 }
 
 const getEthInfo = async (user) => {
-  let ethBalance, ethExchange
+  let ethBalance, ethExchange, bcptBalance
   try {
     ethBalance = await getEthBalance(user.address)
     ethExchange = await getEthExchange()
+    bcptBalance = await getBcptBalance(user.address)
   } catch (e) {
     ethBalance = '0'
     ethExchange = '1000'
+    bcptBalance = '0'
   }
-  return { ethBalance, ethExchange }
+  return { ethBalance, ethExchange, bcptBalance }
 }

@@ -46,7 +46,7 @@ export default class Pinpad extends Component<Props> {
     const { onNumPress, onBackspace, headerText } = this.props
 
     return <ScrollView>
-      <View style={[general.centeredColumn, {marginTop: 20}]}>
+      <View style={[general.centeredColumn, general.iosTopMargin, {marginBottom: 10}]}>
         <TextLogo name='black'/>
       </View>
       <Text style={style.headerText}>{headerText}</Text>

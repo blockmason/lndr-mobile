@@ -14,6 +14,7 @@ import { getAccountInformation, updateNickname, updateEmail, logoutAccount, togg
 import { getUser, getStore } from 'reducers/app'
 import { connect } from 'react-redux'
 import { formatNick, formatLockTimeout, formatEmail, emailFormatIncorrect } from 'lndr/format'
+import { getBcptBalance } from 'lndr/bcpt-utils'
 
 import TextLogo from 'ui/components/images/text-logo'
 import InputImage from 'ui/components/images/input-image'
@@ -213,7 +214,7 @@ class MyAccount extends Component<Props, State> {
       (<View style={style.spaceHorizontalL}>
         <Text style={[style.text, style.spaceTopL, style.center]}>{currentBalance.bcpt}</Text>
         <Text selectable style={style.displayText}>{bcptBalance}</Text>
-        <Button round onPress={() => null /*this.props.navigation.navigate('TransferBcpt')*/} text={accountManagement.sendBcpt.transfer} />
+        <Button round onPress={() => this.props.navigation.navigate('TransferBcpt')} text={accountManagement.sendBcpt.transfer} />
       </View>),
       (<View style={style.spaceHorizontalL}>
         <Button round onPress={() => this.setState({ step: 2 })} text={changePin} />

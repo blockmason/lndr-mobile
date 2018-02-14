@@ -63,3 +63,5 @@ export const bilateralSettlements = (state) => state.store.bilateralSettlements
 export const getEthBalance = (state) => state.store.ethBalance
 
 export const getEthExchange = (state) => state.store.ethExchange
+
+export const getBcptBalance = (state) => state.store.ethBalance
