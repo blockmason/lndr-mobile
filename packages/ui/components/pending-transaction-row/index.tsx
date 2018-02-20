@@ -41,7 +41,6 @@ export default class PendingTransactionRow extends Component<Props, State> {
       const addr = user.address === pendingTransaction.creditorAddress ? pendingTransaction.debtorAddress : pendingTransaction.creditorAddress
       pic = await profilePic.get(addr)
     } catch (e) {}
-    console.log('ISSUE', pic)
     if (pic) {
       this.setState({ pic })
     }
