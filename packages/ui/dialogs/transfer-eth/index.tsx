@@ -99,7 +99,7 @@ class TransferEth extends Component<Props, State> {
 
     return <ScrollView style={general.whiteFlex} keyboardShouldPersistTaps='handled'>
       <Loading context={sendingEthLoader} />
-      <DashboardShell text={accountManagement.sendEth.transferLowercase} />
+      <DashboardShell text={accountManagement.sendEth.transferLowercase} navigation={this.props.navigation} />
       <Button close onPress={() => this.props.navigation.goBack()} />
       <View style={general.largeHMargin} >
         <View style={[general.centeredColumn, {marginBottom: 20}]}>

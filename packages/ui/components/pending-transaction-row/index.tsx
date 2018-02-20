@@ -6,6 +6,7 @@ import Icon from 'react-native-vector-icons/Ionicons'
 import { dollars, cents } from 'lndr/format'
 import PendingTransaction from 'lndr/pending-transaction'
 import User from 'lndr/user'
+import profilePic from 'lndr/profile-pic'
 
 import { white } from 'theme/include/colors'
 
@@ -22,7 +23,29 @@ interface Props {
   friend?: boolean
 }
 
-export default class PendingTransactionRow extends Component<Props> {
+interface State {
+  pic?: string
+}
+
+export default class PendingTransactionRow extends Component<Props, State> {
+  constructor(props) {
+    super(props)
+    this.state = {}
+  }
+
+  async componentWillMount() {
+    const { user, pendingTransaction } = this.props
+    let pic
+
+    try {
+      const addr = user.address === pendingTransaction.creditorAddress ? pendingTransaction.debtorAddress : pendingTransaction.creditorAddress
+      pic = await profilePic.get(addr)
+    } catch (e) {}
+    if (pic) {
+      this.setState({ pic })
+    }
+  }
+
   getTitle() {
     const { pendingTransaction, user } = this.props
 
@@ -55,12 +78,14 @@ export default class PendingTransactionRow extends Component<Props> {
 
   render() {
     const { onPress, pendingTransaction, friend } = this.props
+    const { pic } = this.state
+    const imageSource = pic ? { uri: pic } : require('images/person-outline-dark.png')
 
     return (
       <TouchableHighlight style={style.pendingTransaction} onPress={onPress} underlayColor={white} activeOpacity={1}>
         <View style={style.pendingTransactionRow}>
           <View style={general.flexRow}>
-          {!friend ? <Image source={require('images/person-outline-dark.png')} style={style.pendingIcon}/> : null }
+          {!friend ? <Image source={imageSource} style={style.pendingIcon}/> : null }
             <View style={general.flexColumn}>
               {!friend ? <Text style={style.titledPending}>{this.getTitle()}</Text> : null }
               <Text style={style.pendingMemo}>{friend ? pendingTransaction.memo : debtManagement.for(pendingTransaction.memo)}</Text>

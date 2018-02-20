@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import { View, Text, Platform } from 'react-native'
+import { View, Text, Platform, Image, TouchableHighlight } from 'react-native'
 import { TabNavigator } from 'react-navigation'
 
 import { Tab } from 'ui/components/tabs'
@@ -27,6 +27,7 @@ interface Props {
   logoutAccount: () => any
   isFocusingOn: () => any
   text?: String
+  navigation: any
 }
 
 const HomeScreen = (props) => <HomeView {...props}/>;
@@ -64,7 +65,11 @@ class DashboardShell extends Component<Props> {
           </View>
         </View>
         <View style={style.settingsTriangleLeft}/>
-        <View style={style.settingsBackground}/>
+        <View style={style.settingsBackground}>
+          <TouchableHighlight onPress={() => this.props.navigation.navigate('MyAccount')}>
+            <Image source={require('images/settings.png')} style={TabStyle.settingsButton} />
+          </TouchableHighlight>
+        </View>
         <View style={style.settingsTriangleRight}/>
       </View>
     )

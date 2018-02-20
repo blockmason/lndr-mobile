@@ -62,6 +62,7 @@ export default class LoginAccountForm extends Component<Props, State> {
   }
 
   clearPin() {
+    const { confirmPassword } = this.state
     this.setState({ confirmPassword: confirmPassword.slice(0, -1) })
   }
 

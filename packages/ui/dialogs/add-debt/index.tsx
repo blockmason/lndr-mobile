@@ -156,7 +156,7 @@ class AddDebt extends Component<Props, State> {
 
     return <ScrollView style={general.whiteFlex} keyboardShouldPersistTaps='handled'>
       <Loading context={submittingTransaction} />
-      <DashboardShell text='New Transaction' />
+      <DashboardShell text={debtManagement.shell} navigation={this.props.navigation} />
       <Button close onPress={() => this.props.navigation.goBack()} />
       <View style={[general.centeredColumn, {marginBottom: 20}]}>
         <Text style={[style.header, {marginBottom: 20}]}>{debtManagement[direction]}</Text>
@@ -168,7 +168,7 @@ class AddDebt extends Component<Props, State> {
           <View style={general.centeredColumn}>
             <Text style={formStyle.title}>{debtManagement.fields.amount}</Text>
             <TextInput
-              style={formStyle.jumboInput}
+              style={[formStyle.jumboInput, {marginTop: 5}]}
               placeholder={'$0'}
               placeholderTextColor='black'
               value={amount}

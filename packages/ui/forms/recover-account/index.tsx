@@ -6,10 +6,13 @@ import Pinpad from 'ui/components/pinpad'
 import Button from 'ui/components/button'
 
 import { RecoverAccountData, defaultRecoverAccountData } from 'lndr/user'
+import User from 'lndr/user'
+import { getUser } from 'reducers/app'
 
 import InputImage from 'ui/components/images/input-image'
 import Loading, { LoadingContext } from 'ui/components/loading'
 import { formatPin } from 'lndr/format'
+import { connect } from 'react-redux'
 
 import {
   newPin,
@@ -29,6 +32,7 @@ const loadingContext = new LoadingContext()
 interface Props {
   onSubmitRecoverUser: (formData: RecoverAccountData) => void
   onCancel: () => void
+  user: User
 }
 
 interface State {
@@ -38,7 +42,7 @@ interface State {
   confirmPassword: string
 }
 
-export default class RecoverAccountForm extends Component<Props, State> {
+class RecoverAccountForm extends Component<Props, State> {
   constructor() {
     super()
     this.state = {
@@ -69,9 +73,16 @@ export default class RecoverAccountForm extends Component<Props, State> {
 
   async componentDidUpdate() {
     const { password, confirmPassword, step } = this.state
+    const { user } = this.props
 
     if (password.length === 4 && confirmPassword.length === 4) {
-      await loadingContext.wrap(this.props.onSubmitRecoverUser(this.state))
+      const success = await loadingContext.wrap(this.props.onSubmitRecoverUser(this.state))
+
+      console.log(success, user)
+      if (!success && !user) {
+        loadingContext.wrap(this.setState({ step: 1, password: '', confirmPassword: '' }))
+      }
+      console.log('SUCCESS', success)
     } else if (password.length === 4 && step === 2) {
       this.setState({ step: 3 })
     }
@@ -131,3 +142,5 @@ export default class RecoverAccountForm extends Component<Props, State> {
     }
   }
 }
+
+export default connect((state) => ({ user: getUser(state)() }))(RecoverAccountForm)

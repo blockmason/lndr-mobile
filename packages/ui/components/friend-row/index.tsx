@@ -7,7 +7,8 @@ import Friend from 'lndr/friend'
 
 import { white } from 'theme/include/colors'
 
-import { dollars } from 'lndr/format'
+import { cents } from 'lndr/format'
+import profilePic from 'lndr/profile-pic'
 
 import style from 'theme/account'
 import general from 'theme/general'
@@ -22,10 +23,26 @@ interface Props {
   navigation: any
 }
 
-export default class FriendRow extends Component<Props> {
+interface State {
+  pic?: string
+}
+
+export default class FriendRow extends Component<Props, State> {
   constructor() {
     super()
     this.state = {}
+  }
+
+  async componentWillMount() {
+    const { friend } = this.props
+    let pic
+
+    try {
+      pic = await profilePic.get(friend.address)
+    } catch (e) {}
+    if (pic) {
+      this.setState({ pic })
+    }
   }
 
   getRecentTotal() {
@@ -65,7 +82,7 @@ export default class FriendRow extends Component<Props> {
       sign = '-'
     }
 
-    return `${sign} $${dollars(total)}`
+    return `${sign} $${cents(total)}`
   }
 
   getTransactionTotal() {
@@ -93,25 +110,29 @@ export default class FriendRow extends Component<Props> {
 
   showSettleUp() {
     const { friend } = this.props
-    return this.getRecentTotal() === 0 ? null : <Button narrow small round onPress={() => this.props.navigation.navigate('SettleUp', { friend: friend })} text={debtManagement.settleUp} style={{marginRight: 10}} />
+    return this.getRecentTotal() === 0 ? null : <Button narrow small round onPress={() => this.props.navigation.navigate('SettleUp', { friend: friend })} text={debtManagement.settleUp} style={{maxWidth: 100, alignSelf:'flex-end'}} />
   }
 
   render() {
     const { onPress, friend } = this.props
+    const { pic } = this.state
+    const imageSource = pic ? { uri: pic } : require('images/person-outline-dark.png')
 
     return (
       <TouchableHighlight style={style.friendRow} onPress={onPress} underlayColor={white} activeOpacity={1}>
         <View style={style.pendingTransactionRow}>
           <View style={[general.flexRow, general.alignCenter]}>
-            <Image source={require('images/person-outline-dark.png')} style={style.pendingIcon}/>
+            <Image source={imageSource} style={style.friendIcon}/>
             <View style={general.flexColumn}>
               <Text style={style.titledPending}>{friend.nickname}</Text>
               <Text style={style.pendingMemo}>{this.getTransactionTotal()}</Text>
             </View>
           </View>
           <View style={[general.flexRow, general.alignCenter, general.justifyEnd]}>
-            {this.showSettleUp()}
-            <Text style={style.pendingAmount}>{this.getAmountTotal()}</Text>
+            <View style={general.column}>
+              <Text style={[style.pendingAmount, {alignSelf: 'flex-end'}]}>{this.getAmountTotal()}</Text>
+              {this.showSettleUp()}
+            </View>
           </View>
         </View>
       </TouchableHighlight>

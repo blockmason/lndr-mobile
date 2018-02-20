@@ -68,8 +68,11 @@ export default StyleSheet.create({
   },
   info: {
     ...large,
-    color: aqua,
-    textAlign: 'right'
+    color: aqua
+  },
+  memo: {
+    ...large,
+    fontWeight: 'bold',
+    color: aqua
   }
-
 })

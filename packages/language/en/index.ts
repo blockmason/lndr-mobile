@@ -19,8 +19,10 @@ export const updateAccount = 'UPDATE ACCOUNT'
 export const loginAction = 'UNLOCK'
 export const enterPin = 'PLEASE ENTER YOUR PIN'
 export const changePin = 'CHANGE PIN'
+export const enterCurrentPin = 'ENTER CURRENT PIN'
 export const logoutAction = 'LOG OUT'
 export const seeAllActivity = 'See All Activity'
+export const copiedClipboard = 'Copied to Clipboard'
 
 export const addFriend = 'Add Friend'
 export const addFriendConfirmationQuestion = 'Are you sure you would like to add this user as a friend?'
@@ -33,6 +35,7 @@ export const noMatches = 'No matching users found'
 export const noBalances = 'You have no recorded debts'
 export const addFriendButton = '+ ADD FRIEND'
 export const alreadyFriendsButton = 'FRIENDS'
+export const friendShell = 'Friend'
 
 export const tip = 'Tip: '
 export const notice = 'Notice: '
@@ -40,7 +43,7 @@ export const welcome = 'Welcome to your LNDR'
 export const noBalanceWarning = 'We were not able to load your balance at this time, please try again later.'
 export const totalBalance = 'Total Balance: '
 export const totalBalances = 'Total Counterparties: '
-export const startNewDebt = 'Start New Debt'
+export const newTransaction = 'New Transaction'
 export const needsReview = 'Needs Review'
 export const owesMe = 'I AM OWED'
 export const iOwe = 'I OWE SOMEONE'
@@ -59,7 +62,8 @@ export const recoverMnemonic = 'Mnemonic (12 words displayed \nwhen you created 
 export const successTitle = 'Success'
 export const errorTitle = 'Error'
 
-export const mnemonicExhortation = 'Record these 12 words somewhere safe and secret'
+export const showMnemonic = 'Show 12-Word Mnemonic'
+export const mnemonicExhortation = 'This 12-word phrase is required to restore your account, please keep it somewhere safe and secret'
 export const addressExhortation = 'Send Ethereum to your address so you can settle debts on Lndr'
 export const removeAccountTitle = 'Are you sure you would like to remove your account from this device?'
 export const removeAccountExhortation = 'Be sure that you have access to your mnemonic to restore your account later, as this is a permanent removal of your account information from this device.'
@@ -191,6 +195,7 @@ export const welcomeView = {
 }
 
 export const debtManagement = {
+  shell: 'New Transaction',
   add: 'Add Debt',
   selectFriend: 'SELECT',
   lend: 'New Loan',
@@ -275,7 +280,10 @@ export const notifications = {
 }
 
 export const pendingTransactionsLanguage = {
+  shell: 'Pending Transaction',
   title: 'Pending',
+  memo: 'Memo:',
+  for: 'For',
   none: 'You have no pending transactions',
   confirmationQuestion: 'Are you sure you want to confirm this transaction?',
   pendingAnnouncement: 'This transaction is waiting for confirmation by the other party.',
@@ -289,6 +297,7 @@ export const pendingTransactionsLanguage = {
 }
 
 export const pendingSettlementsLanguage = {
+  shell: 'Pending Settlement',
   title: 'Pending',
   none: 'You have no pending settlements',
   confirm: 'CONFIRM',
@@ -314,6 +323,7 @@ export const tabs = {
 }
 
 export const confirmation = {
+  shell: 'Confirmation',
   done: 'DONE',
   create: {
     start: "We've sent the record over to ",

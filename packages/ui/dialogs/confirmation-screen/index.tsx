@@ -28,7 +28,7 @@ export default class ConfirmationScreen extends Component<Props> {
 
   render() {
     const type = this.props.navigation.state.params ? this.props.navigation.state.params.type : 'create'
-    let friend = { nickname: '' }
+    let friend = { nickname: 'your friend' }
     let txHash = ''
     let amount = ''
     if (this.props.navigation.state.params) {
@@ -38,7 +38,7 @@ export default class ConfirmationScreen extends Component<Props> {
     }
 
     return <ScrollView style={[general.fullHeight, general.view]} keyboardShouldPersistTaps='handled'>
-      <DashboardShell text='Confirmation' />
+      <DashboardShell text={confirmation.shell} navigation={this.props.navigation} />
       <Button close onPress={() => this.props.navigation.navigate('Home')} />
       <View style={[general.centeredColumn, general.standardHMargin]}>
         {this.getConfirmationImage(type)}

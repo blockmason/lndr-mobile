@@ -5,6 +5,7 @@ import { Text, TextInput, TouchableHighlight, View } from 'react-native'
 import { debounce } from 'lndr/time'
 import RecentTransaction from 'lndr/recent-transaction'
 import { UserData } from 'lndr/user'
+import profilePic from 'lndr/profile-pic'
 
 import Button from 'ui/components/button'
 import Loading, { LoadingContext } from 'ui/components/loading'
