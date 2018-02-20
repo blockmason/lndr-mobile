@@ -145,7 +145,7 @@ class SettleUp extends Component<Props, State> {
 
     return <ScrollView style={general.whiteFlex} keyboardShouldPersistTaps='handled'>
       <Loading context={submittingTransaction} />
-      <DashboardShell text={debtManagement.settleUpLower} />
+      <DashboardShell text={debtManagement.settleUpLower} navigation={this.props.navigation} />
       <Button close onPress={() => this.props.navigation.navigate('Friends')} />
       <View style={[general.centeredColumn, {marginBottom: 20}]}>
         <Image source={require('images/person-outline-dark.png')} style={style.settleImage}/>

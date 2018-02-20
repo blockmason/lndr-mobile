@@ -7,6 +7,7 @@ import Balance from 'lndr/balance'
 import Friend from 'lndr/friend'
 import { UserData } from 'lndr/user'
 import { cents } from 'lndr/format'
+import profilePic from 'lndr/profile-pic'
 import PendingView from 'ui/views/account/activity/pending'
 import RecentView from 'ui/views/account/activity/recent'
 import DashboardShell from 'ui/components/dashboard-shell'
@@ -25,6 +26,7 @@ import {
   back,
   removeFriend as removeFriendText,
   friendInfo,
+  friendShell,
   noBalances,
   debtManagement,
   pendingTransactionsLanguage,
@@ -48,6 +50,7 @@ interface Props {
 interface State {
   balanceLoaded?: boolean
   balance: Balance
+  pic?: string
 }
 
 class RemoveFriend extends Component<Props, State> {
@@ -56,6 +59,20 @@ class RemoveFriend extends Component<Props, State> {
     this.state = {
       balanceLoaded: false,
       balance: new Balance({ relativeToNickname: "", relativeTo: "", amount: 0 })
+    }
+  }
+
+  async componentWillMount() {
+    const friend = this.props.navigation ? this.props.navigation.state.params.friend : {}
+    let pic
+
+    try {
+      if (friend.address !== undefined) {
+        pic = await profilePic.get(friend.address)
+      }
+    } catch (e) {}
+    if (pic) {
+      this.setState({ pic })
     }
   }
 
@@ -107,14 +124,16 @@ class RemoveFriend extends Component<Props, State> {
 
   render() {
     const friend = this.props.navigation ? this.props.navigation.state.params.friend : {}
-    console.log('FRIEND', friend)
+    const { pic } = this.state
+    const { navigation } = this.props
+    const imageSource = pic ? { uri: pic } : require('images/person-outline-dark.png')
 
     return <ScrollView style={general.view}>
-      <DashboardShell text='Friend' />
+      <DashboardShell text={friendShell} navigation={this.props.navigation} />
       <Loading context={loadingContext} />
       <Button close onPress={() => this.props.navigation.goBack(null)} />
       <View style={general.centeredColumn}>
-        <Image source={require('images/person-outline-dark.png')} style={pendingStyle.image}/>
+        <Image source={imageSource} style={pendingStyle.image}/>
         <Text style={pendingStyle.title}>{`@${friend.nickname}`}</Text>
         <Text style={pendingStyle.subTitle}>{`${recentTransactionsLanguage.balance}:`}</Text>
         <View style={pendingStyle.balanceRow}>
@@ -126,9 +145,9 @@ class RemoveFriend extends Component<Props, State> {
         { this.getTransactionNumber() === 0 ? <Button round large danger wide onPress={() => this.removeFriend(friend)} text={removeFriendText} containerStyle={style.spaceBottom} /> : null }
         <View style={style.fullWidth}>
           <Text style={accountStyle.transactionHeader}>{pendingTransactionsLanguage.title}</Text>
-          <PendingView friend={friend} />
+          <PendingView friend={friend} navigation={navigation} />
           <Text style={accountStyle.transactionHeader}>{recentTransactionsLanguage.title}</Text>
-          <RecentView friend={friend} />
+          <RecentView friend={friend} navigation={navigation} />
         </View>
       </View>
     </ScrollView>

@@ -7,6 +7,7 @@ import { debounce } from 'lndr/time'
 import { cents } from 'lndr/format'
 import PendingUnilateral from 'lndr/pending-unilateral'
 import { getTxCost } from 'lndr/eth-price-utils'
+import profilePic from 'lndr/profile-pic'
 
 import Button from 'ui/components/button'
 import Loading, { LoadingContext } from 'ui/components/loading'
@@ -41,6 +42,7 @@ interface Props {
 
 interface State {
   txCost: string
+  pic?: string
 }
 
 class PendingSettlementDetail extends Component<Props, State> {
@@ -53,7 +55,15 @@ class PendingSettlementDetail extends Component<Props, State> {
 
   async componentWillMount() {
     const txCost = await getTxCost('dollar')
-    this.setState({txCost})
+    const pendingSettlement = this.getPendingSettlement()
+    const { user } = this.props
+    let pic
+
+    try {
+      const addr = user.address === pendingSettlement.creditorAddress ? pendingSettlement.debtorAddress : pendingSettlement.creditorAddress
+      pic = await profilePic.get(addr)
+    } catch (e) {}
+    this.setState({ pic, txCost })
   }
 
   async confirmPendingSettlement(pendingSettlement: PendingUnilateral) {
@@ -143,12 +153,12 @@ class PendingSettlementDetail extends Component<Props, State> {
     const { settlerIsMe } = this.props
     const pendingSettlement = this.getPendingSettlement()
     if (settlerIsMe(pendingSettlement)) {
-      return <Button alternate arrowRed onPress={() => this.rejectPendingSettlement(pendingSettlement)} text={pendingSettlementsLanguage.cancel} />
+      return <Button danger round onPress={() => this.rejectPendingSettlement(pendingSettlement)} text={pendingSettlementsLanguage.cancel} />
     }
 
     return <View style={{marginBottom: 50}}>
       <Button round large onPress={() => this.confirmPendingSettlement(pendingSettlement)} text={pendingSettlementsLanguage.confirm} />
-      <Button alternate arrowRed onPress={() => this.rejectPendingSettlement(pendingSettlement)} text={pendingSettlementsLanguage.reject} />
+      <Button danger round onPress={() => this.rejectPendingSettlement(pendingSettlement)} text={pendingSettlementsLanguage.reject} />
     </View>
   }
 
@@ -159,7 +169,7 @@ class PendingSettlementDetail extends Component<Props, State> {
 
     return <ScrollView style={[general.fullHeight, general.view]}>
       <Loading context={loadingContext} />
-      <DashboardShell text='Pending Settlement' />
+      <DashboardShell text={pendingSettlementsLanguage.shell} navigation={this.props.navigation} />
       <Button close onPress={() => this.props.navigation.goBack()} />
       <View style={[general.centeredColumn, general.standardHMargin]}>
         <Image source={require('images/person-outline-dark.png')} style={style.image}/>

@@ -1,6 +1,6 @@
 declare const global
 
-export default class GasPrice {
+export default class FetchUtil {
   fetch: any
 
   constructor(fetch) {

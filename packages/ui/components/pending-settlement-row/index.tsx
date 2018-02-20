@@ -8,6 +8,7 @@ import { dollars, cents } from 'lndr/format'
 import PendingUnilateral from 'lndr/pending-unilateral'
 import PendingBilateral from 'lndr/pending-bilateral'
 import User from 'lndr/user'
+import profilePic from 'lndr/profile-pic'
 
 import { white } from 'theme/include/colors'
 
@@ -24,10 +25,32 @@ interface Props {
   pendingSettlement: PendingUnilateral | PendingBilateral
   user: User
   friend?: boolean
-  settlerIsMe: (pendingSettlement: PendingUnilateral) => boolean
+  settlerIsMe: (pendingSettlement: PendingUnilateral | PendingBilateral) => boolean
 }
 
-export default class PendingSettlementRow extends Component<Props> {
+interface State {
+  pic?: string
+}
+
+export default class PendingSettlementRow extends Component<Props, State> {
+  constructor(props) {
+    super(props)
+    this.state = {}
+  }
+
+  async componentWillMount() {
+    const { user, pendingSettlement } = this.props
+    let pic
+
+    try {
+      const addr = user.address === pendingSettlement.creditorAddress ? pendingSettlement.debtorAddress : pendingSettlement.creditorAddress
+      pic = await profilePic.get(addr)
+    } catch (e) {}
+    if (pic) {
+      this.setState({ pic })
+    }
+  }
+  
   getTitle() {
     const { pendingSettlement, user, settlerIsMe } = this.props
 
@@ -65,12 +88,14 @@ export default class PendingSettlementRow extends Component<Props> {
 
   render() {
     const { onPress, pendingSettlement, friend } = this.props
+    const { pic } = this.state
+    const imageSource = pic ? { uri: pic } : require('images/person-outline-dark.png')
 
     return (
       <TouchableHighlight style={style.pendingTransaction} onPress={onPress} underlayColor={white} activeOpacity={1}>
         <View style={style.pendingTransactionRow}>
           <View style={general.flexRow}>
-          {!friend ? <Image source={require('images/person-outline-dark.png')} style={style.pendingIcon}/> : null }
+          {!friend ? <Image source={imageSource} style={style.pendingIcon}/> : null }
             <View style={general.flexColumn}>
               {!friend ? <Text style={style.titledPending}>{this.getTitle()}</Text> : null }
               {friend ? <Text style={style.pendingMemo}>{pendingSettlement.memo}</Text> : null }

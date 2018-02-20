@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import { View, ScrollView, Text, TouchableHighlight } from 'react-native'
+import { View, ScrollView, Text, TouchableHighlight, Image } from 'react-native'
 import TextLogo from 'ui/components/images/text-logo'
 
 import general from 'theme/general'
@@ -68,7 +68,7 @@ export default class Pinpad extends Component<Props> {
           </TouchableHighlight>
           <TouchableHighlight {...underlayColor} onPress={() => onBackspace()} style={style.button} >
             <View>
-              <Text style={style.number}>{'<'}</Text>
+              <Image style={style.backspace} source={require('images/backspace.png')}/>
             </View>
           </TouchableHighlight>
         </View>

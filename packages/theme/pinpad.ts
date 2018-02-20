@@ -22,6 +22,12 @@ export default StyleSheet.create({
     flexDirection: 'column',
     alignItems: 'center'
   },
+  backspace: {
+    height: 50,
+    width: 50,
+    marginTop: '10%',
+    marginRight: '12%'
+  },
   number: {
     fontSize: 50,
     color: aqua

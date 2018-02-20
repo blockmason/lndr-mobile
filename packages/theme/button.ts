@@ -16,7 +16,12 @@ export default StyleSheet.create({
     minWidth: 45,
     flexDirection: 'row',
     justifyContent: 'center',
-    alignItems: 'center'
+    alignItems: 'center',
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.8,
+    shadowRadius: 2,
+    elevation: 2
   },
   icon: {
     position: 'absolute',
@@ -93,12 +98,15 @@ export default StyleSheet.create({
   narrow: {
     paddingRight: 0,
     paddingLeft: 0,
-    paddingVertical: 0,
+    paddingTop: 0,
+    paddingBottom: 0,
     minHeight: 20,
     minWidth: 25
   },
   fat: {
-    paddingVertical: 10
+    paddingVertical: 10,
+    elevation: 4,
+    shadowOffset: { width: 0, height: 4 }
   },
   wide: {
     paddingLeft: 30,

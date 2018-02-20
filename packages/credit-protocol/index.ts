@@ -3,6 +3,8 @@ declare const Buffer
 
 import Mnemonic from 'bitcore-mnemonic'
 import ethUtil from 'ethereumjs-util'
+import RNFetchBlog from 'react-native-fetch-blob'
+import ImageResizer from 'react-native-image-resizer'
 
 import { hexToBuffer, utf8ToBuffer, bufferToHex, stringToBuffer } from './lib/buffer-utils'
 import Client from './lib/client'
@@ -338,12 +340,22 @@ export default class CreditProtocol {
   getEthTxHash(hash: string) {
     return this.client.get(`/tx_hash/${hash}`)
   }
-}
 
-function web3AsyncWrapper (web3Fun) {
-  return function (arg) {
-    return new Promise((resolve, reject) => {
-      web3Fun(arg, (e, data) => e ? reject(e) : resolve(data))
+  async setProfilePic(imageURI: string, privateKeyBuffer: any) {
+    if (privateKeyBuffer.type === 'Buffer') {
+      privateKeyBuffer = Buffer.from(privateKeyBuffer.data)
+    }
+
+    const IMAGE_TARGET_SIZE = 240
+    const resizedImageResponse = await ImageResizer.createResizedImage(imageURI, IMAGE_TARGET_SIZE, IMAGE_TARGET_SIZE, "JPEG", 100, 0)
+    const base64ImageData = await RNFetchBlog.fs.readFile(resizedImageResponse.uri, 'base64')
+
+    const signature = this.serverSign(ethUtil.sha3(base64ImageData), privateKeyBuffer)
+
+    await this.client.post(`/profile_photo`, {
+      image: base64ImageData,
+      signature: signature
     })
+    return `data:image/jpg;base64,${base64ImageData}`
   }
 }

@@ -1,56 +1,56 @@
-import AWS from 'aws-sdk'
-import RNFetchBlog from 'react-native-fetch-blob'
-import ImageResizer from 'react-native-image-resizer'
+// import FetchUtil from 'lndr/fetch-util'
+
+// const fetchUtil = new FetchUtil(fetch)
+
+import RNFetchBlob from 'react-native-fetch-blob'
+
+const fs = RNFetchBlob.fs
+
+let imagePath = null
+
+const tempStorage = {
+  pics: {}
+}
+
+function isBlank(imageData: string) {
+  return imageData.length === 324
+}
 
 declare const Buffer
 
-const region = 'us-east-2'
-
-// AWS.config = new AWS.Config({
-//   accessKeyId: Config.AWS_ACCESS_KEY_ID, 
-//   secretAccessKey: 'tYa6gOwZ+WF9dGcz0m9kTXTOtouOzHb5rr3GR2fu', 
-//   region
-// })
-
-const Bucket = 'lndr-profile-pics'
-const s3 = new AWS.S3( { params: { Bucket } } )
-
 export default {
-  get: nickname => {
-    return new Promise( (resolve, reject) => {
-      s3.getObject( { Bucket, Key: `test/${nickname}.jpg` }, (err, data) => {
-        if (err) {
-          reject(err)
-        } else {
-          const buffer = Buffer.from(data.Body)
-          const base64ImageData = buffer.toString('base64')
-          resolve(`data:image/jpg;base64,${base64ImageData}`)
-        }
-      })
+  get: addr => {
+    if (tempStorage.pics[addr] !== undefined) {
+      return tempStorage.pics[addr]
+    }
+    
+    return RNFetchBlob
+    .config({
+      fileCache : true 
     })
+    .fetch('GET', `https://s3-us-west-2.amazonaws.com/lndr-avatars/${addr}.jpeg`)
+    // the image is now dowloaded to device's storage
+    .then((resp) => {
+      imagePath = resp.path()
+      return resp.readFile('base64')
+    })
+    .then((base64Data) => {
+      fs.unlink(imagePath)
+      if(isBlank(base64Data)) {
+        throw new Error('Blank Image')
+      }
+      return `data:image/jpg;base64,${base64Data}`
+    })
+
+    // return tempStorage.pics[addr] = fetchUtil.fetch(`https://s3-us-west-2.amazonaws.com/lndr-avatars/${addr}.jpeg`).then( data => {
+    //   console.log('2 GOT THE DATA', data)
+    //   // const buffer = Buffer.from(data._bodyText, 'base64')
+    //   // const base64ImageData = buffer.toString('base64')
+    //   return 
+    // })
   },
 
-  set: async (nickname, imageURI) => {
-    const IMAGE_TARGET_SIZE = 150
-    const resizedImageResponse = await ImageResizer.createResizedImage(imageURI, IMAGE_TARGET_SIZE, IMAGE_TARGET_SIZE, "JPEG", 100, 0)
-    const imageData = await RNFetchBlog.fs.readFile(resizedImageResponse.uri, 'base64')
-    const base64buffer = new Buffer(imageData, 'base64')
-    const data = { 
-      Bucket, 
-        Key: `test/${nickname}.jpg`, 
-        Body: base64buffer
-    }
-
-    return new Promise( (resolve, reject) => {
-      s3.upload(data, function(err, data){
-        if (err) {
-          console.log('ERROR UPLOADING PROFILE PIC: ', nickname, err)
-          reject(err)
-        } else {
-          console.log('UPLOADED PROFILE PIC', data)
-            resolve(`data:image/jpg;base64,${imageData}`)
-        }
-      })
-    })
+  clear: addr => {
+    delete tempStorage.pics[addr]
   }
 }

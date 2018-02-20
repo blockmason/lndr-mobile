@@ -1,7 +1,7 @@
 import ethUtil from 'ethereumjs-util'
 import { UrbanAirship } from 'urbanairship-react-native'
 import moment from 'moment'
-import { Platform } from 'react-native'
+import { Platform, Clipboard } from 'react-native'
 
 import { longTimePeriod } from 'lndr/time'
 import Balance from 'lndr/balance'
@@ -25,7 +25,7 @@ import { getBcptBalance, transferBcpt } from 'lndr/bcpt-utils'
 
 import CreditProtocol from 'credit-protocol'
 
-import { accountManagement, debtManagement, settlementManagement } from 'language'
+import { accountManagement, debtManagement, settlementManagement, copiedClipboard } from 'language'
 
 import { ToastActionsCreators } from 'react-native-redux-toast'
 import { getUser, getStore } from 'reducers/app'
@@ -200,12 +200,15 @@ export const confirmAccount = () => {
   return async (dispatch, getState) => {
     const { password, mnemonic } = getStore(getState())()
     const hashedPassword = bcrypt.hashSync(password)
-
-    const user = await createUserFromCredentials(mnemonic, hashedPassword)
-    await storeUserSession(user)
-    let { ethBalance, ethExchange, bcptBalance } = await getEthInfo(user)
-    const payload = { user, hasStoredUser: true, ethBalance, ethExchange, bcptBalance }
-    dispatch(setState(payload))
+    try {
+      const user = await createUserFromCredentials(mnemonic, hashedPassword)
+      await storeUserSession(user)
+      let { ethBalance, ethExchange, bcptBalance } = await getEthInfo(user)
+      const payload = { user, hasStoredUser: true, ethBalance, ethExchange, bcptBalance }
+      dispatch(setState(payload))
+    } catch (e) {
+      dispatch(displayError(accountManagement.mnemonic.unableToValidate))
+    }
   }
 }
 
@@ -746,9 +749,7 @@ export const recoverAccount = (recoverData: RecoverAccountData) => {
       const payload = { password: confirmPassword, mnemonic: mnemonic.toLowerCase()}
       dispatch(setState(payload))
       dispatch(await confirmAccount())
-    }
-
-    catch (e) {
+    } catch (e) {
       dispatch(displayError(accountManagement.mnemonic.unableToValidate))
     }
   }
@@ -860,10 +861,15 @@ export const sendBcpt = (destAddr: string, amount: string) => {
   }
 }
 
+export const validatePin = async (confirmPassword: string) => {
+  const hashedPassword = await hashedPasswordStorage.get()
+  return bcrypt.compareSync(confirmPassword, hashedPassword)
+}
+
 export const updateLockTimeout = (timeout: number) => {
   return async (dispatch, getState) => {
     try {
-      const { user } = getState().store
+      const user = getUser(getState())()
       user.lockTimeout = timeout
       await userStorage.set(user)
       dispatch(setState({ user }))
@@ -874,26 +880,38 @@ export const updateLockTimeout = (timeout: number) => {
   }
 }
 
-export const getProfilePic = (nickname: string) => {
-  return async (dispatch) => {
+export const getProfilePic = () => {
+  return async (dispatch, getState) => {
+    const { address } = getUser(getState())()
     try {
-      const userPic = await profilePic.get(nickname)
+      const userPic = await profilePic.get(address)
+      console.log('working 1', userPic)
       dispatch(setState({ userPic }))
     } catch (e) {
-      // dispatch(displayError(accountManagement.profilePic.getError))
+      dispatch(displayError(accountManagement.profilePic.getError))
     }
   }
 }
 
-export const setProfilePic = (nickname: string, imageURI: string) => {
-  return async (dispatch) => {
+export const setProfilePic = (imageURI: string) => {
+  return async (dispatch, getState) => {
+    const { address, privateKeyBuffer } = getUser(getState())()
+    profilePic.clear(address)
     try {
-      const userPic = await profilePic.set(nickname, imageURI)
+      const userPic = await creditProtocol.setProfilePic(imageURI, privateKeyBuffer)
       dispatch(displaySuccess(accountManagement.profilePic.setSuccess))
       dispatch(setState({ userPic }))
     } catch (e) {
+      console.log('ERROR SETTING PROFILE PIC', e)
       dispatch(displayError(accountManagement.profilePic.setError))
     }
+  }
+}
+
+export const copyToClipboard = (text: string) => {
+  return async (dispatch) => {
+    Clipboard.setString(text)
+    dispatch(displaySuccess(copiedClipboard))
   }
 }
 
@@ -902,7 +920,7 @@ const refreshTransactions = () => {
   getRecentTransactions()
   setEthBalance()
   //enable this once server is done
-  // getPendingSettlements()
+  getPendingSettlements()
 }
 
 const sanitizeAmount = amount => {
@@ -922,11 +940,6 @@ const settleBilateral = async (user, bilateralSettlements, dispatch, getState) =
   const ethBalance = getState().store.ethBalance
 
   bilateralSettlements.forEach( async (settlement) => {
-    // "bilateralSettlements":[
-    //   {
-    //     "txHash":"0x4358c649de5746c91673378dd4c40a78feda715166913e09ded45343ff76841c","creditRecord":{"creditor":"0x11edd217a875063583dd1b638d16810c5d34d54b","debtor":"0x6a362e5cee1cf5a5408ff1e12b0bc546618dffcb","amount":69,"memo":"test memo","submitter":"0x11edd217a875063583dd1b638d16810c5d34d54b","nonce":0,"hash":"0x4358c649de5746c91673378dd4c40a78feda715166913e09ded45343ff76841c","signature":"0x457b0db63b83199f305ef29ba2d7678820806d98abbe3f6aafe015957ecfc5892368b4432869830456c335ade4f561603499d0216cda3af7b6b6cadf6f273c101b"}
-    //   }
-    // ]
     if (settlement.creditorAddress.indexOf(user.address) === -1 || settlement.txHash !== undefined) {
       return
     }

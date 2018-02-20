@@ -274,7 +274,14 @@ export default StyleSheet.create({
   pendingIcon: {
     width: 50,
     height: 50,
-    marginRight: 15
+    marginRight: 15,
+    borderRadius: 25
+  },
+  friendIcon: {
+    width: 60,
+    height: 60,
+    marginRight: 15,
+    borderRadius: 30
   },
   recentIcon: {
     width: 30,
@@ -324,7 +331,7 @@ export default StyleSheet.create({
     height: 60
   },
   nickname: {
-    fontSize: 32,
+    fontSize: 24,
     fontWeight: 'bold',
     marginVertical: 10,
     color: aqua

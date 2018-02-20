@@ -2,7 +2,7 @@ import React, { Component } from 'react'
 
 import { defaultUpdateAccountData, UpdateAccountData, UserData } from 'lndr/user'
 
-import { Text, TextInput, View, Clipboard, Dimensions, ScrollView, CameraRoll,
+import { Text, TextInput, View, Dimensions, ScrollView, CameraRoll,
   TouchableHighlight, Image, BackHandler, FlatList } from 'react-native'
 
 import Button from 'ui/components/button'
@@ -10,7 +10,8 @@ import Pinpad from 'ui/components/pinpad'
 import Loading, { LoadingContext } from 'ui/components/loading'
 
 import { getAccountInformation, updateNickname, updateEmail, logoutAccount, toggleNotifications, 
-  setEthBalance, updateLockTimeout, updatePin, getProfilePic, setProfilePic, takenNick, takenEmail } from 'actions'
+  setEthBalance, updateLockTimeout, updatePin, getProfilePic, setProfilePic, takenNick, takenEmail,
+  copyToClipboard, validatePin } from 'actions'
 import { getUser, getStore } from 'reducers/app'
 import { connect } from 'react-redux'
 import { formatNick, formatLockTimeout, formatEmail, emailFormatIncorrect } from 'lndr/format'
@@ -28,7 +29,8 @@ import general from 'theme/general'
 import { underlayColor } from 'theme/general'
 
 import { nickname, setNickname, email, setEmail, updateAccount as updateAccountText, copy, accountManagement, changePin, enterNewPin, confirmPin,
-  cancel, mnemonicExhortation, addressExhortation, logoutAction, notifications, currentBalance } from 'language'
+  cancel, mnemonicExhortation, addressExhortation, logoutAction, notifications, currentBalance, showMnemonic, enterCurrentPin
+ } from 'language'
 
 interface Props {
   logoutAccount: () => any
@@ -44,7 +46,8 @@ interface Props {
   updateLockTimeout: (timeout: number) => any
   updatePin: (password: string, confirmPassword: string) => any
   getProfilePic: (nickname: string) => any
-  setProfilePic: (nickname: string, imageURI: string) => any
+  setProfilePic: (imageURI: string) => any
+  copyToClipboard: (text: string) => any
 }
 
 interface State {
@@ -58,6 +61,7 @@ interface State {
   photos: any
   nickTextInputErrorText?: string
   emailTextInputErrorText?: string
+  authenticated: boolean
 }
 
 class MyAccount extends Component<Props, State> {
@@ -68,14 +72,16 @@ class MyAccount extends Component<Props, State> {
       lockTimeout: '',
       hiddenPanels: [true, true, true, true, true, true, true, true, true, true],
       step: 1,
-      photos: []
+      photos: [],
+      authenticated: false
     }
   }
 
   async componentWillMount() {
-    const { nickname } = this.props.user
+    const { address } = this.props.user
+    console.log(this.props.user)
     this.props.setEthBalance()
-    this.props.getProfilePic(nickname)
+    this.props.getProfilePic(address)
   }
 
   async componentDidMount() {
@@ -99,7 +105,10 @@ class MyAccount extends Component<Props, State> {
   async componentDidUpdate() {
     const { password, confirmPassword, step } = this.state
 
-    if (password.length === 4 && confirmPassword.length === 4) {
+    if (step === 4 && confirmPassword.length === 4 ) {
+      const authenticated = loadingContext.wrap(validatePin(confirmPassword))
+      this.setState({ step: 1, confirmPassword: '', authenticated })
+    } else if (step === 3 && password.length === 4 && confirmPassword.length === 4) {
       await loadingContext.wrap(this.props.updatePin(password, confirmPassword))
       this.clearPinView()
     } else if (password.length === 4 && step === 2) {
@@ -148,9 +157,7 @@ class MyAccount extends Component<Props, State> {
   }
 
   async setNewProfilePic(imageURI: string) {
-    const { nickname } = this.props.user
-    const { setProfilePic } = this.props
-    const image = await loadingContext.wrap( setProfilePic(nickname, imageURI) )
+    const image = await loadingContext.wrap( this.props.setProfilePic(imageURI) )
     this.setState({ photos: [] })
   }
 
@@ -187,9 +194,9 @@ class MyAccount extends Component<Props, State> {
   }
 
   renderPanels() {
-    const { user, closePopup, updateNickname, updateEmail } = this.props
+    const { user, closePopup, updateNickname, updateEmail, copyToClipboard } = this.props
     const { notificationsEnabled, ethBalance, bcptBalance, userPic } = this.props.state
-    const { lockTimeout, hiddenPanels, photos, nickTextInputErrorText, emailTextInputErrorText } = this.state
+    const { lockTimeout, hiddenPanels, photos, nickTextInputErrorText, emailTextInputErrorText, authenticated } = this.state
     const imageSource = userPic ? { uri: userPic } : require('images/person-outline-dark.png')
 
     const submitNickname = async () => {
@@ -204,7 +211,7 @@ class MyAccount extends Component<Props, State> {
       (<View style={style.spaceHorizontalL}>
         <Text style={[style.text, style.spaceTopL, style.center]}>{addressExhortation}</Text>
         <Text selectable style={style.displayText}>{`0x${user.address}`}</Text>
-        <Button round onPress={() => Clipboard.setString(user.address)} text={copy} />
+        <Button round onPress={() => copyToClipboard(user.address)} text={copy} />
       </View>),
       (<View style={style.spaceHorizontalL}>
         <Text style={[style.text, style.spaceTopL, style.center]}>{currentBalance.eth}</Text>
@@ -217,7 +224,8 @@ class MyAccount extends Component<Props, State> {
         <Button round onPress={() => this.props.navigation.navigate('TransferBcpt')} text={accountManagement.sendBcpt.transfer} />
       </View>),
       (<View style={style.spaceHorizontalL}>
-        <Button round onPress={() => this.setState({ step: 2 })} text={changePin} />
+        {authenticated ? <Button round onPress={() => this.setState({ step: 2 })} text={changePin} /> :
+        <Button round onPress={() => this.setState({ step: 4 })} text={enterCurrentPin} />}
       </View>),
       (<View style={style.spaceHorizontalL}>
         <Text style={[style.text, style.spaceTopL, style.center]}>{setNickname}</Text>
@@ -248,7 +256,6 @@ class MyAccount extends Component<Props, State> {
             value={this.state.email}
             underlineColorAndroid='transparent'
             keyboardType='email-address'
-            maxLength={20}
             onChangeText={email => this.setState({ email: formatEmail(email) })}
             onBlur={(): any => this.onEmailTextInputBlur(this.state.email)}
           />
@@ -288,9 +295,12 @@ class MyAccount extends Component<Props, State> {
         <Button round onPress={() => this.setLockTimeout()} text={accountManagement.lockTimeout.update} />
       </View>),
       (<View style={style.spaceHorizontalL}>
-        <Text style={[style.text, style.spaceTopL, style.center]}>{mnemonicExhortation}</Text>
-        <Text selectable style={style.displayText}>{user.mnemonic}</Text>
-        <Button round onPress={() => Clipboard.setString(user.mnemonic)} text={copy} />
+        {authenticated ? <View>
+          <Text style={[style.text, style.spaceTopL, style.center]}>{mnemonicExhortation}</Text>
+          <Text selectable style={style.displayText}>{user.mnemonic}</Text>
+          <Button round onPress={() => copyToClipboard(user.mnemonic)} text={copy} />
+        </View> :
+        <Button round onPress={() => this.setState({ step: 4 })} text={showMnemonic} />}
       </View>),
       (<View style={style.spaceHorizontalL}>
         <Text style={[style.text, style.spaceTopL, style.center]}>{notifications.toggleNotifications}</Text>
@@ -316,7 +326,7 @@ class MyAccount extends Component<Props, State> {
   render() {
     const { password, confirmPassword, step } = this.state
 
-    if (step === 3) {
+    if (step === 3 || step === 4) {
       return <View style={[general.fullHeight, general.view]}>
         <Button close onPress={() => this.clearPinView()} />
         <View style={style.form}>
@@ -348,4 +358,4 @@ class MyAccount extends Component<Props, State> {
 
 export default connect((state) => ({ user: getUser(state)(), state: getStore(state)() }), { updateEmail, updateNickname, 
   getAccountInformation, logoutAccount, toggleNotifications, setEthBalance, updateLockTimeout, updatePin, 
-  getProfilePic, setProfilePic })(MyAccount)
+  getProfilePic, setProfilePic, copyToClipboard  })(MyAccount)

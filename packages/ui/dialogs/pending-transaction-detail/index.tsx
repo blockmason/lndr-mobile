@@ -6,7 +6,7 @@ import { UserData } from 'lndr/user'
 import { debounce } from 'lndr/time'
 import { cents } from 'lndr/format'
 import PendingTransaction from 'lndr/pending-transaction'
-import { getProfilePic } from 'lndr/profile-pic'
+import profilePic from 'lndr/profile-pic'
 
 import Button from 'ui/components/button'
 import Loading, { LoadingContext } from 'ui/components/loading'
@@ -39,6 +39,7 @@ interface Props {
 
 interface State {
   userPic: string
+  pic?: string
 }
 
 class PendingTransactionDetail extends Component<Props, State> {
@@ -50,11 +51,13 @@ class PendingTransactionDetail extends Component<Props, State> {
   async componentWillMount() {
     const { user, navigation } = this.props
     const pendingTransaction = navigation.state ? navigation.state.params.pendingTransaction : {}
-    if (pendingTransaction.creditorNickname !== undefined) {
-      const nicknameToGet = pendingTransaction.creditorAddress === user.address ? pendingTransaction.debtorNickname : pendingTransaction.creditorNickname
-      const userPic = await getProfilePic(nicknameToGet)
-      this.setState({ userPic })
-    }
+    let pic
+
+    try {
+      const addr = user.address === pendingTransaction.creditorAddress ? pendingTransaction.debtorAddress : pendingTransaction.creditorAddress
+      pic = await profilePic.get(addr)
+    } catch (e) {}
+    this.setState({ pic })
   }
 
   async confirmPendingTransaction(pendingTransaction: PendingTransaction) {
@@ -109,14 +112,10 @@ class PendingTransactionDetail extends Component<Props, State> {
     }
   }
 
-  labelRow(label, info) {
-    return <View style={style.labelRow}>
-      <View style={{flex: 1}}>
-        <Text style={style.label}>{label}</Text>
-      </View>
-      <View style={{flex: 3}}>
-        <Text style={style.info}>{info}</Text>
-      </View>
+  labelRow(memo) {
+    return <View style={general.centeredColumn}>
+      <Text style={style.memo}>{pendingTransactionsLanguage.for}</Text>
+      <Text style={style.info}>{memo}</Text>
     </View>
   }
 
@@ -124,12 +123,12 @@ class PendingTransactionDetail extends Component<Props, State> {
     const { submitterIsMe, navigation } = this.props
     const pendingTransaction = navigation.state ? navigation.state.params.pendingTransaction : {}
     if (submitterIsMe(pendingTransaction)) {
-      return <Button alternate arrowRed onPress={() => this.rejectPendingTransaction(pendingTransaction)} text={pendingTransactionsLanguage.cancel} />
+      return <Button danger round onPress={() => this.rejectPendingTransaction(pendingTransaction)} text={pendingTransactionsLanguage.cancel} />
     }
 
     return <View style={{marginBottom: 10}}>
       <Button round large onPress={() => this.confirmPendingTransaction(pendingTransaction)} text={pendingTransactionsLanguage.confirm} />
-      <Button alternate arrowRed onPress={() => this.rejectPendingTransaction(pendingTransaction)} text={pendingTransactionsLanguage.reject} />
+      <Button danger round onPress={() => this.rejectPendingTransaction(pendingTransaction)} text={pendingTransactionsLanguage.reject} />
     </View>
   }
 
@@ -141,7 +140,7 @@ class PendingTransactionDetail extends Component<Props, State> {
 
     return <ScrollView style={[general.fullHeight, general.view]}>
       <Loading context={loadingContext} />
-      <DashboardShell text='Pending Transaction' />
+      <DashboardShell text={pendingTransactionsLanguage.shell} navigation={this.props.navigation} />
       <Button close onPress={() => this.props.navigation.goBack()} />
       <View style={general.centeredColumn}>
         <Image source={imageSource} style={style.image}/>
@@ -151,7 +150,7 @@ class PendingTransactionDetail extends Component<Props, State> {
           <Text style={style.amount}>{cents(pendingTransaction.amount)}</Text>
           <Text style={style.balanceInfo}>USD</Text>
         </View>
-        {this.labelRow('For', pendingTransaction.memo.trim())}
+        {this.labelRow(pendingTransaction.memo.trim())}
         <View style={{marginBottom: 10}}/>
         {this.showButtons()}
       </View>

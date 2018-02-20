@@ -19,7 +19,7 @@ import { UserData } from 'lndr/user'
 import PendingTransaction from 'lndr/pending-transaction'
 
 import { isFocusingOn } from 'reducers/nav'
-import { getStore, getUser } from 'reducers/app'
+import { getStore, getUser, getNeedsReviewCount } from 'reducers/app'
 import { getAccountInformation, displayError, getPendingTransactions, getBalances, registerChannelID } from 'actions'
 import { connect } from 'react-redux'
 import { UrbanAirship } from 'urbanairship-react-native'
@@ -40,7 +40,7 @@ import {
   accountManagement,
   owesMe,
   iOwe,
-  startNewDebt,
+  newTransaction,
   needsReview,
   recentTransactionsLanguage,
   pendingTransactionsLanguage,
@@ -63,6 +63,7 @@ interface Props {
   registerChannelID: (channelID: string, platform: string) => any
   user: UserData
   state: any
+  needsReviewCount: number
 }
 
 interface State {
@@ -116,6 +117,14 @@ class HomeView extends Component<Props, State> {
 
   refresh() {
     this.componentDidMount()
+  }
+
+  renderNeedsReview() {
+    return this.props.needsReviewCount > 0 ? <View>
+      <Text style={[formStyle.titleLarge, formStyle.center, formStyle.spaceBottom, formStyle.spaceTop]}>{needsReview}</Text>
+      <PendingView navigation={this.props.navigation} homeScreen /> 
+    </View>
+    : <View style={{height: 100}} />
   }
 
   renderBalanceInformation() {
@@ -172,16 +181,13 @@ class HomeView extends Component<Props, State> {
         { this.renderBalanceInformation() }
       </Section>
       <Section>
-        <Text style={[formStyle.title, formStyle.center, formStyle.spaceBottomS]}>{startNewDebt}</Text>
+        <Text style={[formStyle.titleXLarge, formStyle.center, formStyle.spaceBottomS]}>{newTransaction}</Text>
         <View style={style.newTransactionButtonContainer}>
           <Button fat small round onPress={() => this.props.navigation.navigate('AddDebt', { direction: 'lend' })} text={owesMe} style={{minWidth: width / 2 - 25}} />
           <Button fat small round dark onPress={() => this.props.navigation.navigate('AddDebt', {direction: 'borrow'})} text={iOwe} style={{minWidth: width / 2 - 25}} />
         </View>
       </Section>
-
-      <Text style={[formStyle.title, formStyle.center, formStyle.spaceBottom, formStyle.spaceTop]}>{needsReview}</Text>
-      <PendingView navigation={this.props.navigation} homeScreen />
-
+      {this.renderNeedsReview()}
       <TouchableHighlight {...underlayColor} onPress={() => this.props.navigation.navigate('Activity')}>
         <View style={style.seeAllActivityButton}>
           <Text style={style.seeAllActivity}>{seeAllActivity}</Text>
@@ -192,5 +198,6 @@ class HomeView extends Component<Props, State> {
   }
 }
 
-export default connect((state) => ({ state: getStore(state)(), user: getUser(state)(), isFocused: isFocusingOn(state)('Home') }),
-{ getAccountInformation, displayError, getPendingTransactions, getBalances, registerChannelID })(HomeView)
+export default connect((state) => ({ state: getStore(state)(), user: getUser(state)(), isFocused: isFocusingOn(state)('Home'), 
+needsReviewCount: getNeedsReviewCount(state) }), { getAccountInformation, displayError, getPendingTransactions, 
+getBalances, registerChannelID })(HomeView)

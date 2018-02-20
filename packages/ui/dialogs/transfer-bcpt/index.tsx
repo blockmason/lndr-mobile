@@ -104,7 +104,7 @@ class TransferBcpt extends Component<Props, State> {
 
     return <ScrollView style={general.whiteFlex} keyboardShouldPersistTaps='handled'>
       <Loading context={sendingBcptLoader} />
-      <DashboardShell text={accountManagement.sendBcpt.transfer} />
+      <DashboardShell text={accountManagement.sendBcpt.transfer} navigation={this.props.navigation} />
       <Button close onPress={() => this.props.navigation.goBack()} />
       <View style={general.largeHMargin} >
         <View style={[general.centeredColumn, {marginBottom: 20}]}>

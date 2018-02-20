@@ -151,7 +151,6 @@ export default class CreateAccountForm extends Component<Props, State> {
               style={style.textInput}
               placeholder={email}
               value={this.state.email}
-              maxLength={20}
               underlineColorAndroid='transparent'
               keyboardType='email-address'
               onChangeText={email => this.setState({ email: formatEmail(email) })}
