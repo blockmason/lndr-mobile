@@ -98,6 +98,7 @@ class FriendsView extends Component<Props, State> {
             <FriendRow
               key={friend.address}
               friend={friend}
+              friendScreen
               onPress={() => this.props.navigation.navigate('FriendDetail', { friend })}
               pendingTransactions={pendingTransactions}
               recentTransactions={recentTransactions}

@@ -4,9 +4,10 @@ import { Text, TextInput, TouchableHighlight, View, Image, ScrollView } from 're
 import { UserData } from 'lndr/user'
 
 import { debounce } from 'lndr/time'
-import { cents, currency } from 'lndr/format'
+import { currencyFormats, amountFormat } from 'lndr/format'
 import Friend from 'lndr/friend'
 import { getTxCost } from 'lndr/eth-price-utils'
+import defaultCurrency from 'lndr/default-currency'
 
 import Button from 'ui/components/button'
 import Loading, { LoadingContext } from 'ui/components/loading'
@@ -23,7 +24,8 @@ import {
   cancel,
   pendingTransactionsLanguage,
   debtManagement,
-  accountManagement
+  accountManagement,
+  currencies
 } from 'language'
 
 import { getUser, recentTransactions, getEthBalance, getEthExchange } from 'reducers/app'
@@ -39,7 +41,8 @@ interface Props {
     amount: string,
     memo: string,
     direction: string,
-    denomination: string
+    denomination: string,
+    currency: string
   ) => any
   user: UserData
   ethBalance: string
@@ -52,7 +55,8 @@ interface State {
   amount?: string
   balance: number
   direction: string
-  txCost: String
+  txCost: string
+  currency: string
 }
 
 class SettleUp extends Component<Props, State> {
@@ -61,7 +65,8 @@ class SettleUp extends Component<Props, State> {
     this.state = {
       balance: this.getRecentTotal(),
       direction: this.getRecentTotal() > 0 ? 'borrow' : 'lend',
-      txCost: '0.00'
+      txCost: '0.00',
+      currency: 'USD'
     }
   }
 
@@ -71,7 +76,7 @@ class SettleUp extends Component<Props, State> {
   }
 
   async submit() {
-    const { amount, direction } = this.state
+    const { amount, direction, currency } = this.state
     const friend = this.props.navigation ? this.props.navigation.state.params.friend : {}
 
     const memo = debtManagement.settleUpMemo(direction, amount)
@@ -84,7 +89,8 @@ class SettleUp extends Component<Props, State> {
         amount as string,
         memo as string,
         direction as string,
-        denomination as string
+        denomination as string,
+        currency as string
       )
     )
 
@@ -124,7 +130,8 @@ class SettleUp extends Component<Props, State> {
   }
 
   setAmount(amount) {
-    return `${currency(amount)}`
+    const { currency } = this.state
+    return amountFormat(amount, currency)
   }
 
   displayMessage() {
@@ -135,11 +142,11 @@ class SettleUp extends Component<Props, State> {
   }
 
   displayTotal(balance) {
-    return `${balance < 0 ? '-' : '+'}${currency(cents(balance))}`
+    return `${balance < 0 ? '-' : '+'}${currencyFormats[defaultCurrency](balance)}`
   }
 
   render() {
-    const { amount, balance, txCost } = this.state
+    const { amount, balance, txCost, currency } = this.state
     const { recentTransactions, ethBalance, ethExchange } = this.props
     const friend = this.props.navigation ? this.props.navigation.state.params.friend : {}
 
@@ -156,7 +163,7 @@ class SettleUp extends Component<Props, State> {
               return transaction.creditorAddress === friend.address || transaction.debtorAddress === friend.address ?
                 <View style={style.recent} key={friend.address + index}>
                   <Text style={style.recentText}>{transaction.memo}</Text>
-                  <Text style={style.recentText}>{ (transaction.creditorAddress === friend.address ? '-' : '+') + currency(cents(transaction.amount))}</Text>
+                  <Text style={style.recentText}>{ (transaction.creditorAddress === friend.address ? '-' : '+') + `${currencies[defaultCurrency]}${currencyFormats[defaultCurrency](transaction.amount)}`}</Text>
                 </View> : null
             })
           }
@@ -168,7 +175,7 @@ class SettleUp extends Component<Props, State> {
             <View style={[accountStyle.balanceRow, {marginTop: 20}]}>
               <Text style={[accountStyle.balance, {marginLeft: '2%'}]}>{accountManagement.ethBalance.display(ethBalance)}</Text>
               <Button alternate blackText narrow arrow small onPress={() => {this.props.navigation.navigate('MyAccount')}}
-                text={accountManagement.ethBalance.inUsd(ethBalance, ethExchange)}
+                text={accountManagement.ethBalance.inFiat(ethBalance, ethExchange, currency)}
                 containerStyle={{marginTop: -6}}
               />
             </View>
@@ -186,7 +193,7 @@ class SettleUp extends Component<Props, State> {
             />
           </View>
         </View>
-        { amount ? <Button large round wide onPress={() => this.submit()} text={debtManagement.settleUp} /> : <Button large round wide onPress={() => this.setState({ amount: currency(cents(Math.abs(balance))) })} text={debtManagement.settleTotal} />}
+        { amount ? <Button large round wide onPress={() => this.submit()} text={debtManagement.settleUp} /> : <Button large round wide onPress={() => this.setState({ amount: `${currencies[defaultCurrency]}${currencyFormats[defaultCurrency](Math.abs(balance))}`})} text={debtManagement.settleTotal} />}
       </View>
     </ScrollView>
   }

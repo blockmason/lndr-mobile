@@ -38,6 +38,7 @@
 		2DCD954D1E0B4F2C00145EB5 /* LNDRTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 00E356F21AD99517003FC87E /* LNDRTests.m */; };
 		31611481E753464D8519D1D5 /* libsqlite3.0.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = C5746A00620E4AE48E7AA530 /* libsqlite3.0.tbd */; };
 		37747F42C1C043BC9CC89A03 /* libRNFetchBlob.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 0B26B84F35E44256960BFDEA /* libRNFetchBlob.a */; };
+		39EFA3E4203E51E40049FA93 /* libRCTCameraRoll.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 39EFA3E3203E516F0049FA93 /* libRCTCameraRoll.a */; };
 		39FEC60C2033A795006E6F8A /* libRCTAnimation.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 5E9157331DD0AC6500FF2AA8 /* libRCTAnimation.a */; };
 		3A41961AED1B4ACC8BD3D5DD /* Entypo.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 77636632FF0747C588A7AA56 /* Entypo.ttf */; };
 		47A2920F50705E9287620A6E /* libPods-LNDR.a in Frameworks */ = {isa = PBXBuildFile; fileRef = AA5446E718D74A207E01E42B /* libPods-LNDR.a */; };
@@ -132,19 +133,19 @@
 			remoteGlobalIDString = 2D02E47A1E0B4A5D006451C7;
 			remoteInfo = "LNDR-tvOS";
 		};
-		3980366420254AEE00226143 /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = 3980365B20254AEE00226143 /* RCTCameraRoll.xcodeproj */;
-			proxyType = 2;
-			remoteGlobalIDString = 58B5115D1A9E6B3D00147676;
-			remoteInfo = RCTCameraRoll;
-		};
 		39A632A62020254A00DB7129 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = 13745C949FE64968845B2400 /* TouchID.xcodeproj */;
 			proxyType = 2;
 			remoteGlobalIDString = 134814201AA4EA6300B7C361;
 			remoteInfo = TouchID;
+		};
+		39EFA3E2203E516F0049FA93 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 39EFA3DE203E516F0049FA93 /* RCTCameraRoll.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = 58B5115D1A9E6B3D00147676;
+			remoteInfo = RCTCameraRoll;
 		};
 		39FEC59B20339D40006E6F8A /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
@@ -407,7 +408,7 @@
 		2D02E47B1E0B4A5D006451C7 /* LNDR-tvOS.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "LNDR-tvOS.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		2D02E4901E0B4A5D006451C7 /* LNDR-tvOSTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "LNDR-tvOSTests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
 		2FFC0B3E71E84E5AABC774B7 /* RNRandomBytes.xcodeproj */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = "wrapper.pb-project"; name = RNRandomBytes.xcodeproj; path = "../node_modules/react-native-randombytes/RNRandomBytes.xcodeproj"; sourceTree = "<group>"; };
-		3980365B20254AEE00226143 /* RCTCameraRoll.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = RCTCameraRoll.xcodeproj; path = "../node_modules/react-native/Libraries/CameraRoll/RCTCameraRoll.xcodeproj"; sourceTree = "<group>"; };
+		39EFA3DE203E516F0049FA93 /* RCTCameraRoll.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = RCTCameraRoll.xcodeproj; path = "../node_modules/react-native/Libraries/CameraRoll/RCTCameraRoll.xcodeproj"; sourceTree = "<group>"; };
 		425DFAAA95E0DE35FE32D579 /* Pods-LNDR.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-LNDR.debug.xcconfig"; path = "Pods/Target Support Files/Pods-LNDR/Pods-LNDR.debug.xcconfig"; sourceTree = "<group>"; };
 		458548CD75E140688119A4C8 /* Ionicons.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = Ionicons.ttf; path = "../node_modules/react-native-vector-icons/Fonts/Ionicons.ttf"; sourceTree = "<group>"; };
 		4A49F6E091E249B1B548C8FA /* RCTImageResizer.xcodeproj */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = "wrapper.pb-project"; name = RCTImageResizer.xcodeproj; path = "../node_modules/react-native-image-resizer/ios/RCTImageResizer.xcodeproj"; sourceTree = "<group>"; };
@@ -455,6 +456,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				39EFA3E4203E51E40049FA93 /* libRCTCameraRoll.a in Frameworks */,
 				ADBDB9381DFEBF1600ED6528 /* libRCTBlob.a in Frameworks */,
 				39FEC60C2033A795006E6F8A /* libRCTAnimation.a in Frameworks */,
 				146834051AC3E58100842450 /* libReact.a in Frameworks */,
@@ -628,18 +630,18 @@
 			name = Frameworks;
 			sourceTree = "<group>";
 		};
-		3980365C20254AEE00226143 /* Products */ = {
-			isa = PBXGroup;
-			children = (
-				3980366520254AEE00226143 /* libRCTCameraRoll.a */,
-			);
-			name = Products;
-			sourceTree = "<group>";
-		};
 		39A632A32020254A00DB7129 /* Products */ = {
 			isa = PBXGroup;
 			children = (
 				39A632A72020254A00DB7129 /* libTouchID.a */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		39EFA3DF203E516F0049FA93 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				39EFA3E3203E516F0049FA93 /* libRCTCameraRoll.a */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -707,7 +709,7 @@
 		832341AE1AAA6A7D00B99B32 /* Libraries */ = {
 			isa = PBXGroup;
 			children = (
-				3980365B20254AEE00226143 /* RCTCameraRoll.xcodeproj */,
+				39EFA3DE203E516F0049FA93 /* RCTCameraRoll.xcodeproj */,
 				5E91572D1DD0AC6500FF2AA8 /* RCTAnimation.xcodeproj */,
 				146833FF1AC3E56700842450 /* React.xcodeproj */,
 				00C302A71ABCB8CE00DB3ED1 /* RCTActionSheet.xcodeproj */,
@@ -971,8 +973,8 @@
 					ProjectRef = ADBDB91F1DFEBF0600ED6528 /* RCTBlob.xcodeproj */;
 				},
 				{
-					ProductGroup = 3980365C20254AEE00226143 /* Products */;
-					ProjectRef = 3980365B20254AEE00226143 /* RCTCameraRoll.xcodeproj */;
+					ProductGroup = 39EFA3DF203E516F0049FA93 /* Products */;
+					ProjectRef = 39EFA3DE203E516F0049FA93 /* RCTCameraRoll.xcodeproj */;
 				},
 				{
 					ProductGroup = 00C302B61ABCB90400DB3ED1 /* Products */;
@@ -1110,18 +1112,18 @@
 			remoteRef = 146834031AC3E56700842450 /* PBXContainerItemProxy */;
 			sourceTree = BUILT_PRODUCTS_DIR;
 		};
-		3980366520254AEE00226143 /* libRCTCameraRoll.a */ = {
-			isa = PBXReferenceProxy;
-			fileType = archive.ar;
-			path = libRCTCameraRoll.a;
-			remoteRef = 3980366420254AEE00226143 /* PBXContainerItemProxy */;
-			sourceTree = BUILT_PRODUCTS_DIR;
-		};
 		39A632A72020254A00DB7129 /* libTouchID.a */ = {
 			isa = PBXReferenceProxy;
 			fileType = archive.ar;
 			path = libTouchID.a;
 			remoteRef = 39A632A62020254A00DB7129 /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		39EFA3E3203E516F0049FA93 /* libRCTCameraRoll.a */ = {
+			isa = PBXReferenceProxy;
+			fileType = archive.ar;
+			path = libRCTCameraRoll.a;
+			remoteRef = 39EFA3E2203E516F0049FA93 /* PBXContainerItemProxy */;
 			sourceTree = BUILT_PRODUCTS_DIR;
 		};
 		39FEC59C20339D40006E6F8A /* libRCTImageResizer.a */ = {

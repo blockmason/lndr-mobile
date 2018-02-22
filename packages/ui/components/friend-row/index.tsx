@@ -7,8 +7,9 @@ import Friend from 'lndr/friend'
 
 import { white } from 'theme/include/colors'
 
-import { cents } from 'lndr/format'
+import { currencyFormats } from 'lndr/format'
 import profilePic from 'lndr/profile-pic'
+import defaultCurrency from 'lndr/default-currency'
 
 import style from 'theme/account'
 import general from 'theme/general'
@@ -18,6 +19,7 @@ import { debtManagement } from 'language'
 interface Props {
   onPress?: () => void
   friend: Friend
+  friendScreen?: boolean
   recentTransactions?: any
   pendingTransactions?: any
   navigation: any
@@ -82,7 +84,7 @@ export default class FriendRow extends Component<Props, State> {
       sign = '-'
     }
 
-    return `${sign} $${cents(total)}`
+    return `${sign} $${currencyFormats[`${defaultCurrency}abs`](total)}`
   }
 
   getTransactionTotal() {
@@ -109,8 +111,8 @@ export default class FriendRow extends Component<Props, State> {
   }
 
   showSettleUp() {
-    const { friend } = this.props
-    return this.getRecentTotal() === 0 ? null : <Button narrow small round onPress={() => this.props.navigation.navigate('SettleUp', { friend: friend })} text={debtManagement.settleUp} style={{maxWidth: 100, alignSelf:'flex-end'}} />
+    const { friend, friendScreen } = this.props
+    return this.getRecentTotal() === 0 || !friendScreen ? null : <Button narrow small round onPress={() => this.props.navigation.navigate('SettleUp', { friend: friend })} text={debtManagement.settleUp} style={{maxWidth: 100, alignSelf:'flex-end'}} />
   }
 
   render() {

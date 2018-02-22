@@ -31,25 +31,23 @@ export const getGasPrice = async () => {
 
 export const getTxCost = async (currency: string) => {
   try {
-    if (currency === 'dollar') {
-      const gasPrice = await getGasPrice()
-      const rate = await getEthExchange()
-      return `${gasPrice * Number(rate) * 21000 / Math.pow(10, 18)}`.slice(0,6)
-    }
+    const gasPrice = await getGasPrice()
+    const rate = await getEthExchange(currency)
+    return `${gasPrice * Number(rate) * 21000 / Math.pow(10, 18)}`.slice(0,6)
   } catch (e) {}
 
   return '0.00'
 }
 
-export const getEthExchange = async () => {
+export const getEthExchange = async (currency: string) => {
   if (tempStorage.ethExchange) {
     return tempStorage.ethExchange
   }
   const rates = await fetchUtil.get('https://api.coinbase.com/v2/exchange-rates?currency=ETH')
-  return tempStorage.ethExchange = rates.data.rates.USD
+  return tempStorage.ethExchange = rates.data.rates[currency]
 }
 
-export const ethToUsd = (eth, exchange) => {
+export const ethToFiat = (eth, exchange) => {
   const usd = String(Number(eth) * Number(exchange))
   const decimalIndex = usd.indexOf('.')
   if (decimalIndex === -1) {

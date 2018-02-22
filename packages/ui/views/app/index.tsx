@@ -54,7 +54,8 @@ const initialState = {
   ethExchange: '1000',
   bcptBalance: '0',
   bcptExchange: '0.5',
-  userPic: ''
+  userPic: '',
+  ucacAddresses: {}
 }
 
 const store = createStore(initialState)

@@ -29,18 +29,18 @@ const loadingPendingTransactions = new LoadingContext()
 const loadingPendingSettlements = new LoadingContext()
 
 interface Props {
-  getPendingTransactions: () => any
-  getPendingSettlements: () => any
-  submitterIsMe: (pendingTransaction: PendingTransaction) => any
-  settlerIsMe: (pendingSettlement: PendingUnilateral) => any
-  isFocused: boolean
-  user: UserData
   state: any
-  friend?: Friend
-  navigation: any
-  homeScreen?: boolean
+  user: UserData
+  isFocused: boolean
   pendingSettlements: any
   bilateralSettlements: any
+  submitterIsMe: (pendingTransaction: PendingTransaction) => any
+  settlerIsMe: (pendingSettlement: PendingUnilateral) => any
+  getPendingTransactions: () => any
+  getPendingSettlements: () => any
+  navigation: any
+  friend?: any
+  homeScreen?: boolean
 }
 
 interface State {

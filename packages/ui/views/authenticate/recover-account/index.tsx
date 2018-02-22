@@ -10,6 +10,8 @@ import RecoverAccountForm from 'ui/forms/recover-account'
 
 import { RecoverAccountData } from 'lndr/user'
 
+import Loading, { LoadingContext } from 'ui/components/loading'
+
 interface Props {
   setAuthLoading: (state: boolean) => any
   recoverAccount: (formData: RecoverAccountData) => any

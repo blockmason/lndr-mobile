@@ -2,32 +2,35 @@ import React, { Component } from 'react'
 
 import { Text, TouchableHighlight, View, Image } from 'react-native'
 import Icon from 'react-native-vector-icons/Ionicons'
+import { connect } from 'react-redux'
 
-import { dollars, cents } from 'lndr/format'
+import { currencyFormats } from 'lndr/format'
 import PendingTransaction from 'lndr/pending-transaction'
 import User from 'lndr/user'
 import profilePic from 'lndr/profile-pic'
+import defaultCurrency from 'lndr/default-currency'
+import { getUcacCurrency } from 'reducers/app'
 
 import { white } from 'theme/include/colors'
-
 import formStyle from 'theme/form'
 import style from 'theme/account'
 import general from 'theme/general'
 
-import { debtManagement } from 'language'
+import { debtManagement, currencies } from 'language'
 
 interface Props {
   onPress?: () => void
   pendingTransaction: PendingTransaction
   user: User
   friend?: boolean
+  getUcacCurrency: (ucac: string) => string
 }
 
 interface State {
   pic?: string
 }
 
-export default class PendingTransactionRow extends Component<Props, State> {
+class PendingTransactionRow extends Component<Props, State> {
   constructor(props) {
     super(props)
     this.state = {}
@@ -63,7 +66,7 @@ export default class PendingTransactionRow extends Component<Props, State> {
   }
 
   getAmount() {
-    const { pendingTransaction, user } = this.props
+    const { pendingTransaction, user, getUcacCurrency } = this.props
 
     let sign = ''
 
@@ -73,7 +76,9 @@ export default class PendingTransactionRow extends Component<Props, State> {
       sign = '-'
     }
 
-    return `${sign} $${cents(pendingTransaction.amount)}`
+    const currentCurrency = getUcacCurrency(pendingTransaction.creditRecord.ucacAddress)
+
+    return `${sign} ${currencies[currentCurrency]}${currencyFormats[currentCurrency](pendingTransaction.amount)}`
   }
 
   render() {
@@ -97,3 +102,5 @@ export default class PendingTransactionRow extends Component<Props, State> {
     )
   }
 }
+
+export default connect((state) => ({ getUcacCurrency: getUcacCurrency(state) }))(PendingTransactionRow)

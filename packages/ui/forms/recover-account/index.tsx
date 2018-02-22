@@ -78,7 +78,6 @@ class RecoverAccountForm extends Component<Props, State> {
     if (password.length === 4 && confirmPassword.length === 4) {
       const success = await loadingContext.wrap(this.props.onSubmitRecoverUser(this.state))
 
-      console.log(success, user)
       if (!success && !user) {
         loadingContext.wrap(this.setState({ step: 1, password: '', confirmPassword: '' }))
       }

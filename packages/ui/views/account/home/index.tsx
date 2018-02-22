@@ -4,7 +4,7 @@ import React, { Component } from 'react'
 
 import { Text, View, ScrollView, Platform, Dimensions, Image, TouchableHighlight, BackHandler, BackAndroid } from 'react-native'
 
-import { cents } from 'lndr/format'
+import { currencyFormats } from 'lndr/format'
 import Balance from 'lndr/balance'
 
 import Button from 'ui/components/button'
@@ -20,9 +20,10 @@ import PendingTransaction from 'lndr/pending-transaction'
 
 import { isFocusingOn } from 'reducers/nav'
 import { getStore, getUser, getNeedsReviewCount } from 'reducers/app'
-import { getAccountInformation, displayError, getPendingTransactions, getBalances, registerChannelID } from 'actions'
+import { getAccountInformation, displayError, getPendingTransactions, getPendingSettlements, getBalances, registerChannelID } from 'actions'
 import { connect } from 'react-redux'
 import { UrbanAirship } from 'urbanairship-react-native'
+import defaultCurrency from 'lndr/default-currency'
 
 import style from 'theme/account'
 import formStyle from 'theme/form'
@@ -44,7 +45,8 @@ import {
   needsReview,
   recentTransactionsLanguage,
   pendingTransactionsLanguage,
-  seeAllActivity
+  seeAllActivity,
+  currencies
 } from 'language'
 
 const { width } = Dimensions.get('window')
@@ -57,6 +59,7 @@ interface Props {
   navigation: any
   isFocused: boolean
   getPendingTransactions: () => any
+  getPendingSettlements: () => any
   getBalances: () => any
   getAccountInformation: () => any
   displayError: (errorMsg: string) => any
@@ -69,12 +72,15 @@ interface Props {
 interface State {
   balanceToView?: Balance
   pendingTransaction?: PendingTransaction
+  currency: string
 }
 
 class HomeView extends Component<Props, State> {
   constructor() {
     super()
-    this.state = {}
+    this.state = {
+      currency: defaultCurrency
+    }
   }
 
   async componentDidMount() {
@@ -88,6 +94,7 @@ class HomeView extends Component<Props, State> {
     }
 
     await loadingPendingTransactions.wrap(this.props.getPendingTransactions())
+    await loadingPendingSettlements.wrap(this.props.getPendingSettlements())
     await loadingBalances.wrap(this.props.getBalances())
   }
 
@@ -129,6 +136,7 @@ class HomeView extends Component<Props, State> {
 
   renderBalanceInformation() {
     const { accountInformationLoaded, accountInformation = {}, balances, balancesLoaded, ethBalance = '0', ethExchange = '1000' } = this.props.state
+    const { currency } = this.state
 
     if (!accountInformationLoaded) {
       return
@@ -146,9 +154,8 @@ class HomeView extends Component<Props, State> {
     return <Section contentContainerStyle={style.column}>
       <View style={style.negativeMargin}>
         <View style={style.balanceRow}>
-          <Text style={style.balanceInfo}>$</Text>
-          <Text style={style.largeFactAmount}>{cents(balance)}</Text>
-          <Text style={style.balanceInfo}>USD</Text>
+          <Text style={style.balanceInfo}>{currencies[defaultCurrency]}</Text>
+          <Text style={style.largeFactAmount}>{currencyFormats[defaultCurrency](balance)}</Text>
         </View>
       </View>
       <View style={style.balanceRow}>
@@ -161,7 +168,7 @@ class HomeView extends Component<Props, State> {
       <View style={[style.balanceRow, {marginTop: 10}]}>
         <Text style={[style.balance, {marginLeft: '2%'}]}>{accountManagement.ethBalance.display(ethBalance)}</Text>
         <Button alternate blackText narrow arrow small onPress={() => {this.props.navigation.navigate('MyAccount')}}
-          text={accountManagement.ethBalance.inUsd(ethBalance, ethExchange)}
+          text={accountManagement.ethBalance.inFiat(ethBalance, ethExchange, currency)}
           containerStyle={{marginTop: -6}}
         />
       </View>
@@ -199,5 +206,5 @@ class HomeView extends Component<Props, State> {
 }
 
 export default connect((state) => ({ state: getStore(state)(), user: getUser(state)(), isFocused: isFocusingOn(state)('Home'), 
-needsReviewCount: getNeedsReviewCount(state) }), { getAccountInformation, displayError, getPendingTransactions, 
+needsReviewCount: getNeedsReviewCount(state) }), { getAccountInformation, displayError, getPendingTransactions, getPendingSettlements,
 getBalances, registerChannelID })(HomeView)

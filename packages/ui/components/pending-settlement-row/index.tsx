@@ -4,21 +4,22 @@ import { Text, TouchableHighlight, View, Image } from 'react-native'
 import Icon from 'react-native-vector-icons/Ionicons'
 import { connect } from 'react-redux'
 
-import { dollars, cents } from 'lndr/format'
+import { currencyFormats } from 'lndr/format'
 import PendingUnilateral from 'lndr/pending-unilateral'
 import PendingBilateral from 'lndr/pending-bilateral'
 import User from 'lndr/user'
 import profilePic from 'lndr/profile-pic'
+import defaultCurrency from 'lndr/default-currency'
+import { getUcacCurrency } from 'reducers/app'
 
 import { white } from 'theme/include/colors'
-
 import formStyle from 'theme/form'
 import style from 'theme/account'
 import general from 'theme/general'
 
 import settlerIsMe from 'reducers/app'
 
-import { debtManagement } from 'language'
+import { debtManagement, currencies } from 'language'
 
 interface Props {
   onPress?: () => void
@@ -26,13 +27,14 @@ interface Props {
   user: User
   friend?: boolean
   settlerIsMe: (pendingSettlement: PendingUnilateral | PendingBilateral) => boolean
+  getUcacCurrency: (ucac: string) => string
 }
 
 interface State {
   pic?: string
 }
 
-export default class PendingSettlementRow extends Component<Props, State> {
+class PendingSettlementRow extends Component<Props, State> {
   constructor(props) {
     super(props)
     this.state = {}
@@ -74,7 +76,7 @@ export default class PendingSettlementRow extends Component<Props, State> {
   }
 
   getAmount() {
-    const { pendingSettlement, user } = this.props
+    const { pendingSettlement, user, getUcacCurrency } = this.props
     let sign = ''
 
     if (user.address === pendingSettlement.creditorAddress) {
@@ -83,7 +85,9 @@ export default class PendingSettlementRow extends Component<Props, State> {
       sign = '-'
     }
 
-    return `${sign} $${cents(pendingSettlement.amount)}`
+    const currentCurrency = getUcacCurrency(pendingSettlement.creditRecord.ucacAddress)
+
+    return `${sign} ${currencies[currentCurrency]}${currencyFormats[currentCurrency](pendingSettlement.amount)}`
   }
 
   render() {
@@ -107,3 +111,5 @@ export default class PendingSettlementRow extends Component<Props, State> {
     )
   }
 }
+
+export default connect((state) => ({ getUcacCurrency: getUcacCurrency(state) }))(PendingSettlementRow)

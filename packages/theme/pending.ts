@@ -37,8 +37,8 @@ export default StyleSheet.create({
     marginBottom: 20
   },
   balanceInfo: {
-    ...medium,
-    color: aqua,
+    ...xlarge,
+    color: aqua
   },
   amount: {
     fontSize: 40,

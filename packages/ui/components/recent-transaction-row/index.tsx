@@ -2,15 +2,17 @@ import React, { Component } from 'react'
 
 import { Text, TouchableHighlight, View, Image } from 'react-native'
 
-import { dollars } from 'lndr/format'
+import { currencyFormats } from 'lndr/format'
 import User from 'lndr/user'
 import RecentTransaction from 'lndr/recent-transaction'
 import profilePic from 'lndr/profile-pic'
+import defaultCurrency from 'lndr/default-currency'
+import { getUcacCurrency } from 'reducers/app'
+import { connect } from 'react-redux'
+
+import { debtManagement, currencies } from 'language'
 
 import { white } from 'theme/include/colors'
-
-import { debtManagement } from 'language'
-
 import style from 'theme/account'
 import formStyle from 'theme/form'
 import general from 'theme/general'
@@ -20,13 +22,14 @@ interface Props {
   recentTransaction: RecentTransaction,
   user: User
   friend?: boolean
+  getUcacCurrency: (ucac: string) => string
 }
 
 interface State {
   pic?: string
 }
 
-export default class RecentTransactionRow extends Component<Props, State> {
+class RecentTransactionRow extends Component<Props, State> {
   constructor(props) {
     super(props)
     this.state = {}
@@ -62,7 +65,7 @@ export default class RecentTransactionRow extends Component<Props, State> {
   }
 
   getAmount() {
-    const { recentTransaction, user } = this.props
+    const { recentTransaction, user, getUcacCurrency } = this.props
 
     let sign = ''
 
@@ -72,7 +75,9 @@ export default class RecentTransactionRow extends Component<Props, State> {
       sign = '-'
     }
 
-    return `${sign} $${dollars(recentTransaction.amount)}`
+    const currentCurrency = getUcacCurrency(recentTransaction.ucac)
+
+    return `${sign} ${currencies[currentCurrency]}${currencyFormats[currentCurrency](recentTransaction.amount)}`
   }
 
   render() {
@@ -96,3 +101,5 @@ export default class RecentTransactionRow extends Component<Props, State> {
     )
   }
 }
+
+export default connect((state) => ({ getUcacCurrency: getUcacCurrency(state) }))(RecentTransactionRow)

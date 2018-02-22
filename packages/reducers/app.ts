@@ -52,6 +52,21 @@ export const getNeedsReviewCount = (state) => {
   return result
 }
 
+export const getUcacAddr = (state, currency: string) => {
+  return state.store.ucacAddresses[currency]
+}
+
+export const getUcacCurrency = (state) => (ucac: string) => {
+  const { ucacAddresses } = getStore(state)()
+
+  for(let currency in ucacAddresses) {
+    if (ucacAddresses[currency].indexOf(ucac) !== -1) {
+      return currency
+    }
+  }
+  return 'USD'
+}
+
 export const recentTransactions = (state) => state.store.recentTransactions
 
 export const pendingTransactions = (state) => state.store.pendingTransactions

@@ -6,11 +6,12 @@ import { debounce } from 'lndr/time'
 import Balance from 'lndr/balance'
 import Friend from 'lndr/friend'
 import { UserData } from 'lndr/user'
-import { cents } from 'lndr/format'
+import { currencyFormats } from 'lndr/format'
 import profilePic from 'lndr/profile-pic'
 import PendingView from 'ui/views/account/activity/pending'
 import RecentView from 'ui/views/account/activity/recent'
 import DashboardShell from 'ui/components/dashboard-shell'
+import defaultCurrency from 'lndr/default-currency'
 
 import Button from 'ui/components/button'
 import Loading, { LoadingContext } from 'ui/components/loading'
@@ -30,7 +31,8 @@ import {
   noBalances,
   debtManagement,
   pendingTransactionsLanguage,
-  recentTransactionsLanguage
+  recentTransactionsLanguage,
+  currencies
 } from 'language'
 
 import { getUser, pendingTransactions, recentTransactions } from 'reducers/app'
@@ -137,9 +139,8 @@ class RemoveFriend extends Component<Props, State> {
         <Text style={pendingStyle.title}>{`@${friend.nickname}`}</Text>
         <Text style={pendingStyle.subTitle}>{`${recentTransactionsLanguage.balance}:`}</Text>
         <View style={pendingStyle.balanceRow}>
-          <Text style={pendingStyle.balanceInfo}>$</Text>
-          <Text style={pendingStyle.amount}>{cents(this.getRecentTotal())}</Text>
-          <Text style={pendingStyle.balanceInfo}>USD</Text>
+          <Text style={pendingStyle.balanceInfo}>{currencies[defaultCurrency]}</Text>
+          <Text style={pendingStyle.amount}>{currencyFormats[defaultCurrency](this.getRecentTotal())}</Text>
         </View>
         { this.getRecentTotal() < 0 ? <Button round large fat wide onPress={() => this.props.navigation.navigate('SettleUp', { friend: friend })} text={debtManagement.settleUp} containerStyle={style.spaceBottom} /> : null }
         { this.getTransactionNumber() === 0 ? <Button round large danger wide onPress={() => this.removeFriend(friend)} text={removeFriendText} containerStyle={style.spaceBottom} /> : null }
