@@ -3,7 +3,8 @@ import React, { Component } from 'react'
 import { View, ScrollView, Text, TextInput, TouchableHighlight, Image, Platform } from 'react-native'
 
 import Friend from 'lndr/friend'
-import { currency, formatMemo } from 'lndr/format'
+import { formatMemo, currencyFormats, amountFormat } from 'lndr/format'
+import defaultCurrency from 'lndr/default-currency'
 
 import Button from 'ui/components/button'
 import Checkbox from 'ui/components/checkbox'
@@ -19,10 +20,10 @@ import formStyle from 'theme/form'
 import general from 'theme/general'
 import pendingStyle from 'theme/pending'
 
-import { debtManagement, noFriends, submit, cancel, back } from 'language'
+import { debtManagement, noFriends, submit, cancel, back, currencies } from 'language'
 
-import { getStore } from 'reducers/app'
-import { addDebt, getFriends, getPendingTransactions, getRecentTransactions } from 'actions'
+import { getStore, pendingTransactions, recentTransactions } from 'reducers/app'
+import { addDebt, getFriends, getRecentTransactions } from 'actions'
 import { connect } from 'react-redux'
 
 const loadingFriends = new LoadingContext()
@@ -34,9 +35,12 @@ interface Props {
     friend: Friend,
     amount: string,
     memo: string,
-    direction: string
+    direction: string,
+    currency: string
   ) => any
   state: any
+  pendingTransactions: any
+  recentTransactions: any
   navigation: any
 }
 
@@ -45,6 +49,7 @@ interface State {
   friend?: Friend
   amount?: string
   memo?: string
+  currency: string
 }
 
 class AddDebt extends Component<Props, State> {
@@ -53,7 +58,8 @@ class AddDebt extends Component<Props, State> {
   constructor() {
     super()
     this.state = {
-      shouldSelectFriend: false
+      shouldSelectFriend: false,
+      currency: defaultCurrency
     }
   }
 
@@ -65,13 +71,14 @@ class AddDebt extends Component<Props, State> {
 
   async submit() {
     const direction = this.props.navigation.state.params ? this.props.navigation.state.params.direction : 'lend'
-    const { friend, amount, memo } = this.state
+    const { friend, amount, memo, currency } = this.state
     const success = await submittingTransaction.wrap(
       this.props.addDebt(
         friend as Friend,
         amount as string,
         memo as string,
-        direction as string
+        direction as string,
+        currency as string
       )
     )
 
@@ -100,7 +107,7 @@ class AddDebt extends Component<Props, State> {
   }
 
   renderSelectFriend() {
-    const { friendsLoaded, friends } = this.props.state
+    const { friendsLoaded, friends, pendingTransactions, recentTransactions } = this.props.state
     const goBack = () => this.setState({ shouldSelectFriend: false })
 
     return <ScrollView style={[general.view, {paddingTop: 30}]} keyboardShouldPersistTaps='handled'>
@@ -127,6 +134,8 @@ class AddDebt extends Component<Props, State> {
               key={friend.address}
               friend={friend}
               onPress={() => this.setState({ shouldSelectFriend: false, friend })}
+              pendingTransactions={pendingTransactions}
+              recentTransactions={recentTransactions}
               navigation={this.props.navigation}
             />
           )
@@ -145,10 +154,15 @@ class AddDebt extends Component<Props, State> {
     this.props.navigation.goBack()
   }
 
+  setAmount(amount) {
+    const { currency } = this.state
+    return amountFormat(amount, currency)
+  }
+
   render() {
     const direction = this.props.navigation.state.params ? this.props.navigation.state.params.direction : 'lend'
 
-    const { shouldSelectFriend, friend, amount, memo } = this.state
+    const { shouldSelectFriend, friend, amount, memo, currency } = this.state
 
     if (shouldSelectFriend) {
       return this.renderSelectFriend()
@@ -175,7 +189,7 @@ class AddDebt extends Component<Props, State> {
               maxLength={14}
               underlineColorAndroid='transparent'
               keyboardType='numeric'
-              onChangeText={amount => this.setState({ amount: currency(amount) })}
+              onChangeText={amount => this.setState({ amount: this.setAmount(amount) })}
             />
           </View>
         </View>
@@ -196,4 +210,4 @@ class AddDebt extends Component<Props, State> {
   }
 }
 
-export default connect((state) => ({ state: getStore(state)() }), { addDebt, getFriends })(AddDebt)
+export default connect((state) => ({ state: getStore(state)(), pendingTransactions: pendingTransactions(state), recentTransactions: recentTransactions(state) }), { addDebt, getFriends })(AddDebt)

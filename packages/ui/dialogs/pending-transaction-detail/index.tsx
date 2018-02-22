@@ -4,9 +4,10 @@ import { Text, TextInput, TouchableHighlight, View, Image, ScrollView } from 're
 import { UserData } from 'lndr/user'
 
 import { debounce } from 'lndr/time'
-import { cents } from 'lndr/format'
+import { currencyFormats } from 'lndr/format'
 import PendingTransaction from 'lndr/pending-transaction'
 import profilePic from 'lndr/profile-pic'
+import defaultCurrency from 'lndr/default-currency'
 
 import Button from 'ui/components/button'
 import Loading, { LoadingContext } from 'ui/components/loading'
@@ -20,7 +21,8 @@ import {
   back,
   cancel,
   pendingTransactionsLanguage,
-  debtManagement
+  debtManagement,
+  currencies
 } from 'language'
 
 import { getUser, submitterIsMe } from 'reducers/app'
@@ -146,9 +148,8 @@ class PendingTransactionDetail extends Component<Props, State> {
         <Image source={imageSource} style={style.image}/>
         <Text style={style.title}>{this.getTitle()}</Text>
         <View style={style.balanceRow}>
-          <Text style={style.balanceInfo}>$</Text>
-          <Text style={style.amount}>{cents(pendingTransaction.amount)}</Text>
-          <Text style={style.balanceInfo}>USD</Text>
+          <Text style={style.balanceInfo}>{currencies[defaultCurrency]}</Text>
+          <Text style={style.amount}>{currencyFormats[defaultCurrency](pendingTransaction.amount)}</Text>
         </View>
         {this.labelRow(pendingTransaction.memo.trim())}
         <View style={{marginBottom: 10}}/>

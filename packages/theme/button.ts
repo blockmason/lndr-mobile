@@ -18,9 +18,9 @@ export default StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
     shadowColor: '#000',
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.8,
-    shadowRadius: 2,
+    shadowOffset: { width: 0, height: 1 },
+    shadowOpacity: 0.5,
+    shadowRadius: 1,
     elevation: 2
   },
   icon: {
@@ -106,7 +106,7 @@ export default StyleSheet.create({
   fat: {
     paddingVertical: 10,
     elevation: 4,
-    shadowOffset: { width: 0, height: 4 }
+    shadowOffset: { width: 0, height: 2 }
   },
   wide: {
     paddingLeft: 30,

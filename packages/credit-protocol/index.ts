@@ -5,6 +5,7 @@ import Mnemonic from 'bitcore-mnemonic'
 import ethUtil from 'ethereumjs-util'
 import RNFetchBlog from 'react-native-fetch-blob'
 import ImageResizer from 'react-native-image-resizer'
+import { Platform } from 'react-native'
 
 import { hexToBuffer, utf8ToBuffer, bufferToHex, stringToBuffer } from './lib/buffer-utils'
 import Client from './lib/client'
@@ -102,6 +103,14 @@ export default class CreditProtocol {
       email,
       signature
     })
+  }
+
+  async getUcacAddresses() {
+    if (this.tempStorage.ucacs) {
+      return this.tempStorage.ucacs
+    }
+    const config = await this.client.get(`/config`)
+    return this.tempStorage.ucacs = config.lndrAddresses
   }
 
   getBalance(user: string) {
@@ -236,6 +245,7 @@ export default class CreditProtocol {
     }
 
     const {
+      ucacAddress: ucac,
       creditorAddress: creditor,
       debtorAddress: debtor,
       amount,
@@ -244,14 +254,15 @@ export default class CreditProtocol {
     } = creditRecord
 
     return this.client.post(`/${action}`, {
-      creditor: creditor,
-      debtor: debtor,
-      amount: amount,
-      memo: memo,
+      ucac,
+      creditor,
+      debtor,
+      amount,
+      memo,
       submitter: action === 'lend' ? creditor : debtor,
       hash: bufferToHex(creditRecord.hash),
-      nonce: nonce,
-      signature: signature
+      nonce,
+      signature
     })
   }
 
@@ -261,6 +272,7 @@ export default class CreditProtocol {
     }
 
     const {
+      ucacAddress: ucac,
       creditorAddress: creditor,
       debtorAddress: debtor,
       amount,
@@ -269,14 +281,15 @@ export default class CreditProtocol {
     } = creditRecord
 
     return this.client.post(`/${action}`, {
-      creditor: creditor,
-      debtor: debtor,
-      amount: amount,
-      memo: memo,
+      ucac,
+      creditor,
+      debtor,
+      amount,
+      memo,
       submitter: action === 'lend' ? creditor : debtor,
       hash: bufferToHex(creditRecord.hash),
-      nonce: nonce,
-      signature: signature,
+      nonce,
+      signature,
       settlementCurrency: denomination
     })
   }
@@ -335,6 +348,7 @@ export default class CreditProtocol {
       creditorAddress: settlement.creditorAddress,
       signature
     })
+
   }
 
   getEthTxHash(hash: string) {
@@ -348,7 +362,14 @@ export default class CreditProtocol {
 
     const IMAGE_TARGET_SIZE = 240
     const resizedImageResponse = await ImageResizer.createResizedImage(imageURI, IMAGE_TARGET_SIZE, IMAGE_TARGET_SIZE, "JPEG", 100, 0)
-    const base64ImageData = await RNFetchBlog.fs.readFile(resizedImageResponse.uri, 'base64')
+    
+    let base64ImageData
+
+    if (Platform.OS === 'ios') {
+      base64ImageData = await RNFetchBlog.fs.readFile(imageURI, 'base64')
+    } else {
+      base64ImageData = await RNFetchBlog.fs.readFile(resizedImageResponse.uri, 'base64')
+    }
 
     const signature = this.serverSign(ethUtil.sha3(base64ImageData), privateKeyBuffer)
 

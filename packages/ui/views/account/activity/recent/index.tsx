@@ -30,7 +30,7 @@ interface Props {
   isFocused: boolean
   user: UserData
   state: any
-  friend?: Friend
+  friend?: any
   navigation: any
 }
 

@@ -14,7 +14,6 @@ import PendingUnilateral from 'lndr/pending-unilateral'
 import PendingBilateral from 'lndr/pending-bilateral'
 import EthTransaction from 'lndr/eth-transaction'
 import BcptTransaction from 'lndr/bcpt-transaction'
-import ucac from 'lndr/ucac'
 import Storage from 'lndr/storage'
 import { getEthBalance, web3 } from 'lndr/settlement'
 import { getGasPrice, settlementCost, getEthExchange } from 'lndr/eth-price-utils'
@@ -28,9 +27,10 @@ import CreditProtocol from 'credit-protocol'
 import { accountManagement, debtManagement, settlementManagement, copiedClipboard } from 'language'
 
 import { ToastActionsCreators } from 'react-native-redux-toast'
-import { getUser, getStore } from 'reducers/app'
-import { hexToBuffer } from '../credit-protocol/lib/buffer-utils';
-import account from 'theme/account';
+import { getUser, getStore, getUcacAddr } from 'reducers/app'
+import { hexToBuffer } from '../credit-protocol/lib/buffer-utils'
+import account from 'theme/account'
+import defaultCurrency from 'lndr/default-currency'
 
 const bcrypt = require('bcryptjs')
 
@@ -67,14 +67,17 @@ export const initializeStorage = () => {
     if (storedUser && moment(storedSession).add(storedUser.lockTimeout, 'minute') > moment()) {
       await sessionStorage.set(moment())
       let { ethBalance, ethExchange, bcptBalance } = await getEthInfo(storedUser)
-      const payload = { hasStoredUser: true, welcomeComplete: true, user: storedUser, notificationsEnabled, ethBalance, ethExchange, bcptBalance }
+      let ucacAddresses = await creditProtocol.getUcacAddresses()
+      const payload = { hasStoredUser: true, welcomeComplete: true, user: storedUser, notificationsEnabled, ethBalance, ethExchange, bcptBalance, ucacAddresses }
       dispatch(setState(payload))
     } else if (touchIdSupported && storedMnemonic && storedUser) {
       let { ethBalance, ethExchange, bcptBalance } = await getEthInfo(storedUser)
+      let ucacAddresses = await creditProtocol.getUcacAddresses()
       const payload = await triggerTouchId(storedUser, notificationsEnabled)
       payload.ethBalance = ethBalance
       payload.ethExchange = ethExchange
       payload.bcptBalance = bcptBalance
+      payload.ucacAddresses = ucacAddresses
       dispatch(setState(payload))
     } else if (storedMnemonic) {
       dispatch(setState({ hasStoredUser: true, welcomeComplete: true, notificationsEnabled }))
@@ -204,7 +207,8 @@ export const confirmAccount = () => {
       const user = await createUserFromCredentials(mnemonic, hashedPassword)
       await storeUserSession(user)
       let { ethBalance, ethExchange, bcptBalance } = await getEthInfo(user)
-      const payload = { user, hasStoredUser: true, ethBalance, ethExchange, bcptBalance }
+      let ucacAddresses = await creditProtocol.getUcacAddresses()
+      const payload = { user, hasStoredUser: true, ethBalance, ethExchange, bcptBalance, ucacAddresses }
       dispatch(setState(payload))
     } catch (e) {
       dispatch(displayError(accountManagement.mnemonic.unableToValidate))
@@ -471,7 +475,6 @@ export const getPendingTransactions = () => {
 export const getPendingSettlements = () => {
   return async (dispatch, getState) => {
     const user = getUser(getState())()
-
     const rawPendingSettlements = await creditProtocol.getPendingSettlements(user.address)
     console.log('RAW PENDING SETTLEMENTS: ', rawPendingSettlements)
     const pendingSettlements = rawPendingSettlements.unilateralSettlements.map(jsonToPendingUnilateral)
@@ -485,13 +488,14 @@ export const getPendingSettlements = () => {
 
 export const confirmPendingTransaction = (pendingTransaction: PendingTransaction) => {
   return async (dispatch, getState) => {
-    const { creditorAddress, debtorAddress, amount, memo, creditorNickname, debtorNickname } = pendingTransaction
+    const { creditorAddress, debtorAddress, amount, memo, creditorNickname, debtorNickname, creditRecord } = pendingTransaction
+    const { ucacAddress } = creditRecord
     const { address, privateKeyBuffer } = getUser(getState())()
     const direction = address === creditorAddress ? 'lend' : 'borrow'
 
     try {
       const creditRecord = await creditProtocol.createCreditRecord(
-        ucac,
+        ucacAddress,
         creditorAddress,
         debtorAddress,
         amount,
@@ -503,7 +507,6 @@ export const confirmPendingTransaction = (pendingTransaction: PendingTransaction
       refreshTransactions()
       
       dispatch(displaySuccess(debtManagement.confirmation.transaction(direction === 'lend' ? debtorNickname : creditorNickname)))
-
       return true
     }
 
@@ -515,9 +518,10 @@ export const confirmPendingTransaction = (pendingTransaction: PendingTransaction
   }
 }
 
-export const confirmPendingSettlement = (pendingTransaction: PendingTransaction, denomination: string) => {
+export const confirmPendingSettlement = (pendingSettlement: PendingUnilateral, denomination: string) => {
   return async (dispatch, getState) => {
-    const { creditorAddress, debtorAddress, amount, memo, debtorNickname, creditorNickname } = pendingTransaction
+    const { creditorAddress, debtorAddress, amount, memo, debtorNickname, creditorNickname, creditRecord } = pendingSettlement
+    const { ucacAddress } = creditRecord
     const { address, privateKeyBuffer } = getUser(getState())()
     const direction = address === creditorAddress ? 'lend' : 'borrow'
 
@@ -531,7 +535,7 @@ export const confirmPendingSettlement = (pendingTransaction: PendingTransaction,
 
     try {
       const creditRecord = await creditProtocol.createCreditRecord(
-        ucac,
+        ucacAddress,
         creditorAddress,
         debtorAddress,
         amount,
@@ -591,7 +595,7 @@ export const rejectPendingSettlement = (pendingSettlement: PendingUnilateral) =>
   }
 }
 
-export const addDebt = (friend: Friend, amount: string, memo: string, direction: string) => {
+export const addDebt = (friend: Friend, amount: string, memo: string, direction: string, currency: string) => {
   return async (dispatch, getState) => {
     const { address, privateKeyBuffer } = getUser(getState())()
 
@@ -617,7 +621,9 @@ export const addDebt = (friend: Friend, amount: string, memo: string, direction:
       lend: [ address, friend.address ],
       borrow: [ friend.address, address ]
     }[direction]
-    
+
+    const ucac = getUcacAddr(getState(), currency)
+    console.log(ucac)
     try {
       const creditRecord = await creditProtocol.createCreditRecord(
         ucac,
@@ -642,7 +648,7 @@ export const addDebt = (friend: Friend, amount: string, memo: string, direction:
   }
 }
 
-export const settleUp = (friend: Friend, amount: string, memo: string, direction: string, denomination: string) => {
+export const settleUp = (friend: Friend, amount: string, memo: string, direction: string, denomination: string, currency: string) => {
   return async (dispatch, getState) => {
     const { address, privateKeyBuffer } = getUser(getState())()
 
@@ -675,6 +681,8 @@ export const settleUp = (friend: Friend, amount: string, memo: string, direction
       lend: [ address, friend.address ],
       borrow: [ friend.address, address ]
     }[direction]
+
+    const ucac = await getUcacAddr(getState(), currency)
     
     try {
       const creditRecord = await creditProtocol.createCreditRecord(
@@ -715,9 +723,11 @@ export const loginAccount = (loginData: LoginAccountData) => {
 
     await storeUserSession(user)
     let { ethBalance, ethExchange, bcptBalance } = await getEthInfo(user)
+    let ucacAddresses = await creditProtocol.getUcacAddresses()
     
-    const payload = { user, hasStoredUser: true, ethBalance, ethExchange, bcptBalance }
+    const payload = { user, hasStoredUser: true, ethBalance, ethExchange, bcptBalance, ucacAddresses }
     dispatch(setState(payload))
+    refreshTransactions()
     return true
   }
 }
@@ -808,7 +818,7 @@ export const setEthBalance = () => {
   return async (dispatch, getState) => {
     const { user } = getState().store
     const ethBalance = await getEthBalance(user.address)
-    const ethExchange = await getEthExchange()
+    const ethExchange = await getEthExchange(defaultCurrency)
     dispatch(setState({ ethBalance, ethExchange }))
   }
 }
@@ -885,7 +895,6 @@ export const getProfilePic = () => {
     const { address } = getUser(getState())()
     try {
       const userPic = await profilePic.get(address)
-      console.log('working 1', userPic)
       dispatch(setState({ userPic }))
     } catch (e) {
       dispatch(displayError(accountManagement.profilePic.getError))
@@ -919,7 +928,6 @@ const refreshTransactions = () => {
   getPendingTransactions()
   getRecentTransactions()
   setEthBalance()
-  //enable this once server is done
   getPendingSettlements()
 }
 
@@ -953,7 +961,6 @@ const settleBilateral = async (user, bilateralSettlements, dispatch, getState) =
     const ethTransaction = new EthTransaction(settlement.creditorAddress, settlement.debtorAddress, settlement.settlementAmount, gasPrice)
     try {
       const txHash = await creditProtocol.settleWithEth(ethTransaction, user.privateKeyBuffer)
-      console.log('TX HASH', txHash)
       creditProtocol.storeSettlementHash(txHash, settlement, user.privateKeyBuffer)
 
     } catch (e) {
@@ -1004,7 +1011,7 @@ const getEthInfo = async (user) => {
   let ethBalance, ethExchange, bcptBalance
   try {
     ethBalance = await getEthBalance(user.address)
-    ethExchange = await getEthExchange()
+    ethExchange = await getEthExchange(defaultCurrency)
     bcptBalance = await getBcptBalance(user.address)
   } catch (e) {
     ethBalance = '0'

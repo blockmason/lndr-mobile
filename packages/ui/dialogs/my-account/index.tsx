@@ -18,6 +18,7 @@ import { formatNick, formatLockTimeout, formatEmail, emailFormatIncorrect } from
 import { getBcptBalance } from 'lndr/bcpt-utils'
 
 import TextLogo from 'ui/components/images/text-logo'
+import BMLogo from 'ui/components/images/bm-logo'
 import InputImage from 'ui/components/images/input-image'
 
 const loadingContext = new LoadingContext()
@@ -79,7 +80,6 @@ class MyAccount extends Component<Props, State> {
 
   async componentWillMount() {
     const { address } = this.props.user
-    console.log(this.props.user)
     this.props.setEthBalance()
     this.props.getProfilePic(address)
   }
@@ -345,7 +345,9 @@ class MyAccount extends Component<Props, State> {
         <Button close onPress={() => this.props.navigation.goBack()} />
         <View style={[style.account, {minHeight: height}]}>
           <Loading context={loadingContext} />
-          <TextLogo name='black'/>
+          {/* <TextLogo name='black'/> */}
+          {/* <Text>BY</Text> */}
+          <BMLogo type='square' size='medium'/>
           <Button round danger onPress={() => this.props.logoutAccount()} text={logoutAction} containerStyle={style.spaceVertical} />
           <View style={general.centeredColumn}>
             {this.renderPanels()}

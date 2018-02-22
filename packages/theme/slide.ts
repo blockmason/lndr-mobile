@@ -1,6 +1,6 @@
 import { StyleSheet } from 'react-native'
 
-import { light, white, black } from 'theme/include/colors'
+import { light, white, black, gray } from 'theme/include/colors'
 import { percent } from 'theme/include/dimensions'
 
 export default StyleSheet.create({
@@ -58,5 +58,12 @@ export default StyleSheet.create({
   },
   bottomSpacing: {
     paddingBottom: '7%'
+  },
+  by: {
+    marginTop: 24,
+    marginBottom: 8,
+    fontSize: 16,
+    fontWeight: 'bold',
+    color: gray
   }
 } as any)

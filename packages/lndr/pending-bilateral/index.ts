@@ -1,7 +1,5 @@
 import { CreditRecord } from 'credit-protocol'
 
-import ucac from 'lndr/ucac'
-
 export default class PendingBilateral {
   creditorNickname: string
   debtorNickname: string
@@ -13,7 +11,7 @@ export default class PendingBilateral {
   settlementCurrency: string
 
   constructor(data) {
-    const { creditor, debtor, amount, memo, nonce , submitter, hash, settlementAmount, settlementCurrency, settlementBlocknumber } = data.creditRecord
+    const { creditor, debtor, amount, memo, nonce, ucac, submitter, hash, settlementAmount, settlementCurrency, settlementBlocknumber } = data.creditRecord
     this.creditRecord = new CreditRecord(ucac, creditor, debtor, amount, memo, nonce)
     this.txHash = data.txHash
     this.submitter = submitter.replace('0x', '')

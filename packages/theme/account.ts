@@ -286,6 +286,7 @@ export default StyleSheet.create({
   recentIcon: {
     width: 30,
     height: 30,
+    borderRadius: 15,
     marginRight: 15
   },
   pendingMemo: {

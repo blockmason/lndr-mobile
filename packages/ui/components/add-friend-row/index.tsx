@@ -45,7 +45,7 @@ export default class FriendRow extends Component<Props, State> {
   addFriendButton() {
     const { onPress } = this.props
     //need check to see if person is friend
-    return <Button narrow small round friend onPress={onPress} text={addFriendButton} style={{marginRight: 10}} />
+    return <Button small round friend onPress={onPress} text={addFriendButton} style={{marginRight: 10}} />
   }
 
   render() {

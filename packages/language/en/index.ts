@@ -1,4 +1,4 @@
-import { ethToUsd } from 'lndr/eth-price-utils'
+import { ethToFiat } from 'lndr/eth-price-utils'
 
 const generalCommunicationError = 'There was a problem communicating with the server, please try again later.'
 
@@ -124,7 +124,7 @@ export const accountManagement = {
   },
   ethBalance: {
     display: balance => `Your ETH balance is ${String(balance).slice(0,8)} `,
-    inUsd: (balance, exchange) => ` ($${ethToUsd(balance, exchange)})`,
+    inFiat: (balance, exchange, currency) => ` (${currencies[currency]}${ethToFiat(balance, exchange)})`,
     getError: 'Unable to retrieve Eth balance',
     manage: 'Manage ETH'
   },
@@ -179,6 +179,7 @@ export const currentBalance = {
 }
 
 export const welcomeView = {
+  by: 'BUILT BY',
   makeItEasy: 'Lndr makes it easy to track simple debts',
   weHelpFriends: 'We help friends live, work, and play together.',
   len: 'Len',
@@ -347,4 +348,10 @@ export const confirmation = {
   },
   status: 'You can see the status of this transaction in the ',
   activity: 'activity tab.'
+}
+
+export const currencies = {
+  USD: '$',
+  JPY: '¥',
+  KRW: '₩'
 }

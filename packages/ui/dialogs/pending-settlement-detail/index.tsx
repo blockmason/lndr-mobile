@@ -4,10 +4,11 @@ import { Text, TextInput, TouchableHighlight, View, Image, ScrollView } from 're
 import { UserData } from 'lndr/user'
 
 import { debounce } from 'lndr/time'
-import { cents } from 'lndr/format'
+import { currencyFormats } from 'lndr/format'
 import PendingUnilateral from 'lndr/pending-unilateral'
 import { getTxCost } from 'lndr/eth-price-utils'
 import profilePic from 'lndr/profile-pic'
+import defaultCurrency from 'lndr/default-currency'
 
 import Button from 'ui/components/button'
 import Loading, { LoadingContext } from 'ui/components/loading'
@@ -23,7 +24,8 @@ import {
   cancel,
   pendingSettlementsLanguage,
   debtManagement,
-  accountManagement
+  accountManagement,
+  currencies
 } from 'language'
 
 import { getUser, settlerIsMe } from 'reducers/app'
@@ -33,8 +35,8 @@ import { connect } from 'react-redux'
 const loadingContext = new LoadingContext()
 
 interface Props {
-  confirmPendingSettlement: (pendingSettlement: PendingUnilateral) => any
-  rejectPendingSettlement: (pendingSettlement: PendingUnilateral) => any
+  confirmPendingSettlement: (pendingSettlement: PendingUnilateral, settlementCurrency: string) => any
+  rejectPendingSettlement: (pendingSettlement: PendingUnilateral, settlementCurrency: string) => any
   user: UserData
   settlerIsMe: (pendingSettlement: PendingUnilateral) => boolean
   navigation: any
@@ -67,8 +69,10 @@ class PendingSettlementDetail extends Component<Props, State> {
   }
 
   async confirmPendingSettlement(pendingSettlement: PendingUnilateral) {
+    const pending = this.getPendingSettlement()
+
     const success = await loadingContext.wrap(
-      this.props.confirmPendingSettlement(pendingSettlement)
+      this.props.confirmPendingSettlement(pendingSettlement, pending.settlementCurrency)
     )
 
     if (success) {
@@ -79,8 +83,10 @@ class PendingSettlementDetail extends Component<Props, State> {
   }
 
   async rejectPendingSettlement(pendingSettlement: PendingUnilateral) {
+    const pending = this.getPendingSettlement()
+
     const success = await loadingContext.wrap(
-      this.props.rejectPendingSettlement(pendingSettlement)
+      this.props.rejectPendingSettlement(pendingSettlement, pending.settlementCurrency)
     )
 
     if (success) {
@@ -175,9 +181,8 @@ class PendingSettlementDetail extends Component<Props, State> {
         <Image source={require('images/person-outline-dark.png')} style={style.image}/>
         <Text style={[style.title, {alignSelf: 'center', textAlign: 'center'}]}>{this.getTitle()}</Text>
         <View style={style.balanceRow}>
-          <Text style={style.balanceInfo}>$</Text>
-          <Text style={style.amount}>{cents(pendingSettlement.amount)}</Text>
-          <Text style={style.balanceInfo}>USD</Text>
+          <Text style={style.balanceInfo}>{currencies[defaultCurrency]}</Text>
+          <Text style={style.amount}>{currencyFormats[defaultCurrency](pendingSettlement.amount)}</Text>
         </View>
         <View style={style.balanceRow}>
           <Text style={style.amount}>{this.getSettlementAmount()}</Text>
