@@ -38,7 +38,7 @@ const mnemonicStorage = new Storage('mnemonic')
 const hashedPasswordStorage = new Storage('hashed-password')
 const notificationsEnabledStorage = new Storage('notifications-enabled')
 
-const creditProtocol = new CreditProtocol('http://34.238.20.130')
+const creditProtocol = new CreditProtocol('https://api.lndr.blockmason.io')
 
 // TODO REMOVE setState FUNCTION as the sole purpose was to transition from using
 // the custom engine design to redux storage
