@@ -48,7 +48,7 @@ export default StyleSheet.create({
     fontWeight: 'bold'
   },
   completeButton: {
-    marginTop: percent.ten
+    marginTop: '7%'
   },
   horizontial: {
     flexDirection: 'row'

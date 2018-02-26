@@ -199,7 +199,6 @@ class AddDebt extends Component<Props, State> {
             style={formStyle.memoInput}
             placeholder={debtManagement.memo.example}
             value={memo}
-            maxLength={32}
             underlineColorAndroid='transparent'
             onChangeText={memo => this.setState({ memo: formatMemo(memo) })}
           />

@@ -179,7 +179,7 @@ class SettleUp extends Component<Props, State> {
                 containerStyle={{marginTop: -6}}
               />
             </View>
-            <Text style={[accountStyle.txCost, {marginLeft: '2%'}]}>{accountManagement.sendEth.txCost(txCost)}</Text>
+            <Text style={[accountStyle.txCost, {marginLeft: '2%'}]}>{accountManagement.sendEth.txCost(txCost, currency)}</Text>
             <Text style={formStyle.titleLarge}>{debtManagement.fields.settlementAmount}</Text>
             <TextInput
               style={formStyle.jumboInput}

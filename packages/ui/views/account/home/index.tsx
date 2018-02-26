@@ -46,7 +46,8 @@ import {
   recentTransactionsLanguage,
   pendingTransactionsLanguage,
   seeAllActivity,
-  currencies
+  currencies,
+  debtManagement
 } from 'language'
 
 const { width } = Dimensions.get('window')
@@ -190,8 +191,8 @@ class HomeView extends Component<Props, State> {
       <Section>
         <Text style={[formStyle.titleXLarge, formStyle.center, formStyle.spaceBottomS]}>{newTransaction}</Text>
         <View style={style.newTransactionButtonContainer}>
-          <Button fat small round onPress={() => this.props.navigation.navigate('AddDebt', { direction: 'lend' })} text={owesMe} style={{minWidth: width / 2 - 25}} />
-          <Button fat small round dark onPress={() => this.props.navigation.navigate('AddDebt', {direction: 'borrow'})} text={iOwe} style={{minWidth: width / 2 - 25}} />
+          <Button fat small round onPress={() => this.props.navigation.navigate('AddDebt', { direction: 'lend' })} text={debtManagement.lend} style={{minWidth: width / 2 - 25}} />
+          <Button fat small round dark onPress={() => this.props.navigation.navigate('AddDebt', {direction: 'borrow'})} text={debtManagement.borrow} style={{minWidth: width / 2 - 25}} />
         </View>
       </Section>
       {this.renderNeedsReview()}
