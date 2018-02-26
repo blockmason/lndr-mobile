@@ -45,13 +45,15 @@ interface Props {
 interface State {
   txCost: string
   pic?: string
+  currency: string
 }
 
 class PendingSettlementDetail extends Component<Props, State> {
   constructor() {
     super()
     this.state = {
-      txCost: '0.00'
+      txCost: '0.00',
+      currency: defaultCurrency
     }
   }
 
@@ -169,7 +171,7 @@ class PendingSettlementDetail extends Component<Props, State> {
   }
 
   render() {
-    const { txCost } = this.state
+    const { txCost, currency } = this.state
     const { user, settlerIsMe } = this.props
     const pendingSettlement = this.getPendingSettlement()
 
@@ -188,7 +190,7 @@ class PendingSettlementDetail extends Component<Props, State> {
           <Text style={style.amount}>{this.getSettlementAmount()}</Text>
           <Text style={style.balanceInfo}>{pendingSettlement.settlementCurrency}</Text>
         </View>
-        <Text style={[accountStyle.txCost, formStyle.spaceBottom, {marginLeft: '2%'}]}>{accountManagement.sendEth.txCost(txCost)}</Text>
+        <Text style={[accountStyle.txCost, formStyle.spaceBottom, {marginLeft: '2%'}]}>{accountManagement.sendEth.txCost(txCost, currency)}</Text>
         {this.showButtons()}
       </View>
     </ScrollView>

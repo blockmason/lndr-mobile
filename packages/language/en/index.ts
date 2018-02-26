@@ -136,10 +136,9 @@ export const accountManagement = {
     amount: 'AMOUNT TO SEND',
     address: `Destination Address (without '0x' prefix)`,
     transfer: 'TRANSFER ETH',
-    transferAll: 'TRANSFER EVERYTHING',
     balance: (balance) => `Your current ETH balance is ${typeof balance === 'string' ? balance.slice(0,8) : ''}`,
     ethAddress: 'Ethereum Address',
-    txCost: cost => `The current transaction cost is $${cost}`,
+    txCost: (cost, currency) => `The current transaction cost is ${currencies[currency]}${cost}`,
     transferLowercase: 'Transfer Eth'
   },
   sendBcpt: {
@@ -202,7 +201,6 @@ export const debtManagement = {
   lend: 'New Loan',
   borrow: 'New Debt',
   settleUpLower: 'Settle Up',
-  amountToSettle: 'Amount to Settle',
   total: 'Total',
   createError: {
     amountTooLow: 'Amount must be greater than $0',
@@ -227,13 +225,13 @@ export const debtManagement = {
     lend: nickname => `${nickname} owes me`,
     borrow: nickname => `I owe ${nickname}`,
     initiatedLend: nickname => `${nickname} says he/she owes`,
-    initiatedBorrow: nickname => `${nickname} says he/she owes`,
+    initiatedBorrow: nickname => `${nickname} says you owe`,
     pendingLend: nickname => `@${nickname} owes you`,
     pendingBorrow: nickname => `You owe @${nickname}`,
     pendingLendSettlement: settlement => `@${settlement.debtorNickname} requests a settlement in ${settlement.settlementCurrency}`,
     pendingBorrowSettlement: settlement => `@${settlement.creditorNickname} wants to settle with you in ${settlement.settlementCurrency}`,
     pendingLendSettlementMe: settlement => `You requested to settle with @${settlement.debtorNickname} in ${settlement.settlementCurrency}`,
-    pendingBorrowSettlementMe: settlement => `You requested that @${settlement.creditorNickname} settle with in ${settlement.settlementCurrency}`
+    pendingBorrowSettlementMe: settlement => `You requested that @${settlement.creditorNickname} settle in ${settlement.settlementCurrency}`
   },
   pending: {
     success: friend => `Pending debt submitted to @${friend.nickname}`,

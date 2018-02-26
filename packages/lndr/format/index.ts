@@ -2,6 +2,8 @@ import defaultCurrency from 'lndr/default-currency'
 
 import { currencies } from 'language'
 
+declare const Buffer
+
 export const commas = value => {
   return String(value).replace(/(\d{3})+$/g,
     full => full.replace(/\d{3}/g, group => `,${group}`)
@@ -32,25 +34,25 @@ export const currencyFormats = {
     return `${commas(left) || '0'}.${leftPad('0', 2, right)}`
   },
   
-  WON: value => {
+  KRW: value => {
     const sign = value < 0 ? '-' : ''
     const raw = String(Math.abs(value))
     return `${sign}${commas(raw) || '0'}`
   },
   
-  WONabs: value => {
+  KRWabs: value => {
     const sign = value < 0 ? '-' : ''
     const raw = String(Math.abs(value))
     return `${commas(raw) || '0'}`
   },
   
-  YEN: value => {
+  JPY: value => {
     const sign = value < 0 ? '-' : ''
     const raw = String(Math.abs(value))
     return `${sign}${commas(raw) || '0'}`
   },
   
-  YENabs: value => {
+  JPYabs: value => {
     const sign = value < 0 ? '-' : ''
     const raw = String(Math.abs(value))
     return `${commas(raw) || '0'}}`
@@ -92,7 +94,11 @@ export const formatNick = nick => nick.replace(/[^A-Za-z0-9]/g, '')
 
 export const formatEmail = email => email.replace(/[^A-Za-z0-9@\._\-!#$%&'*+\-\/=?^_`{|}~]/g, '')
 
-export const formatMemo = memo => memo.replace(/^\s/, '').replace(/\s\s$/, ' ')
+export const formatMemo = memo => {
+  const updatedMemo = memo.replace(/^\s/, '').replace(/\s\s$/, ' ')
+  const memoBuffer = Buffer.from(updatedMemo, 'utf8')
+  return memoBuffer.slice(0, 32).toString('utf8')
+}
 
 export const formatPin = pin => pin.replace(/[^0-9]/g, '')
 
