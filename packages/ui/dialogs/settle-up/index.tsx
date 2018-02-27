@@ -25,10 +25,11 @@ import {
   pendingTransactionsLanguage,
   debtManagement,
   accountManagement,
-  currencies
+  currencies,
+  transferLimits
 } from 'language'
 
-import { getUser, recentTransactions, getEthBalance, getEthExchange } from 'reducers/app'
+import { getUser, recentTransactions, getEthBalance, getEthExchange, getWeeklyEthTotal } from 'reducers/app'
 import { settleUp } from 'actions'
 import { connect } from 'react-redux'
 import { addNavigationHelpers } from 'react-navigation';
@@ -47,12 +48,14 @@ interface Props {
   user: UserData
   ethBalance: string
   ethExchange: string
+  ethSentPastWeek: number
   recentTransactions: any
   navigation: any
 }
 
 interface State {
   amount?: string
+  formInputError?: string
   balance: number
   direction: string
   txCost: string
@@ -77,7 +80,13 @@ class SettleUp extends Component<Props, State> {
 
   async submit() {
     const { amount, direction, currency } = this.state
+    const { ethExchange, ethSentPastWeek } = this.props
     const friend = this.props.navigation ? this.props.navigation.state.params.friend : {}
+
+    if ( direction === 'lend' && ethSentPastWeek * Number(ethExchange) + Number(amount) > Number(transferLimits[currency]) ) {
+      this.setState({ formInputError: accountManagement.sendEth.error.limitExceeded(defaultCurrency) })
+      return
+    }
 
     const memo = debtManagement.settleUpMemo(direction, amount)
 
@@ -145,9 +154,17 @@ class SettleUp extends Component<Props, State> {
     return `${balance < 0 ? '-' : '+'}${currencyFormats[defaultCurrency](balance)}`
   }
 
+  getLimit() {
+    const { currency } = this.state
+    const { ethExchange, ethSentPastWeek } = this.props
+    const remaining = String(Number(transferLimits[currency]) - Number(ethSentPastWeek) * Number(ethExchange))
+    const end = remaining.indexOf('.') === -1 ? remaining.length : remaining.indexOf('.') + 3
+    return remaining.slice(0, end)
+  }
+
   render() {
-    const { amount, balance, txCost, currency } = this.state
-    const { recentTransactions, ethBalance, ethExchange } = this.props
+    const { amount, balance, txCost, currency, formInputError } = this.state
+    const { recentTransactions, ethBalance, ethExchange, ethSentPastWeek } = this.props
     const friend = this.props.navigation ? this.props.navigation.state.params.friend : {}
 
     return <ScrollView style={general.whiteFlex} keyboardShouldPersistTaps='handled'>
@@ -180,6 +197,7 @@ class SettleUp extends Component<Props, State> {
               />
             </View>
             <Text style={[accountStyle.txCost, {marginLeft: '2%'}]}>{accountManagement.sendEth.txCost(txCost, currency)}</Text>
+            {balance > 0 ? null : <Text style={[formStyle.smallText, formStyle.spaceTop, formStyle.center]}>{accountManagement.sendEth.warning(this.getLimit(), currency)}</Text>}
             <Text style={formStyle.titleLarge}>{debtManagement.fields.settlementAmount}</Text>
             <TextInput
               style={formStyle.jumboInput}
@@ -189,15 +207,16 @@ class SettleUp extends Component<Props, State> {
               maxLength={14}
               underlineColorAndroid='transparent'
               keyboardType='numeric'
-              onChangeText={amount => this.setState({ amount: this.setAmount(amount) })}
+              onChangeText={amount => this.setState({ amount: this.setAmount(amount), formInputError: undefined })}
             />
           </View>
         </View>
+        { formInputError && <Text style={[formStyle.warningText, {alignSelf: 'center'}]}>{formInputError}</Text>}
         { amount ? <Button large round wide onPress={() => this.submit()} text={debtManagement.settleUp} /> : <Button large round wide onPress={() => this.setState({ amount: `${currencies[defaultCurrency]}${currencyFormats[defaultCurrency](Math.abs(balance))}`})} text={debtManagement.settleTotal} />}
       </View>
     </ScrollView>
   }
 }
 
-export default connect((state) => ({ user: getUser(state)(), ethBalance: getEthBalance(state), ethExchange: getEthExchange(state), recentTransactions: recentTransactions(state) }),
-{ settleUp })(SettleUp)
+export default connect((state) => ({ user: getUser(state)(), ethBalance: getEthBalance(state), ethExchange: getEthExchange(state), 
+  recentTransactions: recentTransactions(state), ethSentPastWeek: getWeeklyEthTotal(state) }), { settleUp })(SettleUp)

@@ -10,6 +10,7 @@ import { Platform } from 'react-native'
 import { hexToBuffer, utf8ToBuffer, bufferToHex, stringToBuffer } from './lib/buffer-utils'
 import Client from './lib/client'
 import CreditRecord from './lib/credit-record'
+import { storeEthTransaction } from 'actions'
 export { default as CreditRecord } from './lib/credit-record'
 
 import FetchUtil from 'lndr/fetch-util'
@@ -105,12 +106,21 @@ export default class CreditProtocol {
     })
   }
 
-  async getUcacAddresses() {
-    if (this.tempStorage.ucacs) {
-      return this.tempStorage.ucacs
+  getConfig () {
+    if (this.tempStorage.config) {
+      return this.tempStorage.config
     }
-    const config = await this.client.get(`/config`)
-    return this.tempStorage.ucacs = config.lndrAddresses
+    return this.tempStorage.config = this.client.get(`/config`)
+  }
+
+  async getUcacAddresses() {
+    const config = await this.getConfig()
+    return config.lndrAddresses
+  }
+
+  async getWeekAgoBlock() {
+    const config = await this.getConfig()
+    return '0'
   }
 
   getBalance(user: string) {
@@ -326,10 +336,21 @@ export default class CreditProtocol {
     tx.sign(privateKeyBuffer)
     const serializedTx = tx.serialize()
 
-    console.log('TOTAL ETH TO BE SETTLED: ', Number(transaction.value) + Number(transaction.gas * transaction.gasPrice) )
+    console.log('TOTAL ETH TO BE SENT: ', Number(transaction.value) + Number(transaction.gas * transaction.gasPrice) )
     
     return new Promise((resolve, reject) => {
-      web3.eth.sendRawTransaction(('0x' + serializedTx.toString('hex')), (e, data) => e ? reject(e) : resolve(data))
+      web3.eth.sendRawTransaction(('0x' + serializedTx.toString('hex')), (e, data) => {
+        if (e) {
+          reject(e)
+        } else {
+          storeEthTransaction({
+            amount: transaction.value,
+            user: transaction.from,
+            time: Date.now()
+          })
+          resolve(data)
+        }
+      })
     })
   }
 
@@ -353,6 +374,13 @@ export default class CreditProtocol {
 
   getEthTxHash(hash: string) {
     return this.client.get(`/tx_hash/${hash}`)
+  }
+
+  getEthTransfers(user: string, block: string) {
+    return new Promise((resolve, reject) => [
+      {amount: 100, type: 'settlement', user: '123456', date: Date.now()},
+      {amount: 100, type: 'transfer', user: '123456', date: Date.now()}
+    ])
   }
 
   async setProfilePic(imageURI: string, privateKeyBuffer: any) {

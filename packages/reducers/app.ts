@@ -1,5 +1,7 @@
 import reduceReducers from 'reduce-reducers'
 import PendingTransaction from 'lndr/pending-transaction'
+import moment from 'moment'
+import { UserData } from 'lndr/user'
 
 export const initialState = ({})
 
@@ -19,8 +21,7 @@ const reducer = (state = initialState, action) => {
 // TODO - Organize selectors.  We are in the middle of a transistional stage
 // so all selectors will be here for now.
 
-
-export const getUser = (state) => () => state.store.user
+export const getUser = (state) => () : UserData => state.store.user
 
 export const submitterIsMe = (state) => (pendingTransaction: PendingTransaction) => {
   const { address } = getUser(state)()
@@ -65,6 +66,18 @@ export const getUcacCurrency = (state) => (ucac: string) => {
     }
   }
   return 'USD'
+}
+
+export const getWeeklyEthTotal = (state) => {
+  const { ethTransactions } = getStore(state)()
+  const totalWei = ethTransactions.reduce( (acc, cur) => {
+    if (moment(cur.time).add(7, 'day') > moment()) {
+      acc += Number(cur.amount)
+    }
+
+    return acc
+  }, 0)
+  return totalWei / Math.pow(10, 18)
 }
 
 export const recentTransactions = (state) => state.store.recentTransactions

@@ -47,10 +47,10 @@ export const getEthExchange = async (currency: string) => {
   return tempStorage.ethExchange = rates.data.rates[currency]
 }
 
-export const ethToFiat = (eth, exchange) => {
+export const ethToFiat = (eth, exchange, currency) => {
   const usd = String(Number(eth) * Number(exchange))
   const decimalIndex = usd.indexOf('.')
-  if (decimalIndex === -1) {
+  if (decimalIndex === -1 && currency === 'USD') {
     return `${usd}.00`
   }
   return usd.slice(0, decimalIndex + 3)

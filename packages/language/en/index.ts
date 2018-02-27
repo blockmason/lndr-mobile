@@ -124,14 +124,17 @@ export const accountManagement = {
   },
   ethBalance: {
     display: balance => `Your ETH balance is ${String(balance).slice(0,8)} `,
-    inFiat: (balance, exchange, currency) => ` (${currencies[currency]}${ethToFiat(balance, exchange)})`,
+    inFiat: (balance, exchange, currency) => ` (${currencies[currency]}${ethToFiat(balance, exchange, currency)})`,
     getError: 'Unable to retrieve Eth balance',
     manage: 'Manage ETH'
   },
   sendEth: {
     error: {
       insufficient: 'The transfer failed due to insufficient funds',
-      generic: 'There was an error with the transfer, please try again later'
+      generic: 'There was an error with the transfer, please try again later',
+      address: 'Please enter a valid address',
+      amount: 'Please enter an amount greater than 0',
+      limitExceeded: currency => `You can only send ${currencies[currency]}${transferLimits[currency]} per week, please select a smaller amount`
     },
     amount: 'AMOUNT TO SEND',
     address: `Destination Address (without '0x' prefix)`,
@@ -139,7 +142,9 @@ export const accountManagement = {
     balance: (balance) => `Your current ETH balance is ${typeof balance === 'string' ? balance.slice(0,8) : ''}`,
     ethAddress: 'Ethereum Address',
     txCost: (cost, currency) => `The current transaction cost is ${currencies[currency]}${cost}`,
-    transferLowercase: 'Transfer Eth'
+    transferLowercase: 'Transfer Eth',
+    note: currency => `Please note: you can only transfer ${currencies[currency]}${transferLimits[currency]} per week out of Lndr`,
+    warning: (amount, currency) => `You have ${currencies[currency]}${amount} remaining of your ${currencies[currency]}${transferLimits[currency]} limit`
   },
   sendBcpt: {
     error: {
@@ -352,4 +357,10 @@ export const currencies = {
   USD: '$',
   JPY: '¥',
   KRW: '₩'
+}
+
+export const transferLimits = {
+  USD: '200',
+  JPY: '20,000',
+  KRW: '200,000'
 }

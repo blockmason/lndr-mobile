@@ -40,6 +40,7 @@ interface State {
   amount?: string
   address?: string
   formInputError?: string
+  error?: string
 }
 
 class TransferBcpt extends Component<Props, State> {
@@ -53,10 +54,10 @@ class TransferBcpt extends Component<Props, State> {
     const { amount, address } = this.state
 
     if (!this.validAddress()) {
-      this.setState({ formInputError: 'Please enter a valid address' })
+      this.setState({ formInputError: accountManagement.sendEth.error.address })
       return
     } else if (!amount || amount === '0') {
-      this.setState({ formInputError: 'Please enter an amount greater than 0' })
+      this.setState({ formInputError: accountManagement.sendEth.error.amount })
       return
     }
 
@@ -99,7 +100,7 @@ class TransferBcpt extends Component<Props, State> {
   }
 
   render() {
-    const { amount, address, formInputError } = this.state
+    const { amount, address, formInputError, error } = this.state
     const { bcptBalance } = this.props
 
     return <ScrollView style={general.whiteFlex} keyboardShouldPersistTaps='handled'>

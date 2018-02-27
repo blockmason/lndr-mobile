@@ -25,6 +25,7 @@ export default class WelcomeStepOneView extends Component {
         </View>
         <Text style={style.by}>{welcomeView.by}</Text>
         <BMLogo type='square' size='small'/>
+        <Text style={style.inc}>INC.</Text>
       </View>
     )
   }
