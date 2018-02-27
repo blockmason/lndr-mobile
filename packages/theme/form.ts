@@ -26,6 +26,13 @@ export default StyleSheet.create({
     ...center,
     fontWeight: '100'
   },
+  smallText: {
+    ...medium,
+    ...verticalMarginXXS,
+    color: black,
+    ...center,
+    fontWeight: '100'
+  },
   spaceBottom: {
     marginBottom: 20
   },
@@ -40,6 +47,9 @@ export default StyleSheet.create({
   },
   spaceTop: {
     marginTop: 20
+  },
+  spaceTopS: {
+    marginTop: 10
   },
   spaceVertical: {
     marginVertical: 15

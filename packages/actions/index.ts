@@ -21,22 +21,25 @@ import { isTouchIdSupported } from 'lndr/touch-id'
 import TouchID from 'react-native-touch-id'
 import profilePic from 'lndr/profile-pic'
 import { getBcptBalance, transferBcpt } from 'lndr/bcpt-utils'
+import { getEtherscanTransactions } from 'lndr/etherscan'
 
 import CreditProtocol from 'credit-protocol'
 
 import { accountManagement, debtManagement, settlementManagement, copiedClipboard } from 'language'
 
 import { ToastActionsCreators } from 'react-native-redux-toast'
-import { getUser, getStore, getUcacAddr } from 'reducers/app'
+import { getUser, getStore, getUcacAddr, getEthExchange as exchangeReducer, getWeeklyEthTotal } from 'reducers/app'
 import { hexToBuffer } from '../credit-protocol/lib/buffer-utils'
 import account from 'theme/account'
 import defaultCurrency from 'lndr/default-currency'
+import { transferLimits } from 'language'
 
 const bcrypt = require('bcryptjs')
 
 const mnemonicStorage = new Storage('mnemonic')
 const hashedPasswordStorage = new Storage('hashed-password')
 const notificationsEnabledStorage = new Storage('notifications-enabled')
+const ethTransactionsStorage = new Storage('eth-transactions')
 
 const creditProtocol = new CreditProtocol('https://api.lndr.blockmason.io')
 
@@ -68,17 +71,23 @@ export const initializeStorage = () => {
       await sessionStorage.set(moment())
       let { ethBalance, ethExchange, bcptBalance } = await getEthInfo(storedUser)
       let ucacAddresses = await creditProtocol.getUcacAddresses()
-      const payload = { hasStoredUser: true, welcomeComplete: true, user: storedUser, notificationsEnabled, ethBalance, ethExchange, bcptBalance, ucacAddresses }
+      let ethTransactions = await ethTransactionsStorage.get()
+      const payload = { hasStoredUser: true, welcomeComplete: true, user: storedUser, notificationsEnabled, ethBalance, 
+        ethExchange, bcptBalance, ucacAddresses, ethTransactions }
       dispatch(setState(payload))
+
     } else if (touchIdSupported && storedMnemonic && storedUser) {
       let { ethBalance, ethExchange, bcptBalance } = await getEthInfo(storedUser)
       let ucacAddresses = await creditProtocol.getUcacAddresses()
+      let ethTransactions = await ethTransactionsStorage.get()
       const payload = await triggerTouchId(storedUser, notificationsEnabled)
       payload.ethBalance = ethBalance
       payload.ethExchange = ethExchange
       payload.bcptBalance = bcptBalance
       payload.ucacAddresses = ucacAddresses
+      payload.ethTransactions = ethTransactions
       dispatch(setState(payload))
+
     } else if (storedMnemonic) {
       dispatch(setState({ hasStoredUser: true, welcomeComplete: true, notificationsEnabled }))
     }
@@ -199,7 +208,7 @@ export const createUserFromCredentials = async (mnemonic, hashedPassword) => {
   )
 }
 
-export const confirmAccount = () => {
+export const confirmAccount = (recovery: boolean) => {
   return async (dispatch, getState) => {
     const { password, mnemonic } = getStore(getState())()
     const hashedPassword = bcrypt.hashSync(password)
@@ -208,7 +217,8 @@ export const confirmAccount = () => {
       await storeUserSession(user)
       let { ethBalance, ethExchange, bcptBalance } = await getEthInfo(user)
       let ucacAddresses = await creditProtocol.getUcacAddresses()
-      const payload = { user, hasStoredUser: true, ethBalance, ethExchange, bcptBalance, ucacAddresses }
+      let ethTransactions = await getEthTransactions(user.address, recovery)
+      const payload = { user, hasStoredUser: true, ethBalance, ethExchange, bcptBalance, ucacAddresses, ethTransactions }
       dispatch(setState(payload))
     } catch (e) {
       dispatch(displayError(accountManagement.mnemonic.unableToValidate))
@@ -236,7 +246,7 @@ export const createAccount = (accountData: CreateAccountData) => {
     const payload = { shouldDisplayMnemonic: true, password: password, mnemonic }
 
     dispatch(setState(payload))
-    dispatch(await confirmAccount())
+    dispatch(await confirmAccount(false))
     //hacky, need to update this
     setTimeout( async () => {
       dispatch(await updateNickname({nickname: accountData.nickname}))
@@ -623,7 +633,6 @@ export const addDebt = (friend: Friend, amount: string, memo: string, direction:
     }[direction]
 
     const ucac = getUcacAddr(getState(), currency)
-    console.log(ucac)
     try {
       const creditRecord = await creditProtocol.createCreditRecord(
         ucac,
@@ -724,8 +733,9 @@ export const loginAccount = (loginData: LoginAccountData) => {
     await storeUserSession(user)
     let { ethBalance, ethExchange, bcptBalance } = await getEthInfo(user)
     let ucacAddresses = await creditProtocol.getUcacAddresses()
+    let ethTransactions = await ethTransactionsStorage.get()
     
-    const payload = { user, hasStoredUser: true, ethBalance, ethExchange, bcptBalance, ucacAddresses }
+    const payload = { user, hasStoredUser: true, ethBalance, ethExchange, bcptBalance, ucacAddresses, ethTransactions }
     dispatch(setState(payload))
     refreshTransactions()
     return true
@@ -756,9 +766,9 @@ export const recoverAccount = (recoverData: RecoverAccountData) => {
     }
 
     try {
-      const payload = { password: confirmPassword, mnemonic: mnemonic.toLowerCase()}
+      const payload = { password: confirmPassword, mnemonic: mnemonic.toLowerCase() }
       dispatch(setState(payload))
-      dispatch(await confirmAccount())
+      dispatch(await confirmAccount(true))
     } catch (e) {
       dispatch(displayError(accountManagement.mnemonic.unableToValidate))
     }
@@ -863,7 +873,7 @@ export const sendBcpt = (destAddr: string, amount: string) => {
     } catch (e) {
       console.log('ERROR SENDING BCPT', e)
       if (typeof e === 'string' && e.indexOf('insufficient') !== -1) {
-        return dispatch(displayError(accountManagement.sendEth.error.insufficient))
+        return dispatch(displayError(accountManagement.sendBcpt.error.insufficient))
       } else {
         return dispatch(displayError(accountManagement.sendBcpt.error.generic))
       }
@@ -924,6 +934,34 @@ export const copyToClipboard = (text: string) => {
   }
 }
 
+export const storeEthTransaction = async (ethTx: object) => {
+  return async (dispatch) => {
+    const ethTransactions = await ethTransactionsStorage.get()
+    if (!ethTransactions) {
+      ethTransactionsStorage.set([ ethTx ])
+      dispatch(setState({ ethTransactions: [ ethTx ] }))
+    } else {
+      ethTransactions.push(ethTx)
+      await ethTransactionsStorage.set(ethTransactions)
+      dispatch(setState({ ethTransactions }))
+    }
+  }
+}
+
+const getEthTransactions = async (addr: string, recovery: boolean) => {
+  let ethTransactions = []
+  //get all transactions from etherscan and add relevant txs to the list
+  if (recovery) {
+    try {
+      const startBlock = await creditProtocol.getWeekAgoBlock()
+      ethTransactions = await getEtherscanTransactions(addr, startBlock)
+    } catch (e) {}
+  }
+
+  await ethTransactionsStorage.set(ethTransactions)
+  return ethTransactions
+}
+
 const refreshTransactions = () => {
   getPendingTransactions()
   getRecentTransactions()
@@ -951,13 +989,12 @@ const settleBilateral = async (user, bilateralSettlements, dispatch, getState) =
     if (settlement.creditorAddress.indexOf(user.address) === -1 || settlement.txHash !== undefined) {
       return
     }
-      
-    console.log('ETH AMOUNTS FOR SETTLEMENT', Number(`${settlement.settlementAmount}`), Number(`${settlement.settlementAmount}`) > Number(web3.toWei(ethBalance, 'ether')), Number(web3.toWei(ethBalance, 'ether')) )
     
     if ( Number(`${settlement.settlementAmount}`) > Number(web3.toWei(ethBalance, 'ether')) ) {
       const debtorNickname = await getNicknameForAddress(settlement.debtorAddress)
       return dispatch(displayError(settlementManagement.bilateral.error.insufficient(debtorNickname)))
     }
+
     const ethTransaction = new EthTransaction(settlement.creditorAddress, settlement.debtorAddress, settlement.settlementAmount, gasPrice)
     try {
       const txHash = await creditProtocol.settleWithEth(ethTransaction, user.privateKeyBuffer)

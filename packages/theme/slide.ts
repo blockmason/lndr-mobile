@@ -2,6 +2,7 @@ import { StyleSheet } from 'react-native'
 
 import { light, white, black, gray } from 'theme/include/colors'
 import { percent } from 'theme/include/dimensions'
+import { large } from 'theme/include/fonts'
 
 export default StyleSheet.create({
   topView: {
@@ -65,5 +66,9 @@ export default StyleSheet.create({
     fontSize: 16,
     fontWeight: 'bold',
     color: gray
+  },
+  inc: {
+    ...large,
+    marginVertical: 5
   }
 } as any)

@@ -16,6 +16,7 @@ import { getUser, getStore } from 'reducers/app'
 import { connect } from 'react-redux'
 import { formatNick, formatLockTimeout, formatEmail, emailFormatIncorrect } from 'lndr/format'
 import { getBcptBalance } from 'lndr/bcpt-utils'
+import defaultCurrency from 'lndr/default-currency'
 
 import TextLogo from 'ui/components/images/text-logo'
 import BMLogo from 'ui/components/images/bm-logo'
@@ -28,6 +29,7 @@ const { height } = Dimensions.get('window');
 import style from 'theme/form'
 import general from 'theme/general'
 import { underlayColor } from 'theme/general'
+import slideStyle from 'theme/slide'
 
 import { nickname, setNickname, email, setEmail, updateAccount as updateAccountText, copy, accountManagement, changePin, enterNewPin, confirmPin,
   cancel, mnemonicExhortation, addressExhortation, logoutAction, notifications, currentBalance, showMnemonic, enterCurrentPin
@@ -63,6 +65,7 @@ interface State {
   nickTextInputErrorText?: string
   emailTextInputErrorText?: string
   authenticated: boolean
+  currency: string
 }
 
 class MyAccount extends Component<Props, State> {
@@ -74,7 +77,8 @@ class MyAccount extends Component<Props, State> {
       hiddenPanels: [true, true, true, true, true, true, true, true, true, true],
       step: 1,
       photos: [],
-      authenticated: false
+      authenticated: false,
+      currency: defaultCurrency
     }
   }
 
@@ -196,7 +200,7 @@ class MyAccount extends Component<Props, State> {
   renderPanels() {
     const { user, closePopup, updateNickname, updateEmail, copyToClipboard } = this.props
     const { notificationsEnabled, ethBalance, bcptBalance, userPic } = this.props.state
-    const { lockTimeout, hiddenPanels, photos, nickTextInputErrorText, emailTextInputErrorText, authenticated } = this.state
+    const { lockTimeout, hiddenPanels, photos, nickTextInputErrorText, emailTextInputErrorText, authenticated, currency } = this.state
     const imageSource = userPic ? { uri: userPic } : require('images/person-outline-dark.png')
 
     const submitNickname = async () => {
@@ -210,6 +214,7 @@ class MyAccount extends Component<Props, State> {
     const panelContent = [
       (<View style={style.spaceHorizontalL}>
         <Text style={[style.text, style.spaceTopL, style.center]}>{addressExhortation}</Text>
+        <Text style={[style.smallText, style.spaceTop, style.center]}>{accountManagement.sendEth.note(currency)}</Text>
         <Text selectable style={style.displayText}>{`0x${user.address}`}</Text>
         <Button round onPress={() => copyToClipboard(user.address)} text={copy} />
       </View>),
@@ -348,6 +353,7 @@ class MyAccount extends Component<Props, State> {
           {/* <TextLogo name='black'/> */}
           {/* <Text>BY</Text> */}
           <BMLogo type='square' size='medium'/>
+          <Text style={slideStyle.inc}>INC.</Text>
           <Button round danger onPress={() => this.props.logoutAccount()} text={logoutAction} containerStyle={style.spaceVertical} />
           <View style={general.centeredColumn}>
             {this.renderPanels()}
@@ -360,4 +366,4 @@ class MyAccount extends Component<Props, State> {
 
 export default connect((state) => ({ user: getUser(state)(), state: getStore(state)() }), { updateEmail, updateNickname, 
   getAccountInformation, logoutAccount, toggleNotifications, setEthBalance, updateLockTimeout, updatePin, 
-  getProfilePic, setProfilePic, copyToClipboard  })(MyAccount)
+  getProfilePic, setProfilePic, copyToClipboard })(MyAccount)
