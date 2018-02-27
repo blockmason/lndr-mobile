@@ -48,10 +48,17 @@ export const getEthExchange = async (currency: string) => {
 }
 
 export const ethToFiat = (eth, exchange, currency) => {
-  const usd = String(Number(eth) * Number(exchange))
-  const decimalIndex = usd.indexOf('.')
-  if (decimalIndex === -1 && currency === 'USD') {
-    return `${usd}.00`
+  const fiat = String(Number(eth) * Number(exchange))
+
+  if (currency === 'USD') {
+    const decimalIndex = fiat.indexOf('.')
+    if (decimalIndex === -1) {
+      return `${fiat}.00`
+    }
+    return fiat.slice(0, decimalIndex + 3)
+
+  } else {
+    const decimalIndex = fiat.indexOf('.')
+    return fiat.slice(0, decimalIndex)
   }
-  return usd.slice(0, decimalIndex + 3)
 }

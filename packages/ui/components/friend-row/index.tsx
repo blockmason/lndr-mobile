@@ -14,7 +14,7 @@ import defaultCurrency from 'lndr/default-currency'
 import style from 'theme/account'
 import general from 'theme/general'
 
-import { debtManagement } from 'language'
+import { debtManagement} from 'language'
 
 interface Props {
   onPress?: () => void
@@ -107,12 +107,12 @@ export default class FriendRow extends Component<Props, State> {
 
     const records = ( hasPending ? 1 : 0 ) + recentNumber
 
-    return `${records} ${records === 1 ? 'record' : 'records'}`
+    return `${records} ${records === 1 ? debtManagement.record : debtManagement.records}`
   }
 
   showSettleUp() {
     const { friend, friendScreen } = this.props
-    return this.getRecentTotal() === 0 || !friendScreen ? null : <Button narrow small round onPress={() => this.props.navigation.navigate('SettleUp', { friend: friend })} text={debtManagement.settleUp} style={{maxWidth: 100, alignSelf:'flex-end'}} />
+    return this.getRecentTotal() === 0 || !friendScreen ? null : <Button narrow small round onPress={() => this.props.navigation.navigate('SettleUp', { friend: friend })} text={debtManagement.settleUp} style={{maxWidth: 130, alignSelf:'flex-end'}} />
   }
 
   render() {

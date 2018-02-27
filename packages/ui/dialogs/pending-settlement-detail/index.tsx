@@ -25,10 +25,11 @@ import {
   pendingSettlementsLanguage,
   debtManagement,
   accountManagement,
-  currencies
+  currencies,
+  transferLimits
 } from 'language'
 
-import { getUser, settlerIsMe } from 'reducers/app'
+import { getUser, settlerIsMe, getEthExchange, getWeeklyEthTotal } from 'reducers/app'
 import { confirmPendingSettlement, rejectPendingSettlement } from 'actions'
 import { connect } from 'react-redux'
 
@@ -38,6 +39,8 @@ interface Props {
   confirmPendingSettlement: (pendingSettlement: PendingUnilateral, settlementCurrency: string) => any
   rejectPendingSettlement: (pendingSettlement: PendingUnilateral, settlementCurrency: string) => any
   user: UserData
+  ethExchange: string
+  ethSentPastWeek: number
   settlerIsMe: (pendingSettlement: PendingUnilateral) => boolean
   navigation: any
 }
@@ -46,6 +49,7 @@ interface State {
   txCost: string
   pic?: string
   currency: string
+  confirmationError?: string
 }
 
 class PendingSettlementDetail extends Component<Props, State> {
@@ -72,6 +76,14 @@ class PendingSettlementDetail extends Component<Props, State> {
 
   async confirmPendingSettlement(pendingSettlement: PendingUnilateral) {
     const pending = this.getPendingSettlement()
+    //restrict it here
+    const { currency } = this.state
+    const { ethExchange, ethSentPastWeek, user } = this.props
+
+    if ( pending.creditorAddress === user.address && ethSentPastWeek * Number(ethExchange) + Number(pending.amount) > Number(transferLimits[currency]) ) {
+      this.setState({ confirmationError: accountManagement.sendEth.error.limitExceeded(currency) })
+      return
+    }
 
     const success = await loadingContext.wrap(
       this.props.confirmPendingSettlement(pendingSettlement, pending.settlementCurrency)
@@ -171,7 +183,7 @@ class PendingSettlementDetail extends Component<Props, State> {
   }
 
   render() {
-    const { txCost, currency } = this.state
+    const { txCost, currency, confirmationError } = this.state
     const { user, settlerIsMe } = this.props
     const pendingSettlement = this.getPendingSettlement()
 
@@ -191,11 +203,13 @@ class PendingSettlementDetail extends Component<Props, State> {
           <Text style={style.balanceInfo}>{pendingSettlement.settlementCurrency}</Text>
         </View>
         <Text style={[accountStyle.txCost, formStyle.spaceBottom, {marginLeft: '2%'}]}>{accountManagement.sendEth.txCost(txCost, currency)}</Text>
+        { confirmationError && <Text style={[formStyle.warningText, {alignSelf: 'center'}]}>{confirmationError}</Text>}
         {this.showButtons()}
+        <View style={{marginBottom: 40}}/>
       </View>
     </ScrollView>
   }
 }
 
-export default connect((state) => ({ user: getUser(state)(), settlerIsMe: settlerIsMe(state) }),
+export default connect((state) => ({ user: getUser(state)(), settlerIsMe: settlerIsMe(state), ethExchange: getEthExchange(state), ethSentPastWeek: getWeeklyEthTotal(state) }),
 { confirmPendingSettlement, rejectPendingSettlement })(PendingSettlementDetail)

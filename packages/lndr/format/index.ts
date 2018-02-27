@@ -55,7 +55,7 @@ export const currencyFormats = {
   JPYabs: value => {
     const sign = value < 0 ? '-' : ''
     const raw = String(Math.abs(value))
-    return `${commas(raw) || '0'}}`
+    return `${commas(raw) || '0'}`
   }
 }
 
