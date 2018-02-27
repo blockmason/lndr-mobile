@@ -249,7 +249,9 @@ export default StyleSheet.create({
   },
   txCost: {
     color: black,
-    ...small
+    ...small,
+    alignSelf: 'center',
+    textAlign: 'center'
   },
   friends: {
     color: black,

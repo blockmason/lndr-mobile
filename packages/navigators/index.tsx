@@ -78,7 +78,6 @@ class AppWithNavigationState extends React.Component<Props> {
 
   onBackPress = () => {
     const { nav, navigation } = this.props;
-    console.log('WHAT IS THIS NAV THING', nav)
     if (nav.index === 0 && nav.routes[0].index === 0) {
       BackAndroid.exitApp()
       return false;
