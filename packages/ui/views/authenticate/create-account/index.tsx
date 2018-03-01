@@ -9,7 +9,7 @@ import { setAuthLoading, createAccount, goToRecoverAccount, takenNick, takenEmai
 import CreateAccountForm from 'ui/forms/create-account'
 
 import { CreateAccountData } from 'lndr/user'
-import { emailFormatIncorrect } from 'lndr/format'
+import { emailFormatIncorrect, nickLengthIncorrect } from 'lndr/format'
 
 import { accountManagement } from 'language'
 
@@ -21,6 +21,8 @@ interface Props {
 
 interface AccountViewState {
   nickDuplicationViolation?: boolean
+  nickFormatViolation?: boolean
+  nickLengthViolation?: boolean
   emailDuplicationViolation?: boolean
   emailFormatViolation?: boolean
 }
@@ -30,6 +32,7 @@ class CreateAccountView extends Component<Props, AccountViewState> {
     super()
     this.state = {
       nickDuplicationViolation: false,
+      nickLengthViolation: false,
       emailDuplicationViolation: false,
       emailFormatViolation: false
     }
@@ -42,11 +45,15 @@ class CreateAccountView extends Component<Props, AccountViewState> {
   }
 
   async handleOnNickTextInputBlur(nickname: string) {
-    const duplicateNick = await takenNick(nickname)
-    if (duplicateNick) {
-      this.setState({ nickDuplicationViolation: true })
+    if(nickLengthIncorrect(nickname)) {
+      this.setState({ nickLengthViolation: true })
     } else {
-      this.setState({ nickDuplicationViolation: false })
+      const duplicateNick = await takenNick(nickname)
+      if (duplicateNick) {
+        this.setState({ nickDuplicationViolation: true })
+      } else {
+        this.setState({ nickDuplicationViolation: false, nickLengthViolation: false })
+      }
     }
   }
 
@@ -54,6 +61,10 @@ class CreateAccountView extends Component<Props, AccountViewState> {
     let errorText
     if (this.state.nickDuplicationViolation) {
       errorText = accountManagement.nickname.duplicationViolation
+    } else if (this.state.nickFormatViolation) {
+      errorText = accountManagement.nickname.compositionViolation
+    } else if (this.state.nickLengthViolation) {
+      errorText = accountManagement.nickname.lengthViolation
     }
     return errorText
   }
@@ -86,15 +97,16 @@ class CreateAccountView extends Component<Props, AccountViewState> {
     return (
       <View>
         <CreateAccountForm
-          nickTextInputErrorText={this.renderNickTextInputErrorText()}
+          nickInputError={this.renderNickTextInputErrorText()}
           onNickTextInputBlur={this.handleOnNickTextInputBlur.bind(this)}
-          emailTextInputErrorText={this.renderEmailTextInputErrorText()}
+          emailInputError={this.renderEmailTextInputErrorText()}
           onEmailTextInputBlur={this.handleOnEmailTextInputBlur.bind(this)}
           onSubmitCreateUser={this.handleOnSubmitCreateAccount.bind(this)}
           onSubmitRecover={this.props.goToRecoverAccount}
           nickDuplicationViolation={this.state.nickDuplicationViolation}
+          nickLengthViolation={this.state.nickLengthViolation}
           emailDuplicationViolation={this.state.emailDuplicationViolation}
-          emailFormatViolation={this.state.emailDuplicationViolation}
+          emailFormatViolation={this.state.emailFormatViolation}
         />
       </View>
     )

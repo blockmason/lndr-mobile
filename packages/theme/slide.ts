@@ -69,6 +69,7 @@ export default StyleSheet.create({
   },
   inc: {
     ...large,
-    marginVertical: 5
+    marginVertical: 5,
+    color: gray
   }
 } as any)

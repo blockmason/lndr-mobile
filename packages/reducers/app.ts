@@ -69,7 +69,10 @@ export const getUcacCurrency = (state) => (ucac: string) => {
 }
 
 export const getWeeklyEthTotal = (state) => {
-  const { ethTransactions } = getStore(state)()
+  let { ethTransactions } = getStore(state)()
+  if (!ethTransactions) {
+    ethTransactions = []
+  }
   const totalWei = ethTransactions.reduce( (acc, cur) => {
     if (moment(cur.time).add(7, 'day') > moment()) {
       acc += Number(cur.amount)

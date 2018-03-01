@@ -1,5 +1,3 @@
-import { ethToFiat } from 'lndr/eth-price-utils'
-
 const generalCommunicationError = 'There was a problem communicating with the server, please try again later.'
 
 export const applicationName = 'Lndr'
@@ -124,7 +122,7 @@ export const accountManagement = {
   },
   ethBalance: {
     display: balance => `Your ETH balance is ${String(balance).slice(0,8)} `,
-    inFiat: (balance, exchange, currency) => ` (${currencies[currency]}${ethToFiat(balance, exchange, currency)})`,
+    inFiat: (amount, exchange, currency) => ` (${currencies[currency]}${String(Number(amount) * Number(exchange)).slice(0, 8)})`,
     getError: 'Unable to retrieve Eth balance',
     manage: 'Manage ETH'
   },
@@ -207,6 +205,8 @@ export const debtManagement = {
   borrow: 'New Debt',
   settleUpLower: 'Settle Up',
   total: 'Total',
+  record: 'record',
+  records: 'records',
   createError: {
     amountTooLow: 'Amount must be greater than $0',
     amountTooHigh: 'Amount must be less than $1,000,000,000',
@@ -361,6 +361,6 @@ export const currencies = {
 
 export const transferLimits = {
   USD: '200',
-  JPY: '20,000',
-  KRW: '200,000'
+  JPY: '20000',
+  KRW: '200000'
 }

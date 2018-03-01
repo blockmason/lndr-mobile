@@ -154,6 +154,7 @@ class PendingTransactionDetail extends Component<Props, State> {
         {this.labelRow(pendingTransaction.memo.trim())}
         <View style={{marginBottom: 10}}/>
         {this.showButtons()}
+        <View style={general.spaceBelow}/>
       </View>
     </ScrollView>
   }

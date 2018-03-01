@@ -110,4 +110,6 @@ export const ethAmount = amount => amount.replace(/[^0-9\.]/g, '')
 
 export const emailFormatIncorrect = email => !( email.length > 4 && email.indexOf('@') > 0 && email.indexOf('.') > 2 )
 
+export const nickLengthIncorrect = nick => typeof nick === 'string' && nick.length < 3
+
 export const bcptAmount = amount => amount.replace(/[^0-9]/g, '')

@@ -6,7 +6,6 @@ import { UserData } from 'lndr/user'
 import { debounce } from 'lndr/time'
 import { ethAmount, ethAddress } from 'lndr/format'
 import Friend from 'lndr/friend'
-import { getTxCost } from 'lndr/eth-price-utils'
 import defaultCurrency from 'lndr/default-currency'
 
 import Button from 'ui/components/button'
@@ -28,7 +27,7 @@ import {
 } from 'language'
 
 import { getUser, getEthBalance, getEthExchange, getWeeklyEthTotal } from 'reducers/app'
-import { sendEth } from 'actions'
+import { sendEth, getEthTxCost } from 'actions'
 import { connect } from 'react-redux'
 import { addNavigationHelpers } from 'react-navigation';
 
@@ -61,7 +60,7 @@ class TransferEth extends Component<Props, State> {
   }
 
   async componentWillMount() {
-    const txCost = await getTxCost('dollar')
+    const txCost = await getEthTxCost(defaultCurrency)
     this.setState({ txCost })
   }
 

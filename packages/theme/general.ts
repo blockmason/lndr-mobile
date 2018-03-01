@@ -55,6 +55,9 @@ export default StyleSheet.create({
   },
   iosTopMargin: {
     marginTop: Platform.OS === 'ios' ? 20 : 0
+  },
+  spaceBelow: {
+    paddingBottom: 40
   }
 
 } as any)

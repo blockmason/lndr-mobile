@@ -12,6 +12,8 @@ import { RecoverAccountData } from 'lndr/user'
 
 import Loading, { LoadingContext } from 'ui/components/loading'
 
+const loadingContext = new LoadingContext()
+
 interface Props {
   setAuthLoading: (state: boolean) => any
   recoverAccount: (formData: RecoverAccountData) => any
@@ -21,7 +23,7 @@ interface Props {
 class RecoverAccountView extends Component<Props> {
   async handleOnSubmitRecoverUser(formData: RecoverAccountData) {
     this.props.setAuthLoading(true)
-    await this.props.recoverAccount(formData)
+    await loadingContext.wrap(this.props.recoverAccount(formData))
     this.props.setAuthLoading(false)
   }
 

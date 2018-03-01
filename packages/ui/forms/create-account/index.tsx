@@ -7,7 +7,7 @@ import ThemeImage from 'ui/components/images/theme-image'
 import TextLogo from 'ui/components/images/text-logo'
 import { CreateAccountData, defaultCreateAccountData } from 'lndr/user'
 
-import { formatNick, formatEmail, formatPin } from 'lndr/format'
+import { formatNick, formatEmail, formatPin, emailFormatIncorrect, nickLengthIncorrect } from 'lndr/format'
 import Pinpad from 'ui/components/pinpad'
 
 import InputImage from 'ui/components/images/input-image'
@@ -28,14 +28,15 @@ import general from 'theme/general'
 
 interface Props {
   onNickTextInputBlur: (nickname: string) => void
-  nickTextInputErrorText: string
+  nickInputError: string
   onEmailTextInputBlur: (email: string) => void
-  emailTextInputErrorText: string
+  emailInputError: string
   onSubmitCreateUser: (formData: CreateAccountData) => void
   onSubmitRecover: () => void
   nickDuplicationViolation?: boolean
   emailDuplicationViolation?: boolean
   emailFormatViolation?: boolean
+  nickLengthViolation?: boolean
 }
 
 interface State {
@@ -82,7 +83,9 @@ export default class CreateAccountForm extends Component<Props, State> {
   }
 
   submit() {
-    if(!this.props.nickDuplicationViolation && !this.props.emailDuplicationViolation) {
+    const { nickDuplicationViolation, emailDuplicationViolation } = this.props
+    const { email, nickname } = this.state
+    if(!nickDuplicationViolation && !emailDuplicationViolation && !emailFormatIncorrect(email) && !nickLengthIncorrect(nickname) && nickname && email ) {
       this.setState({ step: 2 })
     }
   }
@@ -114,7 +117,7 @@ export default class CreateAccountForm extends Component<Props, State> {
   }
 
   render() {
-    const { onNickTextInputBlur, nickTextInputErrorText, onEmailTextInputBlur, emailTextInputErrorText } = this.props
+    const { onNickTextInputBlur, nickInputError, onEmailTextInputBlur, emailInputError } = this.props
     const { password, confirmPassword, step } = this.state
 
     if (step === 3) {
@@ -143,7 +146,7 @@ export default class CreateAccountForm extends Component<Props, State> {
               onBlur={(): void => onNickTextInputBlur(this.state.nickname)}
             />
           </View>
-          { nickTextInputErrorText && <Text style={style.warningText}>{nickTextInputErrorText}</Text>}
+          { nickInputError && <Text style={style.warningText}>{nickInputError}</Text>}
           <View style={style.textInputContainer}>
             <InputImage name='email'/>
             <TextInput
@@ -157,7 +160,7 @@ export default class CreateAccountForm extends Component<Props, State> {
               onBlur={(): void => onEmailTextInputBlur(this.state.email)}
             />
           </View>
-          { emailTextInputErrorText && <Text style={style.warningText}>{emailTextInputErrorText}</Text>}
+          { emailInputError && <Text style={style.warningText}>{emailInputError}</Text>}
           <Button round fat onPress={() => this.submit()} style={style.submitButton} text={createAccount} />
           <Button alternate small arrow onPress={() => this.recover()} style={style.submitButton} text={recoverAccount} />
         </KeyboardAvoidingView>
