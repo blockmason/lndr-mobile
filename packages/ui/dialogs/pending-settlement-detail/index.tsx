@@ -6,7 +6,6 @@ import { UserData } from 'lndr/user'
 import { debounce } from 'lndr/time'
 import { currencyFormats } from 'lndr/format'
 import PendingUnilateral from 'lndr/pending-unilateral'
-import { getTxCost } from 'lndr/eth-price-utils'
 import profilePic from 'lndr/profile-pic'
 import defaultCurrency from 'lndr/default-currency'
 
@@ -30,7 +29,7 @@ import {
 } from 'language'
 
 import { getUser, settlerIsMe, getEthExchange, getWeeklyEthTotal } from 'reducers/app'
-import { confirmPendingSettlement, rejectPendingSettlement } from 'actions'
+import { confirmPendingSettlement, rejectPendingSettlement, getEthTxCost } from 'actions'
 import { connect } from 'react-redux'
 
 const loadingContext = new LoadingContext()
@@ -62,7 +61,7 @@ class PendingSettlementDetail extends Component<Props, State> {
   }
 
   async componentWillMount() {
-    const txCost = await getTxCost('dollar')
+    const txCost = await getEthTxCost(defaultCurrency)
     const pendingSettlement = this.getPendingSettlement()
     const { user } = this.props
     let pic
@@ -205,7 +204,7 @@ class PendingSettlementDetail extends Component<Props, State> {
         <Text style={[accountStyle.txCost, formStyle.spaceBottom, {marginLeft: '2%'}]}>{accountManagement.sendEth.txCost(txCost, currency)}</Text>
         { confirmationError && <Text style={[formStyle.warningText, {alignSelf: 'center'}]}>{confirmationError}</Text>}
         {this.showButtons()}
-        <View style={{marginBottom: 40}}/>
+        <View style={general.spaceBelow}/>
       </View>
     </ScrollView>
   }

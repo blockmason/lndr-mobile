@@ -120,15 +120,15 @@ export default class CreditProtocol {
 
   async getWeekAgoBlock() {
     const config = await this.getConfig()
-    return '0'
+    return config.weekAgoBlock
   }
 
-  getBalance(user: string) {
-    return this.client.get(`/balance/${user}`)
+  getBalance(user: string, currency: string) {
+    return this.client.get(`/balance/${user}?currency=${currency}`)
   }
 
-  getBalanceBetween(user: string, counterpartyAddress: string) {
-    return this.client.get(`/balance/${user}/${counterpartyAddress}`)
+  getBalanceBetween(user: string, counterpartyAddress: string, currency: string) {
+    return this.client.get(`/balance/${user}/${counterpartyAddress}?currency=${currency}`)
   }
 
   getCounterparties(user: string) {
@@ -376,13 +376,6 @@ export default class CreditProtocol {
     return this.client.get(`/tx_hash/${hash}`)
   }
 
-  getEthTransfers(user: string, block: string) {
-    return new Promise((resolve, reject) => [
-      {amount: 100, type: 'settlement', user: '123456', date: Date.now()},
-      {amount: 100, type: 'transfer', user: '123456', date: Date.now()}
-    ])
-  }
-
   async setProfilePic(imageURI: string, privateKeyBuffer: any) {
     if (privateKeyBuffer.type === 'Buffer') {
       privateKeyBuffer = Buffer.from(privateKeyBuffer.data)
@@ -406,5 +399,57 @@ export default class CreditProtocol {
       signature: signature
     })
     return `data:image/jpg;base64,${base64ImageData}`
+  }
+
+  async fiatToEth(amount: number, currency: string) {
+    const conversionRate = await this.getEthExchange(currency)
+    if(currency === 'USD') {
+      return Number(amount) / 100 / Number(conversionRate)
+    } else {
+      return Number(amount) / Number(conversionRate)
+    }
+  }
+  
+  async getSettlementCost(amount: number, currency: string) {
+    const settlementAmount = await this.fiatToEth(amount, currency)
+    const transactionCost = await this.getGasPrice()
+    return settlementAmount + ( Number(transactionCost) / Math.pow(10, 18) )
+  }
+  
+  async getGasPrice() {
+    const config = await this.getConfig()
+    return config.gasPrice
+  }
+  
+  async getTxCost(currency: string) {
+    try {
+      const gasPrice = await this.getGasPrice()
+      const rate = await this.getEthExchange(currency)
+      return `${gasPrice * Number(rate) * 21000 / Math.pow(10, 18)}`.slice(0,6)
+    } catch (e) {}
+  
+    return '0.00'
+  }
+  
+  async getEthExchange(currency: string) {
+    const config = await this.getConfig()
+    return config.ethereumPrices[currency.toLowerCase()]
+  }
+  
+  async ethToFiat(eth, currency) {
+    const exchange = await this.getEthExchange(currency)
+    const fiat = String(Number(eth) * Number(exchange))
+  
+    if (currency === 'USD') {
+      const decimalIndex = fiat.indexOf('.')
+      if (decimalIndex === -1) {
+        return `${fiat}.00`
+      }
+      return fiat.slice(0, decimalIndex + 3)
+  
+    } else {
+      const decimalIndex = fiat.indexOf('.')
+      return fiat.slice(0, decimalIndex)
+    }
   }
 }

@@ -16,7 +16,6 @@ import EthTransaction from 'lndr/eth-transaction'
 import BcptTransaction from 'lndr/bcpt-transaction'
 import Storage from 'lndr/storage'
 import { getEthBalance, web3 } from 'lndr/settlement'
-import { getGasPrice, settlementCost, getEthExchange } from 'lndr/eth-price-utils'
 import { isTouchIdSupported } from 'lndr/touch-id'
 import TouchID from 'react-native-touch-id'
 import profilePic from 'lndr/profile-pic'
@@ -30,9 +29,7 @@ import { accountManagement, debtManagement, settlementManagement, copiedClipboar
 import { ToastActionsCreators } from 'react-native-redux-toast'
 import { getUser, getStore, getUcacAddr, getEthExchange as exchangeReducer, getWeeklyEthTotal } from 'reducers/app'
 import { hexToBuffer } from '../credit-protocol/lib/buffer-utils'
-import account from 'theme/account'
 import defaultCurrency from 'lndr/default-currency'
-import { transferLimits } from 'language'
 
 const bcrypt = require('bcryptjs')
 
@@ -208,22 +205,15 @@ export const createUserFromCredentials = async (mnemonic, hashedPassword) => {
   )
 }
 
-export const confirmAccount = (recovery: boolean) => {
-  return async (dispatch, getState) => {
-    const { password, mnemonic } = getStore(getState())()
+export const confirmAccount = async (recovery: boolean, shouldDisplayMnemonic: boolean, password: string, mnemonic: string) => {
     const hashedPassword = bcrypt.hashSync(password)
-    try {
-      const user = await createUserFromCredentials(mnemonic, hashedPassword)
-      await storeUserSession(user)
-      let { ethBalance, ethExchange, bcptBalance } = await getEthInfo(user)
-      let ucacAddresses = await creditProtocol.getUcacAddresses()
-      let ethTransactions = await getEthTransactions(user.address, recovery)
-      const payload = { user, hasStoredUser: true, ethBalance, ethExchange, bcptBalance, ucacAddresses, ethTransactions }
-      dispatch(setState(payload))
-    } catch (e) {
-      dispatch(displayError(accountManagement.mnemonic.unableToValidate))
-    }
-  }
+    const user = await createUserFromCredentials(mnemonic, hashedPassword)
+    await storeUserSession(user)
+    let { ethBalance, ethExchange, bcptBalance } = await getEthInfo(user)
+    let ucacAddresses = await creditProtocol.getUcacAddresses()
+    let ethTransactions = await getEthTransactions(user.address, recovery)
+    const payload = { user, hasStoredUser: true, ethBalance, ethExchange, bcptBalance, ucacAddresses, ethTransactions, shouldDisplayMnemonic, password, mnemonic }
+    return payload
 }
 
 export const createAccount = (accountData: CreateAccountData) => {
@@ -243,10 +233,10 @@ export const createAccount = (accountData: CreateAccountData) => {
 
     const password = accountData.password
     const mnemonic = creditProtocol.getRandomMnemonic().toString()
-    const payload = { shouldDisplayMnemonic: true, password: password, mnemonic }
+
+    const payload = await confirmAccount(false, true, password, mnemonic)
 
     dispatch(setState(payload))
-    dispatch(await confirmAccount(false))
     //hacky, need to update this
     setTimeout( async () => {
       dispatch(await updateNickname({nickname: accountData.nickname}))
@@ -268,7 +258,7 @@ export async function getNicknameForAddress(address) {
 //Not a redux action
 export async function getTwoPartyBalance(user: User, friend: Friend) {
   const { address } = user
-  const amount = await creditProtocol.getBalanceBetween(address, friend.address)
+  const amount = await creditProtocol.getBalanceBetween(address, friend.address, defaultCurrency)
   return new Balance({ relativeToNickname: friend.nickname, relativeTo: friend.address, amount: amount })
 }
 
@@ -285,7 +275,7 @@ export const getBalances = () => {
         if (!(counterpartyAddress in uniqueCounterparties)) {
           uniqueCounterparties[counterpartyAddress] = true
           try {
-            const amount = await creditProtocol.getBalanceBetween(address, counterpartyAddress)
+            const amount = await creditProtocol.getBalanceBetween(address, counterpartyAddress, defaultCurrency)
             const relativeToNickname = await getNicknameForAddress(counterpartyAddress)
             balances.push(new Balance({ relativeToNickname, relativeTo: counterpartyAddress, amount }))
           }
@@ -313,7 +303,7 @@ export const getAccountInformation = () => {
     
     const accountInformation: { nickname?: string, email?: string, balance?: number } = { nickname, email }
     try {
-      accountInformation.balance = await creditProtocol.getBalance(address)
+      accountInformation.balance = await creditProtocol.getBalance(address, defaultCurrency)
     }
     catch (e) {}
     dispatch(setState({ accountInformation, accountInformationLoaded: true }))
@@ -766,9 +756,8 @@ export const recoverAccount = (recoverData: RecoverAccountData) => {
     }
 
     try {
-      const payload = { password: confirmPassword, mnemonic: mnemonic.toLowerCase() }
+      const payload = await confirmAccount(true, false, confirmPassword, mnemonic.toLowerCase())
       dispatch(setState(payload))
-      dispatch(await confirmAccount(true))
     } catch (e) {
       dispatch(displayError(accountManagement.mnemonic.unableToValidate))
     }
@@ -828,7 +817,7 @@ export const setEthBalance = () => {
   return async (dispatch, getState) => {
     const { user } = getState().store
     const ethBalance = await getEthBalance(user.address)
-    const ethExchange = await getEthExchange(defaultCurrency)
+    const ethExchange = await creditProtocol.getEthExchange(defaultCurrency)
     dispatch(setState({ ethBalance, ethExchange }))
   }
 }
@@ -837,11 +826,11 @@ export const setEthBalance = () => {
 export const sendEth = (destAddr: string, amount: string) => {
   return async (dispatch, getState) => {
     try {
-      const { privateKey, address } = getState().store.user
+      const { privateKeyBuffer, address } = getState().store.user
       //Safe Low is in 10^8 Wei (deciGigaWei)
-      const gasPrice = await getGasPrice()
+      const gasPrice = await creditProtocol.getGasPrice()
       const ethTransaction = new EthTransaction(address, destAddr, Number(web3.toWei(Number(amount), 'ether')), gasPrice)
-      const txHash = await creditProtocol.settleWithEth(ethTransaction, privateKey)
+      const txHash = await creditProtocol.settleWithEth(ethTransaction, privateKeyBuffer)
       console.log('SENDING ETH, TXHASH:', txHash)
       return txHash
     } catch (e) {
@@ -865,7 +854,7 @@ export const sendBcpt = (destAddr: string, amount: string) => {
     try {
       const { privateKeyBuffer, address } = getState().store.user
       //Safe Low is in 10^8 Wei (deciGigaWei)
-      const gasPrice = await getGasPrice()
+      const gasPrice = await creditProtocol.getGasPrice()
       const bcptTransaction = new BcptTransaction(address, destAddr, Number(amount), gasPrice)
       const txHash = await transferBcpt(bcptTransaction, privateKeyBuffer)
       console.log('SENDING BCPT, TXHASH:', txHash)
@@ -948,6 +937,10 @@ export const storeEthTransaction = async (ethTx: object) => {
   }
 }
 
+export const getEthTxCost = async (currency: string) => {
+  return creditProtocol.getTxCost(currency)
+}
+
 const getEthTransactions = async (addr: string, recovery: boolean) => {
   let ethTransactions = []
   //get all transactions from etherscan and add relevant txs to the list
@@ -967,6 +960,7 @@ const refreshTransactions = () => {
   getRecentTransactions()
   setEthBalance()
   getPendingSettlements()
+  getFriends()
 }
 
 const sanitizeAmount = amount => {
@@ -981,7 +975,7 @@ const sanitizeAmount = amount => {
 }
 
 const settleBilateral = async (user, bilateralSettlements, dispatch, getState) => {
-  const gasPrice = await getGasPrice()
+  const gasPrice = await creditProtocol.getGasPrice()
   //Safe Low is in 10^8 Wei (deciGigaWei)
   const ethBalance = getState().store.ethBalance
 
@@ -1024,7 +1018,7 @@ const getEthRequired = async (getState, amount) => {
   const { ethBalance } = getState().store
   let ethAmount = 0
   try {
-    ethAmount = await settlementCost(amount)
+    ethAmount = await creditProtocol.getSettlementCost(amount, defaultCurrency)
   } catch (e) {
     console.log('ERROR GETTING SETTLEMENT AMOUNT: ', e)
   }
@@ -1048,7 +1042,7 @@ const getEthInfo = async (user) => {
   let ethBalance, ethExchange, bcptBalance
   try {
     ethBalance = await getEthBalance(user.address)
-    ethExchange = await getEthExchange(defaultCurrency)
+    ethExchange = await creditProtocol.getEthExchange(defaultCurrency)
     bcptBalance = await getBcptBalance(user.address)
   } catch (e) {
     ethBalance = '0'
