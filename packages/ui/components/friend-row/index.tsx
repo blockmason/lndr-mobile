@@ -14,7 +14,7 @@ import defaultCurrency from 'lndr/default-currency'
 import style from 'theme/account'
 import general from 'theme/general'
 
-import { debtManagement} from 'language'
+import { debtManagement, currencies } from 'language'
 
 interface Props {
   onPress?: () => void
@@ -84,7 +84,7 @@ export default class FriendRow extends Component<Props, State> {
       sign = '-'
     }
 
-    return `${sign} $${currencyFormats[`${defaultCurrency}abs`](total)}`
+    return `${sign} ${currencies[defaultCurrency]}${currencyFormats[`${defaultCurrency}abs`](total)}`
   }
 
   getTransactionTotal() {

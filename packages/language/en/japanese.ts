@@ -1,0 +1,372 @@
+const generalCommunicationError = 'サーバーとの通信中にエラーが起きました。しばらくしてからお試しください。'
+
+export const applicationName = 'Lndr'
+export const helloWorld = 'Hello world'
+
+export const submit = '提出'
+export const next = '次'
+export const cancel = '取り消し'
+export const back = '戻る'
+export const copy = 'クリップボードへコピー'
+
+export const confirmAccount = '確認'
+export const createAccount = 'アカウントを作成する'
+export const recoverAccount = 'アカウントを復元する'
+export const removeAccount = 'アカウントを削除する'
+export const updateAccount = 'アカウントを更新する'
+export const loginAction = 'アンロック'
+export const enterPin = '暗証番号を入力してください'
+export const changePin = '暗証番号を変える'
+export const enterCurrentPin = '暗証番号を入力してください'
+export const logoutAction = 'ログアウト'
+export const seeAllActivity = '全アクティビティを閲覧'
+export const copiedClipboard = 'クリップボードへコピーしました'
+
+export const addFriend = 'フレンドを追加'
+export const addFriendConfirmationQuestion = '本当にこのユーザーをフレンドに追加しますか？'
+export const removeFriend = 'フレンドを外す'
+export const currentFriends = '現在のフレンド'
+export const removeFriendConfirmationQuestion = '本当にこのユーザーをフレンドから解除しますか？'
+export const friendInfo = 'この関係についての追加情報:'
+export const noFriends = 'フレンドを追加して始めよう!'
+export const noMatches = 'ユーザーが見つかりません'
+export const noBalances = '借りがありません'
+export const addFriendButton = '+ フレンドを追加'
+export const alreadyFriendsButton = 'フレンド'
+export const friendShell = '友達'
+
+export const tip = 'チップ: '
+export const notice = '通知: '
+export const welcome = 'あなたのLNDRへようこそ'
+export const noBalanceWarning = 'あなたの残高をロードすることに失敗しました。しばらくしてからお試しください。'
+export const totalBalance = '残高合計: '
+export const totalBalances = '相手方合計: '
+export const newTransaction = '新しいやりとり'
+export const needsReview = '審査が必要です'
+export const owesMe = '私に貸しがあります'
+export const iOwe = '私は借りがています'
+
+export const newPassword = '新しいパスワード　(最低8文字)'
+export const confirmPassword = 'パスワードの確認'
+export const newPin = '4桁の暗証番号'
+export const enterNewPin = '新しい暗証番号を設定してください'
+export const confirmPin = 'あなたが入力した暗証番号はこちら'
+export const newAccount = '新しいアカウントを作成する'
+export const loginAccount = 'アカウントをアンロックする'
+
+export const recoverExistingAccount = '既存のアカウントを復旧する'
+export const recoverMnemonic = 'ニューモニック　\n(アカウントを作成した際に12個の単語が表示されます)'
+
+export const successTitle = '成功'
+export const errorTitle = 'エラー'
+
+export const showMnemonic = '12個のニューモニックを表示する'
+export const mnemonicExhortation = 'この12個の単語は、アカウントの復活に必要です。安全な秘密の場所に保存してください'
+export const addressExhortation = 'イーサリアムをあなたのアドレスに送信し、Lndrで債務を果たしましょう'
+export const removeAccountTitle = '本当にこのデバイスからあなたのアカウントを削除しますか？'
+export const removeAccountExhortation = 'このデバイスからアカウント情報を永久に削除するため、後でアカウントを復元する際にニーモニックにアクセスできることを確認してください。'
+
+export const myAccount = '自分のアカウント'
+
+export const setNickname = 'フレンドに検索されるようにニックネームを設定しよう'
+export const setEmail = 'メールアドレスを入力して下さい'
+export const nickname = 'ニックネーム (小文字と半角数字)'
+export const email = 'メールアドレス'
+
+export const accountManagement = {
+  nickname: {
+    lengthViolation: 'ニックネームは最低3文字です.',
+    compositionViolation: 'ニックネームは小文字と半角数字のみ有効です.',
+    duplicationViolation: 'このニックネームは既に使用されています'
+  },
+  email: {
+    compositionViolation: '正しくメールアドレスを入力してください',
+    duplicationViolation: 'このメールアドレスはすでに使われています'
+  },
+  pin: {
+    lengthViolation: '暗証番号は、4文字以上です.',
+    matchViolation: '暗証番号は合致しなければなりません.',
+    failedHashComparison: '暗証番号を正しく入力してください.',
+    updateSuccess: '暗証番号が更新されました',
+    updateError: '暗証番号を更新できませんでした'
+  },
+  mnemonic: {
+    lengthViolation: 'ニモニックは最低12文字あるはずです.',
+    unableToValidate: '入力されたニューモニックは無効です。再度、お試しください。'
+  },
+  setNickname: {
+    success: 'あなたのニックネームの登録が完了しました.',
+    error: generalCommunicationError
+  },
+  setEmail: {
+    success: 'メールアドレスは保存されました',
+    error: generalCommunicationError
+  },
+  lockTimeout: {
+    top: '暗証番号は必須です',
+    bottom: '利用できません',
+    update: '更新',
+    error: 'アカウント設定を更新できませんでした',
+    success: 'タイムアウトする時間を変更しました'
+  },
+  addFriend: {
+    success: nickname => `フレンドに@${nickname}を加えました`,
+    error: generalCommunicationError
+  },
+  removeFriend: {
+    success: nickname => `@${nickname}をあなたのフレンドから外しました`,
+    error: generalCommunicationError
+  },
+  loadInformation: {
+    error: generalCommunicationError
+  },
+  ethBalance: {
+    display: balance => `あなたのETH残高はこちら ${String(balance).slice(0,8)} `,
+    inFiat: (amount, exchange, currency) => {
+      const strAmnt = String(Number(amount) * Number(exchange))
+      const perInd = strAmnt.indexOf('.') === -1 ? strAmnt.length : strAmnt.indexOf('.')
+      return ` (${currencies[currency]}${strAmnt.slice(0, perInd)})`
+    },
+    getError: 'ETH残高を取得できません',
+    manage: 'ETHを管理する'
+  },
+  sendEth: {
+    error: {
+      insufficient: '残高不足のため、送信に失敗しました',
+      generic: '送信時にエラーが起きました。時間をおいて、また送信してください',
+      address: '正しいアドレスを入力してください',
+      amount: '数値は0以上を入力してください',
+      limitExceeded: currency => `１週間に送れるのは ${currencies[currency]}${transferLimits[currency]} までです。これより小さい数値を入力してください`
+    },
+    amount: '送信額',
+    address: `送信先アドレス（先頭の0xは入力不要）`,
+    transfer: 'ETHを送信する',
+    transferAll: 'TRANSFER EVERYTHING',
+    balance: (balance) => `現在のETH残高はこちら ${typeof balance === 'string' ? balance.slice(0,8) : ''}`,
+    ethAddress: 'イーサリアムアドレス',
+    txCost: (cost, currency) => `現在、1回あたりにかかるETH取引コストは ${currencies[currency]}${cost}です `,
+    transferLowercase: 'ETHを送信する',
+    note: currency => `注意：１週間にLndrから送れるのは ${currencies[currency]}${transferLimits[currency]} です`,
+    warning: (amount, currency) => `${currencies[currency]}${amount} の送付上限に対し、残りは ${currencies[currency]}${transferLimits[currency]} です`
+  },
+  sendBcpt: {
+    error: {
+      insufficient: '必要な分のBCPTがありません',
+      generic: '送信時にエラーが起きました。時間をおいて、また送信してください'
+    },
+    transfer: 'BCPTを送信する',
+    address: `送信先アドレス（先頭の0xは入力不要）`,
+    balance: (balance) => `現在のBCPT残高はこちら ${typeof balance === 'string' ? balance.slice(0,8) : ''}`,
+    bcptAddress: 'BCPTアドレス'
+  },
+  changeProfilePic: '変更する',
+  addProfilePic: '端末の写真を使う',
+  panelHeaders: [
+    'ETHアドレス',
+    'EHT残高',
+    'BCPT残高',
+    '暗証番号を変える',
+    'ニックネームを変える',
+    'メールアドレスを変える',
+    'プロフィール画像を変える',
+    'タイムアウトする時間を変える',
+    'ニューモニック',
+    '通知'
+  ],
+  profilePic: {
+    setError: 'プロフィール画像をアップロードできませんでした。のちほど、再度実行してください。',
+    getError: 'プロフィール画像をretrieveできませんでした',
+    setSuccess: 'プロフィール画像がアップロードされました'
+  }
+}
+
+export const currentBalance = {
+  eth: '現在のETH残高は:',
+  bcpt: '現在のBCPT残高は:'
+}
+
+export const welcomeView = {
+  by: '開発元',
+  makeItEasy: 'Lndrは単純な貸し借りを簡単に管理します',
+  weHelpFriends: 'フレンドの生活、仕事、娯楽をサポートします.',
+  len: 'Len',
+  dot: '.',
+  der: 'der',
+  shareDinner: '夕食を割り勘する',
+  fillTank: 'ガソリンを満タンにする',
+  travelTogether: '一緒に旅行する',
+  runEthereum: 'イーサリアム上で操作されています！',
+  firstLendingApp: '史上初！ブロックチェーン技術を用いたレンディングモバイルアプリ.',
+  greatConcert: 'コンサートを見る',
+  youPlayWithFriends: "フレンドと遊びます。\nタブを保存します。",
+  start: '始める'
+}
+
+export const debtManagement = {
+  shell: '新しいやりとり',
+  add: '借りを追加する',
+  selectFriend: '選択',
+  lend: '新しいローン',
+  borrow: '新しい借り',
+  settleUpLower: '帳消しにする',
+  amountToSettle: '送信額',
+  total: '合計',
+  record: 'やりとり',
+  records: 'やりとり',
+  createError: {
+    amountTooLow: '金額は$0以上にしてください',
+    amountTooHigh: '金額は$1,000,000,000未満にしてください',
+    selfAsFriend: '自分自身に貸しを作ることはできません。フレンドを選んでください。',
+    pending: 'やりとりを開始する前に、承認待ちになっているやりとりに対処してください',
+    insufficientEth: eth => `帳消しするためには${eth}ETHが必要です。残高を設定で確認してください。`
+  },
+  fields: {
+    amount: '金額',
+    settlementAmount: '決済額',
+    selectFriend: 'フレンド',
+    memo: 'メモ',
+    direction: '正しい説明を選択',
+    to: 'から',
+    for: 'の為に'
+  },
+  memo: {
+    example: 'ここへメモを記入'
+  },
+  direction: {
+    lend: nickname => `@${nickname}はあなたに借りがあります`,
+    borrow: nickname => `私は@${nickname}に貸しがあります`,
+    initiatedLend: nickname => `@${nickname}は彼／彼女に貸しがあります`,
+    initiatedBorrow: nickname => `@${nickname}は彼／彼女に貸しがあります`,
+    pendingLend: nickname => `@${nickname}はあなたに借りがあります`,
+    pendingBorrow: nickname => `あなたは@${nickname}に貸しがあります`,
+    pendingLendSettlement: settlement => `@${settlement.debtorNickname} は貸しとなっている${settlement.settlementCurrency}を帳消ししたいとリクエストしています`,
+    pendingBorrowSettlement: settlement => `@${settlement.creditorNickname} は貸しとなっている${settlement.settlementCurrency}を帳消ししたいとリクエストしています`,
+    pendingLendSettlementMe: settlement => `あなたは　@${settlement.creditorNickname}　に対し、${settlement.settlementCurrency}で帳消ししたいとリクエストしました`,
+    pendingBorrowSettlementMe: settlement => `あなたは@${settlement.creditorNickname}が${settlement.settlementCurrency}で支払うように求めました`
+  },
+  pending: {
+    success: friend => `@${friend.nickname}　に送信された負債は、承認待ちになっています`,
+    error: generalCommunicationError
+  },
+  pendingParens: ' (承認待ち)',
+  confirmation: {
+    transaction: counterParty => `${counterParty}とのやりとりは承認されました`,
+    settlement: counterParty => `${counterParty}とのやりとりは完了しました`,
+    error: 'やりとりを正常に確認できませんでした。しばらくしてから再度お試しください。'
+  },
+  rejection: {
+    success: '取引が拒否されました。',
+    error: 'やりとりを正常に拒否できませんでした。しばらくしてから再度お試しください。'
+  },
+  balances: {
+    error: '残高のロードに失敗しました。しばらくしてから再度お試しください。'
+  },
+  for: memo => `${memo}のために`,
+  settleUp: '帳消しにする',
+  settleTotal: '承認する',
+  settleUpMemo: (direction, amount) => direction === 'lend' ? `${amount} を設定` : `${amount} の帳消しをリクエスト`
+}
+
+export const settlementManagement = {
+  bilateral: {
+    error: {
+      insufficient: nickname => `残高が少なかったため、${nickname} への支払いが失敗しまいた`,
+      generic: nickname => `${nickname} への支払い中に、エラーが発生しました`
+    }
+  }
+}
+
+export const accountViewLanguage = {
+  lndr: 'L n d r',
+  home: 'ホーム',
+  friends: '友達',
+  activity: 'アクティビティ'
+}
+
+export const notifications = {
+  toggleNotifications: '通知を切り替える',
+  enable: 'オンにする',
+  disable: 'オフにする'
+}
+
+export const pendingTransactionsLanguage = {
+  shell: '保留になっているやりとり',
+  title: '承認待ち',
+  memo: 'Memo:',
+  for: 'For',
+  none: 'あなたは承認待ちの取引がありません',
+  confirmationQuestion: '本当にこの取引を承認しますか？',
+  pendingAnnouncement: 'この取引は相手方の承認待ちです.',
+  confirm: '承認',
+  reject: '取引を拒否',
+  cancel: '取引のキャンセル',
+  direction: {
+    lend: (nickname, amount) => `${nickname}  は、あなたに${amount}の貸しがあります`,
+    borrow: (nickname, amount) => `あなたは${nickname} に${amount}の貸しがあります`
+  }
+}
+
+export const pendingSettlementsLanguage = {
+  shell: 'まだ帳消しされていません',
+  title: '承認待ち',
+  none: '承認待ちの取引はありません',
+  confirm: '承認',
+  reject: '清算を拒否する',
+  cancel: '清算をキャンセルする',
+}
+
+export const recentTransactionsLanguage = {
+  title: '完了',
+  none: '完了している取引がありません',
+  direction: {
+    lend: (nickname, amount) => `${nickname} はあなたに${amount}の貸しがあります`,
+    borrow: (nickname, amount) => `あなたは${nickname} に${amount}の貸しがあります`
+  },
+  balance: '残高 ',
+  friends: (friends) => `(${friends}からフレンドへ)`
+}
+
+export const tabs = {
+  home: 'ホーム',
+  friends: ' 友達 ',
+  activity: 'アクティビティ'
+}
+
+export const confirmation = {
+  shell: '承認',
+  done: '完了',
+  create: {
+    start: "記録を〜へ送りました ",
+    end: ' 承認するには.'
+  },
+  confirm: {
+    start: "〜からの記録を承認しました ",
+    end: '.'
+  },
+  reject: {
+    start: "〜に通知を送ります ",
+    end: " あなたがこの記録を承認しなかったことを."
+  },
+  ethSent: {
+    start: "送信成功 ",
+    end: " あなたのETHとトランザクションハッシュは "
+  },
+  bcptSent: {
+    start: "送信成功 ",
+    end: " あなたのBCPTとトランザクションハッシュは "
+  },
+  status: '取引のステータスを確認するにはここ ',
+  activity: 'アクティビティタブ.'
+}
+
+export const currencies = {
+  USD: '$',
+  JPY: '¥',
+  KRW: '₩'
+}
+
+export const transferLimits = {
+  USD: '200',
+  JPY: '20000',
+  KRW: '200000'
+}
