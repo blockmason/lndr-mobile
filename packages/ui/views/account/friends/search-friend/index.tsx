@@ -161,7 +161,7 @@ export default class SearchFriend extends Component<Props, State> {
               return <AddFriendRow
                 key={match.address}
                 friend={match}
-                onPress={ () => this.setFriendCandidate(match) }
+                onPress={addDebt ? () => selectFriend(match) : () => this.setFriendCandidate(match) }
               />
             }
           }

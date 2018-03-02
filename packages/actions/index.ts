@@ -960,7 +960,6 @@ const refreshTransactions = () => {
   getRecentTransactions()
   setEthBalance()
   getPendingSettlements()
-  getFriends()
 }
 
 const sanitizeAmount = amount => {
