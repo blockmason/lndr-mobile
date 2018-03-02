@@ -203,10 +203,6 @@ export default class CreditProtocol {
   }
 
   getFriends(user: string) {
-    const friendsPromise = this.tempStorage.getFriends
-    if (friendsPromise) {
-      return friendsPromise
-    }
     return this.tempStorage.getFriends = this.client.get(`/friends/${user}`)
   }
 
