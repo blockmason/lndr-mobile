@@ -77,7 +77,7 @@ class RecentTransactionRow extends Component<Props, State> {
 
     const currentCurrency = getUcacCurrency(recentTransaction.ucac)
 
-    return `${sign} ${currencies[currentCurrency]}${currencyFormats[currentCurrency](recentTransaction.amount)}`
+    return `${sign} ${currencies[defaultCurrency]}${currencyFormats[defaultCurrency](recentTransaction.amount)}`
   }
 
   render() {

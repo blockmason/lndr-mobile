@@ -173,7 +173,7 @@ class SettleUp extends Component<Props, State> {
       <KeyboardAvoidingView behavior='position' keyboardVerticalOffset={-305} >
         <View style={[general.centeredColumn, {marginBottom: 20}]}>
           <Image source={require('images/person-outline-dark.png')} style={style.settleImage}/>
-          <Text style={[style.header, {marginBottom: 20}]}>{this.displayMessage()}</Text>
+          <Text style={[style.header, {marginBottom: 20, marginHorizontal: 20, textAlign: 'center'}]}>{this.displayMessage()}</Text>
           <View style={style.transactions}>
             {
               recentTransactions.map( (transaction, index) => {
