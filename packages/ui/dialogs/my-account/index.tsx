@@ -31,9 +31,11 @@ import general from 'theme/general'
 import { underlayColor } from 'theme/general'
 import slideStyle from 'theme/slide'
 
-import { nickname, setNickname, email, setEmail, updateAccount as updateAccountText, copy, accountManagement, changePin, enterNewPin, confirmPin,
+import language, { currencies } from 'language'
+const { nickname, setNickname, email, setEmail, copy, accountManagement, changePin, enterNewPin, confirmPin,
   cancel, mnemonicExhortation, addressExhortation, logoutAction, notifications, currentBalance, showMnemonic, enterCurrentPin
- } from 'language'
+ } = language
+ const updateAccountText = language.updateAccount
 
 interface Props {
   logoutAccount: () => any

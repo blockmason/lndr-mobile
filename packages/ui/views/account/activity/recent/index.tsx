@@ -17,7 +17,8 @@ import defaultCurrency from 'lndr/default-currency'
 import style from 'theme/account'
 import general from 'theme/general'
 
-import { recentTransactionsLanguage } from 'language'
+import language from 'language'
+const { recentTransactionsLanguage } = language
 
 import { getStore, getUser, getUcacAddr } from 'reducers/app'
 import { isFocusingOn } from 'reducers/nav'

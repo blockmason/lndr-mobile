@@ -17,14 +17,15 @@ import style from 'theme/form'
 import friendStyle from 'theme/friend'
 import general from 'theme/general'
 
-import {
+import language from 'language'
+const {
   nickname,
   cancel,
   back,
   noMatches,
-  addFriend as addFriendText,
   addFriendConfirmationQuestion
-} from 'language'
+} = language
+const addFriendText = language.addFriend
 
 import { searchUsers } from 'actions'
 import { connect } from 'react-redux'

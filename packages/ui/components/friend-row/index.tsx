@@ -17,7 +17,8 @@ import general from 'theme/general'
 import { getUcacAddr } from 'reducers/app'
 import { connect } from 'react-redux'
 
-import { debtManagement, currencies } from 'language'
+import language, { currencies } from 'language'
+const { debtManagement } = language
 
 interface Props {
   onPress?: () => void

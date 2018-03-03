@@ -9,7 +9,8 @@ import BMLogo from 'ui/components/images/bm-logo'
 
 import { largeImage } from 'theme/include/dimensions'
 
-import { welcomeView } from 'language'
+import language from 'language'
+const { welcomeView } = language
 
 export default class WelcomeStepOneView extends Component {
   render() {

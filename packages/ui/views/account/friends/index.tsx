@@ -15,7 +15,8 @@ import SearchFriend from './search-friend'
 import style from 'theme/account'
 import general from 'theme/general'
 
-import { noFriends, currentFriends } from 'language'
+import language from 'language'
+const { noFriends, currentFriends } = language
 
 import { isFocusingOn } from 'reducers/nav'
 import { getStore, pendingTransactions, recentTransactions } from 'reducers/app'

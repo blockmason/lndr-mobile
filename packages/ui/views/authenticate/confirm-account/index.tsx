@@ -9,7 +9,8 @@ import { connect } from 'react-redux'
 import { mnemonicDisplayed } from 'actions'
 import { getStore } from 'reducers/app'
 
-import { next, copy, mnemonicExhortation } from 'language'
+import language from 'language'
+const { next, copy, mnemonicExhortation } = language
 
 import style from 'theme/form'
 

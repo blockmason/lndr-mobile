@@ -29,4 +29,8 @@ export default class PendingTransaction {
   get memo() {
     return this.creditRecord.memo
   }
+
+  get ucac() {
+    return this.creditRecord.ucacAddress
+  }
 }

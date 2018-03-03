@@ -20,7 +20,8 @@ import formStyle from 'theme/form'
 import general from 'theme/general'
 import pendingStyle from 'theme/pending'
 
-import { debtManagement, noFriends, submit, cancel, back, currencies } from 'language'
+import language, { currencies } from 'language'
+const { debtManagement, noFriends, submit, cancel, back } = language
 
 import { getStore, pendingTransactions, recentTransactions } from 'reducers/app'
 import { addDebt, getFriends, getRecentTransactions } from 'actions'

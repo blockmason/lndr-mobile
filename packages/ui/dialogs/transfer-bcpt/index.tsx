@@ -16,11 +16,12 @@ import style from 'theme/friend'
 import formStyle from 'theme/form'
 import general from 'theme/general'
 
-import {
+import language from 'language'
+const {
   back,
   cancel,
   accountManagement
-} from 'language'
+} = language
 
 import { getUser, getBcptBalance } from 'reducers/app'
 import { sendBcpt } from 'actions'

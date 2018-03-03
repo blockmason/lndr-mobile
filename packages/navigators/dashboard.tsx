@@ -15,10 +15,12 @@ import { logoutAccount } from 'actions'
 
 import { connect } from 'react-redux'
 
-import { 
+import language from 'language'
+
+const { 
   accountViewLanguage,
   tabs
- } from 'language'
+ } = language
 
 import general from 'theme/general'
 import style from 'theme/account'

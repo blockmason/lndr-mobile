@@ -14,7 +14,8 @@ import Loading, { LoadingContext } from 'ui/components/loading'
 import { formatPin } from 'lndr/format'
 import { connect } from 'react-redux'
 
-import {
+import language from 'language'
+const {
   newPin,
   recoverAccount,
   recoverMnemonic,
@@ -22,7 +23,7 @@ import {
   cancel,
   enterNewPin,
   confirmPin
-} from 'language'
+} = language
 
 import style from 'theme/form'
 import general from 'theme/general'

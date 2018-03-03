@@ -1,81 +1,84 @@
 import { amountFormat } from 'lndr/format'
 
+import { currencies, transferLimits } from 'language'
+
 const generalCommunicationError = '서버에 오류가 발생하였습니다. 나중에 다시 시도해주세요'
 
-export const applicationName = 'Lndr'
-export const helloWorld = '헬로 월드'
+export default {
+  applicationName: 'Lndr',
+  helloWorld: '헬로 월드',
 
-export const submit = '제출'
-export const next = '다음'
-export const cancel = '취소'
-export const back = '돌아가기'
-export const copy = '클립보드에 복사'
+  submit: '제출',
+  next: '다음',
+  cancel: '취소',
+  back: '돌아가기',
+  copy: '클립보드에 복사',
 
-export const confirmAccount = '인증'
-export const createAccount = '계정 생성'
-export const recoverAccount = '계정 복원'
-export const removeAccount = '계정 삭제'
-export const updateAccount = '계정 업데이트'
-export const loginAction = 'UNLOCK'
-export const enterPin = '비밀번호를 입력해주세요'
-export const changePin = '비밀번호 수정'
-export const enterCurrentPin = '사용중인 비밀번호를 입력해주세요'
-export const logoutAction = '로그아웃'
-export const seeAllActivity = '활동보기'
-export const copiedClipboard = '클립보드에 복사되었습니다'
+  confirmAccount: '인증',
+  createAccount: '계정 생성',
+  recoverAccount: '계정 복원',
+  removeAccount: '계정 삭제',
+  updateAccount: '계정 업데이트',
+  loginAction: 'UNLOCK',
+  enterPin: '비밀번호를 입력해주세요',
+  changePin: '비밀번호 수정',
+  enterCurrentPin: '사용중인 비밀번호를 입력해주세요',
+  logoutAction: '로그아웃',
+  seeAllActivity: '활동보기',
+  copiedClipboard: '클립보드에 복사되었습니다',
 
-export const addFriend = '친구 추가'
-export const addFriendConfirmationQuestion = '정말 친구로 추가하시겠습니까?'
-export const removeFriend = '친구 삭제'
-export const currentFriends = '친구 리스트'
-export const removeFriendConfirmationQuestion = '정말 해당 친구를 목록에서 삭제하시겠습니까?'
-export const friendInfo = '친구 관계 정보:'
-export const noFriends = '사용 전 친구를 추가해보세요!'
-export const noMatches = '검색 결과 없음'
-export const noBalances = '현존하는 부채가 없습니다'
-export const addFriendButton = '+ 친구 추가'
-export const alreadyFriendsButton = '친구'
-export const friendShell = '친구'
+  addFriend: '친구 추가',
+  addFriendConfirmationQuestion: '정말 친구로 추가하시겠습니까?',
+  removeFriend: '친구 삭제',
+  currentFriends: '친구 리스트',
+  removeFriendConfirmationQuestion: '정말 해당 친구를 목록에서 삭제하시겠습니까?',
+  friendInfo: '친구 관계 정보:',
+  noFriends: '사용 전 친구를 추가해보세요!',
+  noMatches: '검색 결과 없음',
+  noBalances: '현존하는 부채가 없습니다',
+  addFriendButton: '+ 친구 추가',
+  alreadyFriendsButton: '친구',
+  friendShell: '친구',
 
-export const tip = '팁: '
-export const notice = '공지: '
-export const welcome = '당신의 LNDR에 오신 것을 환영합니다'
-export const noBalanceWarning = '현재 잔액을 확인할 수 없음으로 나중에 다시 시도해주세요.'
-export const totalBalance = '총 잔액: '
-export const totalBalances = '총 거래대상: '
-export const newTransaction = '새로운 거래'
-export const needsReview = '리뷰 필요'
-export const owesMe = '친구가 갚을 빚이 있습니다'
-export const iOwe = '친구에게 빚을 갚아야합니다'
+  tip: '팁: ',
+  notice: '공지: ',
+  welcome: '당신의 LNDR에 오신 것을 환영합니다',
+  noBalanceWarning: '현재 잔액을 확인할 수 없음으로 나중에 다시 시도해주세요.',
+  totalBalance: '총 잔액: ',
+  totalBalances: '총 거래대상: ',
+  newTransaction: '새로운 거래',
+  needsReview: '리뷰 필요',
+  owesMe: '친구가 갚을 빚이 있습니다',
+  iOwe: '친구에게 빚을 갚아야합니다',
 
-export const newPassword = '새로운 비밀번호(최소 8자)'
-export const confirmPassword = '비밀번호 인증'
-export const newPin = '새로운 비밀번호 4자리'
-export const enterNewPin = '비밀번호 4자리를 생성해주세요'
-export const confirmPin = '비밀번호를 확인해주세요'
-export const newAccount = '계정 생성'
-export const loginAccount = '계정 UNLOCK'
+  newPassword: '새로운 비밀번호(최소 8자)',
+  confirmPassword: '비밀번호 인증',
+  newPin: '새로운 비밀번호 4자리',
+  enterNewPin: '비밀번호 4자리를 생성해주세요',
+  confirmPin: '비밀번호를 확인해주세요',
+  newAccount: '계정 생성',
+  loginAccount: '계정 UNLOCK',
 
-export const recoverExistingAccount = '본 계정 되돌리기'
-export const recoverMnemonic = '연상 기호(계정 생성\n 시 입력해야 하는 12자)'
+  recoverExistingAccount: '본 계정 되돌리기',
+  recoverMnemonic: '연상 기호(계정 생성\n 시 입력해야 하는 12자)',
 
-export const successTitle = '성공'
-export const errorTitle = '에러'
+  successTitle: '성공',
+  errorTitle: '에러',
 
-export const showMnemonic = '12자 연상기호 보이기'
-export const mnemonicExhortation = '해당 12자 기호는 계정 복구 시 필요함으로 반드시 안전한 곳에 저장하세요'
-export const addressExhortation = 'Lndr에서 빚을 갚기 위해 이더리움을 내 주소로 보내기'
-export const removeAccountTitle = '기기로부터 계정을 정말 삭제하시겠습니까?'
-export const removeAccountExhortation = '향후 계정을 복구할 시 입력할 연상 기호를 인지해야 합니다.'
+  showMnemonic: '12자 연상기호 보이기',
+  mnemonicExhortation: '해당 12자 기호는 계정 복구 시 필요함으로 반드시 안전한 곳에 저장하세요',
+  addressExhortation: 'Lndr에서 빚을 갚기 위해 이더리움을 내 주소로 보내기',
+  removeAccountTitle: '기기로부터 계정을 정말 삭제하시겠습니까?',
+  removeAccountExhortation: '향후 계정을 복구할 시 입력할 연상 기호를 인지해야 합니다.',
 
-export const myAccount = '나의 계정'
+  myAccount: '나의 계정',
 
-export const setNickname = '친구들이 알아볼 수 있도록 닉네임을 설정하세요'
-export const setEmail = '이메일 설정하고 Lndr 업데이트 정보 받아보기'
-export const nickname = '닉네임(소문자 & 숫자)'
-export const email = '이메일 주소'
+  setNickname: '친구들이 알아볼 수 있도록 닉네임을 설정하세요',
+  setEmail: '이메일 설정하고 Lndr 업데이트 정보 받아보기',
+  nickname: '닉네임(소문자 & 숫자)',
+  email: '이메일 주소',
 
-export const accountManagement = {
+  accountManagement: {
   nickname: {
     lengthViolation: '닉네임은 적어도 3글자 이상 가능합니다.',
     compositionViolation: '닉네임은 숫자와 소문자만 포함될 수 있습니다.',
@@ -180,14 +183,14 @@ export const accountManagement = {
     getError: '프로필 사진을 가져오는데 실패했습니다',
     setSuccess: '프로필 사진이 업데이트됐습니다'
   }
-}
+},
 
-export const currentBalance = {
+  currentBalance: {
   eth: '당신의 현재 이더리움 잔액은:',
   bcpt: '당신의 현재 BCPT 잔액은:'
-}
+},
 
-export const welcomeView = {
+  welcomeView: {
   by: 'BUILT BY',
   makeItEasy: 'Lndr 는 간단한 부채 기록을 추적해 볼 수 있게 해줍니다',
   weHelpFriends: '우리는 친구화 함께 살아가고, 일하고, 놀 수 있도록 서비스합니다.',
@@ -202,9 +205,9 @@ export const welcomeView = {
   greatConcert: '콘서트 보기',
   youPlayWithFriends: "친구와 시간을 보내세요; \n계산과 관련된 확인작업은 우리가 할게요...,",
   start: '시작하기'
-}
+},
 
-export const debtManagement = {
+  debtManagement: {
   shell: '새로운 거래',
   add: '부채 추가',
   selectFriend: '선택',
@@ -267,31 +270,31 @@ export const debtManagement = {
   settleUp: '    청산    ',
   settleTotal: '전액 청산',
   settleUpMemo: (direction, amount) => direction === 'lend' ? `청산 ${amount}` : `청산 요청 ${amount} `
-}
+},
 
-export const settlementManagement = {
+  settlementManagement: {
   bilateral: {
     error: {
       insufficient: nickname => `당신이 ${nickname} 에게 시도한 청산은 자금 부족으로 실패하였습니다`,
       generic: nickname => `${nickname} 에게 청산하는 과정에서 에러가 발생했습니다`
     }
   }
-}
+},
 
-export const accountViewLanguage = {
+  accountViewLanguage: {
   lndr: 'L n d r',
   home: '홈',
   friends: '친구',
   activity: '액티비티'
-}
+},
 
-export const notifications = {
+  notifications: {
   toggleNotifications: '알림 표시 전환',
   enable: 'TURN ON',
   disable: 'TURN OFF'
-}
+},
 
-export const pendingTransactionsLanguage = {
+  pendingTransactionsLanguage: {
   shell: '새로운 거래',
   title: '미결',
   memo: '메모:',
@@ -306,18 +309,18 @@ export const pendingTransactionsLanguage = {
     lend: (nickname, amount) => `@${nickname} 은 ${amount} 을 당신에게 빚을 갚아야합니다`,
     borrow: (nickname, amount) => `당신은 @${nickname} 에게 ${amount} 빚을 갚아야합니다`
   }
-}
+},
 
-export const pendingSettlementsLanguage = {
+  pendingSettlementsLanguage: {
   shell: '상환 계류중',
   title: '미결',
   none: '계류중인 청산 내역이 없습니다',
   confirm: 'CONFIRM',
   reject: '청산 거부',
   cancel: '청산 취소',
-}
+},
 
-export const recentTransactionsLanguage = {
+  recentTransactionsLanguage: {
   title: '완료',
   none: '완료된 트랜잭션 내역이 없습니다',
   direction: {
@@ -326,15 +329,15 @@ export const recentTransactionsLanguage = {
   },
   balance: '잔액 ',
   friends: (friends) => `(from ${friends} 친구)`
-}
+},
 
-export const tabs = {
+  tabs: {
   home: '    홈    ',
   friends: '   친구   ',
   activity: '액티비티'
-}
+},
 
-export const confirmation = {
+  confirmation: {
   shell: '인증',
   done: '완료',
   create: {
@@ -360,15 +363,4 @@ export const confirmation = {
   status: '거래 내역을 볼 수 있는 곳은 ',
   activity: '액티비티 탭.'
 }
-
-export const currencies = {
-  USD: '$',
-  JPY: '¥',
-  KRW: '₩'
-}
-
-export const transferLimits = {
-  USD: '200',
-  JPY: '20000',
-  KRW: '200000'
 }

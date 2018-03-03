@@ -11,7 +11,8 @@ import CreateAccountForm from 'ui/forms/create-account'
 import { CreateAccountData } from 'lndr/user'
 import { emailFormatIncorrect, nickLengthIncorrect } from 'lndr/format'
 
-import { accountManagement } from 'language'
+import language from 'language'
+const { accountManagement } = language
 
 interface Props {
   setAuthLoading: (state: boolean) => any

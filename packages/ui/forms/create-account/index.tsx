@@ -12,7 +12,8 @@ import Pinpad from 'ui/components/pinpad'
 
 import InputImage from 'ui/components/images/input-image'
 
-import {
+import language from 'language'
+const {
   newAccount,
   nickname,
   email,
@@ -21,7 +22,7 @@ import {
   confirmPin,
   createAccount,
   recoverAccount
-} from 'language'
+} = language
 
 import style from 'theme/form'
 import general from 'theme/general'
