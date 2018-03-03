@@ -28,7 +28,7 @@ import {
   transferLimits
 } from 'language'
 
-import { getUser, recentTransactions, getEthBalance, getEthExchange, getWeeklyEthTotal } from 'reducers/app'
+import { getUser, recentTransactions, getEthBalance, getEthExchange, getWeeklyEthTotal, getUcacAddr } from 'reducers/app'
 import { settleUp, getEthTxCost } from 'actions'
 import { connect } from 'react-redux'
 import { addNavigationHelpers } from 'react-navigation';
@@ -50,6 +50,7 @@ interface Props {
   ethSentPastWeek: number
   recentTransactions: any
   navigation: any
+  getUcacAddress: (currency: string) => string
 }
 
 interface State {
@@ -114,14 +115,16 @@ class SettleUp extends Component<Props, State> {
   getRecentTotal() {
     const friend = this.props.navigation ? this.props.navigation.state.params.friend : {}
 
-    const { recentTransactions } = this.props
+    const { recentTransactions, getUcacAddress } = this.props
     let total = 0
 
     recentTransactions.map( transaction => {
-      if(transaction.creditorAddress === friend.address) {
-        total -= transaction.amount
-      } else if(transaction.debtorAddress === friend.address) {
-        total += transaction.amount
+      if(getUcacAddress(defaultCurrency).indexOf(transaction.ucac) !== -1) {
+        if(transaction.creditorAddress === friend.address) {
+          total -= transaction.amount
+        } else if(transaction.debtorAddress === friend.address) {
+          total += transaction.amount
+        }
       }
     })
 
@@ -163,7 +166,7 @@ class SettleUp extends Component<Props, State> {
 
   render() {
     const { amount, balance, txCost, currency, formInputError } = this.state
-    const { recentTransactions, ethBalance, ethExchange, ethSentPastWeek } = this.props
+    const { recentTransactions, ethBalance, ethExchange, ethSentPastWeek, getUcacAddress } = this.props
     const friend = this.props.navigation ? this.props.navigation.state.params.friend : {}
 
     return <ScrollView style={general.whiteFlex} keyboardShouldPersistTaps='handled'>
@@ -177,7 +180,7 @@ class SettleUp extends Component<Props, State> {
           <View style={style.transactions}>
             {
               recentTransactions.map( (transaction, index) => {
-                return transaction.creditorAddress === friend.address || transaction.debtorAddress === friend.address ?
+                return getUcacAddress(defaultCurrency).indexOf(transaction.ucac) !== -1 && (transaction.creditorAddress === friend.address || transaction.debtorAddress === friend.address) ?
                   <View style={style.recent} key={friend.address + index}>
                     <Text style={style.recentText}>{transaction.memo}</Text>
                     <Text style={style.recentText}>{ (transaction.creditorAddress === friend.address ? '-' : '+') + `${currencies[defaultCurrency]}${currencyFormats[defaultCurrency](transaction.amount)}`}</Text>
@@ -201,7 +204,7 @@ class SettleUp extends Component<Props, State> {
               <Text style={formStyle.titleLarge}>{debtManagement.fields.settlementAmount}</Text>
               <TextInput
                 style={formStyle.jumboInput}
-                placeholder={'$0'}
+                placeholder={`${currencies[currency]}0`}
                 placeholderTextColor='black'
                 value={amount}
                 maxLength={14}
@@ -220,4 +223,4 @@ class SettleUp extends Component<Props, State> {
 }
 
 export default connect((state) => ({ user: getUser(state)(), ethBalance: getEthBalance(state), ethExchange: getEthExchange(state), 
-  recentTransactions: recentTransactions(state), ethSentPastWeek: getWeeklyEthTotal(state) }), { settleUp })(SettleUp)
+  recentTransactions: recentTransactions(state), ethSentPastWeek: getWeeklyEthTotal(state), getUcacAddress: getUcacAddr(state) }), { settleUp })(SettleUp)

@@ -23,7 +23,6 @@ export default {
     if (tempStorage.pics[addr] !== undefined) {
       return tempStorage.pics[addr]
     }
-    
     return RNFetchBlob
     .config({
       fileCache : true 

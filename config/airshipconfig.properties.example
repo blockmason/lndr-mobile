@@ -14,3 +14,5 @@ productionLogLevel = ERROR
 
 # FCM/GCM Sender ID
 gcmSender = <%= gcmSenderID %>
+
+notificationIcon = ic_notification

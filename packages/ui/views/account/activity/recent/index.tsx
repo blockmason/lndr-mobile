@@ -12,13 +12,14 @@ import { UserData } from 'lndr/user'
 import RecentTransactionDetail from 'ui/dialogs/recent-transaction-detail'
 import RecentTransactionRow from 'ui/components/recent-transaction-row'
 import Friend from 'lndr/friend'
+import defaultCurrency from 'lndr/default-currency'
 
 import style from 'theme/account'
 import general from 'theme/general'
 
 import { recentTransactionsLanguage } from 'language'
 
-import { getStore, getUser } from 'reducers/app'
+import { getStore, getUser, getUcacAddr } from 'reducers/app'
 import { isFocusingOn } from 'reducers/nav'
 import { getRecentTransactions } from 'actions'
 import { connect } from 'react-redux'
@@ -31,6 +32,7 @@ interface Props {
   user: UserData
   state: any
   friend?: any
+  getUcacAddress: (currency: string) => string
   navigation: any
 }
 
@@ -80,7 +82,7 @@ class RecentTransactionsView extends Component<Props, State> {
 
   render() {
     const { recentTransactionsLoaded, recentTransactions } = this.props.state
-    const { user, friend } = this.props
+    const { user, friend, getUcacAddress } = this.props
 
     return <View>
       { this.renderRecentTransactionDetailDialog() }
@@ -90,6 +92,9 @@ class RecentTransactionsView extends Component<Props, State> {
         {recentTransactionsLoaded && recentTransactions.length === 0 ? <Text style={style.emptyState}>{recentTransactionsLanguage.none}</Text> : null}
         {recentTransactions.map(
           (recentTransaction, index) => {
+            if(getUcacAddress(defaultCurrency).indexOf(recentTransaction.ucac) === -1 ) {
+              return null
+            }
             if(friend && friend.address !== recentTransaction.creditorAddress && friend.address !== recentTransaction.debtorAddress) {
                 return null
             }
@@ -106,4 +111,5 @@ class RecentTransactionsView extends Component<Props, State> {
   }
 }
 
-export default connect((state) => ({ state: getStore(state)(), user: getUser(state)(), isFocused: isFocusingOn(state)('Activity') }), { getRecentTransactions })(RecentTransactionsView)
+export default connect((state) => ({ state: getStore(state)(), user: getUser(state)(), isFocused: isFocusingOn(state)('Activity'), getUcacAddress: getUcacAddr(state) }), 
+ { getRecentTransactions })(RecentTransactionsView)

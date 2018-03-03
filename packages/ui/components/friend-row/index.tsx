@@ -14,6 +14,9 @@ import defaultCurrency from 'lndr/default-currency'
 import style from 'theme/account'
 import general from 'theme/general'
 
+import { getUcacAddr } from 'reducers/app'
+import { connect } from 'react-redux'
+
 import { debtManagement, currencies } from 'language'
 
 interface Props {
@@ -23,13 +26,14 @@ interface Props {
   recentTransactions?: any
   pendingTransactions?: any
   navigation: any
+  getUcacAddress: (currency: string) => string
 }
 
 interface State {
   pic?: string
 }
 
-export default class FriendRow extends Component<Props, State> {
+class FriendRow extends Component<Props, State> {
   constructor() {
     super()
     this.state = {}
@@ -48,15 +52,17 @@ export default class FriendRow extends Component<Props, State> {
   }
 
   getRecentTotal() {
-    const { friend, recentTransactions } = this.props
+    const { friend, recentTransactions, getUcacAddress } = this.props
     let total = 0
 
     if(recentTransactions !== undefined) {
       recentTransactions.map( transaction => {
-        if(transaction.creditorAddress === friend.address) {
-          total -= transaction.amount
-        } else if(transaction.debtorAddress === friend.address) {
-          total += transaction.amount
+        if(getUcacAddress(defaultCurrency).indexOf(transaction.ucac) !== -1) {
+          if(transaction.creditorAddress === friend.address) {
+            total -= transaction.amount
+          } else if(transaction.debtorAddress === friend.address) {
+            total += transaction.amount
+          }
         }
       })
     }
@@ -64,16 +70,18 @@ export default class FriendRow extends Component<Props, State> {
   }
   
   getAmountTotal() {
-    const { friend, pendingTransactions } = this.props
+    const { friend, pendingTransactions, getUcacAddress } = this.props
     let total = this.getRecentTotal()
     let sign = ''
 
     if(pendingTransactions !== undefined) {
       pendingTransactions.map( transaction => {
-        if(transaction.creditorAddress === friend.address) {
-          total -= transaction.amount
-        } else if(transaction.debtorAddress === friend.address) {
-          total += transaction.amount
+        if(getUcacAddress(defaultCurrency).indexOf(transaction.ucac) !== -1) {
+          if(transaction.creditorAddress === friend.address) {
+            total -= transaction.amount
+          } else if(transaction.debtorAddress === friend.address) {
+            total += transaction.amount
+          }
         }
       })
     }
@@ -141,3 +149,5 @@ export default class FriendRow extends Component<Props, State> {
     )
   }
 }
+
+export default connect((state) => ({ getUcacAddress: getUcacAddr(state) }))(FriendRow)
