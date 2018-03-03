@@ -183,7 +183,7 @@ class AddDebt extends Component<Props, State> {
             <Text style={formStyle.title}>{debtManagement.fields.amount}</Text>
             <TextInput
               style={[formStyle.jumboInput, {marginTop: 5}]}
-              placeholder={'$0'}
+              placeholder={`${currencies[currency]}0`}
               placeholderTextColor='black'
               value={amount}
               maxLength={14}

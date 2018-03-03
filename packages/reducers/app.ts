@@ -53,8 +53,9 @@ export const getNeedsReviewCount = (state) => {
   return result
 }
 
-export const getUcacAddr = (state, currency: string) => {
-  return state.store.ucacAddresses[currency]
+export const getUcacAddr = (state) => (currency: string) => {
+  const { ucacAddresses } = getStore(state)()
+  return ucacAddresses[currency]
 }
 
 export const getUcacCurrency = (state) => (ucac: string) => {

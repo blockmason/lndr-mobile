@@ -10,6 +10,7 @@ import Popup, { closePopup } from 'ui/components/popup'
 import Loading, { LoadingContext } from 'ui/components/loading'
 import { UserData } from 'lndr/user'
 import Friend from 'lndr/friend'
+import defaultCurrency from 'lndr/default-currency'
 
 import PendingTransactionDetail from 'ui/dialogs/pending-transaction-detail'
 import PendingTransactionRow from 'ui/components/pending-transaction-row'
@@ -20,7 +21,7 @@ import general from 'theme/general'
 
 import { pendingTransactionsLanguage } from 'language'
 
-import { getStore, getUser, submitterIsMe, settlerIsMe, pendingSettlements, bilateralSettlements } from 'reducers/app'
+import { getStore, getUser, submitterIsMe, settlerIsMe, pendingSettlements, bilateralSettlements, getUcacAddr } from 'reducers/app'
 import { isFocusingOn } from 'reducers/nav'
 import { getPendingTransactions, getPendingSettlements } from 'actions'
 import { connect } from 'react-redux'
@@ -41,6 +42,7 @@ interface Props {
   navigation: any
   friend?: any
   homeScreen?: boolean
+  getUcacAddress: (currency: string) => string
 }
 
 interface State {
@@ -108,7 +110,7 @@ class PendingTransactionsView extends Component<Props, State> {
   render() {
     const { pendingTransactionsLoaded, pendingTransactions, bilateralSettlements } = this.props.state
     const { pendingSettlements, settlerIsMe } = this.props
-    const { user, friend, homeScreen, navigation } = this.props
+    const { user, friend, homeScreen, navigation, getUcacAddress } = this.props
 
     return <View>
       <Section contentContainerStyle={style.list}>
@@ -116,6 +118,9 @@ class PendingTransactionsView extends Component<Props, State> {
         {this.showNoneMessage()}
         {
           pendingTransactions.map(pendingTransaction => {
+            if(getUcacAddress(defaultCurrency).indexOf(pendingTransaction.ucac) === -1 ) {
+              return null
+            }
             if (friend && friend.address !== pendingTransaction.creditorAddress && friend.address !== pendingTransaction.debtorAddress) {
                 return null
             }
@@ -133,6 +138,9 @@ class PendingTransactionsView extends Component<Props, State> {
         )}
         {
           pendingSettlements.map( pendingSettlement => {
+            if(getUcacAddress(defaultCurrency).indexOf(pendingSettlement.ucac) === -1 ) {
+              return null
+            }
             if (homeScreen && this.props.settlerIsMe(pendingSettlement)) {
               return null
             }
@@ -147,6 +155,9 @@ class PendingTransactionsView extends Component<Props, State> {
           })}
           { homeScreen ? null :
           bilateralSettlements.map( bilateralSettlement => {
+            if(getUcacAddress(defaultCurrency).indexOf(bilateralSettlement.ucac) === -1 ) {
+              return null
+            }
             if (homeScreen && this.props.settlerIsMe(bilateralSettlement)) {
               return null
             }
@@ -164,4 +175,4 @@ class PendingTransactionsView extends Component<Props, State> {
   }
 }
 
-export default connect((state) => ({ state: getStore(state)(), user: getUser(state)(), isFocused: isFocusingOn(state)('Activity'), pendingSettlements: pendingSettlements(state), bilateralSettlements: bilateralSettlements(state), submitterIsMe: submitterIsMe(state), settlerIsMe: settlerIsMe(state) }), { getPendingTransactions, getPendingSettlements })(PendingTransactionsView)
+export default connect((state) => ({ state: getStore(state)(), user: getUser(state)(), isFocused: isFocusingOn(state)('Activity'), pendingSettlements: pendingSettlements(state), bilateralSettlements: bilateralSettlements(state), submitterIsMe: submitterIsMe(state), settlerIsMe: settlerIsMe(state), getUcacAddress: getUcacAddr(state) }), { getPendingTransactions, getPendingSettlements })(PendingTransactionsView)

@@ -166,7 +166,7 @@ export const updatePin = (password: string, confirmPassword: string) =>  {
 export const registerChannelID = (channelID: string, platform: string) => {
   return async (_dispatch, getState) => {
     const { address, privateKeyBuffer } = getUser(getState())()
-    // creditProtocol.registerChannelID(address, channelID, platform, privateKeyBuffer)
+    creditProtocol.registerChannelID(address, channelID, platform, privateKeyBuffer)
   }
 }
 
@@ -599,7 +599,7 @@ export const addDebt = (friend: Friend, amount: string, memo: string, direction:
   return async (dispatch, getState) => {
     const { address, privateKeyBuffer } = getUser(getState())()
 
-    const sanitizedAmount = sanitizeAmount(amount)
+    const sanitizedAmount = sanitizeAmount(amount, currency)
 
     if (sanitizedAmount <= 0) {
       return dispatch(displayError(debtManagement.createError.amountTooLow))
@@ -622,7 +622,7 @@ export const addDebt = (friend: Friend, amount: string, memo: string, direction:
       borrow: [ friend.address, address ]
     }[direction]
 
-    const ucac = getUcacAddr(getState(), currency)
+    const ucac = getUcacAddr(getState())(currency)
     try {
       const creditRecord = await creditProtocol.createCreditRecord(
         ucac,
@@ -651,7 +651,7 @@ export const settleUp = (friend: Friend, amount: string, memo: string, direction
   return async (dispatch, getState) => {
     const { address, privateKeyBuffer } = getUser(getState())()
 
-    const sanitizedAmount = sanitizeAmount(amount)
+    const sanitizedAmount = sanitizeAmount(amount, currency)
 
     if (sanitizedAmount <= 0) {
       return dispatch(displayError(debtManagement.createError.amountTooLow))
@@ -681,7 +681,7 @@ export const settleUp = (friend: Friend, amount: string, memo: string, direction
       borrow: [ friend.address, address ]
     }[direction]
 
-    const ucac = await getUcacAddr(getState(), currency)
+    const ucac = await getUcacAddr(getState())(currency)
     
     try {
       const creditRecord = await creditProtocol.createCreditRecord(
@@ -758,8 +758,10 @@ export const recoverAccount = (recoverData: RecoverAccountData) => {
     try {
       const payload = await confirmAccount(true, false, confirmPassword, mnemonic.toLowerCase())
       dispatch(setState(payload))
+      return true
     } catch (e) {
       dispatch(displayError(accountManagement.mnemonic.unableToValidate))
+      return false
     }
   }
 }
@@ -962,15 +964,21 @@ const refreshTransactions = () => {
   getPendingSettlements()
 }
 
-const sanitizeAmount = amount => {
-  return parseInt(
-    amount
-    .replace(/[^.\d]/g, '')
-    .replace(/^\d+\.?$/, x => `${x}00`)
-    .replace(/\.\d$/, x => `${x.substr(1)}0`)
-    .replace(/\.\d\d$/, x => `${x.substr(1)}`)
-    .replace(/\./, () => '')
-  )
+const sanitizeAmount = (amount, currency) => {
+  if(currency === 'USD') {
+    return parseInt(
+      amount
+      .replace(/[^.\d]/g, '')
+      .replace(/^\d+\.?$/, x => `${x}00`)
+      .replace(/\.\d$/, x => `${x.substr(1)}0`)
+      .replace(/\.\d\d$/, x => `${x.substr(1)}`)
+      .replace(/\./, () => '')
+    )
+  } else {
+    return parseInt(
+      amount.replace(/[^.\d]/g, '')
+    )
+  }
 }
 
 const settleBilateral = async (user, bilateralSettlements, dispatch, getState) => {
