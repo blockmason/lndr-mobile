@@ -2,7 +2,8 @@ import React from 'react'
 
 import { View, Image, Text, Dimensions } from 'react-native'
 
-import { applicationName } from 'language'
+import language from 'language'
+const { applicationName } = language
 
 import style from 'theme/image'
 

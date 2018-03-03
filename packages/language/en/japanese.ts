@@ -1,79 +1,82 @@
 const generalCommunicationError = 'サーバーとの通信中にエラーが起きました。しばらくしてからお試しください。'
 
-export const applicationName = 'Lndr'
-export const helloWorld = 'Hello world'
+import { currencies, transferLimits } from 'language'
 
-export const submit = '提出'
-export const next = '次'
-export const cancel = '取り消し'
-export const back = '戻る'
-export const copy = 'クリップボードへコピー'
+export default {
+  applicationName: 'Lndr',
+  helloWorld: 'Hello world',
 
-export const confirmAccount = '確認'
-export const createAccount = 'アカウントを作成する'
-export const recoverAccount = 'アカウントを復元する'
-export const removeAccount = 'アカウントを削除する'
-export const updateAccount = 'アカウントを更新する'
-export const loginAction = 'アンロック'
-export const enterPin = '暗証番号を入力してください'
-export const changePin = '暗証番号を変える'
-export const enterCurrentPin = '暗証番号を入力してください'
-export const logoutAction = 'ログアウト'
-export const seeAllActivity = '全アクティビティを閲覧'
-export const copiedClipboard = 'クリップボードへコピーしました'
+  submit: '提出',
+  next: '次',
+  cancel: '取り消し',
+  back: '戻る',
+  copy: 'クリップボードへコピー',
 
-export const addFriend = 'フレンドを追加'
-export const addFriendConfirmationQuestion = '本当にこのユーザーをフレンドに追加しますか？'
-export const removeFriend = 'フレンドを外す'
-export const currentFriends = '現在のフレンド'
-export const removeFriendConfirmationQuestion = '本当にこのユーザーをフレンドから解除しますか？'
-export const friendInfo = 'この関係についての追加情報:'
-export const noFriends = 'フレンドを追加して始めよう!'
-export const noMatches = 'ユーザーが見つかりません'
-export const noBalances = '借りがありません'
-export const addFriendButton = '+ フレンドを追加'
-export const alreadyFriendsButton = 'フレンド'
-export const friendShell = '友達'
+  confirmAccount: '確認',
+  createAccount: 'アカウントを作成する',
+  recoverAccount: 'アカウントを復元する',
+  removeAccount: 'アカウントを削除する',
+  updateAccount: 'アカウントを更新する',
+  loginAction: 'アンロック',
+  enterPin: '暗証番号を入力してください',
+  changePin: '暗証番号を変える',
+  enterCurrentPin: '暗証番号を入力してください',
+  logoutAction: 'ログアウト',
+  seeAllActivity: '全アクティビティを閲覧',
+  copiedClipboard: 'クリップボードへコピーしました',
 
-export const tip = 'チップ: '
-export const notice = '通知: '
-export const welcome = 'あなたのLNDRへようこそ'
-export const noBalanceWarning = 'あなたの残高をロードすることに失敗しました。しばらくしてからお試しください。'
-export const totalBalance = '残高合計: '
-export const totalBalances = '相手方合計: '
-export const newTransaction = '新しいやりとり'
-export const needsReview = '審査が必要です'
-export const owesMe = '私に貸しがあります'
-export const iOwe = '私は借りがています'
+  addFriend: 'フレンドを追加',
+  addFriendConfirmationQuestion: '本当にこのユーザーをフレンドに追加しますか？',
+  removeFriend: 'フレンドを外す',
+  currentFriends: '現在のフレンド',
+  removeFriendConfirmationQuestion: '本当にこのユーザーをフレンドから解除しますか？',
+  friendInfo: 'この関係についての追加情報:',
+  noFriends: 'フレンドを追加して始めよう!',
+  noMatches: 'ユーザーが見つかりません',
+  noBalances: '借りがありません',
+  addFriendButton: '+ フレンドを追加',
+  alreadyFriendsButton: 'フレンド',
+  friendShell: '友達',
 
-export const newPassword = '新しいパスワード　(最低8文字)'
-export const confirmPassword = 'パスワードの確認'
-export const newPin = '4桁の暗証番号'
-export const enterNewPin = '新しい暗証番号を設定してください'
-export const confirmPin = 'あなたが入力した暗証番号はこちら'
-export const newAccount = '新しいアカウントを作成する'
-export const loginAccount = 'アカウントをアンロックする'
+  tip: 'チップ: ',
+  notice: '通知: ',
+  welcome: 'あなたのLNDRへようこそ',
+  noBalanceWarning: 'あなたの残高をロードすることに失敗しました。しばらくしてからお試しください。',
+  totalBalance: '残高合計: ',
+  totalBalances: '相手方合計: ',
+  newTransaction: '新しいやりとり',
+  needsReview: '審査が必要です',
+  owesMe: '私に貸しがあります',
+  iOwe: '私は借りがています',
 
-export const recoverExistingAccount = '既存のアカウントを復旧する'
-export const recoverMnemonic = 'ニューモニック　\n(アカウントを作成した際に12個の単語が表示されます)'
+  newPassword: '新しいパスワード　(最低8文字)',
+  confirmPassword: 'パスワードの確認',
+  newPin: '4桁の暗証番号',
+  enterNewPin: '新しい暗証番号を設定してください',
+  confirmPin: 'あなたが入力した暗証番号はこちら',
+  newAccount: '新しいアカウントを作成する',
+  loginAccount: 'アカウントをアンロックする',
 
-export const successTitle = '成功'
-export const errorTitle = 'エラー'
+  recoverExistingAccount: '既存のアカウントを復旧する',
+  recoverMnemonic: 'ニューモニック　\n(アカウントを作成した際に12個の単語が表示されます)',
 
-export const showMnemonic = '12個のニューモニックを表示する'
-export const mnemonicExhortation = 'この12個の単語は、アカウントの復活に必要です。安全な秘密の場所に保存してください'
-export const addressExhortation = 'イーサリアムをあなたのアドレスに送信し、Lndrで債務を果たしましょう'
-export const removeAccountTitle = '本当にこのデバイスからあなたのアカウントを削除しますか？'
-export const removeAccountExhortation = 'このデバイスからアカウント情報を永久に削除するため、後でアカウントを復元する際にニーモニックにアクセスできることを確認してください。'
+  successTitle: '成功',
+  errorTitle: 'エラー',
 
-export const myAccount = '自分のアカウント'
+  showMnemonic: '12個のニューモニックを表示する',
+  mnemonicExhortation: 'この12個の単語は、アカウントの復活に必要です。安全な秘密の場所に保存してください',
+  addressExhortation: 'イーサリアムをあなたのアドレスに送信し、Lndrで債務を果たしましょう',
+  removeAccountTitle: '本当にこのデバイスからあなたのアカウントを削除しますか？',
+  removeAccountExhortation: 'このデバイスからアカウント情報を永久に削除するため、後でアカウントを復元する際にニーモニックにアクセスできることを確認してください。',
 
-export const setNickname = 'フレンドに検索されるようにニックネームを設定しよう'
-export const setEmail = 'メールアドレスを入力して下さい'
-export const nickname = 'ニックネーム (小文字と半角数字)'
-export const email = 'メールアドレス'
+  myAccount: '自分のアカウント',
 
-export const accountManagement = {
+  setNickname: 'フレンドに検索されるようにニックネームを設定しよう',
+  setEmail: 'メールアドレスを入力して下さい',
+  nickname: 'ニックネーム (小文字と半角数字)',
+  email: 'メールアドレス',
+
+  accountManagement: {
   nickname: {
     lengthViolation: 'ニックネームは最低3文字です.',
     compositionViolation: 'ニックネームは小文字と半角数字のみ有効です.',
@@ -178,14 +181,14 @@ export const accountManagement = {
     getError: 'プロフィール画像をretrieveできませんでした',
     setSuccess: 'プロフィール画像がアップロードされました'
   }
-}
+},
 
-export const currentBalance = {
+  currentBalance: {
   eth: '現在のETH残高は:',
   bcpt: '現在のBCPT残高は:'
-}
+},
 
-export const welcomeView = {
+  welcomeView: {
   by: '開発元',
   makeItEasy: 'Lndrは単純な貸し借りを簡単に管理します',
   weHelpFriends: 'フレンドの生活、仕事、娯楽をサポートします.',
@@ -200,9 +203,9 @@ export const welcomeView = {
   greatConcert: 'コンサートを見る',
   youPlayWithFriends: "フレンドと遊びます。\nタブを保存します。",
   start: '始める'
-}
+},
 
-export const debtManagement = {
+  debtManagement: {
   shell: '新しいやりとり',
   add: '借りを追加する',
   selectFriend: '選択',
@@ -265,31 +268,31 @@ export const debtManagement = {
   settleUp: '帳消しにする',
   settleTotal: '承認する',
   settleUpMemo: (direction, amount) => direction === 'lend' ? `${amount} を設定` : `${amount} の帳消しをリクエスト`
-}
+},
 
-export const settlementManagement = {
+  settlementManagement: {
   bilateral: {
     error: {
       insufficient: nickname => `残高が少なかったため、${nickname} への支払いが失敗しまいた`,
       generic: nickname => `${nickname} への支払い中に、エラーが発生しました`
     }
   }
-}
+},
 
-export const accountViewLanguage = {
+  accountViewLanguage: {
   lndr: 'L n d r',
   home: 'ホーム',
   friends: '友達',
   activity: 'アクティビティ'
-}
+},
 
-export const notifications = {
+  notifications: {
   toggleNotifications: '通知を切り替える',
   enable: 'オンにする',
   disable: 'オフにする'
-}
+},
 
-export const pendingTransactionsLanguage = {
+  pendingTransactionsLanguage: {
   shell: '保留になっているやりとり',
   title: '承認待ち',
   memo: 'Memo:',
@@ -304,18 +307,18 @@ export const pendingTransactionsLanguage = {
     lend: (nickname, amount) => `${nickname}  は、あなたに${amount}の貸しがあります`,
     borrow: (nickname, amount) => `あなたは${nickname} に${amount}の貸しがあります`
   }
-}
+},
 
-export const pendingSettlementsLanguage = {
+  pendingSettlementsLanguage: {
   shell: 'まだ帳消しされていません',
   title: '承認待ち',
   none: '承認待ちの取引はありません',
   confirm: '承認',
   reject: '清算を拒否する',
   cancel: '清算をキャンセルする',
-}
+},
 
-export const recentTransactionsLanguage = {
+  recentTransactionsLanguage: {
   title: '完了',
   none: '完了している取引がありません',
   direction: {
@@ -324,15 +327,15 @@ export const recentTransactionsLanguage = {
   },
   balance: '残高 ',
   friends: (friends) => `(${friends}からフレンドへ)`
-}
+},
 
-export const tabs = {
+  tabs: {
   home: 'ホーム',
   friends: ' 友達 ',
   activity: 'アクティビティ'
-}
+},
 
-export const confirmation = {
+  confirmation: {
   shell: '承認',
   done: '完了',
   create: {
@@ -358,15 +361,4 @@ export const confirmation = {
   status: '取引のステータスを確認するにはここ ',
   activity: 'アクティビティタブ.'
 }
-
-export const currencies = {
-  USD: '$',
-  JPY: '¥',
-  KRW: '₩'
-}
-
-export const transferLimits = {
-  USD: '200',
-  JPY: '20000',
-  KRW: '200000'
 }

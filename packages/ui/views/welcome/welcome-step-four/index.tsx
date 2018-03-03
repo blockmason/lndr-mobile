@@ -6,7 +6,8 @@ import style from 'theme/slide'
 
 import { largeImage } from 'theme/include/dimensions'
 
-import { welcomeView } from 'language'
+import language from 'language'
+const { welcomeView } = language
 
 import TextLogo from 'ui/components/images/text-logo'
 import ThemeImage from 'ui/components/images/theme-image'

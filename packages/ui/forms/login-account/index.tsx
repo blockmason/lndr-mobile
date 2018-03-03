@@ -9,13 +9,14 @@ import Loading, { LoadingContext } from 'ui/components/loading'
 
 import { LoginAccountData, defaultLoginAccountData } from 'lndr/user'
 
-import {
+import language from 'language'
+const {
   loginAccount,
   loginAction,
   removeAccount,
   confirmPassword,
   enterPin
-} from 'language'
+} = language
 
 import style from 'theme/form'
 import general from 'theme/general'

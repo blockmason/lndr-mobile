@@ -17,10 +17,11 @@ import formStyle from 'theme/form'
 import { getUser } from 'reducers/app'
 import { connect } from 'react-redux'
 
-import {
+import language from 'language'
+const {
   back,
   recentTransactionsLanguage
-} from 'language'
+} = language
 
 const loadingContext = new LoadingContext()
 

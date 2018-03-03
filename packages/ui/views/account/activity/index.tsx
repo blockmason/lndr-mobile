@@ -6,7 +6,8 @@ import RecentView from 'ui/views/account/activity/recent'
 
 import { UserData } from 'lndr/user'
 
-import { recentTransactionsLanguage, pendingTransactionsLanguage } from 'language'
+import language from 'language'
+const { recentTransactionsLanguage, pendingTransactionsLanguage } = language
 
 import general from 'theme/general'
 import style from 'theme/account'

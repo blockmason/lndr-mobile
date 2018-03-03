@@ -30,7 +30,8 @@ import formStyle from 'theme/form'
 import general from 'theme/general'
 import { underlayColor } from 'theme/general'
 
-import {
+import language, { currencies } from 'language'
+const {
   tip,
   notice,
   totalBalance,
@@ -46,9 +47,8 @@ import {
   recentTransactionsLanguage,
   pendingTransactionsLanguage,
   seeAllActivity,
-  currencies,
   debtManagement
-} from 'language'
+} = language
 
 const { width } = Dimensions.get('window')
 

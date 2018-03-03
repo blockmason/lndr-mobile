@@ -22,20 +22,20 @@ import general from 'theme/general'
 import pendingStyle from 'theme/pending'
 import accountStyle from 'theme/account'
 
-import {
+import language, { currencies } from 'language'
+const {
   cancel,
   back,
-  removeFriend as removeFriendText,
   friendInfo,
   friendShell,
   noBalances,
   debtManagement,
   pendingTransactionsLanguage,
-  recentTransactionsLanguage,
-  currencies
-} from 'language'
+  recentTransactionsLanguage
+} = language
+const removeFriendText = language.removeFriend
 
-import { getUser, pendingTransactions, recentTransactions } from 'reducers/app'
+import { getUser, pendingTransactions, recentTransactions, getUcacAddr } from 'reducers/app'
 import { getTwoPartyBalance, removeFriend } from 'actions'
 import { connect } from 'react-redux'
 
@@ -44,6 +44,7 @@ const loadingContext = new LoadingContext()
 interface Props {
   user: UserData
   removeFriend: (friend: Friend) => any
+  getUcacAddress: (currency: string) => string
   recentTransactions: any
   pendingTransactions: any
   navigation: any
@@ -92,15 +93,17 @@ class RemoveFriend extends Component<Props, State> {
   }
 
   getRecentTotal() {
-    const { recentTransactions } = this.props
+    const { recentTransactions, getUcacAddress } = this.props
     const friend = this.props.navigation ? this.props.navigation.state.params.friend : {}
     let total = 0
 
     recentTransactions.map( transaction => {
-      if(transaction.creditorAddress === friend.address) {
-        total -= transaction.amount
-      } else if(transaction.debtorAddress === friend.address) {
-        total += transaction.amount
+      if(getUcacAddress(defaultCurrency).indexOf(transaction.ucac) !== -1 ) {
+        if(transaction.creditorAddress === friend.address) {
+          total -= transaction.amount
+        } else if(transaction.debtorAddress === friend.address) {
+          total += transaction.amount
+        }
       }
     })
 
@@ -155,4 +158,4 @@ class RemoveFriend extends Component<Props, State> {
   }
 }
 
-export default connect((state) => ({ user: getUser(state)(), pendingTransactions: pendingTransactions(state), recentTransactions: recentTransactions(state) }),{ removeFriend })(RemoveFriend)
+export default connect((state) => ({ user: getUser(state)(), pendingTransactions: pendingTransactions(state), recentTransactions: recentTransactions(state), getUcacAddress: getUcacAddr(state) }),{ removeFriend })(RemoveFriend)

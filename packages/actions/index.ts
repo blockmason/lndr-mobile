@@ -24,7 +24,8 @@ import { getEtherscanTransactions } from 'lndr/etherscan'
 
 import CreditProtocol from 'credit-protocol'
 
-import { accountManagement, debtManagement, settlementManagement, copiedClipboard } from 'language'
+import language from 'language'
+const { accountManagement, debtManagement, settlementManagement, copiedClipboard } = language
 
 import { ToastActionsCreators } from 'react-native-redux-toast'
 import { getUser, getStore, getUcacAddr, getEthExchange as exchangeReducer, getWeeklyEthTotal } from 'reducers/app'

@@ -8,7 +8,8 @@ import DashboardShell from 'ui/components/dashboard-shell'
 import general from 'theme/general'
 import style from 'theme/confirmation'
 
-import { confirmation } from 'language'
+import language from 'language'
+const { confirmation } = language
 
 interface Props {
   navigation: any

@@ -18,15 +18,14 @@ import formStyle from 'theme/form'
 import general from 'theme/general'
 import accountStyle from 'theme/account'
 
-import {
+import language, { currencies, transferLimits } from 'language'
+const {
   back,
   cancel,
   pendingTransactionsLanguage,
   debtManagement,
-  accountManagement,
-  currencies,
-  transferLimits
-} from 'language'
+  accountManagement
+} = language
 
 import { getUser, recentTransactions, getEthBalance, getEthExchange, getWeeklyEthTotal, getUcacAddr } from 'reducers/app'
 import { settleUp, getEthTxCost } from 'actions'

@@ -19,7 +19,8 @@ import general from 'theme/general'
 
 import settlerIsMe from 'reducers/app'
 
-import { debtManagement, currencies } from 'language'
+import language, { currencies } from 'language'
+const { debtManagement } = language
 
 interface Props {
   onPress?: () => void

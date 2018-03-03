@@ -17,13 +17,13 @@ import style from 'theme/pending'
 import formStyle from 'theme/form'
 import general from 'theme/general'
 
-import {
+import language, { currencies } from 'language'
+const {
   back,
   cancel,
   pendingTransactionsLanguage,
-  debtManagement,
-  currencies
-} from 'language'
+  debtManagement
+} = language
 
 import { getUser, submitterIsMe } from 'reducers/app'
 import { confirmPendingTransaction, rejectPendingTransaction } from 'actions'

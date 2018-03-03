@@ -2,6 +2,7 @@ import reduceReducers from 'reduce-reducers'
 import PendingTransaction from 'lndr/pending-transaction'
 import moment from 'moment'
 import { UserData } from 'lndr/user'
+import defaultCurrency from 'lndr/default-currency'
 
 export const initialState = ({})
 
@@ -47,7 +48,8 @@ export const getPendingTransactionsCount = (state) => state.store.pendingTransac
 
 export const getNeedsReviewCount = (state) => {
   const result = (
-    state.store.pendingTransactions.filter( (transaction) => !submitterIsMe(state)(transaction) ).length + 
+    state.store.pendingTransactions.filter( (transaction) => !submitterIsMe(state)(transaction) )
+    .filter( (transaction) => transaction.ucac).length + 
     state.store.pendingSettlements.filter( (settlement) => !settlerIsMe(state)(settlement) ).length
   )
   return result

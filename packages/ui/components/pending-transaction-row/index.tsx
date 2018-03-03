@@ -16,7 +16,8 @@ import formStyle from 'theme/form'
 import style from 'theme/account'
 import general from 'theme/general'
 
-import { debtManagement, currencies } from 'language'
+import language, { currencies } from 'language'
+const { debtManagement } = language
 
 interface Props {
   onPress?: () => void

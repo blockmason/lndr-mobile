@@ -7,12 +7,13 @@ import { connect } from 'react-redux'
 
 import { removeAccount, cancelRemoveAccount } from 'actions'
 
-import {
+import language from 'language'
+const {
   cancel,
-  removeAccount as removeAccountText,
   removeAccountTitle,
   removeAccountExhortation
-} from 'language'
+} = language
+const removeAccountText = language.removeAccount
 
 import Button from 'ui/components/button'
 

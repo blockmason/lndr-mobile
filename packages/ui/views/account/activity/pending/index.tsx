@@ -19,7 +19,8 @@ import PendingSettlementRow from 'ui/components/pending-settlement-row'
 import style from 'theme/account'
 import general from 'theme/general'
 
-import { pendingTransactionsLanguage } from 'language'
+import language from 'language'
+const { pendingTransactionsLanguage } = language
 
 import { getStore, getUser, submitterIsMe, settlerIsMe, pendingSettlements, bilateralSettlements, getUcacAddr } from 'reducers/app'
 import { isFocusingOn } from 'reducers/nav'

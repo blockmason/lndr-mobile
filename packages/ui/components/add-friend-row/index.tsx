@@ -12,7 +12,8 @@ import style from 'theme/account'
 import general from 'theme/general'
 import friendStyle from 'theme/friend'
 
-import { alreadyFriendsButton, addFriendButton } from 'language'
+import language from 'language'
+const { alreadyFriendsButton, addFriendButton } = language
 
 interface Props {
   onPress: () => void
