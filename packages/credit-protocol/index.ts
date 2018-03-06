@@ -6,6 +6,7 @@ import ethUtil from 'ethereumjs-util'
 import RNFetchBlog from 'react-native-fetch-blob'
 import ImageResizer from 'react-native-image-resizer'
 import { Platform } from 'react-native'
+import moment from 'moment'
 
 import { hexToBuffer, utf8ToBuffer, bufferToHex, stringToBuffer } from './lib/buffer-utils'
 import Client from './lib/client'
@@ -207,11 +208,19 @@ export default class CreditProtocol {
   }
 
   getPendingTransactions(user: string) {
-    return this.client.get(`/pending/${user}`)
+    if ( this.tempStorage.lastPending && moment(this.tempStorage.lastPendingTime).add(1, 'second') > moment() ) {
+      return this.tempStorage.lastPending
+    }
+    this.tempStorage.lastPendingTime = new Date()
+    return this.tempStorage.lastPending = this.client.get(`/pending/${user}`)
   }
 
   getPendingSettlements(user: string) {
-    return this.client.get(`/pending_settlements/${user}`)
+    if ( this.tempStorage.lastPendingSettlements && moment(this.tempStorage.lastPendingSettlementsTime).add(1, 'second') > moment() ) {
+      return this.tempStorage.lastPendingSettlements
+    }
+    this.tempStorage.lastPendingSettlementsTime = new Date()
+    return this.tempStorage.lastPendingSettlements = this.client.get(`/pending_settlements/${user}`)
   }
 
   getNonce(address1, address2) {
