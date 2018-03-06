@@ -20,7 +20,7 @@ const { noFriends, currentFriends } = language
 
 import { isFocusingOn } from 'reducers/nav'
 import { getStore, pendingTransactions, recentTransactions } from 'reducers/app'
-import { getFriends, getRecentTransactions, getPendingTransactions, addFriend } from 'actions'
+import { getFriends, addFriend } from 'actions'
 import { connect } from 'react-redux'
 
 const loadingFriends = new LoadingContext()

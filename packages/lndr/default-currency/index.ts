@@ -1,13 +1,21 @@
 let defaultCurrency = 'USD'
 
-// import deviceInfo from 'react-native-device-info'
+import { NativeModules, Platform } from 'react-native'
 
-// const language = deviceInfo.getDeviceLocale()
+let language = ''
 
-// if(language.indexOf('ko') !== -1) {
-//   defaultCurrency = 'KRW'
-// } else if(language.indexOf('ja') !== -1) {
-//   defaultCurrency = 'JPY'
-// }
+try {
+  if (Platform.OS === 'ios') {
+    language = NativeModules.SettingsManager.settings.AppleLocale
+  } else {
+    language = NativeModules.I18nManager.localeIdentifier
+  }
+} catch (e) {}
+
+if(language.indexOf('ko') !== -1) {
+  defaultCurrency = 'KRW'
+} else if(language.indexOf('ja') !== -1) {
+  defaultCurrency = 'JPY'
+}
 
 export default defaultCurrency

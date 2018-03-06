@@ -35,4 +35,8 @@ export default class PendingBilateral {
   get memo() {
     return this.creditRecord.memo
   }
+
+  get ucac() {
+    return this.creditRecord.ucacAddress
+  }
 }

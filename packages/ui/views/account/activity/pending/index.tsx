@@ -128,7 +128,7 @@ class PendingTransactionsView extends Component<Props, State> {
             if (homeScreen && this.props.submitterIsMe(pendingTransaction)) {
               return null
             }
-            return<PendingTransactionRow
+            return <PendingTransactionRow
               user={user}
               key={pendingTransaction.hash}
               pendingTransaction={pendingTransaction}

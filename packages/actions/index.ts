@@ -40,6 +40,7 @@ const notificationsEnabledStorage = new Storage('notifications-enabled')
 const ethTransactionsStorage = new Storage('eth-transactions')
 
 const creditProtocol = new CreditProtocol('https://api.lndr.blockmason.io')
+// const creditProtocol = new CreditProtocol('http://34.238.20.130')
 
 // TODO REMOVE setState FUNCTION as the sole purpose was to transition from using
 // the custom engine design to redux storage
@@ -883,6 +884,7 @@ export const updateLockTimeout = (timeout: number) => {
     try {
       const user = getUser(getState())()
       user.lockTimeout = timeout
+      await userStorage.remove()
       await userStorage.set(user)
       dispatch(setState({ user }))
       dispatch(displaySuccess(accountManagement.lockTimeout.success))
@@ -983,6 +985,7 @@ const sanitizeAmount = (amount, currency) => {
 }
 
 const settleBilateral = async (user, bilateralSettlements, dispatch, getState) => {
+
   const gasPrice = await creditProtocol.getGasPrice()
   //Safe Low is in 10^8 Wei (deciGigaWei)
   const ethBalance = getState().store.ethBalance
@@ -1005,8 +1008,10 @@ const settleBilateral = async (user, bilateralSettlements, dispatch, getState) =
     } catch (e) {
       console.log('HAD AN ERROR', e)
       const debtorNickname = await getNicknameForAddress(settlement.debtorAddress)
-      if (typeof e === 'string' && e.indexOf('insufficient') !== -1) {
+      if (e.toString().indexOf('insufficient') !== -1) {
         dispatch(displayError(settlementManagement.bilateral.error.insufficient(debtorNickname)))
+      } else if (e.toString().indexOf('known transaction') !== -1) {
+        console.log('Duplicate')
       } else {
         dispatch(displayError(settlementManagement.bilateral.error.generic(debtorNickname)))
       }
