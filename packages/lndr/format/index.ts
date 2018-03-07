@@ -90,7 +90,7 @@ export const amountFormat = (amount: string, currency: string) => {
   }
 }
 
-export const formatNick = nick => nick.replace(/[^A-Za-z0-9]/g, '')
+export const formatNick = nick => nick.toLowerCase().replace(/[^a-z0-9]/g, '')
 
 export const formatEmail = email => email.replace(/[^A-Za-z0-9@\._\-!#$%&'*+\-\/=?^_`{|}~]/g, '')
 
@@ -108,7 +108,7 @@ export const ethAddress = addr => addr.replace(/[g-z]/gi, '').replace(/[^a-z0-9]
 
 export const ethAmount = amount => amount.replace(/[^0-9\.]/g, '')
 
-export const emailFormatIncorrect = email => !( email.length > 4 && email.indexOf('@') > 0 && email.indexOf('.') > 2 )
+export const emailFormatIncorrect = email => !( /^(([^<>()\[\]\.,;:\s@\"]+(\.[^<>()\[\]\.,;:\s@\"]+)*)|(\".+\"))@(([^<>()[\]\.,;:\s@\"]+\.)+[^<>()[\]\.,;:\s@\"]{2,})$/i.test(email) )
 
 export const nickLengthIncorrect = nick => typeof nick === 'string' && nick.length < 3
 
