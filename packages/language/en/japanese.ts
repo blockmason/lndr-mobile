@@ -198,8 +198,8 @@ export default {
   shareDinner: '夕食を割り勘する',
   fillTank: 'ガソリンを満タンにする',
   travelTogether: '一緒に旅行する',
-  runEthereum: 'イーサリアム上で操作されています！',
-  firstLendingApp: '史上初！ブロックチェーン技術を用いたレンディングモバイルアプリ.',
+  runEthereum: 'イーサリアムを活用しています！',
+  firstLendingApp: '史上初！ブロックチェーン技術を用いたレンディングモバイルアプリ',
   greatConcert: 'コンサートを見る',
   youPlayWithFriends: "フレンドと遊びます。\nタブを保存します。",
   start: '始める'
