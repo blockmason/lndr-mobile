@@ -162,7 +162,7 @@ export default {
   changeProfilePic: 'Tap to Change',
   addProfilePic: 'Use Picture from Phone',
   panelHeaders: [
-    'ETH Address',
+    'ETH (& BCPT) Address',
     'ETH Balance',
     'BCPT Balance',
     'Change PIN',

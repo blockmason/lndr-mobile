@@ -165,7 +165,7 @@ export default {
   changeProfilePic: '変更する',
   addProfilePic: '端末の写真を使う',
   panelHeaders: [
-    'ETHアドレス',
+    'ETH (& BCPT) アドレス',
     'EHT残高',
     'BCPT残高',
     '暗証番号を変える',
