@@ -71,6 +71,7 @@ export default StyleSheet.create({
   balanceRow: {
     minWidth: '80%',
     flexDirection: 'row',
+    flexWrap: 'wrap',
     justifyContent: 'center'
   },
   balanceInfo: {
@@ -244,6 +245,7 @@ export default StyleSheet.create({
   },
   balance: {
     color: black,
+    textAlign: 'center',
     ...bold,
     ...small
   },
