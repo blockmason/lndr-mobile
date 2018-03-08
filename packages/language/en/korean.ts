@@ -167,7 +167,7 @@ export default {
   changeProfilePic: '변경하려면 터치하세요',
   addProfilePic: '폰에서 사진 불러오기',
   panelHeaders: [
-    '이더리움 주소',
+    '이더리움 (& BCPT) 주소',
     '이더리움 잔액',
     'BCPT 잔액',
     '비밀번호 변경',
