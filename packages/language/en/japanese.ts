@@ -6,9 +6,9 @@ export default {
   applicationName: 'Lndr',
   helloWorld: 'Hello world',
 
-  submit: '提出',
-  next: '次',
-  cancel: '取り消し',
+  submit: '送信する',
+  next: '次へ',
+  cancel: '取り消す',
   back: '戻る',
   copy: 'クリップボードへコピー',
 
@@ -149,7 +149,7 @@ export default {
     ethAddress: 'イーサリアムアドレス',
     txCost: (cost, currency) => `現在、1回あたりにかかるETH取引コストは ${currencies[currency]}${cost}です `,
     transferLowercase: 'ETHを送信する',
-    note: currency => `注意：１週間にLndrから送れるのは ${currencies[currency]}${transferLimits[currency]} です`,
+    note: currency => `注意：１週間にLndrから送れるのは ${currencies[currency]}${transferLimits[currency]} までです`,
     warning: (amount, currency) => `${currencies[currency]}${amount} の送付上限に対し、残りは ${currencies[currency]}${transferLimits[currency]} です`
   },
   sendBcpt: {
@@ -190,7 +190,7 @@ export default {
 
   welcomeView: {
   by: '開発元',
-  makeItEasy: 'Lndrは単純な貸し借りを簡単に管理します',
+  makeItEasy: 'Lndrがあれば、借りを忘れません',
   weHelpFriends: 'フレンドの生活、仕事、娯楽をサポートします.',
   len: 'Len',
   dot: '.',
@@ -237,7 +237,7 @@ export default {
   },
   direction: {
     lend: nickname => `@${nickname}はあなたに借りがあります`,
-    borrow: nickname => `私は@${nickname}に貸しがあります`,
+    borrow: nickname => `私は@${nickname}に借りがあります`,
     initiatedLend: nickname => `@${nickname}は彼／彼女に貸しがあります`,
     initiatedBorrow: nickname => `@${nickname}は彼／彼女に貸しがあります`,
     pendingLend: nickname => `@${nickname}はあなたに借りがあります`,
@@ -273,7 +273,7 @@ export default {
   settlementManagement: {
   bilateral: {
     error: {
-      insufficient: nickname => `残高が少なかったため、${nickname} への支払いが失敗しまいた`,
+      insufficient: nickname => `残高が少なかったため、${nickname} への支払いができませんでした`,
       generic: nickname => `${nickname} への支払い中に、エラーが発生しました`
     }
   }
@@ -339,16 +339,16 @@ export default {
   shell: '承認',
   done: '完了',
   create: {
-    start: "記録を〜へ送りました ",
-    end: ' 承認するには.'
+    start: "確認のため ",
+    end: ' へ記録を送りました.'
   },
   confirm: {
-    start: "〜からの記録を承認しました ",
-    end: '.'
+    start: "",
+    end: 'から送られたこの記録は承認済みです.'
   },
   reject: {
-    start: "〜に通知を送ります ",
-    end: " あなたがこの記録を承認しなかったことを."
+    start: "",
+    end: " に通知を送ります."
   },
   ethSent: {
     start: "送信成功 ",
