@@ -230,9 +230,7 @@ export default {
     settlementAmount: '결제 금액',
     selectFriend: '친구',
     memo: '메모',
-    direction: '올바른 내역을 선택하세요',
-    to: 'TO',
-    for: 'FOR'
+    direction: '올바른 내역을 선택하세요'
   },
   memo: {
     example: '메모를 입력하세요'

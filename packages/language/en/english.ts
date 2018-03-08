@@ -225,9 +225,7 @@ export default {
     settlementAmount: 'SETTLEMENT AMOUNT',
     selectFriend: 'FRIEND',
     memo: 'MEMO',
-    direction: 'SELECT THE CORRECT STATEMENT',
-    to: 'to',
-    for: 'for'
+    direction: 'SELECT THE CORRECT STATEMENT'
   },
   memo: {
     example: 'Type memo here'
