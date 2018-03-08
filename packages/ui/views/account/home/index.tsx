@@ -176,7 +176,7 @@ class HomeView extends Component<Props, State> {
     </Section>
   }
 
-  showAddDebt(direction) {
+  showAddDebt() {
     this.props.navigation.navigate('AddDebt')
   }
 
