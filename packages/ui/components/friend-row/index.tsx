@@ -25,7 +25,6 @@ interface Props {
   friend: Friend
   friendScreen?: boolean
   recentTransactions?: any
-  pendingTransactions?: any
   navigation: any
   getUcacAddress: (currency: string) => string
 }
@@ -71,21 +70,9 @@ class FriendRow extends Component<Props, State> {
   }
   
   getAmountTotal() {
-    const { friend, pendingTransactions, getUcacAddress } = this.props
+    const { friend, getUcacAddress } = this.props
     let total = this.getRecentTotal()
     let sign = ''
-
-    if(pendingTransactions !== undefined) {
-      pendingTransactions.map( transaction => {
-        if(getUcacAddress(defaultCurrency).indexOf(transaction.ucac) !== -1) {
-          if(transaction.creditorAddress === friend.address) {
-            total -= transaction.amount
-          } else if(transaction.debtorAddress === friend.address) {
-            total += transaction.amount
-          }
-        }
-      })
-    }
 
     if (total >= 0) {
       sign = '+'
@@ -97,17 +84,11 @@ class FriendRow extends Component<Props, State> {
   }
 
   getTransactionTotal() {
-    const { friend, pendingTransactions, recentTransactions } = this.props
+    const { friend, recentTransactions } = this.props
 
     let hasPending = false
     let recentNumber = 0
 
-    if(pendingTransactions !== undefined) {
-      pendingTransactions.map( transaction => {
-        hasPending = hasPending || transaction.creditorAddress === friend.address || transaction.debtorAddress === friend.address
-      })
-    }
-    
     if(recentTransactions !== undefined) {
       recentTransactions.map( transaction => {
         recentNumber += (transaction.creditorAddress === friend.address || transaction.debtorAddress === friend.address) ? 1 : 0

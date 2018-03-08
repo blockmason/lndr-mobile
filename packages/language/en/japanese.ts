@@ -228,9 +228,7 @@ export default {
     settlementAmount: '決済額',
     selectFriend: 'フレンド',
     memo: 'メモ',
-    direction: '正しい説明を選択',
-    to: 'から',
-    for: 'の為に'
+    direction: '正しい説明を選択'
   },
   memo: {
     example: 'ここへメモを記入'
