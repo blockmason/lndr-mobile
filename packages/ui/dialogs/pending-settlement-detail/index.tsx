@@ -1,8 +1,9 @@
 import React, { Component } from 'react'
 
 import { Text, TextInput, TouchableHighlight, View, Image, ScrollView } from 'react-native'
-import { UserData } from 'lndr/user'
+import { getResetAction } from 'reducers/nav'
 
+import { UserData } from 'lndr/user'
 import { debounce } from 'lndr/time'
 import { currencyFormats } from 'lndr/format'
 import PendingUnilateral from 'lndr/pending-unilateral'
@@ -107,8 +108,11 @@ class PendingSettlementDetail extends Component<Props, State> {
   }
 
   closePopup(type) {
+    let resetAction
     if (type) {
-      this.props.navigation.navigate('Confirmation', { type: type, friend: { nickname: this.getFriendNickname() } })
+      resetAction = getResetAction({ routeName:'Confirmation', params: { type: type, friend: { nickname: this.getFriendNickname() } } })
+
+      this.props.navigation.dispatch(resetAction)
     } else {
       this.props.navigation.navigate('Home')
     }

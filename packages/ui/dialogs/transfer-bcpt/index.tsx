@@ -1,8 +1,9 @@
 import React, { Component } from 'react'
 
 import { Text, TextInput, TouchableHighlight, View, Image, ScrollView } from 'react-native'
-import { UserData } from 'lndr/user'
+import { getResetAction } from 'reducers/nav'
 
+import { UserData } from 'lndr/user'
 import { debounce } from 'lndr/time'
 import { bcptAmount, ethAddress } from 'lndr/format'
 import Friend from 'lndr/friend'
@@ -73,8 +74,9 @@ class TransferBcpt extends Component<Props, State> {
 
     if (success && typeof success !== 'string' && success.type === '@@TOAST/DISPLAY_ERROR') {
       this.props.navigation.goBack()
-    } else if (success) {
-      this.props.navigation.navigate('Confirmation', { type: 'bcptSent', txHash: success, amount: amount })
+    } else {
+      const resetAction = getResetAction({ routeName:'Confirmation', params: { type: 'bcptSent', txHash: success, amount: amount } })
+      this.props.navigation.dispatch(resetAction)
     }
   }
 

@@ -1,8 +1,9 @@
 import React, { Component } from 'react'
 
 import { Text, TextInput, TouchableHighlight, View, Image, ScrollView, KeyboardAvoidingView } from 'react-native'
-import { UserData } from 'lndr/user'
+import { getResetAction } from 'reducers/nav'
 
+import { UserData } from 'lndr/user'
 import { debounce } from 'lndr/time'
 import { currencyFormats, amountFormat } from 'lndr/format'
 import Friend from 'lndr/friend'
@@ -103,12 +104,16 @@ class SettleUp extends Component<Props, State> {
     )
 
     this.clear()
+
+    let resetAction
     
-    if (success && success.type === '@@TOAST/DISPLAY_ERROR') {
-      this.props.navigation.navigate('Friends')
-    } else if (success) {
-      this.props.navigation.navigate('Confirmation', { type: 'create', friend })
+    if (success && success.type !== '@@TOAST/DISPLAY_ERROR') {
+      resetAction = getResetAction({ routeName:'Confirmation', params: { type: 'create', friend } })
+    } else {
+      resetAction = getResetAction({ routeName:'Dashboard' })
     }
+
+    this.props.navigation.dispatch(resetAction)
   }
 
   getRecentTotal() {

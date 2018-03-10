@@ -1,4 +1,5 @@
 import { AppNavigator } from 'navigators'
+import { NavigationActions } from 'react-navigation'
 
 export const getCurrentRoute = (state) => {
   const findCurrentRoute = (navState) => {
@@ -11,5 +12,15 @@ export const getCurrentRoute = (state) => {
 }
 
 export const isFocusingOn = (state: Object) => (route: String) => (getCurrentRoute(state) === route)
+
+export const getResetAction = (routeInput: Object) => {
+  return NavigationActions.reset({
+    index: 0,
+    actions: [
+      NavigationActions.navigate(routeInput)
+    ],
+    key: null
+  })
+}
 
 export default (state, action) => AppNavigator.router.getStateForAction(action, state)
