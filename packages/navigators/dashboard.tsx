@@ -55,6 +55,15 @@ class DashboardNavigatorWithHeader extends Component<Props> {
 
   static router = DashboardNavigator.router
 
+  componentWillMount() {
+    //check if navigating from the confirmation, in which case navigate to activity
+    const to = this.props.navigation.state.params ? this.props.navigation.state.params.to : null
+
+    if (to === 'activity') {
+      this.props.navigation.navigate('Activity')
+    }
+  }
+
   render() {
 
     return (

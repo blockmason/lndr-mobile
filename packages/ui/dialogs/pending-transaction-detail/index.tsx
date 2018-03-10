@@ -1,8 +1,9 @@
 import React, { Component } from 'react'
 
 import { Text, TextInput, TouchableHighlight, View, Image, ScrollView } from 'react-native'
-import { UserData } from 'lndr/user'
+import { getResetAction } from 'reducers/nav'
 
+import { UserData } from 'lndr/user'
 import { debounce } from 'lndr/time'
 import { currencyFormats } from 'lndr/format'
 import PendingTransaction from 'lndr/pending-transaction'
@@ -87,7 +88,11 @@ class PendingTransactionDetail extends Component<Props, State> {
   }
 
   closePopup(type) {
-    this.props.navigation.navigate('Confirmation', { type: type, friend: { nickname: this.getFriendNickname() } })
+    const nickname = this.getFriendNickname()
+
+    const resetAction = getResetAction({ routeName:'Confirmation', params: { type: type, friend: { nickname } } })
+
+    this.props.navigation.dispatch(resetAction)
   }
 
   getFriendNickname() {

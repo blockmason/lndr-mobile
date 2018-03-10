@@ -1,6 +1,7 @@
 import React, { Component } from 'react'
 
 import { View, ScrollView, Text, TextInput, TouchableHighlight, Image, Platform } from 'react-native'
+import { getResetAction } from 'reducers/nav'
 
 import Friend from 'lndr/friend'
 import { formatMemo, currencyFormats, amountFormat } from 'lndr/format'
@@ -84,12 +85,18 @@ class AddDebt extends Component<Props, State> {
     )
 
     this.clear()
+
+    const { navigation } = this.props
+    let resetAction
     
-    if (success && success.type === '@@TOAST/DISPLAY_ERROR') {
-      this.props.navigation.navigate('Home')
-    } else if (success) {
-      this.props.navigation.navigate('Confirmation', { type: 'create', friend })
+    if (success && success.type !== '@@TOAST/DISPLAY_ERROR') {
+      resetAction = getResetAction( { routeName:'Confirmation', params: { type: 'create', friend } } )
+
+    } else {
+      resetAction = getResetAction( { routeName: 'Home' } )
     }
+
+    navigation.dispatch(resetAction)
   }
 
   renderSelectedFriend() {
