@@ -177,6 +177,7 @@ export default {
     '通知'
   ],
   profilePic: {
+    change: 'プロフィール画像を変える',
     setError: 'プロフィール画像をアップロードできませんでした。のちほど、再度実行してください。',
     getError: 'プロフィール画像をretrieveできませんでした',
     setSuccess: 'プロフィール画像がアップロードされました'

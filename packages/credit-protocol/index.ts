@@ -3,7 +3,7 @@ declare const Buffer
 
 import Mnemonic from 'bitcore-mnemonic'
 import ethUtil from 'ethereumjs-util'
-import RNFetchBlog from 'react-native-fetch-blob'
+import RNFetchBlob from 'react-native-fetch-blob'
 import ImageResizer from 'react-native-image-resizer'
 import { Platform } from 'react-native'
 import moment from 'moment'
@@ -381,29 +381,28 @@ export default class CreditProtocol {
     return this.client.get(`/tx_hash/${hash}`)
   }
 
-  async setProfilePic(imageURI: string, privateKeyBuffer: any) {
+  async setProfilePic(imageURI: string, imageData: string, privateKeyBuffer: any) {
     if (privateKeyBuffer.type === 'Buffer') {
       privateKeyBuffer = Buffer.from(privateKeyBuffer.data)
     }
 
     const IMAGE_TARGET_SIZE = 240
-    const resizedImageResponse = await ImageResizer.createResizedImage(imageURI, IMAGE_TARGET_SIZE, IMAGE_TARGET_SIZE, "JPEG", 100, 0)
+    let resizedImageResponse, base64ImageData
     
-    let base64ImageData
-
-    if (Platform.OS === 'ios') {
-      base64ImageData = await RNFetchBlog.fs.readFile(imageURI, 'base64')
+    if (Platform.OS === 'android') {
+      resizedImageResponse = await ImageResizer.createResizedImage(imageURI, IMAGE_TARGET_SIZE, IMAGE_TARGET_SIZE, "JPEG", 100, 0)
+      base64ImageData = await RNFetchBlob.fs.readFile(resizedImageResponse.uri, 'base64')
     } else {
-      base64ImageData = await RNFetchBlog.fs.readFile(resizedImageResponse.uri, 'base64')
+      resizedImageResponse = await ImageResizer.createResizedImage(`data:image/jpg;jpeg;base64,${imageData}`, IMAGE_TARGET_SIZE, IMAGE_TARGET_SIZE, "JPEG", 100, 0)
+      base64ImageData = await RNFetchBlob.fs.readFile(resizedImageResponse.path, 'base64')
     }
 
     const signature = this.serverSign(ethUtil.sha3(base64ImageData), privateKeyBuffer)
-
     await this.client.post(`/profile_photo`, {
       image: base64ImageData,
       signature: signature
     })
-    return `data:image/jpg;base64,${base64ImageData}`
+    return `data:image/jpg;jpeg;base64,${base64ImageData}`
   }
 
   async fiatToEth(amount: number, currency: string) {

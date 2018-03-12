@@ -174,6 +174,7 @@ export default {
     'Notifications'
   ],
   profilePic: {
+    change: 'Change Profile Picture',
     setError: 'There was an error uploading your picture, please try again later',
     getError: 'There was an error retrieving your profile picture',
     setSuccess: 'Profile picture updated'

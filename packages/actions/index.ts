@@ -901,17 +901,19 @@ export const getProfilePic = () => {
       const userPic = await profilePic.get(address)
       dispatch(setState({ userPic }))
     } catch (e) {
-      dispatch(displayError(accountManagement.profilePic.getError))
+      if (e.toString().indexOf('Blank Image') === -1) {
+        dispatch(displayError(accountManagement.profilePic.getError))
+      }
     }
   }
 }
 
-export const setProfilePic = (imageURI: string) => {
+export const setProfilePic = (imageURI: string, imageData: string) => {
   return async (dispatch, getState) => {
     const { address, privateKeyBuffer } = getUser(getState())()
     profilePic.clear(address)
     try {
-      const userPic = await creditProtocol.setProfilePic(imageURI, privateKeyBuffer)
+      const userPic = await creditProtocol.setProfilePic(imageURI, imageData, privateKeyBuffer)
       dispatch(displaySuccess(accountManagement.profilePic.setSuccess))
       dispatch(setState({ userPic }))
     } catch (e) {
