@@ -28,7 +28,6 @@ export default {
       fileCache : true 
     })
     .fetch('GET', `https://s3-us-west-2.amazonaws.com/lndr-avatars/${addr}.jpeg`)
-    // the image is now dowloaded to device's storage
     .then((resp) => {
       imagePath = resp.path()
       return resp.readFile('base64')
@@ -40,13 +39,9 @@ export default {
       }
       return `data:image/jpg;base64,${base64Data}`
     })
-
-    // return tempStorage.pics[addr] = fetchUtil.fetch(`https://s3-us-west-2.amazonaws.com/lndr-avatars/${addr}.jpeg`).then( data => {
-    //   console.log('2 GOT THE DATA', data)
-    //   // const buffer = Buffer.from(data._bodyText, 'base64')
-    //   // const base64ImageData = buffer.toString('base64')
-    //   return 
-    // })
+    .catch( err => {
+      throw new Error(err)
+    })
   },
 
   clear: addr => {

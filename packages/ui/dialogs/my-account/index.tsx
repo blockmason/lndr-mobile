@@ -2,8 +2,10 @@ import React, { Component } from 'react'
 
 import { defaultUpdateAccountData, UpdateAccountData, UserData } from 'lndr/user'
 
-import { Text, TextInput, View, Dimensions, ScrollView, CameraRoll,
+import { Text, TextInput, View, Dimensions, ScrollView,
   TouchableHighlight, Image, BackHandler, FlatList } from 'react-native'
+
+import ImagePicker from 'react-native-image-picker'
 
 import Button from 'ui/components/button'
 import Pinpad from 'ui/components/pinpad'
@@ -51,7 +53,7 @@ interface Props {
   updateLockTimeout: (timeout: number) => any
   updatePin: (password: string, confirmPassword: string) => any
   getProfilePic: (nickname: string) => any
-  setProfilePic: (imageURI: string) => any
+  setProfilePic: (imageURI: string, imageData: string) => any
   copyToClipboard: (text: string) => any
 }
 
@@ -154,16 +156,40 @@ class MyAccount extends Component<Props, State> {
     this.setState({ hiddenPanels })
   }
 
-  async getCameraRoll() {
-    if (this.state.photos.length) {
-      return
-    }
-    const photos = await CameraRoll.getPhotos({ first: 50 })
-    this.setState({ photos: photos.edges })
+  async getPhoto() {
+    var options = {
+      title: accountManagement.profilePic.change,
+      storageOptions: {
+        skipBackup: true,
+        path: 'images'
+      }
+    };
+
+    /**
+     * The first arg is the options object for customization (it can also be null or omitted for default options),
+     * The second arg is the callback which sends object: response (more info below in README)
+     */
+    ImagePicker.showImagePicker(options, (response) => {
+      console.log('Response = ', response);
+
+      if (response.didCancel) {
+        console.log('User cancelled image picker');
+      }
+      else if (response.error) {
+        console.log('ImagePicker Error: ', response.error);
+      }
+      else {
+        const { uri, data } =  response
+
+        this.setNewProfilePic(uri, data)
+        // You can also display the image using data:
+        // let source = { uri: 'data:image/jpeg;base64,' + response.data };
+      }
+    });
   }
 
-  async setNewProfilePic(imageURI: string) {
-    const image = await loadingContext.wrap( this.props.setProfilePic(imageURI) )
+  async setNewProfilePic(imageURI: string, imageData: string) {
+    const image = await loadingContext.wrap( this.props.setProfilePic(imageURI, imageData) )
     this.setState({ photos: [] })
   }
 
@@ -191,13 +217,6 @@ class MyAccount extends Component<Props, State> {
   }
 
   _keyExtractor = (item, index) => index
-
-  renderPhoto = ({ item, index }) => {
-    const uri = item.node.image.uri
-    return <TouchableHighlight { ...underlayColor } onPress={() => this.setNewProfilePic(item.node.image.uri)}>
-      <Image source={{ uri }} style={style.cameraImage}/>
-    </TouchableHighlight>
-  }
 
   renderPanels() {
     const { user, closePopup, updateNickname, updateEmail, copyToClipboard } = this.props
@@ -271,18 +290,12 @@ class MyAccount extends Component<Props, State> {
         <Button round onPress={submitEmail} text={updateAccountText} />
       </View>),
       (<View style={style.spaceHorizontalL}>
-        <TouchableHighlight {...underlayColor} onPress={() => this.getCameraRoll()}>
+        <TouchableHighlight {...underlayColor} onPress={() => this.getPhoto()}>
           <View style={general.centeredColumn}>
             <Text style={[style.text, style.spaceTopL, style.center]}>{userPic ? accountManagement.changeProfilePic : accountManagement.addProfilePic}</Text>
             {!photos.length ? <Image source={imageSource} style={[style.image, style.spaceBottomL]}/> : null}
           </View>
         </TouchableHighlight>
-        <FlatList
-          data={photos}
-          keyExtractor={this._keyExtractor}
-          renderItem={this.renderPhoto}
-          horizontal
-        />
       </View>),
       (<View style={style.spaceHorizontalL}>
         <Text style={[style.text, style.spaceTopL, style.center]}>{accountManagement.lockTimeout.top}</Text>
