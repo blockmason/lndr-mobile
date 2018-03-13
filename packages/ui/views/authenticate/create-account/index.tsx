@@ -4,7 +4,7 @@ import { View } from 'react-native'
 
 import { connect } from 'react-redux'
 
-import { setAuthLoading, createAccount, goToRecoverAccount, takenNick, takenEmail } from 'actions'
+import { goToRecoverAccount, takenNick, takenEmail } from 'actions'
 
 import CreateAccountForm from 'ui/forms/create-account'
 
@@ -37,12 +37,6 @@ class CreateAccountView extends Component<Props, AccountViewState> {
       emailDuplicationViolation: false,
       emailFormatViolation: false
     }
-  }
-
-  async handleOnSubmitCreateAccount(formData: CreateAccountData) {
-    this.props.setAuthLoading(true)
-    await this.props.createAccount(formData)
-    this.props.setAuthLoading(false)
   }
 
   async handleOnNickTextInputBlur(nickname: string) {
@@ -102,7 +96,6 @@ class CreateAccountView extends Component<Props, AccountViewState> {
           onNickTextInputBlur={this.handleOnNickTextInputBlur.bind(this)}
           emailInputError={this.renderEmailTextInputErrorText()}
           onEmailTextInputBlur={this.handleOnEmailTextInputBlur.bind(this)}
-          onSubmitCreateUser={this.handleOnSubmitCreateAccount.bind(this)}
           onSubmitRecover={this.props.goToRecoverAccount}
           nickDuplicationViolation={this.state.nickDuplicationViolation}
           nickLengthViolation={this.state.nickLengthViolation}
@@ -114,6 +107,6 @@ class CreateAccountView extends Component<Props, AccountViewState> {
   }
 }
 
-const mapDispatchToProps = { createAccount, setAuthLoading, goToRecoverAccount }
+const mapDispatchToProps = { goToRecoverAccount }
 
 export default connect(null, mapDispatchToProps)(CreateAccountView)
