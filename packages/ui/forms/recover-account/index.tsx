@@ -19,6 +19,7 @@ const {
   newPin,
   recoverAccount,
   recoverMnemonic,
+  recoverMnemonicLengthError,
   recoverExistingAccount,
   cancel,
   enterNewPin,
@@ -41,6 +42,7 @@ interface State {
   mnemonic: string
   password: string
   confirmPassword: string
+  mnemonicLengthError?: string
 }
 
 class RecoverAccountForm extends Component<Props, State> {
@@ -110,8 +112,13 @@ class RecoverAccountForm extends Component<Props, State> {
     this.setState({ confirmPassword: confirmPassword.slice(0, -1) })
   }
 
+  checkMnemonicLength() {
+    const mnemonicLengthError = this.state.mnemonic.split(' ').length !== 12 ? recoverMnemonicLengthError : undefined
+    this.setState({ mnemonicLengthError })
+  }
+
   render() {
-    const { password, confirmPassword, step } = this.state
+    const { password, confirmPassword, step, mnemonicLengthError } = this.state
 
     if (step === 3) {
       return <View style={style.form}>
@@ -132,9 +139,12 @@ class RecoverAccountForm extends Component<Props, State> {
               style={style.multilineTextInput}
               placeholder={recoverMnemonic}
               underlineColorAndroid='transparent'
-              onChangeText={mnemonic => this.setState({ mnemonic: mnemonic.trim() })}
+              autoCorrect={false}
+              onChangeText={mnemonic => this.setState({ mnemonic: mnemonic.trim(), mnemonicLengthError: undefined })}
+              onBlur={(): void => this.checkMnemonicLength()}
             />
           </View>
+          { mnemonicLengthError && <Text style={style.warningText}>{mnemonicLengthError}</Text> }
           <Button round fat style={style.submitButton} onPress={() => this.setState({ step: 2 })} text={recoverAccount} />
           <Button alternate small arrow style={style.submitButton} onPress={() => this.cancel()} text={cancel} />
         </KeyboardAvoidingView>
