@@ -80,14 +80,16 @@ class PendingTransactionsView extends Component<Props, State> {
 
   showNoneMessage() {
     const { pendingTransactionsLoaded, pendingTransactions, pendingSettlements, bilateralSettlements } = this.props.state
-    const { friend } = this.props
+    const { friend, getUcacAddress } = this.props
 
     let showNone = false
 
     if (!pendingTransactionsLoaded) {
       showNone = true
     } else if (!friend) {
-      showNone = pendingTransactions.length + pendingSettlements.length + bilateralSettlements.length === 0
+      showNone = pendingTransactions.filter( tx => tx.ucac === getUcacAddr(defaultCurrency) ).length 
+      + pendingSettlements.filter( tx => tx.ucac === getUcacAddr(defaultCurrency) ).length 
+      + bilateralSettlements.filter( tx => tx.ucac === getUcacAddr(defaultCurrency) ).length  === 0
     } else if (friend) {
       showNone = true
       pendingTransactions.map( (pending) => {
@@ -154,6 +156,8 @@ class PendingTransactionsView extends Component<Props, State> {
               settlerIsMe={settlerIsMe}
             />
           })}
+          { homeScreen || bilateralSettlements.length === 0 ? null : 
+          <Text style={style.transactionHeader}>{pendingTransactionsLanguage.bilateral}</Text> }
           { homeScreen ? null :
           bilateralSettlements.map( bilateralSettlement => {
             if(getUcacAddress(defaultCurrency).indexOf(bilateralSettlement.ucac) === -1 ) {

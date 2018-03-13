@@ -303,6 +303,7 @@ export default {
   none: '계류중인 트랜잭션 내역이 없습니다',
   confirmationQuestion: '해당 거래를 정말 진행하시겠습니까?',
   pendingAnnouncement: '해당 거래는 제3자로부터 인증절차를 기다리고 있는 상태입니다.',
+  bilateral: 'ETH 송금을 기다리는 중입니다',
   confirm: '인증',
   reject: '트랜잭션 거부',
   cancel: '트랜잭션 취소',
