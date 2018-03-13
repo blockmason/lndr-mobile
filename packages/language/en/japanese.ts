@@ -59,6 +59,7 @@ export default {
 
   recoverExistingAccount: '既存のアカウントを復旧する',
   recoverMnemonic: 'ニューモニック　\n(アカウントを作成した際に12個の単語が表示されます)',
+  recoverMnemonicLengthError: 'ニューモニックは12個の単語です',
 
   successTitle: '成功',
   errorTitle: 'エラー',

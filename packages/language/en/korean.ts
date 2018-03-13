@@ -61,6 +61,7 @@ export default {
 
   recoverExistingAccount: '본 계정 되돌리기',
   recoverMnemonic: '연상 기호(계정 생성\n 시 입력해야 하는 12자)',
+  recoverMnemonicLengthError: '정확히 12 단어이어야합니다',
 
   successTitle: '성공',
   errorTitle: '에러',

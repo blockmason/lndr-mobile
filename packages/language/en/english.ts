@@ -60,6 +60,7 @@ export default {
 
   recoverExistingAccount: 'Recover an existing account',
   recoverMnemonic: 'Mnemonic (12 words displayed \nwhen you created your account)',
+  recoverMnemonicLengthError: 'Mnemonic should be exactly 12 words',
 
   successTitle: 'Success',
   errorTitle: 'Error',
