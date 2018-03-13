@@ -25,6 +25,7 @@ export default {
   logoutAction: 'LOG OUT',
   seeAllActivity: 'See All Activity',
   copiedClipboard: 'Copied to Clipboard',
+  pleaseWait: 'Please Wait',
 
   addFriend: 'Add Friend',
   addFriendConfirmationQuestion: 'Are you sure you would like to add this user as a friend?',

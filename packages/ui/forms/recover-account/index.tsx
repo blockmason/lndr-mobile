@@ -23,7 +23,8 @@ const {
   recoverExistingAccount,
   cancel,
   enterNewPin,
-  confirmPin
+  confirmPin,
+  pleaseWait
 } = language
 
 import style from 'theme/form'
@@ -76,15 +77,21 @@ class RecoverAccountForm extends Component<Props, State> {
 
   async componentDidUpdate() {
     const { password, confirmPassword, step } = this.state
-    const { user } = this.props
+    const { user, onSubmitRecoverUser } = this.props
 
-    if (password.length === 4 && confirmPassword.length === 4) {
-      const success = await loadingContext.wrap(this.props.onSubmitRecoverUser(this.state))
+    if (step === 4) {
+      const component = this
 
-      if (!success && !user) {
-        loadingContext.wrap(this.setState({ step: 1, password: '', confirmPassword: '' }))
-      }
+      setTimeout( async () => {
+        const success = await loadingContext.wrap(onSubmitRecoverUser(component.state))
 
+        if (!success && !user) {
+          loadingContext.wrap(component.setState({ step: 1, password: '', confirmPassword: '' }))
+        }
+      }, 100)
+
+    } else if (password.length === 4 && confirmPassword.length === 4) {
+      this.setState({ step: 4 })
     } else if (password.length === 4 && step === 2) {
       this.setState({ step: 3 })
     }
@@ -120,7 +127,11 @@ class RecoverAccountForm extends Component<Props, State> {
   render() {
     const { password, confirmPassword, step, mnemonicLengthError } = this.state
 
-    if (step === 3) {
+    if (step === 4) {
+      return <View style={style.form}>
+        <Pinpad onNumPress={() => null} onBackspace={() => null} pin={confirmPassword} headerText={pleaseWait} />
+      </View>
+    } else if (step === 3) {
       return <View style={style.form}>
         <Pinpad onNumPress={(pin) => this.confirmPin(pin)} onBackspace={() => this.clearConfirmPin()} pin={confirmPassword} headerText={confirmPin} />
       </View>

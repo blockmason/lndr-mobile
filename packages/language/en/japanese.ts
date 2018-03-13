@@ -24,6 +24,7 @@ export default {
   logoutAction: 'ログアウト',
   seeAllActivity: '全アクティビティを閲覧',
   copiedClipboard: 'クリップボードへコピーしました',
+  pleaseWait: 'お待ちください',
 
   addFriend: 'フレンドを追加',
   addFriendConfirmationQuestion: '本当にこのユーザーをフレンドに追加しますか？',

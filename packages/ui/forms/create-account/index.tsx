@@ -9,8 +9,11 @@ import { CreateAccountData, defaultCreateAccountData } from 'lndr/user'
 
 import { formatNick, formatEmail, formatPin, emailFormatIncorrect, nickLengthIncorrect } from 'lndr/format'
 import Pinpad from 'ui/components/pinpad'
-
 import InputImage from 'ui/components/images/input-image'
+import Loading, { LoadingContext } from 'ui/components/loading'
+
+import { createAccount } from 'actions'
+import { connect } from 'react-redux'
 
 import language from 'language'
 const {
@@ -20,20 +23,23 @@ const {
   newPin,
   enterNewPin,
   confirmPin,
-  createAccount,
-  recoverAccount
+  recoverAccount,
+  pleaseWait
 } = language
+const createAccountText = language.createAccount
 
 import style from 'theme/form'
 import general from 'theme/general'
+
+const loadingContext = new LoadingContext()
 
 interface Props {
   onNickTextInputBlur: (nickname: string) => void
   nickInputError: string
   onEmailTextInputBlur: (email: string) => void
   emailInputError: string
-  onSubmitCreateUser: (formData: CreateAccountData) => void
   onSubmitRecover: () => void
+  createAccount: (accountData: CreateAccountData) => any
   nickDuplicationViolation?: boolean
   emailDuplicationViolation?: boolean
   emailFormatViolation?: boolean
@@ -48,7 +54,7 @@ interface State {
   confirmPassword: string
 }
 
-export default class CreateAccountForm extends Component<Props, State> {
+class CreateAccountForm extends Component<Props, State> {
   constructor() {
     super()
     this.state = {
@@ -75,9 +81,17 @@ export default class CreateAccountForm extends Component<Props, State> {
 
   componentDidUpdate() {
     const { password, confirmPassword, step } = this.state
+    const { createAccount } = this.props
 
-    if (password.length === 4 && confirmPassword.length === 4) {
-      this.props.onSubmitCreateUser(this.state)
+    if (step === 4) {
+      const component = this
+
+      setTimeout(async () => {
+        await loadingContext.wrap(createAccount(this.state))
+      }, 1000)
+
+    } else if (password.length === 4 && confirmPassword.length === 4) {
+      this.setState({ step: 4 })
     } else if (password.length === 4 && step === 2) {
       this.setState({ step: 3 })
     }
@@ -121,7 +135,11 @@ export default class CreateAccountForm extends Component<Props, State> {
     const { onNickTextInputBlur, nickInputError, onEmailTextInputBlur, emailInputError } = this.props
     const { password, confirmPassword, step } = this.state
 
-    if (step === 3) {
+    if (step === 4) {
+      return <View style={style.form}>
+        <Pinpad onNumPress={() => null} onBackspace={() => null} pin={confirmPassword} headerText={pleaseWait} />
+      </View>
+    } else if (step === 3) {
       return <View style={style.form}>
         <Pinpad onNumPress={(pin) => this.confirmPin(pin)} onBackspace={() => this.clearConfirmPin()} pin={confirmPassword} headerText={confirmPin} />
       </View>
@@ -162,10 +180,12 @@ export default class CreateAccountForm extends Component<Props, State> {
             />
           </View>
           { emailInputError && <Text style={style.warningText}>{emailInputError}</Text>}
-          <Button round fat onPress={() => this.submit()} style={style.submitButton} text={createAccount} />
+          <Button round fat onPress={() => this.submit()} style={style.submitButton} text={createAccountText} />
           <Button alternate small arrow onPress={() => this.recover()} style={style.submitButton} text={recoverAccount} />
         </KeyboardAvoidingView>
       </View>)
     }
   }
 }
+
+export default connect((state) => ({ }), { createAccount })(CreateAccountForm)

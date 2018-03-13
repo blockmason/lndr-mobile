@@ -26,6 +26,7 @@ export default {
   logoutAction: '로그아웃',
   seeAllActivity: '활동보기',
   copiedClipboard: '클립보드에 복사되었습니다',
+  pleaseWait: '잠시 기다려주십시오',
 
   addFriend: '친구 추가',
   addFriendConfirmationQuestion: '정말 친구로 추가하시겠습니까?',
