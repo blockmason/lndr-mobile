@@ -298,6 +298,7 @@ export default {
   none: 'あなたは承認待ちの取引がありません',
   confirmationQuestion: '本当にこの取引を承認しますか？',
   pendingAnnouncement: 'この取引は相手方の承認待ちです.',
+  bilateral: 'ETH送付が完了するのを待っています',
   confirm: '承認',
   reject: '取引を拒否',
   cancel: '取引のキャンセル',
