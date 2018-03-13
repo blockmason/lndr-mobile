@@ -2,7 +2,7 @@ import React, { Component } from 'react'
 
 import Friend from 'lndr/friend'
 
-import { Text, View, ScrollView } from 'react-native'
+import { Text, View, ScrollView, RefreshControl } from 'react-native'
 
 import Button from 'ui/components/button'
 import Section from 'ui/components/section'
@@ -38,6 +38,7 @@ interface Props {
 
 interface State {
   friendToRemove?: Friend
+  refreshing: boolean
 }
 
 class FriendsView extends Component<Props, State> {
@@ -45,7 +46,9 @@ class FriendsView extends Component<Props, State> {
 
   constructor() {
     super()
-    this.state = {}
+    this.state = {
+      refreshing: false
+    }
   }
 
   async componentDidMount() {
@@ -60,8 +63,10 @@ class FriendsView extends Component<Props, State> {
     }
   }
 
-  refresh() {
-    this.componentDidMount()
+  async refresh() {
+    this.setState({ refreshing: true })
+    await this.componentDidMount()
+    this.setState({ refreshing: false })
   }
 
   componentWillUnmount() {
@@ -80,7 +85,14 @@ class FriendsView extends Component<Props, State> {
   render() {
     const { friendsLoaded, friends, recentTransactions, pendingTransactions } = this.props.state
 
-    return <ScrollView style={general.view} keyboardShouldPersistTaps='handled' ref='_friendScrollView'>
+    return <ScrollView style={general.view} keyboardShouldPersistTaps='handled' ref='_friendScrollView'
+      refreshControl={
+        <RefreshControl
+          refreshing={this.state.refreshing}
+          onRefresh={() => this.refresh()}
+        />
+      }
+    >
       <Section>
         <SearchFriend 
           onSuccess={() => this.refresh()}
