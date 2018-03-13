@@ -2,7 +2,7 @@
 
 import React, { Component } from 'react'
 
-import { Text, View, ScrollView, Platform, Dimensions, Image, TouchableHighlight, BackHandler, BackAndroid } from 'react-native'
+import { Text, View, ScrollView, Platform, Dimensions, Image, TouchableHighlight, BackHandler, BackAndroid, RefreshControl } from 'react-native'
 
 import { currencyFormats } from 'lndr/format'
 import Balance from 'lndr/balance'
@@ -74,13 +74,15 @@ interface State {
   balanceToView?: Balance
   pendingTransaction?: PendingTransaction
   currency: string
+  refreshing: boolean
 }
 
 class HomeView extends Component<Props, State> {
   constructor() {
     super()
     this.state = {
-      currency: defaultCurrency
+      currency: defaultCurrency,
+      refreshing: false
     }
   }
 
@@ -124,7 +126,9 @@ class HomeView extends Component<Props, State> {
   }
 
   refresh() {
+    this.setState({ refreshing: true })
     this.componentDidMount()
+    this.setState({ refreshing: false })
   }
 
   renderNeedsReview() {
@@ -184,7 +188,14 @@ class HomeView extends Component<Props, State> {
     const { pendingTransactionsLoaded, pendingTransactions, accountInformation, balancesLoaded, balances } = this.props.state
     const { user } = this.props
 
-    return <ScrollView style={general.view}>
+    return <ScrollView style={general.view}
+        refreshControl={
+          <RefreshControl
+            refreshing={this.state.refreshing}
+            onRefresh={() => this.refresh()}
+          />
+        }
+      >
       <Section>
         { this.renderBalanceInformation() }
       </Section>
