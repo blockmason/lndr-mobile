@@ -183,7 +183,8 @@ export default {
     setError: '사진 업로딩에 실패했습니다, 다시 시도해주세요',
     getError: '프로필 사진을 가져오는데 실패했습니다',
     setSuccess: '프로필 사진이 업데이트됐습니다'
-  }
+  },
+  logoutSuccess: '성공적으로 로그아웃했습니다!'
 },
 
   currentBalance: {

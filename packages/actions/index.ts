@@ -735,10 +735,13 @@ export const loginAccount = (loginData: LoginAccountData) => {
 }
 
 export const logoutAccount = () => {
-  const payload = { user: undefined }
-  userStorage.remove()
-  sessionStorage.remove()
-  return setState(payload)
+  return async (dispatch) => {
+    const payload = { user: undefined }
+    userStorage.remove()
+    sessionStorage.remove()
+    dispatch(displaySuccess(accountManagement.logoutSuccess))
+    return dispatch(setState(payload))
+  }
 }
 
 export const recoverAccount = (recoverData: RecoverAccountData) => {
