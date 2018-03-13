@@ -180,7 +180,8 @@ export default {
     setError: 'プロフィール画像をアップロードできませんでした。のちほど、再度実行してください。',
     getError: 'プロフィール画像をretrieveできませんでした',
     setSuccess: 'プロフィール画像がアップロードされました'
-  }
+  },
+  logoutSuccess: 'ログアウトしました!'
 },
 
   currentBalance: {

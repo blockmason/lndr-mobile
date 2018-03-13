@@ -177,7 +177,8 @@ export default {
     setError: 'There was an error uploading your picture, please try again later',
     getError: 'There was an error retrieving your profile picture',
     setSuccess: 'Profile picture updated'
-  }
+  },
+  logoutSuccess: 'You have successfully logged out!'
 },
 
   currentBalance: {
