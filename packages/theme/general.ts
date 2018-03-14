@@ -2,13 +2,19 @@ import { StyleSheet, Dimensions, Platform } from 'react-native'
 
 import { white } from 'theme/include/colors'
 
-const { height } = Dimensions.get('window')
+const { height, width } = Dimensions.get('window')
 
 export const underlayColor = { underlayColor: '#efefef' }
+
+const isX = Platform.OS === 'ios' && (height === 812 || width === 812)
 
 export default StyleSheet.create({
   flex: {
     flex: 1
+  },
+  isX: {
+    flex: 1,
+    paddingTop: isX ? 5 : 0
   },
   whiteFlex: {
     flex: 1,

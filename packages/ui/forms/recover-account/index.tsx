@@ -141,7 +141,7 @@ class RecoverAccountForm extends Component<Props, State> {
       </View>
     } else {
       return <View style={style.form}>
-        <KeyboardAvoidingView behavior='padding' keyboardVerticalOffset={300} >
+        <KeyboardAvoidingView behavior='position' keyboardVerticalOffset={0} >
           <ThemeImage name='logo' size={0.4} />
           <Text style={[style.text, style.spaceBottom]}>{recoverExistingAccount}</Text>
           <View style={style.textInputContainer}>
