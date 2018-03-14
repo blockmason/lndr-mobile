@@ -11,7 +11,6 @@ import moment from 'moment'
 import { hexToBuffer, utf8ToBuffer, bufferToHex, stringToBuffer } from './lib/buffer-utils'
 import Client from './lib/client'
 import CreditRecord from './lib/credit-record'
-import { storeEthTransaction } from 'actions'
 export { default as CreditRecord } from './lib/credit-record'
 
 import FetchUtil from 'lndr/fetch-util'
@@ -348,11 +347,6 @@ export default class CreditProtocol {
         if (e) {
           reject(e)
         } else {
-          storeEthTransaction({
-            amount: transaction.value,
-            user: transaction.from,
-            time: Date.now()
-          })
           resolve(data)
         }
       })

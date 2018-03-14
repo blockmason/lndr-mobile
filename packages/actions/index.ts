@@ -21,6 +21,7 @@ import TouchID from 'react-native-touch-id'
 import profilePic from 'lndr/profile-pic'
 import { getBcptBalance, transferBcpt } from 'lndr/bcpt-utils'
 import { getEtherscanTransactions } from 'lndr/etherscan'
+import { sanitizeAmount } from 'lndr/format'
 
 import CreditProtocol from 'credit-protocol'
 
@@ -839,6 +840,11 @@ export const sendEth = (destAddr: string, amount: string) => {
       const ethTransaction = new EthTransaction(address, destAddr, Number(web3.toWei(Number(amount), 'ether')), gasPrice)
       const txHash = await creditProtocol.settleWithEth(ethTransaction, privateKeyBuffer)
       console.log('SENDING ETH, TXHASH:', txHash)
+      storeEthTransaction(dispatch, {
+        amount: ethTransaction.value,
+        user: ethTransaction.from,
+        time: Date.now()
+      })
       return txHash
     } catch (e) {
       console.log('ERROR SENDING ETH', e)
@@ -933,17 +939,15 @@ export const copyToClipboard = (text: string) => {
   }
 }
 
-export const storeEthTransaction = async (ethTx: object) => {
-  return async (dispatch) => {
-    const ethTransactions = await ethTransactionsStorage.get()
-    if (!ethTransactions) {
-      ethTransactionsStorage.set([ ethTx ])
-      dispatch(setState({ ethTransactions: [ ethTx ] }))
-    } else {
-      ethTransactions.push(ethTx)
-      await ethTransactionsStorage.set(ethTransactions)
-      dispatch(setState({ ethTransactions }))
-    }
+export const storeEthTransaction = async (dispatch, ethTx: object) => {
+  const ethTransactions = await ethTransactionsStorage.get()
+  if (!ethTransactions) {
+    ethTransactionsStorage.set([ ethTx ])
+    dispatch(setState({ ethTransactions: [ ethTx ] }))
+  } else {
+    ethTransactions.push(ethTx)
+    await ethTransactionsStorage.set(ethTransactions)
+    dispatch(setState({ ethTransactions }))
   }
 }
 
@@ -962,6 +966,7 @@ const getEthTransactions = async (addr: string, recovery: boolean) => {
   }
 
   await ethTransactionsStorage.set(ethTransactions)
+  console.log('GETTING ETH TRANSACTIONS', await ethTransactionsStorage.get())
   return ethTransactions
 }
 
@@ -970,23 +975,6 @@ const refreshTransactions = () => {
   getRecentTransactions()
   setEthBalance()
   getPendingSettlements()
-}
-
-const sanitizeAmount = (amount, currency) => {
-  if(currency === 'USD') {
-    return parseInt(
-      amount
-      .replace(/[^.\d]/g, '')
-      .replace(/^\d+\.?$/, x => `${x}00`)
-      .replace(/\.\d$/, x => `${x.substr(1)}0`)
-      .replace(/\.\d\d$/, x => `${x.substr(1)}`)
-      .replace(/\./, () => '')
-    )
-  } else {
-    return parseInt(
-      amount.replace(/[^.\d]/g, '')
-    )
-  }
 }
 
 const settleBilateral = async (user, bilateralSettlements, dispatch, getState) => {
@@ -1009,7 +997,11 @@ const settleBilateral = async (user, bilateralSettlements, dispatch, getState) =
     try {
       const txHash = await creditProtocol.settleWithEth(ethTransaction, user.privateKeyBuffer)
       creditProtocol.storeSettlementHash(txHash, settlement, user.privateKeyBuffer)
-
+      storeEthTransaction(dispatch, {
+        amount: ethTransaction.value,
+        user: ethTransaction.from,
+        time: Date.now()
+      })
     } catch (e) {
       console.log('HAD AN ERROR', e)
       const debtorNickname = await getNicknameForAddress(settlement.debtorAddress)

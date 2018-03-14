@@ -83,6 +83,7 @@ class SettleUp extends Component<Props, State> {
     const { ethExchange, ethSentPastWeek } = this.props
     const friend = this.props.navigation ? this.props.navigation.state.params.friend : {}
 
+    console.log(1, ethSentPastWeek * Number(ethExchange), Number(amount), ethSentPastWeek * Number(ethExchange) + Number(amount), Number(transferLimits[currency]))
     if ( direction === 'lend' && ethSentPastWeek * Number(ethExchange) + Number(amount) > Number(transferLimits[currency]) ) {
       this.setState({ formInputError: accountManagement.sendEth.error.limitExceeded(defaultCurrency) })
       return
@@ -177,7 +178,7 @@ class SettleUp extends Component<Props, State> {
       <Loading context={submittingTransaction} />
       <DashboardShell text={debtManagement.settleUpLower} navigation={this.props.navigation} />
       <Button close onPress={() => this.props.navigation.navigate('Friends')} />
-      <KeyboardAvoidingView behavior='position' keyboardVerticalOffset={-305} >
+      <KeyboardAvoidingView behavior='padding' keyboardVerticalOffset={0} >
         <View style={[general.centeredColumn, {marginBottom: 20}]}>
           <Image source={require('images/person-outline-dark.png')} style={style.settleImage}/>
           <Text style={[style.header, {marginBottom: 20, marginHorizontal: 20, textAlign: 'center'}]}>{this.displayMessage()}</Text>

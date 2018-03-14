@@ -100,6 +100,23 @@ export const formatMemo = memo => {
   return memoBuffer.slice(0, 32).toString('utf8')
 }
 
+export const sanitizeAmount = (amount, currency) => {
+  if(currency === 'USD') {
+    return parseInt(
+      amount
+      .replace(/[^.\d]/g, '')
+      .replace(/^\d+\.?$/, x => `${x}00`)
+      .replace(/\.\d$/, x => `${x.substr(1)}0`)
+      .replace(/\.\d\d$/, x => `${x.substr(1)}`)
+      .replace(/\./, () => '')
+    )
+  } else {
+    return parseInt(
+      amount.replace(/[^.\d]/g, '')
+    )
+  }
+}
+
 export const formatPin = pin => pin.replace(/[^0-9]/g, '')
 
 export const formatLockTimeout = timeout => timeout.replace(/[^0-9]/g, '')
