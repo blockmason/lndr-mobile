@@ -87,9 +87,8 @@ class PendingTransactionsView extends Component<Props, State> {
     if (!pendingTransactionsLoaded) {
       showNone = true
     } else if (!friend) {
-      showNone = pendingTransactions.filter( tx => tx.ucac === getUcacAddr(defaultCurrency) ).length 
-      + pendingSettlements.filter( tx => tx.ucac === getUcacAddr(defaultCurrency) ).length 
-      + bilateralSettlements.filter( tx => tx.ucac === getUcacAddr(defaultCurrency) ).length  === 0
+      showNone = pendingTransactions.filter( tx => getUcacAddress(defaultCurrency).indexOf(tx.ucac) !== -1 ).length 
+      + pendingSettlements.filter( tx => getUcacAddress(defaultCurrency).indexOf(tx.ucac) !== -1 ).length === 0
     } else if (friend) {
       showNone = true
       pendingTransactions.map( (pending) => {

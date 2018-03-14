@@ -79,7 +79,7 @@ class PendingSettlementDetail extends Component<Props, State> {
     const { currency } = this.state
     const { ethExchange, ethSentPastWeek, user } = this.props
 
-    if ( pending.creditorAddress === user.address && ethSentPastWeek * Number(ethExchange) + Number(pending.amount) > Number(transferLimits[currency]) ) {
+    if ( pending.creditorAddress === user.address && ( ethSentPastWeek * Number(ethExchange) + Number(pending.amount) > Number(transferLimits[currency]) ) ) {
       this.setState({ confirmationError: accountManagement.sendEth.error.limitExceeded(currency) })
       return
     }
