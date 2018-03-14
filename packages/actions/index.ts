@@ -966,7 +966,6 @@ const getEthTransactions = async (addr: string, recovery: boolean) => {
   }
 
   await ethTransactionsStorage.set(ethTransactions)
-  console.log('GETTING ETH TRANSACTIONS', await ethTransactionsStorage.get())
   return ethTransactions
 }
 
