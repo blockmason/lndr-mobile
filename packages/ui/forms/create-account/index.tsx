@@ -1,6 +1,6 @@
 import React, { Component } from 'react'
 
-import { View, Text, TextInput, BackAndroid, BackHandler, KeyboardAvoidingView } from 'react-native'
+import { View, Text, TextInput, BackAndroid, BackHandler, KeyboardAvoidingView, Platform } from 'react-native'
 
 import Button from 'ui/components/button'
 import ThemeImage from 'ui/components/images/theme-image'
@@ -149,7 +149,7 @@ class CreateAccountForm extends Component<Props, State> {
       </View>
     } else {
       return (<View style={style.form}>
-        <KeyboardAvoidingView behavior='padding' keyboardVerticalOffset={200} >
+        <KeyboardAvoidingView behavior={Platform.OS === 'ios' ? 'position' : 'padding'} keyboardVerticalOffset={0} >
           <ThemeImage name='logo' size={0.4} />
           <Text style={[style.text, style.spaceBottom]}>{newAccount}</Text>
           <View style={style.textInputContainer}>

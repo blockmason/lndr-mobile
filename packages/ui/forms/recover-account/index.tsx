@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import { View, Text, TextInput, BackAndroid, BackHandler, KeyboardAvoidingView } from 'react-native'
+import { View, Text, TextInput, BackAndroid, BackHandler, KeyboardAvoidingView, Platform } from 'react-native'
 
 import ThemeImage from 'ui/components/images/theme-image'
 import Pinpad from 'ui/components/pinpad'
@@ -124,6 +124,13 @@ class RecoverAccountForm extends Component<Props, State> {
     this.setState({ mnemonicLengthError })
   }
 
+  setPIN() {
+    if (this.state.mnemonicLengthError) {
+      return
+    }
+    this.setState({ step: 2 })
+  }
+
   render() {
     const { password, confirmPassword, step, mnemonicLengthError } = this.state
 
@@ -141,7 +148,7 @@ class RecoverAccountForm extends Component<Props, State> {
       </View>
     } else {
       return <View style={style.form}>
-        <KeyboardAvoidingView behavior='position' keyboardVerticalOffset={0} >
+        <KeyboardAvoidingView behavior={Platform.OS === 'ios' ? 'position' : 'padding'} keyboardVerticalOffset={0} >
           <ThemeImage name='logo' size={0.4} />
           <Text style={[style.text, style.spaceBottom]}>{recoverExistingAccount}</Text>
           <View style={style.textInputContainer}>
@@ -156,7 +163,7 @@ class RecoverAccountForm extends Component<Props, State> {
             />
           </View>
           { mnemonicLengthError && <Text style={style.warningText}>{mnemonicLengthError}</Text> }
-          <Button round fat style={style.submitButton} onPress={() => this.setState({ step: 2 })} text={recoverAccount} />
+          <Button round fat style={style.submitButton} onPress={() => this.setPIN()} text={recoverAccount} />
           <Button alternate small arrow style={style.submitButton} onPress={() => this.cancel()} text={cancel} />
         </KeyboardAvoidingView>
       </View>

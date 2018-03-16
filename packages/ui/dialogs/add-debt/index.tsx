@@ -93,7 +93,7 @@ class AddDebt extends Component<Props, State> {
       resetAction = getResetAction( { routeName:'Confirmation', params: { type: 'create', friend } } )
 
     } else {
-      resetAction = getResetAction( { routeName: 'Home' } )
+      resetAction = getResetAction( { routeName: 'Dashboard' } )
     }
 
     navigation.dispatch(resetAction)
