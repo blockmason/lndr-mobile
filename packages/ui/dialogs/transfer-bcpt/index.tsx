@@ -52,7 +52,6 @@ class TransferBcpt extends Component<Props, State> {
   }
 
   async submit() {
-    console.log('SUBMITTING BCPT PAYMENT')
     const { amount, address } = this.state
 
     if (!this.validAddress()) {

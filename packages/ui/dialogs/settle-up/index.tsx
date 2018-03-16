@@ -1,6 +1,6 @@
 import React, { Component } from 'react'
 
-import { Text, TextInput, TouchableHighlight, View, Image, ScrollView, KeyboardAvoidingView } from 'react-native'
+import { Text, TextInput, TouchableHighlight, View, Image, ScrollView, KeyboardAvoidingView, Platform } from 'react-native'
 import { getResetAction } from 'reducers/nav'
 
 import { UserData } from 'lndr/user'
@@ -79,13 +79,10 @@ class SettleUp extends Component<Props, State> {
   }
 
   async submit() {
-    const { amount, direction, currency } = this.state
-    const { ethExchange, ethSentPastWeek } = this.props
+    const { amount, direction, currency, formInputError } = this.state
     const friend = this.props.navigation ? this.props.navigation.state.params.friend : {}
 
-    console.log(1, ethSentPastWeek * Number(ethExchange), Number(amount), ethSentPastWeek * Number(ethExchange) + Number(amount), Number(transferLimits[currency]))
-    if ( direction === 'lend' && ethSentPastWeek * Number(ethExchange) + Number(amount) > Number(transferLimits[currency]) ) {
-      this.setState({ formInputError: accountManagement.sendEth.error.limitExceeded(defaultCurrency) })
+    if ( formInputError ) {
       return
     }
 
@@ -169,6 +166,19 @@ class SettleUp extends Component<Props, State> {
     return remaining.slice(0, end)
   }
 
+  updateAmount(amount: string) {
+    const { direction, currency } = this.state
+    const { ethExchange, ethSentPastWeek } = this.props
+    let formInputError
+    const cleanAmount = amount.replace(/^[^0-9\.]/, '')
+
+    if ( direction === 'lend' && ethSentPastWeek * Number(ethExchange) + Number(cleanAmount) > Number(transferLimits[currency]) ) {
+      formInputError = accountManagement.sendEth.error.limitExceeded(defaultCurrency)
+    }
+
+    this.setState({ amount: this.setAmount(amount), formInputError })
+  }
+
   render() {
     const { amount, balance, txCost, currency, formInputError } = this.state
     const { recentTransactions, ethBalance, ethExchange, ethSentPastWeek, getUcacAddress } = this.props
@@ -177,8 +187,10 @@ class SettleUp extends Component<Props, State> {
     return <ScrollView style={general.whiteFlex} keyboardShouldPersistTaps='handled'>
       <Loading context={submittingTransaction} />
       <DashboardShell text={debtManagement.settleUpLower} navigation={this.props.navigation} />
-      <Button close onPress={() => this.props.navigation.navigate('Friends')} />
-      <KeyboardAvoidingView behavior='padding' keyboardVerticalOffset={0} >
+      <View style={{marginBottom: 10, marginTop: -10}}>
+        <Button close onPress={() => this.props.navigation.navigate('Friends')} />
+      </View>
+      <KeyboardAvoidingView behavior={Platform.OS === 'ios' ? 'position' : 'padding'} keyboardVerticalOffset={0} contentContainerStyle={{backgroundColor: 'white'}} >
         <View style={[general.centeredColumn, {marginBottom: 20}]}>
           <Image source={require('images/person-outline-dark.png')} style={style.settleImage}/>
           <Text style={[style.header, {marginBottom: 20, marginHorizontal: 20, textAlign: 'center'}]}>{this.displayMessage()}</Text>
@@ -215,11 +227,11 @@ class SettleUp extends Component<Props, State> {
                 maxLength={14}
                 underlineColorAndroid='transparent'
                 keyboardType='numeric'
-                onChangeText={amount => this.setState({ amount: this.setAmount(amount), formInputError: undefined })}
+                onChangeText={amount => this.updateAmount(amount)}
               />
             </View>
           </View>
-          { formInputError && <Text style={[formStyle.warningText, {alignSelf: 'center'}]}>{formInputError}</Text>}
+          { formInputError && <Text style={[formStyle.warningText, {alignSelf: 'center', marginHorizontal: 15}]}>{formInputError}</Text>}
           { amount ? <Button large round wide onPress={() => this.submit()} text={debtManagement.settleUp} /> : <Button large round wide onPress={() => this.setState({ amount: `${currencies[defaultCurrency]}${currencyFormats[defaultCurrency](Math.abs(balance))}`})} text={debtManagement.settleTotal} />}
         </View>
       </KeyboardAvoidingView>

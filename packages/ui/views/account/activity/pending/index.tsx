@@ -109,6 +109,12 @@ class PendingTransactionsView extends Component<Props, State> {
     this.setState({ pendingTransaction })
   }
 
+  hideBilateralMsg() {
+    const { homeScreen, friend, state } = this.props
+    const numBilat = friend ? state.bilateralSettlements.filter( biSet => friend.address === biSet.creditorAddress || friend.address === biSet.debtorAddress ).length : state.bilateralSettlements.length
+    return homeScreen || numBilat === 0
+  }
+
   render() {
     const { pendingTransactionsLoaded, pendingTransactions, bilateralSettlements } = this.props.state
     const { pendingSettlements, settlerIsMe } = this.props
@@ -155,11 +161,13 @@ class PendingTransactionsView extends Component<Props, State> {
               settlerIsMe={settlerIsMe}
             />
           })}
-          { homeScreen || bilateralSettlements.length === 0 ? null : 
-          <Text style={style.transactionHeader}>{pendingTransactionsLanguage.bilateral}</Text> }
+          { this.hideBilateralMsg() ? null : <Text style={style.transactionHeader}>{pendingTransactionsLanguage.bilateral}</Text> }
           { homeScreen ? null :
           bilateralSettlements.map( bilateralSettlement => {
             if(getUcacAddress(defaultCurrency).indexOf(bilateralSettlement.ucac) === -1 ) {
+              return null
+            }
+            if (friend && friend.address !== bilateralSettlement.creditorAddress && friend.address !== bilateralSettlement.debtorAddress) {
               return null
             }
             if (homeScreen && this.props.settlerIsMe(bilateralSettlement)) {

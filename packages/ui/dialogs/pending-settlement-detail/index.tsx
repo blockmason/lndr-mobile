@@ -184,6 +184,14 @@ class PendingSettlementDetail extends Component<Props, State> {
     </View>
   }
 
+  getLimit() {
+    const { currency } = this.state
+    const { ethExchange, ethSentPastWeek } = this.props
+    const remaining = String(Number(transferLimits[currency]) - Number(ethSentPastWeek) * Number(ethExchange))
+    const end = remaining.indexOf('.') === -1 ? remaining.length : remaining.indexOf('.') + 3
+    return remaining.slice(0, end)
+  }
+
   render() {
     const { txCost, currency, confirmationError } = this.state
     const { user, settlerIsMe } = this.props
@@ -204,6 +212,7 @@ class PendingSettlementDetail extends Component<Props, State> {
           <Text style={style.amount}>{this.getSettlementAmount()}</Text>
           <Text style={style.balanceInfo}>{pendingSettlement.settlementCurrency}</Text>
         </View>
+        {user.address === pendingSettlement.debtorAddress ? null : <Text style={[formStyle.smallText, formStyle.spaceTop, formStyle.center]}>{accountManagement.sendEth.warning(this.getLimit(), currency)}</Text>}
         <Text style={[accountStyle.txCost, formStyle.spaceBottom, {marginLeft: '2%'}]}>{accountManagement.sendEth.txCost(txCost, currency)}</Text>
         { confirmationError && <Text style={[formStyle.warningText, {alignSelf: 'center'}]}>{confirmationError}</Text>}
         {this.showButtons()}

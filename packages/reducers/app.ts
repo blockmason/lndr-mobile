@@ -77,10 +77,9 @@ export const getWeeklyEthTotal = (state) => {
     ethTransactions = []
   }
   const lastWeekWei = ethTransactions.reduce( (acc, cur) => moment(cur.time).add(7, 'day') > moment() ? acc + Number(cur.amount) : acc, 0)
-  const unilateralWei = pendingSettlements.reduce( (acc, cur) => cur.creditorAddress === user.address ? acc + Number(cur.settlementAmount) : acc, 0)
   const bilateralWei = bilateralSettlements.reduce( (acc, cur) => cur.creditorAddress === user.address ? acc + Number(cur.settlementAmount) : acc, 0)
 
-  return (lastWeekWei + unilateralWei + bilateralWei) / Math.pow(10, 18)
+  return (lastWeekWei + bilateralWei) / Math.pow(10, 18)
 }
 
 export const recentTransactions = (state) => state.store.recentTransactions
