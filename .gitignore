@@ -49,6 +49,8 @@ android/app/src/main/assets/index.android.bundle.meta
 node_modules/
 npm-debug.log
 yarn-error.log
+ios/Podfile.lock
+yarn.lock
 
 # BUCK
 buck-out/
@@ -69,6 +71,7 @@ buck-out/
 #app signing .keystore file
 android/gradle.properties
 android/app/blockmason-lndr-android.keystore
+android/app/google-services.json
 
 #aws secrets
 packages/lndr/profile-pic/config.json

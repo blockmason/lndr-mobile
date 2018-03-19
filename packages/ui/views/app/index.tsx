@@ -3,6 +3,8 @@ import React, { Component } from 'react'
 // TODO Remove button / go through the entire import dependecy list
 import { View, ScrollView, Button } from 'react-native'
 
+import firebase from 'react-native-firebase'
+
 import AuthenticateView from 'ui/views/authenticate'
 import WelcomeView from 'ui/views/welcome'
 
