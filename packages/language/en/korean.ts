@@ -32,6 +32,8 @@ export default {
   addFriendConfirmationQuestion: '정말 친구로 추가하시겠습니까?',
   removeFriend: '친구 삭제',
   currentFriends: '친구 리스트',
+  inviteFriends: 'Invite Friends to Lndr',
+  tryLndr: 'Check out the Lndr App here:',
   removeFriendConfirmationQuestion: '정말 해당 친구를 목록에서 삭제하시겠습니까?',
   friendInfo: '친구 관계 정보:',
   noFriends: '사용 전 친구를 추가해보세요!',

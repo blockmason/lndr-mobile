@@ -30,6 +30,8 @@ export default {
   addFriendConfirmationQuestion: '本当にこのユーザーをフレンドに追加しますか？',
   removeFriend: 'フレンドを外す',
   currentFriends: '現在のフレンド',
+  inviteFriends: 'Invite Friends to Lndr',
+  tryLndr: 'Check out the Lndr App here:',
   removeFriendConfirmationQuestion: '本当にこのユーザーをフレンドから解除しますか？',
   friendInfo: 'この関係についての追加情報:',
   noFriends: 'フレンドを追加して始めよう!',
