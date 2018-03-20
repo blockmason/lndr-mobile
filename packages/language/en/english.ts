@@ -82,109 +82,111 @@ export default {
   email: 'Email Address',
 
   accountManagement: {
-  nickname: {
-    lengthViolation: 'Nickname should be at least 3 characters.',
-    compositionViolation: 'Nickname can contain only numbers and lowercase letters.',
-    duplicationViolation: 'Nickname is already taken'
-  },
-  email: {
-    compositionViolation: 'Email format is incorrect',
-    duplicationViolation: 'Email is already taken'
-  },
-  pin: {
-    lengthViolation: 'PIN should be at least 4 characters.',
-    matchViolation: 'PINs should match.',
-    failedHashComparison: 'PIN is not valid, please try again.',
-    updateSuccess: 'Your PIN has been updated',
-    updateError: 'There was an error updating your PIN'
-  },
-  mnemonic: {
-    lengthViolation: 'Mnemonic should have at least 12 words.',
-    unableToValidate: 'The entered mnemonic was not valid, please try again.'
-  },
-  setNickname: {
-    success: 'Your nickname has been saved.',
-    error: generalCommunicationError
-  },
-  setEmail: {
-    success: 'Your email has been saved.',
-    error: generalCommunicationError
-  },
-  lockTimeout: {
-    top: 'You must enter your PIN after',
-    bottom: 'minutes of inactivity',
-    update: 'UPDATE',
-    error: 'We were unable to update your account settings',
-    success: 'Lock Timeout Updated'
-  },
-  addFriend: {
-    success: nickname => `Added to friends: @${nickname}`,
-    error: generalCommunicationError
-  },
-  removeFriend: {
-    success: nickname => `Removed from friends: @${nickname}`,
-    error: generalCommunicationError
-  },
-  loadInformation: {
-    error: generalCommunicationError
-  },
-  ethBalance: {
-    display: balance => `Your ETH balance is ${String(balance).slice(0,8)} `,
-    inFiat: (amount, exchange, currency) => ` (${currencies[currency]}${String(Number(amount) * Number(exchange)).slice(0, 8)})`,
-    getError: 'Unable to retrieve Eth balance',
-    manage: 'Manage ETH'
-  },
-  sendEth: {
-    error: {
-      insufficient: 'The transfer failed due to insufficient funds',
-      generic: 'There was an error with the transfer, please try again later',
-      address: 'Please enter a valid address',
-      amount: 'Please enter an amount greater than 0',
-      limitExceeded: currency => `You can only send ${currencies[currency]}${transferLimits[currency]} per week, please select a smaller amount`
+    nickname: {
+      lengthViolation: 'Nickname should be at least 3 characters.',
+      compositionViolation: 'Nickname can contain only numbers and lowercase letters.',
+      duplicationViolation: 'Nickname is already taken'
     },
-    amount: 'AMOUNT TO SEND',
-    address: `Destination Address (without '0x' prefix)`,
-    transfer: 'TRANSFER ETH',
-    transferAll: 'TRANSFER EVERYTHING',
-    balance: (balance) => `Your current ETH balance is ${typeof balance === 'string' ? balance.slice(0,8) : ''}`,
-    ethAddress: 'Ethereum Address',
-    txCost: (cost, currency) => `The current transaction cost is ${currencies[currency]}${cost}`,
-    transferLowercase: 'Transfer Eth',
-    note: currency => `Please note: you can only transfer ${currencies[currency]}${transferLimits[currency]} per week out of Lndr`,
-    warning: (amount, currency) => `You have ${currencies[currency]}${amount} remaining of your ${currencies[currency]}${transferLimits[currency]} limit`
-  },
-  sendBcpt: {
-    error: {
-      insufficient: 'You do not have enough BCPT for this transaction',
-      generic: 'There was an error with the transfer, please try again later'
+    email: {
+      compositionViolation: 'Email format is incorrect',
+      duplicationViolation: 'Email is already taken'
     },
-    transfer: 'TRANSFER BCPT',
-    address: `Destination Address (without '0x' prefix)`,
-    balance: (balance) => `Your current BCPT balance is ${typeof balance === 'string' ? balance.slice(0,8) : ''}`,
-    bcptAddress: 'BCPT Address'
+    pin: {
+      lengthViolation: 'PIN should be at least 4 characters.',
+      matchViolation: 'PINs should match.',
+      failedHashComparison: 'PIN is not valid, please try again.',
+      updateSuccess: 'Your PIN has been updated',
+      updateError: 'There was an error updating your PIN'
+    },
+    mnemonic: {
+      lengthViolation: 'Mnemonic should have at least 12 words.',
+      unableToValidate: 'The entered mnemonic was not valid, please try again.'
+    },
+    setNickname: {
+      success: 'Your nickname has been saved.',
+      error: generalCommunicationError
+    },
+    setEmail: {
+      success: 'Your email has been saved.',
+      error: generalCommunicationError
+    },
+    lockTimeout: {
+      top: 'You must enter your PIN after',
+      bottom: 'minutes of inactivity',
+      update: 'UPDATE',
+      error: 'We were unable to update your account settings',
+      success: 'Lock Timeout Updated'
+    },
+    addFriend: {
+      success: nickname => `Added to friends: @${nickname}`,
+      error: generalCommunicationError
+    },
+    removeFriend: {
+      success: nickname => `Removed from friends: @${nickname}`,
+      error: generalCommunicationError
+    },
+    loadInformation: {
+      error: generalCommunicationError
+    },
+    ethBalance: {
+      display: balance => `Your ETH balance is ${String(balance).slice(0,8)} `,
+      inFiat: (amount, exchange, currency) => ` (${currencies[currency]}${String(Number(amount) * Number(exchange)).slice(0, 8)})`,
+      getError: 'Unable to retrieve Eth balance',
+      manage: 'Manage ETH'
+    },
+    sendEth: {
+      error: {
+        insufficient: 'The transfer failed due to insufficient funds',
+        generic: 'There was an error with the transfer, please try again later',
+        address: 'Please enter a valid address',
+        amount: 'Please enter an amount greater than 0',
+        limitExceeded: currency => `You can only send ${currencies[currency]}${transferLimits[currency]} per week, please select a smaller amount`
+      },
+      amount: 'AMOUNT TO SEND',
+      address: `Destination Address (without '0x' prefix)`,
+      transfer: 'TRANSFER ETH',
+      transferAll: 'TRANSFER EVERYTHING',
+      balance: (balance) => `Your current ETH balance is ${typeof balance === 'string' ? balance.slice(0,8) : ''}`,
+      ethAddress: 'Ethereum Address',
+      txCost: (cost, currency) => `The current transaction cost is ${currencies[currency]}${cost}`,
+      transferLowercase: 'Transfer Eth',
+      note: currency => `Please note: you can only transfer ${currencies[currency]}${transferLimits[currency]} per week out of Lndr`,
+      warning: (amount, currency) => `You have ${currencies[currency]}${amount} remaining of your ${currencies[currency]}${transferLimits[currency]} limit`
+    },
+    sendBcpt: {
+      error: {
+        insufficient: 'You do not have enough BCPT for this transaction',
+        generic: 'There was an error with the transfer, please try again later'
+      },
+      transfer: 'TRANSFER BCPT',
+      address: `Destination Address (without '0x' prefix)`,
+      balance: (balance) => `Your current BCPT balance is ${typeof balance === 'string' ? balance.slice(0,8) : ''}`,
+      bcptAddress: 'BCPT Address'
+    },
+    changeProfilePic: 'Tap to Change',
+    addProfilePic: 'Use Picture from Phone',
+    panelHeaders: [
+      'ETH (& BCPT) Address',
+      'ETH Balance',
+      'BCPT Balance',
+      'ETH Transaction History',
+      'Change PIN',
+      'Change Nickname',
+      'Change Email',
+      'Change Profile Picture',
+      'Change Lock Timeout',
+      'Mnemonic',
+      'Notifications'
+    ],
+    viewEtherscan: 'View Etherscan History',
+    profilePic: {
+      change: 'Change Profile Picture',
+      setError: 'There was an error uploading your picture, please try again later',
+      getError: 'There was an error retrieving your profile picture',
+      setSuccess: 'Profile picture updated'
+    },
+    logoutSuccess: 'You have successfully logged out!'
   },
-  changeProfilePic: 'Tap to Change',
-  addProfilePic: 'Use Picture from Phone',
-  panelHeaders: [
-    'ETH (& BCPT) Address',
-    'ETH Balance',
-    'BCPT Balance',
-    'Change PIN',
-    'Change Nickname',
-    'Change Email',
-    'Change Profile Picture',
-    'Change Lock Timeout',
-    'Mnemonic',
-    'Notifications'
-  ],
-  profilePic: {
-    change: 'Change Profile Picture',
-    setError: 'There was an error uploading your picture, please try again later',
-    getError: 'There was an error retrieving your profile picture',
-    setSuccess: 'Profile picture updated'
-  },
-  logoutSuccess: 'You have successfully logged out!'
-},
 
   currentBalance: {
     eth: 'Your current Eth balance is:',

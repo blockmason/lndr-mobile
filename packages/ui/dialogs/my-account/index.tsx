@@ -1,8 +1,6 @@
 import React, { Component } from 'react'
 
-import { defaultUpdateAccountData, UpdateAccountData, UserData } from 'lndr/user'
-
-import { Text, TextInput, View, Dimensions, ScrollView,
+import { Text, TextInput, View, Dimensions, ScrollView, Linking,
   TouchableHighlight, Image, BackHandler, FlatList } from 'react-native'
 
 import ImagePicker from 'react-native-image-picker'
@@ -10,23 +8,20 @@ import ImagePicker from 'react-native-image-picker'
 import Button from 'ui/components/button'
 import Pinpad from 'ui/components/pinpad'
 import Loading, { LoadingContext } from 'ui/components/loading'
+import TextLogo from 'ui/components/images/text-logo'
+import BMLogo from 'ui/components/images/bm-logo'
+import InputImage from 'ui/components/images/input-image'
+
+import { formatNick, formatLockTimeout, formatEmail, emailFormatIncorrect } from 'lndr/format'
+import { defaultUpdateAccountData, UpdateAccountData, UserData } from 'lndr/user'
+import { getBcptBalance } from 'lndr/bcpt-utils'
+import defaultCurrency from 'lndr/default-currency'
 
 import { getAccountInformation, updateNickname, updateEmail, logoutAccount, toggleNotifications, 
   setEthBalance, updateLockTimeout, updatePin, getProfilePic, setProfilePic, takenNick, takenEmail,
   copyToClipboard, validatePin } from 'actions'
 import { getUser, getStore } from 'reducers/app'
 import { connect } from 'react-redux'
-import { formatNick, formatLockTimeout, formatEmail, emailFormatIncorrect } from 'lndr/format'
-import { getBcptBalance } from 'lndr/bcpt-utils'
-import defaultCurrency from 'lndr/default-currency'
-
-import TextLogo from 'ui/components/images/text-logo'
-import BMLogo from 'ui/components/images/bm-logo'
-import InputImage from 'ui/components/images/input-image'
-
-const loadingContext = new LoadingContext()
-
-const { height } = Dimensions.get('window');
 
 import style from 'theme/form'
 import general from 'theme/general'
@@ -36,8 +31,12 @@ import slideStyle from 'theme/slide'
 import language, { currencies } from 'language'
 const { nickname, setNickname, email, setEmail, copy, accountManagement, changePin, enterNewPin, confirmPin,
   cancel, mnemonicExhortation, addressExhortation, logoutAction, notifications, currentBalance, showMnemonic, enterCurrentPin
- } = language
- const updateAccountText = language.updateAccount
+} = language
+const updateAccountText = language.updateAccount
+
+const loadingContext = new LoadingContext()
+
+const { height } = Dimensions.get('window');
 
 interface Props {
   logoutAccount: () => any
@@ -78,7 +77,7 @@ class MyAccount extends Component<Props, State> {
     this.state = {
       ...defaultUpdateAccountData(),
       lockTimeout: '',
-      hiddenPanels: [true, true, true, true, true, true, true, true, true, true],
+      hiddenPanels: [true, true, true, true, true, true, true, true, true, true, true],
       step: 1,
       photos: [],
       authenticated: false,
@@ -248,6 +247,9 @@ class MyAccount extends Component<Props, State> {
         <Text style={[style.text, style.spaceTopL, style.center]}>{currentBalance.bcpt}</Text>
         <Text selectable style={style.displayText}>{bcptBalance}</Text>
         <Button round onPress={() => this.props.navigation.navigate('TransferBcpt')} text={accountManagement.sendBcpt.transfer} />
+      </View>),
+      (<View style={style.spaceHorizontalL}>
+        <Button round onPress={() =>  Linking.openURL(`https://etherscan.io/address/${user.address}`)} text={accountManagement.viewEtherscan} />
       </View>),
       (<View style={style.spaceHorizontalL}>
         {authenticated ? <Button round onPress={() => this.setState({ step: 2 })} text={changePin} /> :
