@@ -172,6 +172,7 @@ export default {
     'ETH (& BCPT) アドレス',
     'EHT残高',
     'BCPT残高',
+    'ETH Transaction History',
     '暗証番号を変える',
     'ニックネームを変える',
     'メールアドレスを変える',
@@ -180,6 +181,7 @@ export default {
     'ニューモニック',
     '通知'
   ],
+  viewEtherscan: 'View Etherscan History',
   profilePic: {
     change: 'プロフィール画像を変える',
     setError: 'プロフィール画像をアップロードできませんでした。のちほど、再度実行してください。',

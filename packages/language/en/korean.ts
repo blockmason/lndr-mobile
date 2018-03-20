@@ -174,6 +174,7 @@ export default {
     '이더리움 (& BCPT) 주소',
     '이더리움 잔액',
     'BCPT 잔액',
+    'ETH Transaction History',
     '비밀번호 변경',
     '닉네임 변경',
     '이메일 주소',
@@ -182,6 +183,7 @@ export default {
     '연상기호',
     '알림'
   ],
+  viewEtherscan: 'View Etherscan History',
   profilePic: {
     change: '프로필 사진 변경',
     setError: '사진 업로딩에 실패했습니다, 다시 시도해주세요',
