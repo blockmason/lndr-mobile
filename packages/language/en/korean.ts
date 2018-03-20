@@ -277,13 +277,15 @@ export default {
 },
 
   settlementManagement: {
-  bilateral: {
-    error: {
-      insufficient: nickname => `당신이 ${nickname} 에게 시도한 청산은 자금 부족으로 실패하였습니다`,
-      generic: nickname => `${nickname} 에게 청산하는 과정에서 에러가 발생했습니다`
-    }
-  }
-},
+    bilateral: {
+      error: {
+        insufficient: nickname => `당신이 ${nickname} 에게 시도한 청산은 자금 부족으로 실패하였습니다`,
+        generic: nickname => `${nickname} 에게 청산하는 과정에서 에러가 발생했습니다`
+      }
+    },
+    eth: 'Settle With ETH',
+    nonPayment: 'Record a Settlement'
+  },
 
   accountViewLanguage: {
   lndr: 'L n d r',

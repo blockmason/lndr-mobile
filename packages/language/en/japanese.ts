@@ -275,13 +275,15 @@ export default {
 },
 
   settlementManagement: {
-  bilateral: {
-    error: {
-      insufficient: nickname => `残高が少なかったため、${nickname} への支払いができませんでした`,
-      generic: nickname => `${nickname} への支払い中に、エラーが発生しました`
-    }
-  }
-},
+    bilateral: {
+      error: {
+        insufficient: nickname => `残高が少なかったため、${nickname} への支払いができませんでした`,
+        generic: nickname => `${nickname} への支払い中に、エラーが発生しました`
+      }
+    },
+    eth: 'Settle With ETH',
+    nonPayment: 'Record a Settlement'
+  },
 
   accountViewLanguage: {
   lndr: 'L n d r',
