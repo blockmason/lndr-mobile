@@ -266,8 +266,8 @@ export default StyleSheet.create({
     width: 15
   },
   newTransactionButtonContainer: {
-    flexDirection: 'row',
-    justifyContent: 'space-between'
+    flexDirection: 'column',
+    alignItems: 'center'
   },
   titledPending: {
     color: aqua,

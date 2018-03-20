@@ -202,8 +202,8 @@ class HomeView extends Component<Props, State> {
       <Section>
         <Text style={[formStyle.titleXLarge, formStyle.center, formStyle.spaceBottomS]}>{newTransaction}</Text>
         <View style={style.newTransactionButtonContainer}>
-          <Button fat small round onPress={() => this.props.navigation.navigate('AddDebt', { direction: 'lend' })} text={debtManagement.lend} style={{minWidth: width / 2 - 25}} />
-          <Button fat small round dark onPress={() => this.props.navigation.navigate('AddDebt', {direction: 'borrow'})} text={debtManagement.borrow} style={{minWidth: width / 2 - 25}} />
+          <Button fat round onPress={() => this.props.navigation.navigate('AddDebt', { direction: 'lend' })} text={debtManagement.iLent} style={{minWidth: width / 4 * 3}} />
+          <Button fat round dark onPress={() => this.props.navigation.navigate('AddDebt', {direction: 'borrow'})} text={debtManagement.iBorrowed} style={{minWidth: width / 4 * 3}} />
         </View>
       </Section>
       {this.renderNeedsReview()}

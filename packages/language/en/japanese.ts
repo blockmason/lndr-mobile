@@ -181,7 +181,7 @@ export default {
   profilePic: {
     change: 'プロフィール画像を変える',
     setError: 'プロフィール画像をアップロードできませんでした。のちほど、再度実行してください。',
-    getError: 'プロフィール画像をretrieveできませんでした',
+    getError: 'プロフィール画像を表示できません',
     setSuccess: 'プロフィール画像がアップロードされました'
   },
   logoutSuccess: 'ログアウトしました!'
@@ -215,6 +215,8 @@ export default {
   selectFriend: '選択',
   lend: '新しいローン',
   borrow: '新しい借り',
+  iLent: '新しいローン',
+  iBorrowed: '新しい借り',
   settleUpLower: '帳消しにする',
   amountToSettle: '送信額',
   total: '合計',
@@ -224,7 +226,7 @@ export default {
     amountTooLow: '金額は$0以上にしてください',
     amountTooHigh: '金額は$1,000,000,000未満にしてください',
     selfAsFriend: '自分自身に貸しを作ることはできません。フレンドを選んでください。',
-    pending: 'やりとりを開始する前に、承認待ちになっているやりとりに対処してください',
+    pending: '新規のやりとりを開始する前に、承認待ちになっているやりとりに対処してください',
     insufficientEth: eth => `帳消しするためには${eth}ETHが必要です。残高を設定で確認してください。`
   },
   fields: {
@@ -257,11 +259,11 @@ export default {
   confirmation: {
     transaction: counterParty => `${counterParty}とのやりとりは承認されました`,
     settlement: counterParty => `${counterParty}とのやりとりは完了しました`,
-    error: 'やりとりを正常に確認できませんでした。しばらくしてから再度お試しください。'
+    error: 'やりとりを確認できません。しばらくしてから再度お試しください。'
   },
   rejection: {
     success: '取引が拒否されました。',
-    error: 'やりとりを正常に拒否できませんでした。しばらくしてから再度お試しください。'
+    error: 'やりとりを拒否できません。しばらくしてから再度お試しください。'
   },
   balances: {
     error: '残高のロードに失敗しました。しばらくしてから再度お試しください。'

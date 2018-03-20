@@ -217,6 +217,8 @@ export default {
   selectFriend: '선택',
   lend: '새로운 대출',
   borrow: '새로운 부채',
+  iLent: '새로운 대출',
+  iBorrowed: '새로운 부채',
   settleUpLower: '  청산  ',
   amountToSettle: '청산 금액',
   total: '총액',
