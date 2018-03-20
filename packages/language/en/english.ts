@@ -32,6 +32,8 @@ export default {
   removeFriend: 'Remove Friend',
   currentFriends: 'Current Friends',
   removeFriendConfirmationQuestion: 'Are you sure you would like to remove this user as a friend?',
+  inviteFriends: 'Invite Friends to Lndr',
+  tryLndr: 'Check out the Lndr App here:',
   friendInfo: 'More information about this friendship:',
   noFriends: 'Add some friends to get started!',
   noMatches: 'No matching users found',

@@ -1,8 +1,9 @@
 import React, { Component } from 'react'
 
-import Friend from 'lndr/friend'
+import { Text, View, ScrollView, RefreshControl, Dimensions, Platform, Share } from 'react-native'
 
-import { Text, View, ScrollView, RefreshControl } from 'react-native'
+import Friend from 'lndr/friend'
+import defaultCurrency from 'lndr/default-currency'
 
 import Button from 'ui/components/button'
 import Section from 'ui/components/section'
@@ -16,7 +17,7 @@ import style from 'theme/account'
 import general from 'theme/general'
 
 import language from 'language'
-const { noFriends, currentFriends } = language
+const { noFriends, currentFriends, inviteFriends, tryLndr } = language
 
 import { isFocusingOn } from 'reducers/nav'
 import { getStore, pendingTransactions, recentTransactions } from 'reducers/app'
@@ -25,6 +26,8 @@ import { connect } from 'react-redux'
 
 const loadingFriends = new LoadingContext()
 const loadingAddFriend = new LoadingContext()
+
+const { width } = Dimensions.get('window')
 
 interface Props {
   isFocused: boolean
@@ -82,6 +85,21 @@ class FriendsView extends Component<Props, State> {
     await loadingAddFriend.wrap(this.props.addFriend(friend))
   }
 
+  async shareLndr() {
+    let shareLndrURL
+    if (Platform.OS === 'ios') {
+      shareLndrURL = ''
+    } else if (defaultCurrency === 'KRW') {
+      shareLndrURL = 'https://lndr.io/kr/'
+    } else if (defaultCurrency === 'JPY') {
+      shareLndrURL = 'https://lndr.io/jp/'
+    } else {
+      shareLndrURL = 'https://lndr.io'
+    }
+
+    Share.share({ title: `${tryLndr} ${shareLndrURL}`, url: shareLndrURL })
+  }
+
   render() {
     const { friendsLoaded, friends, recentTransactions, pendingTransactions } = this.props.state
 
@@ -93,6 +111,9 @@ class FriendsView extends Component<Props, State> {
         />
       }
     >
+      <View style={general.centeredColumn}>
+        <Button round onPress={() => this.shareLndr()} text={inviteFriends} style={{width: width / 4 * 3}} />
+      </View>
       <Section>
         <SearchFriend 
           onSuccess={() => this.refresh()}
