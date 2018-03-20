@@ -268,17 +268,19 @@ export default {
   for: memo => `for ${memo}`,
   settleUp: 'SETTLE UP',
   settleTotal: 'SETTLE TOTAL',
-  settleUpMemo: (direction, amount) => direction === 'lend' ? `Settling up for ${amount}` : `Request to settle for ${amount} `
+  settleUpMemo: (direction, amount) => direction === 'lend' ? `Settling up for ${amount}` : `Request to settle for ${amount}`,
+  recordSettleUpMemo: (direction) => direction === 'lend' ? `settling up` : `requesting to settle up`
 },
-
-settlementManagement: {
-  bilateral: {
-    error: {
-      insufficient: nickname => `Your settlement with ${nickname} failed due to insufficient funds`,
-      generic: nickname => `There was an error processing your settlement with ${nickname}`
-    }
-  }
-},
+  settlementManagement: {
+    bilateral: {
+      error: {
+        insufficient: nickname => `Your settlement with ${nickname} failed due to insufficient funds`,
+        generic: nickname => `There was an error processing your settlement with ${nickname}`
+      }
+    },
+    eth: 'Settle With ETH',
+    nonPayment: 'Record a Settlement'
+  },
 
   accountViewLanguage: {
   lndr: 'L n d r',

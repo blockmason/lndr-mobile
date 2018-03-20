@@ -100,7 +100,7 @@ class FriendRow extends Component<Props, State> {
     return `${records} ${records === 1 ? debtManagement.record : debtManagement.records}`
   }
 
-  showSettleUp() {
+  showEthSettlement() {
     const { friend, friendScreen } = this.props
     return this.getRecentTotal() === 0 || !friendScreen ? null : <Button narrow small round onPress={() => this.props.navigation.navigate('SettleUp', { friend: friend })} text={debtManagement.settleUp} style={{maxWidth: 130, alignSelf:'flex-end'}} />
   }
@@ -123,7 +123,7 @@ class FriendRow extends Component<Props, State> {
           <View style={[general.flexRow, general.alignCenter, general.justifyEnd]}>
             <View style={general.column}>
               <Text style={[style.pendingAmount, {alignSelf: 'flex-end'}]}>{this.getAmountTotal()}</Text>
-              {this.showSettleUp()}
+              {this.showEthSettlement()}
             </View>
           </View>
         </View>

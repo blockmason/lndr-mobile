@@ -6,6 +6,8 @@ import ConfirmationScreen from 'ui/dialogs/confirmation-screen'
 import PendingTransactionDetail from 'ui/dialogs/pending-transaction-detail'
 import PendingSettlementDetail from 'ui/dialogs/pending-settlement-detail'
 import SettleUp from 'ui/dialogs/settle-up'
+import EthSettlement from 'ui/dialogs/eth-settlement'
+import NonPaymentSettlement from 'ui/dialogs/non-payment-settlement'
 import FriendDetail from 'ui/dialogs/friend-detail'
 import TransferEth from 'ui/dialogs/transfer-eth'
 import TransferBcpt from 'ui/dialogs/transfer-bcpt'
@@ -25,6 +27,12 @@ export const AppNavigator = StackNavigator({
   },
   SettleUp: {
     screen: SettleUp
+  },
+  EthSettlement: {
+    screen: EthSettlement
+  },
+  NonPaymentSettlement: {
+    screen: NonPaymentSettlement
   },
   PendingSettlement: {
     screen: PendingSettlementDetail

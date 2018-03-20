@@ -129,8 +129,8 @@ class RemoveFriend extends Component<Props, State> {
 
   render() {
     const friend = this.props.navigation ? this.props.navigation.state.params.friend : {}
-    const { pic } = this.state
     const { navigation } = this.props
+    const { pic } = this.state
     const imageSource = pic ? { uri: pic } : require('images/person-outline-dark.png')
 
     return <ScrollView style={general.view}>
