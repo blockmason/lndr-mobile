@@ -212,6 +212,8 @@ export default {
   selectFriend: 'SELECT',
   lend: 'New Loan',
   borrow: 'New Debt',
+  iLent: 'A friend owes me',
+  iBorrowed: 'I owe a friend',
   settleUpLower: 'Settle Up',
   amountToSettle: 'AMOUNT TO SETTLE',
   total: 'Total',
@@ -269,7 +271,7 @@ export default {
   settleUpMemo: (direction, amount) => direction === 'lend' ? `Settling up for ${amount}` : `Request to settle for ${amount} `
 },
 
-  settlementManagement: {
+settlementManagement: {
   bilateral: {
     error: {
       insufficient: nickname => `Your settlement with ${nickname} failed due to insufficient funds`,
