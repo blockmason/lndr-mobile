@@ -30,8 +30,8 @@ export default {
   addFriendConfirmationQuestion: '本当にこのユーザーをフレンドに追加しますか？',
   removeFriend: 'フレンドを外す',
   currentFriends: '現在のフレンド',
-  inviteFriends: 'Invite Friends to Lndr',
-  tryLndr: 'Check out the Lndr App here:',
+  inviteFriends: '友達をLndrに招待する',
+  tryLndr: 'Lndrアプリはここから:',
   removeFriendConfirmationQuestion: '本当にこのユーザーをフレンドから解除しますか？',
   friendInfo: 'この関係についての追加情報:',
   noFriends: 'フレンドを追加して始めよう!',
@@ -172,7 +172,7 @@ export default {
     'ETH (& BCPT) アドレス',
     'EHT残高',
     'BCPT残高',
-    'ETH Transaction History',
+    'ETHのやりとり履歴',
     '暗証番号を変える',
     'ニックネームを変える',
     'メールアドレスを変える',
@@ -181,7 +181,7 @@ export default {
     'ニューモニック',
     '通知'
   ],
-  viewEtherscan: 'View Etherscan History',
+  viewEtherscan: 'Etherscan履歴を確認する',
   profilePic: {
     change: 'プロフィール画像を変える',
     setError: 'プロフィール画像をアップロードできませんでした。のちほど、再度実行してください。',
@@ -207,9 +207,9 @@ export default {
   fillTank: 'ガソリンを満タンにする',
   travelTogether: '一緒に旅行する',
   runEthereum: 'イーサリアムを活用しています！',
-  firstLendingApp: '史上初！ブロックチェーン技術を用いたレンディングモバイルアプリ',
+  firstLendingApp: '史上初！ブロックチェーン技術を用いたレンディングアプリ',
   greatConcert: 'コンサートを見る',
-  youPlayWithFriends: "フレンドと遊びます。\nタブを保存します。",
+  youPlayWithFriends: "友人と遊ぶ時に。",
   start: '始める'
 },
 
@@ -217,10 +217,10 @@ export default {
   shell: '新しいやりとり',
   add: '借りを追加する',
   selectFriend: '選択',
-  lend: '新しいローン',
+  lend: '新しい貸し',
   borrow: '新しい借り',
-  iLent: '新しいローン',
-  iBorrowed: '新しい借り',
+  iLent: '友人に貸しがあります',
+  iBorrowed: '友人に借りがあります',
   settleUpLower: '帳消しにする',
   amountToSettle: '送信額',
   total: '合計',
@@ -285,8 +285,8 @@ export default {
         generic: nickname => `${nickname} への支払い中に、エラーが発生しました`
       }
     },
-    eth: 'Settle With ETH',
-    nonPayment: 'Record a Settlement'
+    eth: 'ETHで帳消し',
+    nonPayment: '帳消ししたことを記録する'
   },
 
   accountViewLanguage: {
@@ -324,7 +324,7 @@ export default {
   pendingSettlementsLanguage: {
   shell: 'まだ帳消しされていません',
   title: '承認待ち',
-  none: '承認待ちの取引はありません',
+  none: '承認待ちのやりとりはありません',
   confirm: '承認',
   reject: '清算を拒否する',
   cancel: '清算をキャンセルする',

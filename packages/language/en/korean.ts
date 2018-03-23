@@ -32,8 +32,8 @@ export default {
   addFriendConfirmationQuestion: '정말 친구로 추가하시겠습니까?',
   removeFriend: '친구 삭제',
   currentFriends: '친구 리스트',
-  inviteFriends: 'Invite Friends to Lndr',
-  tryLndr: 'Check out the Lndr App here:',
+  inviteFriends: 'Lndr에 친구 초대',
+  tryLndr: 'Lndr 애플리케이션은 이곳에서 확인할 수 있습니다:',
   removeFriendConfirmationQuestion: '정말 해당 친구를 목록에서 삭제하시겠습니까?',
   friendInfo: '친구 관계 정보:',
   noFriends: '사용 전 친구를 추가해보세요!',
@@ -119,7 +119,7 @@ export default {
     success: '잠금 제한 시간이 업데이트되었습니다'
   },
   addFriend: {
-    success: nickname => `친구 추가됐습니다: @${nickname}`,
+    success: nickname => `친구의 요청이 접수됐습니다: @${nickname}`,
     error: generalCommunicationError
   },
   removeFriend: {
@@ -174,7 +174,7 @@ export default {
     '이더리움 (& BCPT) 주소',
     '이더리움 잔액',
     'BCPT 잔액',
-    'ETH Transaction History',
+    '이더리움 거래 내역',
     '비밀번호 변경',
     '닉네임 변경',
     '이메일 주소',
@@ -183,7 +183,7 @@ export default {
     '연상기호',
     '알림'
   ],
-  viewEtherscan: 'View Etherscan History',
+  viewEtherscan: '이더스캔 내역 조회하기',
   profilePic: {
     change: '프로필 사진 변경',
     setError: '사진 업로딩에 실패했습니다, 다시 시도해주세요',
@@ -221,8 +221,8 @@ export default {
   selectFriend: '선택',
   lend: '새로운 대출',
   borrow: '새로운 부채',
-  iLent: '새로운 대출',
-  iBorrowed: '새로운 부채',
+  iLent: '친구가 내게 빚지고 있습니다',
+  iBorrowed: '친구에게 빚을 지고 있습니다',
   settleUpLower: '  청산  ',
   amountToSettle: '청산 금액',
   total: '총액',
@@ -287,8 +287,8 @@ export default {
         generic: nickname => `${nickname} 에게 청산하는 과정에서 에러가 발생했습니다`
       }
     },
-    eth: 'Settle With ETH',
-    nonPayment: 'Record a Settlement'
+    eth: '이더리움으로 청산하기',
+    nonPayment: '청산내역 기록하기'
   },
 
   accountViewLanguage: {
