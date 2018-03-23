@@ -20,7 +20,8 @@ import PendingTransaction from 'lndr/pending-transaction'
 
 import { isFocusingOn } from 'reducers/nav'
 import { getStore, getUser, getNeedsReviewCount } from 'reducers/app'
-import { getAccountInformation, displayError, getPendingTransactions, getPendingSettlements, getBalances, registerChannelID } from 'actions'
+import { getAccountInformation, displayError, getPendingTransactions, getPendingSettlements, 
+  getFriendRequests, getBalances, registerChannelID } from 'actions'
 import { connect } from 'react-redux'
 import { UrbanAirship } from 'urbanairship-react-native'
 import defaultCurrency from 'lndr/default-currency'
@@ -55,12 +56,14 @@ const { width } = Dimensions.get('window')
 const loadingBalances = new LoadingContext()
 const loadingPendingTransactions = new LoadingContext()
 const loadingPendingSettlements = new LoadingContext()
+const loadingPendingFriends = new LoadingContext()
 
 interface Props {
   navigation: any
   isFocused: boolean
   getPendingTransactions: () => any
   getPendingSettlements: () => any
+  getFriendRequests: () => any
   getBalances: () => any
   getAccountInformation: () => any
   displayError: (errorMsg: string) => any
@@ -98,6 +101,7 @@ class HomeView extends Component<Props, State> {
 
     await loadingPendingTransactions.wrap(this.props.getPendingTransactions())
     await loadingPendingSettlements.wrap(this.props.getPendingSettlements())
+    await loadingPendingFriends.wrap(this.props.getFriendRequests())
     await loadingBalances.wrap(this.props.getBalances())
   }
 
@@ -219,4 +223,4 @@ class HomeView extends Component<Props, State> {
 
 export default connect((state) => ({ state: getStore(state)(), user: getUser(state)(), isFocused: isFocusingOn(state)('Home'), 
 needsReviewCount: getNeedsReviewCount(state) }), { getAccountInformation, displayError, getPendingTransactions, getPendingSettlements,
-getBalances, registerChannelID })(HomeView)
+getFriendRequests, getBalances, registerChannelID })(HomeView)

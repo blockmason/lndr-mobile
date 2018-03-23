@@ -88,7 +88,7 @@ class EthSettlement extends Component<Props, State> {
     const { amount, direction, currency } = this.state
     const friend = this.props.navigation ? this.props.navigation.state.params.friend : {}
 
-    const memo = debtManagement.recordSettleUpMemo(direction)
+    const memo = debtManagement.recordSettleUpMemo
 
     const success = await submittingTransaction.wrap(
       this.props.addDebt(

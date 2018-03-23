@@ -275,6 +275,12 @@ export default StyleSheet.create({
     ...medium,
     maxWidth: width * 0.5
   },
+  friendRequest: {
+    color: aqua,
+    ...bold,
+    ...medium,
+    maxWidth: width * 2 / 3
+  },
   pendingIcon: {
     width: 50,
     height: 50,

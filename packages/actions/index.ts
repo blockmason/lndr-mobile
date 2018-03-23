@@ -22,6 +22,7 @@ import profilePic from 'lndr/profile-pic'
 import { getBcptBalance, transferBcpt } from 'lndr/bcpt-utils'
 import { getEtherscanTransactions } from 'lndr/etherscan'
 import { sanitizeAmount } from 'lndr/format'
+import { jsonToPendingFriend, jsonToPendingTransaction, jsonToRecentTransaction, jsonToPendingUnilateral, jsonToPendingBilateral } from 'lndr/json-mapping'
 
 import CreditProtocol from 'credit-protocol'
 
@@ -40,8 +41,13 @@ const hashedPasswordStorage = new Storage('hashed-password')
 const notificationsEnabledStorage = new Storage('notifications-enabled')
 const ethTransactionsStorage = new Storage('eth-transactions')
 
-const creditProtocol = new CreditProtocol('https://api.lndr.blockmason.io')
-// const creditProtocol = new CreditProtocol('http://34.238.20.130')
+// const creditProtocol = new CreditProtocol('https://api.lndr.blockmason.io')
+let creditProtocol
+if (Platform.OS === 'ios' ) {
+  creditProtocol = new CreditProtocol('http://localhost:9800')
+} else {
+  creditProtocol = new CreditProtocol('http://10.0.2.2:9800')
+}
 
 // TODO REMOVE setState FUNCTION as the sole purpose was to transition from using
 // the custom engine design to redux storage
@@ -436,23 +442,13 @@ export async function searchUsers(searchData) {
   }
 }
 
-//Not a redux action
-export const jsonToPendingTransaction = (data) => {
-  return new PendingTransaction(data)
-}
-
-//Not a redux action
-export const jsonToRecentTransaction = (data) => {
-  return new RecentTransaction(data)
-}
-
-//Not a redux action
-export const jsonToPendingUnilateral = (data) => {
-  return new PendingUnilateral(data)
-}
-
-export const jsonToPendingBilateral = (data) => {
-  return new PendingBilateral(data)
+export const getFriendRequests = () => {
+  return async (dispatch, getState) => {
+    const { address } = getUser(getState())()
+    const rawPendingFriends = await creditProtocol.getFriendRequests(address)
+    const pendingFriends = rawPendingFriends.map(jsonToPendingFriend)
+    dispatch(setState({ pendingFriends, pendingFriendsLoaded: true }))
+  }
 }
 
 export const getRecentTransactions = () => {
@@ -955,6 +951,30 @@ export const getEthTxCost = async (currency: string) => {
   return creditProtocol.getTxCost(currency)
 }
 
+export const confirmFriendRequest = (friend: string) => {
+  return async (dispatch, getState) => {
+    const { address } = getUser(getState())()
+    try {
+      const userPic = await creditProtocol.addFriend(address, friend)
+      return true
+    } catch (e) {
+      return false
+    }
+  }
+}
+
+export const rejectFriendRequest = (friend: string) => {
+  return async (dispatch, getState) => {
+    const { address } = getUser(getState())()
+    try {
+      const userPic = await creditProtocol.removeFriend(address, friend)
+      return true
+    } catch (e) {
+      return false
+    }
+  }
+}
+
 const getEthTransactions = async (addr: string, recovery: boolean) => {
   let ethTransactions = []
   //get all transactions from etherscan and add relevant txs to the list
@@ -974,6 +994,7 @@ const refreshTransactions = () => {
   getRecentTransactions()
   setEthBalance()
   getPendingSettlements()
+  getFriendRequests()
 }
 
 const settleBilateral = async (user, bilateralSettlements, dispatch, getState) => {

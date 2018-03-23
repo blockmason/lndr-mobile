@@ -22,7 +22,7 @@ import general from 'theme/general'
 import pendingStyle from 'theme/pending'
 
 import language, { currencies } from 'language'
-const { debtManagement, noFriends, submit, cancel, back } = language
+const { debtManagement, noFriends, submit, cancel, back, nickname } = language
 
 import { getStore, pendingTransactions, recentTransactions } from 'reducers/app'
 import { addDebt, getFriends, getRecentTransactions } from 'actions'
@@ -52,6 +52,7 @@ interface State {
   amount?: string
   memo?: string
   currency: string
+  searchText: string
 }
 
 class AddDebt extends Component<Props, State> {
@@ -61,7 +62,8 @@ class AddDebt extends Component<Props, State> {
     super()
     this.state = {
       shouldSelectFriend: false,
-      currency: defaultCurrency
+      currency: defaultCurrency,
+      searchText: ''
     }
   }
 
@@ -116,28 +118,30 @@ class AddDebt extends Component<Props, State> {
 
   renderSelectFriend() {
     const { friendsLoaded, friends, pendingTransactions, recentTransactions } = this.props.state
-    const goBack = () => this.setState({ shouldSelectFriend: false })
+    const { searchText } = this.state
 
     return <ScrollView style={[general.view, {paddingTop: 30}]} keyboardShouldPersistTaps='handled'>
+      <Button close onPress={() => this.setState({ shouldSelectFriend: false })} />
+      <View style={{marginTop: 20}} />
       <Section>
-        <SearchFriend 
-          onSuccess={() => null}
-          selectFriend={(friend) => {
-            this.setState({ shouldSelectFriend: false, friend })
-          }}
-          removeFriend={(friend) => {
-            this.setState({ shouldSelectFriend: false, friend })
-          }}
-          state={this.props.state}
-          addDebt
-          navigation={this.props.navigation}
-         />
+        <View style={formStyle.horizontalView}>
+          <View style={formStyle.textInputContainer}>
+            <InputImage name='search' />
+            <TextInput
+              style={[style.textInput, {marginLeft: 10}]}
+              underlineColorAndroid='transparent'
+              autoCapitalize='none'
+              placeholder={nickname}
+              onChangeText={searchText => this.setState({ searchText })}
+            />
+          </View>
+        </View>
       </Section>
       <View style={style.list}>
         <Loading context={loadingFriends} />
         {friendsLoaded && friends.length === 0 ? <Text style={style.emptyState}>{noFriends}</Text> : null}
         {friends.map(
-          friend => (
+          friend => friend.nickname.indexOf(searchText) === -1 ? null : (
             <FriendRow
               key={friend.address}
               friend={friend}
@@ -149,7 +153,6 @@ class AddDebt extends Component<Props, State> {
           )
         )}
       </View>
-      <Button alternate fat onPress={goBack} text={back} />
     </ScrollView>
   }
 

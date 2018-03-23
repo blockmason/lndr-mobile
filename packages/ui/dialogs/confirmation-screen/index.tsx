@@ -19,9 +19,9 @@ interface Props {
 export default class ConfirmationScreen extends Component<Props> {
   getConfirmationImage(type) {
     let imageName = 'create'
-    if (type === 'create' || type === 'confirm' || type === 'ethSent' || type === 'bcptSent') {
+    if (type === 'create' || type === 'confirm' || type === 'ethSent' || type === 'bcptSent' || type === 'confirmFriend') {
       return <Image source={require('images/check-circle.png')} style={style.image} />
-    } else if (type === 'reject') {
+    } else if (type === 'reject' || type === 'rejectFriend') {
       return <Image source={require('images/thumbs-down.png')} style={style.image} />
     } else {
       return null
@@ -58,7 +58,7 @@ export default class ConfirmationScreen extends Component<Props> {
           <Text>{confirmation[type].end}</Text>
           {type === 'ethSent' || type === 'bcptSent' ? <Text style={style.nickname}>{txHash}</Text> : null}
         </Text>
-        {type === 'ethSent' || type === 'bcptSent' ? <View style={{marginBottom: 20}}/> : 
+        {type === 'ethSent' || type === 'bcptSent' || type === 'confirmFriend' || type === 'rejectFriend' ? <View style={{marginBottom: 20}}/> : 
         <TouchableHighlight onPress={() => this.goActivity()}>
           <Text style={[style.text, style.spacing]}>
             <Text>{confirmation.status}</Text>

@@ -21,6 +21,7 @@ import { getAccountInformation, updateNickname, updateEmail, logoutAccount, togg
   setEthBalance, updateLockTimeout, updatePin, getProfilePic, setProfilePic, takenNick, takenEmail,
   copyToClipboard, validatePin } from 'actions'
 import { getUser, getStore } from 'reducers/app'
+import { getResetAction } from 'reducers/nav'
 import { connect } from 'react-redux'
 
 import style from 'theme/form'
@@ -215,6 +216,11 @@ class MyAccount extends Component<Props, State> {
     }
   }
 
+  logout() {
+    this.props.navigation.dispatch( getResetAction({ routeName: 'Dashboard' }) )
+    this.props.logoutAccount()
+  }
+
   _keyExtractor = (item, index) => index
 
   renderPanels() {
@@ -367,11 +373,9 @@ class MyAccount extends Component<Props, State> {
         <Button close onPress={() => this.props.navigation.goBack()} />
         <View style={[style.account, {minHeight: height}]}>
           <Loading context={loadingContext} />
-          {/* <TextLogo name='black'/> */}
-          {/* <Text>BY</Text> */}
           <BMLogo type='square' size='medium'/>
           <Text style={slideStyle.inc}>INC.</Text>
-          <Button round danger onPress={() => this.props.logoutAccount()} text={logoutAction} containerStyle={style.spaceVertical} />
+          <Button round danger onPress={() => this.logout()} text={logoutAction} containerStyle={style.spaceVertical} />
           <View style={general.centeredColumn}>
             {this.renderPanels()}
           </View>

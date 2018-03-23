@@ -1,26 +1,26 @@
 import React, { Component } from 'react'
 
+import { Text, View } from 'react-native'
+
+import { UserData } from 'lndr/user'
+import Friend from 'lndr/friend'
+import defaultCurrency from 'lndr/default-currency'
 import PendingTransaction from 'lndr/pending-transaction'
 import PendingUnilateral from 'lndr/pending-unilateral'
-
-import { Text, View } from 'react-native'
 
 import Section from 'ui/components/section'
 import Popup, { closePopup } from 'ui/components/popup'
 import Loading, { LoadingContext } from 'ui/components/loading'
-import { UserData } from 'lndr/user'
-import Friend from 'lndr/friend'
-import defaultCurrency from 'lndr/default-currency'
-
 import PendingTransactionDetail from 'ui/dialogs/pending-transaction-detail'
 import PendingTransactionRow from 'ui/components/pending-transaction-row'
 import PendingSettlementRow from 'ui/components/pending-settlement-row'
+import PendingFriendRow from 'ui/components/pending-friend-row'
 
 import style from 'theme/account'
 import general from 'theme/general'
 
 import language from 'language'
-const { pendingTransactionsLanguage } = language
+const { pendingTransactionsLanguage, pendingFriendRequestsLanguage } = language
 
 import { getStore, getUser, submitterIsMe, settlerIsMe, pendingSettlements, bilateralSettlements, getUcacAddr } from 'reducers/app'
 import { isFocusingOn } from 'reducers/nav'
@@ -79,7 +79,7 @@ class PendingTransactionsView extends Component<Props, State> {
   }
 
   showNoneMessage() {
-    const { pendingTransactionsLoaded, pendingTransactions, pendingSettlements, bilateralSettlements } = this.props.state
+    const { pendingTransactionsLoaded, pendingTransactions, pendingSettlements, bilateralSettlements, pendingFriends } = this.props.state
     const { friend, getUcacAddress } = this.props
 
     let showNone = false
@@ -88,7 +88,8 @@ class PendingTransactionsView extends Component<Props, State> {
       showNone = true
     } else if (!friend) {
       showNone = pendingTransactions.filter( tx => getUcacAddress(defaultCurrency).indexOf(tx.ucac) !== -1 ).length 
-      + pendingSettlements.filter( tx => getUcacAddress(defaultCurrency).indexOf(tx.ucac) !== -1 ).length === 0
+      + pendingSettlements.filter( tx => getUcacAddress(defaultCurrency).indexOf(tx.ucac) !== -1 ).length +
+      pendingFriends.length === 0
     } else if (friend) {
       showNone = true
       pendingTransactions.map( (pending) => {
@@ -116,7 +117,7 @@ class PendingTransactionsView extends Component<Props, State> {
   }
 
   render() {
-    const { pendingTransactionsLoaded, pendingTransactions, bilateralSettlements } = this.props.state
+    const { pendingTransactionsLoaded, pendingTransactions, bilateralSettlements, pendingFriends } = this.props.state
     const { pendingSettlements, settlerIsMe } = this.props
     const { user, friend, homeScreen, navigation, getUcacAddress } = this.props
 
@@ -180,6 +181,15 @@ class PendingTransactionsView extends Component<Props, State> {
               friend={friend ? true : false}
               onPress={() => null}
               settlerIsMe={settlerIsMe}
+            />
+          })}
+          { homeScreen || pendingFriends.length === 0 ? null : <Text style={style.transactionHeader}>{pendingFriendRequestsLanguage.message}</Text>}
+          { pendingFriends.length === 0 ? null :
+          pendingFriends.map( friend => {
+            return <PendingFriendRow
+              key={friend.address}
+              friend={friend}
+              navigation={this.props.navigation}
             />
           })}
       </Section>

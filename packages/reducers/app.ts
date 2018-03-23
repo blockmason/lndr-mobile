@@ -50,7 +50,8 @@ export const getNeedsReviewCount = (state) => {
   const result = (
     state.store.pendingTransactions.filter( (transaction) => !submitterIsMe(state)(transaction) )
     .filter( (transaction) => transaction.ucac).length + 
-    state.store.pendingSettlements.filter( (settlement) => !settlerIsMe(state)(settlement) ).length
+    state.store.pendingSettlements.filter( (settlement) => !settlerIsMe(state)(settlement) ).length +
+    state.store.pendingFriends.length
   )
   return result
 }
@@ -89,6 +90,8 @@ export const pendingTransactions = (state) => state.store.pendingTransactions
 export const pendingSettlements = (state) => state.store.pendingSettlements
 
 export const bilateralSettlements = (state) => state.store.bilateralSettlements
+
+export const pendingFriends = (state) => state.store.pendingFriends
 
 export const getEthBalance = (state) => state.store.ethBalance
 
