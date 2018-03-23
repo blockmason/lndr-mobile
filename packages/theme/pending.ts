@@ -24,7 +24,9 @@ export default StyleSheet.create({
     marginTop: 30,
     marginBottom: 20,
     fontWeight: 'bold',
-    color: aqua
+    color: aqua,
+    textAlign: 'center',
+    maxWidth: width * 3 / 4
   },
   subTitle: {
     ...large,

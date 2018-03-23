@@ -149,7 +149,7 @@ export default class SearchFriend extends Component<Props, State> {
         {hasSearchTerm && matches.length === 0 ? <Text style={[style.emptyState, {paddingLeft: 30}]}>{noMatches}</Text> : null}
         {matches.map(
           match => {
-            if (match.address === address) {
+            if (match.address === address || (addDebt && !this.isFriend(match)) ) {
               return null
             } else if (this.isFriend(match)) {
               return <FriendRow

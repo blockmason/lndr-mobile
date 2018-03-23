@@ -117,7 +117,7 @@ export default {
     success: 'タイムアウトする時間を変更しました'
   },
   addFriend: {
-    success: nickname => `フレンドに@${nickname}を加えました`,
+    success: nickname => `${nickname}にフレンド申請が送られました`,
     error: generalCommunicationError
   },
   removeFriend: {
@@ -313,6 +313,7 @@ export default {
   bilateral: 'ETH送付が完了するのを待っています',
   confirm: '承認',
   reject: '取引を拒否',
+  rejectRequest: '拒否',
   cancel: '取引のキャンセル',
   direction: {
     lend: (nickname, amount) => `${nickname}  は、あなたに${amount}の貸しがあります`,

@@ -315,6 +315,7 @@ export default {
   bilateral: 'ETH 송금을 기다리는 중입니다',
   confirm: '인증',
   reject: '트랜잭션 거부',
+  rejectRequest: '거부',
   cancel: '트랜잭션 취소',
   direction: {
     lend: (nickname, amount) => `@${nickname} 은 ${amount} 을 당신에게 빚을 갚아야합니다`,

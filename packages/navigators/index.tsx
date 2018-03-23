@@ -11,6 +11,7 @@ import NonPaymentSettlement from 'ui/dialogs/non-payment-settlement'
 import FriendDetail from 'ui/dialogs/friend-detail'
 import TransferEth from 'ui/dialogs/transfer-eth'
 import TransferBcpt from 'ui/dialogs/transfer-bcpt'
+import FriendRequest from 'ui/dialogs/friend-request'
 import { addNavigationHelpers, StackNavigator, NavigationActions } from 'react-navigation'
 import { connect } from 'react-redux'
 import { View, ScrollView, Text, StyleSheet, Button, BackHandler, BackAndroid } from 'react-native'
@@ -51,6 +52,9 @@ export const AppNavigator = StackNavigator({
   },
   Confirmation: {
     screen: ConfirmationScreen
+  },
+  FriendRequest: {
+    screen: FriendRequest
   }
 },
   {

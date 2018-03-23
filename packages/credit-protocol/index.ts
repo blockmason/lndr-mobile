@@ -206,6 +206,10 @@ export default class CreditProtocol {
     return this.tempStorage.getFriends = this.client.get(`/friends/${user}`)
   }
 
+  getFriendRequests(user: string) {
+    return this.tempStorage.getFriendRequests = this.client.get(`/friend_requests/${user}`)
+  }
+
   getPendingTransactions(user: string) {
     if ( this.tempStorage.lastPending && moment(this.tempStorage.lastPendingTime).add(1, 'second') > moment() ) {
       return this.tempStorage.lastPending

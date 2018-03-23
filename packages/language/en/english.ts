@@ -118,7 +118,7 @@ export default {
       success: 'Lock Timeout Updated'
     },
     addFriend: {
-      success: nickname => `Added to friends: @${nickname}`,
+      success: nickname => `Friend request sent to @${nickname}`,
       error: generalCommunicationError
     },
     removeFriend: {
@@ -273,7 +273,7 @@ export default {
   settleUp: 'SETTLE UP',
   settleTotal: 'SETTLE TOTAL',
   settleUpMemo: (direction, amount) => direction === 'lend' ? `Settling up for ${amount}` : `Request to settle for ${amount}`,
-  recordSettleUpMemo: (direction) => direction === 'lend' ? `settling up` : `requesting to settle up`
+  recordSettleUpMemo: 'settling up'
 },
   settlementManagement: {
     bilateral: {
@@ -310,6 +310,7 @@ export default {
   bilateral: 'Waiting on Eth transfer to complete',
   confirm: 'CONFIRM',
   reject: 'Reject Transaction',
+  rejectRequest: 'Reject',
   cancel: 'Cancel Transaction',
   direction: {
     lend: (nickname, amount) => `@${nickname} owes you ${amount}`,
@@ -344,29 +345,43 @@ export default {
 },
 
   confirmation: {
-  shell: 'Confirmation',
-  done: 'DONE',
-  create: {
-    start: "We've sent the record over to ",
-    end: ' for confirmation.'
+    shell: 'Confirmation',
+    done: 'DONE',
+    create: {
+      start: "We've sent the record over to ",
+      end: ' for confirmation.'
+    },
+    confirm: {
+      start: "You've confirmed this record from ",
+      end: '.'
+    },
+    reject: {
+      start: "We've let ",
+      end: " know that you rejected this record."
+    },
+    confirmFriend: {
+      start: "You are now friends with ",
+      end: '!'
+    },
+    rejectFriend: {
+      start: "You have declined the friend request from ",
+      end: "."
+    },
+    ethSent: {
+      start: "You have successfully sent ",
+      end: " ETH and your transaction hash is "
+    },
+    bcptSent: {
+      start: "You have successfully sent ",
+      end: " BCPT and your transaction hash is "
+    },
+    status: 'You can see the status of this transaction in the ',
+    activity: 'activity tab.'
   },
-  confirm: {
-    start: "You've confirmed this record from ",
-    end: '.'
-  },
-  reject: {
-    start: "We've let ",
-    end: " know that you rejected this record."
-  },
-  ethSent: {
-    start: "You have successfully sent ",
-    end: " ETH and your transaction hash is "
-  },
-  bcptSent: {
-    start: "You have successfully sent ",
-    end: " BCPT and your transaction hash is "
-  },
-  status: 'You can see the status of this transaction in the ',
-  activity: 'activity tab.'
+
+  pendingFriendRequestsLanguage: {
+    shell: 'Friend Request',
+    message: 'Friend Requests',
+    request: friend => `${friend} wants to be friends with you!`
   }
 }

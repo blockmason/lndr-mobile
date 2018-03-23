@@ -145,7 +145,7 @@ class RemoveFriend extends Component<Props, State> {
           <Text style={pendingStyle.balanceInfo}>{currencies[defaultCurrency]}</Text>
           <Text style={pendingStyle.amount}>{currencyFormats[defaultCurrency](this.getRecentTotal())}</Text>
         </View>
-        { this.getRecentTotal() < 0 ? <Button round large fat wide onPress={() => this.props.navigation.navigate('SettleUp', { friend: friend })} text={debtManagement.settleUp} containerStyle={style.spaceBottom} /> : null }
+        <Button round large fat wide onPress={() => this.props.navigation.navigate('SettleUp', { friend: friend })} text={debtManagement.settleUp} containerStyle={style.spaceBottom} />
         { this.getTransactionNumber() === 0 ? <Button round large danger wide onPress={() => this.removeFriend(friend)} text={removeFriendText} containerStyle={style.spaceBottom} /> : null }
         <View style={style.fullWidth}>
           <Text style={accountStyle.transactionHeader}>{pendingTransactionsLanguage.title}</Text>
