@@ -41,13 +41,13 @@ const hashedPasswordStorage = new Storage('hashed-password')
 const notificationsEnabledStorage = new Storage('notifications-enabled')
 const ethTransactionsStorage = new Storage('eth-transactions')
 
-// const creditProtocol = new CreditProtocol('https://api.lndr.blockmason.io')
-let creditProtocol
-if (Platform.OS === 'ios' ) {
-  creditProtocol = new CreditProtocol('http://localhost:9800')
-} else {
-  creditProtocol = new CreditProtocol('http://10.0.2.2:9800')
-}
+const creditProtocol = new CreditProtocol('https://api.lndr.blockmason.io')
+// let creditProtocol
+// if (Platform.OS === 'ios' ) {
+//   creditProtocol = new CreditProtocol('http://localhost:9800')
+// } else {
+//   creditProtocol = new CreditProtocol('http://10.0.2.2:9800')
+// }
 
 // TODO REMOVE setState FUNCTION as the sole purpose was to transition from using
 // the custom engine design to redux storage
