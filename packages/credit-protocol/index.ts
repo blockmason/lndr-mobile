@@ -152,10 +152,11 @@ export default class CreditProtocol {
   }
 
   searchUsers(nick: string) {
-    const nickname = this.tempStorage.searchUsers[nick]
-    if (nickname) {
-      return nickname
-    }
+    // add a time limit in the future for this
+    // const nickname = this.tempStorage.searchUsers[nick]
+    // if (nickname) {
+    //   return nickname
+    // }
     return this.tempStorage.searchUsers[nick] = this.client.get(`/search_nick/${nick}`)
   }
 

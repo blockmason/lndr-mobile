@@ -3,10 +3,9 @@
     android:versionCode="1"
     android:versionName="1.0">
 
+    <uses-feature android:name="android.hardware.camera" />
+
     <uses-permission android:name="android.permission.INTERNET" />
-    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" /> 
-    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" /> 
-    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" /> 
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" /> 
     <uses-permission android:name="android.permission.SYSTEM_ALERT_WINDOW"/>
     <uses-permission android:name="android.permission.CAMERA" />
@@ -29,9 +28,6 @@
         <intent-filter>
             <action android:name="android.intent.action.MAIN" />
             <category android:name="android.intent.category.LAUNCHER" />
-     <action android:name="android.intent.action.DOWNLOAD_COMPLETE"/>
-     <action android:name="android.intent.action.DOWNLOAD_COMPLETE"/>
-     <action android:name="android.intent.action.DOWNLOAD_COMPLETE"/>
      <action android:name="android.intent.action.DOWNLOAD_COMPLETE"/>
         </intent-filter>
       </activity>

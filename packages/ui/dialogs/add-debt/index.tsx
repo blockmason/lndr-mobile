@@ -128,7 +128,7 @@ class AddDebt extends Component<Props, State> {
           <View style={formStyle.textInputContainer}>
             <InputImage name='search' />
             <TextInput
-              style={[style.textInput, {marginLeft: 10}]}
+              style={[style.textInput, {marginLeft: 10, width: '90%'}]}
               underlineColorAndroid='transparent'
               autoCapitalize='none'
               placeholder={nickname}
