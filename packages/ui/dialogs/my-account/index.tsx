@@ -70,6 +70,7 @@ interface State {
   emailTextInputErrorText?: string
   authenticated: boolean
   currency: string
+  scrollY: number
 }
 
 class MyAccount extends Component<Props, State> {
@@ -82,7 +83,8 @@ class MyAccount extends Component<Props, State> {
       step: 1,
       photos: [],
       authenticated: false,
-      currency: defaultCurrency
+      currency: defaultCurrency,
+      scrollY: 0
     }
   }
 
@@ -151,8 +153,12 @@ class MyAccount extends Component<Props, State> {
   }
 
   togglePanel(index: number) {
-    const { hiddenPanels } = this.state
+    const { hiddenPanels, scrollY } = this.state
+    const panelHeights = [170, 140, 140, 60, 60, 190, 190, 190, 190, 60, 100]
+    const y = panelHeights[index]
+
     hiddenPanels[index] = !hiddenPanels[index]
+    this.refs.scrollContent.scrollTo({ x: 0, y: scrollY + (hiddenPanels[index] ? -y : y), animated: true })
     this.setState({ hiddenPanels })
   }
 
@@ -165,10 +171,6 @@ class MyAccount extends Component<Props, State> {
       }
     };
 
-    /**
-     * The first arg is the options object for customization (it can also be null or omitted for default options),
-     * The second arg is the callback which sends object: response (more info below in README)
-     */
     ImagePicker.showImagePicker(options, (response) => {
       console.log('Response = ', response);
 
@@ -180,10 +182,7 @@ class MyAccount extends Component<Props, State> {
       }
       else {
         const { uri, data } =  response
-
         this.setNewProfilePic(uri, data)
-        // You can also display the image using data:
-        // let source = { uri: 'data:image/jpeg;base64,' + response.data };
       }
     });
   }
@@ -219,6 +218,10 @@ class MyAccount extends Component<Props, State> {
   logout() {
     this.props.navigation.dispatch( getResetAction({ routeName: 'Dashboard' }) )
     this.props.logoutAccount()
+  }
+
+  handleScroll(event) {
+    this.setState({ scrollY: event.nativeEvent.contentOffset.y });
   }
 
   _keyExtractor = (item, index) => index
@@ -369,7 +372,12 @@ class MyAccount extends Component<Props, State> {
         </View>
       </View>
     } else {
-      return <ScrollView style={general.view} keyboardShouldPersistTaps='handled'>
+      return <ScrollView 
+      ref='scrollContent'
+      style={general.view} 
+      onScroll={event => this.handleScroll(event)} 
+      scrollEventThrottle={50}
+      keyboardShouldPersistTaps='handled'>
         <Button close onPress={() => this.props.navigation.goBack()} />
         <View style={[style.account, {minHeight: height}]}>
           <Loading context={loadingContext} />
