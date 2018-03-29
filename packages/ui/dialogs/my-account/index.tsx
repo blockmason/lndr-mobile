@@ -113,11 +113,14 @@ class MyAccount extends Component<Props, State> {
   }
 
   async componentDidUpdate() {
-    const { password, confirmPassword, step } = this.state
+    const { password, confirmPassword, step, scrollY } = this.state
 
     if (step === 4 && confirmPassword.length === 4 ) {
       const authenticated = loadingContext.wrap(validatePin(confirmPassword))
       this.setState({ step: 1, confirmPassword: '', authenticated })
+
+      const self = this
+      setTimeout(function() {self.refs.scrollContent.scrollTo({ x: 0, y: scrollY + 200, animated: true })}, 200)
     } else if (step === 3 && password.length === 4 && confirmPassword.length === 4) {
       await loadingContext.wrap(this.props.updatePin(password, confirmPassword))
       this.clearPinView()
@@ -355,7 +358,7 @@ class MyAccount extends Component<Props, State> {
   }
 
   render() {
-    const { password, confirmPassword, step } = this.state
+    const { password, confirmPassword, step, scrollY } = this.state
 
     if (step === 3 || step === 4) {
       return <View style={[general.fullHeight, general.view]}>
