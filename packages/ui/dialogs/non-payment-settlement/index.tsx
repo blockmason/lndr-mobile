@@ -7,7 +7,7 @@ import { UserData } from 'lndr/user'
 import { debounce } from 'lndr/time'
 import { currencyFormats, amountFormat } from 'lndr/format'
 import Friend from 'lndr/friend'
-import defaultCurrency from 'lndr/default-currency'
+import { defaultCurrency } from 'lndr/default-currency'
 import profilePic from 'lndr/profile-pic'
 
 import Button from 'ui/components/button'

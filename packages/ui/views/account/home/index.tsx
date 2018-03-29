@@ -24,7 +24,7 @@ import { getAccountInformation, displayError, getPendingTransactions, getPending
   getFriendRequests, getBalances, registerChannelID } from 'actions'
 import { connect } from 'react-redux'
 import { UrbanAirship } from 'urbanairship-react-native'
-import defaultCurrency from 'lndr/default-currency'
+import { defaultCurrency } from 'lndr/default-currency'
 
 import style from 'theme/account'
 import formStyle from 'theme/form'

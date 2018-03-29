@@ -9,7 +9,7 @@ import { white } from 'theme/include/colors'
 
 import { currencyFormats } from 'lndr/format'
 import profilePic from 'lndr/profile-pic'
-import defaultCurrency from 'lndr/default-currency'
+import { defaultCurrency } from 'lndr/default-currency'
 
 import style from 'theme/account'
 import general from 'theme/general'
