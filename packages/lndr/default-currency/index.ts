@@ -1,21 +1,25 @@
-let defaultCurrency = 'USD'
+import { country } from 'language'
 
-import { NativeModules, Platform } from 'react-native'
-
-let language = ''
-
-try {
-  if (Platform.OS === 'ios') {
-    language = NativeModules.SettingsManager.settings.AppleLocale
-  } else {
-    language = NativeModules.I18nManager.localeIdentifier
-  }
-} catch (e) {}
-
-if(language.indexOf('ko') !== -1) {
-  defaultCurrency = 'KRW'
-} else if(language.indexOf('ja') !== -1) {
-  defaultCurrency = 'JPY'
+const currencies = {
+  DK: 'DKK',
+  CH: 'CHF',
+  DE: 'EUR',
+  ES: 'EUR',
+  IE: 'EUR',
+  AU: 'AUD',
+  GB: 'GBP',
+  CA: 'CAD',
+  JP: 'JPY',
+  KR: 'KRW',
+  NO: 'NOK',
+  FR: 'EUR',
+  SE: 'SEK',
+  IT: 'EUR',
+  US: 'USD'
 }
 
-export default defaultCurrency
+const getCurrency = (country: string) => {
+  return currencies[country] === undefined ? 'EUR' : currencies[country]
+}
+
+export const defaultCurrency = getCurrency(country)

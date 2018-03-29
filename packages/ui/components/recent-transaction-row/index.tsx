@@ -6,7 +6,7 @@ import { currencyFormats } from 'lndr/format'
 import User from 'lndr/user'
 import RecentTransaction from 'lndr/recent-transaction'
 import profilePic from 'lndr/profile-pic'
-import defaultCurrency from 'lndr/default-currency'
+import { defaultCurrency } from 'lndr/default-currency'
 import { getUcacCurrency } from 'reducers/app'
 import { connect } from 'react-redux'
 

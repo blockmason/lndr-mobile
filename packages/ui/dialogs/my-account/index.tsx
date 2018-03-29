@@ -15,7 +15,7 @@ import InputImage from 'ui/components/images/input-image'
 import { formatNick, formatLockTimeout, formatEmail, emailFormatIncorrect } from 'lndr/format'
 import { defaultUpdateAccountData, UpdateAccountData, UserData } from 'lndr/user'
 import { getBcptBalance } from 'lndr/bcpt-utils'
-import defaultCurrency from 'lndr/default-currency'
+import { defaultCurrency } from 'lndr/default-currency'
 
 import { getAccountInformation, updateNickname, updateEmail, logoutAccount, toggleNotifications, 
   setEthBalance, updateLockTimeout, updatePin, getProfilePic, setProfilePic, takenNick, takenEmail,

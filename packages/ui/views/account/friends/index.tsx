@@ -3,7 +3,7 @@ import React, { Component } from 'react'
 import { Text, View, ScrollView, RefreshControl, Dimensions, Platform, Share } from 'react-native'
 
 import Friend from 'lndr/friend'
-import defaultCurrency from 'lndr/default-currency'
+import { defaultCurrency } from 'lndr/default-currency'
 
 import Button from 'ui/components/button'
 import Section from 'ui/components/section'

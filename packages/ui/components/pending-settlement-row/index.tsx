@@ -9,7 +9,7 @@ import PendingUnilateral from 'lndr/pending-unilateral'
 import PendingBilateral from 'lndr/pending-bilateral'
 import User from 'lndr/user'
 import profilePic from 'lndr/profile-pic'
-import defaultCurrency from 'lndr/default-currency'
+import { defaultCurrency } from 'lndr/default-currency'
 import { getUcacCurrency } from 'reducers/app'
 
 import { white } from 'theme/include/colors'

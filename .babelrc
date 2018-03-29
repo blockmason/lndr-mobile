@@ -4,7 +4,7 @@
     ["module-alias", [
       { "src": "./lib/packages/actions", "expose": "actions" },
       { "src": "./lib/packages/credit-protocol", "expose": "credit-protocol" },
-      { "src": "./lib/packages/language/en", "expose": "language" },
+      { "src": "./lib/packages/language", "expose": "language" },
       { "src": "./lib/packages/lndr", "expose": "lndr" },
       { "src": "./lib/packages/navigators", "expose": "navigators" },
       { "src": "./lib/packages/reducers", "expose": "reducers" },

@@ -5,7 +5,7 @@ import { getResetAction } from 'reducers/nav'
 
 import Friend from 'lndr/friend'
 import { formatMemo, currencyFormats, amountFormat } from 'lndr/format'
-import defaultCurrency from 'lndr/default-currency'
+import { defaultCurrency } from 'lndr/default-currency'
 
 import Button from 'ui/components/button'
 import Checkbox from 'ui/components/checkbox'

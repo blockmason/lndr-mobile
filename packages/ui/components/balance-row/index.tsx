@@ -4,7 +4,7 @@ import { Text, TouchableHighlight, View } from 'react-native'
 
 import { currencyFormats } from 'lndr/format'
 import Balance from 'lndr/balance'
-import defaultCurrency from 'lndr/default-currency'
+import { defaultCurrency } from 'lndr/default-currency'
 
 import { lightGray } from 'theme/include/colors'
 

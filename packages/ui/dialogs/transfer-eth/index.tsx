@@ -7,7 +7,7 @@ import { UserData } from 'lndr/user'
 import { debounce } from 'lndr/time'
 import { ethAmount, ethAddress } from 'lndr/format'
 import Friend from 'lndr/friend'
-import defaultCurrency from 'lndr/default-currency'
+import { defaultCurrency } from 'lndr/default-currency'
 
 import Button from 'ui/components/button'
 import Loading, { LoadingContext } from 'ui/components/loading'

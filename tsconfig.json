@@ -37,7 +37,7 @@
     "paths": {
       "actions":  ["packages/actions"],
       "credit-protocol":  ["packages/credit-protocol"],
-      "language":         ["packages/language/en"],
+      "language":         ["packages/language"],
       "navigators":         ["packages/navigators"],
       "lndr/*":           ["packages/lndr/*"],
       "reducers":        ["packages/reducers"],

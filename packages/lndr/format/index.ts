@@ -1,4 +1,4 @@
-import defaultCurrency from 'lndr/default-currency'
+import { defaultCurrency } from 'lndr/default-currency'
 
 import { currencies } from 'language'
 

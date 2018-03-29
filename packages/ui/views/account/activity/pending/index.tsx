@@ -4,7 +4,7 @@ import { Text, View } from 'react-native'
 
 import { UserData } from 'lndr/user'
 import Friend from 'lndr/friend'
-import defaultCurrency from 'lndr/default-currency'
+import { defaultCurrency } from 'lndr/default-currency'
 import PendingTransaction from 'lndr/pending-transaction'
 import PendingUnilateral from 'lndr/pending-unilateral'
 
