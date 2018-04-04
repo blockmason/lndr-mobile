@@ -46,18 +46,23 @@ _*Note:* this file is over 50 lines long because it contains a lot of relevant i
 
 # Running
 
-## ... on iOS
+## Installation and Initialization
+Copy, rename, and update the files `android/app/src/main/assets/airshipconfig.properties.example` and `ios/AirshipConfig.plist.example` with the proper UrbanAirship API key and secret from the Blockmason account on urbanairship.com
 
-- `yarn`
+Log in to Firebase (https://console.firebase.google.com/u/0/project/lndr-english/settings/general/android:com.lndr) and download the google-services.json and GoogleService-Info.plist files and add them to the android and ios folders.
+
+- `yarn` (this installs the packages)
 - Fill in the `.env.example` with the proper information and save as `.env`.
 - `yarn run setup:env`
-- (in new terminal) `yarn run typescript`
 - (only need to do this once or if native dependencies change) `react-native link` (note it may hang on `rnpm-install info Assets have been successfully linked to your project` - it's ok to kill it then)
+- (in new terminal) `yarn run typescript`
+- (in new terminal) `yarn start`
+
+## ... on iOS
+
 - `react-native run-ios`
 
 ## ... on Android
-
-See iOS for initialisation
 
 Setting up ANDROID_HOME env variable
 
@@ -81,6 +86,7 @@ Running Android
 
 - `react-native log-ios`
 - `react-native log-android`
+- Download and start React Native Debugger, then select 'Debug Remotely' from the simulator/emulator
 
 ## Building Android APK for Testing
 - in separate terminal sessions, run `yarn start` and `yarn run typescript`
@@ -96,8 +102,6 @@ Running Android
 XCode 9.0 or higher is required, which in turn requires macOS Sierra (10.12) or higher.
 
 Private keys to sign the build: ios_dist_bm.p12 for iOS and blockmason-lndr-android.keystore for Android
-
-Copy, rename, and update the files `android/app/src/main/assets/airshipconfig.properties.example` and `ios/AirshipConfig.plist.example` with the proper UrbanAirship API key and secret from the Blockmason account on urbanairship.com
 
 ## Building & Signing the Android APK for Google Play
 
