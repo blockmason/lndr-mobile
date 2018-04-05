@@ -40,7 +40,9 @@ class CreateAccountView extends Component<Props, AccountViewState> {
   }
 
   async handleOnNickTextInputBlur(nickname: string) {
-    if(nickLengthIncorrect(nickname)) {
+    if (nickname.length == 0) {
+      this.setState({ nickDuplicationViolation: false, nickLengthViolation: false })
+    } else if(nickLengthIncorrect(nickname)) {
       this.setState({ nickLengthViolation: true })
     } else {
       const duplicateNick = await takenNick(nickname)
@@ -50,6 +52,10 @@ class CreateAccountView extends Component<Props, AccountViewState> {
         this.setState({ nickDuplicationViolation: false, nickLengthViolation: false })
       }
     }
+  }
+
+  async handleOnNickTextChange(nickname: string) {
+    this.setState({ nickDuplicationViolation: false, nickLengthViolation: false })
   }
 
   renderNickTextInputErrorText() {
@@ -65,7 +71,9 @@ class CreateAccountView extends Component<Props, AccountViewState> {
   }
 
   async handleOnEmailTextInputBlur(email: string) {
-    if (emailFormatIncorrect(email)) {
+    if (email.length == 0) {
+      this.setState({ emailDuplicationViolation: false, emailFormatViolation: false })
+    } else if (emailFormatIncorrect(email)) {
       this.setState({ emailFormatViolation: true })
     } else {
       const duplicateEmail = await takenEmail(email)
@@ -76,6 +84,10 @@ class CreateAccountView extends Component<Props, AccountViewState> {
         this.setState({ emailDuplicationViolation: false, emailFormatViolation: false })
       }
     }
+  }
+
+  async handleOnEmailTextChange(email: string) {
+    this.setState({ emailDuplicationViolation: false, emailFormatViolation: false })
   }
 
   renderEmailTextInputErrorText() {
@@ -94,8 +106,10 @@ class CreateAccountView extends Component<Props, AccountViewState> {
         <CreateAccountForm
           nickInputError={this.renderNickTextInputErrorText()}
           onNickTextInputBlur={this.handleOnNickTextInputBlur.bind(this)}
+          onNickTextChange={this.handleOnNickTextChange.bind(this)}
           emailInputError={this.renderEmailTextInputErrorText()}
           onEmailTextInputBlur={this.handleOnEmailTextInputBlur.bind(this)}
+          onEmailTextChange={this.handleOnEmailTextChange.bind(this)}
           onSubmitRecover={this.props.goToRecoverAccount}
           nickDuplicationViolation={this.state.nickDuplicationViolation}
           nickLengthViolation={this.state.nickLengthViolation}
