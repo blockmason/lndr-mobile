@@ -35,7 +35,7 @@ const loadingContext = new LoadingContext()
 
 interface Props {
   onNickTextInputBlur: (nickname: string) => void
-  onNickTextChange: (email: string) => void
+  onNickTextChange: (nickname: string) => void
   nickInputError: string
   onEmailTextInputBlur: (email: string) => void
   onEmailTextChange: (email: string) => void
