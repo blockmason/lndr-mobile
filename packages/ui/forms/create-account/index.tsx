@@ -35,8 +35,10 @@ const loadingContext = new LoadingContext()
 
 interface Props {
   onNickTextInputBlur: (nickname: string) => void
+  onNickTextChange: (nickname: string) => void
   nickInputError: string
   onEmailTextInputBlur: (email: string) => void
+  onEmailTextChange: (email: string) => void
   emailInputError: string
   onSubmitRecover: () => void
   createAccount: (accountData: CreateAccountData) => any
@@ -132,7 +134,8 @@ class CreateAccountForm extends Component<Props, State> {
   }
 
   render() {
-    const { onNickTextInputBlur, nickInputError, onEmailTextInputBlur, emailInputError } = this.props
+    const { onNickTextInputBlur, onNickTextChange, nickInputError,
+      onEmailTextInputBlur, onEmailTextChange, emailInputError } = this.props
     const { password, confirmPassword, step } = this.state
 
     if (step === 4) {
@@ -161,7 +164,7 @@ class CreateAccountForm extends Component<Props, State> {
               value={this.state.nickname}
               maxLength={20}
               underlineColorAndroid='transparent'
-              onChangeText={nickname => this.setState({ nickname: formatNick(nickname) })}
+              onChangeText={nickname => {this.setState({ nickname: formatNick(nickname) }); onNickTextChange(nickname)}}
               onBlur={(): void => onNickTextInputBlur(this.state.nickname)}
             />
           </View>
@@ -175,7 +178,7 @@ class CreateAccountForm extends Component<Props, State> {
               value={this.state.email}
               underlineColorAndroid='transparent'
               keyboardType='email-address'
-              onChangeText={email => this.setState({ email: formatEmail(email) })}
+              onChangeText={email => {this.setState({ email: formatEmail(email) }); onEmailTextChange(email)}}
               onBlur={(): void => onEmailTextInputBlur(this.state.email)}
             />
           </View>
