@@ -29,9 +29,9 @@ export default StyleSheet.create({
     height: Platform.OS === 'ios' ? 148 : 120
   },
   dashboardContainer: {
-    backgroundColor: '#242424', 
-    height: 80, 
-    flexDirection: 'row', 
+    backgroundColor: '#242424',
+    height: 80,
+    flexDirection: 'row',
     marginTop: Platform.OS === 'ios' ? 28 : 0
   },
   dashboardLogo: {
@@ -268,6 +268,11 @@ export default StyleSheet.create({
   newTransactionButtonContainer: {
     flexDirection: 'column',
     alignItems: 'center'
+  },
+  newTransactionRow: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    height: 60
   },
   titledPending: {
     color: aqua,
