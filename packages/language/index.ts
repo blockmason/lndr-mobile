@@ -46,7 +46,10 @@ export const currencies = {
   GBP: '£',
   CAD: '$',
   NOK: 'kr',
-  SEK: 'kr'
+  SEK: 'kr',
+  CNY: '¥',
+  HKD: '$',
+  NZD: '$'
 }
 
 export const transferLimits = {
@@ -60,7 +63,10 @@ export const transferLimits = {
   GBP: '200',
   CAD: '200',
   NOK: '2000',
-  SEK: '2000'
+  SEK: '2000',
+  CNY: '2000',
+  HKD: '2000',
+  NZD: '2000'
 }
 
 export default exportLanguage
