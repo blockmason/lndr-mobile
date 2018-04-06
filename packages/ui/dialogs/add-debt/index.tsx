@@ -1,6 +1,6 @@
 import React, { Component } from 'react'
 
-import { View, ScrollView, Text, TextInput, TouchableHighlight, Image, Platform } from 'react-native'
+import { View, ScrollView, Text, TextInput, TouchableHighlight, Image, Platform, Modal } from 'react-native'
 import { getResetAction } from 'reducers/nav'
 
 import Friend from 'lndr/friend'
@@ -14,17 +14,19 @@ import FriendRow from 'ui/components/friend-row'
 import DashboardShell from 'ui/components/dashboard-shell'
 import InputImage from 'ui/components/images/input-image'
 import Section from 'ui/components/section'
+import SpinningPicker from 'ui/components/spinning-picker'
 import SearchFriend from 'ui/views/account/friends/search-friend'
 
 import style from 'theme/account'
 import formStyle from 'theme/form'
 import general from 'theme/general'
 import pendingStyle from 'theme/pending'
+import popupStyle from 'theme/popup'
 
 import language, { currencies } from 'language'
 const { debtManagement, noFriends, submit, cancel, back, nickname } = language
 
-import { getStore, pendingTransactions, recentTransactions } from 'reducers/app'
+import { getStore, pendingTransactions, recentTransactions, getAllUcacCurrencies } from 'reducers/app'
 import { addDebt, getFriends, getRecentTransactions } from 'actions'
 import { connect } from 'react-redux'
 
@@ -44,6 +46,7 @@ interface Props {
   pendingTransactions: any
   recentTransactions: any
   navigation: any
+  allCurrencies: any
 }
 
 interface State {
@@ -52,6 +55,7 @@ interface State {
   amount?: string
   memo?: string
   currency: string
+  shouldPickCurrency: boolean
   searchText: string
 }
 
@@ -63,6 +67,7 @@ class AddDebt extends Component<Props, State> {
     this.state = {
       shouldSelectFriend: false,
       currency: defaultCurrency,
+      shouldPickCurrency: false,
       searchText: ''
     }
   }
@@ -90,7 +95,7 @@ class AddDebt extends Component<Props, State> {
 
     const { navigation } = this.props
     let resetAction
-    
+
     if (success && success.type !== '@@TOAST/DISPLAY_ERROR') {
       resetAction = getResetAction( { routeName:'Confirmation', params: { type: 'create', friend } } )
 
@@ -170,10 +175,14 @@ class AddDebt extends Component<Props, State> {
     return amountFormat(amount, currency)
   }
 
+  handlePickerDone(value) {
+    this.setState({currency: value, shouldPickCurrency: false})
+  }
+
   render() {
     const direction = this.props.navigation.state.params ? this.props.navigation.state.params.direction : 'lend'
 
-    const { shouldSelectFriend, friend, amount, memo, currency } = this.state
+    const { shouldSelectFriend, friend, amount, memo, currency, shouldPickCurrency } = this.state
 
     if (shouldSelectFriend) {
       return this.renderSelectFriend()
@@ -185,26 +194,35 @@ class AddDebt extends Component<Props, State> {
       <Button close onPress={() => this.props.navigation.goBack()} />
       <View style={[general.centeredColumn, {marginBottom: 20}]}>
         <Text style={[style.header, {marginBottom: 20}]}>{debtManagement[direction]}</Text>
-        <View style={general.betweenRow} >
+        <View style={[general.flex, general.flexRow]} >
           <View style={[general.centeredColumn, {minWidth: 150}]}>
             <Text style={formStyle.title}>{debtManagement.fields.selectFriend}</Text>
-            { this.renderSelectedFriend() }
+            <View style={style.newTransactionRow}>
+              { this.renderSelectedFriend() }
+            </View>
           </View>
           <View style={general.centeredColumn}>
             <Text style={formStyle.title}>{debtManagement.fields.amount}</Text>
-            <TextInput
-              style={[formStyle.jumboInput, {marginTop: 5}]}
-              placeholder={`${currencies[currency]}0`}
-              placeholderTextColor='black'
-              value={amount}
-              maxLength={14}
-              underlineColorAndroid='transparent'
-              keyboardType='numeric'
-              onChangeText={amount => this.setState({ amount: this.setAmount(amount) })}
-            />
+            <View style={style.newTransactionRow}>
+              <TextInput
+                style={[formStyle.jumboInput, {paddingTop:0}]}
+                placeholder={`${currencies[currency]}0`}
+                placeholderTextColor='black'
+                value={amount}
+                maxLength={14}
+                underlineColorAndroid='transparent'
+                keyboardType='numeric'
+                onChangeText={amount => this.setState({ amount: this.setAmount(amount) })}
+              />
+            </View>
+          </View>
+          <View style={general.centeredColumn}>
+            <Text style={formStyle.title}></Text>
+            <View style={style.newTransactionRow}>
+              <Button small narrow black onPress={() => this.setState({shouldPickCurrency: true})} text={currency} />
+            </View>
           </View>
         </View>
-        
         <View style={formStyle.memoBorder} >
           <TextInput
             style={formStyle.memoInput}
@@ -216,8 +234,21 @@ class AddDebt extends Component<Props, State> {
         </View>
         { friend && amount && memo ? <Button large round wide onPress={() => this.submit()} text={submit} /> : null }
       </View>
+      <Modal
+        animationType="slide"
+        transparent={true}
+        visible={shouldPickCurrency}
+        onRequestClose={() => {
+          alert('Modal has been closed.');
+        }}>
+        <View style={[popupStyle.modalOverlay, general.flexColumn, general.justifyEnd]}>
+          <View style={{backgroundColor:'white', paddingTop:4}}>
+            <SpinningPicker label={debtManagement.chooseCurrency} allItems={this.props.allCurrencies} selectedItem={currency} onPickerDone={(value) => this.handlePickerDone(value)} />
+          </View>
+        </View>
+      </Modal>
     </ScrollView>
   }
 }
 
-export default connect((state) => ({ state: getStore(state)(), pendingTransactions: pendingTransactions(state), recentTransactions: recentTransactions(state) }), { addDebt, getFriends })(AddDebt)
+export default connect((state) => ({ state: getStore(state)(), pendingTransactions: pendingTransactions(state), recentTransactions: recentTransactions(state), allCurrencies: getAllUcacCurrencies(state) }), { addDebt, getFriends })(AddDebt)
