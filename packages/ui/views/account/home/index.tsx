@@ -24,14 +24,14 @@ import { getAccountInformation, displayError, getPendingTransactions, getPending
   getFriendRequests, getBalances, registerChannelID } from 'actions'
 import { connect } from 'react-redux'
 import { UrbanAirship } from 'urbanairship-react-native'
-import { defaultCurrency } from 'lndr/default-currency'
+import { defaultCurrency, currencySymbols, transferLimits  } from 'lndr/currencies'
 
 import style from 'theme/account'
 import formStyle from 'theme/form'
 import general from 'theme/general'
 import { underlayColor } from 'theme/general'
 
-import language, { currencies } from 'language'
+import language from 'language'
 const {
   tip,
   notice,
@@ -138,7 +138,7 @@ class HomeView extends Component<Props, State> {
   renderNeedsReview() {
     return this.props.needsReviewCount > 0 ? <View>
       <Text style={[formStyle.titleLarge, formStyle.center, formStyle.spaceBottom, formStyle.spaceTop]}>{needsReview}</Text>
-      <PendingView navigation={this.props.navigation} homeScreen /> 
+      <PendingView navigation={this.props.navigation} homeScreen />
     </View>
     : <View style={{height: 100}} />
   }
@@ -163,7 +163,7 @@ class HomeView extends Component<Props, State> {
     return <Section contentContainerStyle={style.column}>
       <View style={style.negativeMargin}>
         <View style={style.balanceRow}>
-          <Text style={style.balanceInfo}>{currencies[defaultCurrency]}</Text>
+          <Text style={style.balanceInfo}>{currencySymbols[defaultCurrency]}</Text>
           <Text style={style.largeFactAmount}>{currencyFormats[defaultCurrency](balance)}</Text>
         </View>
       </View>

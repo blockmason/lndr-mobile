@@ -186,7 +186,7 @@ export default StyleSheet.create({
     marginBottom: l - s
   },
   submitButton: {
-    width: '70%',
+    width: '80%',
     ...center,
     alignSelf: 'center'
   },

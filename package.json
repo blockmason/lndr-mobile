@@ -42,6 +42,7 @@
     "react-native-touch-id": "^4.0.1",
     "react-native-vector-icons": "^4.4.2",
     "react-navigation": "^1.0.0-beta.21",
+    "react-navigation-redux-helpers": "^1.0.3",
     "react-redux": "^5.0.6",
     "readable-stream": "^1.0.33",
     "reduce-reducers": "^0.1.2",
@@ -61,7 +62,7 @@
   },
   "devDependencies": {
     "@types/jest": "^21.1.5",
-    "@types/react": "^15.6.6",
+    "@types/react": "^16.0.0",
     "@types/react-native": "^0.50.2",
     "@types/react-redux": "^5.0.12",
     "@types/react-test-renderer": "^16.0.0",

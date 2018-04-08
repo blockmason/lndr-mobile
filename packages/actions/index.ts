@@ -32,7 +32,7 @@ const { accountManagement, debtManagement, settlementManagement, copiedClipboard
 import { ToastActionsCreators } from 'react-native-redux-toast'
 import { getUser, getStore, getUcacAddr, getEthExchange as exchangeReducer, getWeeklyEthTotal } from 'reducers/app'
 import { hexToBuffer } from '../credit-protocol/lib/buffer-utils'
-import { defaultCurrency } from 'lndr/default-currency'
+import { defaultCurrency, currencySymbols, transferLimits  } from 'lndr/currencies'
 
 const bcrypt = require('bcryptjs')
 
@@ -1073,7 +1073,8 @@ const getEthInfo = async (user) => {
   try {
     ethBalance = await getEthBalance(user.address)
     ethExchange = await creditProtocol.getEthExchange(defaultCurrency)
-    bcptBalance = await getBcptBalance(user.address)
+    const attoBcpts = await getBcptBalance(user.address)
+    bcptBalance = String ( Number(attoBcpts) / Math.pow(10, 18) )
   } catch (e) {
     ethBalance = '0'
     ethExchange = '1000'

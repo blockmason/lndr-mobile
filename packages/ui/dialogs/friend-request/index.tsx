@@ -15,7 +15,7 @@ import general from 'theme/general'
 import pendingStyle from 'theme/pending'
 import accountStyle from 'theme/account'
 
-import language, { currencies } from 'language'
+import language from 'language'
 const {
   pendingTransactionsLanguage,
   pendingFriendRequestsLanguage

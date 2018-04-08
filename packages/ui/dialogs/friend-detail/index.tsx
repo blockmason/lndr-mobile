@@ -11,7 +11,7 @@ import profilePic from 'lndr/profile-pic'
 import PendingView from 'ui/views/account/activity/pending'
 import RecentView from 'ui/views/account/activity/recent'
 import DashboardShell from 'ui/components/dashboard-shell'
-import { defaultCurrency } from 'lndr/default-currency'
+import { defaultCurrency, currencySymbols, transferLimits  } from 'lndr/currencies'
 
 import Button from 'ui/components/button'
 import Loading, { LoadingContext } from 'ui/components/loading'
@@ -22,7 +22,7 @@ import general from 'theme/general'
 import pendingStyle from 'theme/pending'
 import accountStyle from 'theme/account'
 
-import language, { currencies } from 'language'
+import language from 'language'
 const {
   cancel,
   back,
@@ -126,13 +126,13 @@ class RemoveFriend extends Component<Props, State> {
 
     return total
   }
-
+  
   render() {
     const friend = this.props.navigation ? this.props.navigation.state.params.friend : {}
     const { navigation } = this.props
     const { pic } = this.state
     const imageSource = pic ? { uri: pic } : require('images/person-outline-dark.png')
-
+    
     return <ScrollView style={general.view}>
       <DashboardShell text={friendShell} navigation={this.props.navigation} />
       <Loading context={loadingContext} />
@@ -142,11 +142,11 @@ class RemoveFriend extends Component<Props, State> {
         <Text style={pendingStyle.title}>{`@${friend.nickname}`}</Text>
         <Text style={pendingStyle.subTitle}>{`${recentTransactionsLanguage.balance}:`}</Text>
         <View style={pendingStyle.balanceRow}>
-          <Text style={pendingStyle.balanceInfo}>{currencies[defaultCurrency]}</Text>
+          <Text style={pendingStyle.balanceInfo}>{currencySymbols[defaultCurrency]}</Text>
           <Text style={pendingStyle.amount}>{currencyFormats[defaultCurrency](this.getRecentTotal())}</Text>
         </View>
-        <Button round large fat wide onPress={() => this.props.navigation.navigate('SettleUp', { friend: friend })} text={debtManagement.settleUp} containerStyle={style.spaceBottom} />
-        { this.getTransactionNumber() === 0 ? <Button round large danger wide onPress={() => this.removeFriend(friend)} text={removeFriendText} containerStyle={style.spaceBottom} /> : null }
+        {this.getRecentTotal() === 0 ? null : <Button round large fat wide onPress={() => this.props.navigation.navigate('SettleUp', { friend: friend })} text={debtManagement.settleUp} containerStyle={style.spaceBottom} />}
+        {this.getTransactionNumber() === 0 ? <Button round large danger wide onPress={() => this.removeFriend(friend)} text={removeFriendText} containerStyle={style.spaceBottom} /> : null }
         <View style={style.fullWidth}>
           <Text style={accountStyle.transactionHeader}>{pendingTransactionsLanguage.title}</Text>
           <PendingView friend={friend} navigation={navigation} />

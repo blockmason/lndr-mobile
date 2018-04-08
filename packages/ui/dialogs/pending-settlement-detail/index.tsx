@@ -8,7 +8,7 @@ import { debounce } from 'lndr/time'
 import { currencyFormats } from 'lndr/format'
 import PendingUnilateral from 'lndr/pending-unilateral'
 import profilePic from 'lndr/profile-pic'
-import { defaultCurrency } from 'lndr/default-currency'
+import { defaultCurrency, currencySymbols, transferLimits  } from 'lndr/currencies'
 
 import Button from 'ui/components/button'
 import Loading, { LoadingContext } from 'ui/components/loading'
@@ -205,7 +205,7 @@ class PendingSettlementDetail extends Component<Props, State> {
         <Image source={require('images/person-outline-dark.png')} style={style.image}/>
         <Text style={[style.title, {alignSelf: 'center', textAlign: 'center'}]}>{this.getTitle()}</Text>
         <View style={style.balanceRow}>
-          <Text style={style.balanceInfo}>{currencies[defaultCurrency]}</Text>
+          <Text style={style.balanceInfo}>{currencySymbols[defaultCurrency]}</Text>
           <Text style={style.amount}>{currencyFormats[defaultCurrency](pendingSettlement.amount)}</Text>
         </View>
         <View style={style.balanceRow}>

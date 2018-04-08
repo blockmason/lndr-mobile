@@ -75,3 +75,5 @@ android/app/google-services.json
 
 #aws secrets
 packages/lndr/profile-pic/config.json
+
+ios/GoogleService-Info.plist

@@ -7,7 +7,7 @@ import { UserData } from 'lndr/user'
 import { debounce } from 'lndr/time'
 import { ethAmount, ethAddress } from 'lndr/format'
 import Friend from 'lndr/friend'
-import { defaultCurrency } from 'lndr/default-currency'
+import { defaultCurrency, currencySymbols, transferLimits  } from 'lndr/currencies'
 
 import Button from 'ui/components/button'
 import Loading, { LoadingContext } from 'ui/components/loading'
@@ -132,7 +132,7 @@ class TransferEth extends Component<Props, State> {
     if (amount === undefined) {
       amount = '0'
     }
-    const remaining = `${currencies[currency]}${Number(amount) * Number(exchange)}`
+    const remaining = `${currencySymbols[currency]}${Number(amount) * Number(exchange)}`
     const end = remaining.indexOf('.') === -1 ? remaining.length : remaining.indexOf('.') + 3
     return remaining.slice(0, end)
   }
