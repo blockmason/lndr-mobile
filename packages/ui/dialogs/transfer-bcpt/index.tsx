@@ -55,10 +55,10 @@ class TransferBcpt extends Component<Props, State> {
     const { amount, address } = this.state
 
     if (!this.validAddress()) {
-      this.setState({ formInputError: accountManagement.sendEth.error.address })
+      this.setState({ formInputError: accountManagement.sendBcpt.error.address })
       return
     } else if (!amount || amount === '0') {
-      this.setState({ formInputError: accountManagement.sendEth.error.amount })
+      this.setState({ formInputError: accountManagement.sendBcpt.error.amount })
       return
     }
 

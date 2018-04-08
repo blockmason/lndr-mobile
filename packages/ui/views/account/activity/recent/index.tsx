@@ -12,7 +12,7 @@ import { UserData } from 'lndr/user'
 import RecentTransactionDetail from 'ui/dialogs/recent-transaction-detail'
 import RecentTransactionRow from 'ui/components/recent-transaction-row'
 import Friend from 'lndr/friend'
-import { defaultCurrency } from 'lndr/default-currency'
+import { defaultCurrency, currencySymbols, transferLimits  } from 'lndr/currencies'
 
 import style from 'theme/account'
 import general from 'theme/general'

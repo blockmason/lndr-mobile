@@ -9,7 +9,7 @@ import PendingUnilateral from 'lndr/pending-unilateral'
 import PendingBilateral from 'lndr/pending-bilateral'
 import User from 'lndr/user'
 import profilePic from 'lndr/profile-pic'
-import { defaultCurrency } from 'lndr/default-currency'
+import { defaultCurrency, currencySymbols, transferLimits  } from 'lndr/currencies'
 import { getUcacCurrency } from 'reducers/app'
 
 import { white } from 'theme/include/colors'
@@ -19,7 +19,7 @@ import general from 'theme/general'
 
 import settlerIsMe from 'reducers/app'
 
-import language, { currencies } from 'language'
+import language from 'language'
 const { debtManagement } = language
 
 interface Props {
@@ -88,7 +88,7 @@ class PendingSettlementRow extends Component<Props, State> {
 
     const currentCurrency = getUcacCurrency(pendingSettlement.creditRecord.ucacAddress)
 
-    return `${sign} ${currencies[currentCurrency]}${currencyFormats[currentCurrency](pendingSettlement.amount)}`
+    return `${sign} ${currencySymbols[currentCurrency]}${currencyFormats[currentCurrency](pendingSettlement.amount)}`
   }
 
   render() {

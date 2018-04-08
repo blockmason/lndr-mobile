@@ -15,7 +15,7 @@ import InputImage from 'ui/components/images/input-image'
 import { formatNick, formatLockTimeout, formatEmail, emailFormatIncorrect } from 'lndr/format'
 import { defaultUpdateAccountData, UpdateAccountData, UserData } from 'lndr/user'
 import { getBcptBalance } from 'lndr/bcpt-utils'
-import { defaultCurrency } from 'lndr/default-currency'
+import { defaultCurrency, currencySymbols, transferLimits  } from 'lndr/currencies'
 
 import { getAccountInformation, updateNickname, updateEmail, logoutAccount, toggleNotifications, 
   setEthBalance, updateLockTimeout, updatePin, getProfilePic, setProfilePic, takenNick, takenEmail,
@@ -29,7 +29,7 @@ import general from 'theme/general'
 import { underlayColor } from 'theme/general'
 import slideStyle from 'theme/slide'
 
-import language, { currencies } from 'language'
+import language from 'language'
 const { nickname, setNickname, email, setEmail, copy, accountManagement, changePin, enterNewPin, confirmPin,
   cancel, mnemonicExhortation, addressExhortation, logoutAction, notifications, currentBalance, showMnemonic, enterCurrentPin
 } = language
@@ -40,14 +40,14 @@ const loadingContext = new LoadingContext()
 const { height } = Dimensions.get('window');
 
 interface Props {
-  logoutAccount: () => any
-  closePopup: () => void
   navigation: any
-  getAccountInformation: () => any
   user: UserData
+  state: any
+
+  logoutAccount: () => any
+  getAccountInformation: () => any
   updateNickname: (accountData: UpdateAccountData) => any
   updateEmail: (accountData: UpdateAccountData) => any
-  state: any
   toggleNotifications: () => any
   setEthBalance: () => any
   updateLockTimeout: (timeout: number) => any
@@ -66,11 +66,11 @@ interface State {
   hiddenPanels: any
   step: number
   photos: any
-  nickTextInputErrorText?: string
-  emailTextInputErrorText?: string
   authenticated: boolean
   currency: string
   scrollY: number
+  nickTextInputErrorText?: string
+  emailTextInputErrorText?: string
 }
 
 class MyAccount extends Component<Props, State> {
@@ -230,7 +230,7 @@ class MyAccount extends Component<Props, State> {
   _keyExtractor = (item, index) => index
 
   renderPanels() {
-    const { user, closePopup, updateNickname, updateEmail, copyToClipboard } = this.props
+    const { user, updateNickname, updateEmail, copyToClipboard } = this.props
     const { notificationsEnabled, ethBalance, bcptBalance, userPic } = this.props.state
     const { lockTimeout, hiddenPanels, photos, nickTextInputErrorText, emailTextInputErrorText, authenticated, currency } = this.state
     const imageSource = userPic ? { uri: userPic } : require('images/person-outline-dark.png')

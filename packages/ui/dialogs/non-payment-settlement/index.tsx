@@ -7,7 +7,7 @@ import { UserData } from 'lndr/user'
 import { debounce } from 'lndr/time'
 import { currencyFormats, amountFormat } from 'lndr/format'
 import Friend from 'lndr/friend'
-import { defaultCurrency } from 'lndr/default-currency'
+import { defaultCurrency, currencySymbols, transferLimits  } from 'lndr/currencies'
 import profilePic from 'lndr/profile-pic'
 
 import Button from 'ui/components/button'
@@ -186,7 +186,7 @@ class EthSettlement extends Component<Props, State> {
                 return getUcacAddress(defaultCurrency).indexOf(transaction.ucac) !== -1 && (transaction.creditorAddress === friend.address || transaction.debtorAddress === friend.address) ?
                   <View style={style.recent} key={friend.address + index}>
                     <Text style={style.recentText}>{transaction.memo}</Text>
-                    <Text style={style.recentText}>{ (transaction.creditorAddress === friend.address ? '-' : '+') + `${currencies[defaultCurrency]}${currencyFormats[defaultCurrency](transaction.amount)}`}</Text>
+                    <Text style={style.recentText}>{ (transaction.creditorAddress === friend.address ? '-' : '+') + `${currencySymbols[defaultCurrency]}${currencyFormats[defaultCurrency](transaction.amount)}`}</Text>
                   </View> : null
               })
             }
@@ -198,7 +198,7 @@ class EthSettlement extends Component<Props, State> {
               <Text style={formStyle.titleLarge}>{debtManagement.fields.settlementAmount}</Text>
               <TextInput
                 style={formStyle.jumboInput}
-                placeholder={`${currencies[currency]}0`}
+                placeholder={`${currencySymbols[currency]}0`}
                 placeholderTextColor='black'
                 value={amount}
                 maxLength={14}
@@ -208,7 +208,7 @@ class EthSettlement extends Component<Props, State> {
               />
             </View>
           </View>
-          { amount ? <Button large round wide onPress={() => this.submit()} text={debtManagement.settleUp} /> : <Button large round wide onPress={() => this.setState({ amount: `${currencies[defaultCurrency]}${currencyFormats[defaultCurrency](Math.abs(balance))}`})} text={debtManagement.settleTotal} />}
+          { amount ? <Button large round wide onPress={() => this.submit()} text={debtManagement.settleUp} /> : <Button large round wide onPress={() => this.setState({ amount: `${currencySymbols[defaultCurrency]}${currencyFormats[defaultCurrency](Math.abs(balance))}`})} text={debtManagement.settleTotal} />}
         </View>
       </KeyboardAvoidingView>
     </ScrollView>

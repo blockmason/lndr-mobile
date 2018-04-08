@@ -1,9 +1,9 @@
-import { currencies, transferLimits } from 'language'
+import { currencySymbols, transferLimits } from 'lndr/currencies'
 
-const CUR = currencies
+const CUR = currencySymbols
 const TL = transferLimits
 
-const generalCommunicationError = 'There was a problem communicating with the server, please try again later.'
+const generalCommunicationError = 'Der var et problem med kommunikationen med serveren, prøv igen senere.'
 
 export default {
 

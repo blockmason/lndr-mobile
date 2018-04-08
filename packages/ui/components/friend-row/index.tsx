@@ -9,7 +9,7 @@ import { white } from 'theme/include/colors'
 
 import { currencyFormats } from 'lndr/format'
 import profilePic from 'lndr/profile-pic'
-import { defaultCurrency } from 'lndr/default-currency'
+import { defaultCurrency, currencySymbols, transferLimits  } from 'lndr/currencies'
 
 import style from 'theme/account'
 import general from 'theme/general'
@@ -17,7 +17,7 @@ import general from 'theme/general'
 import { getUcacAddr } from 'reducers/app'
 import { connect } from 'react-redux'
 
-import language, { currencies } from 'language'
+import language from 'language'
 const { debtManagement } = language
 
 interface Props {
@@ -80,7 +80,7 @@ class FriendRow extends Component<Props, State> {
       sign = '-'
     }
 
-    return `${sign} ${currencies[defaultCurrency]}${currencyFormats[`${defaultCurrency}abs`](total)}`
+    return `${sign} ${currencySymbols[defaultCurrency]}${currencyFormats[`${defaultCurrency}abs`](total)}`
   }
 
   getTransactionTotal() {
