@@ -4,7 +4,7 @@ import { Text, View } from 'react-native'
 
 import { UserData } from 'lndr/user'
 import Friend from 'lndr/friend'
-import { defaultCurrency, currencySymbols, transferLimits  } from 'lndr/currencies'
+import { currencySymbols, transferLimits  } from 'lndr/currencies'
 import PendingTransaction from 'lndr/pending-transaction'
 import PendingUnilateral from 'lndr/pending-unilateral'
 
@@ -145,9 +145,6 @@ class PendingTransactionsView extends Component<Props, State> {
         )}
         {
           pendingSettlements.map( pendingSettlement => {
-            if(getUcacAddress(defaultCurrency).indexOf(pendingSettlement.ucac) === -1 ) {
-              return null
-            }
             if (homeScreen && this.props.settlerIsMe(pendingSettlement)) {
               return null
             }
@@ -163,9 +160,6 @@ class PendingTransactionsView extends Component<Props, State> {
           { this.hideBilateralMsg() ? null : <Text style={style.transactionHeader}>{pendingTransactionsLanguage.bilateral}</Text> }
           { homeScreen ? null :
           bilateralSettlements.map( bilateralSettlement => {
-            if(getUcacAddress(defaultCurrency).indexOf(bilateralSettlement.ucac) === -1 ) {
-              return null
-            }
             if (friend && friend.address !== bilateralSettlement.creditorAddress && friend.address !== bilateralSettlement.debtorAddress) {
               return null
             }
