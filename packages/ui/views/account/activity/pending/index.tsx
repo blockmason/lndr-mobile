@@ -88,9 +88,9 @@ class PendingTransactionsView extends Component<Props, State> {
     if (!pendingTransactionsLoaded) {
       showNone = true
     } else if (!friend) {
-      showNone = pendingTransactions.filter( tx => getUcacAddress(defaultCurrency).indexOf(tx.ucac) !== -1 ).length 
-      + pendingSettlements.filter( tx => getUcacAddress(defaultCurrency).indexOf(tx.ucac) !== -1 ).length +
-      pendingFriends.length === 0
+      showNone = (pendingTransactions.length
+        + pendingSettlements.length
+        + pendingFriends.length) === 0
     } else if (friend) {
       showNone = true
       pendingTransactions.map( (pending) => {
@@ -128,9 +128,6 @@ class PendingTransactionsView extends Component<Props, State> {
         {this.showNoneMessage()}
         {
           pendingTransactions.map(pendingTransaction => {
-            if(getUcacAddress(defaultCurrency).indexOf(pendingTransaction.ucac) === -1 ) {
-              return null
-            }
             if (friend && friend.address !== pendingTransaction.creditorAddress && friend.address !== pendingTransaction.debtorAddress) {
                 return null
             }
@@ -154,7 +151,7 @@ class PendingTransactionsView extends Component<Props, State> {
             if (homeScreen && this.props.settlerIsMe(pendingSettlement)) {
               return null
             }
-            return <PendingSettlementRow 
+            return <PendingSettlementRow
               user={user}
               pendingSettlement={pendingSettlement}
               key={pendingSettlement.hash}
@@ -175,7 +172,7 @@ class PendingTransactionsView extends Component<Props, State> {
             if (homeScreen && this.props.settlerIsMe(bilateralSettlement)) {
               return null
             }
-            return <PendingSettlementRow 
+            return <PendingSettlementRow
               user={user}
               pendingSettlement={bilateralSettlement}
               key={bilateralSettlement.creditRecord.hash}
@@ -198,6 +195,6 @@ class PendingTransactionsView extends Component<Props, State> {
   }
 }
 
-export default connect((state) => ({ state: getStore(state)(), user: getUser(state)(), isFocused: isFocusingOn(state)('Activity'), 
-pendingSettlements: pendingSettlements(state), bilateralSettlements: bilateralSettlements(state), submitterIsMe: submitterIsMe(state), 
+export default connect((state) => ({ state: getStore(state)(), user: getUser(state)(), isFocused: isFocusingOn(state)('Activity'),
+pendingSettlements: pendingSettlements(state), bilateralSettlements: bilateralSettlements(state), submitterIsMe: submitterIsMe(state),
 settlerIsMe: settlerIsMe(state), getUcacAddress: getUcacAddr(state) }), { getPendingTransactions, getPendingSettlements })(PendingTransactionsView)
