@@ -10,7 +10,7 @@ import { defaultCurrency, currencySymbols, transferLimits  } from 'lndr/currenci
 import { getUcacCurrency } from 'reducers/app'
 import { connect } from 'react-redux'
 
-import language, { 
+import language from 'language'
 const { debtManagement } = language
 
 import { white } from 'theme/include/colors'
