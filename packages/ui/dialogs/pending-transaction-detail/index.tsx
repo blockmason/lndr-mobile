@@ -46,8 +46,8 @@ interface State {
 }
 
 class PendingTransactionDetail extends Component<Props, State> {
-  constructor() {
-    super()
+  constructor(props) {
+    super(props)
     this.state = { userPic: '' }
   }
 

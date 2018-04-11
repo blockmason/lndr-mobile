@@ -51,8 +51,8 @@ interface State {
 export default class SearchFriend extends Component<Props, State> {
   searchAction: (string) => void
 
-  constructor() {
-    super()
+  constructor(props) {
+    super(props)
     this.state = {
       hasSearchTerm: false,
       matches: []

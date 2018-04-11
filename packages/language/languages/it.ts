@@ -332,7 +332,7 @@ export default {
 
   tabs: {
     home: `Home`,
-    friends: `Amici`,
+    friends: `   Amici   `,
     activity: `Attività`,
   },
 

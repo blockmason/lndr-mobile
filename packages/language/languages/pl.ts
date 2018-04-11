@@ -280,7 +280,7 @@ export default {
 
   accountViewLanguage: {
     lndr: `L n d r`,
-    home: `Strona Główna`,
+    home: `Główna`,
     friends: `Znajomi`,
     activity: `Aktywność`,
   },
@@ -331,7 +331,7 @@ export default {
   },
 
   tabs: {
-    home: `Strona Główna`,
+    home: `Główna`,
     friends: `Znajomi`,
     activity: `Aktywność`,
   },

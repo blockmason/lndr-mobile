@@ -35,8 +35,8 @@ interface State {
 }
   
 class ActivityView extends Component<Props, State> {
-    constructor() {
-        super()
+    constructor(props) {
+        super(props)
         this.state = {
             refreshing: false
         }

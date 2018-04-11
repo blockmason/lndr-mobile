@@ -81,8 +81,8 @@ interface State {
 }
 
 class HomeView extends Component<Props, State> {
-  constructor() {
-    super()
+  constructor(props) {
+    super(props)
     this.state = {
       currency: defaultCurrency,
       refreshing: false
@@ -113,6 +113,7 @@ class HomeView extends Component<Props, State> {
 
   async initializePushNotifications() {
     UrbanAirship.getChannelId().then(channelId => {
+      console.log('CHANNEL ID', channelId)
       this.props.registerChannelID(channelId, Platform.OS)
     })
 

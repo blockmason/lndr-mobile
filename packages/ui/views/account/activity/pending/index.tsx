@@ -52,8 +52,8 @@ interface State {
 }
 
 class PendingTransactionsView extends Component<Props, State> {
-  constructor() {
-    super()
+  constructor(props) {
+    super(props)
     this.state = {}
   }
 

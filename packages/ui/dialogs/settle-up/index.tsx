@@ -20,7 +20,7 @@ import formStyle from 'theme/form'
 import general from 'theme/general'
 import accountStyle from 'theme/account'
 
-import language, { currencies, transferLimits } from 'language'
+import language from 'language'
 const {
   settlementManagement,
   debtManagement

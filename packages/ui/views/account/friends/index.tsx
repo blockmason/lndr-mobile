@@ -47,8 +47,8 @@ interface State {
 class FriendsView extends Component<Props, State> {
   stillRelevant?: boolean
 
-  constructor() {
-    super()
+  constructor(props) {
+    super(props)
     this.state = {
       refreshing: false
     }

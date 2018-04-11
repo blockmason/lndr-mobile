@@ -19,11 +19,11 @@ PODS:
     - nanopb/encode (= 0.3.8)
   - nanopb/decode (0.3.8)
   - nanopb/encode (0.3.8)
-  - UrbanAirship-iOS-SDK (8.6.3)
+  - UrbanAirship-iOS-SDK (9.0.3)
 
 DEPENDENCIES:
   - Firebase/Core
-  - UrbanAirship-iOS-SDK (~> 8.3)
+  - UrbanAirship-iOS-SDK (~> 9.0)
 
 SPEC CHECKSUMS:
   Firebase: 92c6ba593e32db0defde464a9adc981d5cb49f97
@@ -32,8 +32,8 @@ SPEC CHECKSUMS:
   FirebaseInstanceID: d2058a35e9bebda1b6dd42486b84917bde552a9d
   GoogleToolboxForMac: 2501e2ad72a52eb3dfe7bd9aee7dad11b858bd20
   nanopb: 5601e6bca2dbf1ed831b519092ec110f66982ca3
-  UrbanAirship-iOS-SDK: 61bad27cf3ea49e2da7c9a6c469674bf3ac2ffa0
+  UrbanAirship-iOS-SDK: 2dca9836a46c4b3d91337e780226cd60fc4d309b
 
-PODFILE CHECKSUM: d128467045b29cdb5c0fd58b33b220d7d40ef14d
+PODFILE CHECKSUM: ad9300dd62ef79bb3cce9f38fd5654450c5d16fd
 
 COCOAPODS: 1.3.1

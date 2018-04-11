@@ -26,8 +26,8 @@ interface State {
 }
 
 export default class FriendRow extends Component<Props, State> {
-  constructor() {
-    super()
+  constructor(props) {
+    super(props)
     this.state = {}
   }
 

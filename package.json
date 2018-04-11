@@ -21,7 +21,7 @@
     "events": "^1.1.1",
     "metro-bundler": "^0.22.1",
     "react": "^16.0.0",
-    "react-native": "0.49.3",
+    "react-native": "^0.50.0",
     "react-native-action-button": "^2.8.1",
     "react-native-actionsheet": "^2.3.0",
     "react-native-blur": "^3.2.2",

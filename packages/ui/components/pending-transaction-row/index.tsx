@@ -6,7 +6,7 @@ import { connect } from 'react-redux'
 
 import { currencyFormats } from 'lndr/format'
 import PendingTransaction from 'lndr/pending-transaction'
-import User from 'lndr/user'
+import UserData from 'lndr/user'
 import profilePic from 'lndr/profile-pic'
 import { defaultCurrency, currencySymbols, transferLimits  } from 'lndr/currencies'
 import { getUcacCurrency } from 'reducers/app'
@@ -22,7 +22,7 @@ const { debtManagement } = language
 interface Props {
   onPress?: () => void
   pendingTransaction: PendingTransaction
-  user: User
+  user: UserData
   friend?: boolean
   getUcacCurrency: (ucac: string) => string
 }

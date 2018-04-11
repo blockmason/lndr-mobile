@@ -74,8 +74,8 @@ interface State {
 }
 
 class MyAccount extends Component<Props, State> {
-  constructor() {
-    super()
+  constructor(props) {
+    super(props)
     this.state = {
       ...defaultUpdateAccountData(),
       lockTimeout: '',
