@@ -2,6 +2,7 @@ import React, { Component } from 'react'
 
 import { Text, TextInput, TouchableHighlight, View, Image, ScrollView } from 'react-native'
 import { getResetAction } from 'reducers/nav'
+import { getUcacCurrency } from 'reducers/app'
 
 import { UserData } from 'lndr/user'
 import { debounce } from 'lndr/time'
@@ -35,6 +36,7 @@ const loadingContext = new LoadingContext()
 interface Props {
   confirmPendingTransaction: (pendingTransaction: PendingTransaction) => any
   rejectPendingTransaction: (pendingTransaction: PendingTransaction) => any
+  getUcacCurrency: (ucac: string) => string
   user: UserData
   submitterIsMe: (pendingTransaction: PendingTransaction) => boolean
   navigation: any
@@ -140,10 +142,11 @@ class PendingTransactionDetail extends Component<Props, State> {
   }
 
   render() {
-    const { user, submitterIsMe, navigation } = this.props
+    const { user, submitterIsMe, navigation, getUcacCurrency } = this.props
     const { userPic } = this.state
     const pendingTransaction = navigation.state ? navigation.state.params.pendingTransaction : {}
     const imageSource = userPic ? {uri: userPic} : require('images/person-outline-dark.png')
+    const currency = getUcacCurrency(pendingTransaction.ucac)
 
     return <ScrollView style={[general.fullHeight, general.view]}>
       <Loading context={loadingContext} />
@@ -153,8 +156,8 @@ class PendingTransactionDetail extends Component<Props, State> {
         <Image source={imageSource} style={style.image}/>
         <Text style={style.title}>{this.getTitle()}</Text>
         <View style={style.balanceRow}>
-          <Text style={style.balanceInfo}>{currencySymbols[defaultCurrency]}</Text>
-          <Text style={style.amount}>{currencyFormats[defaultCurrency](pendingTransaction.amount)}</Text>
+          <Text style={style.balanceInfo}>{currencySymbols[currency]}</Text>
+          <Text style={style.amount}>{currencyFormats[currency](pendingTransaction.amount)}</Text>
         </View>
         {this.labelRow(pendingTransaction.memo.trim())}
         <View style={{marginBottom: 10}}/>
@@ -165,5 +168,7 @@ class PendingTransactionDetail extends Component<Props, State> {
   }
 }
 
-export default connect((state) => ({ user: getUser(state)(), submitterIsMe: submitterIsMe(state) }),
-{ confirmPendingTransaction, rejectPendingTransaction })(PendingTransactionDetail)
+export default connect((state) => ({ user: getUser(state)(),
+  submitterIsMe: submitterIsMe(state),
+  getUcacCurrency: getUcacCurrency(state)
+}), { confirmPendingTransaction, rejectPendingTransaction })(PendingTransactionDetail)

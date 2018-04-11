@@ -14,6 +14,12 @@ export default StyleSheet.create({
     ...radius,
     ...dropShadow
   },
+  modalOverlay: {
+    backgroundColor:'#222',
+    opacity:0.8,
+    width: '100%',
+    height: '100%'
+  },
   wrap: {
     zIndex: 1,
     position: 'absolute',
