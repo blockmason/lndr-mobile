@@ -1,6 +1,6 @@
 const generalCommunicationError = 'サーバーとの通信中にエラーが起きました。しばらくしてからお試しください。'
 
-import { currencies, transferLimits } from 'language'
+import { currencySymbols, transferLimits } from 'lndr/currencies'
 
 export default {
   applicationName: 'Lndr',
@@ -132,7 +132,7 @@ export default {
     inFiat: (amount, exchange, currency) => {
       const strAmnt = String(Number(amount) * Number(exchange))
       const perInd = strAmnt.indexOf('.') === -1 ? strAmnt.length : strAmnt.indexOf('.')
-      return ` (${currencies[currency]}${strAmnt.slice(0, perInd)})`
+      return ` (${currencySymbols[currency]}${strAmnt.slice(0, perInd)})`
     },
     getError: 'ETH残高を取得できません',
     manage: 'ETHを管理する'
@@ -143,7 +143,7 @@ export default {
       generic: '送信時にエラーが起きました。時間をおいて、また送信してください',
       address: '正しいアドレスを入力してください',
       amount: '数値は0以上を入力してください',
-      limitExceeded: currency => `１週間に送れるのは ${currencies[currency]}${transferLimits[currency]} までです。これより小さい数値を入力してください`
+      limitExceeded: currency => `１週間に送れるのは ${currencySymbols[currency]}${transferLimits[currency]} までです。これより小さい数値を入力してください`
     },
     amount: '送信額',
     address: `送信先アドレス（先頭の0xは入力不要）`,
@@ -151,10 +151,10 @@ export default {
     transferAll: 'TRANSFER EVERYTHING',
     balance: (balance) => `現在のETH残高はこちら ${typeof balance === 'string' ? balance.slice(0,8) : ''}`,
     ethAddress: 'イーサリアムアドレス',
-    txCost: (cost, currency) => `現在、1回あたりにかかるETH取引コストは ${currencies[currency]}${cost}です `,
+    txCost: (cost, currency) => `現在、1回あたりにかかるETH取引コストは ${currencySymbols[currency]}${cost}です `,
     transferLowercase: 'ETHを送信する',
-    note: currency => `注意：１週間にLndrから送れるのは ${currencies[currency]}${transferLimits[currency]} までです`,
-    warning: (amount, currency) => `${currencies[currency]}${amount} の送付上限に対し、残りは ${currencies[currency]}${transferLimits[currency]} です`
+    note: currency => `注意：１週間にLndrから送れるのは ${currencySymbols[currency]}${transferLimits[currency]} までです`,
+    warning: (amount, currency) => `${currencySymbols[currency]}${amount} の送付上限に対し、残りは ${currencySymbols[currency]}${transferLimits[currency]} です`
   },
   sendBcpt: {
     error: {

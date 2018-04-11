@@ -4,17 +4,15 @@ import { Text, TouchableHighlight, View, Image } from 'react-native'
 import Button from 'ui/components/button'
 
 import Friend from 'lndr/friend'
-
-import { white } from 'theme/include/colors'
-
 import profilePic from 'lndr/profile-pic'
 
+import { white } from 'theme/include/colors'
 import style from 'theme/account'
 import general from 'theme/general'
 
 import { connect } from 'react-redux'
 
-import language, { currencies } from 'language'
+import language from 'language'
 const { pendingFriendRequestsLanguage } = language
 
 interface Props {

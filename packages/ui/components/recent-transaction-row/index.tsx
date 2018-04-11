@@ -6,11 +6,11 @@ import { currencyFormats } from 'lndr/format'
 import User from 'lndr/user'
 import RecentTransaction from 'lndr/recent-transaction'
 import profilePic from 'lndr/profile-pic'
-import { defaultCurrency } from 'lndr/default-currency'
+import { defaultCurrency, currencySymbols, transferLimits  } from 'lndr/currencies'
 import { getUcacCurrency } from 'reducers/app'
 import { connect } from 'react-redux'
 
-import language, { currencies } from 'language'
+import language, { 
 const { debtManagement } = language
 
 import { white } from 'theme/include/colors'
@@ -78,7 +78,7 @@ class RecentTransactionRow extends Component<Props, State> {
 
     const currentCurrency = getUcacCurrency(recentTransaction.ucac)
 
-    return `${sign} ${currencies[defaultCurrency]}${currencyFormats[defaultCurrency](recentTransaction.amount)}`
+    return `${sign} ${currencySymbols[defaultCurrency]}${currencyFormats[defaultCurrency](recentTransaction.amount)}`
   }
 
   render() {

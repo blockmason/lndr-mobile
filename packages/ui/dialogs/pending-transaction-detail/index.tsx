@@ -8,7 +8,7 @@ import { debounce } from 'lndr/time'
 import { currencyFormats } from 'lndr/format'
 import PendingTransaction from 'lndr/pending-transaction'
 import profilePic from 'lndr/profile-pic'
-import { defaultCurrency } from 'lndr/default-currency'
+import { defaultCurrency, currencySymbols, transferLimits  } from 'lndr/currencies'
 
 import Button from 'ui/components/button'
 import Loading, { LoadingContext } from 'ui/components/loading'
@@ -18,7 +18,7 @@ import style from 'theme/pending'
 import formStyle from 'theme/form'
 import general from 'theme/general'
 
-import language, { currencies } from 'language'
+import language from 'language'
 const {
   back,
   cancel,
@@ -153,7 +153,7 @@ class PendingTransactionDetail extends Component<Props, State> {
         <Image source={imageSource} style={style.image}/>
         <Text style={style.title}>{this.getTitle()}</Text>
         <View style={style.balanceRow}>
-          <Text style={style.balanceInfo}>{currencies[defaultCurrency]}</Text>
+          <Text style={style.balanceInfo}>{currencySymbols[defaultCurrency]}</Text>
           <Text style={style.amount}>{currencyFormats[defaultCurrency](pendingTransaction.amount)}</Text>
         </View>
         {this.labelRow(pendingTransaction.memo.trim())}

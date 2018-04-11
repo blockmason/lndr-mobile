@@ -5,7 +5,7 @@ import { getResetAction } from 'reducers/nav'
 
 import Friend from 'lndr/friend'
 import { formatMemo, currencyFormats, amountFormat } from 'lndr/format'
-import { defaultCurrency } from 'lndr/default-currency'
+import { defaultCurrency, currencySymbols, transferLimits  } from 'lndr/currencies'
 
 import Button from 'ui/components/button'
 import Checkbox from 'ui/components/checkbox'
@@ -23,7 +23,7 @@ import general from 'theme/general'
 import pendingStyle from 'theme/pending'
 import popupStyle from 'theme/popup'
 
-import language, { currencies } from 'language'
+import language from 'language'
 const { debtManagement, noFriends, submit, cancel, back, nickname } = language
 
 import { getStore, pendingTransactions, recentTransactions, getAllUcacCurrencies } from 'reducers/app'
@@ -206,7 +206,7 @@ class AddDebt extends Component<Props, State> {
             <View style={style.newTransactionRow}>
               <TextInput
                 style={[formStyle.jumboInput, {paddingTop:0}]}
-                placeholder={`${currencies[currency]}0`}
+                placeholder={`${currencySymbols[currency]}0`}
                 placeholderTextColor='black'
                 value={amount}
                 maxLength={14}

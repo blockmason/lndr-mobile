@@ -1,9 +1,9 @@
-import { currencies, transferLimits } from 'language'
+import { currencySymbols, transferLimits } from 'lndr/currencies'
 
-const CUR = currencies
+const CUR = currencySymbols
 const TL = transferLimits
 
-const generalCommunicationError = 'There was a problem communicating with the server, please try again later.'
+const generalCommunicationError = 'Es gab ein Problem mit dem Server in Verbindung steht, versuchen Sie es später.'
 
 export default {
 
@@ -16,45 +16,45 @@ export default {
   copy: `In die Zwischenablage kopieren`,
   confirmAccount: `Bestätigen`,
   createAccount: `Benutzerkonto anlegen`,
-  recoverAccount: `wiederherstellen Konto`,
-  removeAccount: `Konto entfernen`,
-  updateAccount: `Account aktualisieren`,
+  recoverAccount: `Wiederherstellen Konto`,
+  removeAccount: `Konto Entfernen`,
+  updateAccount: `Konto Aktualisieren`,
   loginAction: `Freischalten`,
-  enterPin: `Bitte geben Sie Ihre PIN`,
+  enterPin: `Bitte Geben Sie Ihre PIN`,
   changePin: `PIN ändern`,
-  enterCurrentPin: `Aktuelle PIN eingeben`,
+  enterCurrentPin: `Aktuelle PIN Eingeben`,
   logoutAction: `AUSLOGGEN`,
-  seeAllActivity: `Alle Aktivitäten anzeigen`,
+  seeAllActivity: `Alle Aktivitäten Anzeigen`,
   copiedClipboard: `In die Zwischenablage kopiert`,
-  pleaseWait: `Warten Sie mal`,
+  pleaseWait: `Warten Sie mal bitte`,
   addFriend: `Freund hinzufügen`,
-  addFriendConfirmationQuestion: `Sind Sie sicher, dass Sie möchten uns an dieser Benutzer als Freund hinzufügen?`,
-  removeFriend: `Freund entfernen`,
-  currentFriends: `aktuelle Freunde`,
-  removeFriendConfirmationQuestion: `Sind Sie sicher, dass Sie möchten uns an dieser Benutzer als Freund entfernen?`,
-  inviteFriends: `Lade deine Freund in Lndr`,
+  addFriendConfirmationQuestion: `Sind Sie sicher, dass Sie möchten dieser Benutzer als Freund hinzufügen?`,
+  removeFriend: `Freund Entfernen`,
+  currentFriends: `Aktuelle Freunde`,
+  removeFriendConfirmationQuestion: `Sind Sie sicher, dass Sie möchten dieser Benutzer als Freund entfernen?`,
+  inviteFriends: `Lade deine Freund zu Lndr`,
   tryLndr: `Schauen Sie sich die Lndr App hier aus:`,
   friendInfo: `Weitere Informationen zu dieser Freundschaft:`,
-  noFriends: `Fügen Sie ein paar Freunde, um loszulegen!`,
+  noFriends: `Fügen Sie Freunde, um loszulegen!`,
   noMatches: `Keine passenden Benutzer gefunden`,
   noBalances: `Sie haben keine Schulden aufgenommen`,
-  addFriendButton: `Freund hinzufügen`,
-  alreadyFriendsButton: `Freunde`,
+  addFriendButton: `Freund Hinzufügen`,
+  alreadyFriendsButton: `Freund`,
   friendShell: `Freund`,
-  tip: `Spitze:`,
+  tip: `Vorschlag:`,
   notice: `Beachten:`,
   welcome: `Willkommen in Ihrem LNDR`,
   noBalanceWarning: `Wir waren nicht in der Lage, das Gleichgewicht zu dieser Zeit zu laden, bitte versuchen Sie es später noch einmal.`,
-  totalBalance: `Gesamtsaldo:`,
-  totalBalances: `Insgesamt Partner:`,
-  newTransaction: `neue Transaktion`,
-  needsReview: `Needs Bewertung`,
+  totalBalance: `Kontostand:`,
+  totalBalances: `Gesamtzahl der Partner:`,
+  newTransaction: `Neue Transaktion`,
+  needsReview: `Ausstehende Genehmigung`,
   owesMe: `Ich schuldete`,
   iOwe: `Ich verdanke jemand`,
   newPassword: `Neues Passwort (mindestens 8 Zeichen)`,
   confirmPassword: `Bestätige das Passwort`,
   newPin: `Neuer 4-stellige PIN`,
-  enterNewPin: `BITTE NEUEN 4-stellige PIN`,
+  enterNewPin: `Bitte neuen 4-stellige PIN`,
   confirmPin: `Bitte bestätigen Sie Ihre PIN`,
   newAccount: `Ein neues Konto erstellen`,
   loginAccount: `Entsperren Sie Ihr Konto`,
@@ -71,8 +71,8 @@ export default {
   myAccount: `Mein Konto`,
   setNickname: `Legen Sie einen Spitznamen, damit Ihre Freunde Sie suchen`,
   setEmail: `Stellen Sie eine E-Mail Informationen über Lndr-Updates zu erhalten`,
-  nickname: `Spitzname (Klein & Zahlen)`,
-  email: `E-Mail-Addresse`,
+  nickname: `Spitzname (Kleinbuchstaben & Zahlen)`,
+  email: `E-Mail Addresse`,
   accountManagement: {
     nickname: {
       lengthViolation: `Spitzname sollte mindestens 3 Zeichen lang sein.`,
@@ -106,7 +106,7 @@ export default {
       top: `Sie müssen Ihre PIN eingeben nach`,
       bottom: `Minuten Inaktivität`,
       update: `Aktualisieren`,
-      error: `Wir konnten Ihre Kontoeinstellungen aktualisieren`,
+      error: `Wir konnten Ihre Kontoeinstellungen nicht aktualisieren`,
       success: `Lock Timeout Aktualisiert`,
     },
     addFriend: {
@@ -114,17 +114,17 @@ export default {
       error: generalCommunicationError
     },
     removeFriend: {
-      success: X => `von Freunden entfernt: @${X}`,
+      success: X => `Von Freunden entfernt: @${X}`,
       error: generalCommunicationError
     },
     loadInformation: {
       error: generalCommunicationError
     },
     ethBalance: {
-      display: Y => `Ihr ETH Gleichgewicht ist ${String (Y) .slice (0,8)}`,
+      display: Y => `Ihr ETH Kontostand ist ${String (Y) .slice (0,8)}`,
       inFiat: (Z, B, A) => ` (${CUR[A]}${String(Number(Z) * Number(B)).slice(0, 8)})`,
-      getError: `Unfähig Eth Balance abrufen`,
-      manage: `verwalten ETH`,
+      getError: `Unfähig ETH Kontostand abrufen`,
+      manage: `Verwalten ETH`,
     },
     sendEth: {
       error: {
@@ -132,17 +132,17 @@ export default {
         generic: `Es gab einen Fehler bei der Übertragung, bitte versuchen Sie es später noch einmal`,
         address: `Bitte geben Sie eine gültige Adresse ein`,
         amount: `Bitte geben Sie eine Menge von mehr als 0`,
-        limitExceeded: A => `Sie können nur $ senden {CUR [A]} ${TL [A]} pro Woche, wählen Sie bitte eine kleinere amount`,
+        limitExceeded: A => `Sie können nur senden ${CUR [A]} ${TL [A]} pro Woche, wählen Sie bitte eine kleinere amount`,
       },
       amount: `Betrag zu senden`,
       address: `Zieladresse (ohne ‚0x‘ Präfix)`,
       transfer: `Transfer ETH`,
       transferAll: `Bringen Sie alles`,
-      balance: Y => `Ihr aktuelles ETH Gleichgewicht ist ${typeof Y === 'string'? Y.slice (0,8): ''} `,
+      balance: Y => `Ihr aktuelles ETH Kontostand ist ${typeof Y === 'string'? Y.slice (0,8): ''} `,
       ethAddress: `Astraleum Anschrift`,
       txCost: (B, A) => `Die aktuelle Transaktion kostet ${CUR [A]} ${B}`,
       transferLowercase: `übertragen Eth`,
-      note: A => `Bitte beachten Sie: Sie können nur $ übertragen {CUR [A]} ${TL [A]} pro Woche aus Lndr`,
+      note: A => `Bitte beachten Sie: Sie können nur übertragen ${CUR [A]} ${TL [A]} pro Woche aus Lndr`,
       warning: (Z, A) => `Sie haben ${CUR [A]} ${Z} Rest Ihres ${CUR [A]} ${TL [A]} limit`,
     },
     sendBcpt: {
@@ -152,15 +152,15 @@ export default {
       },
       transfer: `Transfer BCPT`,
       address: `Zieladresse (ohne ‚0x‘ Präfix)`,
-      balance: Y => `Ihr aktuelles BCPT Gleichgewicht ist ${typeof Y === 'string'? Y.slice (0,8): ''} `,
+      balance: Y => `Ihr aktuelles BCPT Kontostand ist ${typeof Y === 'string'? Y.slice (0,8): ''} `,
       bcptAddress: `BCPT Anschrift`,
     },
     changeProfilePic: `Tippen Sie auf Ändern`,
     addProfilePic: `Verwenden Sie Bild von Telefon`,
     panelHeaders: [
       `ETH (& BCPT) Adresse`,
-      `ETH Gleichgewicht`,
-      `BCPT Gleichgewicht`,
+      `ETH Kontostand`,
+      `BCPT Kontostand`,
       `ETH Transaktionshistorie`,
       `PIN ändern`,
       `Spitznamen ändern`,
@@ -181,8 +181,8 @@ export default {
   },
 
   currentBalance: {
-    eth: `Ihr aktuelles Eth Gleichgewicht ist:`,
-    bcpt: `Ihr aktuelles BCPT Gleichgewicht ist:`,
+    eth: `Ihr aktuelles Eth Kontostand ist:`,
+    bcpt: `Ihr aktuelles BCPT Kontostand ist:`,
   },
 
   welcomeView: {
@@ -203,11 +203,11 @@ export default {
   },
 
   debtManagement: {
-    shell: `neue Transaktion`,
+    shell: `Neue Transaktion`,
     add: `In Debt`,
     selectFriend: `Wählen`,
-    lend: `neue Darlehen`,
-    borrow: `neue Schulden`,
+    lend: `Neue Leihgabe`,
+    borrow: `Neue Schulden`,
     iLent: `Ein Freund schuldet mir`,
     iBorrowed: `Ich schulde einen Freund`,
     settleUpLower: `Abrechnen`,
@@ -233,49 +233,49 @@ export default {
       example: `Typ Memo hier`,
     },
     direction: {
-      lend: X => `${X} verdankt me`,
+      lend: X => `${X} verdankt mir`,
       borrow: X => `Ich schulde ${X}`,
-      initiatedLend: X => `${X}, sagt er / sie owes`,
-      initiatedBorrow: X => `${X} sagt, Sie owe`,
-      pendingLend: X => `@${X} verdankt you`,
+      initiatedLend: X => `${X}, sagt er / sie schuldet dir`,
+      initiatedBorrow: X => `${X} sagt, Sie schulden`,
+      pendingLend: X => `@${X} verdankt dir`,
       pendingBorrow: X => `Sie schulden @${X}`,
-      pendingLendSettlement: S => `@${S.debtorNickname} fordert eine Siedlung in ${S.settlementCurrency}`,
-      pendingBorrowSettlement: S => `@${S.creditorNickname} möchte mit Ihnen in ${S.settlementCurrency} regeln`,
-      pendingLendSettlementMe: S => `Sie werden gebeten mit @${S.debtorNickname} in ${S.settlementCurrency} zu regeln`,
-      pendingBorrowSettlementMe: S => `Sie haben beantragt, @${S.creditorNickname} siedeln in ${S.settlementCurrency}`,
+      pendingLendSettlement: S => `@${S.debtorNickname} fordert eine Begleichung in ${S.settlementCurrency}`,
+      pendingBorrowSettlement: S => `@${S.creditorNickname} möchte mit Ihnen in ${S.settlementCurrency} zu begleichen`,
+      pendingLendSettlementMe: S => `Sie werden gebeten mit @${S.debtorNickname} in ${S.settlementCurrency} zu begleichen`,
+      pendingBorrowSettlementMe: S => `Sie haben beantragt, @${S.creditorNickname} in ${S.settlementCurrency} zu begleichen`,
     },
     pending: {
-      success: F => `pending Schulden vorgelegt @${F.nickname}`,
+      success: F => `Transaktion vorgelegt zu @${F.nickname}`,
       error: generalCommunicationError
     },
     pendingParens: `(steht aus)`,
     confirmation: {
-      transaction: CP => `Transaktion mit $ {CP} wurde erfolgreich bestätigt`,
-      settlement: CP => `Abrechnung mit $ {CP} wurde erfolgreich bestätigt`,
-      error: `Transaktion nicht möglich zu diesem Zeitpunkt zu bestätigen, versuchen Sie es erneut bitte später`,
+      transaction: CP => `Transaktion mit ${CP} wurde erfolgreich bestätigt`,
+      settlement: CP => `Abrechnung mit ${CP} wurde erfolgreich bestätigt`,
+      error: `Transaktion nicht möglich zu diesem Zeitpunkt zu bestätigen, versuchen Sie es später bitte`,
     },
     rejection: {
       success: `Transaktion wurde abgelehnt`,
-      error: `Transaktion nicht möglich zu diesem Zeitpunkt ablehnen, versuchen Sie es erneut bitte später`,
+      error: `Transaktion nicht möglich zu diesem Zeitpunkt ablehnen, versuchen Sie es später bitte`,
     },
     balances: {
-      error: `Unfähig Salden zu diesem Zeitpunkt zu laden, versuchen Sie es erneut bitte später`,
+      error: `Unfähig Kontostand zu diesem Zeitpunkt zu laden, versuchen Sie es später bitte`,
     },
     for: M => `für ${M}`,
     settleUp: `Abrechnen`,
-    settleTotal: `Settle Gesamt`,
-    settleUpMemo: (D, A) => `${D === 'lend'? 'Settling up für': 'Antrag beizulegen für'} $ {A} `,
-    recordSettleUpMemo: `Absetzen up`,
+    settleTotal: `Abrechnen Gesamt`,
+    settleUpMemo: (D, A) => `${D === 'lend'? 'Abrechnen für': 'Bitte um abrechnen für'} ${A} `,
+    recordSettleUpMemo: `Abrechnen`,
   },
   settlementManagement: {
     bilateral: {
       error: {
-        insufficient: X => `Ihre Siedlung mit ${X} ist fehlgeschlagen aufgrund unzureichender funds`,
-        generic: X => `Es war ein Fehler bei der Verarbeitung Ihrer Siedlung mit ${X}`,
+        insufficient: X => `Ihre Abrechnung mit ${X} ist fehlgeschlagen aufgrund unzureichender Mittel`,
+        generic: X => `Es war ein Fehler bei der Verarbeitung Ihrer Abrechnung mit ${X}`,
       }
     },
-    eth: `Settle mit der ETH`,
-    nonPayment: `Nehmen Sie eine Abrechnung`,
+    eth: `Abrechnen mit ETH`,
+    nonPayment: `Regulär Abrechnung`,
   },
 
   accountViewLanguage: {
@@ -286,14 +286,14 @@ export default {
   },
 
   notifications: {
-    toggleNotifications: `Toggle Benachrichtigungen`,
-    enable: `Anmachen`,
-    disable: `Abschalten`,
+    toggleNotifications: `Aus/Einschalten Benachrichtigungen`,
+    enable: `Einschalten`,
+    disable: `Ausschalten`,
   },
 
   pendingTransactionsLanguage: {
     shell: `Ausstehende Transaktion`,
-    title: `steht aus`,
+    title: `Ausstehende Transaktion`,
     memo: `Memo:`,
     for: `Zum`,
     none: `Sie haben keine ausstehenden Transaktionen`,
@@ -301,7 +301,7 @@ export default {
     pendingAnnouncement: `Diese Transaktion wird von der anderen Partei für die Bestätigung warten.`,
     bilateral: `Warten auf Eth Übertragung abgeschlossen`,
     confirm: `Bestätigen`,
-    reject: `ablehnen Transaktion`,
+    reject: `Ablehnen Transaktion`,
     rejectRequest: `Ablehnen`,
     cancel: `Abbrechen der Transaktion`,
     direction: {
@@ -311,16 +311,16 @@ export default {
   },
 
   pendingSettlementsLanguage: {
-    shell: `Bis zur Abrechnung`,
-    title: `steht aus`,
-    none: `Sie haben keine ausstehenden Siedlungen`,
+    shell: `Ausstehenden Abrechnung`,
+    title: `Ausstehenden Abrechnung`,
+    none: `Sie haben keine ausstehenden Abrechnung`,
     confirm: `Bestätigen`,
-    reject: `ablehnen Settlement`,
-    cancel: `Abbrechen Settlement`,
+    reject: `Ablehnen Abrechnung`,
+    cancel: `Abbrechen Abrechnung`,
   },
 
   recentTransactionsLanguage: {
-    title: `Abgeschlossen`,
+    title: `Abgeschlossen Transaktionen`,
     none: `Sie haben keine abgeschlossenen Transaktionen`,
     direction: {
       lend: (X, Z) => `@${X} schuldet Ihnen ${Z}`,

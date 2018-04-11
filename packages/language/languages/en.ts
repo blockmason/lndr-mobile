@@ -1,4 +1,4 @@
-import { currencies, transferLimits } from 'language'
+import { currencySymbols, transferLimits } from 'lndr/currencies'
 
 const generalCommunicationError = 'There was a problem communicating with the server, please try again later.'
 
@@ -119,7 +119,7 @@ export default {
     },
     ethBalance: {
       display: balance => `Your ETH balance is ${String(balance).slice(0,8)}`,
-      inFiat: (amount, exchange, currency) => ` (${currencies[currency]}${String(Number(amount) * Number(exchange)).slice(0, 8)})`,
+      inFiat: (amount, exchange, currency) => ` (${currencySymbols[currency]}${String(Number(amount) * Number(exchange)).slice(0, 8)})`,
       getError: `Unable to retrieve Eth balance`,
       manage: `Manage ETH`,
     },
@@ -129,7 +129,7 @@ export default {
         generic: `There was an error with the transfer, please try again later`,
         address: `Please enter a valid address`,
         amount: `Please enter an amount greater than 0`,
-        limitExceeded: currency => `You can only send ${currencies[currency]}${transferLimits[currency]} per week, please select a smaller amount`
+        limitExceeded: currency => `You can only send ${currencySymbols[currency]}${transferLimits[currency]} per week, please select a smaller amount`
       },
       amount: `AMOUNT TO SEND`,
       address: `Destination Address (without '0x' prefix)`,
@@ -137,10 +137,10 @@ export default {
       transferAll: `TRANSFER EVERYTHING`,
       balance: (balance) => `Your current ETH balance is ${typeof balance === 'string' ? balance.slice(0,8) :''}`,
       ethAddress: `Ethereum Address`,
-      txCost: (cost, currency) => `The current transaction cost is ${currencies[currency]}${cost}`,
+      txCost: (cost, currency) => `The current transaction cost is ${currencySymbols[currency]}${cost}`,
       transferLowercase: `Transfer Eth`,
-      note: currency => `Please note: you can only transfer ${currencies[currency]}${transferLimits[currency]} per week out of Lndr`,
-      warning: (amount, currency) => `You have ${currencies[currency]}${amount} remaining of your ${currencies[currency]}${transferLimits[currency]} limit`,
+      note: currency => `Please note: you can only transfer ${currencySymbols[currency]}${transferLimits[currency]} per week out of Lndr`,
+      warning: (amount, currency) => `You have ${currencySymbols[currency]}${amount} remaining of your ${currencySymbols[currency]}${transferLimits[currency]} limit`,
     },
     sendBcpt: {
       error: {

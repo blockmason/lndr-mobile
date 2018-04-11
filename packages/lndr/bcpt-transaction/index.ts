@@ -23,7 +23,7 @@ export default class BcptTransaction {
     }
     this.from = from
     this.to = to
-    this.amount = amount
+    this.amount = amount * Math.pow(10, 18)
     this.gasPrice = gasPrice
     this.gas = 65000
   }

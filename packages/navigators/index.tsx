@@ -16,6 +16,19 @@ import { addNavigationHelpers, StackNavigator, NavigationActions } from 'react-n
 import { connect } from 'react-redux'
 import { View, ScrollView, Text, StyleSheet, Button, BackHandler, BackAndroid } from 'react-native'
 
+import {
+  createReactNavigationReduxMiddleware,
+  createReduxBoundAddListener,
+} from 'react-navigation-redux-helpers';
+
+
+const middleware = createReactNavigationReduxMiddleware(
+  "root",
+  state => state.nav,
+);
+
+const addListener = createReduxBoundAddListener("root");
+
 export const AppNavigator = StackNavigator({
   Dashboard: {
     screen: DashboardNavigator
@@ -75,6 +88,8 @@ interface Props {
 class AppWithNavigationState extends React.Component<Props> {
   constructor(props) {
     super(props);
+  
+    this._addListener = createReduxBoundAddListener("root");
   }
 
   static navigationOptions = {
@@ -106,5 +121,5 @@ class AppWithNavigationState extends React.Component<Props> {
 export default connect(
   state => ({
     nav: state.nav }))(({ dispatch, nav }) => (
-  <AppWithNavigationState navigation={addNavigationHelpers({ dispatch, state: nav })} nav={nav} swipeEnabled={false} />
+  <AppWithNavigationState navigation={addNavigationHelpers({ dispatch, state: nav, addListener })} nav={nav} swipeEnabled={false} />
 ))

@@ -4,7 +4,7 @@ import { Text, View } from 'react-native'
 
 import { UserData } from 'lndr/user'
 import Friend from 'lndr/friend'
-import { defaultCurrency } from 'lndr/default-currency'
+import { defaultCurrency, currencySymbols, transferLimits  } from 'lndr/currencies'
 import PendingTransaction from 'lndr/pending-transaction'
 import PendingUnilateral from 'lndr/pending-unilateral'
 
@@ -31,6 +31,10 @@ const loadingPendingTransactions = new LoadingContext()
 const loadingPendingSettlements = new LoadingContext()
 
 interface Props {
+  navigation: any
+  homeScreen?: boolean
+  friend?: any
+
   state: any
   user: UserData
   isFocused: boolean
@@ -38,12 +42,9 @@ interface Props {
   bilateralSettlements: any
   submitterIsMe: (pendingTransaction: PendingTransaction) => any
   settlerIsMe: (pendingSettlement: PendingUnilateral) => any
+  getUcacAddress: (currency: string) => string
   getPendingTransactions: () => any
   getPendingSettlements: () => any
-  navigation: any
-  friend?: any
-  homeScreen?: boolean
-  getUcacAddress: (currency: string) => string
 }
 
 interface State {
@@ -197,4 +198,6 @@ class PendingTransactionsView extends Component<Props, State> {
   }
 }
 
-export default connect((state) => ({ state: getStore(state)(), user: getUser(state)(), isFocused: isFocusingOn(state)('Activity'), pendingSettlements: pendingSettlements(state), bilateralSettlements: bilateralSettlements(state), submitterIsMe: submitterIsMe(state), settlerIsMe: settlerIsMe(state), getUcacAddress: getUcacAddr(state) }), { getPendingTransactions, getPendingSettlements })(PendingTransactionsView)
+export default connect((state) => ({ state: getStore(state)(), user: getUser(state)(), isFocused: isFocusingOn(state)('Activity'), 
+pendingSettlements: pendingSettlements(state), bilateralSettlements: bilateralSettlements(state), submitterIsMe: submitterIsMe(state), 
+settlerIsMe: settlerIsMe(state), getUcacAddress: getUcacAddr(state) }), { getPendingTransactions, getPendingSettlements })(PendingTransactionsView)

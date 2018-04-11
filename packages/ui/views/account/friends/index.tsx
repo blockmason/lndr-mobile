@@ -3,7 +3,7 @@ import React, { Component } from 'react'
 import { Text, View, ScrollView, RefreshControl, Dimensions, Platform, Share } from 'react-native'
 
 import Friend from 'lndr/friend'
-import { defaultCurrency } from 'lndr/default-currency'
+import { defaultCurrency, currencySymbols, transferLimits } from 'lndr/currencies'
 
 import Button from 'ui/components/button'
 import Section from 'ui/components/section'
@@ -87,9 +87,7 @@ class FriendsView extends Component<Props, State> {
 
   async shareLndr() {
     let shareLndrURL
-    if (Platform.OS === 'ios') {
-      shareLndrURL = ''
-    } else if (defaultCurrency === 'KRW') {
+    if (defaultCurrency === 'KRW') {
       shareLndrURL = 'https://lndr.io/kr/'
     } else if (defaultCurrency === 'JPY') {
       shareLndrURL = 'https://lndr.io/jp/'
@@ -97,7 +95,11 @@ class FriendsView extends Component<Props, State> {
       shareLndrURL = 'https://lndr.io'
     }
 
-    Share.share({ title: `${tryLndr} ${shareLndrURL}`, url: shareLndrURL })
+    if (Platform.OS === 'ios') {
+      Share.share({ title: tryLndr, message: `${tryLndr} `, url: shareLndrURL })
+    } else {
+      Share.share({ title: tryLndr, message: `${tryLndr} ${shareLndrURL}` }, { dialogTitle: tryLndr })
+    }
   }
 
   render() {
