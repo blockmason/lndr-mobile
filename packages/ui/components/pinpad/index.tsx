@@ -14,8 +14,8 @@ interface Props {
 }
 
 export default class Pinpad extends Component<Props> {
-  constructor() {
-    super()
+  constructor(props) {
+    super(props)
     this.state = {}
   }
 

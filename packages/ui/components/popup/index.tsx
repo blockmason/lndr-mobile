@@ -22,8 +22,8 @@ interface TargetState {
 }
 
 export class PopupTarget extends Component<TargetProps, TargetState> {
-  constructor() {
-    super()
+  constructor(props) {
+    super(props)
     this.state = { flip: false, isOpen: false }
     popupTarget = this
   }

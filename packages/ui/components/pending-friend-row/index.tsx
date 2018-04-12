@@ -25,8 +25,8 @@ interface State {
 }
 
 export default class PendingFriendRow extends Component<Props, State> {
-  constructor() {
-    super()
+  constructor(props) {
+    super(props)
     this.state = {}
   }
 

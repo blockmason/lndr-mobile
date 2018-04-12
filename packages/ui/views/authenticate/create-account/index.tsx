@@ -29,8 +29,8 @@ interface AccountViewState {
 }
 
 class CreateAccountView extends Component<Props, AccountViewState> {
-  constructor() {
-    super()
+  constructor(props) {
+    super(props)
     this.state = {
       nickDuplicationViolation: false,
       nickLengthViolation: false,
@@ -54,7 +54,7 @@ class CreateAccountView extends Component<Props, AccountViewState> {
     }
   }
 
-  async handleOnNickTextChange(nickname: string) {
+  async handleOnNickTextChange() {
     this.setState({ nickDuplicationViolation: false, nickLengthViolation: false })
   }
 
@@ -86,7 +86,7 @@ class CreateAccountView extends Component<Props, AccountViewState> {
     }
   }
 
-  async handleOnEmailTextChange(email: string) {
+  async handleOnEmailTextChange() {
     this.setState({ emailDuplicationViolation: false, emailFormatViolation: false })
   }
 

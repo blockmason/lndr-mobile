@@ -6,7 +6,7 @@ target 'LNDR' do
   # use_frameworks!
 
   # Pods for LNDR
-  pod 'UrbanAirship-iOS-SDK', '~>8.3'
+  pod 'UrbanAirship-iOS-SDK', '~>9.0'
   pod 'Firebase/Core'
 
   # target 'LNDR-tvOSTests' do

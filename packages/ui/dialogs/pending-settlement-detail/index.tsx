@@ -19,7 +19,7 @@ import formStyle from 'theme/form'
 import accountStyle from 'theme/account'
 import general from 'theme/general'
 
-import language, { currencies, transferLimits } from 'language'
+import language from 'language'
 const {
   back,
   cancel,
@@ -52,8 +52,8 @@ interface State {
 }
 
 class PendingSettlementDetail extends Component<Props, State> {
-  constructor() {
-    super()
+  constructor(props) {
+    super(props)
     this.state = {
       txCost: '0.00',
       currency: defaultCurrency

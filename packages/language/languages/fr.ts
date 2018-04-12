@@ -10,7 +10,7 @@ export default {
   applicationName: `Lndr`,
   helloWorld: `Bonjour tout le monde,`,
   submit: `SOUMETTRE`,
-  next: `Prochain`,
+  next: `Suivant`,
   cancel: `Annuler`,
   back: `Retourner`,
   copy: `Copier dans le presse-papier`,
@@ -59,7 +59,7 @@ export default {
   newAccount: `Créer un nouveau compte`,
   loginAccount: `Débloquer votre compte`,
   recoverExistingAccount: `Récupérer un compte existant`,
-  recoverMnemonic: `Code mnémonique (12 mots affichés \ Lorsqu'un vous avez créé votre compte)`,
+  recoverMnemonic: `Code mnémonique (12 mots qui ont été affichés \n lorsqu'un vous avez créé votre compte)`,
   recoverMnemonicLengthError: `Le code mnémonique doit être composé d'exactement 12 mots`,
   successTitle: `Succès`,
   errorTitle: `Erreur`,
@@ -208,8 +208,8 @@ export default {
     selectFriend: `Sélectionner`,
     lend: `Nouveau prêt`,
     borrow: `Nouvelle dette`,
-    iLent: `Un ami me doit`,
-    iBorrowed: `Je dois à un ami`,
+    iLent: `Un ami me doit de l'argent`,
+    iBorrowed: `Je dois de l'argent à un ami`,
     settleUpLower: `Régler`,
     amountToSettle: `Montant à régler`,
     total: `Total`,
@@ -332,7 +332,7 @@ export default {
 
   tabs: {
     home: `Accueil`,
-    friends: `Amis`,
+    friends: `   Amis   `,
     activity: `Activité`,
   },
 

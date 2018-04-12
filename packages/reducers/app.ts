@@ -49,8 +49,8 @@ export const getPendingTransactionsCount = (state) => state.store.pendingTransac
 export const getNeedsReviewCount = (state) => {
   const result = (
     state.store.pendingTransactions.filter( (transaction) => !submitterIsMe(state)(transaction) )
-    .filter( (transaction) => transaction.ucac).length + 
-    state.store.pendingSettlements.filter( (settlement) => !settlerIsMe(state)(settlement) ).length +
+    .filter( (transaction) => transaction.ucac.indexOf(getUcacAddr(state)(defaultCurrency)) !== -1 ).length + 
+    state.store.pendingSettlements.filter( (settlement) => !settlerIsMe(state)(settlement) && settlement.ucac.indexOf(getUcacAddr(state)(defaultCurrency)) !== -1 ).length +
     state.store.pendingFriends.length
   )
   return result

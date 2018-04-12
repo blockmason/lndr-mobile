@@ -21,7 +21,7 @@ function getStyle(size) {
   switch (size) {
     case 'medium':
       return {height: 126, width: 220}
-    case 'small':
+    default:
       return {height: 92, width: 160}
   }
 }

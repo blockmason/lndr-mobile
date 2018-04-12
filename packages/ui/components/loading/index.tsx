@@ -62,8 +62,8 @@ interface State {
 }
 
 export default class Loading extends Component<Props, State> {
-  constructor() {
-    super()
+  constructor(props) {
+    super(props)
     this.state = {
       isLoading: false
     }

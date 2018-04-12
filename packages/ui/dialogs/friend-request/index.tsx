@@ -39,8 +39,8 @@ interface State {
 }
 
 class FriendRequest extends Component<Props, State> {
-  constructor() {
-    super()
+  constructor(props) {
+    super(props)
     this.state = {}
   }
 

@@ -7,7 +7,7 @@ import { connect } from 'react-redux'
 import { currencyFormats } from 'lndr/format'
 import PendingUnilateral from 'lndr/pending-unilateral'
 import PendingBilateral from 'lndr/pending-bilateral'
-import User from 'lndr/user'
+import UserData from 'lndr/user'
 import profilePic from 'lndr/profile-pic'
 import { defaultCurrency, currencySymbols, transferLimits  } from 'lndr/currencies'
 import { getUcacCurrency } from 'reducers/app'
@@ -25,7 +25,7 @@ const { debtManagement } = language
 interface Props {
   onPress?: () => void
   pendingSettlement: PendingUnilateral | PendingBilateral
-  user: User
+  user: UserData
   friend?: boolean
   settlerIsMe: (pendingSettlement: PendingUnilateral | PendingBilateral) => boolean
   getUcacCurrency: (ucac: string) => string

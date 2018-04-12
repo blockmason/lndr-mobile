@@ -47,8 +47,8 @@ interface State {
 }
 
 class RecoverAccountForm extends Component<Props, State> {
-  constructor() {
-    super()
+  constructor(props) {
+    super(props)
     this.state = {
       ...defaultRecoverAccountData(),
       step: 1

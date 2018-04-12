@@ -41,11 +41,11 @@ interface Props {
   onEmailTextChange: (email: string) => void
   emailInputError: string
   onSubmitRecover: () => void
-  createAccount: (accountData: CreateAccountData) => any
   nickDuplicationViolation?: boolean
   emailDuplicationViolation?: boolean
   emailFormatViolation?: boolean
   nickLengthViolation?: boolean
+  createAccount: (accountData: CreateAccountData) => any
 }
 
 interface State {
@@ -191,4 +191,4 @@ class CreateAccountForm extends Component<Props, State> {
   }
 }
 
-export default connect((state) => ({ }), { createAccount })(CreateAccountForm)
+export default connect(() => ({ }), { createAccount })(CreateAccountForm)

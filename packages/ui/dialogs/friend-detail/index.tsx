@@ -57,8 +57,8 @@ interface State {
 }
 
 class RemoveFriend extends Component<Props, State> {
-  constructor() {
-    super()
+  constructor(props) {
+    super(props)
     this.state = {
       balanceLoaded: false,
       balance: new Balance({ relativeToNickname: "", relativeTo: "", amount: 0 })

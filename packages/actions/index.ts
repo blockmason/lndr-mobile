@@ -1058,7 +1058,7 @@ const getEthRequired = async (getState, amount) => {
 const triggerTouchId = (user, notificationsEnabled) => {
   const optionalConfigObject = { title: 'Authentication Required', color: '#e00606' }
   return TouchID.authenticate('Please sign in using your fingerprint', optionalConfigObject)
-  .then(success => {
+  .then( () => {
     sessionStorage.set(moment())
     return { hasStoredUser: true, welcomeComplete: true, notificationsEnabled, user }
   })
