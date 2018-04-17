@@ -2,7 +2,7 @@ import reduceReducers from 'reduce-reducers'
 import PendingTransaction from 'lndr/pending-transaction'
 import moment from 'moment'
 import { UserData } from 'lndr/user'
-import { defaultCurrency, currencySymbols, transferLimits  } from 'lndr/currencies'
+import { currencySymbols, transferLimits  } from 'lndr/currencies'
 
 export const initialState = ({})
 
@@ -48,9 +48,8 @@ export const getPendingTransactionsCount = (state) => state.store.pendingTransac
 
 export const getNeedsReviewCount = (state) => {
   const result = (
-    state.store.pendingTransactions.filter( (transaction) => !submitterIsMe(state)(transaction) )
-    .filter( (transaction) => transaction.ucac.indexOf(getUcacAddr(state)(defaultCurrency)) !== -1 ).length + 
-    state.store.pendingSettlements.filter( (settlement) => !settlerIsMe(state)(settlement) && settlement.ucac.indexOf(getUcacAddr(state)(defaultCurrency)) !== -1 ).length +
+    state.store.pendingTransactions.filter( (transaction) => !submitterIsMe(state)(transaction) ).length +
+    state.store.pendingSettlements.filter( (settlement) => !settlerIsMe(state)(settlement) ).length +
     state.store.pendingFriends.length
   )
   return result
@@ -71,6 +70,8 @@ export const getUcacCurrency = (state) => (ucac: string) => {
   }
   return 'USD'
 }
+
+export const getAllUcacCurrencies = (state) => Object.keys(state.store.ucacAddresses);
 
 export const getWeeklyEthTotal = (state) => {
   let { ethTransactions, pendingSettlements, bilateralSettlements, user } = getStore(state)()

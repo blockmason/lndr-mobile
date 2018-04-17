@@ -8,7 +8,7 @@ import { currencyFormats } from 'lndr/format'
 import PendingTransaction from 'lndr/pending-transaction'
 import UserData from 'lndr/user'
 import profilePic from 'lndr/profile-pic'
-import { defaultCurrency, currencySymbols, transferLimits  } from 'lndr/currencies'
+import { currencySymbols, transferLimits  } from 'lndr/currencies'
 import { getUcacCurrency } from 'reducers/app'
 
 import { white } from 'theme/include/colors'

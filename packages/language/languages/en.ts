@@ -212,6 +212,7 @@ export default {
     total: `Total`,
     record: `record`,
     records: `records`,
+    chooseCurrency: `Choose a Currency`,
     createError: {
       amountTooLow: `Amount must be greater than $0`,
       amountTooHigh: `Amount must be less than $1,000,000,000`,

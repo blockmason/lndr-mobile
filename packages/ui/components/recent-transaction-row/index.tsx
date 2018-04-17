@@ -6,7 +6,7 @@ import { currencyFormats } from 'lndr/format'
 import User from 'lndr/user'
 import RecentTransaction from 'lndr/recent-transaction'
 import profilePic from 'lndr/profile-pic'
-import { defaultCurrency, currencySymbols, transferLimits  } from 'lndr/currencies'
+import { currencySymbols, transferLimits  } from 'lndr/currencies'
 import { getUcacCurrency } from 'reducers/app'
 import { connect } from 'react-redux'
 
@@ -78,7 +78,7 @@ class RecentTransactionRow extends Component<Props, State> {
 
     const currentCurrency = getUcacCurrency(recentTransaction.ucac)
 
-    return `${sign} ${currencySymbols[defaultCurrency]}${currencyFormats[defaultCurrency](recentTransaction.amount)}`
+    return `${sign} ${currencySymbols[currentCurrency]}${currencyFormats[currentCurrency](recentTransaction.amount)}`
   }
 
   render() {
