@@ -1,7 +1,7 @@
 import React, { Component } from 'react'
 
 import { Text, TextInput, View, Dimensions, ScrollView, Linking,
-  TouchableHighlight, Image, BackHandler, FlatList } from 'react-native'
+  TouchableHighlight, Image, FlatList } from 'react-native'
 
 import ImagePicker from 'react-native-image-picker'
 

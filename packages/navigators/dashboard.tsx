@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import { View, Text, Platform, TouchableHighlight, Image, BackHandler } from 'react-native'
+import { View, Text, Platform, TouchableHighlight, Image } from 'react-native'
 import { TabNavigator } from 'react-navigation'
 
 import { Tab } from 'ui/components/tabs'

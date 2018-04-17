@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import { View, Text, TextInput, BackAndroid, BackHandler, KeyboardAvoidingView, Platform } from 'react-native'
+import { View, Text, TextInput, BackHandler, KeyboardAvoidingView, Platform } from 'react-native'
 
 import ThemeImage from 'ui/components/images/theme-image'
 import Pinpad from 'ui/components/pinpad'
@@ -69,7 +69,7 @@ class RecoverAccountForm extends Component<Props, State> {
   onBackPress = () => {
     const { step } = this.state
     if (step === 1) {
-      BackAndroid.exitApp()
+      BackHandler.exitApp()
     } else {
       this.setState({ password: '', confirmPassword: '', step: step - 1 })
     }
