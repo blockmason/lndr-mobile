@@ -2,7 +2,7 @@ import reduceReducers from 'reduce-reducers'
 import PendingTransaction from 'lndr/pending-transaction'
 import moment from 'moment'
 import { UserData } from 'lndr/user'
-import { defaultCurrency, currencySymbols, transferLimits  } from 'lndr/currencies'
+import { currencySymbols, transferLimits  } from 'lndr/currencies'
 
 export const initialState = ({})
 

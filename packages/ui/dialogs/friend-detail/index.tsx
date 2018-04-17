@@ -98,6 +98,7 @@ class RemoveFriend extends Component<Props, State> {
     let total = 0
 
     recentTransactions.map( transaction => {
+// EA: FIXME: how do we total up different currencies?      
       if(getUcacAddress(defaultCurrency).indexOf(transaction.ucac) !== -1 ) {
         if(transaction.creditorAddress === friend.address) {
           total -= transaction.amount
@@ -126,13 +127,13 @@ class RemoveFriend extends Component<Props, State> {
 
     return total
   }
-  
+
   render() {
     const friend = this.props.navigation ? this.props.navigation.state.params.friend : {}
     const { navigation } = this.props
     const { pic } = this.state
     const imageSource = pic ? { uri: pic } : require('images/person-outline-dark.png')
-    
+
     return <ScrollView style={general.view}>
       <DashboardShell text={friendShell} navigation={this.props.navigation} />
       <Loading context={loadingContext} />

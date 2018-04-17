@@ -57,6 +57,8 @@ class FriendRow extends Component<Props, State> {
 
     if(recentTransactions !== undefined) {
       recentTransactions.map( transaction => {
+// EA: FIXME should this be limited to defaultCurrency?
+// EA: how do we total up things in different currencies??
         if(getUcacAddress(defaultCurrency).indexOf(transaction.ucac) !== -1) {
           if(transaction.creditorAddress === friend.address) {
             total -= transaction.amount
@@ -68,7 +70,7 @@ class FriendRow extends Component<Props, State> {
     }
     return total
   }
-  
+
   getAmountTotal() {
     const { friend, getUcacAddress } = this.props
     let total = this.getRecentTotal()
