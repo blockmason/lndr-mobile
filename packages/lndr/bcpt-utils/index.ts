@@ -6,13 +6,20 @@ import BcptTransaction from 'lndr/bcpt-transaction'
 import Tx from 'ethereumjs-tx'
 import Web3 from 'web3'
 
+class Bcpt {
+  balanceOf: (address: string, callback: Function) => any
+  transfer: {
+    getData: (address: string, amount: number) => any
+  }
+}
+
 export const web3 = new Web3(new Web3.providers.HttpProvider('https://mainnet.infura.io/EoLr1OVfUMDqq3N2KaKA'))
 const BcptContract = web3.eth.contract(abi)
 
 export const getBcptBalance = async (addr: string) => {
   const Bcpt = await new Promise((resolve, reject) => {
     BcptContract.at('0x1c4481750daa5ff521a2a7490d9981ed46465dbd', (e, data) => e ? reject(e) : resolve(data))
-  })
+  }) as Bcpt
   
   const bcptBalance = await new Promise((resolve, reject) => {
     Bcpt.balanceOf(`0x${addr}`, (e, data) => e ? reject(e) : resolve(data))
@@ -22,12 +29,6 @@ export const getBcptBalance = async (addr: string) => {
 }
 
 export const transferBcpt = async (transaction: BcptTransaction, privateKeyBuffer: any) => {
-  // function transfer(address to, uint256 value) public returns (bool);
-  // var contractAbi = eth.contract(AbiOfContract);
-  // var myContract = contractAbi.at(contractAddress);
-  // var getData = myContract.myFunction.getData(function parameters);
-  // web3.eth.sendTransaction({to:Contractaddress, from:Accountaddress, data: getData});
-
   if (transaction.from === transaction.to) {
     throw new Error('selfError')
   }
@@ -41,7 +42,7 @@ export const transferBcpt = async (transaction: BcptTransaction, privateKeyBuffe
 
   const Bcpt = await new Promise((resolve, reject) => {
     BcptContract.at('0x1c4481750daa5ff521a2a7490d9981ed46465dbd', (e, data) => e ? reject(e) : resolve(data))
-  })
+  }) as Bcpt
 
   // is this synchronous?
   const data = Bcpt.transfer.getData(`0x${transaction.to}`, transaction.amount)

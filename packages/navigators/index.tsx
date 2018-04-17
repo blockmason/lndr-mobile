@@ -24,7 +24,7 @@ import {
 
 const middleware = createReactNavigationReduxMiddleware(
   "root",
-  state => state.nav,
+  (state: any) => state.nav,
 );
 
 const addListener = createReduxBoundAddListener("root");
@@ -86,6 +86,8 @@ interface Props {
 }
 
 class AppWithNavigationState extends React.Component<Props> {
+  _addListener: any
+
   constructor(props) {
     super(props);
   
@@ -119,7 +121,7 @@ class AppWithNavigationState extends React.Component<Props> {
 }
 
 export default connect(
-  state => ({
+  (state: any) => ({
     nav: state.nav }))(({ dispatch, nav }) => (
   <AppWithNavigationState navigation={addNavigationHelpers({ dispatch, state: nav, addListener })} nav={nav} swipeEnabled={false} />
 ))

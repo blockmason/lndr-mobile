@@ -58,8 +58,8 @@ interface State {
 class AddDebt extends Component<Props, State> {
   stillRelevant?: boolean
 
-  constructor() {
-    super()
+  constructor(props) {
+    super(props)
     this.state = {
       shouldSelectFriend: false,
       currency: defaultCurrency,

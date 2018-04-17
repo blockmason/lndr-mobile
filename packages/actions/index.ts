@@ -952,7 +952,7 @@ export const getEthTxCost = async (currency: string) => {
 }
 
 export const confirmFriendRequest = (friend: string) => {
-  return async (dispatch, getState) => {
+  return async (_dispatch, getState) => {
     const { address } = getUser(getState())()
     try {
       const userPic = await creditProtocol.addFriend(address, friend)
@@ -964,7 +964,7 @@ export const confirmFriendRequest = (friend: string) => {
 }
 
 export const rejectFriendRequest = (friend: string) => {
-  return async (dispatch, getState) => {
+  return async (_dispatch, getState) => {
     const { address } = getUser(getState())()
     try {
       const userPic = await creditProtocol.removeFriend(address, friend)
