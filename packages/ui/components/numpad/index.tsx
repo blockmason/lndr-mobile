@@ -1,4 +1,4 @@
-import React, { Component, PropTypes } from 'react'
+import React, { Component } from 'react'
 import { View, Text, Image, TouchableOpacity } from 'react-native'
 import styles, { keyStyle } from 'theme/numpad'
 

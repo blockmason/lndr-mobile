@@ -263,8 +263,8 @@ export default {
   },
   pendingParens: ' (미결)',
   confirmation: {
-    transaction: counterParty => '성공',
-    settlement: counterParty => '성공',
+    transaction: _counterParty => '성공',
+    settlement: _counterParty => '성공',
     error: '거래를 수행할 수 없음으로 다시 시도해주세요'
   },
   rejection: {

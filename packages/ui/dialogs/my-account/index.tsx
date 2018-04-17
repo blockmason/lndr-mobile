@@ -120,7 +120,8 @@ class MyAccount extends Component<Props, State> {
       this.setState({ step: 1, confirmPassword: '', authenticated })
 
       const self = this
-      setTimeout(function() {self.refs.scrollContent.scrollTo({ x: 0, y: scrollY + 200, animated: true })}, 200)
+      const scrollContent = this.refs.scrollContent as any
+      setTimeout(function() {scrollContent.scrollTo({ x: 0, y: scrollY + 200, animated: true })}, 200)
     } else if (step === 3 && password.length === 4 && confirmPassword.length === 4) {
       await loadingContext.wrap(this.props.updatePin(password, confirmPassword))
       this.clearPinView()
@@ -161,7 +162,8 @@ class MyAccount extends Component<Props, State> {
     const y = panelHeights[index]
 
     hiddenPanels[index] = !hiddenPanels[index]
-    this.refs.scrollContent.scrollTo({ x: 0, y: scrollY + (hiddenPanels[index] ? -y : y), animated: true })
+    const scrollContent = this.refs.scrollContent as any
+    scrollContent.scrollTo({ x: 0, y: scrollY + (hiddenPanels[index] ? -y : y), animated: true })
     this.setState({ hiddenPanels })
   }
 
@@ -227,7 +229,7 @@ class MyAccount extends Component<Props, State> {
     this.setState({ scrollY: event.nativeEvent.contentOffset.y });
   }
 
-  _keyExtractor = (item, index) => index
+  _keyExtractor = (_item, index) => index
 
   renderPanels() {
     const { user, updateNickname, updateEmail, copyToClipboard } = this.props

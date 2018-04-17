@@ -114,7 +114,9 @@ class HomeView extends Component<Props, State> {
   async initializePushNotifications() {
     UrbanAirship.getChannelId().then(channelId => {
       console.log('CHANNEL ID', channelId)
-      this.props.registerChannelID(channelId, Platform.OS)
+      if (channelId !== undefined) {
+        this.props.registerChannelID(channelId, Platform.OS)
+      }
     })
 
     const { notificationsEnabled } = this.props.state
