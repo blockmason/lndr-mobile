@@ -101,8 +101,8 @@ android {
         applicationId "com.lndr"
         minSdkVersion 16
         targetSdkVersion 27
-        versionCode 24
-        versionName "1.0.6"
+        versionCode 25
+        versionName "1.0.7"
         ndk {
             abiFilters "armeabi-v7a", "x86"
         }
@@ -171,14 +171,6 @@ dependencies {
     compile("com.google.android.gms:play-services-gcm:11.8.0") {
         force = true;
     }
-
-    // configurations.all {
-    //     resolutionStrategy {
-    //         force 'com.android.support:design:23.4.0'
-    //         force 'com.android.support:support-v4:23.4.0'
-    //         force 'com.android.support:appcompat-v7:23.4.0'
-    //     }
-    // }
 }
 
 // Run this once to be able to run the application with BUCK

@@ -14,7 +14,7 @@ import TransferBcpt from 'ui/dialogs/transfer-bcpt'
 import FriendRequest from 'ui/dialogs/friend-request'
 import { addNavigationHelpers, StackNavigator, NavigationActions } from 'react-navigation'
 import { connect } from 'react-redux'
-import { View, ScrollView, Text, StyleSheet, Button, BackHandler, BackAndroid } from 'react-native'
+import { View, ScrollView, Text, StyleSheet, Button, BackHandler } from 'react-native'
 
 import {
   createReactNavigationReduxMiddleware,
@@ -108,10 +108,10 @@ class AppWithNavigationState extends React.Component<Props> {
   onBackPress = () => {
     const { nav, navigation } = this.props;
     if (nav.index === 0 && nav.routes[0].index === 0) {
-      BackAndroid.exitApp()
-      return false;
+      BackHandler.exitApp()
+      return false
     }
-    navigation.goBack()
+    navigation.goBack(null)
     return true
   }
 

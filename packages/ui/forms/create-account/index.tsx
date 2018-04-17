@@ -1,6 +1,6 @@
 import React, { Component } from 'react'
 
-import { View, Text, TextInput, BackAndroid, BackHandler, KeyboardAvoidingView, Platform } from 'react-native'
+import { View, Text, TextInput, BackHandler, KeyboardAvoidingView, Platform } from 'react-native'
 
 import Button from 'ui/components/button'
 import ThemeImage from 'ui/components/images/theme-image'
@@ -75,7 +75,7 @@ class CreateAccountForm extends Component<Props, State> {
   onBackPress = () => {
     const { step } = this.state
     if (step === 1) {
-      BackAndroid.exitApp()
+      BackHandler.exitApp()
     } else {
       this.setState({ password: '', confirmPassword: '', step: step - 1 })
     }
