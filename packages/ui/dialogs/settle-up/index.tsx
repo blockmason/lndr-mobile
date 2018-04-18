@@ -51,8 +51,8 @@ export default class SettleUp extends Component<Props> {
         <Button close onPress={() => navigation.goBack()} />
       </View>
       <View style={[general.centeredColumn, {marginVertical: 20}]}>
-        <Button fat round onPress={() => navigation.navigate('EthSettlement', { friend })} text={settlementManagement.eth} style={{minWidth: width / 4 * 3}} />
-        <Button fat round onPress={() => navigation.navigate('NonPaymentSettlement', { friend })} text={settlementManagement.nonPayment} style={{minWidth: width / 4 * 3}} />
+        <Button fat round onPress={() => navigation.navigate('Settlement', { friend, ethSettlement: true })} text={settlementManagement.eth} style={{minWidth: width / 4 * 3}} />
+        <Button fat round onPress={() => navigation.navigate('Settlement', { friend, ethSettlement: false })} text={settlementManagement.nonPayment} style={{minWidth: width / 4 * 3}} />
       </View>
     </ScrollView>
   }

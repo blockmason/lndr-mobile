@@ -607,15 +607,7 @@ export const addDebt = (friend: Friend, amount: string, memo: string, direction:
     if (sanitizedAmount >= 1e11) {
       return dispatch(displayError(debtManagement.createError.amountTooHigh))
     }
-
-    if (address === friend.address) {
-      return dispatch(displayError(debtManagement.createError.selfAsFriend))
-    }
-    // TODO - Please move this to validation check to the view layer and in favor of using the getPendingTransaction action
-    if (hasPendingTransaction(getState, friend)) {
-      return dispatch(displayError(debtManagement.createError.pending))
-    }
-
+    
     const [ creditorAddress, debtorAddress ] = {
       lend: [ address, friend.address ],
       borrow: [ friend.address, address ]
@@ -658,14 +650,6 @@ export const settleUp = (friend: Friend, amount: string, memo: string, direction
 
     if (sanitizedAmount >= 1e11) {
       return dispatch(displayError(debtManagement.createError.amountTooHigh))
-    }
-
-    if (address === friend.address) {
-      return dispatch(displayError(debtManagement.createError.selfAsFriend))
-    }
-    // TODO - Please move this to validation check to the view layer and in favor of using the getPendingTransaction action
-    if (hasPendingTransaction(getState, friend)) {
-      return dispatch(displayError(debtManagement.createError.pending))
     }
 
     if (direction === 'lend') {
@@ -975,6 +959,12 @@ export const rejectFriendRequest = (friend: string) => {
   }
 }
 
+export const hasPendingMessage = () => {
+  return async (dispatch) => {
+    dispatch (displayError(debtManagement.createError.pending))
+  }
+}
+
 const getEthTransactions = async (addr: string, recovery: boolean) => {
   let ethTransactions = []
   //get all transactions from etherscan and add relevant txs to the list
@@ -1034,14 +1024,6 @@ const settleBilateral = async (user, bilateralSettlements, dispatch, getState) =
       }
     }
   })
-}
-
-const hasPendingTransaction = (getState, friend) => {
-  function friendMatch(list: any) {
-    return list.some( ele => ele.creditorAddress === friend.address || ele.debtorAddress === friend.address )
-  }
-  const { pendingTransactions, pendingSettlements, bilateralSettlements } = getState().store
-  return friendMatch(pendingTransactions) || friendMatch(pendingSettlements) || friendMatch(bilateralSettlements)
 }
 
 const getEthRequired = async (getState, amount) => {

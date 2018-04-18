@@ -231,7 +231,11 @@ export const formatMemo = memo => {
 }
 
 export const sanitizeAmount = (amount, currency) => {
-  if(currency === 'USD') {
+  if(currency === 'KRW' || currency === 'JPY') {
+    return parseInt(
+      amount.replace(/[^.\d]/g, '')
+    )
+  } else {
     return parseInt(
       amount
       .replace(/[^.\d]/g, '')
@@ -239,10 +243,6 @@ export const sanitizeAmount = (amount, currency) => {
       .replace(/\.\d$/, x => `${x.substr(1)}0`)
       .replace(/\.\d\d$/, x => `${x.substr(1)}`)
       .replace(/\./, () => '')
-    )
-  } else {
-    return parseInt(
-      amount.replace(/[^.\d]/g, '')
     )
   }
 }
