@@ -84,6 +84,14 @@ export const getWeeklyEthTotal = (state) => {
   return (lastWeekWei + bilateralWei) / Math.pow(10, 18)
 }
 
+export const hasPendingTransaction = (state) => (friend) => {
+  function friendMatch(list: any) {
+    return list.some( ele => ele.creditorAddress === friend.address || ele.debtorAddress === friend.address )
+  }
+  const { pendingTransactions, pendingSettlements, bilateralSettlements } = state.store
+  return friendMatch(pendingTransactions) || friendMatch(pendingSettlements) || friendMatch(bilateralSettlements)
+}
+
 export const recentTransactions = (state) => state.store.recentTransactions
 
 export const pendingTransactions = (state) => state.store.pendingTransactions

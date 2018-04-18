@@ -26,8 +26,8 @@ import popupStyle from 'theme/popup'
 import language from 'language'
 const { debtManagement, noFriends, submit, cancel, back, nickname } = language
 
-import { getStore, pendingTransactions, recentTransactions, getAllUcacCurrencies } from 'reducers/app'
-import { addDebt, getFriends, getRecentTransactions } from 'actions'
+import { getStore, pendingTransactions, recentTransactions, getAllUcacCurrencies, hasPendingTransaction } from 'reducers/app'
+import { addDebt, getFriends, getRecentTransactions, hasPendingMessage } from 'actions'
 import { connect } from 'react-redux'
 
 const loadingFriends = new LoadingContext()
@@ -42,6 +42,8 @@ interface Props {
     direction: string,
     currency: string
   ) => any
+  hasPendingMessage: () => any
+  hasPendingTransaction: (friend: Friend) => boolean
   state: any
   pendingTransactions: any
   recentTransactions: any
@@ -150,7 +152,7 @@ class AddDebt extends Component<Props, State> {
             <FriendRow
               key={friend.address}
               friend={friend}
-              onPress={() => this.setState({ shouldSelectFriend: false, friend })}
+              onPress={() => this.setFriend(friend)}
               pendingTransactions={pendingTransactions}
               recentTransactions={recentTransactions}
               navigation={this.props.navigation}
@@ -177,6 +179,15 @@ class AddDebt extends Component<Props, State> {
 
   handlePickerDone(value) {
     this.setState({currency: value, shouldPickCurrency: false})
+  }
+
+  setFriend(friend) {
+    const { hasPendingMessage, hasPendingTransaction } = this.props
+    if (hasPendingTransaction(friend)) {
+      hasPendingMessage()
+    } else {
+      this.setState({ shouldSelectFriend: false, friend })
+    }
   }
 
   render() {
@@ -209,7 +220,7 @@ class AddDebt extends Component<Props, State> {
                 placeholder={`${currencySymbols[currency]}0`}
                 placeholderTextColor='black'
                 value={amount}
-                maxLength={14}
+                maxLength={10}
                 underlineColorAndroid='transparent'
                 keyboardType='numeric'
                 onChangeText={amount => this.setState({ amount: this.setAmount(amount) })}
@@ -221,6 +232,7 @@ class AddDebt extends Component<Props, State> {
             <View style={style.newTransactionRow}>
               <Button small narrow black onPress={() => this.setState({shouldPickCurrency: true})} text={currency} />
             </View>
+            
           </View>
         </View>
         <View style={formStyle.memoBorder} >
@@ -251,4 +263,6 @@ class AddDebt extends Component<Props, State> {
   }
 }
 
-export default connect((state) => ({ state: getStore(state)(), pendingTransactions: pendingTransactions(state), recentTransactions: recentTransactions(state), allCurrencies: getAllUcacCurrencies(state) }), { addDebt, getFriends })(AddDebt)
+export default connect((state) => ({ state: getStore(state)(), pendingTransactions: pendingTransactions(state), 
+  recentTransactions: recentTransactions(state), allCurrencies: getAllUcacCurrencies(state),
+   hasPendingTransaction: hasPendingTransaction(state) }), { addDebt, getFriends, hasPendingMessage })(AddDebt)

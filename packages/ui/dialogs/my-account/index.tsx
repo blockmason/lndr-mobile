@@ -119,9 +119,8 @@ class MyAccount extends Component<Props, State> {
       const authenticated = loadingContext.wrap(validatePin(confirmPassword))
       this.setState({ step: 1, confirmPassword: '', authenticated })
 
-      const self = this
-      const scrollContent = this.refs.scrollContent as any
-      setTimeout(function() {scrollContent.scrollTo({ x: 0, y: scrollY + 200, animated: true })}, 200)
+      const self = this as any
+      setTimeout(function() {self.refs.scrollContent.scrollTo({ x: 0, y: scrollY + 200, animated: true })}, 200)
     } else if (step === 3 && password.length === 4 && confirmPassword.length === 4) {
       await loadingContext.wrap(this.props.updatePin(password, confirmPassword))
       this.clearPinView()
@@ -177,8 +176,6 @@ class MyAccount extends Component<Props, State> {
     };
 
     ImagePicker.showImagePicker(options, (response) => {
-      console.log('Response = ', response);
-
       if (response.didCancel) {
         console.log('User cancelled image picker');
       }
