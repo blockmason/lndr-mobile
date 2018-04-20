@@ -69,14 +69,14 @@ export default class User {
   nickname: string
   email: string
 
-  constructor(mnemonic: string, hashedPassword: string, privateKey: any, privateKeyBuffer: any, ethAddress: any, address: string, nickname: string, email: string) {
+  constructor(mnemonic: string, hashedPassword: string, privateKey: any, privateKeyBuffer: any, ethAddress: any, address: string, nickname: string, email: string, lockTimeout: number) {
     this.mnemonic = mnemonic
     this.hashedPassword = hashedPassword
     this.privateKey = privateKey
     this.privateKeyBuffer = privateKeyBuffer
     this.ethAddress = ethAddress
     this.address = address
-    this.lockTimeout = 15
+    this.lockTimeout = lockTimeout
     this.nickname = nickname
     this.email = email
   }

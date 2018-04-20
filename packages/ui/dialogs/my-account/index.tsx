@@ -30,7 +30,7 @@ import { underlayColor } from 'theme/general'
 import slideStyle from 'theme/slide'
 
 import language from 'language'
-const { nickname, setNickname, email, setEmail, copy, accountManagement, changePin, enterNewPin, confirmPin,
+const { nickname, setNickname, email, setEmail, copy, accountManagement, changePin, enterNewPin, confirmPin, pleaseWait,
   cancel, mnemonicExhortation, addressExhortation, logoutAction, notifications, currentBalance, showMnemonic, enterCurrentPin
 } = language
 const updateAccountText = language.updateAccount
@@ -115,6 +115,8 @@ class MyAccount extends Component<Props, State> {
   async componentDidUpdate() {
     const { password, confirmPassword, step, scrollY } = this.state
 
+    console.log('pw', password, 'cpw', confirmPassword, 'step', step)
+
     if (step === 4 && confirmPassword.length === 4 ) {
       const authenticated = loadingContext.wrap(validatePin(confirmPassword))
       this.setState({ step: 1, confirmPassword: '', authenticated })
@@ -122,10 +124,15 @@ class MyAccount extends Component<Props, State> {
       const self = this as any
       setTimeout(function() {self.refs.scrollContent.scrollTo({ x: 0, y: scrollY + 200, animated: true })}, 200)
     } else if (step === 3 && password.length === 4 && confirmPassword.length === 4) {
-      await loadingContext.wrap(this.props.updatePin(password, confirmPassword))
-      this.clearPinView()
+      this.setState({ step: 5 })
     } else if (password.length === 4 && step === 2) {
       this.setState({ step: 3 })
+    } else if (step === 5) {
+      const self = this
+      setTimeout(async function() {
+        await loadingContext.wrap(self.props.updatePin(password, confirmPassword))
+        self.clearPinView()
+      }, 1000)
     }
   }
 
@@ -359,7 +366,13 @@ class MyAccount extends Component<Props, State> {
   render() {
     const { password, confirmPassword, step, scrollY } = this.state
 
-    if (step === 3 || step === 4) {
+    if (step === 5) {
+      return <View style={[general.fullHeight, general.view]}>
+        <View style={style.form}>
+          <Pinpad onNumPress={() => null} onBackspace={() => null} pin={confirmPassword} headerText={pleaseWait} />
+        </View>
+      </View>
+    } else if (step === 3 || step === 4) {
       return <View style={[general.fullHeight, general.view]}>
         <Button close onPress={() => this.clearPinView()} />
         <View style={style.form}>

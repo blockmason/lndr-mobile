@@ -95,7 +95,8 @@ export const initializeStorage = () => {
       dispatch(setState(payload))
 
     } else if (storedMnemonic) {
-      dispatch(setState({ hasStoredUser: true, welcomeComplete: true, notificationsEnabled }))
+      const lockTimeout = storedUser ? storedUser.lockTimeout : 15
+      dispatch(setState({ hasStoredUser: true, welcomeComplete: true, notificationsEnabled, lockTimeout }))
     }
     dispatch(setState({ isInitializing: false, notificationsEnabled }))
   }
@@ -153,7 +154,7 @@ export const updatePin = (password: string, confirmPassword: string) =>  {
       return false
     }
 
-    const { mnemonic, privateKey, privateKeyBuffer, ethAddress, address, nickname, email } = getUser(getState())()
+    const { mnemonic, privateKey, privateKeyBuffer, ethAddress, address, nickname, email, lockTimeout } = getUser(getState())()
     const hashedPassword = bcrypt.hashSync(password)
   
     const user = new User(
@@ -164,7 +165,8 @@ export const updatePin = (password: string, confirmPassword: string) =>  {
       ethAddress,
       address,
       nickname,
-      email
+      email,
+      lockTimeout
     )
     await storeUserSession(user)
     dispatch(displaySuccess(accountManagement.pin.updateSuccess))
@@ -189,7 +191,7 @@ export async function storeUserSession(user: User) {
 }
 
 //Not a redux action
-export const createUserFromCredentials = async (mnemonic, hashedPassword) => {
+export const createUserFromCredentials = async (mnemonic, hashedPassword, lockTimeout) => {
   const mnemonicInstance = creditProtocol.getMnemonic(mnemonic)
   const privateKey = mnemonicInstance.toHDPrivateKey()
   const privateKeyBuffer = privateKey.privateKey.toBuffer()
@@ -210,13 +212,14 @@ export const createUserFromCredentials = async (mnemonic, hashedPassword) => {
     ethAddress,
     address,
     nickname,
-    email
+    email,
+    lockTimeout
   )
 }
 
 export const confirmAccount = async (recovery: boolean, shouldDisplayMnemonic: boolean, password: string, mnemonic: string) => {
     const hashedPassword = bcrypt.hashSync(password)
-    const user = await createUserFromCredentials(mnemonic, hashedPassword)
+    const user = await createUserFromCredentials(mnemonic, hashedPassword, 15)
     await storeUserSession(user)
     let { ethBalance, ethExchange, bcptBalance } = await getEthInfo(user)
     let ucacAddresses = await creditProtocol.getUcacAddresses()
@@ -701,7 +704,9 @@ export const loginAccount = (loginData: LoginAccountData) => {
     }
 
     const mnemonic = await mnemonicStorage.get()
-    const user = await createUserFromCredentials(mnemonic, hashedPassword)
+    const oldUser = await userStorage.get()
+    const lockTimeout = oldUser ? oldUser.lockTimeout : 15
+    const user = await createUserFromCredentials(mnemonic, hashedPassword, lockTimeout)
 
     await storeUserSession(user)
     let { ethBalance, ethExchange, bcptBalance } = await getEthInfo(user)
@@ -873,8 +878,7 @@ export const updateLockTimeout = (timeout: number) => {
     try {
       const user = getUser(getState())()
       user.lockTimeout = timeout
-      await userStorage.remove()
-      await userStorage.set(user)
+      await storeUserSession(user)
       dispatch(setState({ user }))
       dispatch(displaySuccess(accountManagement.lockTimeout.success))
     } catch (e) {
@@ -906,7 +910,6 @@ export const setProfilePic = (imageURI: string, imageData: string) => {
       dispatch(displaySuccess(accountManagement.profilePic.setSuccess))
       dispatch(setState({ userPic }))
     } catch (e) {
-      console.log('ERROR SETTING PROFILE PIC', e)
       dispatch(displayError(accountManagement.profilePic.setError))
     }
   }
@@ -1018,7 +1021,7 @@ const settleBilateral = async (user, bilateralSettlements, dispatch, getState) =
       if (e.toString().indexOf('insufficient') !== -1) {
         dispatch(displayError(settlementManagement.bilateral.error.insufficient(debtorNickname)))
       } else if (e.toString().indexOf('known transaction') !== -1) {
-        console.log('Duplicate')
+        
       } else {
         dispatch(displayError(settlementManagement.bilateral.error.generic(debtorNickname)))
       }
@@ -1044,8 +1047,7 @@ const triggerTouchId = (user, notificationsEnabled) => {
     sessionStorage.set(moment())
     return { hasStoredUser: true, welcomeComplete: true, notificationsEnabled, user }
   })
-  .catch(error => {
-    console.log('Touch ID login Error: ', error)
+  .catch(_error => {
     return { hasStoredUser: true, welcomeComplete: true, notificationsEnabled }
   })
 }

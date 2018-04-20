@@ -21,17 +21,19 @@ const { noFriends, currentFriends, inviteFriends, tryLndr } = language
 
 import { isFocusingOn } from 'reducers/nav'
 import { getStore, pendingTransactions, recentTransactions } from 'reducers/app'
-import { getFriends, addFriend } from 'actions'
+import { getFriends, getRecentTransactions, addFriend } from 'actions'
 import { connect } from 'react-redux'
 
 const loadingFriends = new LoadingContext()
 const loadingAddFriend = new LoadingContext()
+const loadingRecentTransactions = new LoadingContext()
 
 const { width } = Dimensions.get('window')
 
 interface Props {
   isFocused: boolean
   getFriends: () => any
+  getRecentTransactions: () => any
   addFriend: (friend: Friend) => any
   state: any
   pendingTransactions: any
@@ -56,7 +58,8 @@ class FriendsView extends Component<Props, State> {
 
   async componentDidMount() {
     this.stillRelevant = true
-    const friends = await loadingFriends.wrap(this.props.getFriends())
+    await loadingFriends.wrap(this.props.getFriends())
+    await loadingRecentTransactions.wrap(this.props.getRecentTransactions())
     this.stillRelevant
   }
 
@@ -148,4 +151,4 @@ class FriendsView extends Component<Props, State> {
   }
 }
 
-export default connect((state) => ({ state: getStore(state)(), isFocused: isFocusingOn(state)('Friends'), pendingTransactions: pendingTransactions(state), recentTransactions: recentTransactions(state) }), { getFriends, addFriend })(FriendsView)
+export default connect((state) => ({ state: getStore(state)(), isFocused: isFocusingOn(state)('Friends'), pendingTransactions: pendingTransactions(state), recentTransactions: recentTransactions(state) }), { getFriends, getRecentTransactions, addFriend })(FriendsView)
