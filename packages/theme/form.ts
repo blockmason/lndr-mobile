@@ -146,7 +146,9 @@ export default StyleSheet.create({
     ...small,
     ...verticalMarginXS,
     ...smallPad,
-    ...center
+    ...center,
+    width: '100%',
+    textAlign: 'center'
   },
   borderTextInput: {
     ...medium,
