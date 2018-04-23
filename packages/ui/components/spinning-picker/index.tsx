@@ -7,7 +7,7 @@ import style from 'theme/account'
 import general from 'theme/general'
 
 import language from 'language'
-const { debtManagement } = language
+const { debtManagement, confirmation } = language
 
 interface Props {
   onPickerDone: (selectedItem: any) => void
@@ -36,7 +36,7 @@ class SpinningPicker extends Component<Props, State> {
         <View style={this.props.containerStyle}>
           <View style={[general.flexRow, general.alignCenter, general.standardHMargin]}>
             <Text style={[general.stretch, style.title]}>{this.props.label}</Text>
-            <Button small onPress={() => this.props.onPickerDone(this.state.selectedItem)} text="Done" />
+            <Button round medium narrow onPress={() => this.props.onPickerDone(this.state.selectedItem)} text={confirmation.done} />
           </View>
           <Picker
             selectedValue={this.state.selectedItem}

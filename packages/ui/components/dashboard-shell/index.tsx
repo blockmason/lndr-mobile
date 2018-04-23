@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import { View, Text, Platform, Image, TouchableHighlight } from 'react-native'
+import { View, Text, Platform, Image, TouchableHighlight, Dimensions } from 'react-native'
 import { TabNavigator } from 'react-navigation'
 
 import { Tab } from 'ui/components/tabs'
@@ -15,7 +15,7 @@ import { logoutAccount } from 'actions'
 import { connect } from 'react-redux'
 
 import language from 'language'
-const { 
+const {
   accountViewLanguage,
   tabs
  } = language
@@ -51,14 +51,18 @@ const DashboardNavigator = TabNavigator(RouteConfig, TabNavigatorConfig)
 
 class DashboardShell extends Component<Props> {
   render() {
+    const kSmallScreenThreshold = 320 // e.g. iPhone SE
     const { text } = this.props
+    const { width } = Dimensions.get('window')
+    const logoSize = (width > kSmallScreenThreshold) ? "normal" : "small"
+    const logoContainerStyle = (width > kSmallScreenThreshold) ? style.dashboardLogo : style.dashboardLogoSmall
 
     return (
       <View style={general.whiteFlex}>
         <AndroidStatusBar />
         <View style={style.dashboardContainer}>
-          <View style={style.dashboardLogo}>
-            <TextLogo name='white'/>
+          <View style={logoContainerStyle}>
+            <TextLogo name='white' size={logoSize}/>
           </View>
           <View style={TabStyle.leftTriangle}/>
           <View style={[TabStyle.tabsContainer, style.dashboardTextContainer]}>

@@ -33,7 +33,7 @@ export default StyleSheet.create({
     alignItems: 'center'
   },
   tabActive: {
-    
+
   },
   text: {
     color: charcoal,
