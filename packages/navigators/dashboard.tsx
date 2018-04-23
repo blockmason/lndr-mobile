@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import { View, Text, Platform, TouchableHighlight, Image } from 'react-native'
+import { View, Text, Platform, TouchableHighlight, Image, Dimensions } from 'react-native'
 import { TabNavigator } from 'react-navigation'
 
 import { Tab } from 'ui/components/tabs'
@@ -17,7 +17,7 @@ import { connect } from 'react-redux'
 
 import language from 'language'
 
-const { 
+const {
   accountViewLanguage,
   tabs
  } = language
@@ -65,20 +65,24 @@ class DashboardNavigatorWithHeader extends Component<Props> {
   }
 
   render() {
+    const { width } = Dimensions.get('window')
+    const logoSize = (width > 320) ? "normal" : "small"
+    const logoContainerStyle = (width > 320) ? style.dashboardLogo : style.dashboardLogoSmall
+    const tabContainer = (width > 320) ? TabStyle.tabContainer : { marginRight: 5}
 
     return (
       <View style={general.whiteFlex}>
         <AndroidStatusBar />
         <View style={style.dashboardBackground}>
           <View style={style.dashboardContainer}>
-            <View style={style.dashboardLogo}>
-              <TextLogo name='white'/>
+            <View style={logoContainerStyle}>
+              <TextLogo name='white' size={logoSize}/>
             </View>
             <View style={TabStyle.leftTriangle}/>
-            <View style={[TabStyle.tabsContainer]}>
-              <Tab onPress={() => this.props.navigation.navigate('Home')} text={tabs.home} alerts={this.props.needsReviewTransactionsCount} active={this.props.isFocusingOn('Home')} />
-              <Tab onPress={() => this.props.navigation.navigate('Friends')} text={tabs.friends} active={this.props.isFocusingOn('Friends')} />
-              <Tab onPress={() => this.props.navigation.navigate('Activity')} text={tabs.activity} active={this.props.isFocusingOn('Activity')} />
+            <View style={TabStyle.tabsContainer}>
+              <Tab style={tabContainer} onPress={() => this.props.navigation.navigate('Home')} text={tabs.home} alerts={this.props.needsReviewTransactionsCount} active={this.props.isFocusingOn('Home')} />
+              <Tab style={tabContainer} onPress={() => this.props.navigation.navigate('Friends')} text={tabs.friends} active={this.props.isFocusingOn('Friends')} />
+              <Tab style={tabContainer} onPress={() => this.props.navigation.navigate('Activity')} text={tabs.activity} active={this.props.isFocusingOn('Activity')} />
             </View>
           </View>
         </View>
@@ -89,8 +93,8 @@ class DashboardNavigatorWithHeader extends Component<Props> {
           </TouchableHighlight>
         </View>
         <View style={style.settingsTriangleRight}/>
-        
-        
+
+
         <DashboardNavigator navigation={this.props.navigation}/>
       </View>
     )

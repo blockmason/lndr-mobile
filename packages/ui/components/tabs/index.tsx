@@ -36,7 +36,7 @@ export class Tab extends Component<Props> {
 
     return (
       <TouchableHighlight
-        style={style.tabContainer}
+        style={this.props.style}
         underlayColor={clear}
         activeOpacity={0.5}
         onPress={onPress}

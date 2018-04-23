@@ -40,6 +40,12 @@ export default StyleSheet.create({
     marginLeft: 15,
     width: 90
   },
+  dashboardLogoSmall: {
+    marginTop: 40,
+    marginBottom: 20,
+    marginLeft: 10,
+    width: 80
+  },
   dashboardTextContainer: {
     alignItems: 'center',
     justifyContent: 'center'
