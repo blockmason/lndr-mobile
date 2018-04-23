@@ -51,10 +51,11 @@ const DashboardNavigator = TabNavigator(RouteConfig, TabNavigatorConfig)
 
 class DashboardShell extends Component<Props> {
   render() {
+    const kSmallScreenThreshold = 320 // e.g. iPhone SE
     const { text } = this.props
     const { width } = Dimensions.get('window')
-    const logoSize = (width > 320) ? "normal" : "small"
-    const logoContainerStyle = (width > 320) ? style.dashboardLogo : style.dashboardLogoSmall
+    const logoSize = (width > kSmallScreenThreshold) ? "normal" : "small"
+    const logoContainerStyle = (width > kSmallScreenThreshold) ? style.dashboardLogo : style.dashboardLogoSmall
 
     return (
       <View style={general.whiteFlex}>

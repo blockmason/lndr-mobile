@@ -65,10 +65,11 @@ class DashboardNavigatorWithHeader extends Component<Props> {
   }
 
   render() {
+    const kSmallScreenThreshold = 320 // e.g. iPhone SE
     const { width } = Dimensions.get('window')
-    const logoSize = (width > 320) ? "normal" : "small"
-    const logoContainerStyle = (width > 320) ? style.dashboardLogo : style.dashboardLogoSmall
-    const tabContainer = (width > 320) ? TabStyle.tabContainer : { marginRight: 5}
+    const logoSize = (width > kSmallScreenThreshold) ? "normal" : "small"
+    const logoContainerStyle = (width > kSmallScreenThreshold) ? style.dashboardLogo : style.dashboardLogoSmall
+    const tabContainer = (width > kSmallScreenThreshold) ? TabStyle.tabContainer : { marginRight: 5}
 
     return (
       <View style={general.whiteFlex}>
