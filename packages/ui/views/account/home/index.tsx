@@ -20,7 +20,7 @@ import PendingTransaction from 'lndr/pending-transaction'
 
 import { isFocusingOn } from 'reducers/nav'
 import { getStore, getUser, getNeedsReviewCount } from 'reducers/app'
-import { getAccountInformation, displayError, getPendingTransactions, getPendingSettlements, 
+import { getAccountInformation, displayError, getPendingTransactions, getPendingSettlements,
   getFriendRequests, getBalances, registerChannelID } from 'actions'
 import { connect } from 'react-redux'
 import { UrbanAirship } from 'urbanairship-react-native'
@@ -143,7 +143,7 @@ class HomeView extends Component<Props, State> {
       <Text style={[formStyle.titleLarge, formStyle.center, formStyle.spaceBottom, formStyle.spaceTop]}>{needsReview}</Text>
       <PendingView navigation={this.props.navigation} homeScreen />
     </View>
-    : <View style={{height: 100}} />
+    : <View style={{height: 20}} />
   }
 
   renderBalanceInformation() {
@@ -224,6 +224,6 @@ class HomeView extends Component<Props, State> {
   }
 }
 
-export default connect((state) => ({ state: getStore(state)(), user: getUser(state)(), isFocused: isFocusingOn(state)('Home'), 
+export default connect((state) => ({ state: getStore(state)(), user: getUser(state)(), isFocused: isFocusingOn(state)('Home'),
 needsReviewCount: getNeedsReviewCount(state) }), { getAccountInformation, displayError, getPendingTransactions, getPendingSettlements,
 getFriendRequests, getBalances, registerChannelID })(HomeView)
