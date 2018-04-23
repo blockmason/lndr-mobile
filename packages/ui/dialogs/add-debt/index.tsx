@@ -113,7 +113,7 @@ class AddDebt extends Component<Props, State> {
     const selectFriend = () => this.setState({ shouldSelectFriend: true })
 
     if (!friend) {
-      return <Button round large onPress={selectFriend} text={debtManagement.selectFriend} />
+      return <Button round medium narrow onPress={selectFriend} text={debtManagement.selectFriend} />
     }
 
     return (<TouchableHighlight onPress={selectFriend}>
@@ -206,7 +206,7 @@ class AddDebt extends Component<Props, State> {
       <View style={[general.centeredColumn, {marginBottom: 20}]}>
         <Text style={[style.header, {marginBottom: 20}]}>{debtManagement[direction]}</Text>
         <View style={[general.flex, general.flexRow]} >
-          <View style={[general.centeredColumn, {minWidth: 150}]}>
+          <View style={[general.centeredColumn]}>
             <Text style={formStyle.title}>{debtManagement.fields.selectFriend}</Text>
             <View style={style.newTransactionRow}>
               { this.renderSelectedFriend() }
@@ -227,12 +227,12 @@ class AddDebt extends Component<Props, State> {
               />
             </View>
           </View>
-          <View style={general.centeredColumn}>
+          <View style={[general.centeredColumn]}>
             <Text style={formStyle.title}></Text>
             <View style={style.newTransactionRow}>
               <Button small narrow black onPress={() => this.setState({shouldPickCurrency: true})} text={currency} />
             </View>
-            
+
           </View>
         </View>
         <View style={formStyle.memoBorder} >
@@ -263,6 +263,6 @@ class AddDebt extends Component<Props, State> {
   }
 }
 
-export default connect((state) => ({ state: getStore(state)(), pendingTransactions: pendingTransactions(state), 
+export default connect((state) => ({ state: getStore(state)(), pendingTransactions: pendingTransactions(state),
   recentTransactions: recentTransactions(state), allCurrencies: getAllUcacCurrencies(state),
    hasPendingTransaction: hasPendingTransaction(state) }), { addDebt, getFriends, hasPendingMessage })(AddDebt)
