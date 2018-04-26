@@ -113,7 +113,7 @@ class AddDebt extends Component<Props, State> {
     const selectFriend = () => this.setState({ shouldSelectFriend: true })
 
     if (!friend) {
-      return <Button round medium narrow onPress={selectFriend} text={debtManagement.selectFriend} />
+      return <Button round narrow onPress={selectFriend} text={debtManagement.selectFriend} />
     }
 
     return (<TouchableHighlight onPress={selectFriend}>
@@ -151,9 +151,8 @@ class AddDebt extends Component<Props, State> {
           friend => friend.nickname.indexOf(searchText) === -1 ? null : (
             <FriendRow
               key={friend.address}
-              friend={friend}
               onPress={() => this.setFriend(friend)}
-              pendingTransactions={pendingTransactions}
+              friend={friend}
               recentTransactions={recentTransactions}
               navigation={this.props.navigation}
             />
@@ -205,11 +204,19 @@ class AddDebt extends Component<Props, State> {
       <Button close onPress={() => this.props.navigation.goBack()} />
       <View style={[general.centeredColumn, {marginBottom: 20}]}>
         <Text style={[style.header, {marginBottom: 20}]}>{debtManagement[direction]}</Text>
-        <View style={[general.flex, general.flexRow]} >
-          <View style={[general.centeredColumn]}>
+        <View style={[general.flex, general.centeredColumn]} >
+          <View style={[general.centeredColumn, {minWidth: 150, marginBottom: 20}]}>
             <Text style={formStyle.title}>{debtManagement.fields.selectFriend}</Text>
             <View style={style.newTransactionRow}>
               { this.renderSelectedFriend() }
+            </View>
+          </View>
+        </View>
+        <View style={[general.flex, general.flexRow]} >
+          <View style={[general.centeredColumn, {minWidth: 150}]}>
+            <Text style={formStyle.title}>{debtManagement.fields.currency}</Text>
+            <View style={style.newTransactionRow}>
+              <Button narrow black onPress={() => this.setState({shouldPickCurrency: true})} text={currency} />
             </View>
           </View>
           <View style={general.centeredColumn}>
@@ -217,7 +224,7 @@ class AddDebt extends Component<Props, State> {
             <View style={style.newTransactionRow}>
               <TextInput
                 style={[formStyle.jumboInput, {paddingTop:0}]}
-                placeholder={`${currencySymbols[currency]}0`}
+                placeholder={`${currencySymbols(currency)}0`}
                 placeholderTextColor='black'
                 value={amount}
                 maxLength={10}
@@ -226,13 +233,6 @@ class AddDebt extends Component<Props, State> {
                 onChangeText={amount => this.setState({ amount: this.setAmount(amount) })}
               />
             </View>
-          </View>
-          <View style={[general.centeredColumn]}>
-            <Text style={formStyle.title}></Text>
-            <View style={style.newTransactionRow}>
-              <Button small narrow black onPress={() => this.setState({shouldPickCurrency: true})} text={currency} />
-            </View>
-
           </View>
         </View>
         <View style={formStyle.memoBorder} >

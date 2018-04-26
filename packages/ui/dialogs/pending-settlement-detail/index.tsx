@@ -79,7 +79,7 @@ class PendingSettlementDetail extends Component<Props, State> {
     const { currency } = this.state
     const { ethExchange, ethSentPastWeek, user } = this.props
 
-    if ( pending.creditorAddress === user.address && ( ethSentPastWeek * Number(ethExchange) + Number(pending.amount) > Number(transferLimits[currency]) ) ) {
+    if ( pending.creditorAddress === user.address && ( ethSentPastWeek * Number(ethExchange) + Number(pending.amount) > Number(transferLimits(currency)) ) ) {
       this.setState({ confirmationError: accountManagement.sendEth.error.limitExceeded(currency) })
       return
     }
@@ -187,7 +187,7 @@ class PendingSettlementDetail extends Component<Props, State> {
   getLimit() {
     const { currency } = this.state
     const { ethExchange, ethSentPastWeek } = this.props
-    const remaining = String(Number(transferLimits[currency]) - Number(ethSentPastWeek) * Number(ethExchange))
+    const remaining = String(Number(transferLimits(currency)) - Number(ethSentPastWeek) * Number(ethExchange))
     const end = remaining.indexOf('.') === -1 ? remaining.length : remaining.indexOf('.') + 3
     return remaining.slice(0, end)
   }
@@ -205,8 +205,8 @@ class PendingSettlementDetail extends Component<Props, State> {
         <Image source={require('images/person-outline-dark.png')} style={style.image}/>
         <Text style={[style.title, {alignSelf: 'center', textAlign: 'center'}]}>{this.getTitle()}</Text>
         <View style={style.balanceRow}>
-          <Text style={style.balanceInfo}>{currencySymbols[defaultCurrency]}</Text>
-          <Text style={style.amount}>{currencyFormats[defaultCurrency](pendingSettlement.amount)}</Text>
+          <Text style={style.balanceInfo}>{currencySymbols(defaultCurrency)}</Text>
+          <Text style={style.amount}>{currencyFormats(defaultCurrency)(pendingSettlement.amount)}</Text>
         </View>
         <View style={style.balanceRow}>
           <Text style={style.amount}>{this.getSettlementAmount()}</Text>

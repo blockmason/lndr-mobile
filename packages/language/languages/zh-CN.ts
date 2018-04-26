@@ -122,7 +122,7 @@ export default {
     },
     ethBalance: {
       display: Y =>`你ETH余额是${String(Y).slice(0,8) }`,
-      inFiat: (Z, B, A) => ` (${CUR[A]}${String(Number(Z) * Number(B)).slice(0, 8)})`,
+      inFiat: (Z, B, A) => ` (${CUR(A)}${String(Number(Z) * Number(B)).slice(0, 8)})`,
       getError: `检索的Eth有错误`,
       manage: `管理ETH`,
     },
@@ -132,7 +132,7 @@ export default {
         generic: `有一个与传输错误，请稍后再试`,
         address: `请输入一个有效的地址`,
         amount: `请输入大于0的金额`,
-        limitExceeded: A => `你只能发送${CUR[A]} ${TL [A]}每周，请选择一个较小的数额`,
+        limitExceeded: A => `你只能发送${CUR(A)} ${TL(A)}每周，请选择一个较小的数额`,
       },
       amount: `量发送`,
       address: `目标地址（无“0x”前缀）`,
@@ -140,10 +140,10 @@ export default {
       transferAll: `一切转移`,
       balance: Y => `您当前ETH余额为${typeof Y === 'string'? Y.slice(0,8) :''}`,
       ethAddress: `以太坊地址`,
-      txCost: (B, A) => `当前交易成本是${CUR[A]} ${B}`,
+      txCost: (B, A) => `当前交易成本是${CUR(A)} ${B}`,
       transferLowercase: `转移的Eth`,
-      note: A => `请注意：您从Lndr只能转移${CUR[A]} ${TL [A]}每周`,
-      warning: (Z, A) => `你有${CUR[A]} ${Z}剩余的${CUR[A]} ${TL [A]} 限制`,
+      note: A => `请注意：您从Lndr只能转移${CUR(A)} ${TL(A)}每周`,
+      warning: (Z, A) => `你有${CUR(A)} ${Z}剩余的${CUR(A)} ${TL(A)} 限制`,
     },
     sendBcpt: {
       error: {
@@ -215,6 +215,7 @@ export default {
     total: `总`,
     record: `记录`,
     records: `记录`,
+    chooseCurrency: `选择货币`,
     createError: {
       amountTooLow: `金额必须大于 0`,
       amountTooHigh: `金额必须低于$ 1,000,000,000`,
@@ -223,6 +224,7 @@ export default {
       insufficientEth: E => `你至少需要${E} ETH`,
     },
     fields: {
+      currency: `货币`,
       amount: `量`,
       settlementAmount: `解决的金额`,
       selectFriend: `朋友`,

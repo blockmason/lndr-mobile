@@ -88,7 +88,7 @@ class PendingSettlementRow extends Component<Props, State> {
 
     const currentCurrency = getUcacCurrency(pendingSettlement.creditRecord.ucacAddress)
 
-    return `${sign} ${currencySymbols[currentCurrency]}${currencyFormats[currentCurrency](pendingSettlement.amount)}`
+    return `${sign} ${currencySymbols(currentCurrency)}${currencyFormats(currentCurrency)(pendingSettlement.amount)}`
   }
 
   render() {

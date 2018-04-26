@@ -82,7 +82,7 @@ class FriendRow extends Component<Props, State> {
       sign = '-'
     }
 
-    return `${sign} ${currencySymbols[defaultCurrency]}${currencyFormats[`${defaultCurrency}abs`](total)}`
+    return `${sign} ${currencySymbols(defaultCurrency)}${currencyFormats(`${defaultCurrency}abs`)(total)}`
   }
 
   getTransactionTotal() {

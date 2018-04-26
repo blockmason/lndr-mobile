@@ -122,7 +122,7 @@ export default {
     },
     ethBalance: {
       display: Y => `Ihr ETH Kontostand ist ${String (Y) .slice (0,8)}`,
-      inFiat: (Z, B, A) => ` (${CUR[A]}${String(Number(Z) * Number(B)).slice(0, 8)})`,
+      inFiat: (Z, B, A) => ` (${CUR(A)}${String(Number(Z) * Number(B)).slice(0, 8)})`,
       getError: `Unfähig ETH Kontostand abrufen`,
       manage: `Verwalten ETH`,
     },
@@ -132,7 +132,7 @@ export default {
         generic: `Es gab einen Fehler bei der Übertragung, bitte versuchen Sie es später noch einmal`,
         address: `Bitte geben Sie eine gültige Adresse ein`,
         amount: `Bitte geben Sie eine Menge von mehr als 0`,
-        limitExceeded: A => `Sie können nur senden ${CUR [A]} ${TL [A]} pro Woche, wählen Sie bitte eine kleinere amount`,
+        limitExceeded: A => `Sie können nur senden ${CUR(A)} ${TL(A)} pro Woche, wählen Sie bitte eine kleinere amount`,
       },
       amount: `Betrag zu senden`,
       address: `Zieladresse (ohne ‚0x‘ Präfix)`,
@@ -140,10 +140,10 @@ export default {
       transferAll: `Bringen Sie alles`,
       balance: Y => `Ihr aktuelles ETH Kontostand ist ${typeof Y === 'string'? Y.slice (0,8): ''} `,
       ethAddress: `Astraleum Anschrift`,
-      txCost: (B, A) => `Die aktuelle Transaktion kostet ${CUR [A]} ${B}`,
+      txCost: (B, A) => `Die aktuelle Transaktion kostet ${CUR(A)} ${B}`,
       transferLowercase: `übertragen Eth`,
-      note: A => `Bitte beachten Sie: Sie können nur übertragen ${CUR [A]} ${TL [A]} pro Woche aus Lndr`,
-      warning: (Z, A) => `Sie haben ${CUR [A]} ${Z} Rest Ihres ${CUR [A]} ${TL [A]} limit`,
+      note: A => `Bitte beachten Sie: Sie können nur übertragen ${CUR(A)} ${TL(A)} pro Woche aus Lndr`,
+      warning: (Z, A) => `Sie haben ${CUR(A)} ${Z} Rest Ihres ${CUR(A)} ${TL(A)} limit`,
     },
     sendBcpt: {
       error: {
@@ -215,6 +215,8 @@ export default {
     total: `Gesamt`,
     record: `Aufzeichnung`,
     records: `Aufzeichnungen`,
+    chooseCurrency: `Wählen Sie eine Währung`,
+    
     createError: {
       amountTooLow: `Betrag muss größer sein als $ 0`,
       amountTooHigh: `Betrag muss weniger als $ 1000000000`,
@@ -223,6 +225,7 @@ export default {
       insufficientEth: E => `Sie müssen mindestens ${E} ETH, gehen Sie zu Einstellungen zu begleichen Ihre balance zu ​​sehen`,
     },
     fields: {
+      currency: `Währung`,
       amount: `Menge`,
       settlementAmount: `Abrechnungsbetrag`,
       selectFriend: `Freund`,

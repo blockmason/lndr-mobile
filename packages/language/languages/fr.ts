@@ -122,7 +122,7 @@ export default {
     },
     ethBalance: {
       display: Y => `Votre solde en ETH est de ${String (Y) .slice (0,8)}`,
-      inFiat: (Z, B, A) => ` (${CUR[A]}${String(Number(Z) * Number(B)).slice(0, 8)})`,
+      inFiat: (Z, B, A) => ` (${CUR(A)}${String(Number(Z) * Number(B)).slice(0, 8)})`,
       getError: `Impossible de récupérer votre solde en ETH`,
       manage: `Gérer vos ETH`,
     },
@@ -132,7 +132,7 @@ export default {
         generic: `Il y a eu une erreur lors du transfert, merci de réessayer plus tard.`,
         address: `Merci d'entrer une adresse valide`,
         amount: `Merci d'entrer un montant supérieur à 0`,
-        limitExceeded: A => `Vous ne pouvez envoyer que ${CUR [A]} ${TL [A]} par semaine, merci de sélectionner un montant inférieur`,
+        limitExceeded: A => `Vous ne pouvez envoyer que ${CUR(A)} ${TL(A)} par semaine, merci de sélectionner un montant inférieur`,
       },
       amount: `Montant à envoyer`,
       address: `Adresse de destination (sans préfixe '0x')`,
@@ -140,10 +140,10 @@ export default {
       transferAll: `Tout transférer`,
       balance: Y => `Votre solde en ETH est de ${typeof Y === 'string'? Y.slice (0,8): ''} `,
       ethAddress: `Adresse Ethereum`,
-      txCost: (B, A) => `Le coût actuel de la transaction est de ${CUR [A]} ${B}`,
+      txCost: (B, A) => `Le coût actuel de la transaction est de ${CUR(A)} ${B}`,
       transferLowercase: `Transférer de l'ETH`,
-      note: A => `Merci de noter que vous ne pouvez transférer que ${CUR [A]} ${TL [A]} par semaine sur Lndr`,
-      warning: (Z, A) => `Vous avez ${CUR [A]} ${Z} restants sur votre limite de ${CUR [A]} ${TL [A]} `,
+      note: A => `Merci de noter que vous ne pouvez transférer que ${CUR(A)} ${TL(A)} par semaine sur Lndr`,
+      warning: (Z, A) => `Vous avez ${CUR(A)} ${Z} restants sur votre limite de ${CUR(A)} ${TL(A)} `,
     },
     sendBcpt: {
       error: {
@@ -215,6 +215,8 @@ export default {
     total: `Total`,
     record: `Enregistrement`,
     records: `Enregistrements`,
+    chooseCurrency: `Choisissez une devise`,
+    
     createError: {
       amountTooLow: `Le montant doit être supérieur à 0 $`,
       amountTooHigh: `Le montant doit être inférieur à $ 1.000.000.000`,
@@ -223,6 +225,7 @@ export default {
       insufficientEth: E => `Vous devez avoir au moins ${E} ETH pour régler, allez dans Paramètres pour voir votre solde`,
     },
     fields: {
+      currency: `Devise`,
       amount: `Montant`,
       settlementAmount: `Montant du règlement`,
       selectFriend: `Ami`,

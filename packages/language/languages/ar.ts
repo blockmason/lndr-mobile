@@ -1,0 +1,382 @@
+import { currencySymbols, transferLimits } from 'lndr/currencies'
+
+const CUR = currencySymbols
+const TL = transferLimits
+
+const generalCommunicationError = 'حدث خطأ في الاتصال بالخادم، الرجاء إعادة المحاولة لاحقاً'
+
+export default {
+
+  applicationName: `Lndr`,
+  helloWorld: `مرحباً بكم`,
+  submit: `إرسال`,
+  next: `التالي`,
+  cancel: `إلغاء`,
+  back: `الرجوع`,
+  copy: `نسخ إلى الحافظة`,
+  confirmAccount: `تأكيد`,
+  createAccount: `إنشاء حساب`,
+  recoverAccount: `استعادة الحساب`,
+  removeAccount: `إزالة الحساب`,
+  updateAccount: `تحديث الحساب`,
+  loginAction: `إلغاء القفل`,
+  enterPin: `يرجى إدخال رمز PIN`,
+  changePin: `تغيير رمز PIN‏`,
+  enterCurrentPin: `أدخل رمز PIN الحالي`,
+  logoutAction: `تسجيل الخروج`,
+  seeAllActivity: `مشاهدة جميع النشاطات`,
+  copiedClipboard: `تم النسخ إلى الحافظة`,
+  pleaseWait: `الرجاء الانتظار`,
+  addFriend: `إضافة صديق`,
+  addFriendConfirmationQuestion: `هل أنت متأكد من إضافة هذا المستخدم كصديق؟`,
+  removeFriend: `إزالة صديق`,
+  currentFriends: `الأصدقاء الحاليين`,
+  removeFriendConfirmationQuestion: `هل أنت متأكد من إزالة هذا المستخدم كصديق؟`,
+  inviteFriends: `دعوة الأصدقاء إلى Lndr`,
+  tryLndr: `جرب تطبيق Lndr من هنا:`,
+  friendInfo: `المزيد من المعلومات حول هذه الصداقة:`,
+  noFriends: `أضف بعض الأصدقاء للبدء!`,
+  noMatches: `لم يتم العثور على مستخدمين متطابقين`,
+  noBalances: `لا يوجد لديك ديون مسجلة`,
+  addFriendButton: `إضافة صديق`,
+  alreadyFriendsButton: `الأصدقاء`,
+  friendShell: `صديق`,
+  tip: `تلميح:`,
+  notice: `ملاحظة:`,
+  welcome: `أهلاً بك في LNDR`,
+  noBalanceWarning: `لم نتمكن من تحميل رصيدك في الوقت الحالي، الرجاء إعادة المحاولة لاحقاً.`,
+  totalBalance: `الرصيد الإجمالي:`,
+  totalBalances: `مجموع الأطراف المقابلة:`,
+  newTransaction: `عملية جديدة`,
+  needsReview: `بانتظار الموافقة`,
+  owesMe: `أنا مديون`,
+  iOwe: `أنا أدين لشخص ما`,
+  newPassword: `كلمة مرور جديدة (الحد الأدنى 8 أحرف)`,
+  confirmPassword: `تأكيد كلمة المرور`,
+  newPin: `رمز PIN جديد من 4 أرقام`,
+  enterNewPin: `الرجاء تعيين رمز PIN جديد مكون من 4 أرقام`,
+  confirmPin: `الرجاء تأكيد رمز PIN الخاص بك`,
+  newAccount: `إنشاء حساب جديد`,
+  loginAccount: `إلغاء قفل حسابك`,
+  recoverExistingAccount: `استرداد حساب موجود`,
+  recoverMnemonic: `استذكار (12 كلمة تم عرضها  \nعند إنشائك لحسابك)`,
+  recoverMnemonicLengthError: `يجب أن يكون الاستذكار 12 كلمة بالضبط`,
+  successTitle: `نجاح`,
+  errorTitle: `خطأ`,
+  showMnemonic: `إظهار الاستذكار المؤلف من 12-كلمة`,
+  mnemonicExhortation: `هذه العبارة المؤلفة من 12-كلمة مطلوبة لاسترداد حسابك، الرجاء الاحتفاظ بها في مكان آمن وسري`,
+  addressExhortation: `أرسل إثيريوم إلى عنوانك لكي تتمكن من تسديد الديون على Lndr `,
+  removeAccountTitle: `هل أنت متأكد من إزالة حسابك من هذا الجهاز؟`,
+  removeAccountExhortation: `تأكد من إمكانيتك الوصول إلى الاستذكار الخاص بك لكي تتمكن من استرداد حسابك لاحقاً، فهذه إزالة دائمة لمعلومات حسابك من هذا الجهاز.`,
+  myAccount: `حسابي`,
+  setNickname: `تعيين اسم مستعار لكي يتمكن أصدقاؤك من البحث عنك`,
+  setEmail: `تعيين بريد إلكتروني لتلقي المعلومات عن تحديثات Lndr`,
+  nickname: `الاسم المستعار (أحرف صغيرة & أرقام)`,
+  email: `البريد الإلكتروني`,
+  accountManagement: {
+    nickname: {
+      lengthViolation: `يجب أن يتألف الاسم المستعار من 3 أحرف على الأقل`,
+      compositionViolation: `يمكن أن يتألف الاسم المستعار من أحرف صغيرة وأرقام فقط`,
+      duplicationViolation: `الاسم المستعار مستخدم بالفعل`,
+    },
+    email: {
+      compositionViolation: `البريد الإلكتروني غير صحيح`,
+      duplicationViolation: `البريد الإلكتروني مستخدم بالفعل`,
+    },
+    pin: {
+      lengthViolation: `يجب أن يتألف رمز PIN من 4 أحرف على الأقل`,
+      matchViolation: `يجب أن تتطابق رموز PIN`,
+      failedHashComparison: `رمز PIN غير صالح، الرجاء إعادة المحاولة.`,
+      updateSuccess: `تم تحديث رمز PIN الخاص بك`,
+      updateError: `حدث خطأ أثناء تحديث PIN الخاص بك`,
+    },
+    mnemonic: {
+      lengthViolation: `يجب أن يتألف الاستذكار من 12 حرف على الأقل.`,
+      unableToValidate: `الاستذكار الذي أدخلته غير صالح. الرجاء إعادة المحاولة.`,
+    },
+    setNickname: {
+      success: `تم حفظ اسمك المستعار.`,
+      error: generalCommunicationError
+    },
+    setEmail: {
+      success: `تم حفظ بريدك الإلكتروني. `,
+      error: generalCommunicationError
+    },
+    lockTimeout: {
+      top: `يجب إدخال رمز PIN بعد`,
+      bottom: `دقائق من عدم النشاط`,
+      update: `تحديث`,
+      error: `لم نتمكن من تحديث إعدادات حسابك`,
+      success: `تم تحديث مهلة القفل`,
+    },
+    addFriend: {
+      success: X => `تم إرسال طلب صداقة إلى @${X}`,
+      error: generalCommunicationError
+    },
+    removeFriend: {
+      success: X => `تم حذفه من الأصدقاء: @${X}`,
+      error: generalCommunicationError
+    },
+    loadInformation: {
+      error: generalCommunicationError
+    },
+    ethBalance: {
+      display: Y => `رصيد الإثيريوم الخاص بك هو ${String(Y).slice(0,8)}`,
+      inFiat: (Z, B, A) => ` (${CUR(A)}${String(Number(Z) * Number(B)).slice(0, 8)})`,
+      getError: `تعذر استرداد رصيد إثيريوم`,
+      manage: `إدارة إثيريوم`,
+    },
+    sendEth: {
+      error: {
+        insufficient: `فشلت عملية التحويل نظراً لعدم توفر رصيد كافي`,
+        generic: `حدث خطأ في عملية التحويل، الرجاء إعادة المحاولة لاحقاً`,
+        address: `الرجاء إدخال عنوان صحيح`,
+        amount: `الرجاء إدخال كمية أكبر من 0`,
+        limitExceeded: A => `يمكنك فقط إرسال ${CUR(A)}${TL(A)} في الأسبوع, الرجاء تحديد كمية أصغر`
+      },
+      amount: `المبلغ المراد إرساله`,
+      address: `عنوان الوجهة (بدون اللاحقة '0x')`,
+      transfer: `تحويل إثيريوم`,
+      transferAll: `تحويل كل شيء`,
+      balance: Y => `رصيدك الحالي من الإثيريوم هو ${typeof Y === 'string' ? Y.slice(0,8) :''}`,
+      ethAddress: `عنوان إثيريوم`,
+      txCost: (B, A) => `تكلفة المعاملة الحالية هو ${CUR(A)}${B}`,
+      transferLowercase: `تحويل إثيريوم`,
+      note: A => `يرجى الانتباه: يمكنك فقط تحويل ${CUR(A)}${TL(A)} في الأسبوع من Lndr`,
+      warning: (Z, A) => `لديك ${CUR(A)}${Z} متبقي من حدك ${CUR(A)}${TL(A)}`,
+    },
+    sendBcpt: {
+      error: {
+        insufficient: `ليس لديك ما يكفي من BCPT لهذه العملية`,
+        generic: `حدث خطأ في عملية التحويل، الرجاء إعادة المحاولة مرة أخرى لاحقاً`,
+      },
+      transfer: `تحويل BCPT`,
+      address: `عنوان الوجهة (بدون اللاحقة '0x')`,
+      balance: Y => `رصيدك الحالي من BCPT هو ${typeof Y === 'string' ? Y.slice(0,8) :''}`,
+      bcptAddress: `عنوان BCPT`,
+    },
+    changeProfilePic: `انقر للتغيير`,
+    addProfilePic: `استخدام صورة من الهاتف`,
+    panelHeaders: [
+      `عنوان إثيريوم (& BCPT)`,
+      `رصيد الإثيريوم`,
+      `رصيد BCPT`,
+      `سجل معاملات إثيريوم`,
+      `تغيير رمز PIN‏`,
+      `تغيير الاسم المستعار`,
+      `تغيير البريد الإلكتروني`,
+      `تغيير صورة الملف الشخصي`,
+      `تغيير مهلة القفل`,
+      `استذكار`,
+      `إشعارات`,
+    ],
+    viewEtherscan: `عرض تاريخ Etherscan`,
+    profilePic: {
+      change: `تغيير صورة الملف الشخصي`,
+      setError: `حدث خطأ اثناء رفع صورتك، الرجاء إعادة المحاولة لاحقاً`,
+      getError: `حدث خطأ أثناء استرداد صورة ملفك الشخصي`,
+      setSuccess: `تم تحديث صورة الملف الشخصي`,
+    },
+    logoutSuccess: `تم تسجيل الخروج بنجاح!`,
+  },
+
+  currentBalance: {
+    eth: `رصيدك الحالي من الإثيريوم هو:`,
+    bcpt: `رصيدك الحالي من BCPT هو:`,
+  },
+
+  welcomeView: {
+    by: `تم تصميمه من قبل`,
+    makeItEasy: `يسهّل Lndr عملية تتبع الديون البسيطة`,
+    weHelpFriends: `نحن نساعد الأصدقاء للعيش والعمل واللعب معاً.`,
+    len: `Len`,
+    dot: `.`,
+    der: `der`,
+    shareDinner: `شاركوا عشاءً`,
+    fillTank: `املؤوا خزان وقودكم`,
+    travelTogether: `سافروا معاً`,
+    runEthereum: `نحن نعمل بالإثيريوم!`,
+    firstLendingApp: `أول تطبيق إقراض للهواتف المحمولة مؤمن على البلوكتشين.`,
+    greatConcert: `شاهد حفلاً رائعاً`,
+    youPlayWithFriends: `أنت تلعب مع الأصدقاء؛ \n سوف نتولى الفاتورة...`,
+    start: `البدء`,
+  },
+
+  debtManagement: {
+    shell: `عملية جديدة`,
+    add: `إضافة دين`,
+    selectFriend: `اختيار`,
+    lend: `إقَراض جديد`,
+    borrow: `دين جديد`,
+    iLent: `صديق مدين لي`,
+    iBorrowed: `أنا أدين لصديق`,
+    settleUpLower: `دفع الحساب`,
+    amountToSettle: `المبلغ الواجب دفعه`,
+    total: `المجموع`,
+    record: `سجل`,
+    records: `سجلات`,
+    chooseCurrency: `اختيار العملة`,
+    
+    createError: {
+      amountTooLow: `يجب أن يكون المبلغ أكبر من 0$.`,
+      amountTooHigh: `يجب أن يكون المبلغ أقل من 1,000,000,000$.`,
+      selfAsFriend: `لا يمكنك إنشاء دين مع نفسك، اختر صديقاً آخر`,
+      pending: `الرجاء حل معاملتك المعلقة مع هذا المستخدم قبل القيام بواحدة أخرى`,
+      insufficientEth: E => `أنت بحاجة ${E} ETH على الأقل لسداد المبلغ, انتقل إلى الإعدادات لمعرفة الرصيد الخاص بك`,
+    },
+    fields: {
+      currency: ` العملة`,
+      amount: `المبلغ`,
+      settlementAmount: `كمية مبلغ السداد`,
+      selectFriend: `صديق`,
+      memo: `مذكرة`,
+      direction: `حدد مبلغ السداد الصحيح`,
+    },
+    memo: {
+      example: `اكتب مذكرة هنا`,
+    },
+    direction: {
+      lend: X => `${X} يدين لي`,
+      borrow: X => `انا أدين لـ ${X}`,
+      initiatedLend: X => `${X} يقول أنه/أنها مدين`,
+      initiatedBorrow: X => `${X} يقول أنك مدين`,
+      pendingLend: X => `@${X} مدين لك`,
+      pendingBorrow: X => `أنت مدين لـ @${X}`,
+      pendingLendSettlement: S => `@${S.debtorNickname} طلب سداد مبلغ بـ ${S.settlementCurrency}`,
+      pendingBorrowSettlement: S => `@${S.creditorNickname} يريد السداد معك بـ ${S.settlementCurrency}`,
+      pendingLendSettlementMe: S => `أنت طلبت السداد مع @${S.debtorNickname} بـ ${S.settlementCurrency}`,
+      pendingBorrowSettlementMe: S => `أنت طلبت أن يسدد @${S.creditorNickname} بـ ${S.settlementCurrency}`,
+    },
+    pending: {
+      success: F => `تم إرسال الديون المعلقة إلى @${F.nickname}`,
+      error: generalCommunicationError
+    },
+    pendingParens: `(قيد الانتظار)`,
+    confirmation: {
+      transaction: CP => `تم بنجاح تأكيد المعاملة بـ ${CP}`,
+      settlement: CP => `تم بنجاح تأكيد السداد بـ ${CP}`,
+      error: `تعذر تأكيد المعاملة حالياً، الرجاء إعادة المحاولة لاحقاً`,
+    },
+    rejection: {
+      success: `تم رفض المعاملة.`,
+      error: `تعذر تأكيد المعاملة حالياً، الرجاء إعادة المحاولة`,
+    },
+    balances: {
+      error: `تعذر تحميل الأرصدة حالياً، الرجاء إعادة المحاولة لاحقاً`,
+    },
+    for: M => `لـ ${M}`,
+    settleUp: `دفع الحساب`,
+    settleTotal: `إجمالي مبلغ السداد`,
+    settleUpMemo: (D, A) => `${D === 'lend' ? 'سداد مبلغ لـ' :  'طلب سداد مبلغ لـ'} ${A}`,
+    recordSettleUpMemo: `دفع الحساب`,
+  },
+  settlementManagement: {
+    bilateral: {
+      error: {
+        insufficient: X => `عملية سدادك للمبلغ مع  ${X} فشلت نظراً لعدم توفر رصيدٍ كافي`,
+        generic: X => `حدث خطأ في معالجة عملية سدادك مع ${X}`,
+      }
+    },
+    eth: `سدد الحساب بالإثيريوم`,
+    nonPayment: `سجّل مبلغ سداد`,
+  },
+
+  accountViewLanguage: {
+    lndr: `L n d r`,
+    home: `الرئيسية`,
+    friends: `الأصدقاء`,
+    activity: `النشاط`,
+  },
+
+  notifications: {
+    toggleNotifications: `تفعيل الإشعارات`,
+    enable: `تشغيل`,
+    disable: `إطفاء`,
+  },
+
+  pendingTransactionsLanguage: {
+    shell: `معاملة قيد الانتظار`,
+    title: `قيد الانتظار`,
+    memo: `مذكرة:`,
+    for: `إلى`,
+    none: `ليس لديك أي معاملات معلقة`,
+    confirmationQuestion: `هل أنت متأكد من تأكيد هذه المعاملة؟`,
+    pendingAnnouncement: `هذه المعاملة في انتظار تأكيد الطرف الآخر. `,
+    bilateral: `في انتظار اكتمال تحويل الإثيريوم`,
+    confirm: `تأكيد`,
+    reject: `رفض المعاملة`,
+    rejectRequest: `رفض`,
+    cancel: `إلغاء المعاملة`,
+    direction: {
+      lend: (X, Z) => `@${X} يدين لك بـ ${Z}`,
+      borrow: (X, Z) => `أنت تدين بـ @${X} ${Z}`,
+    }
+  },
+
+  pendingSettlementsLanguage: {
+    shell: `مبلغ سداد معلق`,
+    title: `قيد الانتظار`,
+    none: `ليس لديك أي مبالغ معلق للسداد`,
+    confirm: `تأكيد`,
+    reject: `رفض السداد`,
+    cancel: `إلغاء التسديد`,
+  },
+
+  recentTransactionsLanguage: {
+    title: `مكتملة`,
+    none: `ليس لديك أي معاملات مكتملة`,
+    direction: {
+      lend: (X, Z) => `@${X} يدين لك بـ ${Z}`,
+      borrow: (X, Z) => `أنت تدين بـ @${X} ${Z}`
+    },
+    balance: `الرصيد`,
+    friends: FS => `(${FS === 1 ? 'صديق' :'أصدقاء'} ${FS} من)`,
+  },
+
+  tabs: {
+    home: `الرئيسية`,
+    friends: `الأصدقاء`,
+    activity: `النشاط`,
+  },
+
+  confirmation: {
+    shell: `تأكيد`,
+    done: `تم`,
+    create: {
+      start: `لقد أرسلنا السجل لجون للتأكيد`,
+      end: `.`,
+    },
+    confirm: {
+      start: `لقد أكدت هذا السجل من `,
+      end: `.`,
+    },
+    reject: {
+      start: `لقد أعلمنا  `,
+      end: `. أنك رفضت هذا السجل`,
+    },
+    confirmFriend: {
+      start: `أنت الآن صديقٌ مع `,
+      end: `!`,
+    },
+    rejectFriend: {
+      start: `لقد رفضت طلب الصداقة من `,
+      end: `.`,
+    },
+    ethSent: {
+      start: `لقد أرسلت `,
+      end: ` إثيريوم بنجاح ورقم الهاش لمعاملتك هو `,
+    },
+    bcptSent: {
+      start: ` بنجاح ورقم الهاش لمعاملتك هو `,
+      end: ` لقد أرسلت  BCPT `,
+    },
+    status: ` حالة هذه المعاملة من تبويب النشاط`,
+    activity: `يمكنك رؤية`,
+  },
+
+  pendingFriendRequestsLanguage: {
+    shell: `طلب صداقة`,
+    message: `طلبات الصداقة`,
+    request: F => `${F} يريد أن يصبح صديقاً معك!`,
+  }
+}

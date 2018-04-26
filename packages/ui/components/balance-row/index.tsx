@@ -21,11 +21,11 @@ export default class BalanceRow extends Component<Props> {
     const { amount } = balance
 
     if (amount < 0) {
-      return <Text style={style.titledFactAmountDanger}>{currencyFormats[defaultCurrency](amount)}</Text>
+      return <Text style={style.titledFactAmountDanger}>{currencyFormats(defaultCurrency)(amount)}</Text>
     }
 
     else {
-      return <Text style={style.titledFactAmountGood}>{currencyFormats[defaultCurrency](amount)}</Text>
+      return <Text style={style.titledFactAmountGood}>{currencyFormats(defaultCurrency)(amount)}</Text>
     }
   }
 

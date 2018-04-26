@@ -134,7 +134,7 @@ export default {
     inFiat: (amount, exchange, currency) => {
       const strAmnt = String(Number(amount) * Number(exchange))
       const perInd = strAmnt.indexOf('.') === -1 ? strAmnt.length : strAmnt.indexOf('.')
-      return ` (${currencySymbols[currency]}${strAmnt.slice(0, perInd)})`
+      return ` (${currencySymbols(currency)}${strAmnt.slice(0, perInd)})`
     },
     getError: '이더리움 잔액내역을 불러오지 못했습니다',
     manage: '이더리움 관리'
@@ -145,7 +145,7 @@ export default {
       generic: '거래 도중 에러가 발생하였습니다, 나중에 다시 시도해주세요',
       address: '정확한 주소를 입력해주세요',
       amount: '0보다 높은 금액을 입력해주세요',
-      limitExceeded: currency => `한 주당 ${currencySymbols[currency]}${transferLimits[currency]} 만 보낼 수 있습니다, 이보다 더 적은 금액을 선택하세요`
+      limitExceeded: currency => `한 주당 ${currencySymbols(currency)}${transferLimits(currency)} 만 보낼 수 있습니다, 이보다 더 적은 금액을 선택하세요`
     },
     amount: '보내는 금액',
     address: `수신지 주소(0x 제외)`,
@@ -153,10 +153,10 @@ export default {
     transferAll: '전액 송금',
     balance: (balance) => `당신의 현재 이더리움 잔액은 ${typeof balance === 'string' ? balance.slice(0,8) : ''}`,
     ethAddress: '이더리움 주소',
-    txCost: (cost, currency) => `현재 이더리움 거래에 드는 비용은 한 거래당 ${currencySymbols[currency]}${cost} 달러입니다`,
+    txCost: (cost, currency) => `현재 이더리움 거래에 드는 비용은 한 거래당 ${currencySymbols(currency)}${cost} 달러입니다`,
     transferLowercase: '이더리움 송금',
-    note: currency => `참고 : Lndr에서는 일주일에 ${currencySymbols[currency]}${transferLimits[currency]} 만 송금할 수 있습니다.`,
-    warning: (amount, currency) => `귀하의 거래 한도 ${currencySymbols[currency]}${amount} 중 ${currencySymbols[currency]}${transferLimits[currency]} 이 남아있습니다`
+    note: currency => `참고 : Lndr에서는 일주일에 ${currencySymbols(currency)}${transferLimits(currency)} 만 송금할 수 있습니다.`,
+    warning: (amount, currency) => `귀하의 거래 한도 ${currencySymbols(currency)}${amount} 중 ${currencySymbols(currency)}${transferLimits(currency)} 이 남아있습니다`
   },
   sendBcpt: {
     error: {
@@ -228,6 +228,7 @@ export default {
   total: '총액',
   record: '거래',
   records: '거래',
+  chooseCurrency: `통화를 선택하십시오`,
   createError: {
     amountTooLow: '총액은 0달러보다 이상이여야 합니다 0',
     amountTooHigh: '총액은 10억달러 내외여야 합니다 $1,000,000,000',
@@ -236,6 +237,7 @@ export default {
     insufficientEth: eth => `정산하려면 최소 단위의 ${eth} 이더리움이 필요로 합니다, 설정으로 가서 잔액을 확인해주세요`
   },
   fields: {
+    currency: `통화`,
     amount: '액수',
     settlementAmount: '결제 금액',
     selectFriend: '친구',

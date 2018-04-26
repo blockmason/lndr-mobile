@@ -122,7 +122,7 @@ export default {
     },
     ethBalance: {
       display: Y => `Il saldo ETH è ${String(Y).slice(0,8)}`,
-      inFiat: (Z, B, A) => ` (${CUR[A]}${String(Number(Z) * Number(B)).slice(0, 8)})`,
+      inFiat: (Z, B, A) => ` (${CUR(A)}${String(Number(Z) * Number(B)).slice(0, 8)})`,
       getError: `Impossibile recuperare il saldo Eth`,
       manage: `Gestire ETH`,
     },
@@ -132,7 +132,7 @@ export default {
         generic: `C'è stato un errore con il trasferimento, si prega di riprovare più tardi`,
         address: `Per favore, inserisci un indirizzo valido`,
         amount: `Si prega di inserire un importo maggiore di 0`,
-        limitExceeded: A => `È possibile inviare solo ${CUR[A]}${TL[A]} a settimana, si prega di selezionare un importo minore`,
+        limitExceeded: A => `È possibile inviare solo ${CUR(A)}${TL(A)} a settimana, si prega di selezionare un importo minore`,
       },
       amount: `Importo da inviare`,
       address: `Indirizzo di destinazione (senza il prefisso '0x')`,
@@ -140,10 +140,10 @@ export default {
       transferAll: `Trasferire tutto`,
       balance: Y => `Il tuo saldo corrente è ETH ${typeof Y === 'string'? Y.slice (0,8): ''} `,
       ethAddress: `Indirizzo Ethereum`,
-      txCost: (B, A) => `Il costo della transazione corrente è di ${CUR [A]} ${B}`,
+      txCost: (B, A) => `Il costo della transazione corrente è di ${CUR(A)} ${B}`,
       transferLowercase: `Trasferimento Eth`,
-      note: A => `Si prega di notare: è possibile trasferire solo ${CUR[A]}${TL[A]} a settimana fuori Lndr`,
-      warning: (Z, A) => `Ti sono rimasti ${CUR[A]}${Z} del tuo limite ${CUR[A]}${TL[A]}`,
+      note: A => `Si prega di notare: è possibile trasferire solo ${CUR(A)}${TL(A)} a settimana fuori Lndr`,
+      warning: (Z, A) => `Ti sono rimasti ${CUR(A)}${Z} del tuo limite ${CUR(A)}${TL(A)}`,
     },
     sendBcpt: {
       error: {
@@ -215,6 +215,8 @@ export default {
     total: `Totale`,
     record: `registro`,
     records: `registri`,
+    chooseCurrency: `Scegli una valuta`,
+    
     createError: {
       amountTooLow: `L'importo deve essere superiore a $0`,
       amountTooHigh: `L'importo deve essere inferiore a $1.000.000.000`,
@@ -223,6 +225,7 @@ export default {
       insufficientEth: E => `Hai bisogno di almeno ${E} ETH per saldare il debito, vai in Impostazioni per visualizzare il tuo saldo`,
     },
     fields: {
+      currency: `Valuta`,
       amount: `Importo`,
       settlementAmount: `Importo da saldare`,
       selectFriend: `Amico`,
@@ -264,7 +267,7 @@ export default {
     for: M => `a ${M}`,
     settleUp: `Saldare un debito`,
     settleTotal: `Totale debito da saldare`,
-    settleUpMemo: (D, A) => `${D === 'dare in prestito'? 'Saldare debito per': 'Richiesta di pagamento di'} ${A} `,
+    settleUpMemo: (D, A) => `${D === 'lend'? 'Saldare debito per': 'Richiesta di pagamento di'} ${A} `,
     recordSettleUpMemo: `Salda debito`,
   },
   settlementManagement: {

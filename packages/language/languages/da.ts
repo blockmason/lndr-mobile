@@ -122,7 +122,7 @@ export default {
     },
     ethBalance: {
       display: Y => `Din ETH saldo er ${String(Y).slice(0,8)}`,
-      inFiat: (Z, B, A) => ` (${CUR[A]}${String(Number(Z) * Number(B)).slice(0, 8)})`,
+      inFiat: (Z, B, A) => ` (${CUR(A)}${String(Number(Z) * Number(B)).slice(0, 8)})`,
       getError: `Kunne ikke indlæse Eth saldo`,
       manage: `Administrer ETH`,
     },
@@ -132,7 +132,7 @@ export default {
         generic: `Der opstod en fejl med overførslen, prøv igen senere`,
         address: `Indtast en gyldig adresse`,
         amount: `Indtast et beløb, der er større end 0`,
-        limitExceeded: A => `Du kan kun sende ${CUR[A]}${TL[A]} om ugen, vælg et mindre beløb`,
+        limitExceeded: A => `Du kan kun sende ${CUR(A)}${TL(A)} om ugen, vælg et mindre beløb`,
       },
       amount: `Beløb der skal sendes`,
       address: `Destinationsadresse (uden '0x' præfiks)`,
@@ -140,10 +140,10 @@ export default {
       transferAll: `Overfør alt`,
       balance: Y => `Din aktuelle ETH saldo er ${typeof Y === 'string'? Y.slice (0,8): ''} `,
       ethAddress: `Ethereum Adresse`,
-      txCost: (B, A) => `Den nuværende transaktionspris er ${CUR[A]}${B}`,
+      txCost: (B, A) => `Den nuværende transaktionspris er ${CUR(A)}${B}`,
       transferLowercase: `Overfør Eth`,
-      note: A => `Bemærk: du kan kun overføre ${CUR[A]}${TL[A]} om ugen på Lndr`,
-      warning: (Z, A) => `Du har ${CUR[A]}${Z} resterende af din ${CUR[A]}${TL[A]} grænse`,
+      note: A => `Bemærk: du kan kun overføre ${CUR(A)}${TL(A)} om ugen på Lndr`,
+      warning: (Z, A) => `Du har ${CUR(A)}${Z} resterende af din ${CUR(A)}${TL(A)} grænse`,
     },
     sendBcpt: {
       error: {
@@ -215,6 +215,8 @@ export default {
     total: `Total`,
     record: `optegnelse`,
     records: `optegnelser`,
+    chooseCurrency: `Vælg en valuta`,
+    
     createError: {
       amountTooLow: `Beløb skal være større end $0`,
       amountTooHigh: `Beløb skal være mindre end $1.000.000.000`,
@@ -223,6 +225,7 @@ export default {
       insufficientEth: E => `Du skal have mindst ${E} ETH for at gøre det skyldige beløb op, gå til Indstillinger for at se din saldoat bosætte gå til Indstillinger for at se din balance`,
     },
     fields: {
+      currency: `Valuta`,
       amount: `Beløb`,
       settlementAmount: `Skyldigt beløb`,
       selectFriend: `Ven`,
