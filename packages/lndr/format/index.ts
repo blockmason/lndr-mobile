@@ -18,183 +18,41 @@ export const leftPad = (pad, length, value) => {
   return value
 }
 
-export const currencyFormats = {
-  AUD: value => {
-    const sign = value < 0 ? '-' : ''
-    const raw = String(Math.abs(value))
-    return `${sign}${commas(raw) || '0'}`
-  },
-  
-  AUDabs: value => {
-    const sign = value < 0 ? '-' : ''
-    const raw = String(Math.abs(value))
-    return `${commas(raw) || '0'}`
-  },
-
-  CAD: value => {
-    const sign = value < 0 ? '-' : ''
-    const raw = String(Math.abs(value))
-    return `${sign}${commas(raw) || '0'}`
-  },
-  
-  CADabs: value => {
-    const sign = value < 0 ? '-' : ''
-    const raw = String(Math.abs(value))
-    return `${commas(raw) || '0'}`
-  },
-  
-  CHF: value => {
-    const sign = value < 0 ? '-' : ''
-    const raw = String(Math.abs(value))
-    return `${sign}${commas(raw) || '0'}`
-  },
-  
-  CHFabs: value => {
-    const sign = value < 0 ? '-' : ''
-    const raw = String(Math.abs(value))
-    return `${commas(raw) || '0'}`
-  },
-  
-  CNY: value => {
-    const sign = value < 0 ? '-' : ''
-    const raw = String(Math.abs(value))
-    return `${sign}${commas(raw) || '0'}`
-  },
-  
-  CNYabs: value => {
-    const sign = value < 0 ? '-' : ''
-    const raw = String(Math.abs(value))
-    return `${commas(raw) || '0'}`
-  },
-
-  DKK: value => {
-    const sign = value < 0 ? '-' : ''
-    const raw = String(Math.abs(value))
-    return `${sign}${commas(raw) || '0'}`
-  },
-  
-  DKKabs: value => {
-    const sign = value < 0 ? '-' : ''
-    const raw = String(Math.abs(value))
-    return `${commas(raw) || '0'}`
-  },
-  
-  EUR: value => {
-    const sign = value < 0 ? '-' : ''
-    const raw = String(Math.abs(value))
-    return `${sign}${commas(raw) || '0'}`
-  },
-  
-  EURabs: value => {
-    const sign = value < 0 ? '-' : ''
-    const raw = String(Math.abs(value))
-    return `${commas(raw) || '0'}`
-  },
-  
-  GBP: value => {
-    const sign = value < 0 ? '-' : ''
-    const raw = String(Math.abs(value))
-    return `${sign}${commas(raw) || '0'}`
-  },
-  
-  GBPabs: value => {
-    const sign = value < 0 ? '-' : ''
-    const raw = String(Math.abs(value))
-    return `${commas(raw) || '0'}`
-  },
-
-  HKD: value => {
-    const sign = value < 0 ? '-' : ''
-    const raw = String(Math.abs(value))
-    return `${sign}${commas(raw) || '0'}`
-  },
-  
-  HKDabs: value => {
-    const sign = value < 0 ? '-' : ''
-    const raw = String(Math.abs(value))
-    return `${commas(raw) || '0'}`
-  },
-  
-  JPY: value => {
-    const sign = value < 0 ? '-' : ''
-    const raw = String(Math.abs(value))
-    return `${sign}${commas(raw) || '0'}`
-  },
-  
-  JPYabs: value => {
-    const sign = value < 0 ? '-' : ''
-    const raw = String(Math.abs(value))
-    return `${commas(raw) || '0'}`
-  },
-
-  KRW: value => {
-    const sign = value < 0 ? '-' : ''
-    const raw = String(Math.abs(value))
-    return `${sign}${commas(raw) || '0'}`
-  },
-  
-  KRWabs: value => {
-    const sign = value < 0 ? '-' : ''
-    const raw = String(Math.abs(value))
-    return `${commas(raw) || '0'}`
-  },
-  
-  NOK: value => {
-    const sign = value < 0 ? '-' : ''
-    const raw = String(Math.abs(value))
-    return `${sign}${commas(raw) || '0'}`
-  },
-  
-  NOKabs: value => {
-    const sign = value < 0 ? '-' : ''
-    const raw = String(Math.abs(value))
-    return `${commas(raw) || '0'}`
-  },
-
-  NZD: value => {
-    const sign = value < 0 ? '-' : ''
-    const raw = String(Math.abs(value))
-    return `${sign}${commas(raw) || '0'}`
-  },
-  
-  NZDabs: value => {
-    const sign = value < 0 ? '-' : ''
-    const raw = String(Math.abs(value))
-    return `${commas(raw) || '0'}`
-  },
-  
-  SEK: value => {
-    const sign = value < 0 ? '-' : ''
-    const raw = String(Math.abs(value))
-    return `${sign}${commas(raw) || '0'}`
-  },
-  
-  SEKabs: value => {
-    const sign = value < 0 ? '-' : ''
-    const raw = String(Math.abs(value))
-    return `${commas(raw) || '0'}`
-  },
-  
-  USD: value => {
-    const sign = value < 0 ? '-' : ''
-    const raw = String(Math.abs(value))
-    const [ left, right ] = [ raw.substr(0, raw.length - 2), raw.substr(-2) ]
-    return `${sign}${commas(left) || '0'}.${leftPad('0', 2, right)}`
-  },
-  
-  USDabs: value => {
-    const raw = String(Math.abs(value))
-    const [ left, right ] = [ raw.substr(0, raw.length - 2), raw.substr(-2) ]
-    return `${commas(left) || '0'}.${leftPad('0', 2, right)}`
-  },
+export const currencyFormats = (formatType: string) => {
+  if (formatType === 'KRW' || formatType === 'JPY' || formatType === 'IDR' || formatType === 'VND') {
+    return value => {
+      const sign = value < 0 ? '-' : ''
+      const raw = String(Math.abs(value))
+      return `${sign}${commas(raw) || '0'}`
+    }
+  } else if (formatType === 'KRWabs' || formatType === 'JPYabs' || formatType === 'IDRabs' || formatType === 'VNDabs') {
+    return value => {
+      const sign = value < 0 ? '-' : ''
+      const raw = String(Math.abs(value))
+      return `${commas(raw) || '0'}`
+    }
+  } else if (formatType.indexOf('abs') !== -1) {
+    return value => {
+      const raw = String(Math.abs(value))
+      const [ left, right ] = [ raw.substr(0, raw.length - 2), raw.substr(-2) ]
+      return `${commas(left) || '0'}.${leftPad('0', 2, right)}`
+    }
+  } else {
+    return value => {
+      const sign = value < 0 ? '-' : ''
+      const raw = String(Math.abs(value))
+      const [ left, right ] = [ raw.substr(0, raw.length - 2), raw.substr(-2) ]
+      return `${sign}${commas(left) || '0'}.${leftPad('0', 2, right)}`
+    }
+  }
 }
 
 export const amountFormat = (amount: string, currency: string) => {
-  if (currency === 'KRW' || currency === 'JPY') {
+  if (currency === 'KRW' || currency === 'JPY' || currency === 'IDR' || currency === 'VND') {
     const raw = amount
     .replace(/[^\d]/g, '')
 
-    return `${currencySymbols[currency]}${commas(raw)}`
+    return `${currencySymbols(currency)}${commas(raw)}`
     
   } else {
     const raw = amount
@@ -213,10 +71,10 @@ export const amountFormat = (amount: string, currency: string) => {
         left = `${left}${right[0]}`
         right = right.substr(1)
       }
-      return `${currencySymbols[currency]}${commas(left)}.${right}`
+      return `${currencySymbols(currency)}${commas(left)}.${right}`
     }
   
-    return `${currencySymbols[currency]}${commas(raw)}`
+    return `${currencySymbols(currency)}${commas(raw)}`
   }
 }
 

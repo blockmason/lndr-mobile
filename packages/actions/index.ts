@@ -32,7 +32,7 @@ const { accountManagement, debtManagement, settlementManagement, copiedClipboard
 import { ToastActionsCreators } from 'react-native-redux-toast'
 import { getUser, getStore, getUcacAddr, getEthExchange as exchangeReducer, getWeeklyEthTotal } from 'reducers/app'
 import { hexToBuffer } from '../credit-protocol/lib/buffer-utils'
-import { defaultCurrency, currencySymbols, transferLimits  } from 'lndr/currencies'
+import { defaultCurrency, currencySymbols } from 'lndr/currencies'
 
 const bcrypt = require('bcryptjs')
 

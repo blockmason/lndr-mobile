@@ -76,7 +76,7 @@ class TransferEth extends Component<Props, State> {
       return
     }
 
-    if (( ethSentPastWeek + Number(amount) ) * Number(ethExchange) > Number(transferLimits[currency]) ) {
+    if (( ethSentPastWeek + Number(amount) ) * Number(ethExchange) > Number(transferLimits(currency)) ) {
       this.setState({ formInputError: accountManagement.sendEth.error.limitExceeded(defaultCurrency) })
       return
     }
@@ -123,7 +123,7 @@ class TransferEth extends Component<Props, State> {
   getLimit() {
     const { currency, formInputError } = this.state
     const { ethExchange, ethSentPastWeek } = this.props
-    const remaining = String(Number(transferLimits[currency]) - Number(ethSentPastWeek) * Number(ethExchange))
+    const remaining = String(Number(transferLimits(currency)) - Number(ethSentPastWeek) * Number(ethExchange))
     const end = remaining.indexOf('.') === -1 ? remaining.length : remaining.indexOf('.') + 3
     return remaining.slice(0, end)
   }
@@ -132,7 +132,7 @@ class TransferEth extends Component<Props, State> {
     if (amount === undefined) {
       amount = '0'
     }
-    const remaining = `${currencySymbols[currency]}${Number(amount) * Number(exchange)}`
+    const remaining = `${currencySymbols(currency)}${Number(amount) * Number(exchange)}`
     const end = remaining.indexOf('.') === -1 ? remaining.length : remaining.indexOf('.') + 3
     return remaining.slice(0, end)
   }

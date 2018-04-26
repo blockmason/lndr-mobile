@@ -147,7 +147,7 @@ class HomeView extends Component<Props, State> {
   }
 
   renderBalanceInformation() {
-    const { accountInformationLoaded, accountInformation = {}, balances, balancesLoaded, ethBalance = '0', ethExchange = '1000' } = this.props.state
+    const { accountInformationLoaded, accountInformation = {}, balances, balancesLoaded, ethBalance = '0', ethExchange = '700' } = this.props.state
     const { currency } = this.state
 
     if (!accountInformationLoaded) {
@@ -166,8 +166,8 @@ class HomeView extends Component<Props, State> {
     return <Section contentContainerStyle={style.column}>
       <View style={style.negativeMargin}>
         <View style={style.balanceRow}>
-          <Text style={style.balanceInfo}>{currencySymbols[defaultCurrency]}</Text>
-          <Text style={style.largeFactAmount}>{currencyFormats[defaultCurrency](balance)}</Text>
+          <Text style={style.balanceInfo}>{currencySymbols(defaultCurrency)}</Text>
+          <Text style={style.largeFactAmount}>{currencyFormats(defaultCurrency)(balance)}</Text>
         </View>
       </View>
       <View style={style.balanceRow}>

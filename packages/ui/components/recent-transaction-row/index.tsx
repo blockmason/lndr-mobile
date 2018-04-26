@@ -78,7 +78,7 @@ class RecentTransactionRow extends Component<Props, State> {
 
     const currentCurrency = getUcacCurrency(recentTransaction.ucac)
 
-    return `${sign} ${currencySymbols[currentCurrency]}${currencyFormats[currentCurrency](recentTransaction.amount)}`
+    return `${sign} ${currencySymbols(currentCurrency)}${currencyFormats(currentCurrency)(recentTransaction.amount)}`
   }
 
   render() {
@@ -93,7 +93,7 @@ class RecentTransactionRow extends Component<Props, State> {
             {!friend ? <Image source={imageSource} style={style.recentIcon}/> : null }
             <View style={general.flexColumn}>
               <Text style={style.titledPending}>{friend ? recentTransaction.memo : this.getTitle()}</Text>
-              <Text style={style.pendingMemo}>{recentTransaction.memo}</Text>
+              {friend ? null : <Text style={style.pendingMemo}>{recentTransaction.memo}</Text>}
             </View>
           </View>
           <Text style={style.pendingAmount}>{this.getAmount()}</Text>

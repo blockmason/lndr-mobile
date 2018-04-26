@@ -79,7 +79,7 @@ class PendingTransactionRow extends Component<Props, State> {
 
     const currentCurrency = getUcacCurrency(pendingTransaction.creditRecord.ucacAddress)
 
-    return `${sign} ${currencySymbols[currentCurrency]}${currencyFormats[currentCurrency](pendingTransaction.amount)}`
+    return `${sign} ${currencySymbols(currentCurrency)}${currencyFormats(currentCurrency)(pendingTransaction.amount)}`
   }
 
   render() {

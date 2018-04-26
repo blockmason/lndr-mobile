@@ -122,7 +122,7 @@ export default {
     },
     ethBalance: {
       display: Y => `Bilans ETH wynosi ${String (Y) .slice (0,8)}`,
-      inFiat: (Z, B, A) => ` (${CUR[A]}${String(Number(Z) * Number(B)).slice(0, 8)})`,
+      inFiat: (Z, B, A) => ` (${CUR(A)}${String(Number(Z) * Number(B)).slice(0, 8)})`,
       getError: `Nie udało się uzyskać bilansu Eth`,
       manage: `Zarządzaj ETH`,
     },
@@ -132,7 +132,7 @@ export default {
         generic: `Wystąpił błąd z transferem, spróbuj ponownie później`,
         address: `Wprowadzić poprawny adres`,
         amount: `Proszę wprowadzić kwotę większą niż 0`,
-        limitExceeded: A => `można wysłać tylko ${CUR [A]} ${TL [A]} tygodniowo, wybierz mniejszą sumę`,
+        limitExceeded: A => `można wysłać tylko ${CUR(A)} ${TL(A)} tygodniowo, wybierz mniejszą sumę`,
       },
       amount: `Kwota do Wysłania`,
       address: `Adres docelowy (bez prefiksu „0x”)`,
@@ -140,10 +140,10 @@ export default {
       transferAll: `Prześlij wszystko`,
       balance: Y => `Obecne saldo ETH wynosi ${typeof Y === 'string'? Y.slice (0,8): ''} `,
       ethAddress: `Adres Ethereum`,
-      txCost: (B, A) => `Obecny koszt transakcji to ${CUR [A]} ${B}`,
+      txCost: (B, A) => `Obecny koszt transakcji to ${CUR(A)} ${B}`,
       transferLowercase: `Przelew ETH`,
-      note: A => `Uwaga: można wysłać tylko ${CUR [A]} ${TL [A]} tygodniowo z Lndr`,
-      warning: (Z, A) => `masz ${CUR [A]} ${Z} z Twojego limitu równego ${CUR [A]} ${TL [A]}`,
+      note: A => `Uwaga: można wysłać tylko ${CUR(A)} ${TL(A)} tygodniowo z Lndr`,
+      warning: (Z, A) => `masz ${CUR(A)} ${Z} z Twojego limitu równego ${CUR(A)} ${TL(A)}`,
     },
     sendBcpt: {
       error: {
@@ -215,6 +215,7 @@ export default {
     total: `Całość`,
     record: `dokument`,
     records: `dokumentacja`,
+    chooseCurrency: `Wybierz walutę`,
     createError: {
       amountTooLow: `Kwota musi być większa niż $ 0`,
       amountTooHigh: `Kwota musi być mniej niż $ 1000000000`,
@@ -223,6 +224,7 @@ export default {
       insufficientEth: E => `Potrzeba co najmniejj ${E} ETH by się rozliczyć, przejdź do menu Ustawienia, aby zobaczyć swój stan konta`,
     },
     fields: {
+      currency: `Waluta`,
       amount: `Ilość`,
       settlementAmount: `Kwota rozliczenia`,
       selectFriend: `Znajomy`,

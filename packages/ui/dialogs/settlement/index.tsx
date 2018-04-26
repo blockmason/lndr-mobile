@@ -179,7 +179,7 @@ class Settlement extends Component<Props, State> {
   setAmount(amount) {
     const { balance, currency } = this.state
     const cleanAmount = Number(amount.replace(/[^0-9\.]/g, ''))
-    const adjustedBalance = currency === 'KRW' || currency === 'JPY' ? balance : balance / 100
+    const adjustedBalance = currency === 'KRW' || currency === 'JPY' || currency === 'IDR' || currency === 'VND' ? balance : balance / 100
 
     console.log(cleanAmount, adjustedBalance)
 
@@ -198,13 +198,13 @@ class Settlement extends Component<Props, State> {
   }
 
   displayTotal(balance) {
-    return `${balance < 0 ? '' : '+'}${currencyFormats[defaultCurrency](balance)}`
+    return `${balance < 0 ? '' : '+'}${currencyFormats(defaultCurrency)(balance)}`
   }
 
   getLimit() {
     const { currency } = this.state
     const { ethExchange, ethSentPastWeek } = this.props
-    const remaining = String(Number(transferLimits[currency]) - Number(ethSentPastWeek) * Number(ethExchange))
+    const remaining = String(Number(transferLimits(currency)) - Number(ethSentPastWeek) * Number(ethExchange))
     const end = remaining.indexOf('.') === -1 ? remaining.length : remaining.indexOf('.') + 3
     return remaining.slice(0, end)
   }
@@ -217,7 +217,7 @@ class Settlement extends Component<Props, State> {
     let formInputError
     const cleanAmount = amount.replace(/^[^0-9\.]/, '')
 
-    if ( direction === 'lend' && ethSentPastWeek * Number(ethExchange) + Number(cleanAmount) > Number(transferLimits[currency]) ) {
+    if ( direction === 'lend' && ethSentPastWeek * Number(ethExchange) + Number(cleanAmount) > Number(transferLimits(currency)) ) {
       formInputError = accountManagement.sendEth.error.limitExceeded(defaultCurrency)
     } else if (hasPendingTransaction(friend)) {
       formInputError = debtManagement.createError.pending
@@ -249,7 +249,7 @@ class Settlement extends Component<Props, State> {
                 return getUcacAddress(defaultCurrency).indexOf(transaction.ucac) !== -1 && (transaction.creditorAddress === friend.address || transaction.debtorAddress === friend.address) ?
                   <View style={style.recent} key={friend.address + index}>
                     <Text style={style.recentText}>{transaction.memo}</Text>
-                    <Text style={style.recentText}>{ (transaction.creditorAddress === friend.address ? '-' : '+') + `${currencySymbols[defaultCurrency]}${currencyFormats[defaultCurrency](transaction.amount)}`}</Text>
+                    <Text style={style.recentText}>{ (transaction.creditorAddress === friend.address ? '-' : '+') + `${currencySymbols(defaultCurrency)}${currencyFormats(defaultCurrency)(transaction.amount)}`}</Text>
                   </View> : null
               })
             }
@@ -270,7 +270,7 @@ class Settlement extends Component<Props, State> {
               <Text style={formStyle.titleLarge}>{debtManagement.fields.settlementAmount}</Text>
               <TextInput
                 style={formStyle.jumboInput}
-                placeholder={`${currencySymbols[currency]}0`}
+                placeholder={`${currencySymbols(currency)}0`}
                 placeholderTextColor='black'
                 value={amount}
                 maxLength={9}
@@ -281,7 +281,7 @@ class Settlement extends Component<Props, State> {
             </View>
           </View>
           { formInputError && <Text style={[formStyle.warningText, {alignSelf: 'center', marginHorizontal: 15}]}>{formInputError}</Text>}
-          { amount ? <Button large round wide onPress={() => this.submit()} text={debtManagement.settleUp} /> : <Button large round wide onPress={() => this.setState({ amount: `${currencySymbols[defaultCurrency]}${currencyFormats[defaultCurrency](Math.abs(balance))}`})} text={debtManagement.settleTotal} />}
+          { amount ? <Button large round wide onPress={() => this.submit()} text={debtManagement.settleUp} /> : <Button large round wide onPress={() => this.setState({ amount: `${currencySymbols(defaultCurrency)}${currencyFormats(defaultCurrency)(Math.abs(balance))}`})} text={debtManagement.settleTotal} />}
         </View>
       </KeyboardAvoidingView>
     </ScrollView>

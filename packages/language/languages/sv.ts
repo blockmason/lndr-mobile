@@ -122,7 +122,7 @@ export default {
     },
     ethBalance: {
       display: Y => `Ditt ETH saldo är ${String (Y) .slice (0,8)} `,
-      inFiat: (Z, B, A) => ` (${CUR[A]}${String(Number(Z) * Number(B)).slice(0, 8)})`,
+      inFiat: (Z, B, A) => ` (${CUR(A)}${String(Number(Z) * Number(B)).slice(0, 8)})`,
       getError: `Det gick inte att inhämta Eth saldo`,
       manage: `Hantera ETH`,
     },
@@ -132,7 +132,7 @@ export default {
         generic: `Det uppstod ett fel med överföringen, vänligen försök igen senare`,
         address: `Ange en giltig Etherum-adress`,
         amount: `Ange ett belopp större än 0`,
-        limitExceeded: A => `Du kan endast skicka ${CUR [A]} ${TL [A]} per vecka, välj en mindre summa`,
+        limitExceeded: A => `Du kan endast skicka ${CUR(A)} ${TL(A)} per vecka, välj en mindre summa`,
       },
       amount: `Belopp att skicka`,
       address: `Mottagaradress (utan '0x' prefixet)`,
@@ -140,10 +140,10 @@ export default {
       transferAll: `Överför allt`,
       balance: Y => `Ditt aktuella ETH saldo är ${typeof Y === 'string' ? Y.slice (0,8): ''} `,
       ethAddress: `Ethereum Adress`,
-      txCost: (B, A) => `Den aktuella transaktionskostnaden är ${CUR [A]} ${B}`,
+      txCost: (B, A) => `Den aktuella transaktionskostnaden är ${CUR(A)} ${B}`,
       transferLowercase: `Överför Eth`,
-      note: A => `Observera: Du kan endast överföra ${CUR [A]} ${TL [A]} per vecka från Lndr`,
-      warning: (Z, A) => `Du har ${CUR [A]} ${Z} återstående av din ${CUR [A]} ${TL [A]} gräns`,
+      note: A => `Observera: Du kan endast överföra ${CUR(A)} ${TL(A)} per vecka från Lndr`,
+      warning: (Z, A) => `Du har ${CUR(A)} ${Z} återstående av din ${CUR(A)} ${TL(A)} gräns`,
     },
     sendBcpt: {
       error: {
@@ -215,6 +215,7 @@ export default {
     total: `Totalt`,
     record: `Uppgift`,
     records: `Uppgifter`,
+    chooseCurrency: `Välj en valuta`,
     createError: {
       amountTooLow: `Beloppet måste vara större än $ 0`,
       amountTooHigh: `Beloppet måste vara mindre än $ 1000000000`,
@@ -223,6 +224,7 @@ export default {
       insufficientEth: E => `Du behöver minst ${E} ETH för att kunna betala gå till Inställningar för att se ditt saldo:`,
     },
     fields: {
+      currency: `Valuta`,
       amount: `Belopp`,
       settlementAmount: `Betalningsbelopp`,
       selectFriend: `Vän`,

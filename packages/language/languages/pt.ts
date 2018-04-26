@@ -122,7 +122,7 @@ export default {
     },
     ethBalance: {
       display: Y => `Seu saldo ETH é de R ${String (Y) .slice (0,8)}`,
-      inFiat: (Z, B, A) => ` (${CUR[A]}${String(Number(Z) * Number(B)).slice(0, 8)})`,
+      inFiat: (Z, B, A) => ` (${CUR(A)}${String(Number(Z) * Number(B)).slice(0, 8)})`,
       getError: `Não é possível recuperar o saldo Eth`,
       manage: `Gerenciar ETH`,
     },
@@ -132,7 +132,7 @@ export default {
         generic: `Houve um erro com a transferência, por favor tente novamente mais tarde`,
         address: `Por Favor insira um endereço válido`,
         amount: `Por favor, indique um valor superior a 0`,
-        limitExceeded: A => `Você só pode enviar ${CUR [A]} ${TL [A]} por semana, por favor selecione uma quantidade menor`,
+        limitExceeded: A => `Você só pode enviar ${CUR(A)} ${TL(A)} por semana, por favor selecione uma quantidade menor`,
       },
       amount: `Quantidade a enviar`,
       address: `Endereço de destino (sem prefixo '0x')`,
@@ -140,10 +140,10 @@ export default {
       transferAll: `Transferir tudo`,
       balance: Y => `Seu saldo ETH atual é de R ${typeof Y === 'string'? Y.slice (0,8): ''} `,
       ethAddress: `Endereço Ethereum`,
-      txCost: (B, A) => `O custo de transação atual é de R ${CUR [A]} ${B}`,
+      txCost: (B, A) => `O custo de transação atual é de R ${CUR(A)} ${B}`,
       transferLowercase: `Transferir Eth`,
-      note: A => `Por favor, note: você só pode transferir ${CUR [A]} ${TL [A]} por semana no Lndr`,
-      warning: (Z, A) => `Você tem ${CUR [A]} ${Z} remanescente do seu ${CUR [A]} ${TL [A]} limite`,
+      note: A => `Por favor, note: você só pode transferir ${CUR(A)} ${TL(A)} por semana no Lndr`,
+      warning: (Z, A) => `Você tem ${CUR(A)} ${Z} remanescente do seu ${CUR(A)} ${TL(A)} limite`,
     },
     sendBcpt: {
       error: {
@@ -215,6 +215,7 @@ export default {
     total: `Total`,
     record: `registro`,
     records: `registros`,
+    chooseCurrency: `Escolha uma moeda`,
     createError: {
       amountTooLow: `Montante deve ser superior a US $ 0`,
       amountTooHigh: `Montante deve ser inferior a US $ 1.000.000.000`,
@@ -223,6 +224,7 @@ export default {
       insufficientEth: E => `Você precisa de pelo menos US ${E} ETH para pagar, vá para Configurações para ver o seu balanço`,
     },
     fields: {
+      currency: `Moeda`,
       amount: `Montante`,
       settlementAmount: `Quantidade do Pagamento`,
       selectFriend: `Amigos`,
@@ -264,7 +266,7 @@ export default {
     for: M => `para ${M}`,
     settleUp: `Pagar`,
     settleTotal: `Pagamento Total`,
-    settleUpMemo: (D, A) => `${D === 'emprestar'? 'Pagar a': 'Pedido de pagamento de'} ${A} `,
+    settleUpMemo: (D, A) => `${D === 'lend'? 'Pagar a': 'Pedido de pagamento de'} ${A} `,
     recordSettleUpMemo: `Pagando`,
   },
   settlementManagement: {

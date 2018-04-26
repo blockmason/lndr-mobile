@@ -156,8 +156,8 @@ class PendingTransactionDetail extends Component<Props, State> {
         <Image source={imageSource} style={style.image}/>
         <Text style={style.title}>{this.getTitle()}</Text>
         <View style={style.balanceRow}>
-          <Text style={style.balanceInfo}>{currencySymbols[currency]}</Text>
-          <Text style={style.amount}>{currencyFormats[currency](pendingTransaction.amount)}</Text>
+          <Text style={style.balanceInfo}>{currencySymbols(currency)}</Text>
+          <Text style={style.amount}>{currencyFormats(currency)(pendingTransaction.amount)}</Text>
         </View>
         {this.labelRow(pendingTransaction.memo.trim())}
         <View style={{marginBottom: 10}}/>

@@ -122,7 +122,7 @@ export default {
     },
     ethBalance: {
       display: Y => `Uw ETH saldo is ${String(Y).slice(0,8)}`,
-      inFiat: (Z, B, A) => ` (${CUR[A]}${String(Number(Z) * Number(B)).slice(0, 8)})`,
+      inFiat: (Z, B, A) => ` (${CUR(A)}${String(Number(Z) * Number(B)).slice(0, 8)})`,
       getError: `Kan Eth balans niet ophalen`,
       manage: `Beheer ETH`,
     },
@@ -132,7 +132,7 @@ export default {
         generic: `Er is een fout opgetreden bij de overboeking, probeer het later opnieuw`,
         address: `Vul alstublieft een geldig adres in`,
         amount: `Vul alstublieft een bedrag in dat groter is dan 0`,
-        limitExceeded: A => `U kunt maar ${CUR[A]}${TL[A]} per week versturen, kies een kleiner bedrag`
+        limitExceeded: A => `U kunt maar ${CUR(A)}${TL(A)} per week versturen, kies een kleiner bedrag`
       },
       amount: `Hoeveelheid te versturen`,
       address: `Ontvangstadres (zonder voorvoegsel '0x')`,
@@ -140,10 +140,10 @@ export default {
       transferAll: `Boek alles over`,
       balance: Y => `Uw huidige ETH saldo is ${typeof Y === 'string'? Y.slice(0,8) : ''} `,
       ethAddress: `Ethereum Adres`,
-      txCost: (B, A) => `De huidige transactie kost ${CUR[A]}${B}`,
+      txCost: (B, A) => `De huidige transactie kost ${CUR(A)}${B}`,
       transferLowercase: `Boek ETH over`,
-      note: A => `Let op: u kunt maar ${CUR[A]}${TL[A]} per week overboeken uit Lndr`,
-      warning: (Z, A) => `U heeft ${CUR[A]}${Z} over van uw ${CUR[A]}${TL[A]} limiet`,
+      note: A => `Let op: u kunt maar ${CUR(A)}${TL(A)} per week overboeken uit Lndr`,
+      warning: (Z, A) => `U heeft ${CUR(A)}${Z} over van uw ${CUR(A)}${TL(A)} limiet`,
     },
     sendBcpt: {
       error: {
@@ -215,6 +215,7 @@ export default {
     total: `Totaal`,
     record: `Document`,
     records: `Documentatie`,
+    chooseCurrency: `Kies een valuta`,
     createError: {
       amountTooLow: `Het bedrag moet groter zijn dan $0`,
       amountTooHigh: `Het bedrag moet kleiner zijn dan $1.000.000.000`,
@@ -223,6 +224,7 @@ export default {
       insufficientEth: E => `U heeft minimaal ${E} ETH nodig om te betalen, ga naar Instellingen om uw saldo te zien`,
     },
     fields: {
+      currency: `Valuta`,
       amount: `Bedrag`,
       settlementAmount: `Betalingsbedrag`,
       selectFriend: `Vriend`,

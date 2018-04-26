@@ -36,11 +36,11 @@ class SpinningPicker extends Component<Props, State> {
         <View style={this.props.containerStyle}>
           <View style={[general.flexRow, general.alignCenter, general.standardHMargin]}>
             <Text style={[general.stretch, style.title]}>{this.props.label}</Text>
-            <Button round medium narrow onPress={() => this.props.onPickerDone(this.state.selectedItem)} text={confirmation.done} />
+            <Button round narrow onPress={() => this.props.onPickerDone(this.state.selectedItem)} text={confirmation.done} />
           </View>
           <Picker
             selectedValue={this.state.selectedItem}
-            onValueChange={(value, index) => this.setState({selectedItem: value})}
+            onValueChange={(value, _index) => this.setState({selectedItem: value})}
             prompt={this.props.label}
             style={this.props.pickerStyle}
             cancel>

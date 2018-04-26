@@ -122,7 +122,7 @@ export default {
     },
     ethBalance: {
       display: Y => `ETH-saldosi on ${String (Y) .slice (0,8)}`,
-      inFiat: (Z, B, A) => ` (${CUR[A]}${String(Number(Z) * Number(B)).slice(0, 8)})`,
+      inFiat: (Z, B, A) => ` (${CUR(A)}${String(Number(Z) * Number(B)).slice(0, 8)})`,
       getError: `Emme pystyneet hakea Eth-saldoa`,
       manage: `Hallitse ETH:ta`,
     },
@@ -132,7 +132,7 @@ export default {
         generic: `Siirron yhteydessä on tapahtunut virhe, yritä myöhemmin uudelleen`,
         address: `Syötä kelvollinen osoite`,
         amount: `Anna summa, joka on suurempi kuin 0`,
-        limitExceeded: A => `Voit lähettää vain ${CUR [A]} ${TL [A]} viikossa, valitse pienempi summa`
+        limitExceeded: A => `Voit lähettää vain ${CUR(A)} ${TL(A)} viikossa, valitse pienempi summa`
       },
       amount: `Lähetettävä summa`,
       address: `Kohdeosoite (ilman '0x' -etuliitettä)`,
@@ -140,10 +140,10 @@ export default {
       transferAll: `Siirrä kaikki`,
       balance: Y => `Nykyinen ETH-saldosi on ${typeof Y === 'string' ? Y.slice (0,8): ''} `,
       ethAddress: `Ethereum-osoite`,
-      txCost: (B, A) => `Nykyinen tapahtuma maksaa ${CUR [A]} ${B}`,
+      txCost: (B, A) => `Nykyinen tapahtuma maksaa ${CUR(A)} ${B}`,
       transferLowercase: `Siirrä Eth`,
-      note: A => `Huom.: Voit siirtää Lndr-sovelluksesta vain ${CUR [A]} ${TL [A]} viikossa`,
-      warning: (Z, A) => `Sinulla on jäljellä ${CUR [A]} ${Z}, ennen kuin saavutat ${CUR [A]} ${TL [A]} ylärajasi`,
+      note: A => `Huom.: Voit siirtää Lndr-sovelluksesta vain ${CUR(A)} ${TL(A)} viikossa`,
+      warning: (Z, A) => `Sinulla on jäljellä ${CUR(A)} ${Z}, ennen kuin saavutat ${CUR(A)} ${TL(A)} ylärajasi`,
     },
     sendBcpt: {
       error: {
@@ -215,6 +215,8 @@ export default {
     total: `Yhteissumma`,
     record: `merkintä`,
     records: `merkinnät`,
+    chooseCurrency: `Valitse valuutta`,
+    
     createError: {
       amountTooLow: `Summan on oltava suurempi kuin $ 0`,
       amountTooHigh: `Summan on oltava alle $ 1000000000`,
@@ -223,6 +225,7 @@ export default {
       insufficientEth: E => `Tarvitset vähintään ${E} ETH:ta velan maksamiseen, näet saldosi Asetuksista.`,
     },
     fields: {
+      currency: `Valuutta`,
       amount: `Summa`,
       settlementAmount: `Maksettava summa`,
       selectFriend: `Ystävä`,
