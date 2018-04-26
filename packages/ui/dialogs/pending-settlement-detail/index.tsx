@@ -197,28 +197,32 @@ class PendingSettlementDetail extends Component<Props, State> {
     const { user, settlerIsMe } = this.props
     const pendingSettlement = this.getPendingSettlement()
 
-    return <ScrollView style={[general.fullHeight, general.view]}>
-      <Loading context={loadingContext} />
-      <DashboardShell text={pendingSettlementsLanguage.shell} navigation={this.props.navigation} />
-      <Button close onPress={() => this.props.navigation.goBack()} />
-      <View style={[general.centeredColumn, general.standardHMargin]}>
-        <Image source={require('images/person-outline-dark.png')} style={style.image}/>
-        <Text style={[style.title, {alignSelf: 'center', textAlign: 'center'}]}>{this.getTitle()}</Text>
-        <View style={style.balanceRow}>
-          <Text style={style.balanceInfo}>{currencySymbols(defaultCurrency)}</Text>
-          <Text style={style.amount}>{currencyFormats(defaultCurrency)(pendingSettlement.amount)}</Text>
-        </View>
-        <View style={style.balanceRow}>
-          <Text style={style.amount}>{this.getSettlementAmount()}</Text>
-          <Text style={style.balanceInfo}>{pendingSettlement.settlementCurrency}</Text>
-        </View>
-        {user.address === pendingSettlement.debtorAddress ? null : <Text style={[formStyle.smallText, formStyle.spaceTop, formStyle.center]}>{accountManagement.sendEth.warning(this.getLimit(), currency)}</Text>}
-        <Text style={[accountStyle.txCost, formStyle.spaceBottom, {marginLeft: '2%'}]}>{accountManagement.sendEth.txCost(txCost, currency)}</Text>
-        { confirmationError && <Text style={[formStyle.warningText, {alignSelf: 'center'}]}>{confirmationError}</Text>}
-        {this.showButtons()}
-        <View style={general.spaceBelow}/>
+    return <View style={general.whiteFlex}>
+      <View style={general.view}>
+        <Loading context={loadingContext} />
+        <DashboardShell text={pendingSettlementsLanguage.shell} navigation={this.props.navigation} />
+        <Button close onPress={() => this.props.navigation.goBack()} />
       </View>
-    </ScrollView>
+      <ScrollView style={general.whiteFlex}>
+        <View style={[general.centeredColumn, general.standardHMargin]}>
+          <Image source={require('images/person-outline-dark.png')} style={style.image}/>
+          <Text style={[style.title, {alignSelf: 'center', textAlign: 'center'}]}>{this.getTitle()}</Text>
+          <View style={style.balanceRow}>
+            <Text style={style.balanceInfo}>{currencySymbols(defaultCurrency)}</Text>
+            <Text style={style.amount}>{currencyFormats(defaultCurrency)(pendingSettlement.amount)}</Text>
+          </View>
+          <View style={style.balanceRow}>
+            <Text style={style.amount}>{this.getSettlementAmount()}</Text>
+            <Text style={style.balanceInfo}>{pendingSettlement.settlementCurrency}</Text>
+          </View>
+          {user.address === pendingSettlement.debtorAddress ? null : <Text style={[formStyle.smallText, formStyle.spaceTop, formStyle.center]}>{accountManagement.sendEth.warning(this.getLimit(), currency)}</Text>}
+          <Text style={[accountStyle.txCost, formStyle.spaceBottom, {marginLeft: '2%'}]}>{accountManagement.sendEth.txCost(txCost, currency)}</Text>
+          { confirmationError && <Text style={[formStyle.warningText, {alignSelf: 'center'}]}>{confirmationError}</Text>}
+          {this.showButtons()}
+          <View style={general.spaceBelow}/>
+        </View>
+      </ScrollView>
+    </View>
   }
 }
 

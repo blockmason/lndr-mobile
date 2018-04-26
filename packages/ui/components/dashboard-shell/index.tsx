@@ -58,7 +58,7 @@ class DashboardShell extends Component<Props> {
     const logoContainerStyle = (width > kSmallScreenThreshold) ? style.dashboardLogo : style.dashboardLogoSmall
 
     return (
-      <View style={general.whiteFlex}>
+      <View style={general.view}>
         <AndroidStatusBar />
         <View style={style.dashboardContainer}>
           <View style={logoContainerStyle}>

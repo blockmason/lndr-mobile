@@ -85,19 +85,23 @@ class FriendRequest extends Component<Props, State> {
     const { navigation, confirmFriendRequest, rejectFriendRequest } = this.props
     const imageSource = pic ? { uri: pic } : require('images/person-outline-dark.png')
 
-    return <ScrollView style={general.view}>
-      <DashboardShell text={pendingFriendRequestsLanguage.shell} navigation={this.props.navigation} />
-      <Loading context={loadingContext} />
-      <Button close onPress={() => this.props.navigation.goBack(null)} />
-      <View style={general.centeredColumn}>
-        <Image source={imageSource} style={pendingStyle.image}/>
-        <Text style={pendingStyle.title}>{pendingFriendRequestsLanguage.request(friend.nickname)}</Text>
-        <View style={{marginBottom: 10}}>
-          <Button round large onPress={() => this.submit('confirmFriend', friend)} text={pendingTransactionsLanguage.confirm} />
-          <Button danger round onPress={() => this.submit('rejectFriend', friend)} text={pendingTransactionsLanguage.rejectRequest} />
-        </View>
+    return <View style={general.whiteFlex}>
+      <View style={general.view}>
+        <DashboardShell text={pendingFriendRequestsLanguage.shell} navigation={this.props.navigation} />
+        <Loading context={loadingContext} />
+        <Button close onPress={() => this.props.navigation.goBack(null)} />
       </View>
-    </ScrollView>
+        <ScrollView style={general.view}>
+        <View style={general.centeredColumn}>
+          <Image source={imageSource} style={pendingStyle.image}/>
+          <Text style={pendingStyle.title}>{pendingFriendRequestsLanguage.request(friend.nickname)}</Text>
+          <View style={{marginBottom: 10}}>
+            <Button round large onPress={() => this.submit('confirmFriend', friend)} text={pendingTransactionsLanguage.confirm} />
+            <Button danger round onPress={() => this.submit('rejectFriend', friend)} text={pendingTransactionsLanguage.rejectRequest} />
+          </View>
+        </View>
+      </ScrollView>
+    </View>
   }
 }
 

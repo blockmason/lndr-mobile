@@ -31,7 +31,7 @@ export default class ConfirmationScreen extends Component<Props> {
   goHome() {
     this.props.navigation.dispatch( getResetAction({ routeName: 'Dashboard' }) )
   }
-  
+
   goActivity() {
     this.props.navigation.dispatch( getResetAction({ routeName: 'Dashboard', params: { to: 'activity' } }) )
   }
@@ -47,26 +47,30 @@ export default class ConfirmationScreen extends Component<Props> {
       amount = this.props.navigation.state.params.amount
     }
 
-    return <ScrollView style={[general.fullHeight, general.view]} keyboardShouldPersistTaps='handled'>
-      <DashboardShell text={confirmation.shell} navigation={this.props.navigation} />
-      <Button close onPress={() => this.goHome()} />
-      <View style={[general.centeredColumn, general.standardHMargin]}>
-        {this.getConfirmationImage(type)}
-        <Text style={style.text}>
-          <Text>{confirmation[type].start}</Text>
-          <Text style={style.nickname}>{type !== 'ethSent' && type !== 'bcptSent' ? friend.nickname : amount}</Text>
-          <Text>{confirmation[type].end}</Text>
-          {type === 'ethSent' || type === 'bcptSent' ? <Text style={style.nickname}>{txHash}</Text> : null}
-        </Text>
-        {type === 'ethSent' || type === 'bcptSent' || type === 'confirmFriend' || type === 'rejectFriend' ? <View style={{marginBottom: 20}}/> : 
-        <TouchableHighlight onPress={() => this.goActivity()}>
-          <Text style={[style.text, style.spacing]}>
-            <Text>{confirmation.status}</Text>
-            <Text style={[style.text, style.link]}>{confirmation.activity}</Text>
-          </Text>
-        </TouchableHighlight>}
-        <Button fat wide round onPress={() => this.goHome()} text={confirmation.done} />
+    return <View style={general.whiteFlex}>
+      <View style={general.view}>
+        <DashboardShell text={confirmation.shell} navigation={this.props.navigation} />
+        <Button close onPress={() => this.goHome()} />
       </View>
-    </ScrollView>
+      <ScrollView style={[general.whiteFlex]} keyboardShouldPersistTaps='handled'>
+        <View style={[general.centeredColumn, general.standardHMargin]}>
+          {this.getConfirmationImage(type)}
+          <Text style={style.text}>
+            <Text>{confirmation[type].start}</Text>
+            <Text style={style.nickname}>{type !== 'ethSent' && type !== 'bcptSent' ? friend.nickname : amount}</Text>
+            <Text>{confirmation[type].end}</Text>
+            {type === 'ethSent' || type === 'bcptSent' ? <Text style={style.nickname}>{txHash}</Text> : null}
+          </Text>
+          {type === 'ethSent' || type === 'bcptSent' || type === 'confirmFriend' || type === 'rejectFriend' ? <View style={{marginBottom: 20}}/> :
+          <TouchableHighlight onPress={() => this.goActivity()}>
+            <Text style={[style.text, style.spacing]}>
+              <Text>{confirmation.status}</Text>
+              <Text style={[style.text, style.link]}>{confirmation.activity}</Text>
+            </Text>
+          </TouchableHighlight>}
+          <Button fat wide round onPress={() => this.goHome()} text={confirmation.done} />
+        </View>
+      </ScrollView>
+    </View>
   }
 }

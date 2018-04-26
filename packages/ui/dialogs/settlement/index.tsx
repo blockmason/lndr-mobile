@@ -138,7 +138,7 @@ class Settlement extends Component<Props, State> {
     this.clear()
 
     let resetAction
-    
+
     if (success && success.type !== '@@TOAST/DISPLAY_ERROR') {
       resetAction = getResetAction({ routeName:'Confirmation', params: { type: 'create', friend } })
     } else {
@@ -233,61 +233,65 @@ class Settlement extends Component<Props, State> {
     const friend = this.props.navigation ? this.props.navigation.state.params.friend : {}
     const imageSource = pic ? { uri: pic } : require('images/person-outline-dark.png')
 
-    return <ScrollView style={general.whiteFlex} keyboardShouldPersistTaps='handled'>
-      <Loading context={submittingTransaction} />
-      <DashboardShell text={debtManagement.settleUpLower} navigation={this.props.navigation} />
-      <View style={{marginBottom: 10, marginTop: -10}}>
-        <Button close onPress={() => this.props.navigation.goBack()} />
-      </View>
-      <KeyboardAvoidingView behavior={'padding'} keyboardVerticalOffset={0} contentContainerStyle={{backgroundColor: 'white'}} >
-        <View style={[general.centeredColumn, {marginBottom: 20}]}>
-          <Image source={imageSource} style={style.settleImage}/>
-          <Text style={[style.header, {marginBottom: 20, marginHorizontal: 20, textAlign: 'center'}]}>{this.displayMessage()}</Text>
-          <View style={style.transactions}>
-            {
-              recentTransactions.map( (transaction, index) => {
-                return getUcacAddress(defaultCurrency).indexOf(transaction.ucac) !== -1 && (transaction.creditorAddress === friend.address || transaction.debtorAddress === friend.address) ?
-                  <View style={style.recent} key={friend.address + index}>
-                    <Text style={style.recentText}>{transaction.memo}</Text>
-                    <Text style={style.recentText}>{ (transaction.creditorAddress === friend.address ? '-' : '+') + `${currencySymbols(defaultCurrency)}${currencyFormats(defaultCurrency)(transaction.amount)}`}</Text>
-                  </View> : null
-              })
-            }
-            <View style={[general.betweenRow, style.totalRow]} >
-              <Text style={style.total}>{debtManagement.total}</Text>
-              <Text style={style.totalAmount}>{this.displayTotal(balance)}</Text>
-            </View>
-            <View style={general.centeredColumn}>
-              {ethSettlement ? <View style={[accountStyle.balanceRow, {marginTop: 20}]}>
-                <Text style={[accountStyle.balance, {marginLeft: '2%'}]}>{accountManagement.ethBalance.display(ethBalance)}</Text>
-                <Button alternate blackText narrow arrow small onPress={() => {this.props.navigation.navigate('MyAccount')}}
-                  text={accountManagement.ethBalance.inFiat(ethBalance, ethExchange, currency)}
-                  containerStyle={{marginTop: -6}}
-                />
-              </View> : null}
-              {ethSettlement ? <Text style={[accountStyle.txCost, {marginLeft: '2%'}]}>{accountManagement.sendEth.txCost(txCost, currency)}</Text> : null}
-              {!ethSettlement || balance > 0 ? null : <Text style={[formStyle.smallText, formStyle.spaceTop, formStyle.center]}>{accountManagement.sendEth.warning(this.getLimit(), currency)}</Text>}
-              <Text style={formStyle.titleLarge}>{debtManagement.fields.settlementAmount}</Text>
-              <TextInput
-                style={formStyle.jumboInput}
-                placeholder={`${currencySymbols(currency)}0`}
-                placeholderTextColor='black'
-                value={amount}
-                maxLength={9}
-                underlineColorAndroid='transparent'
-                keyboardType='numeric'
-                onChangeText={amount => this.updateAmount(amount)}
-              />
-            </View>
-          </View>
-          { formInputError && <Text style={[formStyle.warningText, {alignSelf: 'center', marginHorizontal: 15}]}>{formInputError}</Text>}
-          { amount ? <Button large round wide onPress={() => this.submit()} text={debtManagement.settleUp} /> : <Button large round wide onPress={() => this.setState({ amount: `${currencySymbols(defaultCurrency)}${currencyFormats(defaultCurrency)(Math.abs(balance))}`})} text={debtManagement.settleTotal} />}
+    return <View style={general.whiteFlex}>
+      <View style={general.view}>
+        <Loading context={submittingTransaction} />
+        <DashboardShell text={debtManagement.settleUpLower} navigation={this.props.navigation} />
+        <View style={{marginBottom: 10, marginTop: -10}}>
+          <Button close onPress={() => this.props.navigation.goBack()} />
         </View>
-      </KeyboardAvoidingView>
-    </ScrollView>
+      </View>
+      <ScrollView style={general.whiteFlex} keyboardShouldPersistTaps='handled'>
+        <KeyboardAvoidingView behavior={'padding'} keyboardVerticalOffset={0} contentContainerStyle={{backgroundColor: 'white'}} >
+          <View style={[general.centeredColumn, {marginBottom: 20}]}>
+            <Image source={imageSource} style={style.settleImage}/>
+            <Text style={[style.header, {marginBottom: 20, marginHorizontal: 20, textAlign: 'center'}]}>{this.displayMessage()}</Text>
+            <View style={style.transactions}>
+              {
+                recentTransactions.map( (transaction, index) => {
+                  return getUcacAddress(defaultCurrency).indexOf(transaction.ucac) !== -1 && (transaction.creditorAddress === friend.address || transaction.debtorAddress === friend.address) ?
+                    <View style={style.recent} key={friend.address + index}>
+                      <Text style={style.recentText}>{transaction.memo}</Text>
+                      <Text style={style.recentText}>{ (transaction.creditorAddress === friend.address ? '-' : '+') + `${currencySymbols(defaultCurrency)}${currencyFormats(defaultCurrency)(transaction.amount)}`}</Text>
+                    </View> : null
+                })
+              }
+              <View style={[general.betweenRow, style.totalRow]} >
+                <Text style={style.total}>{debtManagement.total}</Text>
+                <Text style={style.totalAmount}>{this.displayTotal(balance)}</Text>
+              </View>
+              <View style={general.centeredColumn}>
+                {ethSettlement ? <View style={[accountStyle.balanceRow, {marginTop: 20}]}>
+                  <Text style={[accountStyle.balance, {marginLeft: '2%'}]}>{accountManagement.ethBalance.display(ethBalance)}</Text>
+                  <Button alternate blackText narrow arrow small onPress={() => {this.props.navigation.navigate('MyAccount')}}
+                    text={accountManagement.ethBalance.inFiat(ethBalance, ethExchange, currency)}
+                    containerStyle={{marginTop: -6}}
+                  />
+                </View> : null}
+                {ethSettlement ? <Text style={[accountStyle.txCost, {marginLeft: '2%'}]}>{accountManagement.sendEth.txCost(txCost, currency)}</Text> : null}
+                {!ethSettlement || balance > 0 ? null : <Text style={[formStyle.smallText, formStyle.spaceTop, formStyle.center]}>{accountManagement.sendEth.warning(this.getLimit(), currency)}</Text>}
+                <Text style={formStyle.titleLarge}>{debtManagement.fields.settlementAmount}</Text>
+                <TextInput
+                  style={formStyle.jumboInput}
+                  placeholder={`${currencySymbols(currency)}0`}
+                  placeholderTextColor='black'
+                  value={amount}
+                  maxLength={9}
+                  underlineColorAndroid='transparent'
+                  keyboardType='numeric'
+                  onChangeText={amount => this.updateAmount(amount)}
+                />
+              </View>
+            </View>
+            { formInputError && <Text style={[formStyle.warningText, {alignSelf: 'center', marginHorizontal: 15}]}>{formInputError}</Text>}
+            { amount ? <Button large round wide onPress={() => this.submit()} text={debtManagement.settleUp} /> : <Button large round wide onPress={() => this.setState({ amount: `${currencySymbols(defaultCurrency)}${currencyFormats(defaultCurrency)(Math.abs(balance))}`})} text={debtManagement.settleTotal} />}
+          </View>
+        </KeyboardAvoidingView>
+      </ScrollView>
+    </View>
   }
 }
 
-export default connect((state) => ({ user: getUser(state)(), ethBalance: getEthBalance(state), ethExchange: getEthExchange(state), 
+export default connect((state) => ({ user: getUser(state)(), ethBalance: getEthBalance(state), ethExchange: getEthExchange(state),
   recentTransactions: recentTransactions(state), ethSentPastWeek: getWeeklyEthTotal(state), getUcacAddress: getUcacAddr(state),
   hasPendingTransaction: hasPendingTransaction(state) }), { settleUp, addDebt })(Settlement)

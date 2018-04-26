@@ -98,7 +98,7 @@ class RemoveFriend extends Component<Props, State> {
     let total = 0
 
     recentTransactions.map( transaction => {
-// EA: FIXME: how do we total up different currencies?      
+// EA: FIXME: how do we total up different currencies?
       if(getUcacAddress(defaultCurrency).indexOf(transaction.ucac) !== -1 ) {
         if(transaction.creditorAddress === friend.address) {
           total -= transaction.amount
@@ -134,28 +134,32 @@ class RemoveFriend extends Component<Props, State> {
     const { pic } = this.state
     const imageSource = pic ? { uri: pic } : require('images/person-outline-dark.png')
 
-    return <ScrollView style={general.view}>
-      <DashboardShell text={friendShell} navigation={this.props.navigation} />
-      <Loading context={loadingContext} />
-      <Button close onPress={() => this.props.navigation.goBack(null)} />
-      <View style={general.centeredColumn}>
-        <Image source={imageSource} style={pendingStyle.image}/>
-        <Text style={pendingStyle.title}>{`@${friend.nickname}`}</Text>
-        <Text style={pendingStyle.subTitle}>{`${recentTransactionsLanguage.balance}:`}</Text>
-        <View style={pendingStyle.balanceRow}>
-          <Text style={pendingStyle.balanceInfo}>{currencySymbols(defaultCurrency)}</Text>
-          <Text style={pendingStyle.amount}>{currencyFormats(defaultCurrency)(this.getRecentTotal())}</Text>
-        </View>
-        {this.getRecentTotal() === 0 ? null : <Button round large fat wide onPress={() => this.props.navigation.navigate('SettleUp', { friend: friend })} text={debtManagement.settleUp} containerStyle={style.spaceBottom} />}
-        {this.getTransactionNumber() === 0 ? <Button round large danger wide onPress={() => this.removeFriend(friend)} text={removeFriendText} containerStyle={style.spaceBottom} /> : null }
-        <View style={style.fullWidth}>
-          <Text style={accountStyle.transactionHeader}>{pendingTransactionsLanguage.title}</Text>
-          <PendingView friend={friend} navigation={navigation} />
-          <Text style={accountStyle.transactionHeader}>{recentTransactionsLanguage.title}</Text>
-          <RecentView friend={friend} navigation={navigation} />
-        </View>
+    return <View style={general.whiteFlex}>
+      <View style={general.view}>
+        <DashboardShell text={friendShell} navigation={this.props.navigation} />
+        <Loading context={loadingContext} />
+        <Button close onPress={() => this.props.navigation.goBack(null)} />
       </View>
-    </ScrollView>
+      <ScrollView style={general.view} keyboardShouldPersistTaps='handled'>
+        <View style={general.centeredColumn}>
+          <Image source={imageSource} style={pendingStyle.image}/>
+          <Text style={pendingStyle.title}>{`@${friend.nickname}`}</Text>
+          <Text style={pendingStyle.subTitle}>{`${recentTransactionsLanguage.balance}:`}</Text>
+          <View style={pendingStyle.balanceRow}>
+            <Text style={pendingStyle.balanceInfo}>{currencySymbols(defaultCurrency)}</Text>
+            <Text style={pendingStyle.amount}>{currencyFormats(defaultCurrency)(this.getRecentTotal())}</Text>
+          </View>
+          {this.getRecentTotal() === 0 ? null : <Button round large fat wide onPress={() => this.props.navigation.navigate('SettleUp', { friend: friend })} text={debtManagement.settleUp} containerStyle={style.spaceBottom} />}
+          {this.getTransactionNumber() === 0 ? <Button round large danger wide onPress={() => this.removeFriend(friend)} text={removeFriendText} containerStyle={style.spaceBottom} /> : null }
+          <View style={style.fullWidth}>
+            <Text style={accountStyle.transactionHeader}>{pendingTransactionsLanguage.title}</Text>
+            <PendingView friend={friend} navigation={navigation} />
+            <Text style={accountStyle.transactionHeader}>{recentTransactionsLanguage.title}</Text>
+            <RecentView friend={friend} navigation={navigation} />
+          </View>
+        </View>
+      </ScrollView>
+    </View>
   }
 }
 
