@@ -87,14 +87,15 @@ class DashboardNavigatorWithHeader extends Component<Props> {
             </View>
           </View>
         </View>
-        <View style={style.settingsTriangleLeft}/>
-        <View style={style.settingsBackground}>
-          <TouchableHighlight onPress={() => this.props.navigation.navigate('MyAccount')}>
-            <Image source={require('images/settings.png')} style={TabStyle.settingsButton} />
+        <View style={style.settingsButton}>
+          <View style={style.settingsTriangleLeft}/>
+          <TouchableHighlight onPress={() => this.props.navigation.navigate('MyAccount')} underlayColor='aqua'>
+            <View style={style.settingsBackground}>
+                <Image source={require('images/settings.png')} style={TabStyle.settingsButton} />
+            </View>
           </TouchableHighlight>
+          <View style={style.settingsTriangleRight}/>
         </View>
-        <View style={style.settingsTriangleRight}/>
-
 
         <DashboardNavigator navigation={this.props.navigation}/>
       </View>
