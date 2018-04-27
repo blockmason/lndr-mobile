@@ -215,18 +215,18 @@ export default StyleSheet.create({
     zIndex: 1,
     ...large
   },
-  settingsBackground: {
+  settingsButton: {
     position: 'absolute',
     top: Platform.OS === 'ios' ? 28 : 0,
-    right: 30,
+    right: 55,
+    flexDirection: 'row'
+  }
+  settingsBackground: {
     backgroundColor: aqua,
     height: 25,
     width: 25
   },
   settingsTriangleLeft: {
-    position: 'absolute',
-    top: Platform.OS === 'ios' ? 28 : 0,
-    right: 55,
     width: 15,
     height: 0,
     borderBottomColor: aqua,
@@ -237,9 +237,6 @@ export default StyleSheet.create({
     borderLeftColor: 'transparent',
   },
   settingsTriangleRight: {
-    position: 'absolute',
-    top: Platform.OS === 'ios' ? 28 : 0,
-    right: 15,
     width: 15,
     height: 0,
     borderTopColor: aqua,
