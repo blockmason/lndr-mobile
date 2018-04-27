@@ -1,6 +1,6 @@
 import React, { Component } from 'react'
 
-import { View, ScrollView, Text, TextInput, TouchableHighlight, Image, Platform, Modal } from 'react-native'
+import { View, ScrollView, Text, TextInput, TouchableHighlight, Image, Platform, Modal, Keyboard } from 'react-native'
 import { getResetAction } from 'reducers/nav'
 
 import Friend from 'lndr/friend'
@@ -168,6 +168,7 @@ class AddDebt extends Component<Props, State> {
 
   cancel() {
     this.clear()
+    Keyboard.dismiss()
     this.props.navigation.goBack()
   }
 
@@ -202,7 +203,7 @@ class AddDebt extends Component<Props, State> {
       <View style={general.view}>
         <Loading context={submittingTransaction} />
         <DashboardShell text={debtManagement.shell} navigation={this.props.navigation} />
-        <Button close onPress={() => this.props.navigation.goBack()} />
+        <Button close onPress={() => this.cancel()} />
       </View>
       <ScrollView style={general.whiteFlex} keyboardShouldPersistTaps='handled'>
         <View style={[general.centeredColumn, {marginBottom: 20}]}>

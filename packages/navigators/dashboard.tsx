@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import { View, Text, Platform, TouchableHighlight, Image, Dimensions } from 'react-native'
+import { View, Text, Platform, TouchableHighlight, Image, Dimensions, Keyboard } from 'react-native'
 import { TabNavigator } from 'react-navigation'
 
 import { Tab } from 'ui/components/tabs'
@@ -64,6 +64,11 @@ class DashboardNavigatorWithHeader extends Component<Props> {
     }
   }
 
+  navigateTo(dest) {
+    Keyboard.dismiss();
+    this.props.navigation.navigate(dest);
+  }
+
   render() {
     const kSmallScreenThreshold = 320 // e.g. iPhone SE
     const { width } = Dimensions.get('window')
@@ -81,9 +86,9 @@ class DashboardNavigatorWithHeader extends Component<Props> {
             </View>
             <View style={TabStyle.leftTriangle}/>
             <View style={TabStyle.tabsContainer}>
-              <Tab style={tabContainer} onPress={() => this.props.navigation.navigate('Home')} text={tabs.home} alerts={this.props.needsReviewTransactionsCount} active={this.props.isFocusingOn('Home')} />
-              <Tab style={tabContainer} onPress={() => this.props.navigation.navigate('Friends')} text={tabs.friends} active={this.props.isFocusingOn('Friends')} />
-              <Tab style={tabContainer} onPress={() => this.props.navigation.navigate('Activity')} text={tabs.activity} active={this.props.isFocusingOn('Activity')} />
+              <Tab style={tabContainer} onPress={() => this.navigateTo('Home')} text={tabs.home} alerts={this.props.needsReviewTransactionsCount} active={this.props.isFocusingOn('Home')} />
+              <Tab style={tabContainer} onPress={() => this.navigateTo('Friends')} text={tabs.friends} active={this.props.isFocusingOn('Friends')} />
+              <Tab style={tabContainer} onPress={() => this.navigateTo('Activity')} text={tabs.activity} active={this.props.isFocusingOn('Activity')} />
             </View>
           </View>
         </View>
