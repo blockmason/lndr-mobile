@@ -21,7 +21,7 @@
     "events": "^1.1.1",
     "metro-bundler": "^0.22.1",
     "react": "^16.0.0",
-    "react-native": "^0.50.0",
+    "react-native": "^0.51.0",
     "react-native-action-button": "^2.8.1",
     "react-native-actionsheet": "^2.3.0",
     "react-native-blur": "^3.2.2",
@@ -61,17 +61,17 @@
     "vm": "^0.1.0"
   },
   "devDependencies": {
-    "@types/jest": "^21.1.5",
+    "@types/jest": "^22.0.0",
     "@types/react": "^16.0.0",
     "@types/react-native": "^0.50.2",
     "@types/react-redux": "^5.0.12",
     "@types/react-test-renderer": "^16.0.0",
-    "babel-jest": "21.2.0",
+    "babel-jest": "^22.0.0",
     "babel-plugin-module-alias": "^1.6.0",
     "babel-preset-expo": "^4.0.0",
-    "babel-preset-react-native": "4.0.0",
-    "jest": "21.2.1",
-    "react-test-renderer": "16.0.0",
+    "babel-preset-react-native": "^4.0.0",
+    "jest": "^22.0.0",
+    "react-test-renderer": "^16.0.0",
     "typescript": "^2.6.1"
   },
   "jest": {
@@ -94,5 +94,8 @@
     "_stream_duplex": "readable-stream/duplex",
     "_stream_passthrough": "readable-stream/passthrough",
     "stream": "stream-browserify"
+  },
+  "resolutions": {
+    "hoek": "^5.0.0"
   }
 }
