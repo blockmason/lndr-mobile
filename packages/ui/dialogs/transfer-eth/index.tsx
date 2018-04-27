@@ -1,6 +1,6 @@
 import React, { Component } from 'react'
 
-import { Text, TextInput, TouchableHighlight, View, Image, ScrollView } from 'react-native'
+import { Text, TextInput, TouchableHighlight, View, Image, ScrollView, KeyboardAvoidingView } from 'react-native'
 import { getResetAction } from 'reducers/nav'
 
 import { UserData } from 'lndr/user'
@@ -147,44 +147,46 @@ class TransferEth extends Component<Props, State> {
         <DashboardShell text={accountManagement.sendEth.transferLowercase} navigation={this.props.navigation} />
         <Button close onPress={() => this.props.navigation.goBack()} />
       </View>
-      <ScrollView style={general.whiteFlex} keyboardShouldPersistTaps='handled'>
-        <View style={general.largeHMargin} >
-          <View style={[general.centeredColumn, {marginBottom: 20}]}>
-            <View style={general.centeredColumn} >
-              <Text style={[formStyle.header, {textAlign: 'center'}]}>{accountManagement.sendEth.balance(ethBalance)}</Text>
-              <View style={formStyle.textInputContainer}>
-                <TextInput
-                  style={[formStyle.textInput,  {paddingVertical: 3}]}
-                  placeholder={accountManagement.sendEth.address}
-                  placeholderTextColor='black'
-                  value={address}
-                  maxLength={40}
-                  underlineColorAndroid='transparent'
-                  onChangeText={address => this.setState({ address: this.setAddress(address), formInputError: undefined })}
-                />
+      <KeyboardAvoidingView style={general.whiteFlex} behavior={'padding'} keyboardVerticalOffset={0} >
+        <ScrollView style={general.view} keyboardShouldPersistTaps='handled'>
+          <View style={general.largeHMargin} >
+            <View style={[general.centeredColumn, {marginBottom: 20}]}>
+              <View style={general.centeredColumn} >
+                <Text style={[formStyle.header, {textAlign: 'center'}]}>{accountManagement.sendEth.balance(ethBalance)}</Text>
+                <View style={formStyle.textInputContainer}>
+                  <TextInput
+                    style={[formStyle.textInput,  {paddingVertical: 3}]}
+                    placeholder={accountManagement.sendEth.address}
+                    placeholderTextColor='black'
+                    value={address}
+                    maxLength={40}
+                    underlineColorAndroid='transparent'
+                    onChangeText={address => this.setState({ address: this.setAddress(address), formInputError: undefined })}
+                  />
+                </View>
+                <Text style={[formStyle.smallText, formStyle.spaceTop, formStyle.center]}>{accountManagement.sendEth.warning(this.getLimit(), currency)}</Text>
+                <Text style={formStyle.title}>{accountManagement.sendEth.amount}</Text>
+                <View style={formStyle.textInputContainer}>
+                  <TextInput
+                    style={[{flex: 1}, formStyle.jumboInput, {paddingVertical: 4}]}
+                    placeholder={'0'}
+                    placeholderTextColor='black'
+                    value={amount}
+                    maxLength={14}
+                    underlineColorAndroid='transparent'
+                    keyboardType='numeric'
+                    onChangeText={amount => this.setState({ amount: this.setAmount(amount), formInputError: undefined })}
+                  />
+                </View>
               </View>
-              <Text style={[formStyle.smallText, formStyle.spaceTop, formStyle.center]}>{accountManagement.sendEth.warning(this.getLimit(), currency)}</Text>
-              <Text style={formStyle.title}>{accountManagement.sendEth.amount}</Text>
-              <View style={formStyle.textInputContainer}>
-                <TextInput
-                  style={[{flex: 1}, formStyle.jumboInput, {paddingVertical: 4}]}
-                  placeholder={'0'}
-                  placeholderTextColor='black'
-                  value={amount}
-                  maxLength={14}
-                  underlineColorAndroid='transparent'
-                  keyboardType='numeric'
-                  onChangeText={amount => this.setState({ amount: this.setAmount(amount), formInputError: undefined })}
-                />
-              </View>
+              <Text style={[formStyle.smallText, formStyle.center, formStyle.spaceTopS]}>{this.toFiat(amount, ethExchange, currency)}</Text>
+              <Text style={[accountStyle.txCost, formStyle.spaceTop]}>{accountManagement.sendEth.txCost(txCost, currency)}</Text>
             </View>
-            <Text style={[formStyle.smallText, formStyle.center, formStyle.spaceTopS]}>{this.toFiat(amount, ethExchange, currency)}</Text>
-            <Text style={[accountStyle.txCost, formStyle.spaceTop]}>{accountManagement.sendEth.txCost(txCost, currency)}</Text>
+            { formInputError && <Text style={[formStyle.warningText, {alignSelf: 'center'}]}>{formInputError}</Text>}
+            <Button large round wide onPress={() => this.submit()} text={accountManagement.sendEth.transfer} />
           </View>
-          { formInputError && <Text style={[formStyle.warningText, {alignSelf: 'center'}]}>{formInputError}</Text>}
-          <Button large round wide onPress={() => this.submit()} text={accountManagement.sendEth.transfer} />
-        </View>
-      </ScrollView>
+        </ScrollView>
+      </KeyboardAvoidingView>
     </View>
   }
 }

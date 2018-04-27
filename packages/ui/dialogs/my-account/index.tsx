@@ -1,7 +1,7 @@
 import React, { Component } from 'react'
 
 import { Text, TextInput, View, Dimensions, ScrollView, Linking,
-  TouchableHighlight, Image, FlatList } from 'react-native'
+  TouchableHighlight, Image, FlatList, KeyboardAvoidingView } from 'react-native'
 
 import ImagePicker from 'react-native-image-picker'
 
@@ -394,17 +394,19 @@ class MyAccount extends Component<Props, State> {
           <DashboardShell text={myAccount} navigation={this.props.navigation} hideSettings />
           <Button close onPress={() => this.props.navigation.goBack()} />
         </View>
-        <ScrollView ref='scrollContent' style={general.view} onScroll={event => this.handleScroll(event)} scrollEventThrottle={50} keyboardShouldPersistTaps='handled'>
-          <View style={[style.account, {minHeight: height}]}>
-            <Loading context={loadingContext} />
-            <BMLogo type='square' size='medium'/>
-            <Text style={slideStyle.inc}>INC.</Text>
-            <Button round danger onPress={() => this.logout()} text={logoutAction} containerStyle={style.spaceVertical} />
-            <View style={general.centeredColumn}>
-              {this.renderPanels()}
+        <KeyboardAvoidingView style={general.whiteFlex} behavior={'padding'} keyboardVerticalOffset={0} >
+          <ScrollView ref='scrollContent' style={general.view} onScroll={event => this.handleScroll(event)} scrollEventThrottle={50} keyboardShouldPersistTaps='handled'>
+            <View style={[style.account, {minHeight: height}]}>
+              <Loading context={loadingContext} />
+              <BMLogo type='square' size='medium'/>
+              <Text style={slideStyle.inc}>INC.</Text>
+              <Button round danger onPress={() => this.logout()} text={logoutAction} containerStyle={style.spaceVertical} />
+              <View style={general.centeredColumn}>
+                {this.renderPanels()}
+              </View>
             </View>
-          </View>
-        </ScrollView>
+          </ScrollView>
+        </KeyboardAvoidingView>
       </View>
     }
   }
