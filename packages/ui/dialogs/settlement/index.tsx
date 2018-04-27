@@ -239,8 +239,8 @@ class Settlement extends Component<Props, State> {
         <DashboardShell text={debtManagement.settleUpLower} navigation={this.props.navigation} />
         <Button close onPress={() => this.props.navigation.goBack()} />
       </View>
-      <ScrollView style={general.whiteFlex} keyboardShouldPersistTaps='handled'>
-        <KeyboardAvoidingView behavior={'padding'} keyboardVerticalOffset={0} contentContainerStyle={{backgroundColor: 'white'}} >
+      <KeyboardAvoidingView style={general.whiteFlex} behavior={'padding'} keyboardVerticalOffset={20} >
+        <ScrollView style={general.view} keyboardShouldPersistTaps='handled'>
           <View style={[general.centeredColumn, {marginBottom: 20}]}>
             <Image source={imageSource} style={style.settleImage}/>
             <Text style={[style.header, {marginBottom: 20, marginHorizontal: 20, textAlign: 'center'}]}>{this.displayMessage()}</Text>
@@ -284,8 +284,8 @@ class Settlement extends Component<Props, State> {
             { formInputError && <Text style={[formStyle.warningText, {alignSelf: 'center', marginHorizontal: 15}]}>{formInputError}</Text>}
             { amount ? <Button large round wide onPress={() => this.submit()} text={debtManagement.settleUp} /> : <Button large round wide onPress={() => this.setState({ amount: `${currencySymbols(defaultCurrency)}${currencyFormats(defaultCurrency)(Math.abs(balance))}`})} text={debtManagement.settleTotal} />}
           </View>
-        </KeyboardAvoidingView>
-      </ScrollView>
+        </ScrollView>
+      </KeyboardAvoidingView>
     </View>
   }
 }
