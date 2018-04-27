@@ -148,23 +148,27 @@ class PendingTransactionDetail extends Component<Props, State> {
     const imageSource = userPic ? {uri: userPic} : require('images/person-outline-dark.png')
     const currency = getUcacCurrency(pendingTransaction.ucac)
 
-    return <ScrollView style={[general.fullHeight, general.view]}>
-      <Loading context={loadingContext} />
-      <DashboardShell text={pendingTransactionsLanguage.shell} navigation={this.props.navigation} />
-      <Button close onPress={() => this.props.navigation.goBack()} />
-      <View style={general.centeredColumn}>
-        <Image source={imageSource} style={style.image}/>
-        <Text style={style.title}>{this.getTitle()}</Text>
-        <View style={style.balanceRow}>
-          <Text style={style.balanceInfo}>{currencySymbols(currency)}</Text>
-          <Text style={style.amount}>{currencyFormats(currency)(pendingTransaction.amount)}</Text>
-        </View>
-        {this.labelRow(pendingTransaction.memo.trim())}
-        <View style={{marginBottom: 10}}/>
-        {this.showButtons()}
-        <View style={general.spaceBelow}/>
+    return <View style={general.whiteFlex}>
+      <View style={general.view}>
+        <Loading context={loadingContext} />
+        <DashboardShell text={pendingTransactionsLanguage.shell} navigation={this.props.navigation} />
+        <Button close onPress={() => this.props.navigation.goBack()} />
       </View>
-    </ScrollView>
+      <ScrollView style={general.whiteFlex}>
+        <View style={general.centeredColumn}>
+          <Image source={imageSource} style={style.image}/>
+          <Text style={style.title}>{this.getTitle()}</Text>
+          <View style={style.balanceRow}>
+            <Text style={style.balanceInfo}>{currencySymbols(currency)}</Text>
+            <Text style={style.amount}>{currencyFormats(currency)(pendingTransaction.amount)}</Text>
+          </View>
+          {this.labelRow(pendingTransaction.memo.trim())}
+          <View style={{marginBottom: 10}}/>
+          {this.showButtons()}
+          <View style={general.spaceBelow}/>
+        </View>
+      </ScrollView>
+    </View>
   }
 }
 

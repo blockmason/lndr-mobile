@@ -1,12 +1,13 @@
 import React, { Component } from 'react'
 
 import { Text, TextInput, View, Dimensions, ScrollView, Linking,
-  TouchableHighlight, Image, FlatList } from 'react-native'
+  TouchableHighlight, Image, FlatList, KeyboardAvoidingView } from 'react-native'
 
 import ImagePicker from 'react-native-image-picker'
 
 import Button from 'ui/components/button'
 import Pinpad from 'ui/components/pinpad'
+import DashboardShell from 'ui/components/dashboard-shell'
 import Loading, { LoadingContext } from 'ui/components/loading'
 import TextLogo from 'ui/components/images/text-logo'
 import BMLogo from 'ui/components/images/bm-logo'
@@ -17,7 +18,7 @@ import { defaultUpdateAccountData, UpdateAccountData, UserData } from 'lndr/user
 import { getBcptBalance } from 'lndr/bcpt-utils'
 import { defaultCurrency, currencySymbols, transferLimits  } from 'lndr/currencies'
 
-import { getAccountInformation, updateNickname, updateEmail, logoutAccount, toggleNotifications, 
+import { getAccountInformation, updateNickname, updateEmail, logoutAccount, toggleNotifications,
   setEthBalance, updateLockTimeout, updatePin, getProfilePic, setProfilePic, takenNick, takenEmail,
   copyToClipboard, validatePin } from 'actions'
 import { getUser, getStore } from 'reducers/app'
@@ -31,7 +32,8 @@ import slideStyle from 'theme/slide'
 
 import language from 'language'
 const { nickname, setNickname, email, setEmail, copy, accountManagement, changePin, enterNewPin, confirmPin, pleaseWait,
-  cancel, mnemonicExhortation, addressExhortation, logoutAction, notifications, currentBalance, showMnemonic, enterCurrentPin
+  cancel, mnemonicExhortation, addressExhortation, logoutAction, notifications, currentBalance, showMnemonic, enterCurrentPin,
+  myAccount
 } = language
 const updateAccountText = language.updateAccount
 
@@ -387,27 +389,29 @@ class MyAccount extends Component<Props, State> {
         </View>
       </View>
     } else {
-      return <ScrollView 
-      ref='scrollContent'
-      style={general.view} 
-      onScroll={event => this.handleScroll(event)} 
-      scrollEventThrottle={50}
-      keyboardShouldPersistTaps='handled'>
-        <Button close onPress={() => this.props.navigation.goBack()} />
-        <View style={[style.account, {minHeight: height}]}>
-          <Loading context={loadingContext} />
-          <BMLogo type='square' size='medium'/>
-          <Text style={slideStyle.inc}>INC.</Text>
-          <Button round danger onPress={() => this.logout()} text={logoutAction} containerStyle={style.spaceVertical} />
-          <View style={general.centeredColumn}>
-            {this.renderPanels()}
-          </View>
+      return <View style={general.whiteFlex}>
+        <View style={general.view}>
+          <DashboardShell text={myAccount} navigation={this.props.navigation} hideSettings />
+          <Button close onPress={() => this.props.navigation.goBack()} />
         </View>
-      </ScrollView>
+        <KeyboardAvoidingView style={general.whiteFlex} behavior={'padding'} keyboardVerticalOffset={0} >
+          <ScrollView ref='scrollContent' style={general.view} onScroll={event => this.handleScroll(event)} scrollEventThrottle={50} keyboardShouldPersistTaps='handled'>
+            <View style={[style.account, {minHeight: height}]}>
+              <Loading context={loadingContext} />
+              <BMLogo type='square' size='medium'/>
+              <Text style={slideStyle.inc}>INC.</Text>
+              <Button round danger onPress={() => this.logout()} text={logoutAction} containerStyle={style.spaceVertical} />
+              <View style={general.centeredColumn}>
+                {this.renderPanels()}
+              </View>
+            </View>
+          </ScrollView>
+        </KeyboardAvoidingView>
+      </View>
     }
   }
 }
 
-export default connect((state) => ({ user: getUser(state)(), state: getStore(state)() }), { updateEmail, updateNickname, 
-  getAccountInformation, logoutAccount, toggleNotifications, setEthBalance, updateLockTimeout, updatePin, 
+export default connect((state) => ({ user: getUser(state)(), state: getStore(state)() }), { updateEmail, updateNickname,
+  getAccountInformation, logoutAccount, toggleNotifications, setEthBalance, updateLockTimeout, updatePin,
   getProfilePic, setProfilePic, copyToClipboard })(MyAccount)

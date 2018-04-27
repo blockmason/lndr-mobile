@@ -29,6 +29,7 @@ interface Props {
   isFocusingOn: () => any
   text?: String
   navigation: any
+  hideSettings: boolean
 }
 
 const HomeScreen = (props) => <HomeView {...props}/>;
@@ -52,13 +53,24 @@ const DashboardNavigator = TabNavigator(RouteConfig, TabNavigatorConfig)
 class DashboardShell extends Component<Props> {
   render() {
     const kSmallScreenThreshold = 320 // e.g. iPhone SE
-    const { text } = this.props
+    const { text, hideSettings } = this.props
     const { width } = Dimensions.get('window')
     const logoSize = (width > kSmallScreenThreshold) ? "normal" : "small"
     const logoContainerStyle = (width > kSmallScreenThreshold) ? style.dashboardLogo : style.dashboardLogoSmall
 
+    const settingsButton = !hideSettings &&
+      <View style={style.settingsButton}>
+        <View style={style.settingsTriangleLeft}/>
+        <TouchableHighlight onPress={() => this.props.navigation.navigate('MyAccount')} underlayColor='aqua'>
+          <View style={style.settingsBackground}>
+              <Image source={require('images/settings.png')} style={TabStyle.settingsButton} />
+          </View>
+        </TouchableHighlight>
+        <View style={style.settingsTriangleRight}/>
+      </View>
+
     return (
-      <View style={general.whiteFlex}>
+      <View style={general.view}>
         <AndroidStatusBar />
         <View style={style.dashboardContainer}>
           <View style={logoContainerStyle}>
@@ -69,13 +81,7 @@ class DashboardShell extends Component<Props> {
             <Text style={style.dashboardText}>{text}</Text>
           </View>
         </View>
-        <View style={style.settingsTriangleLeft}/>
-        <View style={style.settingsBackground}>
-          <TouchableHighlight onPress={() => this.props.navigation.navigate('MyAccount')}>
-            <Image source={require('images/settings.png')} style={TabStyle.settingsButton} />
-          </TouchableHighlight>
-        </View>
-        <View style={style.settingsTriangleRight}/>
+        {settingsButton}
       </View>
     )
   }

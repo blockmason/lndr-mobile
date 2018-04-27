@@ -119,7 +119,7 @@ export default StyleSheet.create({
     width: 30,
     height: 30,
     marginLeft: 15,
-    marginTop: Platform.OS === 'ios' ? 43 : 15
+    marginTop: 15
   },
   black: {
     backgroundColor: black

@@ -1,6 +1,6 @@
 import React, { Component } from 'react'
 
-import { View, ScrollView, Text, TextInput, TouchableHighlight, Image, Platform, Modal } from 'react-native'
+import { View, ScrollView, Text, TextInput, TouchableHighlight, Image, Platform, Modal, Keyboard, KeyboardAvoidingView } from 'react-native'
 import { getResetAction } from 'reducers/nav'
 
 import Friend from 'lndr/friend'
@@ -168,6 +168,7 @@ class AddDebt extends Component<Props, State> {
 
   cancel() {
     this.clear()
+    Keyboard.dismiss()
     this.props.navigation.goBack()
   }
 
@@ -198,54 +199,60 @@ class AddDebt extends Component<Props, State> {
       return this.renderSelectFriend()
     }
 
-    return <ScrollView style={general.whiteFlex} keyboardShouldPersistTaps='handled'>
-      <Loading context={submittingTransaction} />
-      <DashboardShell text={debtManagement.shell} navigation={this.props.navigation} />
-      <Button close onPress={() => this.props.navigation.goBack()} />
-      <View style={[general.centeredColumn, {marginBottom: 20}]}>
-        <Text style={[style.header, {marginBottom: 20}]}>{debtManagement[direction]}</Text>
-        <View style={[general.flex, general.centeredColumn]} >
-          <View style={[general.centeredColumn, {minWidth: 150, marginBottom: 20}]}>
-            <Text style={formStyle.title}>{debtManagement.fields.selectFriend}</Text>
-            <View style={style.newTransactionRow}>
-              { this.renderSelectedFriend() }
+    return <View style={general.whiteFlex}>
+      <View style={general.view}>
+        <Loading context={submittingTransaction} />
+        <DashboardShell text={debtManagement.shell} navigation={this.props.navigation} />
+        <Button close onPress={() => this.cancel()} />
+      </View>
+      <KeyboardAvoidingView style={general.whiteFlex} behavior={'padding'} keyboardVerticalOffset={0} >
+        <ScrollView style={general.view} keyboardShouldPersistTaps='handled'>
+          <View style={[general.centeredColumn, {marginBottom: 20}]}>
+            <Text style={[style.header, {marginBottom: 20}]}>{debtManagement[direction]}</Text>
+            <View style={[general.flex, general.centeredColumn]} >
+              <View style={[general.centeredColumn, {minWidth: 150, marginBottom: 20}]}>
+                <Text style={formStyle.title}>{debtManagement.fields.selectFriend}</Text>
+                <View style={style.newTransactionRow}>
+                  { this.renderSelectedFriend() }
+                </View>
+              </View>
             </View>
-          </View>
-        </View>
-        <View style={[general.flex, general.flexRow]} >
-          <View style={[general.centeredColumn, {minWidth: 150}]}>
-            <Text style={formStyle.title}>{debtManagement.fields.currency}</Text>
-            <View style={style.newTransactionRow}>
-              <Button narrow black onPress={() => this.setState({shouldPickCurrency: true})} text={currency} />
+            <View style={[general.flex, general.flexRow]} >
+              <View style={[general.centeredColumn, {minWidth: 150}]}>
+                <Text style={formStyle.title}>{debtManagement.fields.currency}</Text>
+                <View style={style.newTransactionRow}>
+                  <Button narrow black onPress={() => this.setState({shouldPickCurrency: true})} text={currency} />
+                </View>
+              </View>
+              <View style={general.centeredColumn}>
+                <Text style={formStyle.title}>{debtManagement.fields.amount}</Text>
+                <View style={style.newTransactionRow}>
+                  <TextInput
+                    style={[formStyle.jumboInput, {paddingTop:0}]}
+                    placeholder={`${currencySymbols(currency)}0`}
+                    placeholderTextColor='black'
+                    value={amount}
+                    maxLength={10}
+                    underlineColorAndroid='transparent'
+                    keyboardType='numeric'
+                    onChangeText={amount => this.setState({ amount: this.setAmount(amount) })}
+                  />
+                </View>
+              </View>
             </View>
-          </View>
-          <View style={general.centeredColumn}>
-            <Text style={formStyle.title}>{debtManagement.fields.amount}</Text>
-            <View style={style.newTransactionRow}>
+            <View style={formStyle.memoBorder} >
               <TextInput
-                style={[formStyle.jumboInput, {paddingTop:0}]}
-                placeholder={`${currencySymbols(currency)}0`}
-                placeholderTextColor='black'
-                value={amount}
-                maxLength={10}
+                style={formStyle.memoInput}
+                placeholder={debtManagement.memo.example}
+                value={memo}
                 underlineColorAndroid='transparent'
-                keyboardType='numeric'
-                onChangeText={amount => this.setState({ amount: this.setAmount(amount) })}
+                onChangeText={memo => this.setState({ memo: formatMemo(memo) })}
               />
             </View>
+            { friend && amount && memo ? <Button large round wide onPress={() => this.submit()} text={submit} /> : null }
           </View>
-        </View>
-        <View style={formStyle.memoBorder} >
-          <TextInput
-            style={formStyle.memoInput}
-            placeholder={debtManagement.memo.example}
-            value={memo}
-            underlineColorAndroid='transparent'
-            onChangeText={memo => this.setState({ memo: formatMemo(memo) })}
-          />
-        </View>
-        { friend && amount && memo ? <Button large round wide onPress={() => this.submit()} text={submit} /> : null }
-      </View>
+        </ScrollView>
+      </KeyboardAvoidingView>
       <Modal
         animationType="slide"
         transparent={true}
@@ -259,7 +266,7 @@ class AddDebt extends Component<Props, State> {
           </View>
         </View>
       </Modal>
-    </ScrollView>
+    </View>
   }
 }
 
