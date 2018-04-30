@@ -2,7 +2,8 @@ import reduceReducers from 'reduce-reducers'
 import PendingTransaction from 'lndr/pending-transaction'
 import moment from 'moment'
 import { UserData } from 'lndr/user'
-import { currencySymbols, transferLimits  } from 'lndr/currencies'
+import Friend from 'lndr/friend'
+import { currencySymbols, transferLimits, defaultCurrency } from 'lndr/currencies'
 
 export const initialState = ({})
 
@@ -102,8 +103,52 @@ export const bilateralSettlements = (state) => state.store.bilateralSettlements
 
 export const pendingFriends = (state) => state.store.pendingFriends
 
-export const getEthBalance = (state) => state.store.ethBalance
+export const getEthBalance = (state) : string => state.store.ethBalance
 
-export const getEthExchange = (state) => state.store.ethExchange
+export const getEthExchange = (state) => (currency: string) : string => state.store.ethPrices[currency.toLowerCase()] === 'undefined' ? '1000' : state.store.ethPrices[currency.toLowerCase()]
 
-export const getBcptBalance = (state) => state.store.bcptBalance
+export const getEthPrices = (state) : object => state.store.ethPrices
+
+export const getBcptBalance = (state) : string => state.store.bcptBalance
+
+export const convertCurrency = (state) => (fromUcac: string, amount: number) : number => {
+  const fromExchange = Number(getEthExchange(state)(getUcacCurrency(state)(fromUcac)))
+  const toExchange = Number(getEthExchange(state)(defaultCurrency.toLowerCase()))
+  return amount / fromExchange * toExchange
+}
+
+export const calculateBalance = (state) => (friend: Friend) : number => {
+  const recent = recentTransactions(state)
+  const user = getUser(state)()
+
+  let total = 0
+
+  recent.map( transaction => {
+    if(friend) {
+      if(transaction.creditorAddress === friend.address) {
+        total -= convertCurrency(state)(transaction.ucac, transaction.amount)
+      } else if(transaction.debtorAddress === friend.address) {
+        total += convertCurrency(state)(transaction.ucac, transaction.amount)
+      }
+    } else {
+      if(transaction.creditorAddress === user.address) {
+        total += convertCurrency(state)(transaction.ucac, transaction.amount)
+      } else if(transaction.debtorAddress === user.address) {
+        total -= convertCurrency(state)(transaction.ucac, transaction.amount)
+      }
+    }
+  })
+
+  return Math.round(total)
+}
+
+export const calculateCounterparties = (state) => () : number => {
+  const recent = recentTransactions(state)
+  const friends = {}
+  recent.map( transaction => {
+    friends[transaction.creditorAddress] = 1
+    friends[transaction.debtorAddress] = 1
+  })
+
+  return Object.keys(friends).length - 1
+}

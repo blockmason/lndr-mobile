@@ -26,7 +26,7 @@ const {
   debtManagement
 } = language
 
-import { getUser, recentTransactions, getEthBalance, getEthExchange, getWeeklyEthTotal, getUcacAddr } from 'reducers/app'
+import { getUser, recentTransactions, getEthBalance, getEthExchange, getWeeklyEthTotal } from 'reducers/app'
 import { addDebt } from 'actions'
 import { connect } from 'react-redux'
 import { addNavigationHelpers } from 'react-navigation';

@@ -75,20 +75,20 @@ export const initializeStorage = () => {
 
     if (storedUser && moment(storedSession).add(storedUser.lockTimeout, 'minute') > moment()) {
       await sessionStorage.set(moment())
-      let { ethBalance, ethExchange, bcptBalance } = await getEthInfo(storedUser)
+      let { ethBalance, ethPrices, bcptBalance } = await getEthInfo(storedUser)
       let ucacAddresses = await creditProtocol.getUcacAddresses()
       let ethTransactions = await ethTransactionsStorage.get()
       const payload = { hasStoredUser: true, welcomeComplete: true, user: storedUser, notificationsEnabled, ethBalance, 
-        ethExchange, bcptBalance, ucacAddresses, ethTransactions }
+        ethPrices, bcptBalance, ucacAddresses, ethTransactions }
       dispatch(setState(payload))
 
     } else if (touchIdSupported && storedMnemonic && storedUser) {
-      let { ethBalance, ethExchange, bcptBalance } = await getEthInfo(storedUser)
+      let { ethBalance, ethPrices, bcptBalance } = await getEthInfo(storedUser)
       let ucacAddresses = await creditProtocol.getUcacAddresses()
       let ethTransactions = await ethTransactionsStorage.get()
       const payload = await triggerTouchId(storedUser, notificationsEnabled)
       payload.ethBalance = ethBalance
-      payload.ethExchange = ethExchange
+      payload.ethPrices = ethPrices
       payload.bcptBalance = bcptBalance
       payload.ucacAddresses = ucacAddresses
       payload.ethTransactions = ethTransactions
@@ -221,10 +221,10 @@ export const confirmAccount = async (recovery: boolean, shouldDisplayMnemonic: b
     const hashedPassword = bcrypt.hashSync(password)
     const user = await createUserFromCredentials(mnemonic, hashedPassword, 15)
     await storeUserSession(user)
-    let { ethBalance, ethExchange, bcptBalance } = await getEthInfo(user)
+    let { ethBalance, ethPrices, bcptBalance } = await getEthInfo(user)
     let ucacAddresses = await creditProtocol.getUcacAddresses()
     let ethTransactions = await getEthTransactions(user.address, recovery)
-    const payload = { user, hasStoredUser: true, ethBalance, ethExchange, bcptBalance, ucacAddresses, ethTransactions, shouldDisplayMnemonic, password, mnemonic }
+    const payload = { user, hasStoredUser: true, ethBalance, ethPrices, bcptBalance, ucacAddresses, ethTransactions, shouldDisplayMnemonic, password, mnemonic }
     return payload
 }
 
@@ -274,33 +274,6 @@ export async function getTwoPartyBalance(user: User, friend: Friend) {
   return new Balance({ relativeToNickname: friend.nickname, relativeTo: friend.address, amount: amount })
 }
 
-export const getBalances = () => {
-  return async (dispatch, getState) => {
-    const { address } = getUser(getState())()
-    const rawCounterparties = await creditProtocol.getCounterparties(address)
-    const uniqueCounterparties = {}
-    const balances: Balance[] = []
-
-    await Promise.all(
-      rawCounterparties.map(async (rawCounterparty) => {
-        const counterpartyAddress = rawCounterparty.replace('0x', '')
-        if (!(counterpartyAddress in uniqueCounterparties)) {
-          uniqueCounterparties[counterpartyAddress] = true
-          try {
-            const amount = await creditProtocol.getBalanceBetween(address, counterpartyAddress, defaultCurrency)
-            const relativeToNickname = await getNicknameForAddress(counterpartyAddress)
-            balances.push(new Balance({ relativeToNickname, relativeTo: counterpartyAddress, amount }))
-          }
-          catch (e) {
-            dispatch(displayError(debtManagement.balances.error))
-          }
-        }
-      })
-    )
-    dispatch(setState({ balances, balancesLoaded: true }))
-  }
-}
-
 //Needs a selector
 export const getAccountInformation = () => {
   return async (dispatch, getState) => {
@@ -318,7 +291,7 @@ export const getAccountInformation = () => {
       accountInformation.balance = await creditProtocol.getBalance(address, defaultCurrency)
     }
     catch (e) {}
-    dispatch(setState({ accountInformation, accountInformationLoaded: true }))
+    dispatch(setState({ accountInformation }))
     return accountInformation
   }
 }
@@ -709,11 +682,11 @@ export const loginAccount = (loginData: LoginAccountData) => {
     const user = await createUserFromCredentials(mnemonic, hashedPassword, lockTimeout)
 
     await storeUserSession(user)
-    let { ethBalance, ethExchange, bcptBalance } = await getEthInfo(user)
+    let { ethBalance, ethPrices, bcptBalance } = await getEthInfo(user)
     let ucacAddresses = await creditProtocol.getUcacAddresses()
     let ethTransactions = await ethTransactionsStorage.get()
     
-    const payload = { user, hasStoredUser: true, ethBalance, ethExchange, bcptBalance, ucacAddresses, ethTransactions }
+    const payload = { user, hasStoredUser: true, ethBalance, ethPrices, bcptBalance, ucacAddresses, ethTransactions }
     dispatch(setState(payload))
     refreshTransactions()
     return true
@@ -810,8 +783,8 @@ export const setEthBalance = () => {
   return async (dispatch, getState) => {
     const { user } = getState().store
     const ethBalance = await getEthBalance(user.address)
-    const ethExchange = await creditProtocol.getEthExchange(defaultCurrency)
-    dispatch(setState({ ethBalance, ethExchange }))
+    const ethPrices = await creditProtocol.getEthExchange(defaultCurrency)
+    dispatch(setState({ ethBalance, ethPrices }))
   }
 }
 
@@ -1053,16 +1026,16 @@ const triggerTouchId = (user, notificationsEnabled) => {
 }
 
 const getEthInfo = async (user) => {
-  let ethBalance, ethExchange, bcptBalance
+  let ethBalance, ethPrices, bcptBalance
   try {
     ethBalance = await getEthBalance(user.address)
-    ethExchange = await creditProtocol.getEthExchange(defaultCurrency)
+    ethPrices = await creditProtocol.getEthPrices()
     const attoBcpts = await getBcptBalance(user.address)
     bcptBalance = String ( Number(attoBcpts) / Math.pow(10, 18) )
   } catch (e) {
     ethBalance = '0'
-    ethExchange = '1000'
+    ethPrices = {}
     bcptBalance = '0'
   }
-  return { ethBalance, ethExchange, bcptBalance }
+  return { ethBalance, ethPrices, bcptBalance }
 }

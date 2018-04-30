@@ -29,7 +29,7 @@ interface Props {
   isFocusingOn: () => any
   text?: String
   navigation: any
-  hideSettings: boolean
+  hideSettings?: boolean
 }
 
 const HomeScreen = (props) => <HomeView {...props}/>;

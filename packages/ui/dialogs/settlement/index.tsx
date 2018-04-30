@@ -29,8 +29,8 @@ const {
   accountManagement
 } = language
 
-import { getUser, recentTransactions, getEthBalance, getEthExchange, getWeeklyEthTotal, getUcacAddr,
-  hasPendingTransaction } from 'reducers/app'
+import { getUser, recentTransactions, getEthBalance, getEthExchange, getWeeklyEthTotal,
+  hasPendingTransaction, calculateBalance } from 'reducers/app'
 import { settleUp, addDebt, getEthTxCost } from 'actions'
 import { connect } from 'react-redux'
 import { addNavigationHelpers } from 'react-navigation';
@@ -60,7 +60,7 @@ interface Props {
   ethSentPastWeek: number
   recentTransactions: any
   navigation: any
-  getUcacAddress: (currency: string) => string
+  calculateBalance: (friend: Friend) => number
 }
 
 interface State {
@@ -150,21 +150,9 @@ class Settlement extends Component<Props, State> {
 
   getRecentTotal() {
     const friend = this.props.navigation ? this.props.navigation.state.params.friend : {}
-
-    const { recentTransactions, getUcacAddress } = this.props
-    let total = 0
-
-    recentTransactions.map( transaction => {
-      if(getUcacAddress(defaultCurrency).indexOf(transaction.ucac) !== -1) {
-        if(transaction.creditorAddress === friend.address) {
-          total -= transaction.amount
-        } else if(transaction.debtorAddress === friend.address) {
-          total += transaction.amount
-        }
-      }
-    })
-
-    return total
+    const { calculateBalance } = this.props
+    
+    return calculateBalance(friend)
   }
 
   clear() {
@@ -228,7 +216,7 @@ class Settlement extends Component<Props, State> {
 
   render() {
     const { amount, balance, txCost, currency, formInputError, pic } = this.state
-    const { recentTransactions, ethBalance, ethExchange, ethSentPastWeek, getUcacAddress } = this.props
+    const { recentTransactions, ethBalance, ethExchange, ethSentPastWeek } = this.props
     const ethSettlement = this.props.navigation ? this.props.navigation.state.params.ethSettlement : false
     const friend = this.props.navigation ? this.props.navigation.state.params.friend : {}
     const imageSource = pic ? { uri: pic } : require('images/person-outline-dark.png')
@@ -247,7 +235,7 @@ class Settlement extends Component<Props, State> {
             <View style={style.transactions}>
               {
                 recentTransactions.map( (transaction, index) => {
-                  return getUcacAddress(defaultCurrency).indexOf(transaction.ucac) !== -1 && (transaction.creditorAddress === friend.address || transaction.debtorAddress === friend.address) ?
+                  return (transaction.creditorAddress === friend.address || transaction.debtorAddress === friend.address) ?
                     <View style={style.recent} key={friend.address + index}>
                       <Text style={style.recentText}>{transaction.memo}</Text>
                       <Text style={style.recentText}>{ (transaction.creditorAddress === friend.address ? '-' : '+') + `${currencySymbols(defaultCurrency)}${currencyFormats(defaultCurrency)(transaction.amount)}`}</Text>
@@ -291,5 +279,5 @@ class Settlement extends Component<Props, State> {
 }
 
 export default connect((state) => ({ user: getUser(state)(), ethBalance: getEthBalance(state), ethExchange: getEthExchange(state),
-  recentTransactions: recentTransactions(state), ethSentPastWeek: getWeeklyEthTotal(state), getUcacAddress: getUcacAddr(state),
-  hasPendingTransaction: hasPendingTransaction(state) }), { settleUp, addDebt })(Settlement)
+  recentTransactions: recentTransactions(state), ethSentPastWeek: getWeeklyEthTotal(state), hasPendingTransaction: hasPendingTransaction(state),
+  calculateBalance: calculateBalance(state) }), { settleUp, addDebt })(Settlement)
