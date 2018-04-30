@@ -1,4 +1,4 @@
-import { defaultCurrency, currencySymbols, transferLimits  } from 'lndr/currencies'
+import { defaultCurrency, currencySymbols, transferLimits, hasNoDecimals  } from 'lndr/currencies'
 
 declare const Buffer
 
@@ -19,7 +19,7 @@ export const leftPad = (pad, length, value) => {
 }
 
 export const currencyFormats = (formatType: string) => {
-  if (formatType === 'KRW' || formatType === 'JPY' || formatType === 'IDR' || formatType === 'VND') {
+  if (hasNoDecimals(formatType)) {
     return value => {
       const sign = value < 0 ? '-' : ''
       const raw = String(Math.abs(value))
@@ -48,7 +48,7 @@ export const currencyFormats = (formatType: string) => {
 }
 
 export const amountFormat = (amount: string, currency: string) => {
-  if (currency === 'KRW' || currency === 'JPY' || currency === 'IDR' || currency === 'VND') {
+  if (hasNoDecimals(currency)) {
     const raw = amount
     .replace(/[^\d]/g, '')
 
@@ -89,7 +89,7 @@ export const formatMemo = memo => {
 }
 
 export const sanitizeAmount = (amount, currency) => {
-  if(currency === 'KRW' || currency === 'JPY') {
+  if(hasNoDecimals(currency)) {
     return parseInt(
       amount.replace(/[^.\d]/g, '')
     )

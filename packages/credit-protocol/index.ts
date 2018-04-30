@@ -17,6 +17,7 @@ import FetchUtil from 'lndr/fetch-util'
 import EthTransaction from 'lndr/eth-transaction'
 import Tx from 'ethereumjs-tx'
 import Web3 from 'web3'
+import { hasNoDecimals } from 'lndr/currencies';
 
 const fetchUtil = new FetchUtil(fetch)
 const web3 = new Web3(new Web3.providers.HttpProvider('https://mainnet.infura.io/EoLr1OVfUMDqq3N2KaKA'))
@@ -401,7 +402,7 @@ export default class CreditProtocol {
 
   async fiatToEth(amount: number, currency: string) {
     const conversionRate = await this.getEthExchange(currency)
-    if(currency === 'KRW' || currency === 'JPY' || currency === 'IDR' || currency === 'VND') {
+    if(hasNoDecimals(currency)) {
       return Number(amount) / Number(conversionRate)
     } else {
       return Number(amount) / 100 / Number(conversionRate)
@@ -436,6 +437,7 @@ export default class CreditProtocol {
 
   async getEthPrices() {
     const config = await this.getConfig()
+    console.log('ETH PRICES', config.ethereumPrices)
     return config.ethereumPrices
   }
   
@@ -443,7 +445,7 @@ export default class CreditProtocol {
     const exchange = await this.getEthExchange(currency)
     const fiat = String(Number(eth) * Number(exchange))
   
-    if (currency === 'KRW' || currency === 'JPY' || currency === 'IDR' || currency === 'VND') {
+    if (hasNoDecimals(currency)) {
       const decimalIndex = fiat.indexOf('.')
       return fiat.slice(0, decimalIndex)
     } else {

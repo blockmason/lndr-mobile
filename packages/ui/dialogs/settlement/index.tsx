@@ -7,7 +7,7 @@ import { UserData } from 'lndr/user'
 import { debounce } from 'lndr/time'
 import { currencyFormats, amountFormat } from 'lndr/format'
 import Friend from 'lndr/friend'
-import { defaultCurrency, currencySymbols, transferLimits  } from 'lndr/currencies'
+import { defaultCurrency, currencySymbols, transferLimits, hasNoDecimals } from 'lndr/currencies'
 import profilePic from 'lndr/profile-pic'
 
 import Button from 'ui/components/button'
@@ -56,7 +56,7 @@ interface Props {
   hasPendingTransaction: (friend: Friend) => boolean
   user: UserData
   ethBalance: string
-  ethExchange: string
+  ethExchange: (currency: string) => string
   ethSentPastWeek: number
   recentTransactions: any
   navigation: any
@@ -167,7 +167,7 @@ class Settlement extends Component<Props, State> {
   setAmount(amount) {
     const { balance, currency } = this.state
     const cleanAmount = Number(amount.replace(/[^0-9\.]/g, ''))
-    const adjustedBalance = currency === 'KRW' || currency === 'JPY' || currency === 'IDR' || currency === 'VND' ? balance : balance / 100
+    const adjustedBalance = hasNoDecimals(currency) ? balance : balance / 100
 
     console.log(cleanAmount, adjustedBalance)
 
@@ -192,7 +192,7 @@ class Settlement extends Component<Props, State> {
   getLimit() {
     const { currency } = this.state
     const { ethExchange, ethSentPastWeek } = this.props
-    const remaining = String(Number(transferLimits(currency)) - Number(ethSentPastWeek) * Number(ethExchange))
+    const remaining = String(Number(transferLimits(currency)) - Number(ethSentPastWeek) * Number(ethExchange(defaultCurrency)))
     const end = remaining.indexOf('.') === -1 ? remaining.length : remaining.indexOf('.') + 3
     return remaining.slice(0, end)
   }
@@ -205,7 +205,7 @@ class Settlement extends Component<Props, State> {
     let formInputError
     const cleanAmount = amount.replace(/^[^0-9\.]/, '')
 
-    if ( direction === 'lend' && ethSentPastWeek * Number(ethExchange) + Number(cleanAmount) > Number(transferLimits(currency)) ) {
+    if ( direction === 'lend' && ethSentPastWeek * Number(ethExchange(defaultCurrency)) + Number(cleanAmount) > Number(transferLimits(currency)) ) {
       formInputError = accountManagement.sendEth.error.limitExceeded(defaultCurrency)
     } else if (hasPendingTransaction(friend)) {
       formInputError = debtManagement.createError.pending
@@ -250,7 +250,7 @@ class Settlement extends Component<Props, State> {
                 {ethSettlement ? <View style={[accountStyle.balanceRow, {marginTop: 20}]}>
                   <Text style={[accountStyle.balance, {marginLeft: '2%'}]}>{accountManagement.ethBalance.display(ethBalance)}</Text>
                   <Button alternate blackText narrow arrow small onPress={() => {this.props.navigation.navigate('MyAccount')}}
-                    text={accountManagement.ethBalance.inFiat(ethBalance, ethExchange, currency)}
+                    text={accountManagement.ethBalance.inFiat(ethBalance, ethExchange(defaultCurrency), currency)}
                     containerStyle={{marginTop: -6}}
                   />
                 </View> : null}
