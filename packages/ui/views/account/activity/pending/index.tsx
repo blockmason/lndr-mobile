@@ -22,7 +22,7 @@ import general from 'theme/general'
 import language from 'language'
 const { pendingTransactionsLanguage, pendingFriendRequestsLanguage } = language
 
-import { getStore, getUser, submitterIsMe, settlerIsMe, pendingSettlements, bilateralSettlements, getUcacAddr } from 'reducers/app'
+import { getStore, getUser, submitterIsMe, settlerIsMe, pendingSettlements, bilateralSettlements } from 'reducers/app'
 import { isFocusingOn } from 'reducers/nav'
 import { getPendingTransactions, getPendingSettlements } from 'actions'
 import { connect } from 'react-redux'
@@ -42,7 +42,6 @@ interface Props {
   bilateralSettlements: any
   submitterIsMe: (pendingTransaction: PendingTransaction) => any
   settlerIsMe: (pendingSettlement: PendingUnilateral) => any
-  getUcacAddress: (currency: string) => string
   getPendingTransactions: () => any
   getPendingSettlements: () => any
 }
@@ -81,7 +80,7 @@ class PendingTransactionsView extends Component<Props, State> {
 
   showNoneMessage() {
     const { pendingTransactionsLoaded, pendingTransactions, pendingSettlements, bilateralSettlements, pendingFriends } = this.props.state
-    const { friend, getUcacAddress } = this.props
+    const { friend } = this.props
 
     let showNone = false
 
@@ -120,7 +119,7 @@ class PendingTransactionsView extends Component<Props, State> {
   render() {
     const { pendingTransactionsLoaded, pendingTransactions, bilateralSettlements, pendingFriends } = this.props.state
     const { pendingSettlements, settlerIsMe } = this.props
-    const { user, friend, homeScreen, navigation, getUcacAddress } = this.props
+    const { user, friend, homeScreen, navigation } = this.props
 
     return <View>
       <Section contentContainerStyle={style.list}>
@@ -191,4 +190,4 @@ class PendingTransactionsView extends Component<Props, State> {
 
 export default connect((state) => ({ state: getStore(state)(), user: getUser(state)(), isFocused: isFocusingOn(state)('Activity'),
 pendingSettlements: pendingSettlements(state), bilateralSettlements: bilateralSettlements(state), submitterIsMe: submitterIsMe(state),
-settlerIsMe: settlerIsMe(state), getUcacAddress: getUcacAddr(state) }), { getPendingTransactions, getPendingSettlements })(PendingTransactionsView)
+settlerIsMe: settlerIsMe(state) }), { getPendingTransactions, getPendingSettlements })(PendingTransactionsView)

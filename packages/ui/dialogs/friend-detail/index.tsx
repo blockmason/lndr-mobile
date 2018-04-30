@@ -35,7 +35,7 @@ const {
 } = language
 const removeFriendText = language.removeFriend
 
-import { getUser, pendingTransactions, recentTransactions, getUcacAddr } from 'reducers/app'
+import { getUser, pendingTransactions, recentTransactions, convertCurrency, calculateBalance } from 'reducers/app'
 import { getTwoPartyBalance, removeFriend } from 'actions'
 import { connect } from 'react-redux'
 
@@ -44,10 +44,10 @@ const loadingContext = new LoadingContext()
 interface Props {
   user: UserData
   removeFriend: (friend: Friend) => any
-  getUcacAddress: (currency: string) => string
   recentTransactions: any
   pendingTransactions: any
   navigation: any
+  calculateBalance: (friend: Friend) => number
 }
 
 interface State {
@@ -93,22 +93,10 @@ class RemoveFriend extends Component<Props, State> {
   }
 
   getRecentTotal() {
-    const { recentTransactions, getUcacAddress } = this.props
     const friend = this.props.navigation ? this.props.navigation.state.params.friend : {}
-    let total = 0
+    const { calculateBalance } = this.props
 
-    recentTransactions.map( transaction => {
-// EA: FIXME: how do we total up different currencies?
-      if(getUcacAddress(defaultCurrency).indexOf(transaction.ucac) !== -1 ) {
-        if(transaction.creditorAddress === friend.address) {
-          total -= transaction.amount
-        } else if(transaction.debtorAddress === friend.address) {
-          total += transaction.amount
-        }
-      }
-    })
-
-    return total
+    return calculateBalance(friend)
   }
 
   getTransactionNumber() {
@@ -163,4 +151,6 @@ class RemoveFriend extends Component<Props, State> {
   }
 }
 
-export default connect((state) => ({ user: getUser(state)(), pendingTransactions: pendingTransactions(state), recentTransactions: recentTransactions(state), getUcacAddress: getUcacAddr(state) }),{ removeFriend })(RemoveFriend)
+export default connect((state) => ({ user: getUser(state)(), pendingTransactions: pendingTransactions(state), 
+  recentTransactions: recentTransactions(state), calculateBalance: calculateBalance(state), convertCurrency: convertCurrency(state) }),
+  { removeFriend })(RemoveFriend)

@@ -20,7 +20,7 @@ import general from 'theme/general'
 import language from 'language'
 const { recentTransactionsLanguage } = language
 
-import { getStore, getUser, getUcacAddr } from 'reducers/app'
+import { getStore, getUser } from 'reducers/app'
 import { isFocusingOn } from 'reducers/nav'
 import { getRecentTransactions } from 'actions'
 import { connect } from 'react-redux'
@@ -33,7 +33,6 @@ interface Props {
   user: UserData
   state: any
   friend?: any
-  getUcacAddress: (currency: string) => string
   navigation: any
 }
 
@@ -83,7 +82,7 @@ class RecentTransactionsView extends Component<Props, State> {
 
   render() {
     const { recentTransactionsLoaded, recentTransactions } = this.props.state
-    const { user, friend, getUcacAddress } = this.props
+    const { user, friend } = this.props
 
     return <View>
       { this.renderRecentTransactionDetailDialog() }
@@ -109,5 +108,5 @@ class RecentTransactionsView extends Component<Props, State> {
   }
 }
 
-export default connect((state) => ({ state: getStore(state)(), user: getUser(state)(), isFocused: isFocusingOn(state)('Activity'), getUcacAddress: getUcacAddr(state) }),
+export default connect((state) => ({ state: getStore(state)(), user: getUser(state)(), isFocused: isFocusingOn(state)('Activity') }),
  { getRecentTransactions })(RecentTransactionsView)

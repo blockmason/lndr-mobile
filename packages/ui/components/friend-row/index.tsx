@@ -14,7 +14,7 @@ import { defaultCurrency, currencySymbols, transferLimits  } from 'lndr/currenci
 import style from 'theme/account'
 import general from 'theme/general'
 
-import { getUcacAddr } from 'reducers/app'
+import { calculateBalance, convertCurrency } from 'reducers/app'
 import { connect } from 'react-redux'
 
 import language from 'language'
@@ -26,7 +26,7 @@ interface Props {
   friendScreen?: boolean
   recentTransactions?: any
   navigation: any
-  getUcacAddress: (currency: string) => string
+  calculateBalance: (friend: Friend) => number
 }
 
 interface State {
@@ -52,27 +52,13 @@ class FriendRow extends Component<Props, State> {
   }
 
   getRecentTotal() {
-    const { friend, recentTransactions, getUcacAddress } = this.props
-    let total = 0
-
-    if(recentTransactions !== undefined) {
-      recentTransactions.map( transaction => {
-// EA: FIXME should this be limited to defaultCurrency?
-// EA: how do we total up things in different currencies??
-        if(getUcacAddress(defaultCurrency).indexOf(transaction.ucac) !== -1) {
-          if(transaction.creditorAddress === friend.address) {
-            total -= transaction.amount
-          } else if(transaction.debtorAddress === friend.address) {
-            total += transaction.amount
-          }
-        }
-      })
-    }
-    return total
+    const { friend, calculateBalance } = this.props
+    
+    return calculateBalance(friend)
   }
 
   getAmountTotal() {
-    const { friend, getUcacAddress } = this.props
+    const { friend } = this.props
     let total = this.getRecentTotal()
     let sign = ''
 
@@ -134,4 +120,4 @@ class FriendRow extends Component<Props, State> {
   }
 }
 
-export default connect((state) => ({ getUcacAddress: getUcacAddr(state) }))(FriendRow)
+export default connect((state) => ({ calculateBalance: calculateBalance(state), convertCurrency: convertCurrency(state) }))(FriendRow)

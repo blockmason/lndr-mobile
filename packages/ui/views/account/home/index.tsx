@@ -19,12 +19,12 @@ import { UserData } from 'lndr/user'
 import PendingTransaction from 'lndr/pending-transaction'
 
 import { isFocusingOn } from 'reducers/nav'
-import { getStore, getUser, getNeedsReviewCount } from 'reducers/app'
+import { getStore, getUser, getNeedsReviewCount, calculateBalance, calculateCounterparties } from 'reducers/app'
 import { getAccountInformation, displayError, getPendingTransactions, getPendingSettlements,
-  getFriendRequests, getBalances, registerChannelID } from 'actions'
+  getFriendRequests, getRecentTransactions, registerChannelID } from 'actions'
 import { connect } from 'react-redux'
 import { UrbanAirship } from 'urbanairship-react-native'
-import { defaultCurrency, currencySymbols, transferLimits  } from 'lndr/currencies'
+import { defaultCurrency, currencySymbols, transferLimits } from 'lndr/currencies'
 
 import style from 'theme/account'
 import formStyle from 'theme/form'
@@ -53,10 +53,11 @@ const {
 
 const { width } = Dimensions.get('window')
 
-const loadingBalances = new LoadingContext()
+const loadingRecentTransactions = new LoadingContext()
 const loadingPendingTransactions = new LoadingContext()
 const loadingPendingSettlements = new LoadingContext()
 const loadingPendingFriends = new LoadingContext()
+const balances = new LoadingContext()
 
 interface Props {
   navigation: any
@@ -64,13 +65,16 @@ interface Props {
   getPendingTransactions: () => any
   getPendingSettlements: () => any
   getFriendRequests: () => any
-  getBalances: () => any
+  getRecentTransactions: () => any
   getAccountInformation: () => any
+  getBalances: () => any
   displayError: (errorMsg: string) => any
   registerChannelID: (channelID: string, platform: string) => any
   user: UserData
   state: any
   needsReviewCount: number
+  calculateBalance: () => number
+  calculateCounterparties: () => number
 }
 
 interface State {
@@ -102,7 +106,7 @@ class HomeView extends Component<Props, State> {
     await loadingPendingTransactions.wrap(this.props.getPendingTransactions())
     await loadingPendingSettlements.wrap(this.props.getPendingSettlements())
     await loadingPendingFriends.wrap(this.props.getFriendRequests())
-    await loadingBalances.wrap(this.props.getBalances())
+    await loadingRecentTransactions.wrap(this.props.getRecentTransactions())
   }
 
   componentWillReceiveProps(nextProps) {
@@ -147,14 +151,15 @@ class HomeView extends Component<Props, State> {
   }
 
   renderBalanceInformation() {
-    const { accountInformationLoaded, accountInformation = {}, balances, balancesLoaded, ethBalance = '0', ethExchange = '700' } = this.props.state
+    const { recentTransactionsLoaded, ethBalance = '0', ethExchange = '700' } = this.props.state
     const { currency } = this.state
+    const { calculateBalance, calculateCounterparties } = this.props
 
-    if (!accountInformationLoaded) {
+    if (!recentTransactionsLoaded) {
       return
     }
 
-    const { balance } = accountInformation
+    const balance = calculateBalance()
 
     if (typeof balance === 'undefined') {
       return <Text style={formStyle.warningText}>
@@ -173,7 +178,7 @@ class HomeView extends Component<Props, State> {
       <View style={style.balanceRow}>
         <Text style={[style.balance, {marginLeft: '2%'}]}>{recentTransactionsLanguage.balance}</Text>
         <Button alternate blackText narrow arrow small onPress={() => {this.props.navigation.navigate('Friends')}}
-          text={recentTransactionsLanguage.friends(balancesLoaded ? balances.length : 0)}
+          text={recentTransactionsLanguage.friends(calculateCounterparties())}
           containerStyle={{marginTop: -6}}
         />
       </View>
@@ -192,7 +197,7 @@ class HomeView extends Component<Props, State> {
   }
 
   render() {
-    const { pendingTransactionsLoaded, pendingTransactions, accountInformation, balancesLoaded, balances } = this.props.state
+    const { pendingTransactionsLoaded, pendingTransactions, accountInformation } = this.props.state
     const { user } = this.props
 
     return <ScrollView style={general.view}
@@ -225,5 +230,5 @@ class HomeView extends Component<Props, State> {
 }
 
 export default connect((state) => ({ state: getStore(state)(), user: getUser(state)(), isFocused: isFocusingOn(state)('Home'),
-needsReviewCount: getNeedsReviewCount(state) }), { getAccountInformation, displayError, getPendingTransactions, getPendingSettlements,
-getFriendRequests, getBalances, registerChannelID })(HomeView)
+needsReviewCount: getNeedsReviewCount(state), calculateBalance: calculateBalance(state), calculateCounterparties: calculateCounterparties(state) }), 
+{ getAccountInformation, displayError, getPendingTransactions, getPendingSettlements, getFriendRequests, getRecentTransactions, registerChannelID })(HomeView)

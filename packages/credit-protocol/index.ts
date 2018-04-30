@@ -401,10 +401,10 @@ export default class CreditProtocol {
 
   async fiatToEth(amount: number, currency: string) {
     const conversionRate = await this.getEthExchange(currency)
-    if(currency === 'USD') {
-      return Number(amount) / 100 / Number(conversionRate)
-    } else {
+    if(currency === 'KRW' || currency === 'JPY' || currency === 'IDR' || currency === 'VND') {
       return Number(amount) / Number(conversionRate)
+    } else {
+      return Number(amount) / 100 / Number(conversionRate)
     }
   }
   
@@ -430,24 +430,28 @@ export default class CreditProtocol {
   }
   
   async getEthExchange(currency: string) {
+    const prices = await this.getEthPrices()
+    return prices[currency.toLowerCase()] === 'undefined' ? '0' : prices[currency.toLowerCase()]
+  }
+
+  async getEthPrices() {
     const config = await this.getConfig()
-    return config.ethereumPrices[currency.toLowerCase()]
+    return config.ethereumPrices
   }
   
   async ethToFiat(eth, currency) {
     const exchange = await this.getEthExchange(currency)
     const fiat = String(Number(eth) * Number(exchange))
   
-    if (currency === 'USD') {
+    if (currency === 'KRW' || currency === 'JPY' || currency === 'IDR' || currency === 'VND') {
+      const decimalIndex = fiat.indexOf('.')
+      return fiat.slice(0, decimalIndex)
+    } else {
       const decimalIndex = fiat.indexOf('.')
       if (decimalIndex === -1) {
         return `${fiat}.00`
       }
       return fiat.slice(0, decimalIndex + 3)
-  
-    } else {
-      const decimalIndex = fiat.indexOf('.')
-      return fiat.slice(0, decimalIndex)
     }
   }
 }
