@@ -3,7 +3,7 @@ import PendingTransaction from 'lndr/pending-transaction'
 import moment from 'moment'
 import { UserData } from 'lndr/user'
 import Friend from 'lndr/friend'
-import { currencySymbols, transferLimits, defaultCurrency } from 'lndr/currencies'
+import { currencySymbols, transferLimits, defaultCurrency, hasNoDecimals } from 'lndr/currencies'
 
 export const initialState = ({})
 
@@ -105,15 +105,20 @@ export const pendingFriends = (state) => state.store.pendingFriends
 
 export const getEthBalance = (state) : string => state.store.ethBalance
 
-export const getEthExchange = (state) => (currency: string) : string => state.store.ethPrices[currency.toLowerCase()] === 'undefined' ? '1000' : state.store.ethPrices[currency.toLowerCase()]
+export const getEthExchange = (state) => (currency: string) : string => {
+  return state.store.ethPrices[currency.toLowerCase()] === undefined ? '1000' : state.store.ethPrices[currency.toLowerCase()]
+}
 
 export const getEthPrices = (state) : object => state.store.ethPrices
 
 export const getBcptBalance = (state) : string => state.store.bcptBalance
 
 export const convertCurrency = (state) => (fromUcac: string, amount: number) : number => {
-  const fromExchange = Number(getEthExchange(state)(getUcacCurrency(state)(fromUcac)))
-  const toExchange = Number(getEthExchange(state)(defaultCurrency.toLowerCase()))
+  let fromExchange = Number(getEthExchange(state)(getUcacCurrency(state)(fromUcac)))
+  fromExchange = hasNoDecimals(getUcacCurrency(state)(fromUcac)) ? fromExchange : fromExchange * 100
+  let toExchange = Number(getEthExchange(state)(defaultCurrency.toLowerCase()))
+  toExchange = hasNoDecimals(defaultCurrency) ? toExchange : toExchange * 100
+
   return amount / fromExchange * toExchange
 }
 

@@ -103,4 +103,6 @@ const getCurrency = (country: string) => {
   return currencies[country] === undefined ? 'EUR' : currencies[country]
 }
 
+export const hasNoDecimals = (currency: string) : boolean => currency === 'KRW' || currency === 'JPY' || currency === 'IDR' || currency === 'VND'
+
 export const defaultCurrency = getCurrency(country)

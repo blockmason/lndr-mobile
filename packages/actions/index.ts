@@ -783,8 +783,7 @@ export const setEthBalance = () => {
   return async (dispatch, getState) => {
     const { user } = getState().store
     const ethBalance = await getEthBalance(user.address)
-    const ethPrices = await creditProtocol.getEthExchange(defaultCurrency)
-    dispatch(setState({ ethBalance, ethPrices }))
+    dispatch(setState({ ethBalance }))
   }
 }
 
