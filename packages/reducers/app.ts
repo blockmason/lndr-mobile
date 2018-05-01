@@ -119,8 +119,6 @@ export const convertCurrency = (state) => (fromUcac: string, amount: number) : n
   let toExchange = Number(getEthExchange(state)(defaultCurrency.toLowerCase()))
   toExchange = hasNoDecimals(defaultCurrency) ? toExchange : toExchange * 100
 
-  console.log(amount, fromExchange, toExchange)
-
   return amount / fromExchange * toExchange
 }
 

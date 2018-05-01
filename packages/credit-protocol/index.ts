@@ -437,7 +437,6 @@ export default class CreditProtocol {
 
   async getEthPrices() {
     const config = await this.getConfig()
-    console.log('ETH PRICES', config.ethereumPrices)
     return config.ethereumPrices
   }
   
