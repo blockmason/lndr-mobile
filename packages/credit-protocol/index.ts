@@ -17,7 +17,8 @@ import FetchUtil from 'lndr/fetch-util'
 import EthTransaction from 'lndr/eth-transaction'
 import Tx from 'ethereumjs-tx'
 import Web3 from 'web3'
-import { hasNoDecimals } from 'lndr/currencies';
+import { hasNoDecimals } from 'lndr/currencies'
+import { sanitizeAmount } from 'lndr/format'
 
 const fetchUtil = new FetchUtil(fetch)
 const web3 = new Web3(new Web3.providers.HttpProvider('https://mainnet.infura.io/EoLr1OVfUMDqq3N2KaKA'))
@@ -235,14 +236,7 @@ export default class CreditProtocol {
     return this.client.get('/pending')
   }
 
-  rejectPendingTransactionByHash(hash: string, privateKeyBuffer: any) {
-    return this.client.post('/reject', {
-      hash,
-      signature: this.serverSign(hash, privateKeyBuffer)
-    })
-  }
-
-  rejectPendingSettlementByHash(hash: string, privateKeyBuffer: any) {
+  rejectPendingByHash(hash: string, privateKeyBuffer: any) {
     return this.client.post('/reject', {
       hash,
       signature: this.serverSign(hash, privateKeyBuffer)
@@ -281,11 +275,7 @@ export default class CreditProtocol {
     })
   }
 
-  async submitSettlementRecord(creditRecord, action, signature, denomination) {
-    if (action !== 'lend' && action !== 'borrow') {
-      throw new Error('Action is invalid')
-    }
-
+  async submitSettlementRecord(creditRecord, direction, signature, denomination) {
     const {
       ucacAddress: ucac,
       creditorAddress: creditor,
@@ -295,13 +285,13 @@ export default class CreditProtocol {
       nonce
     } = creditRecord
 
-    return this.client.post(`/${action}`, {
+    return this.client.post(`/${direction}`, {
       ucac,
       creditor,
       debtor,
       amount,
       memo,
-      submitter: action === 'lend' ? creditor : debtor,
+      submitter: direction === 'lend' ? creditor : debtor,
       hash: bufferToHex(creditRecord.hash),
       nonce,
       signature,
@@ -454,5 +444,9 @@ export default class CreditProtocol {
       }
       return fiat.slice(0, decimalIndex + 3)
     }
+  }
+
+  async submitMultiSettlement(transactions: Object[]) {
+    return this.client.post('/multi_settlement', transactions)
   }
 }

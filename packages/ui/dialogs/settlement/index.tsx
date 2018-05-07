@@ -44,14 +44,16 @@ interface Props {
     memo: string,
     direction: string,
     denomination: string,
-    currency: string
+    currency: string,
+    settleTotal: boolean
   ) => any
   addDebt: (
     friend: Friend,
     amount: string,
     memo: string,
     direction: string,
-    currency: string
+    currency: string,
+    settleTotal?: boolean
   ) => any
   hasPendingTransaction: (friend: Friend) => boolean
   user: UserData
@@ -64,7 +66,7 @@ interface Props {
 }
 
 interface State {
-  amount?: string
+  amount: string
   formInputError?: string
   balance: number
   direction: string
@@ -79,6 +81,7 @@ class Settlement extends Component<Props, State> {
 
     this.state = {
       balance: this.getRecentTotal(),
+      amount: '',
       direction: this.getRecentTotal() > 0 ? 'borrow' : 'lend',
       txCost: '0.00',
       currency: defaultCurrency
@@ -88,18 +91,21 @@ class Settlement extends Component<Props, State> {
   async componentWillMount() {
     const txCost = await getEthTxCost(defaultCurrency)
     const friend = this.props.navigation ? this.props.navigation.state.params.friend : {}
-    let pic
+    const ethSettlement = this.props.navigation ? this.props.navigation.state.params.ethSettlement : false
 
+    const amount = ethSettlement ? '' : this.setAmount(String(Math.abs(this.state.balance)))
+
+    let pic
     try {
       if (friend.address !== undefined) {
         pic = await profilePic.get(friend.address)
       }
     } catch (e) {}
-    this.setState({txCost, pic})
+    this.setState({txCost, pic, amount})
   }
 
   async submit() {
-    const { amount, direction, currency, formInputError } = this.state
+    const { amount, direction, currency, formInputError, balance } = this.state
     const friend = this.props.navigation ? this.props.navigation.state.params.friend : {}
     const ethSettlement = this.props.navigation ? this.props.navigation.state.params.ethSettlement : false
 
@@ -112,6 +118,8 @@ class Settlement extends Component<Props, State> {
     const denomination = 'ETH'
     let success
 
+    const settleTotal = Math.abs(balance) === Number(amount.replace(/[^0-9]/g, ''))
+    console.log('DIRECTION', direction, 'AMOUNT', amount, typeof amount)
     if( ethSettlement ) {
       success = await submittingTransaction.wrap(
         this.props.settleUp(
@@ -120,7 +128,8 @@ class Settlement extends Component<Props, State> {
           memo as string,
           direction as string,
           denomination as string,
-          currency as string
+          currency as string,
+          settleTotal as boolean
         )
       )
     } else {
@@ -130,7 +139,8 @@ class Settlement extends Component<Props, State> {
           amount as string,
           memo as string,
           direction as string,
-          currency as string
+          currency as string,
+          settleTotal as boolean
         )
       )
     }
@@ -156,7 +166,7 @@ class Settlement extends Component<Props, State> {
   }
 
   clear() {
-    this.setState( { amount: undefined } )
+    this.setState( { amount: '' } )
   }
 
   cancel() {
@@ -168,8 +178,6 @@ class Settlement extends Component<Props, State> {
     const { balance, currency } = this.state
     const cleanAmount = Number(amount.replace(/[^0-9\.]/g, ''))
     const adjustedBalance = hasNoDecimals(currency) ? balance : balance / 100
-
-    console.log(cleanAmount, adjustedBalance)
 
     if (cleanAmount > Math.abs(adjustedBalance)) {
       return amountFormat( String(adjustedBalance), currency)
@@ -257,7 +265,7 @@ class Settlement extends Component<Props, State> {
                 {ethSettlement ? <Text style={[accountStyle.txCost, {marginLeft: '2%'}]}>{accountManagement.sendEth.txCost(txCost, currency)}</Text> : null}
                 {!ethSettlement || balance > 0 ? null : <Text style={[formStyle.smallText, formStyle.spaceTop, formStyle.center]}>{accountManagement.sendEth.warning(this.getLimit(), currency)}</Text>}
                 <Text style={formStyle.titleLarge}>{debtManagement.fields.settlementAmount}</Text>
-                <TextInput
+                {ethSettlement ? <TextInput
                   style={formStyle.jumboInput}
                   placeholder={`${currencySymbols(currency)}0`}
                   placeholderTextColor='black'
@@ -266,7 +274,7 @@ class Settlement extends Component<Props, State> {
                   underlineColorAndroid='transparent'
                   keyboardType='numeric'
                   onChangeText={amount => this.updateAmount(amount)}
-                />
+                /> : <Text style={formStyle.jumboInput}>{amount}</Text>}
               </View>
             </View>
             { formInputError && <Text style={[formStyle.warningText, {alignSelf: 'center', marginHorizontal: 15}]}>{formInputError}</Text>}
