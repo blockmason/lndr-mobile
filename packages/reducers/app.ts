@@ -163,31 +163,24 @@ export const calculateCounterparties = (state) => () : number => {
 }
 
 export const calculateUcacBalances = (state) => (friendAddress: string) : Object => {
-  const recent = recentTransactions(state)
+  const recents = recentTransactions(state)
   const user = getUser(state)()
   const ucacBalances = {}
 
-  recent.map( tx => {
-    if(tx.creditorAddress === friendAddress) {
-      const currency = getUcacCurrency(state)(tx.ucac)
-      if(ucacBalances[currency] === undefined) {
-        ucacBalances[currency] = -1 * tx.amount
-      } else {
-        ucacBalances[currency] = ucacBalances[currency] - tx.amount
-      }
-    } else if(tx.debtorAddress === friendAddress) {
-      const currency = getUcacCurrency(state)(tx.ucac)
-      if(ucacBalances[currency] === undefined) {
-        ucacBalances[currency] = tx.amount
-      } else {
-        ucacBalances[currency] = ucacBalances[currency] + tx.amount
-      }
+  recents.map( tx => {
+    const multiplier = (tx.debtorAddress === friendAddress) ? 1 : -1
+    const value = multiplier * tx.amount
+    const currency = getUcacCurrency(state)(tx.ucac)
+    if (ucacBalances[currency] === undefined) {
+      ucacBalances[currency] = value
+    } else {
+      ucacBalances[currency] += value
     }
   })
 
-  for(let i in ucacBalances) {
-    if(ucacBalances[i] === 0) {
-      ucacBalances[i] = undefined
+  for(let currency in ucacBalances) {
+    if(ucacBalances[currency] === 0) {
+      delete ucacBalances[currency]
     }
   }
 

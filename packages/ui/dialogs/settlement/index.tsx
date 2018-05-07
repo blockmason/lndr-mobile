@@ -119,7 +119,6 @@ class Settlement extends Component<Props, State> {
     let success
 
     const settleTotal = Math.abs(balance) === Number(amount.replace(/[^0-9]/g, ''))
-    console.log('DIRECTION', direction, 'AMOUNT', amount, typeof amount)
     if( ethSettlement ) {
       success = await submittingTransaction.wrap(
         this.props.settleUp(

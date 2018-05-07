@@ -465,14 +465,14 @@ export const getPending = () => {
 
 export const confirmPendingTransaction = (pendingTransaction: PendingTransaction) => {
   return async (dispatch, getState) => {
-    const { creditorAddress, debtorAddress, amount, memo, creditorNickname, debtorNickname, creditRecord, multiHashes } = pendingTransaction
+    const { creditorAddress, debtorAddress, amount, memo, creditorNickname, debtorNickname, creditRecord, multiTransactionHashes } = pendingTransaction
     const { ucacAddress } = creditRecord
     const { address, privateKeyBuffer } = getUser(getState())()
     const direction = address === creditorAddress ? 'lend' : 'borrow'
     const friendAddress = address === creditorAddress ? debtorAddress : creditorAddress
     const friendNickname = address === creditorAddress ? debtorNickname : creditorNickname
 
-    if(multiHashes !== undefined) {
+    if(multiTransactionHashes !== undefined) {
       const ucacBalances = calculateUcacBalances(getState())(friendAddress)
       const { transactions } = await generateMultiTransaction(address, friendAddress, ucacBalances, memo, getState, privateKeyBuffer)
 
@@ -547,13 +547,13 @@ export const confirmPendingSettlement = (pendingSettlement: PendingUnilateral, d
 export const rejectPendingTransaction = (pendingTransaction: PendingTransaction) => {
   return async (dispatch, getState) => {
     const { address, privateKeyBuffer } = getUser(getState())()
-    const { hash, multiHashes } = pendingTransaction
+    const { hash, multiTransactionHashes } = pendingTransaction
 
     try {
-      if(multiHashes === undefined) {
+      if(multiTransactionHashes === undefined) {
         await creditProtocol.rejectPendingByHash(hash, privateKeyBuffer)
       } else {
-        multiHashes.map( async (hash) => await creditProtocol.rejectPendingByHash(hash, privateKeyBuffer) )
+        multiTransactionHashes.map( async (hash) => await creditProtocol.rejectPendingByHash(hash, privateKeyBuffer) )
       }
       
       dispatch(displaySuccess(debtManagement.rejection.success))
@@ -1176,10 +1176,10 @@ const filterMultiTransactions = (address: string, pending: PendingTransaction[],
     const memo = `Request to settle for ${currencySymbols(defaultCurrency)}${currencyFormats(defaultCurrency)(amount)}`
     const nonce = 0
     const hash = txs[tx][0].hash
-    const multiHashes = txs[tx].map( pendTx => pendTx.hash )
+    const multiTransactionHashes = txs[tx].map( pendTx => pendTx.hash )
 
     newList.push(new PendingTransaction({
-      creditor, debtor, amount, memo, nonce, ucac, submitter, hash, multiHashes
+      creditor, debtor, amount, memo, nonce, ucac, submitter, hash, multiTransactionHashes
     }))
   }
 
