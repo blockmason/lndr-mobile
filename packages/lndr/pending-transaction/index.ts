@@ -6,12 +6,14 @@ export default class PendingTransaction {
   creditRecord: CreditRecord
   submitter: string
   hash: string
+  multiTransactionHashes?: string[]
 
   constructor(data) {
-    const { creditor, debtor, amount, memo, nonce, ucac, submitter, hash } = data
-    this.creditRecord = new CreditRecord(ucac, creditor, debtor, amount, memo, 0)
+    const { creditor, debtor, amount, memo, nonce, ucac, submitter, hash, multiTransactionHashes } = data
+    this.creditRecord = new CreditRecord(ucac, creditor, debtor, amount, memo, nonce)
     this.submitter = submitter.replace('0x', '')
     this.hash = hash
+    this.multiTransactionHashes = multiTransactionHashes
   }
 
   get creditorAddress() {
