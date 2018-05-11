@@ -20,6 +20,7 @@ import { getStore, getUser } from 'reducers/app'
 import AppWithNavigationState from 'navigators'
 import { connect } from 'react-redux'
 import { Toast, ToastActionsCreators } from 'react-native-redux-toast'
+import SplashScreen from 'react-native-splash-screen'
 
 import style from 'theme/general'
 
@@ -66,6 +67,7 @@ const store = createStore(initialState)
 class AppContentsView extends Component<AppContentsProps> {
   componentDidMount() {
     this.props.initializeStorage()
+    SplashScreen.hide()
   }
 
   render() {
