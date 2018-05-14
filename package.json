@@ -38,6 +38,7 @@
     "react-native-popup-dialog": "^0.9.39",
     "react-native-randombytes": "^3.0.0",
     "react-native-redux-toast": "^1.0.1",
+    "react-native-splash-screen": "^3.0.6",
     "react-native-sqlite-storage": "^3.3.3",
     "react-native-touch-id": "^4.0.1",
     "react-native-vector-icons": "^4.4.2",
