@@ -8,6 +8,7 @@
  */
 
 #import "AppDelegate.h"
+#import "SplashScreen.h"
 
 #import <Firebase.h>
 #import <React/RCTBundleURLProvider.h>
@@ -45,6 +46,8 @@
   rootViewController.view = rootView;
   self.window.rootViewController = rootViewController;
   [self.window makeKeyAndVisible];
+  
+  [SplashScreen show];
   return YES;
 }
 
