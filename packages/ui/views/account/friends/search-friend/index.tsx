@@ -11,7 +11,7 @@ import Loading, { LoadingContext } from 'ui/components/loading'
 import AddFriendRow from 'ui/components/add-friend-row'
 import FriendRow from 'ui/components/friend-row'
 import InputImage from 'ui/components/images/input-image'
-import { getRecentTransactions } from 'actions'
+import { getPendingTransactions, getRecentTransactions } from 'actions'
 
 import style from 'theme/form'
 import friendStyle from 'theme/friend'
@@ -171,3 +171,4 @@ export default class SearchFriend extends Component<Props, State> {
     </ScrollView>
   }
 }
+

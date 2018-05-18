@@ -220,7 +220,7 @@ export default StyleSheet.create({
     top: Platform.OS === 'ios' ? 28 : 0,
     right: 55,
     flexDirection: 'row'
-  },
+  }
   settingsBackground: {
     backgroundColor: aqua,
     height: 25,
