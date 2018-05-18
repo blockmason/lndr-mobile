@@ -24,10 +24,11 @@ const { pendingTransactionsLanguage, pendingFriendRequestsLanguage } = language
 
 import { getStore, getUser, submitterIsMe, settlerIsMe, pendingSettlements, bilateralSettlements } from 'reducers/app'
 import { isFocusingOn } from 'reducers/nav'
-import { getPending } from 'actions'
+import { getPendingTransactions, getPendingSettlements } from 'actions'
 import { connect } from 'react-redux'
 
-const loadingPending = new LoadingContext()
+const loadingPendingTransactions = new LoadingContext()
+const loadingPendingSettlements = new LoadingContext()
 
 interface Props {
   navigation: any
@@ -41,7 +42,8 @@ interface Props {
   bilateralSettlements: any
   submitterIsMe: (pendingTransaction: PendingTransaction) => any
   settlerIsMe: (pendingSettlement: PendingUnilateral) => any
-  getPending: () => any
+  getPendingTransactions: () => any
+  getPendingSettlements: () => any
 }
 
 interface State {
@@ -56,7 +58,8 @@ class PendingTransactionsView extends Component<Props, State> {
 
   async componentDidMount() {
     if (this.props.homeScreen) {
-      await loadingPending.wrap(this.props.getPending())
+      await loadingPendingTransactions.wrap(this.props.getPendingTransactions())
+      await loadingPendingSettlements.wrap(this.props.getPendingSettlements())
     }
   }
 
@@ -120,7 +123,7 @@ class PendingTransactionsView extends Component<Props, State> {
 
     return <View>
       <Section contentContainerStyle={style.list}>
-        <Loading context={loadingPending} />
+        <Loading context={loadingPendingTransactions} />
         {this.showNoneMessage()}
         {
           pendingTransactions.map(pendingTransaction => {
@@ -187,4 +190,4 @@ class PendingTransactionsView extends Component<Props, State> {
 
 export default connect((state) => ({ state: getStore(state)(), user: getUser(state)(), isFocused: isFocusingOn(state)('Activity'),
 pendingSettlements: pendingSettlements(state), bilateralSettlements: bilateralSettlements(state), submitterIsMe: submitterIsMe(state),
-settlerIsMe: settlerIsMe(state) }), { getPending })(PendingTransactionsView)
+settlerIsMe: settlerIsMe(state) }), { getPendingTransactions, getPendingSettlements })(PendingTransactionsView)
