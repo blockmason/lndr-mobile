@@ -151,7 +151,7 @@ class Settlement extends Component<Props, State> {
   getRecentTotal() {
     const friend = this.props.navigation ? this.props.navigation.state.params.friend : {}
     const { calculateBalance } = this.props
-    
+
     return calculateBalance(friend)
   }
 
@@ -220,6 +220,7 @@ class Settlement extends Component<Props, State> {
     const ethSettlement = this.props.navigation ? this.props.navigation.state.params.ethSettlement : false
     const friend = this.props.navigation ? this.props.navigation.state.params.friend : {}
     const imageSource = pic ? { uri: pic } : require('images/person-outline-dark.png')
+    const vertOffset = (Platform.OS === 'android') ? -300 : 20;
 
     return <View style={general.whiteFlex}>
       <View style={general.view}>
@@ -227,7 +228,7 @@ class Settlement extends Component<Props, State> {
         <DashboardShell text={debtManagement.settleUpLower} navigation={this.props.navigation} />
         <Button close onPress={() => this.props.navigation.goBack()} />
       </View>
-      <KeyboardAvoidingView style={general.whiteFlex} behavior={'padding'} keyboardVerticalOffset={20} >
+      <KeyboardAvoidingView style={general.whiteFlex} behavior={'padding'} keyboardVerticalOffset={vertOffset} >
         <ScrollView style={general.view} keyboardShouldPersistTaps='handled'>
           <View style={[general.centeredColumn, {marginBottom: 20}]}>
             <Image source={imageSource} style={style.settleImage}/>
