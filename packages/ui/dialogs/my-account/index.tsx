@@ -1,7 +1,7 @@
 import React, { Component } from 'react'
 
 import { Text, TextInput, View, Dimensions, ScrollView, Linking,
-  TouchableHighlight, Image, FlatList, KeyboardAvoidingView } from 'react-native'
+  TouchableHighlight, Image, FlatList, KeyboardAvoidingView, Platform } from 'react-native'
 
 import ImagePicker from 'react-native-image-picker'
 
@@ -389,12 +389,13 @@ class MyAccount extends Component<Props, State> {
         </View>
       </View>
     } else {
+      const vertOffset = (Platform.OS === 'android') ? -300 : 0;
       return <View style={general.whiteFlex}>
         <View style={general.view}>
           <DashboardShell text={myAccount} navigation={this.props.navigation} hideSettings />
           <Button close onPress={() => this.props.navigation.goBack()} />
         </View>
-        <KeyboardAvoidingView style={general.whiteFlex} behavior={'padding'} keyboardVerticalOffset={0} >
+        <KeyboardAvoidingView style={general.whiteFlex} behavior={'padding'} keyboardVerticalOffset={vertOffset} >
           <ScrollView ref='scrollContent' style={general.view} onScroll={event => this.handleScroll(event)} scrollEventThrottle={50} keyboardShouldPersistTaps='handled'>
             <View style={[style.account, {minHeight: height}]}>
               <Loading context={loadingContext} />

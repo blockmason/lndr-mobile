@@ -104,6 +104,7 @@ class TransferBcpt extends Component<Props, State> {
   render() {
     const { amount, address, formInputError, error } = this.state
     const { bcptBalance } = this.props
+    const vertOffset = (Platform.OS === 'android') ? -300 : 0;
 
     return <View style={general.whiteFlex}>
       <View style={general.view}>
@@ -111,7 +112,7 @@ class TransferBcpt extends Component<Props, State> {
         <DashboardShell text={accountManagement.sendBcpt.transfer} navigation={this.props.navigation} />
         <Button close onPress={() => this.props.navigation.goBack()} />
       </View>
-      <KeyboardAvoidingView style={general.whiteFlex} behavior={'padding'} keyboardVerticalOffset={0} >
+      <KeyboardAvoidingView style={general.whiteFlex} behavior={'padding'} keyboardVerticalOffset={vertOffset} >
         <ScrollView style={general.view} keyboardShouldPersistTaps='handled'>
           <View style={general.largeHMargin} >
             <View style={[general.centeredColumn, {marginBottom: 20}]}>

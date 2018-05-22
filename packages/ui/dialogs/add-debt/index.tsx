@@ -199,13 +199,14 @@ class AddDebt extends Component<Props, State> {
       return this.renderSelectFriend()
     }
 
+    const vertOffset = (Platform.OS === 'android') ? -300 : 0;
     return <View style={general.whiteFlex}>
       <View style={general.view}>
         <Loading context={submittingTransaction} />
         <DashboardShell text={debtManagement.shell} navigation={this.props.navigation} />
         <Button close onPress={() => this.cancel()} />
       </View>
-      <KeyboardAvoidingView style={general.whiteFlex} behavior={'padding'} keyboardVerticalOffset={0} >
+      <KeyboardAvoidingView style={general.whiteFlex} behavior={'padding'} keyboardVerticalOffset={vertOffset} >
         <ScrollView style={general.view} keyboardShouldPersistTaps='handled'>
           <View style={[general.centeredColumn, {marginBottom: 20}]}>
             <Text style={[style.header, {marginBottom: 20}]}>{debtManagement[direction]}</Text>

@@ -151,8 +151,9 @@ class CreateAccountForm extends Component<Props, State> {
         <Pinpad onNumPress={(pin) => this.enterPin(pin)} onBackspace={() => this.clearPin()} pin={password} headerText={enterNewPin} />
       </View>
     } else {
+      const vertOffset = (Platform.OS === 'android') ? -300 : 0;
       return (<View style={style.form}>
-        <KeyboardAvoidingView behavior={Platform.OS === 'ios' ? 'position' : 'padding'} keyboardVerticalOffset={0} >
+        <KeyboardAvoidingView behavior={Platform.OS === 'ios' ? 'position' : 'padding'} keyboardVerticalOffset={vertOffset} >
           <ThemeImage name='logo' size={0.4} />
           <Text style={[style.text, style.spaceBottom]}>{newAccount}</Text>
           <View style={style.textInputContainer}>
