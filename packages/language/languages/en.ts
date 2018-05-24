@@ -375,5 +375,10 @@ export default {
     shell: `Friend Request`,
     message: `Friend Requests`,
     request: friend => `${friend} wants to be friends with you!`,
+  },
+
+  privacyPolicy: {
+    link: `lndr.io/terms/`,
+    message: `By clicking below you confirm that you have read and agree to Blockmason's privacy policy. Blockmason may use your email address to send updates about Blockmason and LNDR. Here is a link to the privacy policy:`
   }
 }

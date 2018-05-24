@@ -15,8 +15,8 @@ import indo from './languages/in'
 import it from './languages/it'
 import iw from './languages/iw'
 import ko from './languages/ko'
-import jp from './languages/jp'
 import ms from './languages/ms'
+import ja from './languages/ja'
 import nl from './languages/nl'
 import nb from './languages/nb'
 import no from './languages/no'
@@ -47,12 +47,12 @@ const languages = {
   ar, cs, da, de, el,
   en, es, fi, fr, hi,
   hu, "in": indo, it, iw, ko,
-  jp, ms, nl, nb, no,
+  ja, ms, nl, nb, no,
   pl, pt, ru, sv, th,
   tr, vi, "zh-CN": zh_CN
 }
 
-let exportLanguage = language.indexOf('zh') === 0 ? languages[locale] : languages[language]
+let exportLanguage = languages[language]
 
 if (exportLanguage === undefined) {
   exportLanguage = languages.en

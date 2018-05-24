@@ -376,5 +376,10 @@ export default {
   },
   status: '거래 내역을 볼 수 있는 곳은 ',
   activity: '액티비티 탭.'
+},
+
+privacyPolicy: {
+  link: `lndr.io/terms/`,
+  message: `Blockmason의 개인 정보 보호 정책을 읽고 동의하려면 아래를 클릭하여 확인하십시오. Blockmason은 이메일 주소를 사용하여 Blockmason 및 LNDR에 대한 업데이트를 보낼 수 있습니다. 개인 정보 취급 방침에 대한 링크는 다음과 같습니다:`
 }
 }
