@@ -377,5 +377,10 @@ export default {
     shell: `请求好友`,
     message: `请求好友`,
     request: F =>`${F}愿意跟你做好友！`
+  },
+
+  privacyPolicy: {
+    link: `lndr.io/terms/`,
+    message: `通过点击下面您确认您已阅读并同意Blockmason的隐私政策。 Blockmason可以使用您的电子邮件地址发送有关Blockmason和LNDR更新。这是对隐私政策的链接：`
   }
 }

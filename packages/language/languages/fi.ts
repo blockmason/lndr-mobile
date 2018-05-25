@@ -378,5 +378,10 @@ export default {
     shell: `Ystäväpyyntö`,
     message: `Ystäväpyynnöt`,
     request: F => `${F} haluaa olla ystäväsi! `,
+  },
+
+  privacyPolicy: {
+    link: `lndr.io/terms/`,
+    message: `Klikkaamalla alla olevaa linkkiä vahvistaa, että olet lukenut ja hyväksynyt Blockmason-tietosuojakäytännön. Blockmason voi käyttää sähköpostiosoitteesi lähettää päivityksiä Blockmason ja LNDR. Tässä on linkki tietosuojakäytäntöön:`
   }
 }

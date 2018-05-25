@@ -377,5 +377,10 @@ export default {
     shell: `Vriendschapsverzoek`,
     message: `Vriendschapsverzoeken`,
     request: F => `${F} wil vrienden met u worden! `,
+  },
+
+  privacyPolicy: {
+    link: `lndr.io/terms/`,
+    message: `Door te klikken, bevestigt u dat u het privacybeleid van Blockmason hebt gelezen en hiermee akkoord gaat. Blockmason kan uw e-mailadres gebruiken om updates over Blockmason en LNDR te verzenden. Hier is een link naar het privacybeleid:`
   }
 }

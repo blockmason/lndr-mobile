@@ -7,6 +7,7 @@ import firebase from 'react-native-firebase'
 
 import AuthenticateView from 'ui/views/authenticate'
 import WelcomeView from 'ui/views/welcome'
+import PrivacyPolicyView from 'ui/views/privacy-policy'
 
 import { PopupTarget } from 'ui/components/popup'
 import ThemeImage from 'ui/components/images/theme-image'
@@ -15,7 +16,7 @@ import { UserData } from 'lndr/user'
 
 import { Provider } from 'react-redux'
 import createStore from 'store'
-import { setWelcomeComplete, initializeStorage } from 'actions'
+import { setWelcomeComplete, initializeStorage, verifyPrivacyPolicy } from 'actions'
 import { getStore, getUser } from 'reducers/app'
 import AppWithNavigationState from 'navigators'
 import { connect } from 'react-redux'
@@ -29,6 +30,7 @@ interface Props {}
 interface AppContentsProps {
   initializeStorage: () => any
   setWelcomeComplete: () => any
+  verifyPrivacyPolicy: () => any
   user: UserData
   state: any
 }
@@ -36,6 +38,7 @@ interface AppContentsProps {
 const initialState = {
   hasStoredUser: false,
   welcomeComplete: false,
+  privacyPolicyVerified: false,
   isAuthLoading: false,
   shouldRecoverAccount: false,
   shouldRemoveAccount: false,
@@ -74,6 +77,7 @@ class AppContentsView extends Component<AppContentsProps> {
     const {
       isInitializing,
       welcomeComplete,
+      privacyPolicyVerified,
       shouldDisplayMnemonic,
       displayTouchID
     } = this.props.state
@@ -84,6 +88,10 @@ class AppContentsView extends Component<AppContentsProps> {
 
     if (!welcomeComplete) {
       return <WelcomeView onComplete={this.props.setWelcomeComplete}/>
+    }
+
+    if (!privacyPolicyVerified) {
+      return <PrivacyPolicyView onVerify={this.props.verifyPrivacyPolicy}/>
     }
 
     if (!this.props.user || shouldDisplayMnemonic) {
@@ -97,6 +105,7 @@ class AppContentsView extends Component<AppContentsProps> {
 const mapStateToProps = (state) => ({ state: getStore(state)(), user: getUser(state)() })
 const mapDispatchToProps = (dispatch) => ({
   setWelcomeComplete: () => dispatch(setWelcomeComplete(true)),
+  verifyPrivacyPolicy: () => dispatch(verifyPrivacyPolicy(true)),
   initializeStorage: () => dispatch(initializeStorage())
 })
 

@@ -378,5 +378,10 @@ export default {
     shell: `Demande d'ami`,
     message: `Demandes d'ami`,
     request: F => `${F} veut être ami avec vous !`,
+  },
+
+  privacyPolicy: {
+    link: `lndr.io/terms/`,
+    message: `En cliquant ci-dessous vous confirmez que vous avez lu et accepté la politique de confidentialité de Blockmason. Blockmason peut utiliser votre adresse e-mail pour envoyer des mises à jour sur les Blockmason et LNDR. Voici un lien vers la politique de confidentialité:`
   }
 }

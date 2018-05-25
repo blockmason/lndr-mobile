@@ -71,5 +71,24 @@ export default StyleSheet.create({
     ...large,
     marginVertical: 5,
     color: gray
+  },
+  smallText: {
+    textAlign: 'center',
+    paddingLeft: 5,
+    paddingRight: 5,
+    marginTop: 20,
+    fontSize: 18,
+    fontWeight: '100',
+    color: black
+  },
+  link: {
+    textAlign: 'center',
+    marginTop: 20,
+    fontSize: 24,
+    fontWeight: '100',
+    color: black
+  },
+  partWidth: {
+    paddingHorizontal: 20
   }
 } as any)

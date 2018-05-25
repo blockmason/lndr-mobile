@@ -377,5 +377,10 @@ export default {
     shell: `Vänförfrågan`,
     message: `Vänförfrågningar`,
     request: F => `${F} vill vara vän med dig!`,
+  },
+
+  privacyPolicy: {
+    link: `lndr.io/terms/`,
+    message: `Genom att klicka nedan bekräftar du att du har läst och godkänt Blockmason sekretesspolicy. Blockmason kan använda din e-postadress för att skicka uppdateringar om Blockmason och LNDR. Här är en länk till sekretesspolicy:`
   }
 }

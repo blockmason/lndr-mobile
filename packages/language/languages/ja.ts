@@ -345,35 +345,40 @@ export default {
 },
 
   tabs: {
-  home: 'ホーム',
-  friends: ' 友達 ',
-  activity: 'アクティビティ'
-},
+    home: 'ホーム',
+    friends: ' 友達 ',
+    activity: 'アクティビティ'
+  },
 
   confirmation: {
-  shell: '承認',
-  done: '完了',
-  create: {
-    start: "確認のため ",
-    end: ' へ記録を送りました.'
+    shell: '承認',
+    done: '完了',
+    create: {
+      start: "確認のため ",
+      end: ' へ記録を送りました.'
+    },
+    confirm: {
+      start: "",
+      end: 'から送られたこの記録は承認済みです.'
+    },
+    reject: {
+      start: "",
+      end: " に通知を送ります."
+    },
+    ethSent: {
+      start: "送信成功 ",
+      end: " あなたのETHとトランザクションハッシュは "
+    },
+    bcptSent: {
+      start: "送信成功 ",
+      end: " あなたのBCPTとトランザクションハッシュは "
+    },
+    status: '取引のステータスを確認するにはここ ',
+    activity: 'アクティビティタブ.'
   },
-  confirm: {
-    start: "",
-    end: 'から送られたこの記録は承認済みです.'
-  },
-  reject: {
-    start: "",
-    end: " に通知を送ります."
-  },
-  ethSent: {
-    start: "送信成功 ",
-    end: " あなたのETHとトランザクションハッシュは "
-  },
-  bcptSent: {
-    start: "送信成功 ",
-    end: " あなたのBCPTとトランザクションハッシュは "
-  },
-  status: '取引のステータスを確認するにはここ ',
-  activity: 'アクティビティタブ.'
-}
+
+  privacyPolicy: {
+    link: `lndr.io/terms/`,
+    message: `ボタンをクリックすると、Blockmasonのプライバシーポリシーに同意したことになります。 Blockmasonは、あなたのEメールアドレスを使ってBlockmasonとLNDRに関する最新情報をあなたに送信することができます。 ここでのプライバシーポリシーへのリンクは次のとおりです:`
+  }
 }

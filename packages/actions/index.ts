@@ -779,6 +779,11 @@ export const setWelcomeComplete = (state) => {
   return setState(payload)
 }
 
+export const verifyPrivacyPolicy = (state) => {
+  const payload = { privacyPolicyVerified: state }
+  return setState(payload)
+}
+
 export const setEthBalance = () => {
   return async (dispatch, getState) => {
     const { user } = getState().store

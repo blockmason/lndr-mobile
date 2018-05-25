@@ -378,5 +378,10 @@ export default {
     shell: `Venneanmodning`,
     message: `Venneanmodninger`,
     request: F => `${F} ønsker at være venner med dig!`,
+  },
+
+  privacyPolicy: {
+    link: `lndr.io/terms/`,
+    message: `Ved at klikke herunder bekræfter du at du har læst og accepteret Blockmasons privatlivspolitik. Blockmason kan bruge din email-adresse til at sende opdateringer om Blockmason og LNDR. Her er et link til privatlivspolitikken:`
   }
 }

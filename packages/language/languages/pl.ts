@@ -377,5 +377,10 @@ export default {
     shell: `Prośba o Przyjęcie do grona Znajomych`,
     message: `Prośby o Przyjęcie do grona Znajomych`,
     request: F => `${F} chce być Twoim znajomym!`,
+  },
+
+  privacyPolicy: {
+    link: `lndr.io/terms/`,
+    message: `Klikając poniżej, potwierdzasz, że przeczytałeś i zgadzasz się z polityką prywatności Blockmason użytkownika. Blockmason może wykorzystywać Twój adres e-mail do wysyłania aktualizacji o Blockmason i LNDR. Oto link do polityki prywatności:`
   }
 }
