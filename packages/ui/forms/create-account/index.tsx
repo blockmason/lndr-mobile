@@ -1,6 +1,6 @@
 import React, { Component } from 'react'
 
-import { View, Text, TextInput, BackHandler, KeyboardAvoidingView, Platform } from 'react-native'
+import { View, ScrollView, Text, TextInput, BackHandler, KeyboardAvoidingView, Platform } from 'react-native'
 
 import Button from 'ui/components/button'
 import ThemeImage from 'ui/components/images/theme-image'
@@ -152,42 +152,44 @@ class CreateAccountForm extends Component<Props, State> {
       </View>
     } else {
       const vertOffset = (Platform.OS === 'android') ? -300 : 0;
-      return (<View style={style.form}>
-        <KeyboardAvoidingView behavior={Platform.OS === 'ios' ? 'position' : 'padding'} keyboardVerticalOffset={vertOffset} >
-          <ThemeImage name='logo' size={0.4} />
-          <Text style={[style.text, style.spaceBottom]}>{newAccount}</Text>
-          <View style={style.textInputContainer}>
-            <InputImage name='person'/>
-            <TextInput
-              autoCapitalize='none'
-              style={style.textInput}
-              placeholder={nickname}
-              value={this.state.nickname}
-              maxLength={20}
-              underlineColorAndroid='transparent'
-              onChangeText={nickname => {this.setState({ nickname: formatNick(nickname) }); onNickTextChange(nickname)}}
-              onBlur={(): void => onNickTextInputBlur(this.state.nickname)}
-            />
-          </View>
-          { nickInputError && <Text style={style.warningText}>{nickInputError}</Text>}
-          <View style={style.textInputContainer}>
-            <InputImage name='email'/>
-            <TextInput
-              autoCapitalize='none'
-              style={style.textInput}
-              placeholder={email}
-              value={this.state.email}
-              underlineColorAndroid='transparent'
-              keyboardType='email-address'
-              onChangeText={email => {this.setState({ email: formatEmail(email) }); onEmailTextChange(email)}}
-              onBlur={(): void => onEmailTextInputBlur(this.state.email)}
-            />
-          </View>
-          { emailInputError && <Text style={style.warningText}>{emailInputError}</Text>}
-          <Button round fat onPress={() => this.submit()} style={style.submitButton} text={createAccountText} />
-          <Button alternate small arrow onPress={() => this.recover()} style={style.submitButton} text={recoverAccount} />
-        </KeyboardAvoidingView>
-      </View>)
+      return (<ScrollView>
+        <View style={style.form}>
+          <KeyboardAvoidingView behavior={Platform.OS === 'ios' ? 'position' : 'padding'} keyboardVerticalOffset={vertOffset} >
+            <ThemeImage name='logo' size={0.4} />
+            <Text style={[style.text, style.spaceBottom]}>{newAccount}</Text>
+            <View style={style.textInputContainer}>
+              <InputImage name='person'/>
+              <TextInput
+                autoCapitalize='none'
+                style={style.textInput}
+                placeholder={nickname}
+                value={this.state.nickname}
+                maxLength={20}
+                underlineColorAndroid='transparent'
+                onChangeText={nickname => {this.setState({ nickname: formatNick(nickname) }); onNickTextChange(nickname)}}
+                onBlur={(): void => onNickTextInputBlur(this.state.nickname)}
+              />
+            </View>
+            { nickInputError && <Text style={style.warningText}>{nickInputError}</Text>}
+            <View style={style.textInputContainer}>
+              <InputImage name='email'/>
+              <TextInput
+                autoCapitalize='none'
+                style={style.textInput}
+                placeholder={email}
+                value={this.state.email}
+                underlineColorAndroid='transparent'
+                keyboardType='email-address'
+                onChangeText={email => {this.setState({ email: formatEmail(email) }); onEmailTextChange(email)}}
+                onBlur={(): void => onEmailTextInputBlur(this.state.email)}
+              />
+            </View>
+            { emailInputError && <Text style={style.warningText}>{emailInputError}</Text>}
+            <Button round fat onPress={() => this.submit()} style={style.submitButton} text={createAccountText} />
+            <Button alternate small arrow onPress={() => this.recover()} style={style.submitButton} text={recoverAccount} />
+          </KeyboardAvoidingView>
+        </View>
+      </ScrollView>)
     }
   }
 }

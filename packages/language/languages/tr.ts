@@ -128,7 +128,7 @@ export default {
     },
     sendEth: {
       error: {
-        insufficient: `Yetersiz bakiye sebebiyle aktarım başarısız oldu`,
+        insufficient: `Bu işlem için yeterli ETH ‘niz mevcut değil`,
         generic: `Aktarımda bir sorun oluştu, lütfen daha sonra tekrar deneyin`,
         address: `Lütfen geçerli bir adres girin`,
         amount: `Lütfen 0’dan yüksek bir tutar girin`,
@@ -377,5 +377,10 @@ export default {
     shell: `Arkadaşlık isteği`,
     message: `Arkadaş istekleri`,
     request: F => `${F} seninle arkadaş olmak istiyor!`,
+  },
+
+  privacyPolicy: {
+    link: `lndr.io/terms/`,
+    message: `Altınızda tıklayarak okuyup Blockmason gizlilik politikasına kabul ettiğinizi onaylayın. Blockmason Blockmason ve LNDR hakkında güncellemeleri göndermek için e-posta adresinizi kullanabiliriz. İşte gizlilik politikasına bir link:`
   }
 }

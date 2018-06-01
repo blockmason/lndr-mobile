@@ -128,7 +128,7 @@ export default {
     },
     sendEth: {
       error: {
-        insufficient: `Chuyển tiền thất bại do số tiền không đủ`,
+        insufficient: `Bạn không có đủ ETH để thực hiện giao dịch này`,
         generic: `Có lỗi xảy ra khi chuyển tiền, vui lòng thử lại sau`,
         address: `Vui lòng nhập địa chỉ hợp lệ`,
         amount: `Vui lòng nhập số tiền lớn hơn 0`,
@@ -377,5 +377,10 @@ export default {
     shell: `Yêu cầu kết bạn`,
     message: `Yêu cầu kết bạn`,
     request: F => `${F} muốn kết bạn với bạn!`,
+  },
+
+  privacyPolicy: {
+    link: `lndr.io/terms/`,
+    message: `Bằng cách nhấp bên dưới, bạn xác nhận rằng bạn đã đọc và đồng ý với chính sách bảo mật của Blockmason. Blockmason có thể sử dụng địa chỉ email của bạn để gửi thông tin cập nhật về Blockmason và LNDR. Dưới đây là một liên kết đến chính sách bảo mật:`
   }
 }

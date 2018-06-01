@@ -5,10 +5,11 @@ import { getResetAction } from 'reducers/nav'
 
 import { UserData } from 'lndr/user'
 import { debounce } from 'lndr/time'
-import { currencyFormats } from 'lndr/format'
+import { currencyFormats, amountFormat } from 'lndr/format'
 import PendingUnilateral from 'lndr/pending-unilateral'
 import profilePic from 'lndr/profile-pic'
-import { defaultCurrency, currencySymbols, transferLimits  } from 'lndr/currencies'
+import Friend from 'lndr/friend'
+import { defaultCurrency, currencySymbols, transferLimits, hasNoDecimals } from 'lndr/currencies'
 
 import Button from 'ui/components/button'
 import Loading, { LoadingContext } from 'ui/components/loading'
@@ -28,19 +29,29 @@ const {
   accountManagement
 } = language
 
-import { getUser, settlerIsMe, getEthExchange, getWeeklyEthTotal } from 'reducers/app'
-import { confirmPendingSettlement, rejectPendingSettlement, getEthTxCost } from 'actions'
+import { getUser, settlerIsMe, getEthExchange, getWeeklyEthTotal, calculateBalance, getUcacCurrency } from 'reducers/app'
+import { settleUp, rejectPendingSettlement, getEthTxCost } from 'actions'
 import { connect } from 'react-redux'
 
 const loadingContext = new LoadingContext()
 
 interface Props {
-  confirmPendingSettlement: (pendingSettlement: PendingUnilateral, settlementCurrency: string) => any
+  settleUp: (
+    friend: Friend,
+    amount: string,
+    memo: string,
+    direction: string,
+    settlementCurrency: string,
+    currency: string,
+    settleTotal?: boolean
+  ) => any
   rejectPendingSettlement: (pendingSettlement: PendingUnilateral, settlementCurrency: string) => any
   user: UserData
-  ethExchange: string
+  ethExchange: (currency: string) => string
   ethSentPastWeek: number
   settlerIsMe: (pendingSettlement: PendingUnilateral) => boolean
+  calculateBalance: (friend: Friend) => number
+  getUcacCurrency: (ucac: string) => string
   navigation: any
 }
 
@@ -73,19 +84,30 @@ class PendingSettlementDetail extends Component<Props, State> {
     this.setState({ pic, txCost })
   }
 
-  async confirmPendingSettlement(pendingSettlement: PendingUnilateral) {
-    const pending = this.getPendingSettlement()
-    //restrict it here
+  async settleUp(pendingSettlement: PendingUnilateral) {
+    const { ethExchange, ethSentPastWeek, user, calculateBalance } = this.props
     const { currency } = this.state
-    const { ethExchange, ethSentPastWeek, user } = this.props
-
-    if ( pending.creditorAddress === user.address && ( ethSentPastWeek * Number(ethExchange) + Number(pending.amount) > Number(transferLimits(currency)) ) ) {
+    const { memo, amount, ucac, settlementCurrency, debtorAddress, debtorNickname, creditorAddress, creditorNickname, multiSettlementHashes } = pendingSettlement
+    const friend = user.address === debtorAddress ? new Friend(creditorAddress, creditorNickname) : new Friend(debtorAddress, debtorNickname)
+    const direction = user.address === debtorAddress ? 'borrow' : 'lend'
+    const settleTotal = multiSettlementHashes !== undefined
+    const formattedAmount = hasNoDecimals(this.props.getUcacCurrency(ucac)) ? amount : amount / 100
+    
+    if ( creditorAddress === user.address && ( ethSentPastWeek * Number(ethExchange(currency)) + formattedAmount > Number(transferLimits(currency)) ) ) {
       this.setState({ confirmationError: accountManagement.sendEth.error.limitExceeded(currency) })
       return
     }
 
     const success = await loadingContext.wrap(
-      this.props.confirmPendingSettlement(pendingSettlement, pending.settlementCurrency)
+      this.props.settleUp(
+        friend as Friend,
+        String(formattedAmount) as string,
+        memo as string,
+        direction as string,
+        settlementCurrency as string,
+        currency as string,
+        settleTotal as boolean
+      )
     )
 
     if (success) {
@@ -179,7 +201,7 @@ class PendingSettlementDetail extends Component<Props, State> {
     }
 
     return <View style={{marginBottom: 50}}>
-      <Button round large onPress={() => this.confirmPendingSettlement(pendingSettlement)} text={pendingSettlementsLanguage.confirm} />
+      <Button round large onPress={() => this.settleUp(pendingSettlement)} text={pendingSettlementsLanguage.confirm} />
       <Button danger round onPress={() => this.rejectPendingSettlement(pendingSettlement)} text={pendingSettlementsLanguage.reject} />
     </View>
   }
@@ -187,7 +209,8 @@ class PendingSettlementDetail extends Component<Props, State> {
   getLimit() {
     const { currency } = this.state
     const { ethExchange, ethSentPastWeek } = this.props
-    const remaining = String(Number(transferLimits(currency)) - Number(ethSentPastWeek) * Number(ethExchange))
+
+    const remaining = String(Number(transferLimits(currency)) - Number(ethSentPastWeek) * Number(ethExchange(currency)))
     const end = remaining.indexOf('.') === -1 ? remaining.length : remaining.indexOf('.') + 3
     return remaining.slice(0, end)
   }
@@ -226,5 +249,6 @@ class PendingSettlementDetail extends Component<Props, State> {
   }
 }
 
-export default connect((state) => ({ user: getUser(state)(), settlerIsMe: settlerIsMe(state), ethExchange: getEthExchange(state), ethSentPastWeek: getWeeklyEthTotal(state) }),
-{ confirmPendingSettlement, rejectPendingSettlement })(PendingSettlementDetail)
+export default connect((state) => ({ user: getUser(state)(), settlerIsMe: settlerIsMe(state), ethExchange: getEthExchange(state), 
+  ethSentPastWeek: getWeeklyEthTotal(state), calculateBalance: calculateBalance(state), getUcacCurrency: getUcacCurrency(state) }),
+{ settleUp, rejectPendingSettlement })(PendingSettlementDetail)

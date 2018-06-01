@@ -18,9 +18,11 @@ import EthTransaction from 'lndr/eth-transaction'
 import Tx from 'ethereumjs-tx'
 import Web3 from 'web3'
 import { hasNoDecimals } from 'lndr/currencies';
+import PendingBilateral from 'lndr/pending-bilateral';
 
 const fetchUtil = new FetchUtil(fetch)
-const web3 = new Web3(new Web3.providers.HttpProvider('https://mainnet.infura.io/EoLr1OVfUMDqq3N2KaKA'))
+export const web3 = new Web3(new Web3.providers.HttpProvider('https://mainnet.infura.io/EoLr1OVfUMDqq3N2KaKA'))
+// export const web3 = Platform.OS === 'ios' ? new Web3(new Web3.providers.HttpProvider('http://localhost:7545')) : new Web3(new Web3.providers.HttpProvider('http://10.0.2.2:7545'))
 
 export default class CreditProtocol {
   client: Client
@@ -235,14 +237,7 @@ export default class CreditProtocol {
     return this.client.get('/pending')
   }
 
-  rejectPendingTransactionByHash(hash: string, privateKeyBuffer: any) {
-    return this.client.post('/reject', {
-      hash,
-      signature: this.serverSign(hash, privateKeyBuffer)
-    })
-  }
-
-  rejectPendingSettlementByHash(hash: string, privateKeyBuffer: any) {
+  rejectPendingByHash(hash: string, privateKeyBuffer: any) {
     return this.client.post('/reject', {
       hash,
       signature: this.serverSign(hash, privateKeyBuffer)
@@ -254,34 +249,7 @@ export default class CreditProtocol {
     return new CreditRecord(ucac, address1, address2, amount, memo, nonce)
   }
 
-  async submitCreditRecord(creditRecord, action, signature) {
-    if (action !== 'lend' && action !== 'borrow') {
-      throw new Error('Action is invalid')
-    }
-
-    const {
-      ucacAddress: ucac,
-      creditorAddress: creditor,
-      debtorAddress: debtor,
-      amount,
-      memo,
-      nonce
-    } = creditRecord
-
-    return this.client.post(`/${action}`, {
-      ucac,
-      creditor,
-      debtor,
-      amount,
-      memo,
-      submitter: action === 'lend' ? creditor : debtor,
-      hash: bufferToHex(creditRecord.hash),
-      nonce,
-      signature
-    })
-  }
-
-  async submitSettlementRecord(creditRecord, action, signature, denomination) {
+  async submitCreditRecord(creditRecord, action: string, signature, denomination?: string) {
     if (action !== 'lend' && action !== 'borrow') {
       throw new Error('Action is invalid')
     }
@@ -341,7 +309,7 @@ export default class CreditProtocol {
     tx.sign(privateKeyBuffer)
     const serializedTx = tx.serialize()
 
-    console.log('TOTAL ETH TO BE SENT: ', Number(transaction.value) + Number(transaction.gas * transaction.gasPrice) )
+    console.log('TOTAL ETH TO BE SENT: ',Number(transaction.value), ', ', Number(transaction.value) + Number(transaction.gas * transaction.gasPrice) )
     
     return new Promise((resolve, reject) => {
       web3.eth.sendRawTransaction(('0x' + serializedTx.toString('hex')), (e, data) => {
@@ -354,22 +322,21 @@ export default class CreditProtocol {
     })
   }
 
-  storeSettlementHash(txHash: any, settlement: any, privateKeyBuffer: any) {
+  storeSettlementHash(txHash: string, hash: any, creditorAddress: string, privateKeyBuffer: any) {
     const hashBuffer = Buffer.concat([
-      settlement.creditRecord.hash,
+      hash,
       hexToBuffer(txHash),
-      hexToBuffer(settlement.creditorAddress)
+      hexToBuffer(creditorAddress)
     ])
-    const hash = bufferToHex(ethUtil.sha3(hashBuffer))
-    const signature = this.serverSign(hash, privateKeyBuffer)
+    const newHash = bufferToHex(ethUtil.sha3(hashBuffer))
+    const signature = this.serverSign(newHash, privateKeyBuffer)
 
     return this.client.post('/verify_settlement', {
       txHash,
-      creditHash: bufferToHex(settlement.creditRecord.hash),
-      creditorAddress: settlement.creditorAddress,
+      creditHash: bufferToHex(hash),
+      creditorAddress: creditorAddress,
       signature
     })
-
   }
 
   getEthTxHash(hash: string) {
@@ -424,7 +391,8 @@ export default class CreditProtocol {
     try {
       const gasPrice = await this.getGasPrice()
       const rate = await this.getEthExchange(currency)
-      return `${gasPrice * Number(rate) * 21000 / Math.pow(10, 18)}`.slice(0,6)
+
+      return `${Math.max( 0.01, gasPrice * Number(rate) * 21000 / Math.pow(10, 18) )}`.slice(0,6)
     } catch (e) {}
   
     return '0.00'
@@ -454,5 +422,9 @@ export default class CreditProtocol {
       }
       return fiat.slice(0, decimalIndex + 3)
     }
+  }
+
+  async submitMultiSettlement(transactions: Object[]) {
+    return this.client.post('/multi_settlement', transactions)
   }
 }

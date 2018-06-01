@@ -20,7 +20,7 @@ import PendingTransaction from 'lndr/pending-transaction'
 
 import { isFocusingOn } from 'reducers/nav'
 import { getStore, getUser, getNeedsReviewCount, calculateBalance, calculateCounterparties } from 'reducers/app'
-import { getAccountInformation, displayError, getPendingTransactions, getPendingSettlements,
+import { getAccountInformation, displayError, getPending, 
   getFriendRequests, getRecentTransactions, registerChannelID } from 'actions'
 import { connect } from 'react-redux'
 import { UrbanAirship } from 'urbanairship-react-native'
@@ -54,16 +54,14 @@ const {
 const { width } = Dimensions.get('window')
 
 const loadingRecentTransactions = new LoadingContext()
-const loadingPendingTransactions = new LoadingContext()
-const loadingPendingSettlements = new LoadingContext()
+const loadingPending = new LoadingContext()
 const loadingPendingFriends = new LoadingContext()
 const balances = new LoadingContext()
 
 interface Props {
   navigation: any
   isFocused: boolean
-  getPendingTransactions: () => any
-  getPendingSettlements: () => any
+  getPending: () => any
   getFriendRequests: () => any
   getRecentTransactions: () => any
   getAccountInformation: () => any
@@ -103,8 +101,7 @@ class HomeView extends Component<Props, State> {
       this.props.displayError(accountManagement.loadInformation.error)
     }
 
-    await loadingPendingTransactions.wrap(this.props.getPendingTransactions())
-    await loadingPendingSettlements.wrap(this.props.getPendingSettlements())
+    await loadingPending.wrap(this.props.getPending())
     await loadingPendingFriends.wrap(this.props.getFriendRequests())
     await loadingRecentTransactions.wrap(this.props.getRecentTransactions())
   }
@@ -118,7 +115,7 @@ class HomeView extends Component<Props, State> {
   async initializePushNotifications() {
     UrbanAirship.getChannelId().then(channelId => {
       console.log('CHANNEL ID', channelId)
-      if (channelId !== undefined) {
+      if (channelId) {
         this.props.registerChannelID(channelId, Platform.OS)
       }
     })
@@ -231,4 +228,4 @@ class HomeView extends Component<Props, State> {
 
 export default connect((state) => ({ state: getStore(state)(), user: getUser(state)(), isFocused: isFocusingOn(state)('Home'),
 needsReviewCount: getNeedsReviewCount(state), calculateBalance: calculateBalance(state), calculateCounterparties: calculateCounterparties(state) }), 
-{ getAccountInformation, displayError, getPendingTransactions, getPendingSettlements, getFriendRequests, getRecentTransactions, registerChannelID })(HomeView)
+{ getAccountInformation, displayError, getPending, getFriendRequests, getRecentTransactions, registerChannelID })(HomeView)

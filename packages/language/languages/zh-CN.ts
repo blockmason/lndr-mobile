@@ -128,7 +128,7 @@ export default {
     },
     sendEth: {
       error: {
-        insufficient: `传送失败，由于资金不足`,
+        insufficient: `您没有足够的ETH此交易`,
         generic: `有一个与传输错误，请稍后再试`,
         address: `请输入一个有效的地址`,
         amount: `请输入大于0的金额`,

@@ -13,17 +13,15 @@ const { recentTransactionsLanguage, pendingTransactionsLanguage } = language
 import general from 'theme/general'
 import style from 'theme/account'
 
-import { getPendingTransactions, getPendingSettlements, getRecentTransactions } from 'actions'
+import { getPending, getRecentTransactions } from 'actions'
 import { connect } from 'react-redux'
 
-const loadingPendingTransactions = new LoadingContext()
+const loadingPending = new LoadingContext()
 const loadingRecentTransactions = new LoadingContext()
-const loadingPendingSettlements = new LoadingContext()
 
 interface Props {
     getRecentTransactions: () => any
-    getPendingTransactions: () => any
-    getPendingSettlements: () => any
+    getPending: () => any
     isFocused: boolean
     user: UserData
     state: any
@@ -44,9 +42,8 @@ class ActivityView extends Component<Props, State> {
 
     async refresh() {
         this.setState({ refreshing: true })
-        await loadingPendingTransactions.wrap(this.props.getPendingTransactions())
+        await loadingPending.wrap(this.props.getPending())
         await loadingRecentTransactions.wrap(this.props.getRecentTransactions())
-        await loadingPendingSettlements.wrap(this.props.getPendingSettlements())
         this.setState({ refreshing: false })
     }
 
@@ -69,4 +66,4 @@ class ActivityView extends Component<Props, State> {
     }
 }
 
-export default connect(null, { getRecentTransactions, getPendingTransactions, getPendingSettlements })(ActivityView)
+export default connect(null, { getRecentTransactions, getPending })(ActivityView)

@@ -128,7 +128,7 @@ export default {
     },
     sendEth: {
       error: {
-        insufficient: `De overboeking is mislukt als gevolg van onvoldoende saldo`,
+        insufficient: `U heeft niet genoeg ETH voor deze transactie`,
         generic: `Er is een fout opgetreden bij de overboeking, probeer het later opnieuw`,
         address: `Vul alstublieft een geldig adres in`,
         amount: `Vul alstublieft een bedrag in dat groter is dan 0`,

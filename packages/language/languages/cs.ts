@@ -128,7 +128,7 @@ export default {
     },
     sendEth: {
       error: {
-        insufficient: `Převod selhal kvůli nedostatku finančních prostředků`,
+        insufficient: `Pro tuto transakci nemáte dostatek ETH`,
         generic: `Došlo k chybě při převodu, zkuste to prosím později`,
         address: `Zadejte prosím platnou adresu`,
         amount: `Zadejte částku větší než 0`,
@@ -378,5 +378,10 @@ export default {
     shell: `Žádost o přátelství`,
     message: `Žádosti o přátelství`,
     request: F => `${F} si vás chce přidat mezi přátele!`,
+  },
+
+  privacyPolicy: {
+    link: `lndr.io/terms/`,
+    message: `Click the button below to confirm that you have read and agreed to Blockmason's Privacy Policy. Blockmason can send updates about Blockmason and LNDR using your e-mail address. Here is a link to the privacy policy:`
   }
 }

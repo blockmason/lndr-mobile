@@ -9,15 +9,17 @@ export default class PendingUnilateral {
   settlementAmount: number
   settlementBlocknumber: number
   settlementCurrency: string
+  multiSettlementHashes?: string[]
 
   constructor(data) {
-    const { creditor, debtor, amount, memo, nonce, ucac, submitter, hash, settlementAmount, settlementCurrency, settlementBlocknumber } = data
+    const { creditor, debtor, amount, memo, nonce, ucac, submitter, hash, settlementAmount, settlementCurrency, settlementBlocknumber, multiSettlementHashes } = data
     this.creditRecord = new CreditRecord(ucac, creditor, debtor, amount, memo, 0)
     this.submitter = submitter.replace('0x', '')
     this.hash = hash
     this.settlementAmount = settlementAmount
     this.settlementBlocknumber = settlementBlocknumber
     this.settlementCurrency = settlementCurrency
+    this.multiSettlementHashes = multiSettlementHashes
   }
 
   get creditorAddress() {

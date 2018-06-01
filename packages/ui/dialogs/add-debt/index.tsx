@@ -113,7 +113,7 @@ class AddDebt extends Component<Props, State> {
     const selectFriend = () => this.setState({ shouldSelectFriend: true })
 
     if (!friend) {
-      return <Button round narrow onPress={selectFriend} text={debtManagement.selectFriend} />
+      return <Button round onPress={selectFriend} text={debtManagement.selectFriend} />
     }
 
     return (<TouchableHighlight onPress={selectFriend}>
@@ -222,7 +222,7 @@ class AddDebt extends Component<Props, State> {
               <View style={[general.centeredColumn, {minWidth: 150}]}>
                 <Text style={formStyle.title}>{debtManagement.fields.currency}</Text>
                 <View style={style.newTransactionRow}>
-                  <Button narrow black onPress={() => this.setState({shouldPickCurrency: true})} text={currency} />
+                  <Button black onPress={() => this.setState({shouldPickCurrency: true})} text={currency} />
                 </View>
               </View>
               <View style={general.centeredColumn}>

@@ -2,6 +2,7 @@ import ethUtil from 'ethereumjs-util'
 import { UrbanAirship } from 'urbanairship-react-native'
 import moment from 'moment'
 import { Platform, Clipboard } from 'react-native'
+import { bufferToHex } from '../credit-protocol/lib/buffer-utils'
 
 import { longTimePeriod } from 'lndr/time'
 import Balance from 'lndr/balance'
@@ -21,7 +22,8 @@ import TouchID from 'react-native-touch-id'
 import profilePic from 'lndr/profile-pic'
 import { getBcptBalance, transferBcpt } from 'lndr/bcpt-utils'
 import { getEtherscanTransactions } from 'lndr/etherscan'
-import { sanitizeAmount } from 'lndr/format'
+import { sanitizeAmount, currencyFormats } from 'lndr/format'
+import { CreditRecord } from 'credit-protocol'
 import { jsonToPendingFriend, jsonToPendingTransaction, jsonToRecentTransaction, jsonToPendingUnilateral, jsonToPendingBilateral } from 'lndr/json-mapping'
 
 import CreditProtocol from 'credit-protocol'
@@ -30,7 +32,8 @@ import language from 'language'
 const { accountManagement, debtManagement, settlementManagement, copiedClipboard } = language
 
 import { ToastActionsCreators } from 'react-native-redux-toast'
-import { getUser, getStore, getUcacAddr, getEthExchange as exchangeReducer, getWeeklyEthTotal } from 'reducers/app'
+import { getUser, getStore, getUcacAddr, getEthExchange as exchangeReducer, getWeeklyEthTotal,
+calculateUcacBalances, convertCurrency, getUcacCurrency } from 'reducers/app'
 import { hexToBuffer } from '../credit-protocol/lib/buffer-utils'
 import { defaultCurrency, currencySymbols } from 'lndr/currencies'
 
@@ -44,9 +47,9 @@ const ethTransactionsStorage = new Storage('eth-transactions')
 const creditProtocol = new CreditProtocol('https://api.lndr.blockmason.io')
 // let creditProtocol
 // if (Platform.OS === 'ios' ) {
-//   creditProtocol = new CreditProtocol('http://localhost:9800')
+//   creditProtocol = new CreditProtocol('http://localhost:7402')
 // } else {
-//   creditProtocol = new CreditProtocol('http://10.0.2.2:9800')
+//   creditProtocol = new CreditProtocol('http://10.0.2.2:7402')
 // }
 
 // TODO REMOVE setState FUNCTION as the sole purpose was to transition from using
@@ -78,7 +81,7 @@ export const initializeStorage = () => {
       let { ethBalance, ethPrices, bcptBalance } = await getEthInfo(storedUser)
       let ucacAddresses = await creditProtocol.getUcacAddresses()
       let ethTransactions = await ethTransactionsStorage.get()
-      const payload = { hasStoredUser: true, welcomeComplete: true, user: storedUser, notificationsEnabled, ethBalance, 
+      const payload = { hasStoredUser: true, welcomeComplete: true, privacyPolicyVerified: true, user: storedUser, notificationsEnabled, ethBalance, 
         ethPrices, bcptBalance, ucacAddresses, ethTransactions }
       dispatch(setState(payload))
 
@@ -96,7 +99,7 @@ export const initializeStorage = () => {
 
     } else if (storedMnemonic) {
       const lockTimeout = storedUser ? storedUser.lockTimeout : 15
-      dispatch(setState({ hasStoredUser: true, welcomeComplete: true, notificationsEnabled, lockTimeout }))
+      dispatch(setState({ hasStoredUser: true, welcomeComplete: true, privacyPolicyVerified: true, notificationsEnabled, lockTimeout }))
     }
     dispatch(setState({ isInitializing: false, notificationsEnabled }))
   }
@@ -437,98 +440,66 @@ export const getRecentTransactions = () => {
   }
 }
 
-export const getPendingTransactions = () => {
-  return async (dispatch, getState) => {
-    const { address } = getUser(getState())()
-    const rawPendingTransactions = await creditProtocol.getPendingTransactions(address)
-    const pendingTransactions = rawPendingTransactions.map(jsonToPendingTransaction)
-    await ensureTransactionNicknames(pendingTransactions)
-    dispatch(setState({ pendingTransactions, pendingTransactionsLoaded: true }))
-  }
-}
-
-export const getPendingSettlements = () => {
+export const getPending = () => {
   return async (dispatch, getState) => {
     const user = getUser(getState())()
+    const rawPendingTransactions = await creditProtocol.getPendingTransactions(user.address)
+    const flatPendingTransactions = rawPendingTransactions.map(jsonToPendingTransaction)
+    console.log('RAW PENDING TRANSACTIONS: ', flatPendingTransactions)
+    const pendingTransactions = filterMultiTransactions(user.address, flatPendingTransactions, getState())
+    
     const rawPendingSettlements = await creditProtocol.getPendingSettlements(user.address)
     console.log('RAW PENDING SETTLEMENTS: ', rawPendingSettlements)
-    const pendingSettlements = rawPendingSettlements.unilateralSettlements.map(jsonToPendingUnilateral)
-    const bilateralSettlements = rawPendingSettlements.bilateralSettlements.map(jsonToPendingBilateral)
+    const pendingSettlements = filterMultiTransactions(user.address, rawPendingSettlements.unilateralSettlements.map(jsonToPendingUnilateral), getState())
+    const bilateralSettlements = filterMultiTransactions(user.address, rawPendingSettlements.bilateralSettlements.map(jsonToPendingBilateral), getState())
     settleBilateral(user, bilateralSettlements, dispatch, getState)
     await ensureTransactionNicknames(pendingSettlements)
     await ensureTransactionNicknames(bilateralSettlements)
     dispatch(setState({ pendingSettlements, pendingSettlementsLoaded: true, bilateralSettlements }))
+    
+    await ensureTransactionNicknames(pendingTransactions)
+    
+    dispatch(setState({ pendingTransactions, pendingTransactionsLoaded: true, pendingSettlements, pendingSettlementsLoaded: true, bilateralSettlements }))
   }
 }
 
 export const confirmPendingTransaction = (pendingTransaction: PendingTransaction) => {
   return async (dispatch, getState) => {
-    const { creditorAddress, debtorAddress, amount, memo, creditorNickname, debtorNickname, creditRecord } = pendingTransaction
+    const { creditorAddress, debtorAddress, amount, memo, creditorNickname, debtorNickname, creditRecord, multiTransactionHashes } = pendingTransaction
     const { ucacAddress } = creditRecord
     const { address, privateKeyBuffer } = getUser(getState())()
     const direction = address === creditorAddress ? 'lend' : 'borrow'
+    const friendAddress = address === creditorAddress ? debtorAddress : creditorAddress
+    const friendNickname = address === creditorAddress ? debtorNickname : creditorNickname
 
-    try {
-      const creditRecord = await creditProtocol.createCreditRecord(
-        ucacAddress,
-        creditorAddress,
-        debtorAddress,
-        amount,
-        memo
-      )
+    if(multiTransactionHashes !== undefined) {
+      const ucacBalances = calculateUcacBalances(getState())(friendAddress)
+      const { transactions } = await generateMultiTransaction(address, friendAddress, ucacBalances, memo, getState, privateKeyBuffer)
 
-      const signature = creditRecord.sign(privateKeyBuffer)
-      await creditProtocol.submitCreditRecord(creditRecord, direction, signature)
-      refreshTransactions()
-      
-      dispatch(displaySuccess(debtManagement.confirmation.transaction(direction === 'lend' ? debtorNickname : creditorNickname)))
-      return true
-    }
+      try {
+        await creditProtocol.submitMultiSettlement(transactions)
+        refreshTransactions()
 
-    catch (e) {
-      console.log('----------------------ERROR CONFIRMING TRANSACTION', e)
-      dispatch(displayError(debtManagement.confirmation.error))
-      return false
-    }
-  }
-}
-
-export const confirmPendingSettlement = (pendingSettlement: PendingUnilateral, denomination: string) => {
-  return async (dispatch, getState) => {
-    const { creditorAddress, debtorAddress, amount, memo, debtorNickname, creditorNickname, creditRecord } = pendingSettlement
-    const { ucacAddress } = creditRecord
-    const { address, privateKeyBuffer } = getUser(getState())()
-    const direction = address === creditorAddress ? 'lend' : 'borrow'
-
-    if (direction === 'lend') {
-      const ethRequired = await getEthRequired(getState, amount)
-      if (ethRequired) {
-        dispatch(displayError(debtManagement.createError.insufficientEth(ethRequired)))
+        dispatch(displaySuccess(debtManagement.confirmation.transaction(friendNickname)))
+        return true
+      } catch (e) {
+        dispatch(displayError(debtManagement.pending.error))
         return false
       }
-    }
-
-    try {
-      const creditRecord = await creditProtocol.createCreditRecord(
-        ucacAddress,
-        creditorAddress,
-        debtorAddress,
-        amount,
-        memo
-      )
-
-      const signature = creditRecord.sign(privateKeyBuffer)
-      await creditProtocol.submitSettlementRecord(creditRecord, direction, signature, denomination)
-      refreshTransactions()
-
-      dispatch(displaySuccess(debtManagement.confirmation.settlement(direction === 'lend' ? debtorNickname : creditorNickname)))
-
-      return true
-    }
-
-    catch (e) {
-      dispatch(displayError(debtManagement.confirmation.error))
-      return false
+    } else {
+      try {
+        const creditRecord = await creditProtocol.createCreditRecord(ucacAddress, creditorAddress, debtorAddress, amount, memo)
+        const signature = creditRecord.sign(privateKeyBuffer)
+        await creditProtocol.submitCreditRecord(creditRecord, direction, signature)
+        refreshTransactions()
+        
+        dispatch(displaySuccess(debtManagement.confirmation.transaction(friendNickname)))
+        return true
+      } catch (e) {
+        console.log('----------------------ERROR CONFIRMING TRANSACTION', e)
+        dispatch(displayError(debtManagement.confirmation.error))
+        return false
+      }
     }
   }
 }
@@ -536,12 +507,16 @@ export const confirmPendingSettlement = (pendingSettlement: PendingUnilateral, d
 export const rejectPendingTransaction = (pendingTransaction: PendingTransaction) => {
   return async (dispatch, getState) => {
     const { address, privateKeyBuffer } = getUser(getState())()
-    const { hash } = pendingTransaction
+    const { hash, multiTransactionHashes } = pendingTransaction
     try {
-      await creditProtocol.rejectPendingTransactionByHash(hash, privateKeyBuffer)
+      if(multiTransactionHashes === undefined) {
+        await creditProtocol.rejectPendingByHash(hash, privateKeyBuffer)
+      } else {
+        multiTransactionHashes.map( async (hash) => await creditProtocol.rejectPendingByHash(hash, privateKeyBuffer) )
+      }
+      
       dispatch(displaySuccess(debtManagement.rejection.success))
       refreshTransactions()
-
       return true
     }
     catch (e) {
@@ -555,9 +530,14 @@ export const rejectPendingTransaction = (pendingTransaction: PendingTransaction)
 export const rejectPendingSettlement = (pendingSettlement: PendingUnilateral) => {
   return async (dispatch, getState) => {
     const { address, privateKeyBuffer } = getUser(getState())()
-    const { hash } = pendingSettlement
+    const { hash, multiSettlementHashes } = pendingSettlement
     try {
-      await creditProtocol.rejectPendingSettlementByHash(hash, privateKeyBuffer)
+      if(multiSettlementHashes === undefined) {
+        await creditProtocol.rejectPendingByHash(hash, privateKeyBuffer)
+      } else {
+        multiSettlementHashes.map( async (hash) => await creditProtocol.rejectPendingByHash(hash, privateKeyBuffer) )
+      }
+      
       refreshTransactions()
 
       dispatch(displaySuccess(debtManagement.rejection.success))
@@ -570,18 +550,41 @@ export const rejectPendingSettlement = (pendingSettlement: PendingUnilateral) =>
   }
 }
 
-export const addDebt = (friend: Friend, amount: string, memo: string, direction: string, currency: string) => {
+export const addDebt = (friend: Friend, amount: string, memo: string, direction: string, currency: string, settleTotal?: boolean) => {
   return async (dispatch, getState) => {
     const { address, privateKeyBuffer } = getUser(getState())()
-
+    const ucacBalances = calculateUcacBalances(getState())(friend.address)
+    console.log('UCAC balances', ucacBalances)
     const sanitizedAmount = sanitizeAmount(amount, currency)
+
+    if(direction !== 'borrow' && direction !== 'lend') {
+      return
+    }
 
     if (sanitizedAmount <= 0) {
       return dispatch(displayError(debtManagement.createError.amountTooLow))
+    } else if (sanitizedAmount >= 1e11) {
+      return dispatch(displayError(debtManagement.createError.amountTooHigh))
     }
 
-    if (sanitizedAmount >= 1e11) {
-      return dispatch(displayError(debtManagement.createError.amountTooHigh))
+    if(settleTotal && Object.keys(ucacBalances).length > 1) {
+      const { transactions, tooLow, tooHigh } = await generateMultiTransaction(address, friend.address, ucacBalances, memo, getState, privateKeyBuffer)
+
+      if (tooLow) {
+        return dispatch(displayError(debtManagement.createError.amountTooLow))
+      } else if (tooHigh) {
+        return dispatch(displayError(debtManagement.createError.amountTooHigh))
+      }
+
+      try {
+        await creditProtocol.submitMultiSettlement(transactions)
+        refreshTransactions()
+
+        dispatch(displaySuccess(debtManagement.pending.success(friend)))
+        return true
+      } catch (e) {
+        dispatch(displayError(debtManagement.pending.error))
+      }
     }
     
     const [ creditorAddress, debtorAddress ] = {
@@ -614,24 +617,41 @@ export const addDebt = (friend: Friend, amount: string, memo: string, direction:
   }
 }
 
-export const settleUp = (friend: Friend, amount: string, memo: string, direction: string, denomination: string, currency: string) => {
+export const settleUp = (friend: Friend, amount: string, memo: string, direction: string, denomination: string, currency: string, settleTotal?: boolean) => {
   return async (dispatch, getState) => {
     const { address, privateKeyBuffer } = getUser(getState())()
-
+    const ucacBalances = calculateUcacBalances(getState())(friend.address)
     const sanitizedAmount = sanitizeAmount(amount, currency)
+
+    if(direction !== 'borrow' && direction !== 'lend') {
+      return
+    }
 
     if (sanitizedAmount <= 0) {
       return dispatch(displayError(debtManagement.createError.amountTooLow))
-    }
-
-    if (sanitizedAmount >= 1e11) {
+    } else if (sanitizedAmount >= 1e11) {
       return dispatch(displayError(debtManagement.createError.amountTooHigh))
     }
 
-    if (direction === 'lend') {
-      const ethRequired = await getEthRequired(getState, sanitizedAmount)
-      if (ethRequired) {
-        return dispatch(displayError(debtManagement.createError.insufficientEth(ethRequired)))
+    if(settleTotal && Object.keys(ucacBalances).length > 1) {
+      const { transactions, tooLow, tooHigh } = await generateMultiTransaction(address, friend.address, ucacBalances, memo, getState, privateKeyBuffer, denomination)
+
+      if (tooLow) {
+        return dispatch(displayError(debtManagement.createError.amountTooLow))
+      } else if (tooHigh) {
+        return dispatch(displayError(debtManagement.createError.amountTooHigh))
+      }
+
+      try {
+        await creditProtocol.submitMultiSettlement(transactions)
+        refreshTransactions()
+
+        dispatch(displaySuccess(debtManagement.pending.success(friend)))
+        return true
+      } catch (e) {
+        console.log('WHAT IS HAPPENING', e)
+        dispatch(displayError(debtManagement.pending.error))
+        return false
       }
     }
 
@@ -652,16 +672,14 @@ export const settleUp = (friend: Friend, amount: string, memo: string, direction
       )
 
       const signature = creditRecord.sign(privateKeyBuffer)
-      await creditProtocol.submitSettlementRecord(creditRecord, direction, signature, denomination)
+      await creditProtocol.submitCreditRecord(creditRecord, direction, signature, denomination)
       refreshTransactions()
 
       dispatch(displaySuccess(debtManagement.pending.success(friend)))
-
       return true
-    }
-
-    catch (e) {
+    } catch (e) {
       dispatch(displayError(debtManagement.pending.error))
+      return false
     }
   }
 }
@@ -960,15 +978,13 @@ const getEthTransactions = async (addr: string, recovery: boolean) => {
 }
 
 const refreshTransactions = () => {
-  getPendingTransactions()
+  getPending()
   getRecentTransactions()
   setEthBalance()
-  getPendingSettlements()
   getFriendRequests()
 }
 
 const settleBilateral = async (user, bilateralSettlements, dispatch, getState) => {
-
   const gasPrice = await creditProtocol.getGasPrice()
   //Safe Low is in 10^8 Wei (deciGigaWei)
   const ethBalance = getState().store.ethBalance
@@ -977,7 +993,7 @@ const settleBilateral = async (user, bilateralSettlements, dispatch, getState) =
     if (settlement.creditorAddress.indexOf(user.address) === -1 || settlement.txHash !== undefined) {
       return
     }
-    
+
     if ( Number(`${settlement.settlementAmount}`) > Number(web3.toWei(ethBalance, 'ether')) ) {
       const debtorNickname = await getNicknameForAddress(settlement.debtorAddress)
       return dispatch(displayError(settlementManagement.bilateral.error.insufficient(debtorNickname)))
@@ -986,7 +1002,12 @@ const settleBilateral = async (user, bilateralSettlements, dispatch, getState) =
     const ethTransaction = new EthTransaction(settlement.creditorAddress, settlement.debtorAddress, settlement.settlementAmount, gasPrice)
     try {
       const txHash = await creditProtocol.settleWithEth(ethTransaction, user.privateKeyBuffer)
-      creditProtocol.storeSettlementHash(txHash, settlement, user.privateKeyBuffer)
+      if(settlement.multiSettlementHashes !== undefined) {
+        settlement.multiSettlementHashes.map( async(hash) => await creditProtocol.storeSettlementHash(txHash, hash, settlement.creditorAddress, user.privateKeyBuffer) )
+      } else {
+        await creditProtocol.storeSettlementHash(txHash, settlement.hash, settlement.creditorAddress, user.privateKeyBuffer)
+      }
+      
       storeEthTransaction(dispatch, {
         amount: ethTransaction.value,
         user: ethTransaction.from,
@@ -1022,24 +1043,141 @@ const triggerTouchId = (user, notificationsEnabled) => {
   return TouchID.authenticate('Please sign in using your fingerprint', optionalConfigObject)
   .then( () => {
     sessionStorage.set(moment())
-    return { hasStoredUser: true, welcomeComplete: true, notificationsEnabled, user }
+    return { hasStoredUser: true, welcomeComplete: true, privacyPolicyVerified: true, notificationsEnabled, user }
   })
   .catch(_error => {
-    return { hasStoredUser: true, welcomeComplete: true, notificationsEnabled }
+    return { hasStoredUser: true, welcomeComplete: true, privacyPolicyVerified: true, notificationsEnabled }
   })
 }
 
 const getEthInfo = async (user) => {
-  let ethBalance, ethPrices, bcptBalance
+  let ethBalance = '0', ethPrices = {}, bcptBalance = '0'
+  try {
+    ethPrices = await creditProtocol.getEthPrices()
+  } catch (e) {}
   try {
     ethBalance = await getEthBalance(user.address)
-    ethPrices = await creditProtocol.getEthPrices()
     const attoBcpts = await getBcptBalance(user.address)
     bcptBalance = String ( Number(attoBcpts) / Math.pow(10, 18) )
-  } catch (e) {
-    ethBalance = '0'
-    ethPrices = {}
-    bcptBalance = '0'
-  }
+  } catch (e) {}
   return { ethBalance, ethPrices, bcptBalance }
+}
+
+const generateMultiTransaction = async (address: string, friendAddress: string, ucacBalances: Object, memo: string, getState: Function, privateKeyBuffer: any, settlementCurrency?: string) => {
+  const startNonce = await creditProtocol.getNonce(address, friendAddress)
+  let tooLow = false, tooHigh = false
+
+  const transactions = Object.keys(ucacBalances).map( (ucacCur, index) => {
+    const balance = ucacBalances[ucacCur]
+    const sanAmount = Math.abs(balance)
+    const creditor = balance > 0 ? friendAddress : address
+    const debtor = balance > 0 ? address : friendAddress
+    const ucac = getUcacAddr(getState())(ucacCur)
+
+    tooLow = tooLow || sanAmount <= 0
+    tooHigh = tooHigh || sanAmount >= 1e11
+
+    const creditRecord = new CreditRecord(ucac, creditor, debtor, sanAmount, memo, startNonce + index)
+    const signature = creditRecord.sign(privateKeyBuffer)
+
+    return {
+      ucac,
+      creditor,
+      debtor,
+      amount: sanAmount,
+      memo,
+      submitter: address,
+      hash: bufferToHex(creditRecord.hash),
+      nonce: startNonce + index,
+      signature,
+      settlementAmount: undefined,
+      settlementCurrency
+    }
+  })
+
+  return { transactions, tooLow, tooHigh }
+}
+
+const filterMultiTransactions = (address: string, pending: any, state: Object) => {
+  let txs = {}
+
+  //helper function
+  const storeTx = (txs: Object, addr: string, pend: PendingTransaction | PendingUnilateral | PendingBilateral) => {
+    if(txs[addr] === undefined) {
+      txs[addr] = [ pend ]
+    } else {
+      txs[addr].push(pend)
+    }
+    return txs
+  }
+
+  //create an object of all the transactions/settlements, stored by friend
+  pending.forEach( pendTx => pendTx.debtorAddress === address ? 
+    txs = storeTx(txs, pendTx.creditorAddress, pendTx) : 
+    txs = storeTx(txs, pendTx.debtorAddress, pendTx)
+  )
+
+  for(let tx in txs) {
+    if(txs[tx].length === 1) {
+      delete txs[tx]
+    }
+  }
+
+  //remove all transactions/settlements that are part of a multi settlement
+  const newList = pending.filter( pendTx => {
+    for(let tx in txs) {
+      if(pendTx.creditorAddress === tx || pendTx.debtorAddress === tx) {
+        return false
+      }
+    }
+    return true
+  })
+
+  //make a new transaction/settlement for display purposes
+  for(let tx in txs) {
+    const balance = txs[tx].reduce( (acc, pendTx) => {
+      const txAmt = convertCurrency(state)(pendTx.ucac, pendTx.amount)
+      return pendTx.creditorAddress === address ? acc + txAmt: acc - txAmt
+    }, 0)
+
+    let multiTransactionHashes, settlementAmount, settlementCurrency, settlementBlockNumber, txHash, multiSettlementHashes
+
+    const creditor = balance > 0 ? address : tx
+    const debtor = balance > 0 ? tx : address
+    const submitter = txs[tx][0].submitter
+    const ucac = getUcacAddr(state)(defaultCurrency)
+    const amount = Math.round(Math.abs(balance))
+    const memo = `Request to settle for ${currencySymbols(defaultCurrency)}${currencyFormats(defaultCurrency)(amount)}`
+    const nonce = 0
+    const hash = txs[tx][0].hash
+
+    const data = { creditor, debtor, amount, memo, nonce, ucac, submitter, hash, multiTransactionHashes,
+      settlementAmount, settlementCurrency, settlementBlockNumber, multiSettlementHashes, txHash }
+
+    if(pending[0] instanceof PendingTransaction) {
+      data.multiTransactionHashes = txs[tx].map( pendTx => pendTx.hash )
+      newList.push(new PendingTransaction(data))
+
+    } else if(pending[0] instanceof PendingUnilateral) {
+      data.settlementAmount = txs[tx].reduce( (acc, pendTx) => {
+        return pendTx.creditorAddress === address ? acc + pendTx.settlementAmount: acc - pendTx.settlementAmount
+      }, 0)
+      data.settlementCurrency = txs[tx][0].settlementCurrency
+      data.settlementBlockNumber
+      data.multiSettlementHashes = txs[tx].map( pendStmt => pendStmt.hash )
+      newList.push(new PendingUnilateral(data))
+
+    } else if(pending[0] instanceof PendingBilateral) {
+      data.settlementAmount = txs[tx].reduce( (acc, pendTx) => {
+        return pendTx.creditorAddress === address ? acc + pendTx.settlementAmount: acc - pendTx.settlementAmount
+      }, 0)
+      data.settlementCurrency = txs[tx][0].settlementCurrency
+      data.settlementBlockNumber
+      data.multiSettlementHashes = txs[tx].map( pendStmt => pendStmt.hash )
+      data.txHash = txs[tx][0].txHash
+      newList.push(new PendingBilateral({ txHash, creditRecord: data }))
+    }
+  }
+  
+  return newList
 }

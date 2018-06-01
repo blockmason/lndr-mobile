@@ -128,7 +128,7 @@ export default {
     },
     sendEth: {
       error: {
-        insufficient: `Overføringen mislyktes på grunn av manglende dekning`,
+        insufficient: `Du har ikke nok ETH for denne transaksjonen`,
         generic: `Det oppstod en feil med overføringen, vennligst prøv igjen senere`,
         address: `Vennligst oppgi en gyldig adresse`,
         amount: `Venligst fyll inn et beløp større enn 0`,

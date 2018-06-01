@@ -128,7 +128,7 @@ export default {
     },
     sendEth: {
       error: {
-        insufficient: `Az átvitel fedezethiány miatt sikertelen`,
+        insufficient: `Ehhez a tranzakcióhoz nincs elegendő ETH`,
         generic: `Az átutalás során hiba történt, kérjük, később próbálja újra`,
         address: `Kérjük, érvényes címet adjon meg`,
         amount: `Kérjük, egy 0-nál nagyobb összeget adjon meg`,
