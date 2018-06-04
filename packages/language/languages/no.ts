@@ -162,6 +162,7 @@ export default {
       `ETH Balance`,
       `BCPT Balance`,
       `ETH Transaksjonshistorikk`,
+      `Endre Primær Valuta`,
       `Endre PIN-kode`,
       `Endre kallenavn`,
       `Endre e-post`,

@@ -162,6 +162,7 @@ export default {
       `ETH Kontostand`,
       `BCPT Kontostand`,
       `ETH Transaktionshistorie`,
+      `Ändern Hauptwährung`,
       `PIN ändern`,
       `Spitznamen ändern`,
       `Ändern Sie die E-Mail`,

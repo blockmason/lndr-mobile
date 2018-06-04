@@ -7,7 +7,7 @@ import { UserData } from 'lndr/user'
 import { debounce } from 'lndr/time'
 import { ethAmount, ethAddress } from 'lndr/format'
 import Friend from 'lndr/friend'
-import { defaultCurrency, currencySymbols, transferLimits  } from 'lndr/currencies'
+import { currencySymbols, transferLimits  } from 'lndr/currencies'
 
 import Button from 'ui/components/button'
 import Loading, { LoadingContext } from 'ui/components/loading'
@@ -26,7 +26,7 @@ const {
   accountManagement
 } = language
 
-import { getUser, getEthBalance, getEthExchange, getWeeklyEthTotal } from 'reducers/app'
+import { getUser, getEthBalance, getEthExchange, getWeeklyEthTotal, getPrimaryCurrency } from 'reducers/app'
 import { sendEth, getEthTxCost } from 'actions'
 import { connect } from 'react-redux'
 import { addNavigationHelpers } from 'react-navigation';
@@ -40,6 +40,7 @@ interface Props {
   ethSentPastWeek: number
   ethExchange: (currency: string) => string
   navigation: any
+  primaryCurrency: string
 }
 
 interface State {
@@ -47,26 +48,25 @@ interface State {
   formInputError?: string
   address?: string
   txCost: string
-  currency: string
 }
 
 class TransferEth extends Component<Props, State> {
   constructor(props) {
     super(props)
     this.state = {
-      txCost: '0.00',
-      currency: defaultCurrency
+      txCost: '0.00'
     }
   }
 
   async componentWillMount() {
-    const txCost = await getEthTxCost(defaultCurrency)
+    const { primaryCurrency } = this.props
+    const txCost = await getEthTxCost(primaryCurrency)
     this.setState({ txCost })
   }
 
   async submit() {
-    const { amount, address, currency } = this.state
-    const { ethExchange, ethSentPastWeek } = this.props
+    const { amount, address } = this.state
+    const { ethExchange, ethSentPastWeek, primaryCurrency } = this.props
 
     if (!this.validAddress()) {
       this.setState({ formInputError: accountManagement.sendEth.error.address })
@@ -76,8 +76,8 @@ class TransferEth extends Component<Props, State> {
       return
     }
 
-    if (( ethSentPastWeek + Number(amount) ) * Number(ethExchange(currency)) > Number(transferLimits(currency)) ) {
-      this.setState({ formInputError: accountManagement.sendEth.error.limitExceeded(defaultCurrency) })
+    if (( ethSentPastWeek + Number(amount) ) * Number(ethExchange(primaryCurrency)) > Number(transferLimits(primaryCurrency)) ) {
+      this.setState({ formInputError: accountManagement.sendEth.error.limitExceeded(primaryCurrency) })
       return
     }
 
@@ -121,25 +121,25 @@ class TransferEth extends Component<Props, State> {
   }
 
   getLimit() {
-    const { currency, formInputError } = this.state
-    const { ethExchange, ethSentPastWeek } = this.props
-    const remaining = String(Number(transferLimits(currency)) - Number(ethSentPastWeek) * Number(ethExchange(currency)))
+    const { formInputError } = this.state
+    const { ethExchange, ethSentPastWeek, primaryCurrency } = this.props
+    const remaining = String(Number(transferLimits(primaryCurrency)) - Number(ethSentPastWeek) * Number(ethExchange(primaryCurrency)))
     const end = remaining.indexOf('.') === -1 ? remaining.length : remaining.indexOf('.') + 3
     return remaining.slice(0, end)
   }
 
-  toFiat(amount, exchange, currency) {
+  toFiat(amount, exchange, primaryCurrency) {
     if (amount === undefined) {
       amount = '0'
     }
-    const remaining = `${currencySymbols(currency)}${Number(amount) * Number(exchange)}`
+    const remaining = `${currencySymbols(primaryCurrency)}${Number(amount) * Number(exchange)}`
     const end = remaining.indexOf('.') === -1 ? remaining.length : remaining.indexOf('.') + 3
     return remaining.slice(0, end)
   }
 
   render() {
-    const { amount, address, txCost, currency, formInputError } = this.state
-    const { ethBalance, ethExchange, ethSentPastWeek } = this.props
+    const { amount, address, txCost, formInputError } = this.state
+    const { ethBalance, ethExchange, ethSentPastWeek, primaryCurrency } = this.props
 
     return <View style={general.whiteFlex}>
       <View style={general.view}>
@@ -164,7 +164,7 @@ class TransferEth extends Component<Props, State> {
                     onChangeText={address => this.setState({ address: this.setAddress(address), formInputError: undefined })}
                   />
                 </View>
-                <Text style={[formStyle.smallText, formStyle.spaceTop, formStyle.center]}>{accountManagement.sendEth.warning(this.getLimit(), currency)}</Text>
+                <Text style={[formStyle.smallText, formStyle.spaceTop, formStyle.center]}>{accountManagement.sendEth.warning(this.getLimit(), primaryCurrency)}</Text>
                 <Text style={formStyle.title}>{accountManagement.sendEth.amount}</Text>
                 <View style={formStyle.textInputContainer}>
                   <TextInput
@@ -179,8 +179,8 @@ class TransferEth extends Component<Props, State> {
                   />
                 </View>
               </View>
-              <Text style={[formStyle.smallText, formStyle.center, formStyle.spaceTopS]}>{this.toFiat(amount, ethExchange(currency), currency)}</Text>
-              <Text style={[accountStyle.txCost, formStyle.spaceTop]}>{accountManagement.sendEth.txCost(txCost, currency)}</Text>
+              <Text style={[formStyle.smallText, formStyle.center, formStyle.spaceTopS]}>{this.toFiat(amount, ethExchange(primaryCurrency), primaryCurrency)}</Text>
+              <Text style={[accountStyle.txCost, formStyle.spaceTop]}>{accountManagement.sendEth.txCost(txCost, primaryCurrency)}</Text>
             </View>
             { formInputError && <Text style={[formStyle.warningText, {alignSelf: 'center'}]}>{formInputError}</Text>}
             <Button large round wide onPress={() => this.submit()} text={accountManagement.sendEth.transfer} />
@@ -192,4 +192,4 @@ class TransferEth extends Component<Props, State> {
 }
 
 export default connect((state) => ({ user: getUser(state)(), ethBalance: getEthBalance(state), ethExchange: getEthExchange(state),
-  ethSentPastWeek: getWeeklyEthTotal(state) }), { sendEth })(TransferEth)
+  ethSentPastWeek: getWeeklyEthTotal(state), primaryCurrency: getPrimaryCurrency(state)() }), { sendEth })(TransferEth)

@@ -9,12 +9,12 @@ import { white } from 'theme/include/colors'
 
 import { currencyFormats } from 'lndr/format'
 import profilePic from 'lndr/profile-pic'
-import { defaultCurrency, currencySymbols, transferLimits  } from 'lndr/currencies'
+import { currencySymbols, transferLimits  } from 'lndr/currencies'
 
 import style from 'theme/account'
 import general from 'theme/general'
 
-import { calculateBalance, convertCurrency } from 'reducers/app'
+import { calculateBalance, convertCurrency, getPrimaryCurrency } from 'reducers/app'
 import { connect } from 'react-redux'
 
 import language from 'language'
@@ -27,6 +27,7 @@ interface Props {
   recentTransactions?: any
   navigation: any
   calculateBalance: (friend: Friend) => number
+  primaryCurrency: string
 }
 
 interface State {
@@ -58,7 +59,7 @@ class FriendRow extends Component<Props, State> {
   }
 
   getAmountTotal() {
-    const { friend } = this.props
+    const { friend, primaryCurrency } = this.props
     let total = this.getRecentTotal()
     let sign = ''
 
@@ -68,7 +69,7 @@ class FriendRow extends Component<Props, State> {
       sign = '-'
     }
 
-    return `${sign} ${currencySymbols(defaultCurrency)}${currencyFormats(`${defaultCurrency}abs`)(total)}`
+    return `${sign} ${currencySymbols(primaryCurrency)}${currencyFormats(`${primaryCurrency}abs`)(total)}`
   }
 
   getTransactionTotal() {
@@ -120,4 +121,4 @@ class FriendRow extends Component<Props, State> {
   }
 }
 
-export default connect((state) => ({ calculateBalance: calculateBalance(state), convertCurrency: convertCurrency(state) }))(FriendRow)
+export default connect((state) => ({ calculateBalance: calculateBalance(state), primaryCurrency: getPrimaryCurrency(state)(), convertCurrency: convertCurrency(state) }))(FriendRow)

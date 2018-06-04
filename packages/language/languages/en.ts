@@ -159,6 +159,7 @@ export default {
       `ETH Balance`,
       `BCPT Balance`,
       `ETH Transaction History`,
+      `Change Primary Currency`,
       `Change PIN`,
       `Change Nickname`,
       `Change Email`,

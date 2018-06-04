@@ -4,24 +4,23 @@ import React, { Component } from 'react'
 import { View, ScrollView, Button } from 'react-native'
 
 import firebase from 'react-native-firebase'
+import SplashScreen from 'react-native-splash-screen'
+import { connect, Provider } from 'react-redux'
+import { Toast, ToastActionsCreators } from 'react-native-redux-toast'
 
 import AuthenticateView from 'ui/views/authenticate'
 import WelcomeView from 'ui/views/welcome'
 import PrivacyPolicyView from 'ui/views/privacy-policy'
-
 import { PopupTarget } from 'ui/components/popup'
 import ThemeImage from 'ui/components/images/theme-image'
 import AndroidStatusBar from 'ui/components/android-status-bar'
-import { UserData } from 'lndr/user'
 
-import { Provider } from 'react-redux'
+import { UserData } from 'lndr/user'
+import { defaultCurrency } from 'lndr/currencies'
 import createStore from 'store'
 import { setWelcomeComplete, initializeStorage, verifyPrivacyPolicy } from 'actions'
 import { getStore, getUser } from 'reducers/app'
 import AppWithNavigationState from 'navigators'
-import { connect } from 'react-redux'
-import { Toast, ToastActionsCreators } from 'react-native-redux-toast'
-import SplashScreen from 'react-native-splash-screen'
 
 import style from 'theme/general'
 
@@ -61,7 +60,8 @@ const initialState = {
   bcptExchange: '0.5',
   userPic: '',
   ucacAddresses: {},
-  ethTransactions: []
+  ethTransactions: [],
+  primaryCurrency: defaultCurrency
 }
 
 const store = createStore(initialState)

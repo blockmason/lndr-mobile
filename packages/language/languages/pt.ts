@@ -162,6 +162,7 @@ export default {
       `Balanço ETH`,
       `Balanço BCPT`,
       `Histórico de Transações ETH`,
+      `Alterar Moeda principal`,
       `Alterar PIN`,
       `Alterar Nome de utilizador`,
       `Alterar e-mail`,

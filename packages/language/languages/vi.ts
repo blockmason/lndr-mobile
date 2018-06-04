@@ -162,6 +162,7 @@ export default {
       `Số dư ETH`,
       `Số dư BCPT`,
       `Lịch sử giao dịch ETH`,
+      `Thay đổi tiền tệ chính`,
       `Thay đổi mã PIN`,
       `Thay đổi Biệt danh`,
       `Thay đổi Email`,

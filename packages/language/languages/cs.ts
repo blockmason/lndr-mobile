@@ -162,6 +162,7 @@ export default {
       `Zůstatek ETH`,
       `Zůstatek BCPT`,
       `ETH Transakční historie`,
+      `Změnit hlavní měně`,
       `Změna PIN`,
       `Změna přezdívky`,
       `Změnit email`,

@@ -9,7 +9,7 @@ import { debounce } from 'lndr/time'
 import { currencyFormats } from 'lndr/format'
 import PendingTransaction from 'lndr/pending-transaction'
 import profilePic from 'lndr/profile-pic'
-import { defaultCurrency, currencySymbols, transferLimits  } from 'lndr/currencies'
+import { currencySymbols, transferLimits  } from 'lndr/currencies'
 
 import Button from 'ui/components/button'
 import Loading, { LoadingContext } from 'ui/components/loading'

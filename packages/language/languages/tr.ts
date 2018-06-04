@@ -162,6 +162,7 @@ export default {
       `ETH Bakiyesi`,
       `BCPT Bakiyesi`,
       `ETH İşlem Geçmişi`,
+      `Birincil Para değiştirme`,
       `Pin'i Değiştir`,
       `Kullanıcı Adını Değiştir`,
       `E-postanı Değiştir`,

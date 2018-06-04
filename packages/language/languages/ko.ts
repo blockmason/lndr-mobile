@@ -7,13 +7,11 @@ const generalCommunicationError = '서버에 오류가 발생하였습니다. �
 export default {
   applicationName: 'Lndr',
   helloWorld: '헬로 월드',
-
   submit: '제출',
   next: '다음',
   cancel: '취소',
   back: '돌아가기',
   copy: '클립보드에 복사',
-
   confirmAccount: '인증',
   createAccount: '계정 생성',
   recoverAccount: '계정 복원',
@@ -27,7 +25,6 @@ export default {
   seeAllActivity: '활동보기',
   copiedClipboard: '클립보드에 복사되었습니다',
   pleaseWait: '잠시 기다려주십시오',
-
   addFriend: '친구 추가',
   addFriendConfirmationQuestion: '정말 친구로 추가하시겠습니까?',
   removeFriend: '친구 삭제',
@@ -42,7 +39,6 @@ export default {
   addFriendButton: '+ 친구 추가',
   alreadyFriendsButton: '친구',
   friendShell: '친구',
-
   tip: '팁: ',
   notice: '공지: ',
   welcome: '당신의 LNDR에 오신 것을 환영합니다',
@@ -53,7 +49,6 @@ export default {
   needsReview: '리뷰 필요',
   owesMe: '친구가 갚을 빚이 있습니다',
   iOwe: '친구에게 빚을 갚아야합니다',
-
   newPassword: '새로운 비밀번호(최소 8자)',
   confirmPassword: '비밀번호 인증',
   newPin: '새로운 비밀번호 4자리',
@@ -61,27 +56,21 @@ export default {
   confirmPin: '비밀번호를 확인해주세요',
   newAccount: '계정 생성',
   loginAccount: '계정 UNLOCK',
-
   recoverExistingAccount: '본 계정 되돌리기',
   recoverMnemonic: '연상 기호(계정 생성\n 시 입력해야 하는 12자)',
   recoverMnemonicLengthError: '정확히 12 단어이어야합니다',
-
   successTitle: '성공',
   errorTitle: '에러',
-
   showMnemonic: '12자 연상기호 보이기',
   mnemonicExhortation: '해당 12자 기호는 계정 복구 시 필요함으로 반드시 안전한 곳에 저장하세요',
   addressExhortation: 'Lndr에서 빚을 갚기 위해 이더리움을 내 주소로 보내기',
   removeAccountTitle: '기기로부터 계정을 정말 삭제하시겠습니까?',
   removeAccountExhortation: '향후 계정을 복구할 시 입력할 연상 기호를 인지해야 합니다.',
-
   myAccount: '나의 계정',
-
   setNickname: '친구들이 알아볼 수 있도록 닉네임을 설정하세요',
   setEmail: '이메일 설정하고 Lndr 업데이트 정보 받아보기',
   nickname: '닉네임(소문자 & 숫자)',
   email: '이메일 주소',
-
   accountManagement: {
   nickname: {
     lengthViolation: '닉네임은 적어도 3글자 이상 가능합니다.',
@@ -175,6 +164,7 @@ export default {
     '이더리움 잔액',
     'BCPT 잔액',
     '이더리움 거래 내역',
+    `차 환율 변경`,
     '비밀번호 변경',
     '닉네임 변경',
     '이메일 주소',

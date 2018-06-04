@@ -14,27 +14,27 @@ const country = locale.slice(3, 5)
 
 export const currencySymbols = (currency) => {
   const symbols = {
-    AUD: '$',
-    CAD: '$',
+    AUD: 'AU$',
+    CAD: 'CA$',
     CHF: 'CHf',
-    CNY: '¥',
+    CNY: 'CN¥',
     DKK: 'Kr',
     EUR: '€',
     GBP: '£',
     HKD: 'HK$',
     IDR: 'Rp',
     ILS: '₪',
-    JPY: '¥',
+    JPY: 'JP¥',
     KRW: '₩',
     MYR: 'RM',
-    NOK: 'kr',
-    NZD: '$',
+    NOK: 'Nok',
+    NZD: 'NZ$',
     RUB: '₽',
-    SEK: 'kr',
+    SEK: 'Sek',
     SGD: 'S$',
     THB: '฿',
     TRY: '₺',
-    USD: '$',
+    USD: 'US$',
     VND: '₫'
   }
 

@@ -1,4 +1,4 @@
-import { defaultCurrency, currencySymbols, transferLimits, hasNoDecimals  } from 'lndr/currencies'
+import { currencySymbols, transferLimits, hasNoDecimals  } from 'lndr/currencies'
 
 declare const Buffer
 
