@@ -162,6 +162,7 @@ export default {
       `Saldo ETH`,
       `Saldo BCPT`,
       `Riwayat Transaksi ETH`,
+      `Ubah Mata Uang Primer`,
       `Ubah PIN`,
       `Ubah Nama Panggilan`,
       `Ubah Email`,

@@ -11,7 +11,7 @@ import profilePic from 'lndr/profile-pic'
 import PendingView from 'ui/views/account/activity/pending'
 import RecentView from 'ui/views/account/activity/recent'
 import DashboardShell from 'ui/components/dashboard-shell'
-import { defaultCurrency, currencySymbols, transferLimits  } from 'lndr/currencies'
+import { currencySymbols, transferLimits  } from 'lndr/currencies'
 
 import Button from 'ui/components/button'
 import Loading, { LoadingContext } from 'ui/components/loading'
@@ -35,7 +35,7 @@ const {
 } = language
 const removeFriendText = language.removeFriend
 
-import { getUser, pendingTransactions, recentTransactions, convertCurrency, calculateBalance } from 'reducers/app'
+import { getUser, pendingTransactions, recentTransactions, convertCurrency, calculateBalance, getPrimaryCurrency } from 'reducers/app'
 import { getTwoPartyBalance, removeFriend } from 'actions'
 import { connect } from 'react-redux'
 
@@ -48,6 +48,8 @@ interface Props {
   pendingTransactions: any
   navigation: any
   calculateBalance: (friend: Friend) => number
+  getTwoPartyBalance: (user, friend) => Balance
+  primaryCurrency: string
 }
 
 interface State {
@@ -86,7 +88,7 @@ class RemoveFriend extends Component<Props, State> {
   }
 
   async componentDidMount() {
-    const { user } = this.props
+    const { user, getTwoPartyBalance } = this.props
     const friend = this.props.navigation ? this.props.navigation.state.params.friend : {}
     const balance = await getTwoPartyBalance(user, friend)
     this.setState({ balance, balanceLoaded: true })
@@ -118,7 +120,7 @@ class RemoveFriend extends Component<Props, State> {
 
   render() {
     const friend = this.props.navigation ? this.props.navigation.state.params.friend : {}
-    const { navigation } = this.props
+    const { navigation, primaryCurrency } = this.props
     const { pic } = this.state
     const imageSource = pic ? { uri: pic } : require('images/person-outline-dark.png')
 
@@ -134,8 +136,8 @@ class RemoveFriend extends Component<Props, State> {
           <Text style={pendingStyle.title}>{`@${friend.nickname}`}</Text>
           <Text style={pendingStyle.subTitle}>{`${recentTransactionsLanguage.balance}:`}</Text>
           <View style={pendingStyle.balanceRow}>
-            <Text style={pendingStyle.balanceInfo}>{currencySymbols(defaultCurrency)}</Text>
-            <Text style={pendingStyle.amount}>{currencyFormats(defaultCurrency)(this.getRecentTotal())}</Text>
+            <Text style={pendingStyle.balanceInfo}>{currencySymbols(primaryCurrency)}</Text>
+            <Text style={pendingStyle.amount}>{currencyFormats(primaryCurrency)(this.getRecentTotal())}</Text>
           </View>
           {this.getRecentTotal() === 0 ? null : <Button round large fat wide onPress={() => this.props.navigation.navigate('SettleUp', { friend: friend })} text={debtManagement.settleUp} containerStyle={style.spaceBottom} />}
           {this.getTransactionNumber() === 0 ? <Button round large danger wide onPress={() => this.removeFriend(friend)} text={removeFriendText} containerStyle={style.spaceBottom} /> : null }
@@ -151,6 +153,6 @@ class RemoveFriend extends Component<Props, State> {
   }
 }
 
-export default connect((state) => ({ user: getUser(state)(), pendingTransactions: pendingTransactions(state), 
-  recentTransactions: recentTransactions(state), calculateBalance: calculateBalance(state), convertCurrency: convertCurrency(state) }),
+export default connect((state) => ({ user: getUser(state)(), pendingTransactions: pendingTransactions(state), getTwoPartyBalance: getTwoPartyBalance(state),
+  recentTransactions: recentTransactions(state), calculateBalance: calculateBalance(state), convertCurrency: convertCurrency(state), primaryCurrency: getPrimaryCurrency(state)() }),
   { removeFriend })(RemoveFriend)

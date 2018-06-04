@@ -162,6 +162,7 @@ export default {
       `ETH Egyenleg`,
       `BCPT Egyenleg`,
       `ETH Tranzakció Előzmények`,
+      `Megváltoztathatja az elsődleges pénzneme`,
       `PiN-kód Módosítása`,
       `Becenév Módosítása`,
       `Email Módosítása`,

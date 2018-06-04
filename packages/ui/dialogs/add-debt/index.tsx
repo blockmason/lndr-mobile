@@ -5,7 +5,7 @@ import { getResetAction } from 'reducers/nav'
 
 import Friend from 'lndr/friend'
 import { formatMemo, currencyFormats, amountFormat } from 'lndr/format'
-import { defaultCurrency, currencySymbols, transferLimits  } from 'lndr/currencies'
+import { currencySymbols, transferLimits  } from 'lndr/currencies'
 
 import Button from 'ui/components/button'
 import Checkbox from 'ui/components/checkbox'
@@ -26,7 +26,7 @@ import popupStyle from 'theme/popup'
 import language from 'language'
 const { debtManagement, noFriends, submit, cancel, back, nickname } = language
 
-import { getStore, pendingTransactions, recentTransactions, getAllUcacCurrencies, hasPendingTransaction } from 'reducers/app'
+import { getStore, pendingTransactions, recentTransactions, getAllUcacCurrencies, hasPendingTransaction, getPrimaryCurrency } from 'reducers/app'
 import { addDebt, getFriends, getRecentTransactions, hasPendingMessage } from 'actions'
 import { connect } from 'react-redux'
 
@@ -49,6 +49,7 @@ interface Props {
   recentTransactions: any
   navigation: any
   allCurrencies: any
+  primaryCurrency: string
 }
 
 interface State {
@@ -68,7 +69,7 @@ class AddDebt extends Component<Props, State> {
     super(props)
     this.state = {
       shouldSelectFriend: false,
-      currency: defaultCurrency,
+      currency: props.primaryCurrency,
       shouldPickCurrency: false,
       searchText: ''
     }
@@ -272,5 +273,5 @@ class AddDebt extends Component<Props, State> {
 }
 
 export default connect((state) => ({ state: getStore(state)(), pendingTransactions: pendingTransactions(state),
-  recentTransactions: recentTransactions(state), allCurrencies: getAllUcacCurrencies(state),
+  recentTransactions: recentTransactions(state), allCurrencies: getAllUcacCurrencies(state), primaryCurrency: getPrimaryCurrency(state)(),
    hasPendingTransaction: hasPendingTransaction(state) }), { addDebt, getFriends, hasPendingMessage })(AddDebt)

@@ -3,7 +3,7 @@ import PendingTransaction from 'lndr/pending-transaction'
 import moment from 'moment'
 import { UserData } from 'lndr/user'
 import Friend from 'lndr/friend'
-import { currencySymbols, transferLimits, defaultCurrency, hasNoDecimals } from 'lndr/currencies'
+import { currencySymbols, transferLimits, hasNoDecimals } from 'lndr/currencies'
 
 export const initialState = ({})
 
@@ -19,9 +19,6 @@ const reducer = (state = initialState, action) => {
       return state
   }
 }
-
-// TODO - Organize selectors.  We are in the middle of a transistional stage
-// so all selectors will be here for now.
 
 export const getUser = (state) => () : UserData => state.store.user
 
@@ -114,10 +111,11 @@ export const getEthPrices = (state) : object => state.store.ethPrices
 export const getBcptBalance = (state) : string => state.store.bcptBalance
 
 export const convertCurrency = (state) => (fromUcac: string, amount: number) : number => {
+  const primaryCurrency = getPrimaryCurrency(state)()
   let fromExchange = Number(getEthExchange(state)(getUcacCurrency(state)(fromUcac)))
   fromExchange = hasNoDecimals(getUcacCurrency(state)(fromUcac)) ? fromExchange : fromExchange * 100
-  let toExchange = Number(getEthExchange(state)(defaultCurrency.toLowerCase()))
-  toExchange = hasNoDecimals(defaultCurrency) ? toExchange : toExchange * 100
+  let toExchange = Number(getEthExchange(state)(primaryCurrency.toLowerCase()))
+  toExchange = hasNoDecimals(primaryCurrency) ? toExchange : toExchange * 100
 
   return amount / fromExchange * toExchange
 }
@@ -193,3 +191,5 @@ export const calculateUcacBalances = (state) => (friendAddress: string) : Object
 
   return ucacBalances
 }
+
+export const getPrimaryCurrency = (state) => () : string => state.store.primaryCurrency

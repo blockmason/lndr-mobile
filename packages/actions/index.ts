@@ -33,7 +33,7 @@ const { accountManagement, debtManagement, settlementManagement, copiedClipboard
 
 import { ToastActionsCreators } from 'react-native-redux-toast'
 import { getUser, getStore, getUcacAddr, getEthExchange as exchangeReducer, getWeeklyEthTotal,
-calculateUcacBalances, convertCurrency, getUcacCurrency } from 'reducers/app'
+calculateUcacBalances, convertCurrency, getUcacCurrency, getPrimaryCurrency } from 'reducers/app'
 import { hexToBuffer } from '../credit-protocol/lib/buffer-utils'
 import { defaultCurrency, currencySymbols } from 'lndr/currencies'
 
@@ -43,6 +43,9 @@ const mnemonicStorage = new Storage('mnemonic')
 const hashedPasswordStorage = new Storage('hashed-password')
 const notificationsEnabledStorage = new Storage('notifications-enabled')
 const ethTransactionsStorage = new Storage('eth-transactions')
+const sessionStorage = new Storage('session')
+const userStorage = new Storage('user')
+export const primaryCurrencyStorage = new Storage('primary-currency')
 
 const creditProtocol = new CreditProtocol('https://api.lndr.blockmason.io')
 // let creditProtocol
@@ -58,14 +61,12 @@ const setState = (payload) => (
   { type: 'SET_STATE', payload: payload }
 )
 
-const sessionStorage = new Storage('session')
-const userStorage = new Storage('user')
-
 export const initializeStorage = () => {
   return async (dispatch, getState) => {
     const storedMnemonic = await mnemonicStorage.get()
     const storedSession = await sessionStorage.get()
     const storedUser = await userStorage.get()
+    const primaryCurrency = await primaryCurrencyStorage.get()
 
     //put this in separate section
     const storedNotificationPreference = await notificationsEnabledStorage.get()
@@ -82,7 +83,7 @@ export const initializeStorage = () => {
       let ucacAddresses = await creditProtocol.getUcacAddresses()
       let ethTransactions = await ethTransactionsStorage.get()
       const payload = { hasStoredUser: true, welcomeComplete: true, privacyPolicyVerified: true, user: storedUser, notificationsEnabled, ethBalance, 
-        ethPrices, bcptBalance, ucacAddresses, ethTransactions }
+        ethPrices, bcptBalance, ucacAddresses, ethTransactions, primaryCurrency }
       dispatch(setState(payload))
 
     } else if (touchIdSupported && storedMnemonic && storedUser) {
@@ -95,11 +96,12 @@ export const initializeStorage = () => {
       payload.bcptBalance = bcptBalance
       payload.ucacAddresses = ucacAddresses
       payload.ethTransactions = ethTransactions
+      payload.primaryCurrency = primaryCurrency
       dispatch(setState(payload))
 
     } else if (storedMnemonic) {
       const lockTimeout = storedUser ? storedUser.lockTimeout : 15
-      dispatch(setState({ hasStoredUser: true, welcomeComplete: true, privacyPolicyVerified: true, notificationsEnabled, lockTimeout }))
+      dispatch(setState({ hasStoredUser: true, welcomeComplete: true, privacyPolicyVerified: true, notificationsEnabled, lockTimeout, primaryCurrency }))
     }
     dispatch(setState({ isInitializing: false, notificationsEnabled }))
   }
@@ -159,7 +161,6 @@ export const updatePin = (password: string, confirmPassword: string) =>  {
 
     const { mnemonic, privateKey, privateKeyBuffer, ethAddress, address, nickname, email, lockTimeout } = getUser(getState())()
     const hashedPassword = bcrypt.hashSync(password)
-  
     const user = new User(
       mnemonic,
       hashedPassword,
@@ -188,7 +189,6 @@ export const registerChannelID = (channelID: string, platform: string) => {
 export async function storeUserSession(user: User) {
   await mnemonicStorage.set(user.mnemonic)
   await hashedPasswordStorage.set(user.hashedPassword)
-
   await userStorage.set(user)
   await sessionStorage.set(moment())
 }
@@ -200,6 +200,10 @@ export const createUserFromCredentials = async (mnemonic, hashedPassword, lockTi
   const privateKeyBuffer = privateKey.privateKey.toBuffer()
   const ethAddress = ethUtil.privateToAddress(privateKeyBuffer)
   const address = ethAddress.toString('hex')
+  const storedPrimaryCurrency = await primaryCurrencyStorage.get()
+  if (storedPrimaryCurrency === null) {
+    await primaryCurrencyStorage.set(defaultCurrency)
+  }
   let nickname = ''
   let email = ''
   try {
@@ -271,9 +275,9 @@ export async function getNicknameForAddress(address) {
 }
 
 //Not a redux action
-export async function getTwoPartyBalance(user: User, friend: Friend) {
+export const getTwoPartyBalance = (state) => async(user: User, friend: Friend) => {
   const { address } = user
-  const amount = await creditProtocol.getBalanceBetween(address, friend.address, defaultCurrency)
+  const amount = await creditProtocol.getBalanceBetween(address, friend.address, getPrimaryCurrency(state)())
   return new Balance({ relativeToNickname: friend.nickname, relativeTo: friend.address, amount: amount })
 }
 
@@ -291,7 +295,7 @@ export const getAccountInformation = () => {
     
     const accountInformation: { nickname?: string, email?: string, balance?: number } = { nickname, email }
     try {
-      accountInformation.balance = await creditProtocol.getBalance(address, defaultCurrency)
+      accountInformation.balance = await creditProtocol.getBalance(address, getPrimaryCurrency(getState())())
     }
     catch (e) {}
     dispatch(setState({ accountInformation }))
@@ -963,6 +967,13 @@ export const hasPendingMessage = () => {
   }
 }
 
+export const setPrimaryCurrency = (primaryCurrency: string) => {
+  return async (dispatch) => {
+    await primaryCurrencyStorage.set(primaryCurrency)
+    dispatch (setState({ primaryCurrency }))
+  }
+}
+
 const getEthTransactions = async (addr: string, recovery: boolean) => {
   let ethTransactions = []
   //get all transactions from etherscan and add relevant txs to the list
@@ -1028,10 +1039,11 @@ const settleBilateral = async (user, bilateralSettlements, dispatch, getState) =
 }
 
 const getEthRequired = async (getState, amount) => {
+  const primaryCurrency = await primaryCurrencyStorage.get()
   const { ethBalance } = getState().store
   let ethAmount = 0
   try {
-    ethAmount = await creditProtocol.getSettlementCost(amount, defaultCurrency)
+    ethAmount = await creditProtocol.getSettlementCost(amount, primaryCurrency)
   } catch (e) {
     console.log('ERROR GETTING SETTLEMENT AMOUNT: ', e)
   }
@@ -1134,6 +1146,7 @@ const filterMultiTransactions = (address: string, pending: any, state: Object) =
   })
 
   //make a new transaction/settlement for display purposes
+  const primaryCurrency = getPrimaryCurrency(state)()
   for(let tx in txs) {
     const balance = txs[tx].reduce( (acc, pendTx) => {
       const txAmt = convertCurrency(state)(pendTx.ucac, pendTx.amount)
@@ -1145,9 +1158,9 @@ const filterMultiTransactions = (address: string, pending: any, state: Object) =
     const creditor = balance > 0 ? address : tx
     const debtor = balance > 0 ? tx : address
     const submitter = txs[tx][0].submitter
-    const ucac = getUcacAddr(state)(defaultCurrency)
+    const ucac = getUcacAddr(state)(primaryCurrency)
     const amount = Math.round(Math.abs(balance))
-    const memo = `Request to settle for ${currencySymbols(defaultCurrency)}${currencyFormats(defaultCurrency)(amount)}`
+    const memo = `Request to settle for ${currencySymbols(primaryCurrency)}${currencyFormats(primaryCurrency)(amount)}`
     const nonce = 0
     const hash = txs[tx][0].hash
 

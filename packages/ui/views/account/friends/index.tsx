@@ -3,7 +3,7 @@ import React, { Component } from 'react'
 import { Text, View, ScrollView, RefreshControl, Dimensions, Platform, Share } from 'react-native'
 
 import Friend from 'lndr/friend'
-import { defaultCurrency, currencySymbols, transferLimits } from 'lndr/currencies'
+import { currencySymbols, transferLimits } from 'lndr/currencies'
 
 import Button from 'ui/components/button'
 import Section from 'ui/components/section'
@@ -20,7 +20,7 @@ import language from 'language'
 const { noFriends, currentFriends, inviteFriends, tryLndr } = language
 
 import { isFocusingOn } from 'reducers/nav'
-import { getStore, pendingTransactions, recentTransactions } from 'reducers/app'
+import { getStore, pendingTransactions, recentTransactions, getPrimaryCurrency } from 'reducers/app'
 import { getFriends, getRecentTransactions, addFriend } from 'actions'
 import { connect } from 'react-redux'
 
@@ -39,6 +39,7 @@ interface Props {
   pendingTransactions: any
   recentTransactions: any
   navigation: any
+  primaryCurrency: string
 }
 
 interface State {
@@ -89,10 +90,11 @@ class FriendsView extends Component<Props, State> {
   }
 
   async shareLndr() {
+    const { primaryCurrency } = this.props
     let shareLndrURL
-    if (defaultCurrency === 'KRW') {
+    if (primaryCurrency === 'KRW') {
       shareLndrURL = 'https://lndr.io/kr/'
-    } else if (defaultCurrency === 'JPY') {
+    } else if (primaryCurrency === 'JPY') {
       shareLndrURL = 'https://lndr.io/jp/'
     } else {
       shareLndrURL = 'https://lndr.io'
@@ -151,4 +153,6 @@ class FriendsView extends Component<Props, State> {
   }
 }
 
-export default connect((state) => ({ state: getStore(state)(), isFocused: isFocusingOn(state)('Friends'), pendingTransactions: pendingTransactions(state), recentTransactions: recentTransactions(state) }), { getFriends, getRecentTransactions, addFriend })(FriendsView)
+export default connect((state) => ({ state: getStore(state)(), isFocused: isFocusingOn(state)('Friends'), 
+pendingTransactions: pendingTransactions(state), recentTransactions: recentTransactions(state), 
+primaryCurrency: getPrimaryCurrency(state)() }), { getFriends, getRecentTransactions, addFriend })(FriendsView)

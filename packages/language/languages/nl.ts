@@ -162,6 +162,7 @@ export default {
       `ETH saldo`,
       `BCPT saldo`,
       `ETH transactiegeschiedenis`,
+      `Wijzig primaire valuta`,
       `Wijzig pincode`,
       `Wijzig gebruikersnaam`,
       `Wijzig e-mailadres`,

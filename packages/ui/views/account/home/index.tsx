@@ -19,12 +19,12 @@ import { UserData } from 'lndr/user'
 import PendingTransaction from 'lndr/pending-transaction'
 
 import { isFocusingOn } from 'reducers/nav'
-import { getStore, getUser, getNeedsReviewCount, calculateBalance, calculateCounterparties } from 'reducers/app'
+import { getStore, getUser, getNeedsReviewCount, calculateBalance, calculateCounterparties, getPrimaryCurrency } from 'reducers/app'
 import { getAccountInformation, displayError, getPending, 
   getFriendRequests, getRecentTransactions, registerChannelID } from 'actions'
 import { connect } from 'react-redux'
 import { UrbanAirship } from 'urbanairship-react-native'
-import { defaultCurrency, currencySymbols, transferLimits } from 'lndr/currencies'
+import { currencySymbols, transferLimits } from 'lndr/currencies'
 
 import style from 'theme/account'
 import formStyle from 'theme/form'
@@ -73,12 +73,12 @@ interface Props {
   needsReviewCount: number
   calculateBalance: () => number
   calculateCounterparties: () => number
+  primaryCurrency: string
 }
 
 interface State {
   balanceToView?: Balance
   pendingTransaction?: PendingTransaction
-  currency: string
   refreshing: boolean
 }
 
@@ -86,7 +86,6 @@ class HomeView extends Component<Props, State> {
   constructor(props) {
     super(props)
     this.state = {
-      currency: defaultCurrency,
       refreshing: false
     }
   }
@@ -149,8 +148,7 @@ class HomeView extends Component<Props, State> {
 
   renderBalanceInformation() {
     const { recentTransactionsLoaded, ethBalance = '0', ethExchange = '700' } = this.props.state
-    const { currency } = this.state
-    const { calculateBalance, calculateCounterparties } = this.props
+    const { calculateBalance, calculateCounterparties, primaryCurrency } = this.props
 
     if (!recentTransactionsLoaded) {
       return
@@ -168,8 +166,8 @@ class HomeView extends Component<Props, State> {
     return <Section contentContainerStyle={style.column}>
       <View style={style.negativeMargin}>
         <View style={style.balanceRow}>
-          <Text style={style.balanceInfo}>{currencySymbols(defaultCurrency)}</Text>
-          <Text style={style.largeFactAmount}>{currencyFormats(defaultCurrency)(balance)}</Text>
+          <Text style={style.balanceInfo}>{currencySymbols(primaryCurrency)}</Text>
+          <Text style={style.largeFactAmount}>{currencyFormats(primaryCurrency)(balance)}</Text>
         </View>
       </View>
       <View style={style.balanceRow}>
@@ -182,7 +180,7 @@ class HomeView extends Component<Props, State> {
       <View style={[style.balanceRow, {marginTop: 10}]}>
         <Text style={[style.balance, {marginLeft: '2%'}]}>{accountManagement.ethBalance.display(ethBalance)}</Text>
         <Button alternate blackText narrow arrow small onPress={() => {this.props.navigation.navigate('MyAccount')}}
-          text={accountManagement.ethBalance.inFiat(ethBalance, ethExchange, currency)}
+          text={accountManagement.ethBalance.inFiat(ethBalance, ethExchange, primaryCurrency)}
           containerStyle={{marginTop: -6}}
         />
       </View>
@@ -227,5 +225,6 @@ class HomeView extends Component<Props, State> {
 }
 
 export default connect((state) => ({ state: getStore(state)(), user: getUser(state)(), isFocused: isFocusingOn(state)('Home'),
-needsReviewCount: getNeedsReviewCount(state), calculateBalance: calculateBalance(state), calculateCounterparties: calculateCounterparties(state) }), 
+needsReviewCount: getNeedsReviewCount(state), calculateBalance: calculateBalance(state), calculateCounterparties: calculateCounterparties(state),
+primaryCurrency: getPrimaryCurrency(state)() }), 
 { getAccountInformation, displayError, getPending, getFriendRequests, getRecentTransactions, registerChannelID })(HomeView)

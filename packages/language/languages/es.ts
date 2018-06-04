@@ -162,6 +162,7 @@ export default {
       `Saldo de Ethereum`,
       `Saldo de BCPT`,
       `Historial de Transacciones en Ethereum`,
+      `Cambiar divisa principal`,
       `Cambiar PIN`,
       `Cambio Nombre de Usuario`,
       `Cambiar Correo Electrónico`,

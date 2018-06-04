@@ -162,6 +162,7 @@ export default {
       `ETH Saldo`,
       `BCPT Saldo`,
       `ETH Transaktionshistorik`,
+      `Ändra primära valuta`,
       `Ändra PIN-kod`,
       `Ändra användarnamn`,
       `Ändra e-mail`,

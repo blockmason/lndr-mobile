@@ -1,31 +1,34 @@
 import React, { Component } from 'react'
 
 import { Text, TouchableHighlight, View } from 'react-native'
+import { connect } from 'react-redux'
 
 import { currencyFormats } from 'lndr/format'
 import Balance from 'lndr/balance'
-import { defaultCurrency, currencySymbols, transferLimits  } from 'lndr/currencies'
+import { currencySymbols, transferLimits  } from 'lndr/currencies'
 
 import { lightGray } from 'theme/include/colors'
 
 import style from 'theme/account'
+import { getPrimaryCurrency } from 'reducers/app';
 
 interface Props {
   onPress?: () => void
   balance: Balance
+  primaryCurrency
 }
 
-export default class BalanceRow extends Component<Props> {
+class BalanceRow extends Component<Props> {
   renderAmount() {
-    const { balance } = this.props
+    const { balance, primaryCurrency } = this.props
     const { amount } = balance
 
     if (amount < 0) {
-      return <Text style={style.titledFactAmountDanger}>{currencyFormats(defaultCurrency)(amount)}</Text>
+      return <Text style={style.titledFactAmountDanger}>{currencyFormats(primaryCurrency)(amount)}</Text>
     }
 
     else {
-      return <Text style={style.titledFactAmountGood}>{currencyFormats(defaultCurrency)(amount)}</Text>
+      return <Text style={style.titledFactAmountGood}>{currencyFormats(primaryCurrency)(amount)}</Text>
     }
   }
 
@@ -43,3 +46,5 @@ export default class BalanceRow extends Component<Props> {
     )
   }
 }
+
+export default connect((state) => ({ primaryCurrency: getPrimaryCurrency(state)() }))(BalanceRow)

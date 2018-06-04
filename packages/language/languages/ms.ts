@@ -162,6 +162,7 @@ export default {
       `Baki ETH`,
       `Baki BCPT`,
       `Sejarah Transaksi ETH`,
+      `Tukar Mata Wang Utama`,
       `Tukar PIN`,
       `Tukar Nama Samaran`,
       `Tukar E-mel`,

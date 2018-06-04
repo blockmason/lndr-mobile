@@ -162,6 +162,7 @@ export default {
       `Saldo ETH`,
       `Saldo BCPT`,
       `Cronologia delle Transazioni ETH`,
+      `Cambia primario valuta`,
       `Modifica PIN`,
       `Cambia soprannome`,
       `Cambia email`,

@@ -1,6 +1,6 @@
 import React, { Component } from 'react'
 
-import { Text, TextInput, View, Dimensions, ScrollView, Linking,
+import { Text, TextInput, View, Dimensions, ScrollView, Linking, Modal,
   TouchableHighlight, Image, FlatList, KeyboardAvoidingView, Platform } from 'react-native'
 
 import ImagePicker from 'react-native-image-picker'
@@ -12,16 +12,17 @@ import Loading, { LoadingContext } from 'ui/components/loading'
 import TextLogo from 'ui/components/images/text-logo'
 import BMLogo from 'ui/components/images/bm-logo'
 import InputImage from 'ui/components/images/input-image'
+import SpinningPicker from 'ui/components/spinning-picker'
 
 import { formatNick, formatLockTimeout, formatEmail, emailFormatIncorrect } from 'lndr/format'
 import { defaultUpdateAccountData, UpdateAccountData, UserData } from 'lndr/user'
 import { getBcptBalance } from 'lndr/bcpt-utils'
-import { defaultCurrency, currencySymbols, transferLimits  } from 'lndr/currencies'
+import { currencySymbols, transferLimits  } from 'lndr/currencies'
 
 import { getAccountInformation, updateNickname, updateEmail, logoutAccount, toggleNotifications,
   setEthBalance, updateLockTimeout, updatePin, getProfilePic, setProfilePic, takenNick, takenEmail,
-  copyToClipboard, validatePin } from 'actions'
-import { getUser, getStore } from 'reducers/app'
+  copyToClipboard, validatePin, setPrimaryCurrency } from 'actions'
+import { getUser, getStore, getAllUcacCurrencies, getPrimaryCurrency } from 'reducers/app'
 import { getResetAction } from 'reducers/nav'
 import { connect } from 'react-redux'
 
@@ -29,11 +30,12 @@ import style from 'theme/form'
 import general from 'theme/general'
 import { underlayColor } from 'theme/general'
 import slideStyle from 'theme/slide'
+import popupStyle from 'theme/popup'
 
 import language from 'language'
 const { nickname, setNickname, email, setEmail, copy, accountManagement, changePin, enterNewPin, confirmPin, pleaseWait,
   cancel, mnemonicExhortation, addressExhortation, logoutAction, notifications, currentBalance, showMnemonic, enterCurrentPin,
-  myAccount
+  myAccount, debtManagement, changePrimaryCurrency
 } = language
 const updateAccountText = language.updateAccount
 
@@ -45,7 +47,8 @@ interface Props {
   navigation: any
   user: UserData
   state: any
-
+  allCurrencies: any
+  primaryCurrency: string
   logoutAccount: () => any
   getAccountInformation: () => any
   updateNickname: (accountData: UpdateAccountData) => any
@@ -57,6 +60,7 @@ interface Props {
   getProfilePic: (nickname: string) => any
   setProfilePic: (imageURI: string, imageData: string) => any
   copyToClipboard: (text: string) => any
+  setPrimaryCurrency: (value: string) => any
 }
 
 interface State {
@@ -73,6 +77,7 @@ interface State {
   scrollY: number
   nickTextInputErrorText?: string
   emailTextInputErrorText?: string
+  shouldPickCurrency: boolean
 }
 
 class MyAccount extends Component<Props, State> {
@@ -85,8 +90,9 @@ class MyAccount extends Component<Props, State> {
       step: 1,
       photos: [],
       authenticated: false,
-      currency: defaultCurrency,
-      scrollY: 0
+      currency: props.primaryCurrency,
+      scrollY: 0,
+      shouldPickCurrency: false
     }
   }
 
@@ -116,8 +122,6 @@ class MyAccount extends Component<Props, State> {
 
   async componentDidUpdate() {
     const { password, confirmPassword, step, scrollY } = this.state
-
-    console.log('pw', password, 'cpw', confirmPassword, 'step', step)
 
     if (step === 4 && confirmPassword.length === 4 ) {
       const authenticated = loadingContext.wrap(validatePin(confirmPassword))
@@ -235,6 +239,11 @@ class MyAccount extends Component<Props, State> {
     this.setState({ scrollY: event.nativeEvent.contentOffset.y });
   }
 
+  async handlePickerDone(currency: string) {
+    await this.props.setPrimaryCurrency(currency)
+    this.setState({currency, shouldPickCurrency: false})
+  }
+
   _keyExtractor = (_item, index) => index
 
   renderPanels() {
@@ -270,6 +279,9 @@ class MyAccount extends Component<Props, State> {
       </View>),
       (<View style={style.spaceHorizontalL}>
         <Button round onPress={() =>  Linking.openURL(`https://etherscan.io/address/${user.address}`)} text={accountManagement.viewEtherscan} />
+      </View>),
+      (<View style={style.spaceHorizontalL}>
+        <Button black onPress={() => this.setState({shouldPickCurrency: true})} text={currency} />
       </View>),
       (<View style={style.spaceHorizontalL}>
         {authenticated ? <Button round onPress={() => this.setState({ step: 2 })} text={changePin} /> :
@@ -366,7 +378,7 @@ class MyAccount extends Component<Props, State> {
   }
 
   render() {
-    const { password, confirmPassword, step, scrollY } = this.state
+    const { password, confirmPassword, step, scrollY, shouldPickCurrency, currency } = this.state
 
     if (step === 5) {
       return <View style={[general.fullHeight, general.view]}>
@@ -408,11 +420,25 @@ class MyAccount extends Component<Props, State> {
             </View>
           </ScrollView>
         </KeyboardAvoidingView>
+        <Modal
+          animationType="slide"
+          transparent={false}
+          visible={shouldPickCurrency}
+          onRequestClose={() => {
+            alert('Modal has been closed.');
+          }}>
+          <View style={[popupStyle.modalOverlay, general.flexColumn, general.justifyEnd]}>
+            <View style={{backgroundColor:'white', paddingTop:4}}>
+              <SpinningPicker label={debtManagement.chooseCurrency} allItems={this.props.allCurrencies} selectedItem={currency} onPickerDone={(value) => this.handlePickerDone(value)} />
+            </View>
+          </View>
+        </Modal>
       </View>
     }
   }
 }
 
-export default connect((state) => ({ user: getUser(state)(), state: getStore(state)() }), { updateEmail, updateNickname,
+export default connect((state) => ({ user: getUser(state)(), state: getStore(state)(), allCurrencies: getAllUcacCurrencies(state),
+  primaryCurrency: getPrimaryCurrency(state)()}), { updateEmail, updateNickname,
   getAccountInformation, logoutAccount, toggleNotifications, setEthBalance, updateLockTimeout, updatePin,
-  getProfilePic, setProfilePic, copyToClipboard })(MyAccount)
+  getProfilePic, setProfilePic, copyToClipboard, setPrimaryCurrency })(MyAccount)

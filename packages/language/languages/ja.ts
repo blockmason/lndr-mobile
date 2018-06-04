@@ -5,13 +5,11 @@ import { currencySymbols, transferLimits } from 'lndr/currencies'
 export default {
   applicationName: 'Lndr',
   helloWorld: 'Hello world',
-
   submit: '送信する',
   next: '次へ',
   cancel: '取り消す',
   back: '戻る',
   copy: 'クリップボードへコピー',
-
   confirmAccount: '確認',
   createAccount: 'アカウントを作成する',
   recoverAccount: 'アカウントを復元する',
@@ -25,7 +23,6 @@ export default {
   seeAllActivity: '全アクティビティを閲覧',
   copiedClipboard: 'クリップボードへコピーしました',
   pleaseWait: 'お待ちください',
-
   addFriend: 'フレンドを追加',
   addFriendConfirmationQuestion: '本当にこのユーザーをフレンドに追加しますか？',
   removeFriend: 'フレンドを外す',
@@ -40,7 +37,6 @@ export default {
   addFriendButton: '+ フレンドを追加',
   alreadyFriendsButton: 'フレンド',
   friendShell: '友達',
-
   tip: 'チップ: ',
   notice: '通知: ',
   welcome: 'あなたのLNDRへようこそ',
@@ -51,7 +47,6 @@ export default {
   needsReview: '審査が必要です',
   owesMe: '私に貸しがあります',
   iOwe: '私は借りがています',
-
   newPassword: '新しいパスワード　(最低8文字)',
   confirmPassword: 'パスワードの確認',
   newPin: '4桁の暗証番号',
@@ -59,22 +54,17 @@ export default {
   confirmPin: 'あなたが入力した暗証番号はこちら',
   newAccount: '新しいアカウントを作成する',
   loginAccount: 'アカウントをアンロックする',
-
   recoverExistingAccount: '既存のアカウントを復旧する',
   recoverMnemonic: 'ニューモニック　\n(アカウントを作成した際に12個の単語が表示されます)',
   recoverMnemonicLengthError: 'ニューモニックは12個の単語です',
-
   successTitle: '成功',
   errorTitle: 'エラー',
-
   showMnemonic: '12個のニューモニックを表示する',
   mnemonicExhortation: 'この12個の単語は、アカウントの復活に必要です。安全な秘密の場所に保存してください',
   addressExhortation: 'イーサリアムをあなたのアドレスに送信し、Lndrで債務を果たしましょう',
   removeAccountTitle: '本当にこのデバイスからあなたのアカウントを削除しますか？',
   removeAccountExhortation: 'このデバイスからアカウント情報を永久に削除するため、後でアカウントを復元する際にニーモニックにアクセスできることを確認してください。',
-
   myAccount: '自分のアカウント',
-
   setNickname: 'フレンドに検索されるようにニックネームを設定しよう',
   setEmail: 'メールアドレスを入力して下さい',
   nickname: 'ニックネーム (小文字と半角数字)',
@@ -173,6 +163,7 @@ export default {
     'EHT残高',
     'BCPT残高',
     'ETHのやりとり履歴',
+    `プライマリ通貨を変更`,
     '暗証番号を変える',
     'ニックネームを変える',
     'メールアドレスを変える',
