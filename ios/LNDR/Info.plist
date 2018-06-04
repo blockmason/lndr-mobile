@@ -17,11 +17,11 @@
 	<key>CFBundlePackageType</key>
 	<string>APPL</string>
 	<key>CFBundleShortVersionString</key>
-	<string>1.25</string>
+	<string>1.28</string>
 	<key>CFBundleSignature</key>
 	<string>????</string>
 	<key>CFBundleVersion</key>
-	<string>25</string>
+	<string>28</string>
 	<key>LSRequiresIPhoneOS</key>
 	<true/>
 	<key>NSAppTransportSecurity</key>
@@ -36,8 +36,12 @@
 		</dict>
 	</dict>
 	<key>NSLocationWhenInUseUsageDescription</key>
-	<string/>
+	<string></string>
+	<key>NSCameraUsageDescription</key>
+	<string>To add a profile photo, Lndr needs access to your camera</string>
 	<key>NSPhotoLibraryUsageDescription</key>
+	<string>To add a profile photo, Lndr needs access to your photos</string>
+	<key>NSPhotoLibraryAddUsageDescription</key>
 	<string>To add a profile photo, Lndr needs access to your photos</string>
 	<key>UIAppFonts</key>
 	<array>

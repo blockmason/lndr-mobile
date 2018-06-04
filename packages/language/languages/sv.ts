@@ -128,7 +128,7 @@ export default {
     },
     sendEth: {
       error: {
-        insufficient: `Överföringen misslyckades på grund av otillräckligt saldo`,
+        insufficient: `Du har inte tillräckligt ETH för denna transaktion`,
         generic: `Det uppstod ett fel med överföringen, vänligen försök igen senare`,
         address: `Ange en giltig Etherum-adress`,
         amount: `Ange ett belopp större än 0`,

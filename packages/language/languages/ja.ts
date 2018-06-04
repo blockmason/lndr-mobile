@@ -139,7 +139,7 @@ export default {
   },
   sendEth: {
     error: {
-      insufficient: '残高不足のため、送信に失敗しました',
+      insufficient: '必要な分のETHがありません',
       generic: '送信時にエラーが起きました。時間をおいて、また送信してください',
       address: '正しいアドレスを入力してください',
       amount: '数値は0以上を入力してください',

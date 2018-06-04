@@ -128,7 +128,7 @@ export default {
     },
     sendEth: {
       error: {
-        insufficient: `Pemindahan gagal kerana dana tidak mencukupi`,
+        insufficient: `Anda tidak mempunyai ETH cukup untuk transaksi ini`,
         generic: `Terdapat ralat semasa pemindahan, sila cuba lagi kemudian`,
         address: `Sila masukkan alamat e-mel yang sah`,
         amount: `Sila masukkan jumlah yang lebih besar daripada 0`,
@@ -378,5 +378,10 @@ export default {
     shell: `Permintaan jadi rakan`,
     message: `Permintaan jadi rakan`,
     request: F => `${F} mahu menjadi rakan anda!`,
+  },
+
+  privacyPolicy: {
+    link: `lndr.io/terms/`,
+    message: `Dengan mengklik di bawah anda mengesahkan yang anda telah membaca dan bersetuju dengan dasar privasi Blockmason ini. Blockmason boleh menggunakan alamat e-mel anda untuk menghantar kemas kini mengenai Blockmason dan LNDR. Berikut adalah pautan kepada dasar privasi:`
   }
 }

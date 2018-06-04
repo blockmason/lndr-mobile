@@ -128,7 +128,7 @@ export default {
     },
     sendEth: {
       error: {
-        insufficient: `A transferência falhou devido a fundos insuficientes`,
+        insufficient: `Você não tem ETH o suficiente para esta transação`,
         generic: `Houve um erro com a transferência, por favor tente novamente mais tarde`,
         address: `Por Favor insira um endereço válido`,
         amount: `Por favor, indique um valor superior a 0`,

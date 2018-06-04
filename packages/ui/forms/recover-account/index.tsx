@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import { View, Text, TextInput, BackHandler, KeyboardAvoidingView, Platform } from 'react-native'
+import { View, ScrollView, Text, TextInput, BackHandler, KeyboardAvoidingView, Platform } from 'react-native'
 
 import ThemeImage from 'ui/components/images/theme-image'
 import Pinpad from 'ui/components/pinpad'
@@ -148,26 +148,28 @@ class RecoverAccountForm extends Component<Props, State> {
       </View>
     } else {
       const vertOffset = (Platform.OS === 'android') ? -300 : 0;
-      return <View style={style.form}>
-        <KeyboardAvoidingView behavior={Platform.OS === 'ios' ? 'position' : 'padding'} keyboardVerticalOffset={vertOffset} >
-          <ThemeImage name='logo' size={0.4} />
-          <Text style={[style.text, style.spaceBottom]}>{recoverExistingAccount}</Text>
-          <View style={style.textInputContainer}>
-            <TextInput
-              multiline
-              style={style.multilineTextInput}
-              placeholder={recoverMnemonic}
-              underlineColorAndroid='transparent'
-              autoCorrect={false}
-              onChangeText={mnemonic => this.setState({ mnemonic: mnemonic.trim(), mnemonicLengthError: undefined })}
-              onBlur={(): void => this.checkMnemonicLength()}
-            />
-          </View>
-          { mnemonicLengthError && <Text style={style.warningText}>{mnemonicLengthError}</Text> }
-          <Button round fat style={style.submitButton} onPress={() => this.setPIN()} text={recoverAccount} />
-          <Button alternate small arrow style={style.submitButton} onPress={() => this.cancel()} text={cancel} />
-        </KeyboardAvoidingView>
-      </View>
+      return <ScrollView>
+        <View style={style.form}>
+          <KeyboardAvoidingView behavior={Platform.OS === 'ios' ? 'position' : 'padding'} keyboardVerticalOffset={vertOffset} >
+            <ThemeImage name='logo' size={0.4} />
+            <Text style={[style.text, style.spaceBottom]}>{recoverExistingAccount}</Text>
+            <View style={style.textInputContainer}>
+              <TextInput
+                multiline
+                style={style.multilineTextInput}
+                placeholder={recoverMnemonic}
+                underlineColorAndroid='transparent'
+                autoCorrect={false}
+                onChangeText={mnemonic => this.setState({ mnemonic: mnemonic.trim(), mnemonicLengthError: undefined })}
+                onBlur={(): void => this.checkMnemonicLength()}
+              />
+            </View>
+            { mnemonicLengthError && <Text style={style.warningText}>{mnemonicLengthError}</Text> }
+            <Button round fat style={style.submitButton} onPress={() => this.setPIN()} text={recoverAccount} />
+            <Button alternate small arrow style={style.submitButton} onPress={() => this.cancel()} text={cancel} />
+          </KeyboardAvoidingView>
+        </View>
+      </ScrollView>
     }
   }
 }

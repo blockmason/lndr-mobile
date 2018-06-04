@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import { View, Text, TextInput } from 'react-native'
+import { View, ScrollView, Text, TextInput } from 'react-native'
 
 import Button from 'ui/components/button'
 import InputImage from 'ui/components/images/input-image'
@@ -71,9 +71,11 @@ export default class LoginAccountForm extends Component<Props, State> {
     const { onRemoveAccount } = this.props
     const { confirmPassword } = this.state
 
-    return <View style={[style.form, general.centeredColumn]}>
-      <Pinpad onNumPress={(pin) => this.enterPin(pin)} onBackspace={() => this.clearPin()} pin={confirmPassword} headerText={enterPin} />
-      <Button alternate small arrow onPress={() => onRemoveAccount()} style={style.submitButton} text={removeAccount} />
-    </View>
+    return <ScrollView>
+      <View style={[style.form, general.centeredColumn]}>
+        <Pinpad onNumPress={(pin) => this.enterPin(pin)} onBackspace={() => this.clearPin()} pin={confirmPassword} headerText={enterPin} />
+        <Button alternate small arrow onPress={() => onRemoveAccount()} style={style.submitButton}  containerStyle={general.spaceBelow} text={removeAccount} />
+      </View>
+    </ScrollView>
   }
 }

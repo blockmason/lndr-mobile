@@ -141,7 +141,7 @@ export default {
   },
   sendEth: {
     error: {
-      insufficient: '자금부족으로 거래를 완료하지 못했습니다',
+      insufficient: '해당 거래를 완료하기에 보유한 ETH 잔액이 부족합니다',
       generic: '거래 도중 에러가 발생하였습니다, 나중에 다시 시도해주세요',
       address: '정확한 주소를 입력해주세요',
       amount: '0보다 높은 금액을 입력해주세요',

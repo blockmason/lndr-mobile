@@ -128,7 +128,7 @@ export default {
     },
     sendEth: {
       error: {
-        insufficient: `העסקה נכשלה עקב מחסור בכספים`,
+        insufficient: `אין ברשותך מספיק ETH עבור עסקה זו`,
         generic: `ארעה שגיאה בזמן העסקה, אנא נסה שוב מאוחר יותר`,
         address: `אנא הזן כתובת חוקית`,
         amount: `אנא הזן סכום גדול מ-0`,
@@ -378,5 +378,10 @@ export default {
     shell: `בקשת חברות`,
     message: `בקשות חברות`,
     request: F => `!רוצה להיות חבר שלך ${F}`,
+  },
+
+  privacyPolicy: {
+    link: `lndr.io/terms/`,
+    message: `על ידי לחיצה בהמשך שתאשר כי קראת מסכים למדיניות הפרטיות של Blockmason. Blockmason עשויים להשתמש בכתובת הדוא"ל שלך כדי לשלוח עדכונים על Blockmason ו LNDR. הנה קישור למדיניות הפרטיות`
   }
 }

@@ -128,7 +128,7 @@ export default {
     },
     sendEth: {
       error: {
-        insufficient: `Siirto epäonnistui, koska tililläsi olevat varat eivät riittäneet`,
+        insufficient: `Sinulla ei ole tarpeeksi ETH:tä tämän tapahtuman toteuttamiseksi`,
         generic: `Siirron yhteydessä on tapahtunut virhe, yritä myöhemmin uudelleen`,
         address: `Syötä kelvollinen osoite`,
         amount: `Anna summa, joka on suurempi kuin 0`,
