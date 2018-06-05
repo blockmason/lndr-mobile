@@ -91,6 +91,10 @@ class PendingSettlementRow extends Component<Props, State> {
     return `${sign} ${currencySymbols(currentCurrency)}${currencyFormats(currentCurrency)(pendingSettlement.amount)}`
   }
 
+  getColor() {
+    return this.getAmount().includes('-') ? style.redAmount : style.greenAmount
+  }
+
   render() {
     const { onPress, pendingSettlement, friend } = this.props
     const { pic } = this.state
@@ -106,7 +110,7 @@ class PendingSettlementRow extends Component<Props, State> {
               {friend ? <Text style={style.pendingMemo}>{pendingSettlement.memo}</Text> : null }
             </View>
           </View>
-          <Text style={style.pendingAmount}>{this.getAmount()}</Text>
+          <Text style={[style.pendingAmount, this.getColor()]}>{this.getAmount()}</Text>
         </View>
       </TouchableHighlight>
     )

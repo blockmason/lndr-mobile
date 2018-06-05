@@ -118,6 +118,10 @@ class RemoveFriend extends Component<Props, State> {
     return total
   }
 
+  getColor() {
+    return this.getRecentTotal() < 0 ? accountStyle.redAmount : accountStyle.greenAmount
+  }
+
   render() {
     const friend = this.props.navigation ? this.props.navigation.state.params.friend : {}
     const { navigation, primaryCurrency } = this.props
@@ -137,7 +141,7 @@ class RemoveFriend extends Component<Props, State> {
           <Text style={pendingStyle.subTitle}>{`${recentTransactionsLanguage.balance}:`}</Text>
           <View style={pendingStyle.balanceRow}>
             <Text style={pendingStyle.balanceInfo}>{currencySymbols(primaryCurrency)}</Text>
-            <Text style={pendingStyle.amount}>{currencyFormats(primaryCurrency)(this.getRecentTotal())}</Text>
+            <Text style={[pendingStyle.amount]}>{currencyFormats(primaryCurrency)(this.getRecentTotal())}</Text>
           </View>
           {this.getRecentTotal() === 0 ? null : <Button round large fat wide onPress={() => this.props.navigation.navigate('SettleUp', { friend: friend })} text={debtManagement.settleUp} containerStyle={style.spaceBottom} />}
           {this.getTransactionNumber() === 0 ? <Button round large danger wide onPress={() => this.removeFriend(friend)} text={removeFriendText} containerStyle={style.spaceBottom} /> : null }
