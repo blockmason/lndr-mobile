@@ -192,4 +192,6 @@ export const calculateUcacBalances = (state) => (friendAddress: string) : Object
   return ucacBalances
 }
 
-export const getPrimaryCurrency = (state) => () : string => state.store.primaryCurrency
+export const getPrimaryCurrency = (state) => () : string => {
+  return state.store.primaryCurrency
+}

@@ -30,6 +30,7 @@ interface Props {
 
 interface State {
   confirmPassword: string
+  unmounting?: boolean
 }
 
 export default class LoginAccountForm extends Component<Props, State> {
@@ -42,17 +43,21 @@ export default class LoginAccountForm extends Component<Props, State> {
     this.clearPin.bind(this)
   }
 
-  async submit(confirmPassword: string) {
-    const success = await loadingContext.wrap(this.props.onSubmit({ confirmPassword }))
-    if (!success) {
-      this.setState({ confirmPassword: '' })
-    }
+  componentWillUnmount() {
+    this.setState({unmounting: true})
   }
 
   componentDidUpdate() {
     const { confirmPassword } = this.state
     if (confirmPassword.length === 4) {
       this.submit(confirmPassword)
+    }
+  }
+
+  async submit(confirmPassword: string) {
+    const success = await loadingContext.wrap(this.props.onSubmit({ confirmPassword }))
+    if (!this.state.unmounting && !success) {
+      this.setState({ confirmPassword: '' })
     }
   }
 

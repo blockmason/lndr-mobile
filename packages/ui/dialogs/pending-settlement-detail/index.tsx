@@ -60,6 +60,7 @@ interface State {
   txCost: string
   pic?: string
   confirmationError?: string
+  unmounting?: boolean
 }
 
 class PendingSettlementDetail extends Component<Props, State> {
@@ -80,7 +81,13 @@ class PendingSettlementDetail extends Component<Props, State> {
       const addr = user.address === pendingSettlement.creditorAddress ? pendingSettlement.debtorAddress : pendingSettlement.creditorAddress
       pic = await profilePic.get(addr)
     } catch (e) {}
-    this.setState({ pic, txCost })
+    if(!this.state.unmounting && pic) {
+      this.setState({ pic, txCost })
+    }
+  }
+
+  componentWillUnmount() {
+    this.setState({unmounting: true})
   }
 
   async settleUp(pendingSettlement: PendingUnilateral) {
