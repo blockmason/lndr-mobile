@@ -28,6 +28,7 @@ export const wisteria = '#9b59b6'
 export const whiteout = 'rgba(255, 255, 255, 0.9)'
 
 export const moneyGreen = '#128333'
+export const moneyRed = '#c40000'
 
 export const clear = 'rgba(0, 0, 0, 0)'
 

@@ -18,6 +18,7 @@ import DashboardShell from 'ui/components/dashboard-shell'
 import style from 'theme/pending'
 import formStyle from 'theme/form'
 import general from 'theme/general'
+import accountStyle from 'theme/account'
 
 import language from 'language'
 const {
@@ -128,6 +129,12 @@ class PendingTransactionDetail extends Component<Props, State> {
     }
   }
 
+  getColor() {
+    const { user, navigation } = this.props
+    const pendingTransaction = navigation.state ? navigation.state.params.pendingTransaction : {}
+    return user.address === pendingTransaction.creditorAddress ? accountStyle.greenAmount : accountStyle.redAmount
+  }
+
   labelRow(memo) {
     return <View style={general.centeredColumn}>
       <Text style={style.memo}>{pendingTransactionsLanguage.for}</Text>
@@ -154,6 +161,7 @@ class PendingTransactionDetail extends Component<Props, State> {
     const pendingTransaction = navigation.state ? navigation.state.params.pendingTransaction : {}
     const imageSource = userPic ? {uri: userPic} : require('images/person-outline-dark.png')
     const currency = getUcacCurrency(pendingTransaction.ucac)
+    const color = this.getColor()
 
     return <View style={general.whiteFlex}>
       <View style={general.view}>
@@ -164,10 +172,10 @@ class PendingTransactionDetail extends Component<Props, State> {
       <ScrollView style={general.whiteFlex}>
         <View style={general.centeredColumn}>
           <Image source={imageSource} style={style.image}/>
-          <Text style={style.title}>{this.getTitle()}</Text>
+          <Text style={[style.title, color]}>{this.getTitle()}</Text>
           <View style={style.balanceRow}>
-            <Text style={style.balanceInfo}>{currencySymbols(currency)}</Text>
-            <Text style={style.amount}>{currencyFormats(currency)(pendingTransaction.amount)}</Text>
+            <Text style={[style.balanceInfo, color]}>{currencySymbols(currency)}</Text>
+            <Text style={[style.amount, color]}>{currencyFormats(currency)(pendingTransaction.amount)}</Text>
           </View>
           {this.labelRow(pendingTransaction.memo.trim())}
           <View style={{marginBottom: 10}}/>

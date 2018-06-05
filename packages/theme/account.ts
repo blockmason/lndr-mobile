@@ -4,7 +4,7 @@ import { radius } from 'theme/include/borders'
 import { center } from 'theme/include/align'
 import { wide, bold, lmedium, xlarge, large, medium, small, xsmall, monospace } from 'theme/include/fonts'
 import { xxl, ml, l, m, s, xs, verticalMargin } from 'theme/include/spacing'
-import { softGray, black, gray, white, moneyGreen, goodDark, danger, aqua, darkGray, lightGray, softAqua, paleGray } from 'theme/include/colors'
+import { softGray, black, gray, white, moneyGreen, moneyRed, goodDark, danger, aqua, darkGray, lightGray, softAqua, paleGray } from 'theme/include/colors'
 
 const { width } = Dimensions.get('window')
 
@@ -313,7 +313,6 @@ export default StyleSheet.create({
     maxWidth: width * 0.5
   },
   pendingAmount: {
-    color: aqua,
     ...large
   },
   pendingParens: {
@@ -354,6 +353,12 @@ export default StyleSheet.create({
     fontWeight: 'bold',
     marginVertical: 10,
     color: aqua
+  },
+  redAmount: {
+    color: moneyRed
+  },
+  greenAmount: {
+    color: moneyGreen
   }
 
 } as any)

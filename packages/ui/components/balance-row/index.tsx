@@ -37,11 +37,11 @@ class BalanceRow extends Component<Props> {
 
     return (
       <TouchableHighlight onPress={onPress} underlayColor={lightGray} activeOpacity={0.5}>
-          <View style={style.listItem}>
-            {this.renderAmount()}
-            <Text style={style.fact}>@{balance.relativeToNickname}</Text>
-            <Text selectable style={style.address}>{balance.relativeTo}</Text>
-          </View>
+        <View style={style.listItem}>
+          {this.renderAmount()}
+          <Text style={style.fact}>@{balance.relativeToNickname}</Text>
+          <Text selectable style={style.address}>{balance.relativeTo}</Text>
+        </View>
       </TouchableHighlight>
     )
   }

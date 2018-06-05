@@ -81,6 +81,10 @@ class RecentTransactionRow extends Component<Props, State> {
     return `${sign} ${currencySymbols(currentCurrency)}${currencyFormats(currentCurrency)(recentTransaction.amount)}`
   }
 
+  getColor() {
+    return this.getAmount().includes('-') ? style.redAmount : style.greenAmount
+  }
+
   render() {
     const { onPress, recentTransaction, friend } = this.props
     const { pic } = this.state
@@ -96,7 +100,7 @@ class RecentTransactionRow extends Component<Props, State> {
               {friend ? null : <Text style={style.pendingMemo}>{recentTransaction.memo}</Text>}
             </View>
           </View>
-          <Text style={style.pendingAmount}>{this.getAmount()}</Text>
+          <Text style={[style.pendingAmount, this.getColor()]}>{this.getAmount()}</Text>
         </View>
       </TouchableHighlight>
     )

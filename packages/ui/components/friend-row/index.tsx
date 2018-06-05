@@ -30,9 +30,10 @@ interface Props {
   primaryCurrency: string
 }
 
+let unmounting = false;
+
 interface State {
   pic?: string
-  unmounting?: boolean
 }
 
 class FriendRow extends Component<Props, State> {
@@ -44,17 +45,18 @@ class FriendRow extends Component<Props, State> {
   async componentWillMount() {
     const { friend } = this.props
     let pic
+    unmounting = false;
 
     try {
       pic = await profilePic.get(friend.address)
     } catch (e) {}
-    if (!this.state.unmounting && pic) {
-      this.setState({ pic })
+    if (!unmounting && pic) {
+      this.setState({pic})
     }
   }
 
   componentWillUnmount() {
-    this.setState({unmounting: true})
+    unmounting = true;
   }
 
   getRecentTotal() {
@@ -98,6 +100,10 @@ class FriendRow extends Component<Props, State> {
     return this.getRecentTotal() === 0 || !friendScreen ? null : <Button narrow small round onPress={() => this.props.navigation.navigate('SettleUp', { friend: friend })} text={debtManagement.settleUp} style={{maxWidth: 130, alignSelf:'flex-end'}} />
   }
 
+  getColor() {
+    return this.getAmountTotal().includes('-') ? style.redAmount : style.greenAmount
+  }
+
   render() {
     const { onPress, friend } = this.props
     const { pic } = this.state
@@ -115,7 +121,7 @@ class FriendRow extends Component<Props, State> {
           </View>
           <View style={[general.flexRow, general.alignCenter, general.justifyEnd]}>
             <View style={general.column}>
-              <Text style={[style.pendingAmount, {alignSelf: 'flex-end'}]}>{this.getAmountTotal()}</Text>
+              <Text style={[style.pendingAmount, this.getColor(), {alignSelf: 'flex-end'}]}>{this.getAmountTotal()}</Text>
               {this.showEthSettlement()}
             </View>
           </View>

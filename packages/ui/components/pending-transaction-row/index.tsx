@@ -82,6 +82,10 @@ class PendingTransactionRow extends Component<Props, State> {
     return `${sign} ${currencySymbols(currentCurrency)}${currencyFormats(currentCurrency)(pendingTransaction.amount)}`
   }
 
+  getColor() {
+    return this.getAmount().includes('-') ? style.redAmount : style.greenAmount
+  }
+
   render() {
     const { onPress, pendingTransaction, friend } = this.props
     const { pic } = this.state
@@ -97,7 +101,7 @@ class PendingTransactionRow extends Component<Props, State> {
               <Text style={style.pendingMemo}>{friend ? pendingTransaction.memo : debtManagement.for(pendingTransaction.memo)}</Text>
             </View>
           </View>
-          <Text style={style.pendingAmount}>{this.getAmount()}</Text>
+          <Text style={[style.pendingAmount, this.getColor()]}>{this.getAmount()}</Text>
         </View>
       </TouchableHighlight>
     )
