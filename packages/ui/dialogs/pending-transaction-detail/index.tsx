@@ -45,6 +45,7 @@ interface Props {
 interface State {
   userPic: string
   pic?: string
+  unmounting?: boolean
 }
 
 class PendingTransactionDetail extends Component<Props, State> {
@@ -62,7 +63,13 @@ class PendingTransactionDetail extends Component<Props, State> {
       const addr = user.address === pendingTransaction.creditorAddress ? pendingTransaction.debtorAddress : pendingTransaction.creditorAddress
       pic = await profilePic.get(addr)
     } catch (e) {}
-    this.setState({ pic })
+    if(!this.state.unmounting && pic) {
+      this.setState({ pic })
+    }
+  }
+
+  componentWillUnmount() {
+    this.setState({unmounting: true})
   }
 
   async confirmPendingTransaction(pendingTransaction: PendingTransaction) {

@@ -32,6 +32,7 @@ interface Props {
 
 interface State {
   pic?: string
+  unmounting?: boolean
 }
 
 class FriendRow extends Component<Props, State> {
@@ -47,14 +48,17 @@ class FriendRow extends Component<Props, State> {
     try {
       pic = await profilePic.get(friend.address)
     } catch (e) {}
-    if (pic) {
+    if (!this.state.unmounting && pic) {
       this.setState({ pic })
     }
   }
 
+  componentWillUnmount() {
+    this.setState({unmounting: true})
+  }
+
   getRecentTotal() {
     const { friend, calculateBalance } = this.props
-    
     return calculateBalance(friend)
   }
 

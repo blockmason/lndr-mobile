@@ -66,7 +66,8 @@ export const initializeStorage = () => {
     const storedMnemonic = await mnemonicStorage.get()
     const storedSession = await sessionStorage.get()
     const storedUser = await userStorage.get()
-    const primaryCurrency = await primaryCurrencyStorage.get()
+    let primaryCurrency = await primaryCurrencyStorage.get()
+    primaryCurrency = primaryCurrency === null ? defaultCurrency : primaryCurrency
 
     //put this in separate section
     const storedNotificationPreference = await notificationsEnabledStorage.get()
