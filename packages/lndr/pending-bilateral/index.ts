@@ -9,18 +9,18 @@ export default class PendingBilateral {
   settlementAmount: number
   settlementBlocknumber: number
   settlementCurrency: string
-  multiSettlementHashes?: string[]
+  multiSettlements?: PendingBilateral[]
 
   constructor(data) {
     const { txHash } = data
-    const { creditor, debtor, amount, memo, nonce, ucac, submitter, hash, settlementAmount, settlementCurrency, settlementBlocknumber, multiSettlementHashes } = data.creditRecord
+    const { creditor, debtor, amount, memo, nonce, ucac, submitter, hash, settlementAmount, settlementCurrency, settlementBlocknumber, multiSettlements } = data.creditRecord
     this.submitter = submitter.replace('0x', '')
     this.creditRecord = new CreditRecord(ucac, creditor, debtor, amount, memo, nonce)
     this.txHash = txHash
     this.settlementAmount = settlementAmount
     this.settlementBlocknumber = settlementBlocknumber
     this.settlementCurrency = settlementCurrency
-    this.multiSettlementHashes = multiSettlementHashes
+    this.multiSettlements = multiSettlements
   }
 
   get creditorAddress() {

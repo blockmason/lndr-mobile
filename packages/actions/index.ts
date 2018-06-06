@@ -470,14 +470,14 @@ export const getPending = () => {
 
 export const confirmPendingTransaction = (pendingTransaction: PendingTransaction) => {
   return async (dispatch, getState) => {
-    const { creditorAddress, debtorAddress, amount, memo, creditorNickname, debtorNickname, creditRecord, multiTransactionHashes } = pendingTransaction
+    const { creditorAddress, debtorAddress, amount, memo, creditorNickname, debtorNickname, creditRecord, multiTransactions } = pendingTransaction
     const { ucacAddress } = creditRecord
     const { address, privateKeyBuffer } = getUser(getState())()
     const direction = address === creditorAddress ? 'lend' : 'borrow'
     const friendAddress = address === creditorAddress ? debtorAddress : creditorAddress
     const friendNickname = address === creditorAddress ? debtorNickname : creditorNickname
 
-    if(multiTransactionHashes !== undefined) {
+    if(multiTransactions !== undefined) {
       const ucacBalances = calculateUcacBalances(getState())(friendAddress)
       const { transactions } = await generateMultiTransaction(address, friendAddress, ucacBalances, memo, getState, privateKeyBuffer)
 
@@ -512,12 +512,12 @@ export const confirmPendingTransaction = (pendingTransaction: PendingTransaction
 export const rejectPendingTransaction = (pendingTransaction: PendingTransaction) => {
   return async (dispatch, getState) => {
     const { address, privateKeyBuffer } = getUser(getState())()
-    const { hash, multiTransactionHashes } = pendingTransaction
+    const { hash, multiTransactions } = pendingTransaction
     try {
-      if(multiTransactionHashes === undefined) {
+      if(multiTransactions === undefined) {
         await creditProtocol.rejectPendingByHash(hash, privateKeyBuffer)
       } else {
-        multiTransactionHashes.map( async (hash) => await creditProtocol.rejectPendingByHash(hash, privateKeyBuffer) )
+        multiTransactions.map( async (transaction) => await creditProtocol.rejectPendingByHash(transaction.hash, privateKeyBuffer) )
       }
       
       dispatch(displaySuccess(debtManagement.rejection.success))
@@ -535,12 +535,12 @@ export const rejectPendingTransaction = (pendingTransaction: PendingTransaction)
 export const rejectPendingSettlement = (pendingSettlement: PendingUnilateral) => {
   return async (dispatch, getState) => {
     const { address, privateKeyBuffer } = getUser(getState())()
-    const { hash, multiSettlementHashes } = pendingSettlement
+    const { hash, multiSettlements } = pendingSettlement
     try {
-      if(multiSettlementHashes === undefined) {
+      if(multiSettlements === undefined) {
         await creditProtocol.rejectPendingByHash(hash, privateKeyBuffer)
       } else {
-        multiSettlementHashes.map( async (hash) => await creditProtocol.rejectPendingByHash(hash, privateKeyBuffer) )
+        multiSettlements.map( async (settlement) => await creditProtocol.rejectPendingByHash(settlement.hash, privateKeyBuffer) )
       }
       
       refreshTransactions()
@@ -1014,8 +1014,8 @@ const settleBilateral = async (user, bilateralSettlements, dispatch, getState) =
     const ethTransaction = new EthTransaction(settlement.creditorAddress, settlement.debtorAddress, settlement.settlementAmount, gasPrice)
     try {
       const txHash = await creditProtocol.settleWithEth(ethTransaction, user.privateKeyBuffer)
-      if(settlement.multiSettlementHashes !== undefined) {
-        settlement.multiSettlementHashes.map( async(hash) => await creditProtocol.storeSettlementHash(txHash, hash, settlement.creditorAddress, user.privateKeyBuffer) )
+      if(settlement.multiSettlements !== undefined) {
+        settlement.multiSettlements.map( async(hash) => await creditProtocol.storeSettlementHash(txHash, hash, settlement.creditorAddress, user.privateKeyBuffer) )
       } else {
         await creditProtocol.storeSettlementHash(txHash, settlement.hash, settlement.creditorAddress, user.privateKeyBuffer)
       }
@@ -1154,7 +1154,7 @@ const filterMultiTransactions = (address: string, pending: any, state: Object) =
       return pendTx.creditorAddress === address ? acc + txAmt: acc - txAmt
     }, 0)
 
-    let multiTransactionHashes, settlementAmount, settlementCurrency, settlementBlockNumber, txHash, multiSettlementHashes
+    let multiTransactions, settlementAmount, settlementCurrency, settlementBlockNumber, txHash, multiSettlements
 
     const creditor = balance > 0 ? address : tx
     const debtor = balance > 0 ? tx : address
@@ -1165,11 +1165,12 @@ const filterMultiTransactions = (address: string, pending: any, state: Object) =
     const nonce = 0
     const hash = txs[tx][0].hash
 
-    const data = { creditor, debtor, amount, memo, nonce, ucac, submitter, hash, multiTransactionHashes,
-      settlementAmount, settlementCurrency, settlementBlockNumber, multiSettlementHashes, txHash }
+    const data = { creditor, debtor, amount, memo, nonce, ucac, submitter, hash, multiTransactions,
+      settlementAmount, settlementCurrency, settlementBlockNumber, multiSettlements, txHash }
 
     if(pending[0] instanceof PendingTransaction) {
-      data.multiTransactionHashes = txs[tx].map( pendTx => pendTx.hash )
+      data.multiTransactions = txs[tx]
+      console.log('something screwy here', data.multiTransactions)
       newList.push(new PendingTransaction(data))
 
     } else if(pending[0] instanceof PendingUnilateral) {
@@ -1178,7 +1179,7 @@ const filterMultiTransactions = (address: string, pending: any, state: Object) =
       }, 0)
       data.settlementCurrency = txs[tx][0].settlementCurrency
       data.settlementBlockNumber
-      data.multiSettlementHashes = txs[tx].map( pendStmt => pendStmt.hash )
+      data.multiSettlements = txs[tx]
       newList.push(new PendingUnilateral(data))
 
     } else if(pending[0] instanceof PendingBilateral) {
@@ -1187,7 +1188,7 @@ const filterMultiTransactions = (address: string, pending: any, state: Object) =
       }, 0)
       data.settlementCurrency = txs[tx][0].settlementCurrency
       data.settlementBlockNumber
-      data.multiSettlementHashes = txs[tx].map( pendStmt => pendStmt.hash )
+      data.multiSettlements = txs[tx]
       data.txHash = txs[tx][0].txHash
       newList.push(new PendingBilateral({ txHash, creditRecord: data }))
     }
