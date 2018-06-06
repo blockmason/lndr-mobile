@@ -14,6 +14,7 @@ import { currencySymbols, transferLimits  } from 'lndr/currencies'
 import Button from 'ui/components/button'
 import Loading, { LoadingContext } from 'ui/components/loading'
 import DashboardShell from 'ui/components/dashboard-shell'
+import PendingTransactionRow from 'ui/components/pending-transaction-row'
 
 import style from 'theme/pending'
 import formStyle from 'theme/form'
@@ -178,7 +179,11 @@ class PendingTransactionDetail extends Component<Props, State> {
             <Text style={[style.amount, color]}>{currencyFormats(currency)(pendingTransaction.amount)}</Text>
           </View>
           {this.labelRow(pendingTransaction.memo.trim())}
-          <View style={{marginBottom: 10}}/>
+          <View style={{marginBottom: 20, width: '100%'}}>
+          {pendingTransaction.multiTransactions === undefined ? null :
+            pendingTransaction.multiTransactions.map(tx => <PendingTransactionRow user={user} key={tx.hash} pendingTransaction={tx} friend={true} onPress={() => null} />)
+          }
+          </View>
           {this.showButtons()}
           <View style={general.spaceBelow}/>
         </View>
