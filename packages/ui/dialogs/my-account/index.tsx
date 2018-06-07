@@ -424,9 +424,7 @@ class MyAccount extends Component<Props, State> {
           animationType="slide"
           transparent={false}
           visible={shouldPickCurrency}
-          onRequestClose={() => {
-            alert('Modal has been closed.');
-          }}>
+          onRequestClose={() => this.setState({shouldPickCurrency: false})}>
           <View style={[popupStyle.modalOverlay, general.flexColumn, general.justifyEnd]}>
             <View style={{backgroundColor:'white', paddingTop:4}}>
               <SpinningPicker label={debtManagement.chooseCurrency} allItems={this.props.allCurrencies} selectedItem={currency} onPickerDone={(value) => this.handlePickerDone(value)} />

@@ -269,6 +269,7 @@ export default {
     settleTotal: `Betala allt`,
     settleUpMemo: (D, A) => `${D === 'lend'? 'Betala': 'Begäran om att komma överens om'} ${A} `,
     recordSettleUpMemo: `Betala`,
+    balanceByCurrency: `Detaljer`,
   },
   settlementManagement: {
     bilateral: {

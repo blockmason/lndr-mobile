@@ -269,7 +269,9 @@ export default {
   for: memo => `for ${memo}`,
   settleUp: '    청산    ',
   settleTotal: '전액 청산',
-  settleUpMemo: (direction, amount) => direction === 'lend' ? `청산 ${amount}` : `청산 요청 ${amount} `
+  settleUpMemo: (direction, amount) => direction === 'lend' ? `청산 ${amount}` : `청산 요청 ${amount} `,
+  recordSettleUpMemo: `최대 정착`,
+  balanceByCurrency: `세부`,
 },
 
   settlementManagement: {

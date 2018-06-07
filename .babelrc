@@ -13,5 +13,10 @@
       { "src": "./lib/packages/ui", "expose": "ui" },
       { "src": "./packages/images", "expose": "images" }
     ]]
-  ]
+  ],
+  "env": {
+    "production": {
+      "plugins": ["transform-remove-console"]
+    }
+  }
 }

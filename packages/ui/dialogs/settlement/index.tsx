@@ -37,6 +37,8 @@ import { addNavigationHelpers } from 'react-navigation';
 
 const submittingTransaction = new LoadingContext()
 
+let unmounting = false
+
 interface Props {
   settleUp: (
     friend: Friend,
@@ -92,8 +94,9 @@ class Settlement extends Component<Props, State> {
     const friend = this.props.navigation ? this.props.navigation.state.params.friend : {}
     const ethSettlement = this.props.navigation ? this.props.navigation.state.params.ethSettlement : false
 
-    const amount = ethSettlement ? undefined : this.setAmount(String(Math.abs(this.state.balance)))
+    const amount = ethSettlement ? undefined :   this.setAmount(String(Math.abs(this.state.balance)))
 
+    unmounting = false
     let pic
 
     try {
@@ -102,6 +105,10 @@ class Settlement extends Component<Props, State> {
       }
     } catch (e) {}
     this.setState({txCost, pic, amount})
+  }
+
+  componentWillUnmount() {
+    unmounting = true
   }
 
   async submit() {
@@ -180,9 +187,9 @@ class Settlement extends Component<Props, State> {
     const adjustedBalance = hasNoDecimals(primaryCurrency) ? balance : balance / 100
 
     if (cleanAmount > Math.abs(adjustedBalance)) {
-      return amountFormat( String(adjustedBalance), primaryCurrency)
+      return amountFormat(String(adjustedBalance), primaryCurrency)
     } else {
-      return amountFormat( amount, primaryCurrency)
+      return amountFormat(amount, primaryCurrency)
     }
   }
 
@@ -195,7 +202,7 @@ class Settlement extends Component<Props, State> {
 
   displayTotal(balance) {
     const { primaryCurrency } = this.props
-    return `${balance < 0 ? '' : '+'}${currencyFormats(primaryCurrency)(balance)}`
+    return `${balance < 0 ? '' : '+'}${currencySymbols(primaryCurrency)}${currencyFormats(primaryCurrency)(balance)}`
   }
 
   getLimit() {

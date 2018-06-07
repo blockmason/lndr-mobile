@@ -270,6 +270,7 @@ export default {
     settleTotal: `Maksettavien velkojen kokonaissumma`,
     settleUpMemo: (D, A) => `${D === 'lend' ? 'Maksetaan velkaa' : 'Pyydetään velan maksua summasta'} ${A}`,
     recordSettleUpMemo: `Maksetaan velka`,
+    balanceByCurrency: `Yksityiskohdat`,
   },
   settlementManagement: {
     bilateral: {

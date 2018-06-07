@@ -1,6 +1,7 @@
 import React, { Component } from 'react'
-
 import { Text, TouchableHighlight, View, Image } from 'react-native'
+import { connect } from 'react-redux'
+
 import Button from 'ui/components/button'
 
 import Friend from 'lndr/friend'
@@ -10,10 +11,10 @@ import { white } from 'theme/include/colors'
 import style from 'theme/account'
 import general from 'theme/general'
 
-import { connect } from 'react-redux'
-
 import language from 'language'
 const { pendingFriendRequestsLanguage } = language
+
+let unmounting = false;
 
 interface Props {
   friend: Friend
@@ -32,14 +33,19 @@ export default class PendingFriendRow extends Component<Props, State> {
 
   async componentWillMount() {
     const { friend } = this.props
+    unmounting = false
     let pic
 
     try {
       pic = await profilePic.get(friend.address)
     } catch (e) {}
-    if (pic) {
+    if (!unmounting && pic) {
       this.setState({ pic })
     }
+  }
+
+  componentWillUnmount() {
+    unmounting = true
   }
 
   render() {

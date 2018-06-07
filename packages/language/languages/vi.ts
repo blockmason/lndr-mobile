@@ -269,6 +269,7 @@ export default {
     settleTotal: `Tổng số Thanh toán`,
     settleUpMemo: (D, A) => `${D === 'lend' ? 'Thanh toán cho ' : 'Yêu cầu thanh toán cho'} ${A}`,
     recordSettleUpMemo: `đang thanh toán`,
+    balanceByCurrency: `Chi tiết`,
   },
   settlementManagement: {
     bilateral: {

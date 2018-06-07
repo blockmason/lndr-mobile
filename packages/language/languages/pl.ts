@@ -269,6 +269,7 @@ export default {
     settleTotal: `Rozlicz Całość`,
     settleUpMemo: (D, A) => `${D === 'lend'? 'Rozliczenie za': 'Rozlicz za'} ${A} `,
     recordSettleUpMemo: `rozliczenia`,
+    balanceByCurrency: `Detale`,
   },
   settlementManagement: {
     bilateral: {

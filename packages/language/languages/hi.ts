@@ -270,6 +270,7 @@ export default {
     settleTotal: `कुल निपटान करें`,
     settleUpMemo: (D, A) => ` ${A} ${D === 'lend' ? 'में निपटान करना' :  'में निपटान के लिए रिक्वेस्ट करें'}`,
     recordSettleUpMemo: `निपटाना`,
+    balanceByCurrency: `विवरण`,
   },
   settlementManagement: {
     bilateral: {

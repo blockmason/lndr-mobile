@@ -269,6 +269,7 @@ export default {
     settleTotal: `Tüm Hesabı Kapat`,
     settleUpMemo: (D, A) => `${D === 'lend' ? 'Size ödenecek tutar' : 'Ödenmesini istediğiniz tutar'} ${A}`,
     recordSettleUpMemo: `Ödeşiliyor`,
+    balanceByCurrency: `Ayrıntılar`,
   },
   settlementManagement: {
     bilateral: {

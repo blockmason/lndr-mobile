@@ -270,6 +270,7 @@ export default {
     settleTotal: `Celkem k vyrovnání`,
     settleUpMemo: (D, A) => `${D === 'lend' ? 'Vypořádání na' : 'Žádost o vypořádání na'} ${A}`,
     recordSettleUpMemo: `probíhá vypořádání`,
+    balanceByCurrency: `Podrobnosti`,
   },
   settlementManagement: {
     bilateral: {

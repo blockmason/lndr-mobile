@@ -267,6 +267,7 @@ export default {
     settleTotal: `SETTLE TOTAL`,
     settleUpMemo: (direction, amount) => direction === 'lend' ? `Settling up for ${amount}` :  `Request to settle for ${amount}`,
     recordSettleUpMemo: `settling up`,
+    balanceByCurrency: `Balance by Currency`,
   },
   settlementManagement: {
     bilateral: {

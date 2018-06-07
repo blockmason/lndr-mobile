@@ -36,7 +36,7 @@ export default StyleSheet.create({
   balanceRow: {
     flexDirection: 'row',
     justifyContent: 'center',
-    marginBottom: 20
+    marginBottom: 10
   },
   balanceInfo: {
     ...xlarge,

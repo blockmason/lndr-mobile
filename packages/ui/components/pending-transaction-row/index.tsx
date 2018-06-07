@@ -19,6 +19,8 @@ import general from 'theme/general'
 import language from 'language'
 const { debtManagement } = language
 
+let unmounting = false
+
 interface Props {
   onPress?: () => void
   pendingTransaction: PendingTransaction
@@ -39,15 +41,20 @@ class PendingTransactionRow extends Component<Props, State> {
 
   async componentWillMount() {
     const { user, pendingTransaction } = this.props
+    unmounting = false
     let pic
 
     try {
       const addr = user.address === pendingTransaction.creditorAddress ? pendingTransaction.debtorAddress : pendingTransaction.creditorAddress
       pic = await profilePic.get(addr)
     } catch (e) {}
-    if (pic) {
+    if (!unmounting && pic) {
       this.setState({ pic })
     }
+  }
+
+  componentWillUnmount() {
+    unmounting = true
   }
 
   getTitle() {

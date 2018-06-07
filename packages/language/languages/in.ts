@@ -270,6 +270,7 @@ export default {
     settleTotal: `Jumlah Pelunasan`,
     settleUpMemo: (D, A) => `${D === 'lend'? 'Melunasi': 'Permintaan pelunasan'} ${A}.`,
     recordSettleUpMemo: `melunasi`,
+    balanceByCurrency: `Rincian`,
   },
   settlementManagement: {
     bilateral: {

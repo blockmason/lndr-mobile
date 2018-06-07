@@ -11,7 +11,6 @@ import Button from 'ui/components/button'
 import Loading, { LoadingContext } from 'ui/components/loading'
 import Popup, { closePopup } from 'ui/components/popup'
 import Section from 'ui/components/section'
-import BalanceRow from 'ui/components/balance-row'
 
 import AddDebt from 'ui/dialogs/add-debt'
 import PendingView from 'ui/views/account/activity/pending'

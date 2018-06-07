@@ -13,6 +13,7 @@
   "dependencies": {
     "assert": "^1.4.1",
     "aws-sdk": "^2.188.0",
+    "babel-plugin-transform-remove-console": "^6.9.4",
     "bcryptjs": "^2.4.3",
     "bitcore-mnemonic": "^1.5.0",
     "dotenv": "^4.0.0",

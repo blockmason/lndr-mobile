@@ -269,6 +269,7 @@ export default {
     settleTotal: `偿清总债务`,
     settleUpMemo: (D, A) => `${D === 'lend' ? "偿清债务" : "请求偿清债务"} ${A}`,
     recordSettleUpMemo: `债务偿清了`,
+    balanceByCurrency: `细节`,
   },
   settlementManagement: {
     bilateral: {

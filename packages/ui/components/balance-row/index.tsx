@@ -1,10 +1,8 @@
 import React, { Component } from 'react'
 
 import { Text, TouchableHighlight, View } from 'react-native'
-import { connect } from 'react-redux'
 
 import { currencyFormats } from 'lndr/format'
-import Balance from 'lndr/balance'
 import { currencySymbols, transferLimits  } from 'lndr/currencies'
 
 import { lightGray } from 'theme/include/colors'
@@ -14,37 +12,31 @@ import { getPrimaryCurrency } from 'reducers/app';
 
 interface Props {
   onPress?: () => void
-  balance: Balance
-  primaryCurrency
+  amount: number
+  currency: string
 }
 
-class BalanceRow extends Component<Props> {
+export default class BalanceRow extends Component<Props> {
   renderAmount() {
-    const { balance, primaryCurrency } = this.props
-    const { amount } = balance
+    const { amount, currency } = this.props
 
     if (amount < 0) {
-      return <Text style={style.titledFactAmountDanger}>{currencyFormats(primaryCurrency)(amount)}</Text>
-    }
-
-    else {
-      return <Text style={style.titledFactAmountGood}>{currencyFormats(primaryCurrency)(amount)}</Text>
+      return <Text style={[style.pendingAmount, style.redAmount]}>{`-${currencyFormats(currency)(amount)}`}</Text>
+    } else {
+      return <Text style={[style.pendingAmount, style.greenAmount]}>{`+${currencyFormats(currency)(amount)}`}</Text>
     }
   }
 
   render() {
-    const { onPress, balance } = this.props
+    const { onPress, amount, currency } = this.props
 
     return (
-      <TouchableHighlight onPress={onPress} underlayColor={lightGray} activeOpacity={0.5}>
+      <View style={style.pendingTransactionRow}>
         <View style={style.listItem}>
+          <Text style={style.currencySymbol}>{currencySymbols(currency)}</Text>
           {this.renderAmount()}
-          <Text style={style.fact}>@{balance.relativeToNickname}</Text>
-          <Text selectable style={style.address}>{balance.relativeTo}</Text>
         </View>
-      </TouchableHighlight>
+      </View>
     )
   }
 }
-
-export default connect((state) => ({ primaryCurrency: getPrimaryCurrency(state)() }))(BalanceRow)
