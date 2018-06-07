@@ -52,8 +52,9 @@ export default class SettleUp extends Component<Props> {
       </View>
       <ScrollView style={general.whiteFlex} keyboardShouldPersistTaps='handled'>
         <View style={[general.centeredColumn, {marginVertical: 20}]}>
-          <Button fat round onPress={() => navigation.navigate('Settlement', { friend, ethSettlement: true })} text={settlementManagement.eth} style={{minWidth: width / 4 * 3}} />
-          <Button fat round onPress={() => navigation.navigate('Settlement', { friend, ethSettlement: false })} text={settlementManagement.nonPayment} style={{minWidth: width / 4 * 3}} />
+          <Button fat round onPress={() => navigation.navigate('Settlement', { friend, settlementType: 'eth' })} text={settlementManagement.eth} style={{minWidth: width / 4 * 3}} />
+          <Button fat round onPress={() => navigation.navigate('Settlement', { friend, settlementType: 'paypal' })} text={settlementManagement.paypal} style={{minWidth: width / 4 * 3}} />
+          <Button fat round onPress={() => navigation.navigate('Settlement', { friend, settlementType: 'record' })} text={settlementManagement.nonPayment} style={{minWidth: width / 4 * 3}} />
         </View>
       </ScrollView>
     </View>

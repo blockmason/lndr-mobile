@@ -1,6 +1,5 @@
 import React, { Component } from 'react'
-
-import { Text, TextInput, TouchableHighlight, View, Image, ScrollView, KeyboardAvoidingView, Platform } from 'react-native'
+import { Text, TextInput, TouchableHighlight, View, Image, ScrollView, KeyboardAvoidingView, Platform, NativeModules } from 'react-native'
 import { getResetAction } from 'reducers/nav'
 
 import { UserData } from 'lndr/user'
@@ -87,7 +86,7 @@ class Settlement extends Component<Props, State> {
     const { primaryCurrency } = this.props
     const txCost = await getEthTxCost(primaryCurrency)
     const friend = this.props.navigation ? this.props.navigation.state.params.friend : {}
-    const ethSettlement = this.props.navigation ? this.props.navigation.state.params.ethSettlement : false
+    const ethSettlement = this.props.navigation ? (this.props.navigation.state.params.settlementType == 'eth') : false
 
     const amount = ethSettlement ? undefined :   this.setAmount(String(Math.abs(this.state.balance)))
 
@@ -100,6 +99,8 @@ class Settlement extends Component<Props, State> {
       }
     } catch (e) {}
     this.setState({txCost, pic, amount})
+
+    NativeModules.PayPalManager.initPayPal();
   }
 
   componentWillUnmount() {
@@ -110,7 +111,7 @@ class Settlement extends Component<Props, State> {
     const { amount, direction, formInputError } = this.state
     const { primaryCurrency } = this.props
     const friend = this.props.navigation ? this.props.navigation.state.params.friend : {}
-    const ethSettlement = this.props.navigation ? this.props.navigation.state.params.ethSettlement : false
+    const ethSettlement = this.props.navigation ? (this.props.navigation.state.params.settlementType == 'eth') : false
 
     if ( formInputError || sanitizeAmount(amount, primaryCurrency) === 0 ) {
       return
@@ -121,7 +122,7 @@ class Settlement extends Component<Props, State> {
     const settleTotal = Math.abs(this.getRecentTotal()) === Math.abs(sanitizeAmount(amount, primaryCurrency))
     let success
 
-    if( ethSettlement ) {
+    if( (this.props.navigation) && (this.props.navigation.state.params.settlementType == 'eth') ) {
       success = await submittingTransaction.wrap(
         this.props.settleUp(
           friend as Friend,
@@ -133,6 +134,9 @@ class Settlement extends Component<Props, State> {
           settleTotal as boolean
         )
       )
+    } else if( (this.props.navigation) && (this.props.navigation.state.params.settlementType == 'paypal') ) {
+      success = await this.handlePaypalPayment()
+
     } else {
       success = await submittingTransaction.wrap(
         this.props.addDebt(
@@ -227,13 +231,32 @@ class Settlement extends Component<Props, State> {
     this.setState({ amount: this.setAmount(amount), formInputError })
   }
 
+  _renderPaymentButton() {
+    const { amount, balance } = this.state
+    if (!amount) {
+        return (
+          <Button large round wide onPress={() => this.updateAmount(currencyFormats(this.props.primaryCurrency)(Math.abs(balance)))} text={debtManagement.settleTotal} />
+      )
+    }
+    if ( (this.props.navigation) && (this.props.navigation.state.params.settlementType == "paypal") ) {
+      return (
+        <Button large round wide onPress={() => NativeModules.PayPalManager.connectPayPal()} text="Settle With PayPal" />
+      )
+    }
+    return (
+      <Button large round wide onPress={() => this.submit()} text={debtManagement.settleUp} />
+    )
+  }
+
   render() {
     const { amount, balance, txCost, formInputError, pic } = this.state
     const { ethBalance, ethExchange, ethSentPastWeek, primaryCurrency } = this.props
-    const ethSettlement = this.props.navigation ? this.props.navigation.state.params.ethSettlement : false
+    const ethSettlement = this.props.navigation ? (this.props.navigation.state.params.settlementType == "eth") : false
     const friend = this.props.navigation ? this.props.navigation.state.params.friend : {}
     const imageSource = pic ? { uri: pic } : require('images/person-outline-dark.png')
     const vertOffset = (Platform.OS === 'android') ? -300 : 20;
+
+    const paymentButton = this._renderPaymentButton();
 
     return <View style={general.whiteFlex}>
       <View style={general.view}>
@@ -276,7 +299,7 @@ class Settlement extends Component<Props, State> {
               </View>
             </View>
             { formInputError && <Text style={[formStyle.warningText, {alignSelf: 'center', marginHorizontal: 15}]}>{formInputError}</Text>}
-            { amount ? <Button large round wide onPress={() => this.submit()} text={debtManagement.settleUp} /> : <Button large round wide onPress={() => this.updateAmount(currencyFormats(primaryCurrency)(Math.abs(balance)))} text={debtManagement.settleTotal} />}
+            { paymentButton }
           </View>
         </ScrollView>
       </KeyboardAvoidingView>

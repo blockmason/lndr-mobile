@@ -1,4 +1,5 @@
 PODS:
+  - CardIO (5.4.1)
   - Firebase/Core (4.10.1):
     - FirebaseAnalytics (= 4.1.0)
     - FirebaseCore (= 4.0.17)
@@ -19,21 +20,30 @@ PODS:
     - nanopb/encode (= 0.3.8)
   - nanopb/decode (0.3.8)
   - nanopb/encode (0.3.8)
+  - PayPal-iOS-SDK (2.18.1):
+    - PayPal-iOS-SDK/CardIO (= 2.18.1)
+    - PayPal-iOS-SDK/Core (= 2.18.1)
+  - PayPal-iOS-SDK/CardIO (2.18.1):
+    - CardIO (~> 5.4.1)
+  - PayPal-iOS-SDK/Core (2.18.1)
   - UrbanAirship-iOS-SDK (9.0.3)
 
 DEPENDENCIES:
   - Firebase/Core
+  - PayPal-iOS-SDK
   - UrbanAirship-iOS-SDK (~> 9.0)
 
 SPEC CHECKSUMS:
+  CardIO: 56983b39b62f495fc6dae9ad7cf875143df06443
   Firebase: 92c6ba593e32db0defde464a9adc981d5cb49f97
   FirebaseAnalytics: 3dfae28d4a5e06f86c4fae830efc2ad3fadb19bc
   FirebaseCore: 872307b001bbefda1dfa0dbfffa50a6919023d4a
   FirebaseInstanceID: d2058a35e9bebda1b6dd42486b84917bde552a9d
   GoogleToolboxForMac: 2501e2ad72a52eb3dfe7bd9aee7dad11b858bd20
   nanopb: 5601e6bca2dbf1ed831b519092ec110f66982ca3
+  PayPal-iOS-SDK: 10654cd111e911a9807bddb96fae81aacb8e9915
   UrbanAirship-iOS-SDK: 2dca9836a46c4b3d91337e780226cd60fc4d309b
 
-PODFILE CHECKSUM: ad9300dd62ef79bb3cce9f38fd5654450c5d16fd
+PODFILE CHECKSUM: 491ed2f70b9ae0d9fe1726d45b9c1a24e5453049
 
-COCOAPODS: 1.3.1
+COCOAPODS: 1.4.0

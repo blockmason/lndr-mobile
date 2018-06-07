@@ -18,12 +18,17 @@
 #import <React/RCTDevLoadingView.h>
 #endif
 
+#import "PayPalManager.h"
+
 @implementation AppDelegate
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
 {
   [FIRApp configure];
   
+  [PayPalMobile initializeWithClientIdsForEnvironments:@{PayPalEnvironmentProduction : PAYPAL_CLIENT_ID_PROD,
+                                                         PayPalEnvironmentSandbox : PAYPAL_CLIENT_ID_DEV}];
+
   NSURL *jsCodeLocation;
 
   jsCodeLocation = [[RCTBundleURLProvider sharedSettings] jsBundleURLForBundleRoot:@"index" fallbackResource:nil];

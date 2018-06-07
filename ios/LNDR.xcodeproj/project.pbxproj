@@ -49,6 +49,7 @@
 		8AA0587A13464E7A892CA6D6 /* libTouchID.a in Frameworks */ = {isa = PBXBuildFile; fileRef = FBC3D19E60434D1A9BA1351F /* libTouchID.a */; };
 		A583383FE1FB4B108AEADE0B /* Foundation.ttf in Resources */ = {isa = PBXBuildFile; fileRef = CED122A6C49A4672B90ABC31 /* Foundation.ttf */; };
 		AA3272D77777404086043ED5 /* Octicons.ttf in Resources */ = {isa = PBXBuildFile; fileRef = C8790AD410854661A8E111F8 /* Octicons.ttf */; };
+		AA35679B20C8AF6000B7BB1D /* PayPalManager.m in Sources */ = {isa = PBXBuildFile; fileRef = AA35679A20C8AF6000B7BB1D /* PayPalManager.m */; };
 		AACF326420AA13FD0025FFF7 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = AACF322D20AA13FD0025FFF7 /* GoogleService-Info.plist */; };
 		AACF330E20AA2EA40025FFF7 /* libSplashScreen.a in Frameworks */ = {isa = PBXBuildFile; fileRef = AACF330D20AA2E660025FFF7 /* libSplashScreen.a */; };
 		ADBDB9381DFEBF1600ED6528 /* libRCTBlob.a in Frameworks */ = {isa = PBXBuildFile; fileRef = ADBDB9271DFEBF0700ED6528 /* libRCTBlob.a */; };
@@ -149,20 +150,6 @@
 			proxyType = 2;
 			remoteGlobalIDString = 014A3B5C1C6CF33500B6D375;
 			remoteInfo = RNImagePicker;
-		};
-		39E709AF20B75ADD006146CF /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = 146833FF1AC3E56700842450 /* React.xcodeproj */;
-			proxyType = 2;
-			remoteGlobalIDString = EBF21BDC1FC498900052F4D5;
-			remoteInfo = jsinspector;
-		};
-		39E709B120B75ADD006146CF /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = 146833FF1AC3E56700842450 /* React.xcodeproj */;
-			proxyType = 2;
-			remoteGlobalIDString = EBF21BFA1FC4989A0052F4D5;
-			remoteInfo = "jsinspector-tvOS";
 		};
 		39EFA3E2203E516F0049FA93 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
@@ -492,6 +479,8 @@
 		A18B6B69818548DBB63FD276 /* libRNFS.a */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = archive.ar; path = libRNFS.a; sourceTree = "<group>"; };
 		A1C2970B53D44B05927BDEC3 /* libRNRandomBytes.a */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = archive.ar; path = libRNRandomBytes.a; sourceTree = "<group>"; };
 		A4C3B22783944CF8B00B7D39 /* EvilIcons.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = EvilIcons.ttf; path = "../node_modules/react-native-vector-icons/Fonts/EvilIcons.ttf"; sourceTree = "<group>"; };
+		AA35679920C8AF6000B7BB1D /* PayPalManager.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = PayPalManager.h; sourceTree = "<group>"; };
+		AA35679A20C8AF6000B7BB1D /* PayPalManager.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = PayPalManager.m; sourceTree = "<group>"; };
 		AA5446E718D74A207E01E42B /* libPods-LNDR.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-LNDR.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		AACF322D20AA13FD0025FFF7 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 		AACF330820AA2E660025FFF7 /* SplashScreen.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = SplashScreen.xcodeproj; path = "../node_modules/react-native-splash-screen/ios/SplashScreen.xcodeproj"; sourceTree = "<group>"; };
@@ -667,6 +656,8 @@
 				5409518F1FDB245A001AF14A /* AirshipConfig.plist */,
 				13B07FB11A68108700A75B9A /* LaunchScreen.xib */,
 				13B07FB71A68108700A75B9A /* main.m */,
+				AA35679920C8AF6000B7BB1D /* PayPalManager.h */,
+				AA35679A20C8AF6000B7BB1D /* PayPalManager.m */,
 			);
 			name = LNDR;
 			sourceTree = "<group>";
@@ -682,8 +673,6 @@
 				3DAD3EAB1DF850E9000B6D8A /* libcxxreact.a */,
 				3DAD3EAD1DF850E9000B6D8A /* libjschelpers.a */,
 				3DAD3EAF1DF850E9000B6D8A /* libjschelpers.a */,
-				39E709B020B75ADD006146CF /* libjsinspector.a */,
-				39E709B220B75ADD006146CF /* libjsinspector-tvOS.a */,
 				E038E1FF1FD98F0B006DE943 /* libthird-party.a */,
 				E038E2011FD98F0B006DE943 /* libthird-party.a */,
 				E038E2031FD98F0B006DE943 /* libdouble-conversion.a */,
@@ -1241,20 +1230,6 @@
 			remoteRef = 39B7BF692059D73E00301F3D /* PBXContainerItemProxy */;
 			sourceTree = BUILT_PRODUCTS_DIR;
 		};
-		39E709B020B75ADD006146CF /* libjsinspector.a */ = {
-			isa = PBXReferenceProxy;
-			fileType = archive.ar;
-			path = libjsinspector.a;
-			remoteRef = 39E709AF20B75ADD006146CF /* PBXContainerItemProxy */;
-			sourceTree = BUILT_PRODUCTS_DIR;
-		};
-		39E709B220B75ADD006146CF /* libjsinspector-tvOS.a */ = {
-			isa = PBXReferenceProxy;
-			fileType = archive.ar;
-			path = "libjsinspector-tvOS.a";
-			remoteRef = 39E709B120B75ADD006146CF /* PBXContainerItemProxy */;
-			sourceTree = BUILT_PRODUCTS_DIR;
-		};
 		39EFA3E3203E516F0049FA93 /* libRCTCameraRoll.a */ = {
 			isa = PBXReferenceProxy;
 			fileType = archive.ar;
@@ -1628,11 +1603,11 @@
 			);
 			inputPaths = (
 				"${SRCROOT}/Pods/Target Support Files/Pods-LNDR/Pods-LNDR-resources.sh",
-				"$PODS_CONFIGURATION_BUILD_DIR/UrbanAirship-iOS-SDK/AirshipResources.bundle",
+				"${PODS_CONFIGURATION_BUILD_DIR}/UrbanAirship-iOS-SDK/AirshipResources.bundle",
 			);
 			name = "[CP] Copy Pods Resources";
 			outputPaths = (
-				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}",
+				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/AirshipResources.bundle",
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
@@ -1674,6 +1649,7 @@
 			files = (
 				13B07FBC1A68108700A75B9A /* AppDelegate.m in Sources */,
 				13B07FC11A68108700A75B9A /* main.m in Sources */,
+				AA35679B20C8AF6000B7BB1D /* PayPalManager.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

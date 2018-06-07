@@ -214,7 +214,7 @@ export default {
     record: `record`,
     records: `records`,
     chooseCurrency: `Choose a Currency`,
-    
+
     createError: {
       amountTooLow: `Amount must be greater than $0`,
       amountTooHigh: `Amount must be less than $1,000,000,000`,
@@ -277,6 +277,7 @@ export default {
       }
     },
     eth: `Settle With ETH`,
+    paypal: `Settle With PayPal`,
     nonPayment: `Record a Settlement`,
   },
 
