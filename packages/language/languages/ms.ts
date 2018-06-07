@@ -270,6 +270,7 @@ export default {
     settleTotal: `Jumlah Penyelesaian`,
     settleUpMemo: (D, A) => `${D === 'lend'? 'Menyelesaikan hutang untuk' : 'Mohon untuk menyelesaikan bagi'} ${A} `,
     recordSettleUpMemo: `Sedang Selesaikan Hutang`,
+    balanceByCurrency: `Maklumat`,
   },
   settlementManagement: {
     bilateral: {

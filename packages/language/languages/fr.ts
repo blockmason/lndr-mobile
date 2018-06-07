@@ -270,6 +270,7 @@ export default {
     settleTotal: `Régler le Total`,
     settleUpMemo: (D, A) => `${D === 'lend'? 'Régler pour': 'Demande de régler pour'} ${A} `,
     recordSettleUpMemo: `régler`,
+    balanceByCurrency: `Détails`,
   },
   settlementManagement: {
     bilateral: {

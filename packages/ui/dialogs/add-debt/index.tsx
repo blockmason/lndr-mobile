@@ -64,6 +64,7 @@ interface State {
 
 class AddDebt extends Component<Props, State> {
   stillRelevant?: boolean
+  textInput: any
 
   constructor(props) {
     super(props)
@@ -179,6 +180,7 @@ class AddDebt extends Component<Props, State> {
   }
 
   handlePickerDone(value) {
+    this.textInput.clear()
     this.setState({currency: value, shouldPickCurrency: false})
   }
 
@@ -210,7 +212,8 @@ class AddDebt extends Component<Props, State> {
       <KeyboardAvoidingView style={general.whiteFlex} behavior={'padding'} keyboardVerticalOffset={vertOffset} >
         <ScrollView style={general.view} keyboardShouldPersistTaps='handled'>
           <View style={[general.centeredColumn, {marginBottom: 20}]}>
-            <Text style={[style.header, {marginBottom: 20}]}>{debtManagement[direction]}</Text>
+            <Text style={[style.header]}>{debtManagement[direction]}</Text>
+            <Text style={[style.subHeader, {marginBottom: 20}]}>{direction === 'lend' ? debtManagement.iLent : debtManagement.iBorrowed}</Text>
             <View style={[general.flex, general.centeredColumn]} >
               <View style={[general.centeredColumn, {minWidth: 150, marginBottom: 20}]}>
                 <Text style={formStyle.title}>{debtManagement.fields.selectFriend}</Text>
@@ -238,6 +241,8 @@ class AddDebt extends Component<Props, State> {
                     underlineColorAndroid='transparent'
                     keyboardType='numeric'
                     onChangeText={amount => this.setState({ amount: this.setAmount(amount) })}
+                    ref={ref => this.textInput = ref }
+                    autoCorrect={false} 
                   />
                 </View>
               </View>
@@ -259,9 +264,7 @@ class AddDebt extends Component<Props, State> {
         animationType="slide"
         transparent={true}
         visible={shouldPickCurrency}
-        onRequestClose={() => {
-          alert('Modal has been closed.');
-        }}>
+        onRequestClose={() => this.setState({shouldPickCurrency: false})}>
         <View style={[popupStyle.modalOverlay, general.flexColumn, general.justifyEnd]}>
           <View style={{backgroundColor:'white', paddingTop:4}}>
             <SpinningPicker label={debtManagement.chooseCurrency} allItems={this.props.allCurrencies} selectedItem={currency} onPickerDone={(value) => this.handlePickerDone(value)} />

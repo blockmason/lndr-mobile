@@ -270,6 +270,7 @@ export default {
     settleTotal: `Σύνολο Διακανονισμού`,
     settleUpMemo: (D, A) => `${D === 'lend' ? 'Διακανονισμός για': 'Αίτηση διακανονισμού για'} ${A}`,
     recordSettleUpMemo: `Γίνεται διακανονισμός`,
+    balanceByCurrency: `Λεπτομέριες`,
   },
   settlementManagement: {
     bilateral: {

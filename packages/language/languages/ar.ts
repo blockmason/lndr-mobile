@@ -270,6 +270,7 @@ export default {
     settleTotal: `إجمالي مبلغ السداد`,
     settleUpMemo: (D, A) => `${D === 'lend' ? 'سداد مبلغ لـ' :  'طلب سداد مبلغ لـ'} ${A}`,
     recordSettleUpMemo: `دفع الحساب`,
+    balanceByCurrency: `تفاصيل`,
   },
   settlementManagement: {
     bilateral: {

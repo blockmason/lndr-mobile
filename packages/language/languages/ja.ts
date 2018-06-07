@@ -269,7 +269,9 @@ export default {
   for: memo => `${memo}のために`,
   settleUp: '帳消しにする',
   settleTotal: '承認する',
-  settleUpMemo: (direction, amount) => direction === 'lend' ? `${amount} を設定` : `${amount} の帳消しをリクエスト`
+  settleUpMemo: (direction, amount) => direction === 'lend' ? `${amount} を設定` : `${amount} の帳消しをリクエスト`,
+  recordSettleUpMemo: `アップセトリング`,
+  balanceByCurrency: `細部`,
 },
 
   settlementManagement: {

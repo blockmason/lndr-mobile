@@ -270,6 +270,7 @@ export default {
     settleTotal: `Abrechnen Gesamt`,
     settleUpMemo: (D, A) => `${D === 'lend'? 'Abrechnen für': 'Bitte um abrechnen für'} ${A} `,
     recordSettleUpMemo: `Abrechnen`,
+    balanceByCurrency: `Einzelheiten`,
   },
   settlementManagement: {
     bilateral: {

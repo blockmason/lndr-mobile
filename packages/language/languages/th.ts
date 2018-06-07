@@ -269,6 +269,7 @@ export default {
     settleTotal: `ยอดรวมชำระหนี้`,
     settleUpMemo: (D, A) => `${D === 'lend' ? 'ชำระหนี้เป็นจำนวน ' :  'ขอชำระหนี้เป็นจำนวน'} ${A}`,
     recordSettleUpMemo: `กำลังชำระหนี้`,
+    balanceByCurrency: `รายละเอียด`,
   },
   settlementManagement: {
     bilateral: {

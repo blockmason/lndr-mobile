@@ -8,7 +8,6 @@ import DashboardShell from 'ui/components/dashboard-shell'
 
 import Button from 'ui/components/button'
 import Loading, { LoadingContext } from 'ui/components/loading'
-import BalanceRow from 'ui/components/balance-row'
 
 import style from 'theme/friend'
 import general from 'theme/general'

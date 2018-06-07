@@ -179,7 +179,7 @@ class PendingTransactionDetail extends Component<Props, State> {
             <Text style={[style.amount, color]}>{currencyFormats(currency)(pendingTransaction.amount)}</Text>
           </View>
           {this.labelRow(pendingTransaction.memo.trim())}
-          <View style={{marginBottom: 20, width: '100%'}}>
+          <View style={{marginVertical: 20, width: '100%'}}>
           {pendingTransaction.multiTransactions === undefined ? null :
             pendingTransaction.multiTransactions.map(tx => <PendingTransactionRow user={user} key={tx.hash} pendingTransaction={tx} friend={true} onPress={() => null} />)
           }

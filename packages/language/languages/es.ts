@@ -270,6 +270,7 @@ export default {
     settleTotal: `Total Acordado`,
     settleUpMemo: (D, A) => `${D === 'lend'? 'Acordando Pago Por': 'Solicitud de Acordar Pago Por'} ${A} `,
     recordSettleUpMemo: `Pagar Deudas`,
+    balanceByCurrency: `Detalles`,
   },
   settlementManagement: {
     bilateral: {

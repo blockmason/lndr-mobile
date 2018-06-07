@@ -270,6 +270,7 @@ export default {
     settleTotal: `Skyldigt beløb`,
     settleUpMemo: (D, A) => `${ D === 'lend' ? 'Afregner' : 'Anmodning om at afregne med'} ${A}`,
     recordSettleUpMemo: `til betaling`,
+    balanceByCurrency: `Detaljer`,
   },
   settlementManagement: {
     bilateral: {

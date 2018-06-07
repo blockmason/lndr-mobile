@@ -22,6 +22,8 @@ import settlerIsMe from 'reducers/app'
 import language from 'language'
 const { debtManagement } = language
 
+let unmounting = false
+
 interface Props {
   onPress?: () => void
   pendingSettlement: PendingUnilateral | PendingBilateral
@@ -43,15 +45,20 @@ class PendingSettlementRow extends Component<Props, State> {
 
   async componentWillMount() {
     const { user, pendingSettlement } = this.props
+    unmounting = false
     let pic
 
     try {
       const addr = user.address === pendingSettlement.creditorAddress ? pendingSettlement.debtorAddress : pendingSettlement.creditorAddress
       pic = await profilePic.get(addr)
     } catch (e) {}
-    if (pic) {
+    if (!unmounting && pic) {
       this.setState({ pic })
     }
+  }
+
+  componentWillUnmount() {
+    unmounting = true
   }
   
   getTitle() {
@@ -104,7 +111,7 @@ class PendingSettlementRow extends Component<Props, State> {
       <TouchableHighlight style={style.pendingTransaction} onPress={onPress} underlayColor={white} activeOpacity={1}>
         <View style={style.pendingTransactionRow}>
           <View style={general.flexRow}>
-          {!friend ? <Image source={imageSource} style={style.pendingIcon}/> : null }
+            {!friend ? <Image source={imageSource} style={style.pendingIcon}/> : null }
             <View style={general.flexColumn}>
               {!friend ? <Text style={style.titledPending}>{this.getTitle()}</Text> : null }
               {friend ? <Text style={style.pendingMemo}>{pendingSettlement.memo}</Text> : null }

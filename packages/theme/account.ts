@@ -63,7 +63,14 @@ export default StyleSheet.create({
     display: 'flex',
     flexDirection: 'row',
     justifyContent: 'space-between',
-    alignItems: 'center'
+    alignItems: 'center',
+    borderColor: softGray,
+    borderBottomWidth: 1,
+    borderTopWidth: 1,
+    paddingLeft: s,
+    paddingRight: s,
+    paddingTop: s,
+    paddingBottom: m - xs
   },
   column: {
     display: 'flex',
@@ -103,7 +110,12 @@ export default StyleSheet.create({
   },
   header: {
     fontSize: 36,
-    fontWeight: 'bold',
+    ...bold,
+    color: black
+  },
+  subHeader: {
+    fontSize: 18,
+    ...bold,
     color: black
   },
   topText: {
@@ -117,7 +129,7 @@ export default StyleSheet.create({
   },
   title: {
     ...large,
-    fontWeight: 'bold'
+    ...bold
   },
   titledFact: {
     padding: xs,
@@ -314,7 +326,6 @@ export default StyleSheet.create({
   },
   pendingAmount: {
     ...large,
-    minWidth: 100,
     textAlign: 'right'
   },
   pendingParens: {
@@ -361,6 +372,12 @@ export default StyleSheet.create({
   },
   greenAmount: {
     color: moneyGreen
+  },
+  currencySymbol: {
+    ...large,
+    textAlign: 'left',
+    color: black,
+    width: 100
   }
 
 } as any)

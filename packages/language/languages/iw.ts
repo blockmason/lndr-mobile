@@ -270,6 +270,7 @@ export default {
     settleTotal: `להסדיר סכום כולל`,
     settleUpMemo: (D, A) => `${D === 'lend' ? 'החזרת חוב עבור' : 'בקשת החזרת חוב עבור'} ${A}`,
     recordSettleUpMemo: `החזרת חוב`,
+    balanceByCurrency: `פרטים`,
   },
   settlementManagement: {
     bilateral: {
