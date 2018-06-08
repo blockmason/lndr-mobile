@@ -112,7 +112,17 @@ class AddDebt extends Component<Props, State> {
 
   renderSelectedFriend() {
     const { friend } = this.state
-    const selectFriend = () => this.setState({ shouldSelectFriend: true })
+    const { navigation } = this.props
+    const { friendsLoaded, friends } = this.props.state
+    const selectFriend = () => {
+      if(!friendsLoaded) {
+        return
+      } else if(friends.length === 0){
+        navigation.navigate('Friends')
+      } else {
+        this.setState({ shouldSelectFriend: true })
+      }
+    }
 
     if (!friend) {
       return <Button round onPress={selectFriend} text={debtManagement.selectFriend} />
@@ -126,7 +136,7 @@ class AddDebt extends Component<Props, State> {
   }
 
   renderSelectFriend() {
-    const { friendsLoaded, friends, pendingTransactions, recentTransactions } = this.props.state
+    const { friendsLoaded, friends, recentTransactions } = this.props.state
     const { searchText } = this.state
 
     return <ScrollView style={[general.view, {paddingTop: 30}]} keyboardShouldPersistTaps='handled'>
