@@ -1,12 +1,11 @@
-import ethUtil from 'ethereumjs-util'
-import { UrbanAirship } from 'urbanairship-react-native'
-import moment from 'moment'
 import { Platform, Clipboard } from 'react-native'
+import { UrbanAirship } from 'urbanairship-react-native'
+import ethUtil from 'ethereumjs-util'
+import moment from 'moment'
 import { bufferToHex } from '../credit-protocol/lib/buffer-utils'
 
-import { longTimePeriod } from 'lndr/time'
 import Balance from 'lndr/balance'
-import User, { CreateAccountData, RecoverAccountData, LoginAccountData, UpdateAccountData } from 'lndr/user'
+import User, { CreateAccountData, RecoverAccountData, LoginAccountData } from 'lndr/user'
 import { minimumNicknameLength, minimumPinLength } from 'lndr/user'
 import Friend from 'lndr/friend'
 import PendingTransaction from 'lndr/pending-transaction'
@@ -23,8 +22,9 @@ import profilePic from 'lndr/profile-pic'
 import { getBcptBalance, transferBcpt } from 'lndr/bcpt-utils'
 import { getEtherscanTransactions } from 'lndr/etherscan'
 import { sanitizeAmount, currencyFormats } from 'lndr/format'
+import { jsonToPendingFriend, jsonToPendingTransaction, jsonToRecentTransaction, jsonToPendingUnilateral, 
+  jsonToPendingBilateral } from 'lndr/json-mapping'
 import { CreditRecord } from 'credit-protocol'
-import { jsonToPendingFriend, jsonToPendingTransaction, jsonToRecentTransaction, jsonToPendingUnilateral, jsonToPendingBilateral } from 'lndr/json-mapping'
 
 import CreditProtocol from 'credit-protocol'
 
@@ -32,9 +32,7 @@ import language from 'language'
 const { accountManagement, debtManagement, settlementManagement, copiedClipboard } = language
 
 import { ToastActionsCreators } from 'react-native-redux-toast'
-import { getUser, getStore, getUcacAddr, getEthExchange as exchangeReducer, getWeeklyEthTotal,
-calculateUcacBalances, convertCurrency, getUcacCurrency, getPrimaryCurrency } from 'reducers/app'
-import { hexToBuffer } from '../credit-protocol/lib/buffer-utils'
+import { getUser, getUcacAddr, calculateUcacBalances, convertCurrency, getPrimaryCurrency } from 'reducers/app'
 import { defaultCurrency, currencySymbols } from 'lndr/currencies'
 
 const bcrypt = require('bcryptjs')

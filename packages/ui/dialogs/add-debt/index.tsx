@@ -1,33 +1,30 @@
 import React, { Component } from 'react'
 
-import { View, ScrollView, Text, TextInput, TouchableHighlight, Image, Platform, Modal, Keyboard, KeyboardAvoidingView } from 'react-native'
+import { View, ScrollView, Text, TextInput, TouchableHighlight, Platform, Modal, Keyboard, KeyboardAvoidingView } from 'react-native'
 import { getResetAction } from 'reducers/nav'
 
 import Friend from 'lndr/friend'
-import { formatMemo, currencyFormats, amountFormat } from 'lndr/format'
-import { currencySymbols, transferLimits  } from 'lndr/currencies'
+import { formatMemo, amountFormat } from 'lndr/format'
+import { currencySymbols } from 'lndr/currencies'
 
 import Button from 'ui/components/button'
-import Checkbox from 'ui/components/checkbox'
 import Loading, { LoadingContext } from 'ui/components/loading'
 import FriendRow from 'ui/components/friend-row'
 import DashboardShell from 'ui/components/dashboard-shell'
 import InputImage from 'ui/components/images/input-image'
 import Section from 'ui/components/section'
 import SpinningPicker from 'ui/components/spinning-picker'
-import SearchFriend from 'ui/views/account/friends/search-friend'
 
 import style from 'theme/account'
 import formStyle from 'theme/form'
 import general from 'theme/general'
-import pendingStyle from 'theme/pending'
 import popupStyle from 'theme/popup'
 
 import language from 'language'
-const { debtManagement, noFriends, submit, cancel, back, nickname } = language
+const { debtManagement, noFriends, submit, nickname } = language
 
 import { getStore, pendingTransactions, recentTransactions, getAllUcacCurrencies, hasPendingTransaction, getPrimaryCurrency } from 'reducers/app'
-import { addDebt, getFriends, getRecentTransactions, hasPendingMessage } from 'actions'
+import { addDebt, getFriends, hasPendingMessage } from 'actions'
 import { connect } from 'react-redux'
 
 const loadingFriends = new LoadingContext()
@@ -112,17 +109,7 @@ class AddDebt extends Component<Props, State> {
 
   renderSelectedFriend() {
     const { friend } = this.state
-    const { navigation } = this.props
-    const { friendsLoaded, friends } = this.props.state
-    const selectFriend = () => {
-      if(!friendsLoaded) {
-        return
-      } else if(friends.length === 0){
-        navigation.navigate('Friends')
-      } else {
-        this.setState({ shouldSelectFriend: true })
-      }
-    }
+    const selectFriend = () => this.setState({ shouldSelectFriend: true })
 
     if (!friend) {
       return <Button round onPress={selectFriend} text={debtManagement.selectFriend} />
