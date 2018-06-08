@@ -43,6 +43,8 @@ const loadingContext = new LoadingContext()
 
 const { height } = Dimensions.get('window');
 
+let unmounting = false
+
 interface Props {
   navigation: any
   user: UserData
@@ -103,11 +105,17 @@ class MyAccount extends Component<Props, State> {
   }
 
   async componentDidMount() {
-    this.setState(
-      await loadingContext.wrap(
-        this.props.getAccountInformation()
-      )
+    unmounting = false
+    const accountInfo = await loadingContext.wrap(
+      this.props.getAccountInformation()
     )
+    if(!unmounting) {
+      this.setState(accountInfo)
+    }
+  }
+
+  componentWillUnmount() {
+    unmounting = true
   }
 
   handleOnCancel() {
