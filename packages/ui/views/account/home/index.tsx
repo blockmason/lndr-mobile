@@ -1,6 +1,5 @@
-// This file is over 50 lines and needs to be split up
-
 import React, { Component } from 'react'
+import { connect } from 'react-redux'
 
 import { Text, View, ScrollView, Platform, Dimensions, Image, TouchableHighlight, RefreshControl } from 'react-native'
 
@@ -8,22 +7,21 @@ import { currencyFormats } from 'lndr/format'
 import Balance from 'lndr/balance'
 
 import Button from 'ui/components/button'
-import Loading, { LoadingContext } from 'ui/components/loading'
-import Popup, { closePopup } from 'ui/components/popup'
+import { LoadingContext } from 'ui/components/loading'
 import Section from 'ui/components/section'
-
-import AddDebt from 'ui/dialogs/add-debt'
 import PendingView from 'ui/views/account/activity/pending'
+
 import { UserData } from 'lndr/user'
 import PendingTransaction from 'lndr/pending-transaction'
+import Friend from 'lndr/friend'
 
 import { isFocusingOn } from 'reducers/nav'
-import { getStore, getUser, getNeedsReviewCount, calculateBalance, calculateCounterparties, getPrimaryCurrency } from 'reducers/app'
-import { getAccountInformation, displayError, getPending, 
+import { getStore, getUser, getNeedsReviewCount, calculateBalance, calculateCounterparties,
+  getPrimaryCurrency, getFriendList } from 'reducers/app'
+import { getAccountInformation, displayError, getPending, getFriends,
   getFriendRequests, getRecentTransactions, registerChannelID } from 'actions'
-import { connect } from 'react-redux'
 import { UrbanAirship } from 'urbanairship-react-native'
-import { currencySymbols, transferLimits } from 'lndr/currencies'
+import { currencySymbols } from 'lndr/currencies'
 
 import style from 'theme/account'
 import formStyle from 'theme/form'
@@ -32,20 +30,12 @@ import { underlayColor } from 'theme/general'
 
 import language from 'language'
 const {
-  tip,
   notice,
-  totalBalance,
-  totalBalances,
-  welcome,
-  noBalances,
   noBalanceWarning,
   accountManagement,
-  owesMe,
-  iOwe,
   newTransaction,
   needsReview,
   recentTransactionsLanguage,
-  pendingTransactionsLanguage,
   seeAllActivity,
   debtManagement
 } = language
@@ -55,12 +45,13 @@ const { width } = Dimensions.get('window')
 const loadingRecentTransactions = new LoadingContext()
 const loadingPending = new LoadingContext()
 const loadingPendingFriends = new LoadingContext()
-const balances = new LoadingContext()
+const loadingFriends = new LoadingContext()
 
 interface Props {
   navigation: any
   isFocused: boolean
   getPending: () => any
+  getFriends: () => any
   getFriendRequests: () => any
   getRecentTransactions: () => any
   getAccountInformation: () => any
@@ -73,6 +64,7 @@ interface Props {
   calculateBalance: () => number
   calculateCounterparties: () => number
   primaryCurrency: string
+  friendList: Friend[]
 }
 
 interface State {
@@ -102,6 +94,7 @@ class HomeView extends Component<Props, State> {
     await loadingPending.wrap(this.props.getPending())
     await loadingPendingFriends.wrap(this.props.getFriendRequests())
     await loadingRecentTransactions.wrap(this.props.getRecentTransactions())
+    await loadingFriends.wrap(this.props.getFriends())
   }
 
   componentWillReceiveProps(nextProps) {
@@ -111,6 +104,7 @@ class HomeView extends Component<Props, State> {
   }
 
   async initializePushNotifications() {
+    const { navigation } = this.props
     UrbanAirship.getChannelId().then(channelId => {
       console.log('CHANNEL ID', channelId)
       if (channelId) {
@@ -122,7 +116,10 @@ class HomeView extends Component<Props, State> {
 
     UrbanAirship.setUserNotificationsEnabled(notificationsEnabled)
     UrbanAirship.addListener("pushReceived", (notification) => {
-      console.log('Received push: ', JSON.stringify(notification));
+      console.log('Received push: ', JSON.stringify(notification))
+    })
+    UrbanAirship.addListener("notificationResponse", (notification) => {
+      navigation.navigate('Activity')
     })
     UrbanAirship.setForegroundPresentationOptions({
       alert: true,
@@ -190,10 +187,16 @@ class HomeView extends Component<Props, State> {
     this.props.navigation.navigate('AddDebt')
   }
 
-  render() {
-    const { pendingTransactionsLoaded, pendingTransactions, accountInformation } = this.props.state
-    const { user } = this.props
+  addDebt(direction: string) {
+    const { friendList, navigation } = this.props
+    if(friendList.length === 0) {
+      navigation.navigate('Friends')
+    } else {
+      navigation.navigate('AddDebt', { direction })
+    }
+  }
 
+  render() {
     return <ScrollView style={general.view}
         refreshControl={
           <RefreshControl
@@ -208,8 +211,8 @@ class HomeView extends Component<Props, State> {
       <Section>
         <Text style={[formStyle.titleXLarge, formStyle.center, formStyle.spaceBottomS]}>{newTransaction}</Text>
         <View style={style.newTransactionButtonContainer}>
-          <Button fat round onPress={() => this.props.navigation.navigate('AddDebt', { direction: 'lend' })} text={debtManagement.iLent} style={{minWidth: width / 4 * 3}} />
-          <Button fat round dark onPress={() => this.props.navigation.navigate('AddDebt', {direction: 'borrow'})} text={debtManagement.iBorrowed} style={{minWidth: width / 4 * 3}} />
+          <Button fat round onPress={() => this.addDebt('lend')} text={debtManagement.iLent} style={{minWidth: width / 4 * 3}} />
+          <Button fat round dark onPress={() => this.addDebt('borrow')} text={debtManagement.iBorrowed} style={{minWidth: width / 4 * 3}} />
         </View>
       </Section>
       {this.renderNeedsReview()}
@@ -225,5 +228,5 @@ class HomeView extends Component<Props, State> {
 
 export default connect((state) => ({ state: getStore(state)(), user: getUser(state)(), isFocused: isFocusingOn(state)('Home'),
 needsReviewCount: getNeedsReviewCount(state), calculateBalance: calculateBalance(state), calculateCounterparties: calculateCounterparties(state),
-primaryCurrency: getPrimaryCurrency(state)() }), 
-{ getAccountInformation, displayError, getPending, getFriendRequests, getRecentTransactions, registerChannelID })(HomeView)
+primaryCurrency: getPrimaryCurrency(state)(), friendList: getFriendList(state)() }), 
+{ getAccountInformation, displayError, getPending, getFriendRequests, getRecentTransactions, getFriends, registerChannelID })(HomeView)
