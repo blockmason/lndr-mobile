@@ -29,7 +29,6 @@ const {
 const createAccountText = language.createAccount
 
 import style from 'theme/form'
-import general from 'theme/general'
 
 const loadingContext = new LoadingContext()
 
@@ -152,7 +151,7 @@ class CreateAccountForm extends Component<Props, State> {
       </View>
     } else {
       const vertOffset = (Platform.OS === 'android') ? -300 : 0;
-      return (<ScrollView>
+      return (<ScrollView keyboardShouldPersistTaps="always">
         <View style={style.form}>
           <KeyboardAvoidingView behavior={Platform.OS === 'ios' ? 'position' : 'padding'} keyboardVerticalOffset={vertOffset} >
             <ThemeImage name='logo' size={0.4} />

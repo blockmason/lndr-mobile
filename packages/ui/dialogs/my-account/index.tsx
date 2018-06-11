@@ -445,6 +445,6 @@ class MyAccount extends Component<Props, State> {
 }
 
 export default connect((state) => ({ user: getUser(state)(), state: getStore(state)(), allCurrencies: getAllUcacCurrencies(state),
-  primaryCurrency: getPrimaryCurrency(state)()}), { updateEmail, updateNickname,
+  primaryCurrency: getPrimaryCurrency(state)}), { updateEmail, updateNickname,
   getAccountInformation, logoutAccount, toggleNotifications, setEthBalance, updateLockTimeout, updatePin,
   getProfilePic, setProfilePic, copyToClipboard, setPrimaryCurrency })(MyAccount)

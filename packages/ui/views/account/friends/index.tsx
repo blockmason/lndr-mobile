@@ -155,4 +155,4 @@ class FriendsView extends Component<Props, State> {
 
 export default connect((state) => ({ state: getStore(state)(), isFocused: isFocusingOn(state)('Friends'), 
 pendingTransactions: pendingTransactions(state), recentTransactions: recentTransactions(state), 
-primaryCurrency: getPrimaryCurrency(state)() }), { getFriends, getRecentTransactions, addFriend })(FriendsView)
+primaryCurrency: getPrimaryCurrency(state) }), { getFriends, getRecentTransactions, addFriend })(FriendsView)

@@ -90,7 +90,7 @@ class FriendRequest extends Component<Props, State> {
         <Loading context={loadingContext} />
         <Button close onPress={() => this.props.navigation.goBack(null)} />
       </View>
-        <ScrollView style={general.view}>
+        <ScrollView style={general.view} keyboardShouldPersistTaps="always">
         <View style={general.centeredColumn}>
           <Image source={imageSource} style={pendingStyle.image}/>
           <Text style={pendingStyle.title}>{pendingFriendRequestsLanguage.request(friend.nickname)}</Text>

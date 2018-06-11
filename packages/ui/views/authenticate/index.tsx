@@ -27,7 +27,7 @@ class AuthenticateView extends Component<Props> {
   render() {
     const { hasStoredUser, shouldRemoveAccount, shouldDisplayMnemonic } = this.props.state
 
-    return <ScrollView contentContainerStyle={general.whiteFlex}>
+    return <ScrollView contentContainerStyle={general.whiteFlex} keyboardShouldPersistTaps="always">
       <FadeInView style={style.main}>
         {this.renderView()}
         {this.renderLoadingView()}

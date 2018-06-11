@@ -21,7 +21,7 @@ export default class PrivacyPolicyView extends Component<Props> {
     const { onVerify } = this.props
 
     return <View style={style.topView}>
-      <ScrollView>
+      <ScrollView keyboardShouldPersistTaps="always">
         <ThemeImage size={largeImage} name='logo'/>
         <Text style={[style.smallText, style.topSpacing]}>{privacyPolicy.message}</Text>
         <Text style={style.link} onPress={() => Linking.openURL('https://lndr.io/terms/')}>

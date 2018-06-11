@@ -231,7 +231,7 @@ class PendingSettlementDetail extends Component<Props, State> {
         <DashboardShell text={pendingSettlementsLanguage.shell} navigation={this.props.navigation} />
         <Button close onPress={() => this.props.navigation.goBack()} />
       </View>
-      <ScrollView style={general.whiteFlex}>
+      <ScrollView style={general.whiteFlex} keyboardShouldPersistTaps="always">
         <View style={[general.centeredColumn, general.standardHMargin]}>
           <Image source={require('images/person-outline-dark.png')} style={style.image}/>
           <Text style={[style.title, {alignSelf: 'center', textAlign: 'center'}]}>{this.getTitle()}</Text>
@@ -260,4 +260,4 @@ class PendingSettlementDetail extends Component<Props, State> {
 
 export default connect((state) => ({ user: getUser(state)(), settlerIsMe: settlerIsMe(state), ethExchange: getEthExchange(state), 
   ethSentPastWeek: getWeeklyEthTotal(state), calculateBalance: calculateBalance(state), getUcacCurrency: getUcacCurrency(state),
-  primaryCurrency: getPrimaryCurrency(state)() }), { settleUp, rejectPendingSettlement })(PendingSettlementDetail)
+  primaryCurrency: getPrimaryCurrency(state) }), { settleUp, rejectPendingSettlement })(PendingSettlementDetail)

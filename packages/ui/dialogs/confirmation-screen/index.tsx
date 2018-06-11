@@ -52,7 +52,7 @@ export default class ConfirmationScreen extends Component<Props> {
         <DashboardShell text={confirmation.shell} navigation={this.props.navigation} />
         <Button close onPress={() => this.goHome()} />
       </View>
-      <ScrollView style={[general.whiteFlex]} keyboardShouldPersistTaps='handled'>
+      <ScrollView style={[general.whiteFlex]} keyboardShouldPersistTaps="always">
         <View style={[general.centeredColumn, general.standardHMargin]}>
           {this.getConfirmationImage(type)}
           <Text style={style.text}>

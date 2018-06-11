@@ -192,4 +192,4 @@ class TransferEth extends Component<Props, State> {
 }
 
 export default connect((state) => ({ user: getUser(state)(), ethBalance: getEthBalance(state), ethExchange: getEthExchange(state),
-  ethSentPastWeek: getWeeklyEthTotal(state), primaryCurrency: getPrimaryCurrency(state)() }), { sendEth })(TransferEth)
+  ethSentPastWeek: getWeeklyEthTotal(state), primaryCurrency: getPrimaryCurrency(state) }), { sendEth })(TransferEth)
