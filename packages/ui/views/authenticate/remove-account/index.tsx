@@ -28,7 +28,7 @@ interface Props {
 class RemoveAccountView extends Component<Props> {
   render() {
     return (
-      <ScrollView>
+      <ScrollView keyboardShouldPersistTaps="always">
         <View style={style.form}>
           <ThemeImage name='logo' size={0.4} />
           <Text style={[style.header, style.center, style.spaceTop]}>{removeAccountTitle}</Text>

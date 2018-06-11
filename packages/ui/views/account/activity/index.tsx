@@ -49,7 +49,7 @@ class ActivityView extends Component<Props, State> {
 
     render() {
         return (
-            <ScrollView style={general.view}
+            <ScrollView style={general.view} keyboardShouldPersistTaps="always"
               refreshControl={
                 <RefreshControl
                   refreshing={this.state.refreshing}

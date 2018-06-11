@@ -21,14 +21,14 @@ export default class BalanceRow extends Component<Props> {
     const { amount, currency } = this.props
 
     if (amount < 0) {
-      return <Text style={[style.pendingAmount, style.redAmount]}>{`-${currencyFormats(currency)(amount)}`}</Text>
+      return <Text style={[style.pendingAmount, style.redAmount]}>{currencyFormats(currency)(amount)}</Text>
     } else {
-      return <Text style={[style.pendingAmount, style.greenAmount]}>{`+${currencyFormats(currency)(amount)}`}</Text>
+      return <Text style={[style.pendingAmount, style.greenAmount]}>{currencyFormats(currency)(amount)}</Text>
     }
   }
 
   render() {
-    const { onPress, amount, currency } = this.props
+    const { currency } = this.props
 
     return (
       <View style={style.pendingTransactionRow}>

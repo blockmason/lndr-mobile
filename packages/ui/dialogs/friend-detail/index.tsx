@@ -1,8 +1,7 @@
 import React, { Component } from 'react'
 
-import { Text, TextInput, TouchableHighlight, View, Image, ScrollView } from 'react-native'
+import { Text, View, Image, ScrollView } from 'react-native'
 
-import { debounce } from 'lndr/time'
 import Balance from 'lndr/balance'
 import Friend from 'lndr/friend'
 import { UserData } from 'lndr/user'
@@ -11,11 +10,11 @@ import profilePic from 'lndr/profile-pic'
 import PendingView from 'ui/views/account/activity/pending'
 import RecentView from 'ui/views/account/activity/recent'
 import DashboardShell from 'ui/components/dashboard-shell'
-import { currencySymbols, transferLimits  } from 'lndr/currencies'
+import { currencySymbols } from 'lndr/currencies'
 
 import Button from 'ui/components/button'
 import Loading, { LoadingContext } from 'ui/components/loading'
-import BalanceRow from 'ui/components/balance-row'
+import BalanceSection from 'ui/components/balance-section'
 
 import style from 'theme/friend'
 import general from 'theme/general'
@@ -24,11 +23,7 @@ import accountStyle from 'theme/account'
 
 import language from 'language'
 const {
-  cancel,
-  back,
-  friendInfo,
   friendShell,
-  noBalances,
   debtManagement,
   pendingTransactionsLanguage,
   recentTransactionsLanguage
@@ -36,7 +31,7 @@ const {
 const removeFriendText = language.removeFriend
 
 import { getUser, pendingTransactions, recentTransactions, convertCurrency, calculateBalance, 
-  calculateUcacBalances, getPrimaryCurrency } from 'reducers/app'
+  getPrimaryCurrency } from 'reducers/app'
 import { getTwoPartyBalance, removeFriend } from 'actions'
 import { connect } from 'react-redux'
 
@@ -50,7 +45,6 @@ interface Props {
   navigation: any
   calculateBalance: (friend: Friend) => number
   getTwoPartyBalance: (user, friend) => Balance
-  calculateUcacBalances: (friendAddr: string) => object
   primaryCurrency: string
 }
 
@@ -126,13 +120,9 @@ class RemoveFriend extends Component<Props, State> {
 
   render() {
     const friend = this.props.navigation ? this.props.navigation.state.params.friend : {}
-    const { navigation, primaryCurrency, calculateUcacBalances } = this.props
+    const { navigation, primaryCurrency } = this.props
     const { pic } = this.state
     const imageSource = pic ? { uri: pic } : require('images/person-outline-dark.png')
-    const ucacBalances = calculateUcacBalances(friend.address)
-    const hasNoBalance = Object.keys(ucacBalances).length === 0
-
-    console.log(ucacBalances)
 
     return <View style={general.whiteFlex}>
       <View style={general.view}>
@@ -140,7 +130,7 @@ class RemoveFriend extends Component<Props, State> {
         <Loading context={loadingContext} />
         <Button close onPress={() => this.props.navigation.goBack(null)} />
       </View>
-      <ScrollView style={general.view} keyboardShouldPersistTaps='handled'>
+      <ScrollView style={general.view}  keyboardShouldPersistTaps="always">
         <View style={general.centeredColumn}>
           <Image source={imageSource} style={pendingStyle.image}/>
           <Text style={pendingStyle.title}>{`@${friend.nickname}`}</Text>
@@ -150,8 +140,7 @@ class RemoveFriend extends Component<Props, State> {
             <Text style={[pendingStyle.amount]}>{currencyFormats(primaryCurrency)(this.getRecentTotal())}</Text>
           </View>
           <View style={[general.centeredColumn, {marginBottom: 10}]}>
-            {hasNoBalance ? null : <Text style={[style.title, {marginBottom: 3}]}>{debtManagement.balanceByCurrency}</Text> }
-            {hasNoBalance ? null : Object.keys(ucacBalances).map( ucac => <BalanceRow key={ucac} amount={ucacBalances[ucac]} currency={ucac} /> )}
+            <BalanceSection friend={friend} />
           </View>
           {this.getRecentTotal() === 0 ? null : <Button round large fat wide onPress={() => this.props.navigation.navigate('SettleUp', { friend: friend })} text={debtManagement.settleUp} containerStyle={style.spaceBottom} />}
           {this.getTransactionNumber() === 0 ? <Button round large danger wide onPress={() => this.removeFriend(friend)} text={removeFriendText} containerStyle={style.spaceBottom} /> : null }
@@ -169,5 +158,5 @@ class RemoveFriend extends Component<Props, State> {
 
 export default connect((state) => ({ user: getUser(state)(), pendingTransactions: pendingTransactions(state), getTwoPartyBalance: getTwoPartyBalance(state),
   recentTransactions: recentTransactions(state), calculateBalance: calculateBalance(state), convertCurrency: convertCurrency(state), 
-  calculateUcacBalances: calculateUcacBalances(state), primaryCurrency: getPrimaryCurrency(state)() }),
+  primaryCurrency: getPrimaryCurrency(state)() }),
   { removeFriend })(RemoveFriend)

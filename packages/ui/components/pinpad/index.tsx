@@ -45,7 +45,7 @@ export default class Pinpad extends Component<Props> {
   render() {
     const { onNumPress, onBackspace, headerText } = this.props
 
-    return <ScrollView>
+    return <ScrollView keyboardShouldPersistTaps="always">
       <View style={[general.centeredColumn, general.iosTopMargin, {marginBottom: 10}]}>
         <TextLogo name='black'/>
       </View>

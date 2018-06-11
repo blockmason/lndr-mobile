@@ -17,7 +17,7 @@ import Friend from 'lndr/friend'
 
 import { isFocusingOn } from 'reducers/nav'
 import { getStore, getUser, getNeedsReviewCount, calculateBalance, calculateCounterparties,
-  getPrimaryCurrency, getFriendList } from 'reducers/app'
+  getPrimaryCurrency, getFriendList, getPendingFromFriend } from 'reducers/app'
 import { getAccountInformation, displayError, getPending, getFriends,
   getFriendRequests, getRecentTransactions, registerChannelID } from 'actions'
 import { UrbanAirship } from 'urbanairship-react-native'
@@ -65,6 +65,7 @@ interface Props {
   calculateCounterparties: () => number
   primaryCurrency: string
   friendList: Friend[]
+  getPendingFromFriend: (friendNickname: string) => any
 }
 
 interface State {
@@ -115,11 +116,28 @@ class HomeView extends Component<Props, State> {
     const { notificationsEnabled } = this.props.state
 
     UrbanAirship.setUserNotificationsEnabled(notificationsEnabled)
-    UrbanAirship.addListener("pushReceived", (notification) => {
+    UrbanAirship.addListener("pushReceived", async(notification) => {
       console.log('Received push: ', JSON.stringify(notification))
+      await loadingPending.wrap(this.props.getPending())
     })
-    UrbanAirship.addListener("notificationResponse", (notification) => {
-      navigation.navigate('Activity')
+    UrbanAirship.addListener("notificationResponse", async(incoming) => {
+      console.log('CLICKED PUSH NOTIFICATION', incoming)
+      const { getPendingFromFriend } = this.props
+      try{
+        const actions = JSON.parse(incoming.notification.extras['com.urbanairship.actions'])
+        const type = actions.type
+        const nick = actions.user
+        if(type === 'NewPendingCredit') {
+          const { route, pendingTransaction, pendingSettlement } = getPendingFromFriend(nick)
+          if(pendingTransaction !== undefined && pendingSettlement !== undefined) {
+            navigation.navigate(route, { pendingTransaction, pendingSettlement })
+          }
+        } else {
+          navigation.navigate('Activity')
+        }
+      } catch(e) {
+        navigation.navigate('Activity')
+      }
     })
     UrbanAirship.setForegroundPresentationOptions({
       alert: true,
@@ -197,7 +215,7 @@ class HomeView extends Component<Props, State> {
   }
 
   render() {
-    return <ScrollView style={general.view}
+    return <ScrollView style={general.view} keyboardShouldPersistTaps="always"
         refreshControl={
           <RefreshControl
             refreshing={this.state.refreshing}
@@ -228,5 +246,5 @@ class HomeView extends Component<Props, State> {
 
 export default connect((state) => ({ state: getStore(state)(), user: getUser(state)(), isFocused: isFocusingOn(state)('Home'),
 needsReviewCount: getNeedsReviewCount(state), calculateBalance: calculateBalance(state), calculateCounterparties: calculateCounterparties(state),
-primaryCurrency: getPrimaryCurrency(state)(), friendList: getFriendList(state)() }), 
+primaryCurrency: getPrimaryCurrency(state)(), friendList: getFriendList(state)(), getPendingFromFriend: getPendingFromFriend(state) }), 
 { getAccountInformation, displayError, getPending, getFriendRequests, getRecentTransactions, getFriends, registerChannelID })(HomeView)

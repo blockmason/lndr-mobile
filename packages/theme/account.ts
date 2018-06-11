@@ -64,6 +64,7 @@ export default StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
+    width: '80%',
     borderColor: softGray,
     borderBottomWidth: 1,
     borderTopWidth: 1,
@@ -378,6 +379,12 @@ export default StyleSheet.create({
     textAlign: 'left',
     color: black,
     width: 100
+  },
+  balanceSectionTitle: {
+    ...large,
+    ...bold,
+    marginBottom: 3,
+    color: black
   }
 
 } as any)

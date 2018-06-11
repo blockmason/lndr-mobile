@@ -328,7 +328,7 @@ export default {
       lend: (nickname, amount) => `@${nickname} owes you ${amount}`,
       borrow: (nickname, amount) => `You owe @${nickname} ${amount}`
     },
-    balance: `Balance `,
+    balance: `Consolidated Balance `,
     friends: (friends) => `(from ${friends} ${friends === 1 ? 'friend' :'friends'})`,
   },
 

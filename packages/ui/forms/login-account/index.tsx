@@ -76,7 +76,7 @@ export default class LoginAccountForm extends Component<Props, State> {
     const { onRemoveAccount } = this.props
     const { confirmPassword } = this.state
 
-    return <ScrollView>
+    return <ScrollView keyboardShouldPersistTaps="always">
       <View style={[style.form, general.centeredColumn]}>
         <Pinpad onNumPress={(pin) => this.enterPin(pin)} onBackspace={() => this.clearPin()} pin={confirmPassword} headerText={enterPin} />
         <Button alternate small arrow onPress={() => onRemoveAccount()} style={style.submitButton}  containerStyle={general.spaceBelow} text={removeAccount} />

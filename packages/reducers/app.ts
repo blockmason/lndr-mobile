@@ -195,3 +195,15 @@ export const calculateUcacBalances = (state) => (friendAddress: string) : Object
 export const getPrimaryCurrency = (state) => () : string => state.store.primaryCurrency
 
 export const getFriendList = (state) => () : object[] => state.store.friends
+
+export const getPendingFromFriend = (state) => (nick: string) => {
+  const friend = state.store.friends.filter(fr => fr.nickname === nick)[0]
+  if(friend) {
+    const pendingTransaction = state.store.pendingTransactions.filter(tx => tx.creditorAddress === friend.address || tx.debtorAddress === friend.address)[0]
+    const pendingSettlement = state.store.pendingSettlements.filter(stmt => stmt.creditorAddress === friend.address || stmt.debtorAddress === friend.address)[0]
+    const route = pendingSettlement ? 'PendingSettlement' : 'PendingTransaction'
+    return { route, pendingTransaction, pendingSettlement }
+  } else {
+    return {}
+  }
+}

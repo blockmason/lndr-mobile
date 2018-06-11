@@ -148,11 +148,11 @@ class RecoverAccountForm extends Component<Props, State> {
       </View>
     } else {
       const vertOffset = (Platform.OS === 'android') ? -300 : 0;
-      return <ScrollView>
+      return <ScrollView keyboardShouldPersistTaps="always">
         <View style={style.form}>
+          <ThemeImage name='logo' size={0.4} />
+          <Text style={[style.text, style.spaceBottom]}>{recoverExistingAccount}</Text>
           <KeyboardAvoidingView behavior={Platform.OS === 'ios' ? 'position' : 'padding'} keyboardVerticalOffset={vertOffset} >
-            <ThemeImage name='logo' size={0.4} />
-            <Text style={[style.text, style.spaceBottom]}>{recoverExistingAccount}</Text>
             <View style={style.textInputContainer}>
               <TextInput
                 multiline
@@ -164,10 +164,10 @@ class RecoverAccountForm extends Component<Props, State> {
                 onBlur={(): void => this.checkMnemonicLength()}
               />
             </View>
-            { mnemonicLengthError && <Text style={style.warningText}>{mnemonicLengthError}</Text> }
-            <Button round fat style={style.submitButton} onPress={() => this.setPIN()} text={recoverAccount} />
-            <Button alternate small arrow style={style.submitButton} onPress={() => this.cancel()} text={cancel} />
           </KeyboardAvoidingView>
+          { mnemonicLengthError && <Text style={style.warningText}>{mnemonicLengthError}</Text> }
+          <Button round fat style={style.submitButton} onPress={() => this.setPIN()} text={recoverAccount} />
+          <Button alternate small arrow style={style.submitButton} onPress={() => this.cancel()} text={cancel} />
         </View>
       </ScrollView>
     }

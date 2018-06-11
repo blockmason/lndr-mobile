@@ -62,7 +62,7 @@ export default class Slideshow extends Component<Props> {
     <View style={style.slideContent}>
       <AndroidStatusBar hidden/>
       <View style={ [ { width }, style.slideHeight ] }>
-        <ScrollView
+        <ScrollView keyboardShouldPersistTaps="always"
           horizontal={true}
           pagingEnabled={true}
           showsHorizontalScrollIndicator={false}

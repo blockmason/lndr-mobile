@@ -170,7 +170,7 @@ class PendingTransactionDetail extends Component<Props, State> {
         <DashboardShell text={pendingTransactionsLanguage.shell} navigation={this.props.navigation} />
         <Button close onPress={() => this.props.navigation.goBack()} />
       </View>
-      <ScrollView style={general.whiteFlex}>
+      <ScrollView style={general.whiteFlex} keyboardShouldPersistTaps="always">
         <View style={general.centeredColumn}>
           <Image source={imageSource} style={style.image}/>
           <Text style={[style.title, color]}>{this.getTitle()}</Text>

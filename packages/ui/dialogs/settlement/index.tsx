@@ -4,7 +4,6 @@ import { Text, TextInput, TouchableHighlight, View, Image, ScrollView, KeyboardA
 import { getResetAction } from 'reducers/nav'
 
 import { UserData } from 'lndr/user'
-import { debounce } from 'lndr/time'
 import { currencyFormats, amountFormat, sanitizeAmount } from 'lndr/format'
 import Friend from 'lndr/friend'
 import { currencySymbols, transferLimits, hasNoDecimals } from 'lndr/currencies'
@@ -13,7 +12,7 @@ import profilePic from 'lndr/profile-pic'
 import Button from 'ui/components/button'
 import Loading, { LoadingContext } from 'ui/components/loading'
 import DashboardShell from 'ui/components/dashboard-shell'
-import RecentView from 'ui/views/account/activity/recent'
+import BalanceSection from 'ui/components/balance-section'
 
 import style from 'theme/friend'
 import formStyle from 'theme/form'
@@ -22,9 +21,6 @@ import accountStyle from 'theme/account'
 
 import language from 'language'
 const {
-  back,
-  cancel,
-  pendingTransactionsLanguage,
   debtManagement,
   accountManagement
 } = language
@@ -33,7 +29,6 @@ import { getUser, recentTransactions, getEthBalance, getEthExchange, getWeeklyEt
   hasPendingTransaction, calculateBalance, getUcacCurrency, getPrimaryCurrency } from 'reducers/app'
 import { settleUp, addDebt, getEthTxCost } from 'actions'
 import { connect } from 'react-redux'
-import { addNavigationHelpers } from 'react-navigation';
 
 const submittingTransaction = new LoadingContext()
 
@@ -234,7 +229,7 @@ class Settlement extends Component<Props, State> {
 
   render() {
     const { amount, balance, txCost, formInputError, pic } = this.state
-    const { recentTransactions, ethBalance, ethExchange, ethSentPastWeek, getUcacCurrency, primaryCurrency } = this.props
+    const { ethBalance, ethExchange, ethSentPastWeek, primaryCurrency } = this.props
     const ethSettlement = this.props.navigation ? this.props.navigation.state.params.ethSettlement : false
     const friend = this.props.navigation ? this.props.navigation.state.params.friend : {}
     const imageSource = pic ? { uri: pic } : require('images/person-outline-dark.png')
@@ -252,16 +247,7 @@ class Settlement extends Component<Props, State> {
             <Image source={imageSource} style={style.settleImage}/>
             <Text style={[style.header, {marginBottom: 20, marginHorizontal: 20, textAlign: 'center'}]}>{this.displayMessage()}</Text>
             <View style={style.transactions}>
-              {
-                recentTransactions.map( (transaction, index) => {
-                  const txCurrency = getUcacCurrency(transaction.ucac)
-                  return (transaction.creditorAddress === friend.address || transaction.debtorAddress === friend.address) ?
-                    <View style={style.recent} key={friend.address + index}>
-                      <Text style={style.recentText}>{transaction.memo}</Text>
-                      <Text style={style.recentText}>{ (transaction.creditorAddress === friend.address ? '-' : '+') + `${currencySymbols(txCurrency)}${currencyFormats(txCurrency)(transaction.amount)}`}</Text>
-                    </View> : null
-                })
-              }
+              <BalanceSection friend={friend} />
               <View style={[general.betweenRow, style.totalRow]} >
                 <Text style={style.total}>{debtManagement.total}</Text>
                 <Text style={style.totalAmount}>{this.displayTotal(balance)}</Text>
