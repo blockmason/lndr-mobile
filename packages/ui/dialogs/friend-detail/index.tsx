@@ -158,5 +158,5 @@ class RemoveFriend extends Component<Props, State> {
 
 export default connect((state) => ({ user: getUser(state)(), pendingTransactions: pendingTransactions(state), getTwoPartyBalance: getTwoPartyBalance(state),
   recentTransactions: recentTransactions(state), calculateBalance: calculateBalance(state), convertCurrency: convertCurrency(state), 
-  primaryCurrency: getPrimaryCurrency(state)() }),
+  primaryCurrency: getPrimaryCurrency(state) }),
   { removeFriend })(RemoveFriend)

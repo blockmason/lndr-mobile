@@ -111,7 +111,7 @@ export const getEthPrices = (state) : object => state.store.ethPrices
 export const getBcptBalance = (state) : string => state.store.bcptBalance
 
 export const convertCurrency = (state) => (fromUcac: string, amount: number) : number => {
-  const primaryCurrency = getPrimaryCurrency(state)()
+  const primaryCurrency = getPrimaryCurrency(state)
   let fromExchange = Number(getEthExchange(state)(getUcacCurrency(state)(fromUcac)))
   fromExchange = hasNoDecimals(getUcacCurrency(state)(fromUcac)) ? fromExchange : fromExchange * 100
   let toExchange = Number(getEthExchange(state)(primaryCurrency.toLowerCase()))
@@ -192,15 +192,15 @@ export const calculateUcacBalances = (state) => (friendAddress: string) : Object
   return ucacBalances
 }
 
-export const getPrimaryCurrency = (state) => () : string => state.store.primaryCurrency
+export const getPrimaryCurrency = (state) : string => state.store.primaryCurrency
 
 export const getFriendList = (state) => () : object[] => state.store.friends
 
 export const getPendingFromFriend = (state) => (nick: string) => {
-  const friend = state.store.friends.filter(fr => fr.nickname === nick)[0]
+  const friend = state.store.friends.find(fr => fr.nickname === nick)
   if(friend) {
-    const pendingTransaction = state.store.pendingTransactions.filter(tx => tx.creditorAddress === friend.address || tx.debtorAddress === friend.address)[0]
-    const pendingSettlement = state.store.pendingSettlements.filter(stmt => stmt.creditorAddress === friend.address || stmt.debtorAddress === friend.address)[0]
+    const pendingTransaction = state.store.pendingTransactions.find(tx => tx.creditorAddress === friend.address || tx.debtorAddress === friend.address)
+    const pendingSettlement = state.store.pendingSettlements.find(stmt => stmt.creditorAddress === friend.address || stmt.debtorAddress === friend.address)
     const route = pendingSettlement ? 'PendingSettlement' : 'PendingTransaction'
     return { route, pendingTransaction, pendingSettlement }
   } else {

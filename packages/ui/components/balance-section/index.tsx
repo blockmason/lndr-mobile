@@ -29,7 +29,6 @@ class BalanceSection extends Component<Props> {
     const { friend, calculateUcacBalances } = this.props
     const ucacBalances = calculateUcacBalances(friend.address)
     const hasNoBalance = Object.keys(ucacBalances).length === 0
-    console.log(friend, ucacBalances)
 
     return (
       <View style={general.centeredColumn}>

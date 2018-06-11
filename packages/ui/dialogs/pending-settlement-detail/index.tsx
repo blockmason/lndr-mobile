@@ -260,4 +260,4 @@ class PendingSettlementDetail extends Component<Props, State> {
 
 export default connect((state) => ({ user: getUser(state)(), settlerIsMe: settlerIsMe(state), ethExchange: getEthExchange(state), 
   ethSentPastWeek: getWeeklyEthTotal(state), calculateBalance: calculateBalance(state), getUcacCurrency: getUcacCurrency(state),
-  primaryCurrency: getPrimaryCurrency(state)() }), { settleUp, rejectPendingSettlement })(PendingSettlementDetail)
+  primaryCurrency: getPrimaryCurrency(state) }), { settleUp, rejectPendingSettlement })(PendingSettlementDetail)

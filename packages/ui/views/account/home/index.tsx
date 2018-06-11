@@ -17,7 +17,7 @@ import Friend from 'lndr/friend'
 
 import { isFocusingOn } from 'reducers/nav'
 import { getStore, getUser, getNeedsReviewCount, calculateBalance, calculateCounterparties,
-  getPrimaryCurrency, getFriendList, getPendingFromFriend } from 'reducers/app'
+  getPrimaryCurrency, getFriendList, getPendingFromFriend, getEthExchange } from 'reducers/app'
 import { getAccountInformation, displayError, getPending, getFriends,
   getFriendRequests, getRecentTransactions, registerChannelID } from 'actions'
 import { UrbanAirship } from 'urbanairship-react-native'
@@ -66,6 +66,7 @@ interface Props {
   primaryCurrency: string
   friendList: Friend[]
   getPendingFromFriend: (friendNickname: string) => any
+  ethExchange: (currency: string) => string
 }
 
 interface State {
@@ -121,7 +122,6 @@ class HomeView extends Component<Props, State> {
       await loadingPending.wrap(this.props.getPending())
     })
     UrbanAirship.addListener("notificationResponse", async(incoming) => {
-      console.log('CLICKED PUSH NOTIFICATION', incoming)
       const { getPendingFromFriend } = this.props
       try{
         const actions = JSON.parse(incoming.notification.extras['com.urbanairship.actions'])
@@ -161,8 +161,8 @@ class HomeView extends Component<Props, State> {
   }
 
   renderBalanceInformation() {
-    const { recentTransactionsLoaded, ethBalance = '0', ethExchange = '700' } = this.props.state
-    const { calculateBalance, calculateCounterparties, primaryCurrency } = this.props
+    const { calculateBalance, calculateCounterparties, primaryCurrency, ethExchange } = this.props
+    const { recentTransactionsLoaded, ethBalance } = this.props.state
 
     if (!recentTransactionsLoaded) {
       return
@@ -194,7 +194,7 @@ class HomeView extends Component<Props, State> {
       <View style={[style.balanceRow, {marginTop: 10}]}>
         <Text style={[style.balance, {marginLeft: '2%'}]}>{accountManagement.ethBalance.display(ethBalance)}</Text>
         <Button alternate blackText narrow arrow small onPress={() => {this.props.navigation.navigate('MyAccount')}}
-          text={accountManagement.ethBalance.inFiat(ethBalance, ethExchange, primaryCurrency)}
+          text={accountManagement.ethBalance.inFiat(ethBalance, ethExchange(primaryCurrency), primaryCurrency)}
           containerStyle={{marginTop: -6}}
         />
       </View>
@@ -246,5 +246,6 @@ class HomeView extends Component<Props, State> {
 
 export default connect((state) => ({ state: getStore(state)(), user: getUser(state)(), isFocused: isFocusingOn(state)('Home'),
 needsReviewCount: getNeedsReviewCount(state), calculateBalance: calculateBalance(state), calculateCounterparties: calculateCounterparties(state),
-primaryCurrency: getPrimaryCurrency(state)(), friendList: getFriendList(state)(), getPendingFromFriend: getPendingFromFriend(state) }), 
+primaryCurrency: getPrimaryCurrency(state), friendList: getFriendList(state)(), getPendingFromFriend: getPendingFromFriend(state),
+ethExchange: getEthExchange(state) }), 
 { getAccountInformation, displayError, getPending, getFriendRequests, getRecentTransactions, getFriends, registerChannelID })(HomeView)

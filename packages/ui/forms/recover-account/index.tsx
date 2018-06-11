@@ -140,11 +140,11 @@ class RecoverAccountForm extends Component<Props, State> {
       </View>
     } else if (step === 3) {
       return <View style={style.form}>
-        <Pinpad onNumPress={(pin) => this.confirmPin(pin)} onBackspace={() => this.clearConfirmPin()} pin={confirmPassword} headerText={confirmPin} />
+        <Pinpad onNumPress={(pin) => this.confirmPin(pin)} onBackspace={this.clearConfirmPin.bind(this)} pin={confirmPassword} headerText={confirmPin} />
       </View>
     } else if (step === 2) {
       return <View style={style.form}>
-        <Pinpad onNumPress={(pin) => this.enterPin(pin)} onBackspace={() => this.clearPin()} pin={password} headerText={enterNewPin} />
+        <Pinpad onNumPress={(pin) => this.enterPin(pin)} onBackspace={this.clearPin.bind(this)} pin={password} headerText={enterNewPin} />
       </View>
     } else {
       const vertOffset = (Platform.OS === 'android') ? -300 : 0;
@@ -166,8 +166,8 @@ class RecoverAccountForm extends Component<Props, State> {
             </View>
           </KeyboardAvoidingView>
           { mnemonicLengthError && <Text style={style.warningText}>{mnemonicLengthError}</Text> }
-          <Button round fat style={style.submitButton} onPress={() => this.setPIN()} text={recoverAccount} />
-          <Button alternate small arrow style={style.submitButton} onPress={() => this.cancel()} text={cancel} />
+          <Button round fat style={style.submitButton} onPress={this.setPIN.bind(this)} text={recoverAccount} />
+          <Button alternate small arrow style={style.submitButton} onPress={this.cancel.bind(this)} text={cancel} />
         </View>
       </ScrollView>
     }

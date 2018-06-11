@@ -131,4 +131,4 @@ class FriendRow extends Component<Props, State> {
   }
 }
 
-export default connect((state) => ({ calculateBalance: calculateBalance(state), primaryCurrency: getPrimaryCurrency(state)(), convertCurrency: convertCurrency(state) }))(FriendRow)
+export default connect((state) => ({ calculateBalance: calculateBalance(state), primaryCurrency: getPrimaryCurrency(state), convertCurrency: convertCurrency(state) }))(FriendRow)

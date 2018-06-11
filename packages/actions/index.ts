@@ -276,7 +276,7 @@ export async function getNicknameForAddress(address) {
 //Not a redux action
 export const getTwoPartyBalance = (state) => async(user: User, friend: Friend) => {
   const { address } = user
-  const amount = await creditProtocol.getBalanceBetween(address, friend.address, getPrimaryCurrency(state)())
+  const amount = await creditProtocol.getBalanceBetween(address, friend.address, getPrimaryCurrency(state))
   return new Balance({ relativeToNickname: friend.nickname, relativeTo: friend.address, amount: amount })
 }
 
@@ -294,7 +294,7 @@ export const getAccountInformation = () => {
     
     const accountInformation: { nickname?: string, email?: string, balance?: number } = { nickname, email }
     try {
-      accountInformation.balance = await creditProtocol.getBalance(address, getPrimaryCurrency(getState())())
+      accountInformation.balance = await creditProtocol.getBalance(address, getPrimaryCurrency(getState()))
     }
     catch (e) {}
     dispatch(setState({ accountInformation }))
@@ -1145,7 +1145,7 @@ const filterMultiTransactions = (address: string, pending: any, state: Object) =
   })
 
   //make a new transaction/settlement for display purposes
-  const primaryCurrency = getPrimaryCurrency(state)()
+  const primaryCurrency = getPrimaryCurrency(state)
   for(let tx in txs) {
     const balance = txs[tx].reduce( (acc, pendTx) => {
       const txAmt = convertCurrency(state)(pendTx.ucac, pendTx.amount)

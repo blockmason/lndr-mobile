@@ -286,5 +286,5 @@ class AddDebt extends Component<Props, State> {
 }
 
 export default connect((state) => ({ state: getStore(state)(), pendingTransactions: pendingTransactions(state),
-  recentTransactions: recentTransactions(state), allCurrencies: getAllUcacCurrencies(state), primaryCurrency: getPrimaryCurrency(state)(),
+  recentTransactions: recentTransactions(state), allCurrencies: getAllUcacCurrencies(state), primaryCurrency: getPrimaryCurrency(state),
    hasPendingTransaction: hasPendingTransaction(state) }), { addDebt, getFriends, hasPendingMessage })(AddDebt)
