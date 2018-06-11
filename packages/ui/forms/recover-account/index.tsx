@@ -9,14 +9,11 @@ import { RecoverAccountData, defaultRecoverAccountData } from 'lndr/user'
 import User from 'lndr/user'
 import { getUser } from 'reducers/app'
 
-import InputImage from 'ui/components/images/input-image'
-import Loading, { LoadingContext } from 'ui/components/loading'
-import { formatPin } from 'lndr/format'
+import { LoadingContext } from 'ui/components/loading'
 import { connect } from 'react-redux'
 
 import language from 'language'
 const {
-  newPin,
   recoverAccount,
   recoverMnemonic,
   recoverMnemonicLengthError,
@@ -28,7 +25,6 @@ const {
 } = language
 
 import style from 'theme/form'
-import general from 'theme/general'
 
 const loadingContext = new LoadingContext()
 
@@ -53,6 +49,16 @@ class RecoverAccountForm extends Component<Props, State> {
       ...defaultRecoverAccountData(),
       step: 1
     }
+
+    this.enterMnemonic = this.enterMnemonic.bind(this)
+    this.cancel = this.cancel.bind(this)
+    this.setPIN = this.setPIN.bind(this)
+    this.checkMnemonicLength = this.checkMnemonicLength.bind(this)
+    this.clearConfirmPin = this.clearConfirmPin.bind(this)
+    this.clearPin = this.clearPin.bind(this)
+    this.confirmPin = this.confirmPin.bind(this)
+    this.enterPin = this.enterPin.bind(this)
+    this.nullReturn = this.nullReturn.bind(this)
   }
 
   cancel() {
@@ -97,6 +103,10 @@ class RecoverAccountForm extends Component<Props, State> {
     }
   }
 
+  enterMnemonic(mnemonic: string) {
+    this.setState({ mnemonic: mnemonic.trim(), mnemonicLengthError: undefined })
+  }
+
   enterPin(num: string) {
     const { password } = this.state
     const fullPin = password + num
@@ -131,20 +141,24 @@ class RecoverAccountForm extends Component<Props, State> {
     this.setState({ step: 2 })
   }
 
+  nullReturn() {
+    return null
+  }
+
   render() {
     const { password, confirmPassword, step, mnemonicLengthError } = this.state
 
     if (step === 4) {
       return <View style={style.form}>
-        <Pinpad onNumPress={() => null} onBackspace={() => null} pin={confirmPassword} headerText={pleaseWait} />
+        <Pinpad onNumPress={this.nullReturn} onBackspace={this.nullReturn} pin={confirmPassword} headerText={pleaseWait} />
       </View>
     } else if (step === 3) {
       return <View style={style.form}>
-        <Pinpad onNumPress={(pin) => this.confirmPin(pin)} onBackspace={this.clearConfirmPin.bind(this)} pin={confirmPassword} headerText={confirmPin} />
+        <Pinpad onNumPress={this.confirmPin} onBackspace={this.clearConfirmPin} pin={confirmPassword} headerText={confirmPin} />
       </View>
     } else if (step === 2) {
       return <View style={style.form}>
-        <Pinpad onNumPress={(pin) => this.enterPin(pin)} onBackspace={this.clearPin.bind(this)} pin={password} headerText={enterNewPin} />
+        <Pinpad onNumPress={this.enterPin} onBackspace={this.clearPin} pin={password} headerText={enterNewPin} />
       </View>
     } else {
       const vertOffset = (Platform.OS === 'android') ? -300 : 0;
@@ -160,14 +174,14 @@ class RecoverAccountForm extends Component<Props, State> {
                 placeholder={recoverMnemonic}
                 underlineColorAndroid='transparent'
                 autoCorrect={false}
-                onChangeText={mnemonic => this.setState({ mnemonic: mnemonic.trim(), mnemonicLengthError: undefined })}
-                onBlur={(): void => this.checkMnemonicLength()}
+                onChangeText={this.enterMnemonic}
+                onBlur={this.checkMnemonicLength}
               />
             </View>
           </KeyboardAvoidingView>
           { mnemonicLengthError && <Text style={style.warningText}>{mnemonicLengthError}</Text> }
-          <Button round fat style={style.submitButton} onPress={this.setPIN.bind(this)} text={recoverAccount} />
-          <Button alternate small arrow style={style.submitButton} onPress={this.cancel.bind(this)} text={cancel} />
+          <Button round fat style={style.submitButton} onPress={this.setPIN} text={recoverAccount} />
+          <Button alternate small arrow style={style.submitButton} onPress={this.cancel} text={cancel} />
         </View>
       </ScrollView>
     }
