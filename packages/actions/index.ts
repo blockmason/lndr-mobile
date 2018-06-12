@@ -557,7 +557,6 @@ export const addDebt = (friend: Friend, amount: string, memo: string, direction:
   return async (dispatch, getState) => {
     const { address, privateKeyBuffer } = getUser(getState())()
     const ucacBalances = calculateUcacBalances(getState())(friend.address)
-    console.log('UCAC balances', ucacBalances)
     const sanitizedAmount = sanitizeAmount(amount, currency)
 
     if(direction !== 'borrow' && direction !== 'lend') {
@@ -1062,7 +1061,7 @@ const triggerTouchId = (user, notificationsEnabled) => {
 }
 
 const getEthInfo = async (user) => {
-  let ethBalance = '0', ethPrices = {}, bcptBalance = '0'
+  let ethBalance = '0' as any, ethPrices = {}, bcptBalance = '0'
   try {
     ethPrices = await creditProtocol.getEthPrices()
   } catch (e) {}
