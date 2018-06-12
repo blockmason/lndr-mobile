@@ -75,13 +75,13 @@ export const amountFormat = (amount: string, currency: string) => {
     const raw = amount
       .replace(/[^,\d]/g, '')
       .replace(',', 'DOT')
-      .replace(/\./g, '')
-      .replace('DOT', '.')
+      .replace(/,/g, '')
+      .replace('DOT', ',')
       .replace(/^0\d/, x => x[1])
       .replace(/,\d{3\.}/, x => `,${x.substr(-2)}`)
   
     const hasDecimal = amount.indexOf(',') !== -1
-  
+
     if (hasDecimal) {
       let [ left, right ] = raw.split(',')
       while (right.length > 2) {
@@ -136,7 +136,7 @@ export const sanitizeAmount = (amount, currency) => {
   } else if(isCommaDecimal(currency)) {
     return parseInt(
       amount
-      .replace(/[^.\d]/g, '')
+      .replace(/[^,\d]/g, '')
       .replace(/^\d+,?$/, x => `${x}00`)
       .replace(/,\d$/, x => `${x.substr(1)}0`)
       .replace(/,\d\d$/, x => `${x.substr(1)}`)
