@@ -213,7 +213,7 @@ class Settlement extends Component<Props, State> {
     const friend = this.props.navigation ? this.props.navigation.state.params.friend : {}
 
     let formInputError
-    const cleanAmount = amount.replace(/^[^0-9\.]/, '')
+    const cleanAmount = amount.replace(/[^0-9\.]/g, '')
     const totalEthCost = ( Number(txCost) + Number(cleanAmount) ) / Number(ethExchange(primaryCurrency))
 
     if ( direction === 'lend' && totalEthCost > Number(ethBalance) ) {
@@ -264,7 +264,7 @@ class Settlement extends Component<Props, State> {
                 {!ethSettlement || balance > 0 ? null : <Text style={[formStyle.smallText, formStyle.spaceTop, formStyle.center]}>{accountManagement.sendEth.warning(this.getLimit(), primaryCurrency)}</Text>}
                 <Text style={formStyle.titleLarge}>{debtManagement.fields.settlementAmount}</Text>
                 {ethSettlement ? <TextInput
-                  style={formStyle.jumboInput}
+                  style={[formStyle.jumboInput, formStyle.settleAmount]}
                   placeholder={`${currencySymbols(primaryCurrency)}0`}
                   placeholderTextColor='black'
                   value={amount}

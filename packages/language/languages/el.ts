@@ -332,11 +332,12 @@ export default {
       borrow: (X, Z) => `Xρωστάτε @${X} ${Z}`
     },
     balance: `Yπόλοιπο`,
+    consolidatedBalance: `Yπόλοιπο`,
     friends: FS => `(από ${FS} ${FS === 1 ? 'φίλος' :'φίλοι'})`,
   },
 
   tabs: {
-    home: `Σπίτι`,
+    home: `Σπίτι `,
     friends: `Φίλοι`,
     activity: `Δραστηριότητα`,
   },

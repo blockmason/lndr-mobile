@@ -332,11 +332,12 @@ export default {
       borrow: (X, Z) => `Anda berutang ${Z} pada @${X}.`
     },
     balance: `Saldo`,
+    consolidatedBalance: `Saldo`,
     friends: FS => `(dari ${FS} ${FS === 1 ? 'teman' :'teman'})`,
   },
 
   tabs: {
-    home: `Beranda`,
+    home: `Beranda `,
     friends: `Teman`,
     activity: `Aktivitas`,
   },

@@ -23,7 +23,7 @@ export default class BalanceRow extends Component<Props> {
     if (amount < 0) {
       return <Text style={[style.pendingAmount, style.redAmount]}>{currencyFormats(currency)(amount)}</Text>
     } else {
-      return <Text style={[style.pendingAmount, style.greenAmount]}>{currencyFormats(currency)(amount)}</Text>
+      return <Text style={[style.pendingAmount, style.greenAmount]}>{`+${currencyFormats(currency)(amount)}`}</Text>
     }
   }
 

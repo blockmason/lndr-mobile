@@ -105,4 +105,6 @@ const getCurrency = (country: string) => {
 
 export const hasNoDecimals = (currency: string) : boolean => currency === 'KRW' || currency === 'JPY' || currency === 'IDR' || currency === 'VND'
 
+export const isCommaDecimal = (currency: string) : boolean => currency === 'CHF' || currency === 'EUR' || currency === 'DKK' || currency === 'NOK' || currency === 'SEK' || currency === 'IDR' || currency === 'VND'
+
 export const defaultCurrency = getCurrency(country)

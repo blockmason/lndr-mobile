@@ -102,7 +102,7 @@ class PendingTransactionRow extends Component<Props, State> {
       <TouchableHighlight style={style.pendingTransaction} onPress={onPress} underlayColor={white} activeOpacity={1}>
         <View style={style.pendingTransactionRow}>
           <View style={general.flexRow}>
-          {!friend ? <Image source={imageSource} style={style.pendingIcon}/> : null }
+            {!friend ? <Image source={imageSource} style={style.pendingIcon}/> : null }
             <View style={general.flexColumn}>
               {!friend ? <Text style={style.titledPending}>{this.getTitle()}</Text> : null }
               <Text style={style.pendingMemo}>{friend ? pendingTransaction.memo : debtManagement.for(pendingTransaction.memo)}</Text>

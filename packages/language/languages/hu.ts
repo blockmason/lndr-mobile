@@ -332,11 +332,12 @@ export default {
       borrow: (X, Z) => `Ön tartozik @${X} ${Z}`
     },
     balance: `Egyenleg`,
+    consolidatedBalance: `Egyenleg`,
     friends: FS => `(${FS} ${FS === 1? 'ismerősétől': 'ismerőseitől'})`,
   },
 
   tabs: {
-    home: `Kezdőlap`,
+    home: `Kezdőlap `,
     friends: `Ismerősök`,
     activity: `Tevékenység`,
   },

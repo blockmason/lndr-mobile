@@ -331,11 +331,12 @@ export default {
       borrow: (X, Z) => `คุณติดหนี้ @${X} ${Z}`
     },
     balance: `ยอดคงเหลือ`,
+    consolidatedBalance: `ยอดคงเหลือ`,
     friends: FS => `(จาก ${FS} ${FS === 1 ? 'เพื่อน' :'เพื่อน'})`,
   },
 
   tabs: {
-    home: `หน้าแรก`,
+    home: `หน้าแรก `,
     friends: `เพื่อน`,
     activity: `กิจกรรม`,
   },

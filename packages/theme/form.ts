@@ -124,6 +124,13 @@ export default StyleSheet.create({
     paddingLeft: 8,
     ...verticalMarginXS
   },
+  settleAmount: {
+    width: '80%', 
+    borderRadius: 30, 
+    borderWidth: 1, 
+    borderColor: softGray, 
+    ...verticalMarginXS
+  },
   textInputContainerMinor: {
     width: '50%', 
     borderRadius: 30, 

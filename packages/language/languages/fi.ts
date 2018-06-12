@@ -332,11 +332,12 @@ export default {
       borrow: (X, Z) => `Sinä olet velkaa @${X} ${Z}:lle`,
     },
     balance: `Saldo`,
+    consolidatedBalance: `Saldo`,
     friends: FS => `(alkaen ${FS} ${FS === 1? 'Ystävä': 'ystävät'})`,
   },
 
   tabs: {
-    home: `Koti`,
+    home: `Koti `,
     friends: `Ystävät`,
     activity: `Tapahtumat`,
   },

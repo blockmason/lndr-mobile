@@ -332,11 +332,12 @@ export default {
       borrow: (X, Z) => `Devi @${X} ${Z}`
     },
     balance: `Saldo`,
+    consolidatedBalance: `Saldo`,
     friends: FS => `(da ${FS} ${FS === 1 ? 'friend' :'friends'})`,
   },
 
   tabs: {
-    home: `Home`,
+    home: `Home `,
     friends: `   Amici   `,
     activity: `Attività`,
   },

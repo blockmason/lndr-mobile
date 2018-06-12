@@ -30,7 +30,8 @@ export default StyleSheet.create({
   },
   tabContent: {
     flexDirection: 'column',
-    alignItems: 'center'
+    alignItems: 'center',
+    minWidth: 50
   },
   tabActive: {
 
@@ -50,7 +51,7 @@ export default StyleSheet.create({
     borderBottomWidth: 2
   },
   noUnderline: {
-
+    
   },
   leftTriangle: {
     width: 35,

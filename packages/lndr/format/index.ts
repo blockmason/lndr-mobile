@@ -1,8 +1,13 @@
-import { currencySymbols, transferLimits, hasNoDecimals  } from 'lndr/currencies'
+import { currencySymbols, hasNoDecimals, isCommaDecimal  } from 'lndr/currencies'
 
 declare const Buffer
 
-export const commas = value => {
+export const commas = (value, currency) => {
+  if(isCommaDecimal(currency)) {
+    return String(value).replace(/(\d{3})+$/g,
+      full => full.replace(/\d{3}/g, group => `.${group}`)
+    ).replace(/^\./, '')
+  }
   return String(value).replace(/(\d{3})+$/g,
     full => full.replace(/\d{3}/g, group => `,${group}`)
   ).replace(/^,/, '')
@@ -23,26 +28,39 @@ export const currencyFormats = (formatType: string) => {
     return value => {
       const sign = value < 0 ? '-' : ''
       const raw = String(Math.abs(value))
-      return `${sign}${commas(raw) || '0'}`
+      return `${sign}${commas(raw, formatType) || '0'}`
     }
   } else if (formatType === 'KRWabs' || formatType === 'JPYabs' || formatType === 'IDRabs' || formatType === 'VNDabs') {
     return value => {
       const sign = value < 0 ? '-' : ''
       const raw = String(Math.abs(value))
-      return `${commas(raw) || '0'}`
+      return `${commas(raw, formatType.substr(0, 3)) || '0'}`
+    }
+  } else if(isCommaDecimal(formatType)) {
+    return value => {
+      const sign = value < 0 ? '-' : ''
+      const raw = String(Math.abs(value))
+      const [ left, right ] = [ raw.substr(0, raw.length - 2), raw.substr(-2) ]
+      return `${sign}${commas(left, formatType) || '0'},${leftPad('0', 2, right)}`
+    }
+  } else if (formatType === 'CHFabs' || formatType === 'EURabs' || formatType === 'DKKabs' || formatType === 'NOKabs' || formatType === 'SEKabs' || formatType === 'IDRabs') {
+    return value => {
+      const raw = String(Math.abs(value))
+      const [ left, right ] = [ raw.substr(0, raw.length - 2), raw.substr(-2) ]
+      return `${commas(left, formatType.substr(0, 3)) || '0'},${leftPad('0', 2, right)}`
     }
   } else if (formatType.indexOf('abs') !== -1) {
     return value => {
       const raw = String(Math.abs(value))
       const [ left, right ] = [ raw.substr(0, raw.length - 2), raw.substr(-2) ]
-      return `${commas(left) || '0'}.${leftPad('0', 2, right)}`
+      return `${commas(left, formatType) || '0'}.${leftPad('0', 2, right)}`
     }
   } else {
     return value => {
       const sign = value < 0 ? '-' : ''
       const raw = String(Math.abs(value))
       const [ left, right ] = [ raw.substr(0, raw.length - 2), raw.substr(-2) ]
-      return `${sign}${commas(left) || '0'}.${leftPad('0', 2, right)}`
+      return `${sign}${commas(left, formatType) || '0'}.${leftPad('0', 2, right)}`
     }
   }
 }
@@ -52,8 +70,29 @@ export const amountFormat = (amount: string, currency: string) => {
     const raw = amount
     .replace(/[^\d]/g, '')
 
-    return `${currencySymbols(currency)}${commas(raw)}`
-    
+    return `${currencySymbols(currency)}${commas(raw, currency)}`
+  } else if (isCommaDecimal(currency)) {
+    const raw = amount
+      .replace(/[^,\d]/g, '')
+      .replace(',', 'DOT')
+      .replace(/\./g, '')
+      .replace('DOT', '.')
+      .replace(/^0\d/, x => x[1])
+      .replace(/,\d{3\.}/, x => `,${x.substr(-2)}`)
+  
+    const hasDecimal = amount.indexOf(',') !== -1
+  
+    if (hasDecimal) {
+      let [ left, right ] = raw.split(',')
+      while (right.length > 2) {
+        left = `${left}${right[0]}`
+        right = right.substr(1)
+      }
+      right = right.length === 1 ? right + '0' : right
+      return `${currencySymbols(currency)}${commas(left, currency)},${right}`
+    }
+  
+    return `${currencySymbols(currency)}${commas(raw, currency)}`
   } else {
     const raw = amount
       .replace(/[^\.\d]/g, '')
@@ -72,10 +111,10 @@ export const amountFormat = (amount: string, currency: string) => {
         right = right.substr(1)
       }
       right = right.length === 1 ? right + '0' : right
-      return `${currencySymbols(currency)}${commas(left)}.${right}`
+      return `${currencySymbols(currency)}${commas(left, currency)}.${right}`
     }
   
-    return `${currencySymbols(currency)}${commas(raw)}`
+    return `${currencySymbols(currency)}${commas(raw, currency)}`
   }
 }
 
@@ -93,6 +132,15 @@ export const sanitizeAmount = (amount, currency) => {
   if(hasNoDecimals(currency)) {
     return parseInt(
       amount.replace(/[^.\d]/g, '')
+    )
+  } else if(isCommaDecimal(currency)) {
+    return parseInt(
+      amount
+      .replace(/[^.\d]/g, '')
+      .replace(/^\d+,?$/, x => `${x}00`)
+      .replace(/,\d$/, x => `${x.substr(1)}0`)
+      .replace(/,\d\d$/, x => `${x.substr(1)}`)
+      .replace(/,/, () => '')
     )
   } else {
     return parseInt(

@@ -332,11 +332,12 @@ export default {
       borrow: (X, Z) => `@${X} -ל ${Z} אתה חייב`
     },
     balance: `יתרה`,
+    consolidatedBalance: `יתרה`,
     friends: FS => `(${FS === 1 ? 'חבר': 'חברים'} ${FS} -מ)`,
   },
 
   tabs: {
-    home: `דף הבית`,
+    home: `דף הבית `,
     friends: `חברים`,
     activity: `פעילות`,
   },
