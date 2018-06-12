@@ -180,8 +180,8 @@ class HomeView extends Component<Props, State> {
     return <Section contentContainerStyle={style.column}>
       <View style={style.negativeMargin}>
         <View style={style.balanceRow}>
-          <Text style={style.balanceInfo}>{currencySymbols(primaryCurrency)}</Text>
-          <Text style={style.largeFactAmount}>{currencyFormats(primaryCurrency)(balance)}</Text>
+          <Text style={style.balanceInfo} >{`${currencySymbols(primaryCurrency)}`}</Text>
+          <Text style={style.largeFactAmount}>{`${currencyFormats(primaryCurrency)(balance)} `}</Text>
         </View>
       </View>
       <View style={style.balanceRow}>

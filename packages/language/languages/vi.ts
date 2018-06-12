@@ -331,11 +331,12 @@ export default {
       borrow: (X, Z) => `Bạn nợ @${X} ${Z}`
     },
     balance: `Số dư`,
+    consolidatedBalance: `Số dư`,
     friends: FS => `(từ ${FS} ${FS === 1 ? 'bạn bè' :'bạn bè'})`,
   },
 
   tabs: {
-    home: `Trang chủ`,
+    home: `Trang chủ `,
     friends: `Bạn bè`,
     activity: `Hoạt động`,
   },

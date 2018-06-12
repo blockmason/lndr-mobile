@@ -332,11 +332,12 @@ export default {
       borrow: (X, Z) => `आपको @${X} को ${Z} देना है`
     },
     balance: `बैलेन्स`,
+    consolidatedBalance: `बैलेन्स`,
     friends: FS => `(${FS} फ्रेंड्स से)`,
   },
 
   tabs: {
-    home: `होम`,
+    home: `होम `,
     friends: `फ्रेंड्स`,
     activity: `एक्टिविटी`,
   },

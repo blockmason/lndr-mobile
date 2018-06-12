@@ -133,11 +133,11 @@ class RemoveFriend extends Component<Props, State> {
       <ScrollView style={general.view}  keyboardShouldPersistTaps="always">
         <View style={general.centeredColumn}>
           <Image source={imageSource} style={pendingStyle.image}/>
-          <Text style={pendingStyle.title}>{`@${friend.nickname}`}</Text>
-          <Text style={pendingStyle.subTitle}>{`${recentTransactionsLanguage.balance}:`}</Text>
+          <Text style={pendingStyle.title}>{`  @${friend.nickname}  `}</Text>
+          <Text style={pendingStyle.subTitle}>{`${recentTransactionsLanguage.consolidatedBalance}:`}</Text>
           <View style={pendingStyle.balanceRow}>
             <Text style={pendingStyle.balanceInfo}>{currencySymbols(primaryCurrency)}</Text>
-            <Text style={[pendingStyle.amount]}>{currencyFormats(primaryCurrency)(this.getRecentTotal())}</Text>
+            <Text style={pendingStyle.amount}>{currencyFormats(primaryCurrency)(this.getRecentTotal())}</Text>
           </View>
           <View style={[general.centeredColumn, {marginBottom: 10}]}>
             <BalanceSection friend={friend} />

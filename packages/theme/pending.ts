@@ -39,6 +39,7 @@ export default StyleSheet.create({
     marginBottom: 10
   },
   balanceInfo: {
+    minWidth: 45,
     ...xlarge,
     color: aqua
   },

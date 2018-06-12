@@ -19,6 +19,7 @@ const getUnderlineTextStyle = (active?: boolean) => {
 }
 
 interface Props {
+  style: any
   text: string
   alerts?: number
   badge?: any

@@ -281,7 +281,7 @@ export default {
         generic: nickname => `${nickname} への支払い中に、エラーが発生しました`
       }
     },
-    eth: 'ETHで帳消し',
+    eth: 'ETHで帳消し ',
     nonPayment: '帳消ししたことを記録する'
   },
 

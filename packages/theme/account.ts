@@ -83,7 +83,7 @@ export default StyleSheet.create({
     marginTop: -20,
   },
   balanceRow: {
-    minWidth: '80%',
+    minWidth: '100%',
     flexDirection: 'row',
     flexWrap: 'wrap',
     justifyContent: 'center'
@@ -92,7 +92,10 @@ export default StyleSheet.create({
     ...bold,
     fontSize: 28,
     color: '#000',
-    paddingTop: 8
+    paddingTop: 8,
+    minWidth: 52,
+    textAlign: 'right',
+    textAlignVertical: 'top'
   },
   address: {
     width: 150,
@@ -160,7 +163,7 @@ export default StyleSheet.create({
   },
   largeFactAmount: {
     ...bold,
-    fontSize: 54,
+    fontSize: 50,
     color: black
   },
   largeFactAmountGood: {
@@ -323,7 +326,7 @@ export default StyleSheet.create({
   pendingMemo: {
     color: aqua,
     ...medium,
-    maxWidth: width * 0.5
+    maxWidth: width * 0.35
   },
   pendingAmount: {
     ...large,
@@ -384,7 +387,9 @@ export default StyleSheet.create({
     ...large,
     ...bold,
     marginBottom: 3,
-    color: black
+    width: '100%',
+    color: black,
+    textAlign: 'center'
   }
 
 } as any)

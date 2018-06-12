@@ -225,7 +225,7 @@ export default {
     fields: {
       currency: `CURRENCY`,
       amount: `AMOUNT`,
-      settlementAmount: `SETTLEMENT AMOUNT`,
+      settlementAmount: `  SETTLEMENT AMOUNT  `,
       selectFriend: `FRIEND`,
       memo: `MEMO`,
       direction: `SELECT THE CORRECT STATEMENT`,
@@ -267,7 +267,7 @@ export default {
     settleTotal: `SETTLE TOTAL`,
     settleUpMemo: (direction, amount) => direction === 'lend' ? `Settling up for ${amount}` :  `Request to settle for ${amount}`,
     recordSettleUpMemo: `settling up`,
-    balanceByCurrency: `Balance by Currency`,
+    balanceByCurrency: `      Balance by Currency      `,
   },
   settlementManagement: {
     bilateral: {
@@ -328,12 +328,13 @@ export default {
       lend: (nickname, amount) => `@${nickname} owes you ${amount}`,
       borrow: (nickname, amount) => `You owe @${nickname} ${amount}`
     },
-    balance: `Consolidated Balance `,
+    balance: `Balance `,
+    consolidatedBalance: `Consolidated Balance`,
     friends: (friends) => `(from ${friends} ${friends === 1 ? 'friend' :'friends'})`,
   },
 
   tabs: {
-    home: `HOME`,
+    home: `HOME `,
     friends: `FRIENDS`,
     activity: `ACTIVITY`,
   },

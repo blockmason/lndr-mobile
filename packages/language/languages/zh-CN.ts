@@ -331,6 +331,7 @@ export default {
       borrow: (X, Z) => `你欠@${X} ${Z}`
     },
     balance: `账户余额`,
+    consolidatedBalance: `账户余额`,
     friends: FS => `(由${FS} ${FS === 1 ? '朋友' : '朋友'}) `,
   },
 

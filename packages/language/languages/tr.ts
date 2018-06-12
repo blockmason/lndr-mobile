@@ -331,11 +331,12 @@ export default {
       borrow: (X, Z) => `@${X}’a ${Z} borçlusunuz`,
     },
     balance: `Bakiye`,
+    consolidatedBalance: `Bakiye`,
     friends: FS => `(${FS} ${FS === 1 ? 'arkadaştan' :'arkadastan'})`,
   },
 
   tabs: {
-    home: `Anasayfa`,
+    home: `Anasayfa `,
     friends: `Arkadaş`,
     activity: `Hareketler`,
   },

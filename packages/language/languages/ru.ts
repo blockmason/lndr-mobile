@@ -331,11 +331,12 @@ export default {
       borrow: (X, Z) => `Вы должны @${X} ${Z}`
     },
     balance: `Баланс`,
+    consolidatedBalance: `Баланс`,
     friends: FS => `(от ${FS} ${FS === 1 ? 'друг' : 'Друзья'})`,
   },
 
   tabs: {
-    home: `Главная`,
+    home: `Главная `,
     friends: `Друзья`,
     activity: `Мероприятия`,
   },

@@ -332,11 +332,12 @@ export default {
       borrow: (X, Z) => `أنت تدين بـ @${X} ${Z}`
     },
     balance: `الرصيد`,
+    consolidatedBalance: `الرصيد`,
     friends: FS => `(${FS === 1 ? 'صديق' :'أصدقاء'} ${FS} من)`,
   },
 
   tabs: {
-    home: `الرئيسية`,
+    home: `الرئيسية `,
     friends: `الأصدقاء`,
     activity: `النشاط`,
   },

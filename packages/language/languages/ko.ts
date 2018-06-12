@@ -287,7 +287,7 @@ export default {
 
   accountViewLanguage: {
   lndr: 'L n d r',
-  home: '홈',
+  home: '홈 ',
   friends: '친구',
   activity: '액티비티'
 },
