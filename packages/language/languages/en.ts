@@ -159,6 +159,7 @@ export default {
       `ETH Balance`,
       `BCPT Balance`,
       `ETH Transaction History`,
+      `Receive PayPal Payments`,
       `Change Primary Currency`,
       `Change PIN`,
       `Change Nickname`,

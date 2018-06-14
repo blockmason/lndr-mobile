@@ -217,6 +217,7 @@ class Settlement extends Component<Props, State> {
     const friend = this.props.navigation ? this.props.navigation.state.params.friend : {}
 
     let formInputError
+
     const cleanAmount = amount.replace(/[^0-9\.]/g, '')
     const totalEthCost = ( Number(txCost) + Number(cleanAmount) ) / Number(ethExchange(primaryCurrency))
 
@@ -232,15 +233,22 @@ class Settlement extends Component<Props, State> {
   }
 
   _renderPaymentButton() {
-    const { amount, balance } = this.state
+    const { amount, balance, direction } = this.state
+    const friend = this.props.navigation ? this.props.navigation.state.params.friend : {}
+    const payeeEmail = friend.address //.payeeEmail;
+
     if (!amount) {
         return (
           <Button large round wide onPress={() => this.updateAmount(currencyFormats(this.props.primaryCurrency)(Math.abs(balance)))} text={debtManagement.settleTotal} />
       )
     }
+
+    const cleanAmount = amount.replace(/[^0-9\.]/g, '')
+    const memo = debtManagement.settleUpMemo(direction, amount)
     if ( (this.props.navigation) && (this.props.navigation.state.params.settlementType == "paypal") ) {
+      /*        <Button large round wide onPress={() => NativeModules.PayPalManager.connectPayPal()} text="Settle With PayPal" /> */
       return (
-        <Button large round wide onPress={() => NativeModules.PayPalManager.connectPayPal()} text="Settle With PayPal" />
+        <Button large round wide onPress={() => NativeModules.PayPalManager.sendPayPalPayment(cleanAmount, this.props.primaryCurrency, payeeEmail, memo)} text="Settle With PayPal" />
       )
     }
     return (
@@ -254,9 +262,9 @@ class Settlement extends Component<Props, State> {
     const ethSettlement = this.props.navigation ? (this.props.navigation.state.params.settlementType == "eth") : false
     const friend = this.props.navigation ? this.props.navigation.state.params.friend : {}
     const imageSource = pic ? { uri: pic } : require('images/person-outline-dark.png')
-    const vertOffset = (Platform.OS === 'android') ? -300 : 20;
+    const vertOffset = (Platform.OS === 'android') ? -300 : 20
 
-    const paymentButton = this._renderPaymentButton();
+    const paymentButton = this._renderPaymentButton()
 
     return <View style={general.whiteFlex}>
       <View style={general.view}>

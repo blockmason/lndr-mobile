@@ -33,6 +33,7 @@ export default class CreditProtocol {
     this.tempStorage = {
       nicknames: {},
       emails: {},
+      paypal: {},
       registerId: {},
       searchUsers: {}
     }
@@ -109,6 +110,22 @@ export default class CreditProtocol {
     })
   }
 
+  setPayPal(addr: string, paypal: string, privateKeyBuffer: string) {
+    //hash the paypal, including null
+    const hashBuffer = Buffer.concat([
+      hexToBuffer(addr),
+      utf8ToBuffer(paypal)
+    ])
+    const hash = bufferToHex(ethUtil.sha3(hashBuffer))
+    const signature = this.serverSign(hash, privateKeyBuffer)
+
+    return this.client.post('/paypal', {
+      addr,
+      paypal,
+      signature
+    })
+  }
+
   getConfig () {
     if (this.tempStorage.config) {
       return this.tempStorage.config
@@ -152,6 +169,14 @@ export default class CreditProtocol {
       return email
     }
     return this.tempStorage.emails[user] = this.client.get(`/email/${user}`)
+  }
+
+  getPayPal(user: string) {
+    const paypal = this.tempStorage.paypal[user]
+    if (paypal) {
+      return paypal
+    }
+    return this.tempStorage.paypal[user] = this.client.get(`/paypal/${user}`)
   }
 
   searchUsers(nick: string) {
@@ -310,7 +335,7 @@ export default class CreditProtocol {
     const serializedTx = tx.serialize()
 
     console.log('TOTAL ETH TO BE SENT: ',Number(transaction.value), ', ', Number(transaction.value) + Number(transaction.gas * transaction.gasPrice) )
-    
+
     return new Promise((resolve, reject) => {
       web3.eth.sendRawTransaction(('0x' + serializedTx.toString('hex')), (e, data) => {
         if (e) {
@@ -350,7 +375,7 @@ export default class CreditProtocol {
 
     const IMAGE_TARGET_SIZE = 240
     let resizedImageResponse, base64ImageData
-    
+
     if (Platform.OS === 'android') {
       resizedImageResponse = await ImageResizer.createResizedImage(imageURI, IMAGE_TARGET_SIZE, IMAGE_TARGET_SIZE, "JPEG", 100, 0)
       base64ImageData = await RNFetchBlob.fs.readFile(resizedImageResponse.uri, 'base64')
@@ -375,18 +400,18 @@ export default class CreditProtocol {
       return Number(amount) / 100 / Number(conversionRate)
     }
   }
-  
+
   async getSettlementCost(amount: number, currency: string) {
     const settlementAmount = await this.fiatToEth(amount, currency)
     const transactionCost = await this.getGasPrice()
     return settlementAmount + ( Number(transactionCost) / Math.pow(10, 18) )
   }
-  
+
   async getGasPrice() {
     const config = await this.getConfig()
     return config.gasPrice
   }
-  
+
   async getTxCost(currency: string) {
     try {
       const gasPrice = await this.getGasPrice()
@@ -394,10 +419,10 @@ export default class CreditProtocol {
 
       return `${Math.max( 0.01, gasPrice * Number(rate) * 21000 / Math.pow(10, 18) )}`.slice(0,6)
     } catch (e) {}
-  
+
     return '0.00'
   }
-  
+
   async getEthExchange(currency: string) {
     const prices = await this.getEthPrices()
     return prices[currency.toLowerCase()] === 'undefined' ? '0' : prices[currency.toLowerCase()]
@@ -407,11 +432,11 @@ export default class CreditProtocol {
     const config = await this.getConfig()
     return config.ethereumPrices
   }
-  
+
   async ethToFiat(eth, currency) {
     const exchange = await this.getEthExchange(currency)
     const fiat = String(Number(eth) * Number(exchange))
-  
+
     if (hasNoDecimals(currency)) {
       const decimalIndex = fiat.indexOf('.')
       return fiat.slice(0, decimalIndex)

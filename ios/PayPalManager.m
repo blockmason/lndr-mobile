@@ -32,12 +32,14 @@ RCT_EXPORT_METHOD(initPayPal) {
     // See PayPalConfiguration.h for details and default values.
     // Minimally, you will need to set three merchant information properties.
     // These should be the same values that you provided to PayPal when you registered your app.
-    _payPalConfiguration.merchantName = @"BM";
+    _payPalConfiguration.merchantName = @"BlockMason";
     _payPalConfiguration.merchantPrivacyPolicyURL = [NSURL URLWithString:@"https://blockmason.io/privacy"];
     _payPalConfiguration.merchantUserAgreementURL = [NSURL URLWithString:@"https://blockmason.io/agreement"];
+    _payPalConfiguration.acceptCreditCards = NO;
   });
 }
 
+#pragma mark Linking PayPal to a User's account: "connectPayPal"
 RCT_EXPORT_METHOD(connectPayPal) {
   // obtain user consent for PayPal info
   NSSet *scopeValues = [NSSet setWithArray:@[kPayPalOAuth2ScopeOpenId, kPayPalOAuth2ScopeEmail]];//, kPayPalOAuth2ScopeAddress, kPayPalOAuth2ScopePhone]];
@@ -82,6 +84,80 @@ RCT_EXPORT_METHOD(connectPayPal) {
   AppDelegate *delegate = (AppDelegate *)[[UIApplication sharedApplication] delegate];
   [delegate.window.rootViewController dismissViewControllerAnimated:YES completion:^{
     //    [self.navigationController popViewControllerAnimated:NO];
+  }];
+}
+
+#pragma mark Sending an actual Payment: "sendPayment"
+
+RCT_EXPORT_METHOD(sendPayPalPayment:(NSString *)amount currencyCode:(NSString *)currencyCode payeeEmail:(NSString *)payeeEmail description:(NSString *)description) {
+  if ([amount doubleValue] <= 0.0) {
+    NSLog(@"Payment amount <= 0");
+    return;
+  }
+  if ([currencyCode length] == 0) {
+    NSLog(@"Missing currency code");
+    return;
+  }
+  if ([payeeEmail length] == 0) {
+    NSLog(@"Missing payeeEmail");
+    return;
+  }
+  if ([description length] == 0) {
+    NSLog(@"Missing description");
+    return;
+  }
+
+  // Create a PayPalPayment
+  PayPalPayment *payment = [[PayPalPayment alloc] init];
+  
+  // Amount, currency, and description
+  payment.amount = [[NSDecimalNumber alloc] initWithDouble:[amount doubleValue]];
+  payment.currencyCode = currencyCode;
+  payment.shortDescription = description;
+  payment.payeeEmail = payeeEmail; // set destination payee
+
+  // Use the intent property to indicate that this is a "sale" payment,
+  // meaning combined Authorization + Capture.
+  // To perform Authorization only, and defer Capture to your server,
+  // use PayPalPaymentIntentAuthorize.
+  // To place an Order, and defer both Authorization and Capture to
+  // your server, use PayPalPaymentIntentOrder.
+  // (PayPalPaymentIntentOrder is valid only for PayPal payments, not credit card payments.)
+  payment.intent = PayPalPaymentIntentSale;
+  
+  // Check whether payment is processable.
+  if (!payment.processable) {
+    // If, for example, the amount was negative or the shortDescription was empty, then
+    // this payment would not be processable. You would want to handle that here.
+    NSLog(@"PayPal payment not processable");
+    return;
+  }
+
+  PayPalPaymentViewController *paymentViewController;
+  paymentViewController = [[PayPalPaymentViewController alloc] initWithPayment:payment configuration:self.payPalConfiguration delegate:self];
+  dispatch_async(dispatch_get_main_queue(), ^{
+    // Present the PayPalPaymentViewController.
+    AppDelegate *delegate = (AppDelegate *)[[UIApplication sharedApplication] delegate];
+    [delegate.window.rootViewController presentViewController:paymentViewController animated:YES completion:nil];
+  });
+}
+
+#pragma mark - PayPalPaymentDelegate
+
+- (void)payPalPaymentDidCancel:(nonnull PayPalPaymentViewController *)paymentViewController {
+  // User canceled the payment process.
+  AppDelegate *delegate = (AppDelegate *)[[UIApplication sharedApplication] delegate];
+  [delegate.window.rootViewController dismissViewControllerAnimated:YES completion:^{
+    //    [self.navigationController popViewControllerAnimated:NO];
+  }];
+}
+
+- (void)payPalPaymentViewController:(nonnull PayPalPaymentViewController *)paymentViewController didCompletePayment:(nonnull PayPalPayment *)completedPayment {
+  // User successfully completed the payment.
+  // TODO: send completedPayment.confirmation to server to verify
+  
+  AppDelegate *delegate = (AppDelegate *)[[UIApplication sharedApplication] delegate];
+  [delegate.window.rootViewController dismissViewControllerAnimated:YES completion:^{
   }];
 }
 

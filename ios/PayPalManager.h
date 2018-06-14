@@ -13,6 +13,6 @@
 extern const NSString *PAYPAL_CLIENT_ID_PROD;
 extern const NSString *PAYPAL_CLIENT_ID_DEV;
 
-@interface PayPalManager : NSObject <RCTBridgeModule, PayPalProfileSharingDelegate>
+@interface PayPalManager : NSObject <RCTBridgeModule, PayPalProfileSharingDelegate, PayPalPaymentDelegate>
 
 @end
