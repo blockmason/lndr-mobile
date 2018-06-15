@@ -27,7 +27,7 @@ RCT_EXPORT_METHOD(initPayPal) {
     // initiate PayPal session
     // Start out working with the mock environment. When you are ready, switch to PayPalEnvironmentProduction.
     [PayPalMobile preconnectWithEnvironment:PayPalEnvironmentNoNetwork];//PayPalEnvironmentSandbox//PayPalEnvironmentProduction];
-    
+
     _payPalConfiguration = [[PayPalConfiguration alloc] init];
     // See PayPalConfiguration.h for details and default values.
     // Minimally, you will need to set three merchant information properties.
@@ -43,10 +43,10 @@ RCT_EXPORT_METHOD(initPayPal) {
 RCT_EXPORT_METHOD(connectPayPal) {
   // obtain user consent for PayPal info
   NSSet *scopeValues = [NSSet setWithArray:@[kPayPalOAuth2ScopeOpenId, kPayPalOAuth2ScopeEmail]];//, kPayPalOAuth2ScopeAddress, kPayPalOAuth2ScopePhone]];
-  
+
   PayPalProfileSharingViewController *psViewController;
   psViewController = [[PayPalProfileSharingViewController alloc] initWithScopeValues:scopeValues configuration:self.payPalConfiguration delegate:self];
-  
+
   dispatch_async(dispatch_get_main_queue(), ^{
     // Present the PayPalProfileSharingViewController
     AppDelegate *delegate = (AppDelegate *)[[UIApplication sharedApplication] delegate];
@@ -109,7 +109,7 @@ RCT_EXPORT_METHOD(sendPayPalPayment:(NSString *)amount currencyCode:(NSString *)
 
   // Create a PayPalPayment
   PayPalPayment *payment = [[PayPalPayment alloc] init];
-  
+
   // Amount, currency, and description
   payment.amount = [[NSDecimalNumber alloc] initWithDouble:[amount doubleValue]];
   payment.currencyCode = currencyCode;
@@ -124,7 +124,7 @@ RCT_EXPORT_METHOD(sendPayPalPayment:(NSString *)amount currencyCode:(NSString *)
   // your server, use PayPalPaymentIntentOrder.
   // (PayPalPaymentIntentOrder is valid only for PayPal payments, not credit card payments.)
   payment.intent = PayPalPaymentIntentSale;
-  
+
   // Check whether payment is processable.
   if (!payment.processable) {
     // If, for example, the amount was negative or the shortDescription was empty, then
@@ -155,7 +155,7 @@ RCT_EXPORT_METHOD(sendPayPalPayment:(NSString *)amount currencyCode:(NSString *)
 - (void)payPalPaymentViewController:(nonnull PayPalPaymentViewController *)paymentViewController didCompletePayment:(nonnull PayPalPayment *)completedPayment {
   // User successfully completed the payment.
   // TODO: send completedPayment.confirmation to server to verify
-  
+
   AppDelegate *delegate = (AppDelegate *)[[UIApplication sharedApplication] delegate];
   [delegate.window.rootViewController dismissViewControllerAnimated:YES completion:^{
   }];

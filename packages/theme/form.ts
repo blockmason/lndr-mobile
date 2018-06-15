@@ -57,6 +57,9 @@ export default StyleSheet.create({
   spaceHorizontalL: {
     marginHorizontal: 40
   },
+  spaceHorizontalBig: {
+    marginHorizontal: 80
+  },
   formTitle: {
     ...xlarge,
     ...verticalMargin,
@@ -114,12 +117,12 @@ export default StyleSheet.create({
     marginTop: m
   },
   textInputContainer: {
-    width: '100%', 
-    borderRadius: 30, 
-    borderWidth: 1, 
-    borderColor: softGray, 
+    width: '100%',
+    borderRadius: 30,
+    borderWidth: 1,
+    borderColor: softGray,
     flexDirection: 'row',
-    alignItems: 'center', 
+    alignItems: 'center',
     ...center,
     paddingLeft: 8,
     ...verticalMarginXS
@@ -132,12 +135,12 @@ export default StyleSheet.create({
     ...verticalMarginXS
   },
   textInputContainerMinor: {
-    width: '50%', 
-    borderRadius: 30, 
-    borderWidth: 1, 
-    borderColor: softGray, 
+    width: '50%',
+    borderRadius: 30,
+    borderWidth: 1,
+    borderColor: softGray,
     flexDirection: 'row',
-    alignItems: 'center', 
+    alignItems: 'center',
     ...center,
     paddingLeft: 8,
     ...verticalMarginXS

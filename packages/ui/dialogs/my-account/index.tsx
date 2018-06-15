@@ -4,6 +4,7 @@ import { Text, TextInput, View, Dimensions, ScrollView, Linking, Modal, Switch,
   TouchableHighlight, Image, FlatList, KeyboardAvoidingView, Platform, NativeModules } from 'react-native'
 
 import ImagePicker from 'react-native-image-picker'
+import Icon from 'react-native-vector-icons/Zocial'
 
 import Button from 'ui/components/button'
 import Pinpad from 'ui/components/pinpad'
@@ -298,23 +299,27 @@ class MyAccount extends Component<Props, State> {
       (<View style={style.spaceHorizontalL}>
         <Button round onPress={() => Linking.openURL(`https://etherscan.io/address/${user.address}`)} text={accountManagement.viewEtherscan} />
       </View>),
-      (<View style={[style.spaceHorizontalL, general.flexRow]}>
-        <Image source={require('images/PayPalLogo.png')} />
-{/* TODO: show a button when not linked, a Switch when linked*/}
-        <Switch onValueChanged={(newValue) => this.setPayPalConnected(newValue)} />
+      (<View style={[style.spaceTopS, style.spaceBottomS, style.spaceHorizontalBig]}>
+        <Icon.Button name="paypal" backgroundColor="#21c5d7" onPress={() => this.setPayPalConnected(true)}>
+          <Text style={[{color:"white"},{fontSize:18.0},{marginLeft:10}]}>Connect PayPal</Text>
+        </Icon.Button>
 
-        <TouchableHighlight
-          underlayColor='#fff'
-          activeOpacity={0.5}
-          onPress={() => this.setPayPalConnected(newValue)}
-          style={}
-        >
-          <View style={}>
+
+{/*
+        <TouchableHighlight underlayColor='black' onPress={() => this.setPayPalConnected(newValue)} style={}>
+          <View style={[general.flexRow, style.button, {backgroundColor:'black'}]}>
             <Image source={require('images/PayPalIcon.png')} />
-            <Text style={[style.text, style.spaceTopL, style.center]}>Connect PayPal</Text>
-{/*            {showText(text, alternate, blackText, large, small, fat)} */}
+            <Text style={[{color:'white'},style.text, style.spaceTopL, style.center]}>Connect PayPal</Text>
           </View>
         </TouchableHighlight>
+*/}
+
+{/* TODO: show a button when not linked, a Switch when linked
+  <View style={[style.spaceHorizontalL, general.flexRow]}>
+          <Image source={require('images/PayPalLogo.png')} />
+        <Switch onValueChanged={(newValue) => this.setPayPalConnected(newValue)} />
+        </View>
+*/}
 {/*<Button black onPress={() => this.setPayPalConnected(newValue)} text="Connect PayPal" icon={require('images/PayPalIcon.png')}/>*/}
       </View>),
       (<View style={style.spaceHorizontalL}>
