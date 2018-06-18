@@ -93,9 +93,10 @@ export default StyleSheet.create({
     fontSize: 28,
     color: '#000',
     paddingTop: 8,
-    minWidth: 52,
+    minWidth: 54,
     textAlign: 'right',
-    textAlignVertical: 'top'
+    textAlignVertical: 'top',
+    height: 68
   },
   address: {
     width: 150,
