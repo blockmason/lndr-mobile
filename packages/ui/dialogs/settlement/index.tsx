@@ -316,9 +316,9 @@ console.log(confirmation)
     return (
       <View style={[general.centeredColumn]}>
         <View style={[formStyle.warningText, {verticalMargin:0}]}>
-          <Text style={[formStyle.title, {marginTop:0}]}>{"@" + friend.nickname + " has not authorized PayPal payments."}</Text>
+          <Text style={[formStyle.title, {marginTop:0}]}>{"@" + friend.nickname + " has not enabled PayPal payments."}</Text>
         </View>
-        <Text style={style.recentText}>{"Want to send a PayPal payment?"}</Text>
+{/*        <Text style={style.recentText}>{"Want to send a PayPal payment?"}</Text> */}
       </View>
     )
   }
@@ -412,8 +412,8 @@ console.log(confirmation)
               </View>
             </View>
             { formInputError && <Text style={[formStyle.warningText, {alignSelf: 'center', marginHorizontal: 15}]}>{formInputError}</Text>}
-            { payPalMessage }
             { paymentButton }
+            { payPalMessage }
           </View>
         </ScrollView>
       </KeyboardAvoidingView>
