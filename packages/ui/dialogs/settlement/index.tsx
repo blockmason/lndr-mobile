@@ -256,8 +256,10 @@ class Settlement extends Component<Props, State> {
   }
 
   requestPayPalPayment() {
-    // NYI: fire off notification request to friend that you want to be paid via PayPal
-    // TODO: bring in Confirmation and close this screen
+    // TODO: fire off notification request to friend that you want to be paid via PayPal
+    const friend = this.props.navigation ? this.props.navigation.state.params.friend : {}
+    const resetAction = getResetAction({ routeName:'Confirmation', params: { type: 'requestPayPalPayment', friend } })
+    this.props.navigation.dispatch(resetAction)
   }
 
   async handlePayPalPayment() {
@@ -285,9 +287,12 @@ console.log(confirmation)
   }
 
   requestPayPalPayee() {
-    // NYI: fire off notification request to friend to connect PayPal
-    // TODO: bring in Confirmation and close this screen
+    // TODO: fire off notification request to friend to connect PayPal
+    const friend = this.props.navigation ? this.props.navigation.state.params.friend : {}
+    const resetAction = getResetAction({ routeName:'Confirmation', params: { type: 'requestPayPalPayee', friend } })
+    this.props.navigation.dispatch(resetAction)
   }
+  
   _renderPayPalMessage() {
     if (!this.isPayPalSettlement())
       return null
