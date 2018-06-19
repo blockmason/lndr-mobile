@@ -346,7 +346,7 @@ console.log(confirmation)
           )
         else // friend needs to connect PayPal
           return (
-            <Button large round wide onPress={() => this.requestPayPalPayee()} text={"Request Authorization"} />
+            <Button large round wide onPress={() => this.requestPayPalPayee()} text={"Request PayPal"} />
           )
       }
     }
