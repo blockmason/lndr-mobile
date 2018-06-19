@@ -310,17 +310,26 @@ console.log(confirmation)
       )
     }
 
-    if (isPayee)
-      return null // no message
-
-    return (
-      <View style={[general.centeredColumn]}>
-        <View style={[formStyle.warningText, {verticalMargin:0}]}>
-          <Text style={[formStyle.title, {marginTop:0}]}>{"@" + friend.nickname + " has not enabled PayPal payments."}</Text>
+    if (isPayee) {
+      const message = "Enabling PayPal allows @" + friend.nickname + " to pay you"
+      return (
+        <View style={[general.centeredColumn]}>
+          <View style={[formStyle.infoText, {verticalMargin:0}]}>
+            <Text style={[formStyle.title, {marginTop:0}]}>{message}</Text>
+          </View>
         </View>
+      )
+    } else {
+      const message = "@" + friend.nickname + " has not enabled PayPal payments."
+      return (
+        <View style={[general.centeredColumn]}>
+          <View style={[formStyle.warningText, {verticalMargin:0}]}>
+            <Text style={[formStyle.title, {marginTop:0}]}>{message}</Text>
+          </View>
 {/*        <Text style={style.recentText}>{"Want to send a PayPal payment?"}</Text> */}
-      </View>
-    )
+        </View>
+      )
+    }
   }
 
   _renderPaymentButton() {
@@ -346,7 +355,7 @@ console.log(confirmation)
       } else {
         if (isPayee) // user is Payee and needs to connect PayPal
           return (
-            <Button large round wide onPress={() => this.handleConnectPayPal()} text="Connect PayPal" />
+            <Button large round wide onPress={() => this.handleConnectPayPal()} text="Enable PayPal" />
           )
         else // friend needs to connect PayPal
           return (
