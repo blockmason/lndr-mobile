@@ -255,6 +255,39 @@ class Settlement extends Component<Props, State> {
     this.setState({ amount: this.setAmount(amount), formInputError })
   }
 
+  requestPayPalPayment() {
+    // NYI: fire off notification request to friend that you want to be paid via PayPal
+    // TODO: bring in Confirmation and close this screen
+  }
+
+  async handlePayPalPayment() {
+    const { amount, direction, payPalPayee } = this.state
+    const cleanAmount = amount.replace(/[^0-9\.]/g, '')
+    const memo = debtManagement.settleUpMemo(direction, amount)
+
+    try {
+      const confirmation = await NativeModules.PayPalManager.sendPayPalPayment(cleanAmount, this.props.primaryCurrency, payPalPayee, memo)
+console.log(confirmation)
+      this.setState({confirmation: confirmation})
+      // TODO: popup confirmation and close this window
+    } catch (e) {
+      console.error(e)
+    }
+  }
+
+  async handleConnectPayPal() {
+    try {
+      const payPalPayee = await NativeModules.PayPalManager.connectPayPal()
+      this.setState({payPalPayee: payPalPayee})
+    } catch (e) {
+      console.error(e)
+    }
+  }
+
+  requestPayPalPayee() {
+    // NYI: fire off notification request to friend to connect PayPal
+    // TODO: bring in Confirmation and close this screen
+  }
   _renderPayPalMessage() {
     if (!this.isPayPalSettlement())
       return null
@@ -296,8 +329,6 @@ class Settlement extends Component<Props, State> {
       )
     }
 
-    const cleanAmount = amount.replace(/[^0-9\.]/g, '')
-    const memo = debtManagement.settleUpMemo(direction, amount)
     if (this.isPayPalSettlement()) {
       if (this.hasPayPalPayee()) {
           if (isPayee) // we'd like to receive a PayPal payment and we're connected
@@ -306,12 +337,12 @@ class Settlement extends Component<Props, State> {
             )
           else // we're ready to send payment
             return (
-              <Button large round wide onPress={() => NativeModules.PayPalManager.sendPayPalPayment(cleanAmount, this.props.primaryCurrency, payeeEmail, memo)} text="Send With PayPal" />
+              <Button large round wide onPress={() => this.handlePayPalPayment()} text="Send With PayPal" />
             )
       } else {
         if (isPayee) // user is Payee and needs to connect PayPal
           return (
-            <Button large round wide onPress={() => NativeModules.PayPalManager.connectPayPal()} text="Connect PayPal" />
+            <Button large round wide onPress={() => this.handleConnectPayPal()} text="Connect PayPal" />
           )
         else // friend needs to connect PayPal
           return (

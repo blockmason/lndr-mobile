@@ -15,6 +15,8 @@ const NSString *PAYPAL_CLIENT_ID_DEV = @"AQabZLoBTVKngs5UNiUWKk4CCjzh8EvPGoqz07n
 
 @interface PayPalManager ()
 @property (nonatomic, strong, readwrite) PayPalConfiguration *payPalConfiguration;
+@property (nonatomic, strong) RCTPromiseResolveBlock resolver;
+@property (nonatomic, strong) RCTPromiseRejectBlock rejecter;
 @end
 
 @implementation PayPalManager
@@ -26,7 +28,7 @@ RCT_EXPORT_METHOD(initPayPal) {
   dispatch_async(dispatch_get_main_queue(), ^{
     // initiate PayPal session
     // Start out working with the mock environment. When you are ready, switch to PayPalEnvironmentProduction.
-    [PayPalMobile preconnectWithEnvironment:PayPalEnvironmentNoNetwork];//PayPalEnvironmentSandbox//PayPalEnvironmentProduction];
+    [PayPalMobile preconnectWithEnvironment:PayPalEnvironmentSandbox];//PayPalEnvironmentProduction];//PayPalEnvironmentNoNetwork
 
     _payPalConfiguration = [[PayPalConfiguration alloc] init];
     // See PayPalConfiguration.h for details and default values.
@@ -40,13 +42,18 @@ RCT_EXPORT_METHOD(initPayPal) {
 }
 
 #pragma mark Linking PayPal to a User's account: "connectPayPal"
-RCT_EXPORT_METHOD(connectPayPal) {
+RCT_REMAP_METHOD(connectPayPal,
+                 connectPayPalWithResolver:(RCTPromiseResolveBlock)resolver
+                 rejecter:(RCTPromiseRejectBlock)rejecter) {
   // obtain user consent for PayPal info
   NSSet *scopeValues = [NSSet setWithArray:@[kPayPalOAuth2ScopeOpenId, kPayPalOAuth2ScopeEmail]];//, kPayPalOAuth2ScopeAddress, kPayPalOAuth2ScopePhone]];
 
   PayPalProfileSharingViewController *psViewController;
   psViewController = [[PayPalProfileSharingViewController alloc] initWithScopeValues:scopeValues configuration:self.payPalConfiguration delegate:self];
 
+  self.resolver = resolver;
+  self.rejecter = rejecter;
+  
   dispatch_async(dispatch_get_main_queue(), ^{
     // Present the PayPalProfileSharingViewController
     AppDelegate *delegate = (AppDelegate *)[[UIApplication sharedApplication] delegate];
@@ -75,21 +82,39 @@ RCT_EXPORT_METHOD(connectPayPal) {
 //  NSString *endpoint = [NSString stringWithFormat:@"/ledger/paypal"];
 //  [super postEndpoint:endpoint data:paypalD completion:^(NSObject *resultObj, NSError *error) {
 
+  if (self.resolver) {
+    self.resolver(profileSharingAuthorization);
+    self.rejecter = nil;
+    self.resolver = nil;
+  }
+
   AppDelegate *delegate = (AppDelegate *)[[UIApplication sharedApplication] delegate];
   [delegate.window.rootViewController dismissViewControllerAnimated:YES completion:^{
   }];
 }
 
 - (void)userDidCancelPayPalProfileSharingViewController:(nonnull PayPalProfileSharingViewController *)profileSharingViewController {
+  if (self.rejecter) {
+    self.rejecter(@"user_cancelled", @"User cancelled", nil);
+    self.rejecter = nil;
+    self.resolver = nil;
+  }
+
   AppDelegate *delegate = (AppDelegate *)[[UIApplication sharedApplication] delegate];
   [delegate.window.rootViewController dismissViewControllerAnimated:YES completion:^{
     //    [self.navigationController popViewControllerAnimated:NO];
   }];
 }
 
-#pragma mark Sending an actual Payment: "sendPayment"
+#pragma mark Sending an actual Payment: "sendPayPalPayment"
 
-RCT_EXPORT_METHOD(sendPayPalPayment:(NSString *)amount currencyCode:(NSString *)currencyCode payeeEmail:(NSString *)payeeEmail description:(NSString *)description) {
+RCT_REMAP_METHOD(sendPayPalPayment,
+                 sendPayPalPayment:(NSString *)amount
+                 currencyCode:(NSString *)currencyCode
+                 payeeEmail:(NSString *)payeeEmail
+                 description:(NSString *)description
+                 resolver:(RCTPromiseResolveBlock)resolver
+                 rejecter:(RCTPromiseRejectBlock)rejecter) {
   if ([amount doubleValue] <= 0.0) {
     NSLog(@"Payment amount <= 0");
     return;
@@ -133,6 +158,9 @@ RCT_EXPORT_METHOD(sendPayPalPayment:(NSString *)amount currencyCode:(NSString *)
     return;
   }
 
+  self.resolver = resolver;
+  self.rejecter = rejecter;
+  
   PayPalPaymentViewController *paymentViewController;
   paymentViewController = [[PayPalPaymentViewController alloc] initWithPayment:payment configuration:self.payPalConfiguration delegate:self];
   dispatch_async(dispatch_get_main_queue(), ^{
@@ -146,6 +174,11 @@ RCT_EXPORT_METHOD(sendPayPalPayment:(NSString *)amount currencyCode:(NSString *)
 
 - (void)payPalPaymentDidCancel:(nonnull PayPalPaymentViewController *)paymentViewController {
   // User canceled the payment process.
+  if (self.rejecter) {
+    self.rejecter(@"user_cancelled", @"User cancelled", nil);
+    self.rejecter = nil;
+    self.resolver = nil;
+  }
   AppDelegate *delegate = (AppDelegate *)[[UIApplication sharedApplication] delegate];
   [delegate.window.rootViewController dismissViewControllerAnimated:YES completion:^{
     //    [self.navigationController popViewControllerAnimated:NO];
@@ -154,8 +187,11 @@ RCT_EXPORT_METHOD(sendPayPalPayment:(NSString *)amount currencyCode:(NSString *)
 
 - (void)payPalPaymentViewController:(nonnull PayPalPaymentViewController *)paymentViewController didCompletePayment:(nonnull PayPalPayment *)completedPayment {
   // User successfully completed the payment.
-  // TODO: send completedPayment.confirmation to server to verify
-
+  if (self.resolver) {
+    self.resolver(completedPayment.confirmation);
+    self.rejecter = nil;
+    self.resolver = nil;
+  }
   AppDelegate *delegate = (AppDelegate *)[[UIApplication sharedApplication] delegate];
   [delegate.window.rootViewController dismissViewControllerAnimated:YES completion:^{
   }];
