@@ -292,7 +292,7 @@ console.log(confirmation)
     const resetAction = getResetAction({ routeName:'Confirmation', params: { type: 'requestPayPalPayee', friend } })
     this.props.navigation.dispatch(resetAction)
   }
-  
+
   _renderPayPalMessage() {
     if (!this.isPayPalSettlement())
       return null
@@ -315,9 +315,8 @@ console.log(confirmation)
 
     return (
       <View style={[general.centeredColumn]}>
-        {/* I AM HERE verticalMargin having no effect */}
         <View style={[formStyle.warningText, {verticalMargin:0}]}>
-          <Text style={formStyle.title}>{"@" + friend.nickname + " has not authorized PayPal payments."}</Text>
+          <Text style={[formStyle.title, {marginTop:0}]}>{"@" + friend.nickname + " has not authorized PayPal payments."}</Text>
         </View>
         <Text style={style.recentText}>{"Want to send a PayPal payment?"}</Text>
       </View>
