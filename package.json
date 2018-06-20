@@ -8,7 +8,8 @@
     "start": "node node_modules/react-native/local-cli/cli.js start",
     "setup:env": "node scripts/env.js",
     "postinstall": "node_modules/.bin/rn-nodeify --install stream,crypto --hack",
-    "debug": "open 'rndebugger://set-debugger-loc?host=localhost&port=8081'"
+    "debug": "open 'rndebugger://set-debugger-loc?host=localhost&port=8081'",
+    "test": "jest"
   },
   "dependencies": {
     "assert": "^1.4.1",
@@ -77,7 +78,42 @@
     "typescript": "^2.6.1"
   },
   "jest": {
-    "preset": "react-native"
+    "preset": "react-native",
+    "transformIgnorePatterns": [
+      "node_modules/(?!(jest-)?react-native|react-navigation)"
+    ],
+    "setupFiles": [
+      "./setupJest.js"
+    ],
+    "moduleFileExtensions": [
+      "js"
+    ],
+    "moduleDirectories": [
+      "./lib",
+      "node_modules"
+    ],
+    "moduleNameMapper": {
+      "^actions": "<rootDir>/packages/actions",
+      "^credit-protocol": "<rootDir>/packages/credit-protocol",
+      "^language": "<rootDir>/packages/language",
+      "^navigators": "<rootDir>/packages/navigators",
+      "^lndr/(.*)": "<rootDir>/packages/lndr/$1",
+      "^reducers": "<rootDir>/packages/reducers",
+      "^reducers/(.*)": "<rootDir>/packages/reducers/$1",
+      "^store": "<rootDir>/packages/store",
+      "^theme/(.*)": "<rootDir>/packages/theme/$1",
+      "^ui/(.*)": "<rootDir>/packages/ui/$1"
+    },
+    "transform": {
+      "^.+\\.(js)$": "<rootDir>/node_modules/babel-jest",
+      "\\.(ts|tsx)$": "<rootDir>/node_modules/ts-jest/preprocessor.js"
+    },
+    "testRegex": "(/__tests__/.*|\\.(test|spec))\\.(ts|tsx|js)$",
+    "testPathIgnorePatterns": [
+      "\\.snap$",
+      "<rootDir>/node_modules/"
+    ],
+    "cacheDirectory": ".jest/cache"
   },
   "react-native": {
     "crypto": "react-native-crypto",
