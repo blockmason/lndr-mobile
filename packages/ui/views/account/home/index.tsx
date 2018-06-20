@@ -19,7 +19,7 @@ import { isFocusingOn } from 'reducers/nav'
 import { getStore, getUser, getNeedsReviewCount, calculateBalance, calculateCounterparties,
   getPrimaryCurrency, getFriendList, getPendingFromFriend, getEthExchange } from 'reducers/app'
 import { getAccountInformation, displayError, getPending, getFriends,
-  getFriendRequests, getRecentTransactions, registerChannelID } from 'actions'
+  getRecentTransactions, registerChannelID } from 'actions'
 import { UrbanAirship } from 'urbanairship-react-native'
 import { currencySymbols } from 'lndr/currencies'
 
@@ -44,7 +44,6 @@ const { width } = Dimensions.get('window')
 
 const loadingRecentTransactions = new LoadingContext()
 const loadingPending = new LoadingContext()
-const loadingPendingFriends = new LoadingContext()
 const loadingFriends = new LoadingContext()
 
 interface Props {
@@ -52,7 +51,6 @@ interface Props {
   isFocused: boolean
   getPending: () => any
   getFriends: () => any
-  getFriendRequests: () => any
   getRecentTransactions: () => any
   getAccountInformation: () => any
   getBalances: () => any
@@ -94,7 +92,6 @@ class HomeView extends Component<Props, State> {
     }
 
     await loadingPending.wrap(this.props.getPending())
-    await loadingPendingFriends.wrap(this.props.getFriendRequests())
     await loadingRecentTransactions.wrap(this.props.getRecentTransactions())
     await loadingFriends.wrap(this.props.getFriends())
   }
@@ -248,4 +245,4 @@ export default connect((state) => ({ state: getStore(state)(), user: getUser(sta
 needsReviewCount: getNeedsReviewCount(state), calculateBalance: calculateBalance(state), calculateCounterparties: calculateCounterparties(state),
 primaryCurrency: getPrimaryCurrency(state), friendList: getFriendList(state)(), getPendingFromFriend: getPendingFromFriend(state),
 ethExchange: getEthExchange(state) }), 
-{ getAccountInformation, displayError, getPending, getFriendRequests, getRecentTransactions, getFriends, registerChannelID })(HomeView)
+{ getAccountInformation, displayError, getPending, getRecentTransactions, getFriends, registerChannelID })(HomeView)
