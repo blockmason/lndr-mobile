@@ -117,11 +117,13 @@ class Settlement extends Component<Props, State> {
     }
 
     const memo = debtManagement.settleUpMemo(direction, amount)
-    const denomination = 'ETH'
     const settleTotal = Math.abs(this.getRecentTotal()) === Math.abs(sanitizeAmount(amount, primaryCurrency))
     let success
 
-    if( (this.props.navigation) && (this.isEthSettlement()) ) {
+    if( (this.props.navigation)
+        && ((this.isEthSettlement()) || (this.isPayPalSettlement())) ) {
+      // NOTE: using 'denomination' for PayPal
+      const denomination = (this.isEthSettlement()) ? 'ETH' : 'PAYPAL'
       success = await submittingTransaction.wrap(
         this.props.settleUp(
           friend as Friend,
@@ -149,9 +151,13 @@ class Settlement extends Component<Props, State> {
     this.clear()
 
     let resetAction
-
     if (success && success.type !== '@@TOAST/DISPLAY_ERROR') {
-      resetAction = getResetAction({ routeName:'Confirmation', params: { type: 'create', friend } })
+      let type = 'create'
+      if (this.isPayPalSettlement()) {
+        const isPayee = (direction == 'borrow')
+        type = (isPayee) ? 'requestPayPalPayment' : 'requestPayPalPayee'
+      }
+      resetAction = getResetAction({ routeName:'Confirmation', params: { type: type, friend } })
     } else {
       resetAction = getResetAction({ routeName:'Dashboard' })
     }
@@ -256,6 +262,7 @@ class Settlement extends Component<Props, State> {
           memo={memo}
           direction={this.state.direction}
           primaryCurrency={this.props.primaryCurrency}
+          onPress={() => this.submit()}
         />
       )
     }

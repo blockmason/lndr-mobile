@@ -26,6 +26,7 @@ import { getAccountInformation, updateNickname, updateEmail, logoutAccount, togg
 import { getUser, getStore, getAllUcacCurrencies, getPrimaryCurrency } from 'reducers/app'
 import { getResetAction } from 'reducers/nav'
 import { connect } from 'react-redux'
+import { ToastActionsCreators } from 'react-native-redux-toast'
 
 import style from 'theme/form'
 import general from 'theme/general'
@@ -64,6 +65,7 @@ interface Props {
   setProfilePic: (imageURI: string, imageData: string) => any
   copyToClipboard: (text: string) => any
   setPrimaryCurrency: (value: string) => any
+  getPayPalForAddress: (address: string) => any
 }
 
 interface State {
@@ -81,6 +83,7 @@ interface State {
   nickTextInputErrorText?: string
   emailTextInputErrorText?: string
   shouldPickCurrency: boolean
+  payPalEmail: any // the user's PayPal id (email)
 }
 
 class MyAccount extends Component<Props, State> {
@@ -95,7 +98,8 @@ class MyAccount extends Component<Props, State> {
       authenticated: false,
       currency: props.primaryCurrency,
       scrollY: 0,
-      shouldPickCurrency: false
+      shouldPickCurrency: false,
+      payPalEmail: null
     }
   }
 
@@ -103,6 +107,12 @@ class MyAccount extends Component<Props, State> {
     const { address } = this.props.user
     this.props.setEthBalance()
     this.props.getProfilePic(address)
+
+    NativeModules.PayPalManager.initPayPal();
+    if (this.state.payPalEmail == null) {
+      const payPalEmail = await loadingPayPal.wrap(this.props.getPayPalForAddress(address))
+      this.setState({payPalEmail: payPalEmail})
+    }
   }
 
   async componentDidMount() {
@@ -239,14 +249,28 @@ class MyAccount extends Component<Props, State> {
     }
   }
 
-  async setPayPalConnected(bConnected) {
-      if (bConnected) {
-        NativeModules.PayPalManager.initPayPal();
-        NativeModules.PayPalManager.connectPayPal();
-        // TODO: send response to server
-      } else {
-        // TODO: tell server to delete user's PayPal info
-      }
+  async connectPayPal() {
+    try {
+      const payPalEmail = await NativeModules.PayPalManager.connectPayPal()
+      this.setState({payPalEmail: payPalEmail})
+      // TODO: send response to server
+      this.props.navigation.dispatch(ToastActionsCreators.displayInfo("PayPal enabled"));
+    } catch (e) {
+      // user cancelled
+      console.log(e)
+    }
+  }
+
+  async disconnectPayPal() {
+    try {
+      // TODO: popup confirmation
+      this.setState({payPalEmail: null})
+      // TODO: tell server to delete user's PayPal info
+      this.props.navigation.dispatch(ToastActionsCreators.displayInfo("PayPal disconnected"));
+    } catch (e) {
+      // user cancelled
+      console.log(e)
+    }
   }
 
   logout() {
@@ -264,6 +288,19 @@ class MyAccount extends Component<Props, State> {
   }
 
   _keyExtractor = (_item, index) => index
+
+  renderPayPalContent() {
+    return (this.state.payPalEmail) ? (
+        <View style={[general.flexRow, style.spaceTopS, style.spaceBottomS, style.spaceHorizontalBig]}>
+          <Image source={require('images/PayPalLogo.png')} style={{marginRight: 20}} />
+          <Switch value={true} onValueChange={() => this.disconnectPayPal()} />
+        </View>
+    ) : (<View style={[style.spaceTopS, style.spaceBottomS, style.spaceHorizontalBig]}>
+        <Icon.Button name="paypal" backgroundColor="#21c5d7" onPress={() => this.connectPayPal()}>
+          <Text style={[{color:"white"},{fontSize:18.0},{marginLeft:10}]}>Connect PayPal</Text>
+        </Icon.Button>
+      </View>)
+  }
 
   renderPanels() {
     const { user, updateNickname, updateEmail, copyToClipboard } = this.props
@@ -299,29 +336,7 @@ class MyAccount extends Component<Props, State> {
       (<View style={style.spaceHorizontalL}>
         <Button round onPress={() => Linking.openURL(`https://etherscan.io/address/${user.address}`)} text={accountManagement.viewEtherscan} />
       </View>),
-      (<View style={[style.spaceTopS, style.spaceBottomS, style.spaceHorizontalBig]}>
-        <Icon.Button name="paypal" backgroundColor="#21c5d7" onPress={() => this.setPayPalConnected(true)}>
-          <Text style={[{color:"white"},{fontSize:18.0},{marginLeft:10}]}>Connect PayPal</Text>
-        </Icon.Button>
-
-
-{/*
-        <TouchableHighlight underlayColor='black' onPress={() => this.setPayPalConnected(newValue)} style={}>
-          <View style={[general.flexRow, style.button, {backgroundColor:'black'}]}>
-            <Image source={require('images/PayPalIcon.png')} />
-            <Text style={[{color:'white'},style.text, style.spaceTopL, style.center]}>Connect PayPal</Text>
-          </View>
-        </TouchableHighlight>
-*/}
-
-{/* TODO: show a button when not linked, a Switch when linked
-  <View style={[style.spaceHorizontalL, general.flexRow]}>
-          <Image source={require('images/PayPalLogo.png')} />
-        <Switch onValueChanged={(newValue) => this.setPayPalConnected(newValue)} />
-        </View>
-*/}
-{/*<Button black onPress={() => this.setPayPalConnected(newValue)} text="Connect PayPal" icon={require('images/PayPalIcon.png')}/>*/}
-      </View>),
+      this.renderPayPalContent(),
       (<View style={style.spaceHorizontalL}>
         <Button black onPress={() => this.setState({shouldPickCurrency: true})} text={currency} />
       </View>),
@@ -481,4 +496,4 @@ class MyAccount extends Component<Props, State> {
 export default connect((state) => ({ user: getUser(state)(), state: getStore(state)(), allCurrencies: getAllUcacCurrencies(state),
   primaryCurrency: getPrimaryCurrency(state)}), { updateEmail, updateNickname,
   getAccountInformation, logoutAccount, toggleNotifications, setEthBalance, updateLockTimeout, updatePin,
-  getProfilePic, setProfilePic, copyToClipboard, setPrimaryCurrency })(MyAccount)
+  getProfilePic, setProfilePic, copyToClipboard, setPrimaryCurrency, getPayPalForAddress })(MyAccount)

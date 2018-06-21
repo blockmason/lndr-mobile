@@ -152,6 +152,7 @@ export const updateEmail = (accountData: any) => {
 }
 
 export const updatePayPal = (payPal: string) => {
+  // NOTE: sample code, going away
   return async (dispatch, getState) => {
     const { address, privateKeyBuffer } = getUser(getState())()
 //    const { "email": payPal } = payPal

@@ -19,26 +19,27 @@ const loadingPayPal = new LoadingContext()
 
 interface Props {
   user: UserData
-  ,navigation: any
-  ,displayAmount: string
-  ,direction: string
-  ,primaryCurrency: string
-  ,memo:string
-  ,getPayPalForAddress: (address: string) => any
+  navigation: any
+  displayAmount: string
+  direction: string
+  primaryCurrency: string
+  memo:string
+  getPayPalForAddress: (address: string) => any
+  onPress: () => any
 }
 
 interface State {
-  payPalPayee: string // the payee's PayPal id (email)
+  payPalPayee: any // the payee's PayPal id (email)
   confirmation: any
 }
 
 class PayPalSettlementButton extends Component<Props, State> {
   constructor(props) {
     super(props)
-    // this.state = {
-    //   payPalPayee: null
+    this.state = {
+      payPalPayee: null
     //   ,confirmation: null
-    // }
+    }
   }
 
   async componentWillMount() {
@@ -61,10 +62,7 @@ class PayPalSettlementButton extends Component<Props, State> {
   }
 
   requestPayPalPayment() {
-    // TODO: fire off notification request to friend that you want to be paid via PayPal
-    const friend = this.props.navigation ? this.props.navigation.state.params.friend : {}
-    const resetAction = getResetAction({ routeName:'Confirmation', params: { type: 'requestPayPalPayment', friend } })
-    this.props.navigation.dispatch(resetAction)
+    this.props.onPress()
   }
 
   async handlePayPalPayment() {
@@ -83,12 +81,7 @@ console.log(confirmation)
     try {
       const payPalPayee = await NativeModules.PayPalManager.connectPayPal()
       this.setState({payPalPayee: payPalPayee})
-
       this.props.navigation.dispatch(ToastActionsCreators.displayInfo("PayPal enabled successfully"));
-      // NOTE: would need to update confirmation screen to show PayPal success and after closing stay on this screen...
-      // const friend = this.props.navigation ? this.props.navigation.state.params.friend : {}
-      // const resetAction = getResetAction({ routeName:'Confirmation', params: { type: 'confirm', friend } })
-      // this.props.navigation.dispatch(resetAction)
     } catch (e) {
       // user cancelled
       console.log(e)
@@ -96,24 +89,13 @@ console.log(confirmation)
   }
 
   requestPayPalPayee() {
-    // TODO: fire off notification request to friend to connect PayPal
-    const friend = this.props.navigation ? this.props.navigation.state.params.friend : {}
-    const resetAction = getResetAction({ routeName:'Confirmation', params: { type: 'requestPayPalPayee', friend } })
-    this.props.navigation.dispatch(resetAction)
+    this.props.onPress()
   }
 
   renderPaymentMessage() {
     const friend = this.props.navigation ? this.props.navigation.state.params.friend : {}
     if (this.hasPayPalPayee()) {
       return null
-      // if (!this.isPayee())
-      //   return null // no message, we're ready to transact
-      //
-      // return (
-      //   <View style={general.centeredColumn}>
-      //     <Text style={style.recentText}>{"Ask @" + friend.nickname + " to pay you with PayPal?"}</Text>
-      //   </View>
-      // )
     }
 
     if (this.isPayee()) {

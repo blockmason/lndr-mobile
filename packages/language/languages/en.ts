@@ -379,7 +379,7 @@ export default {
     requestPayPalPayment: {
       start: `We've let `,
       end: ` know that you'd like to be paid with PayPal.`,      
-    }
+    },
     status: `You can see the status of this transaction in the `,
     activity: `activity tab.`,
   },
