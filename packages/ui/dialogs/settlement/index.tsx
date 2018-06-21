@@ -1,7 +1,6 @@
 import React, { Component } from 'react'
 import { Text, TextInput, TouchableHighlight, View, Image, ScrollView, KeyboardAvoidingView, Platform, NativeModules } from 'react-native'
 import { getResetAction } from 'reducers/nav'
-import { getPayPalForAddress } from 'actions'
 
 import { UserData } from 'lndr/user'
 import { currencyFormats, amountFormat, sanitizeAmount } from 'lndr/format'
@@ -13,6 +12,7 @@ import Button from 'ui/components/button'
 import Loading, { LoadingContext } from 'ui/components/loading'
 import DashboardShell from 'ui/components/dashboard-shell'
 import BalanceSection from 'ui/components/balance-section'
+import PayPalSettlementButton from 'ui/components/paypal-settle-button'
 
 import style from 'theme/friend'
 import formStyle from 'theme/form'
@@ -31,7 +31,6 @@ import { settleUp, addDebt, getEthTxCost } from 'actions'
 import { connect } from 'react-redux'
 
 const submittingTransaction = new LoadingContext()
-const loadingPayPal = new LoadingContext()
 
 let unmounting = false
 
@@ -63,7 +62,6 @@ interface Props {
   calculateBalance: (friend: Friend) => number
   getUcacCurrency: (ucac: string) => string
   primaryCurrency: string
-  getPayPalForAddress: (address: string) => any
 }
 
 interface State {
@@ -73,7 +71,6 @@ interface State {
   direction: string
   txCost: string
   pic?: string
-  payPalPayee: string // the payee's PayPal id (email)
 }
 
 class Settlement extends Component<Props, State> {
@@ -103,16 +100,6 @@ class Settlement extends Component<Props, State> {
       }
     } catch (e) {}
     this.setState({txCost, pic, amount})
-
-    if (this.isPayPalSettlement()) {
-      NativeModules.PayPalManager.initPayPal()
-      if (this.state.payPalPayee == null) {
-        // load payee's PayPal info, if available
-        const payPalAddress = (this.state.direction == 'borrow') ? friend.address : this.props.user.address
-        const payPalPayee = await loadingPayPal.wrap(this.props.getPayPalForAddress(payPalAddress))
-        this.setState({payPalPayee:payPalPayee})
-      }
-    }
   }
 
   componentWillUnmount() {
@@ -146,8 +133,6 @@ class Settlement extends Component<Props, State> {
           settleTotal as boolean
         )
       )
-    } else if (this.isPayPalSettlement()) {
-      success = await this.handlePaypalPayment()
     } else {
       success = await submittingTransaction.wrap(
         this.props.addDebt(
@@ -176,10 +161,6 @@ class Settlement extends Component<Props, State> {
 
   isPayPalSettlement() {
     return ( (this.props.navigation) && (this.props.navigation.state.params.settlementType == 'paypal') )
-  }
-
-  hasPayPalPayee() {
-    return (this.state.payPalPayee != null)
   }
 
   isEthSettlement() {
@@ -255,84 +236,7 @@ class Settlement extends Component<Props, State> {
     this.setState({ amount: this.setAmount(amount), formInputError })
   }
 
-  requestPayPalPayment() {
-    // TODO: fire off notification request to friend that you want to be paid via PayPal
-    const friend = this.props.navigation ? this.props.navigation.state.params.friend : {}
-    const resetAction = getResetAction({ routeName:'Confirmation', params: { type: 'requestPayPalPayment', friend } })
-    this.props.navigation.dispatch(resetAction)
-  }
-
-  async handlePayPalPayment() {
-    const { amount, direction, payPalPayee } = this.state
-    const cleanAmount = amount.replace(/[^0-9\.]/g, '')
-    const memo = debtManagement.settleUpMemo(direction, amount)
-
-    try {
-      const confirmation = await NativeModules.PayPalManager.sendPayPalPayment(cleanAmount, this.props.primaryCurrency, payPalPayee, memo)
-console.log(confirmation)
-      this.setState({confirmation: confirmation})
-      // TODO: popup confirmation and close this window
-    } catch (e) {
-      console.error(e)
-    }
-  }
-
-  async handleConnectPayPal() {
-    try {
-      const payPalPayee = await NativeModules.PayPalManager.connectPayPal()
-      this.setState({payPalPayee: payPalPayee})
-    } catch (e) {
-      console.error(e)
-    }
-  }
-
-  requestPayPalPayee() {
-    // TODO: fire off notification request to friend to connect PayPal
-    const friend = this.props.navigation ? this.props.navigation.state.params.friend : {}
-    const resetAction = getResetAction({ routeName:'Confirmation', params: { type: 'requestPayPalPayee', friend } })
-    this.props.navigation.dispatch(resetAction)
-  }
-
-  _renderPayPalMessage() {
-    if (!this.isPayPalSettlement())
-      return null
-
-    const friend = this.props.navigation ? this.props.navigation.state.params.friend : {}
-    const isPayee = (this.state.direction == 'borrow')
-    if (this.hasPayPalPayee()) {
-      if (!isPayee)
-        return null // no message, we're ready to transact
-
-      return (
-        <View style={general.centeredColumn}>
-          <Text style={style.recentText}>{"Ask @" + friend.nickname + " to pay you with PayPal?"}</Text>
-        </View>
-      )
-    }
-
-    if (isPayee) {
-      const message = "Enabling PayPal allows @" + friend.nickname + " to pay you"
-      return (
-        <View style={[general.centeredColumn]}>
-          <View style={[formStyle.infoText, {verticalMargin:0}]}>
-            <Text style={[formStyle.title, {marginTop:0}]}>{message}</Text>
-          </View>
-        </View>
-      )
-    } else {
-      const message = "@" + friend.nickname + " has not enabled PayPal payments."
-      return (
-        <View style={[general.centeredColumn]}>
-          <View style={[formStyle.warningText, {verticalMargin:0}]}>
-            <Text style={[formStyle.title, {marginTop:0}]}>{message}</Text>
-          </View>
-{/*        <Text style={style.recentText}>{"Want to send a PayPal payment?"}</Text> */}
-        </View>
-      )
-    }
-  }
-
-  _renderPaymentButton() {
+  renderPaymentButton() {
     const { amount, balance, direction } = this.state
     const isPayee = (direction == 'borrow')
 
@@ -343,25 +247,17 @@ console.log(confirmation)
     }
 
     if (this.isPayPalSettlement()) {
-      if (this.hasPayPalPayee()) {
-          if (isPayee) // we'd like to receive a PayPal payment and we're connected
-            return (
-              <Button large round wide onPress={() => this.requestPayPalPayment()} text="Request PayPal Payment" />
-            )
-          else // we're ready to send payment
-            return (
-              <Button large round wide onPress={() => this.handlePayPalPayment()} text="Send With PayPal" />
-            )
-      } else {
-        if (isPayee) // user is Payee and needs to connect PayPal
-          return (
-            <Button large round wide onPress={() => this.handleConnectPayPal()} text="Enable PayPal" />
-          )
-        else // friend needs to connect PayPal
-          return (
-            <Button large round wide onPress={() => this.requestPayPalPayee()} text={"Request PayPal"} />
-          )
-      }
+      const cleanAmount = amount.replace(/[^0-9\.]/g, '')
+      const memo = debtManagement.settleUpMemo(direction, amount)
+      return (
+        <PayPalSettlementButton user={this.props.user}
+          navigation={this.props.navigation}
+          displayAmount={cleanAmount}
+          memo={memo}
+          direction={this.state.direction}
+          primaryCurrency={this.props.primaryCurrency}
+        />
+      )
     }
 
     return (
@@ -370,15 +266,14 @@ console.log(confirmation)
   }
 
   render() {
-    const { amount, balance, txCost, formInputError, pic } = this.state
+    const { amount, balance, direction, txCost, formInputError, pic } = this.state
     const { ethBalance, ethExchange, ethSentPastWeek, primaryCurrency } = this.props
     const ethSettlement = this.props.navigation ? (this.props.navigation.state.params.settlementType == "eth") : false
     const friend = this.props.navigation ? this.props.navigation.state.params.friend : {}
     const imageSource = pic ? { uri: pic } : require('images/person-outline-dark.png')
     const vertOffset = (Platform.OS === 'android') ? -300 : 20
 
-    const payPalMessage = this._renderPayPalMessage()
-    const paymentButton = this._renderPaymentButton()
+    const paymentButton = this.renderPaymentButton()
 
     return <View style={general.whiteFlex}>
       <View style={general.view}>
@@ -422,7 +317,6 @@ console.log(confirmation)
             </View>
             { formInputError && <Text style={[formStyle.warningText, {alignSelf: 'center', marginHorizontal: 15}]}>{formInputError}</Text>}
             { paymentButton }
-            { payPalMessage }
           </View>
         </ScrollView>
       </KeyboardAvoidingView>
@@ -433,4 +327,4 @@ console.log(confirmation)
 export default connect((state) => ({ user: getUser(state)(), ethBalance: getEthBalance(state), ethExchange: getEthExchange(state),
   recentTransactions: recentTransactions(state), ethSentPastWeek: getWeeklyEthTotal(state), hasPendingTransaction: hasPendingTransaction(state),
   calculateBalance: calculateBalance(state), getUcacCurrency: getUcacCurrency(state), primaryCurrency: getPrimaryCurrency(state)}),
-  { settleUp, addDebt, getPayPalForAddress })(Settlement)
+  { settleUp, addDebt })(Settlement)

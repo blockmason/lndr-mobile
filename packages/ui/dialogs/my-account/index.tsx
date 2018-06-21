@@ -22,7 +22,7 @@ import { currencySymbols, transferLimits  } from 'lndr/currencies'
 
 import { getAccountInformation, updateNickname, updateEmail, logoutAccount, toggleNotifications,
   setEthBalance, updateLockTimeout, updatePin, getProfilePic, setProfilePic, takenNick, takenEmail,
-  copyToClipboard, validatePin, setPrimaryCurrency, getPayPal, updatePayPal } from 'actions'
+  copyToClipboard, validatePin, setPrimaryCurrency, getPayPalForAddress, updatePayPal } from 'actions'
 import { getUser, getStore, getAllUcacCurrencies, getPrimaryCurrency } from 'reducers/app'
 import { getResetAction } from 'reducers/nav'
 import { connect } from 'react-redux'

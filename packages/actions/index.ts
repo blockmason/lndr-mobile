@@ -22,7 +22,7 @@ import profilePic from 'lndr/profile-pic'
 import { getBcptBalance, transferBcpt } from 'lndr/bcpt-utils'
 import { getEtherscanTransactions } from 'lndr/etherscan'
 import { sanitizeAmount, currencyFormats } from 'lndr/format'
-import { jsonToPendingFriend, jsonToPendingTransaction, jsonToRecentTransaction, jsonToPendingUnilateral, 
+import { jsonToPendingFriend, jsonToPendingTransaction, jsonToRecentTransaction, jsonToPendingUnilateral,
   jsonToPendingBilateral } from 'lndr/json-mapping'
 import { CreditRecord } from 'credit-protocol'
 
@@ -156,7 +156,7 @@ export const updatePayPal = (payPal: string) => {
     const { address, privateKeyBuffer } = getUser(getState())()
 //    const { "email": payPal } = payPal
     try {
-      await creditProtocol.setPayPal(address, paypal, privateKeyBuffer)
+      await creditProtocol.setPayPal(address, payPal, privateKeyBuffer)
       dispatch(displaySuccess(accountManagement.setPayPal.success))
       dispatch(getAccountInformation())
     } catch (error) {
