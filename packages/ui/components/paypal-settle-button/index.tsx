@@ -13,6 +13,7 @@ import general from 'theme/general'
 
 import { getUser, getPrimaryCurrency } from 'reducers/app'
 import { connect } from 'react-redux'
+import { ToastActionsCreators } from 'react-native-redux-toast'
 
 const loadingPayPal = new LoadingContext()
 
@@ -34,8 +35,10 @@ interface State {
 class PayPalSettlementButton extends Component<Props, State> {
   constructor(props) {
     super(props)
-    this.state = {
-    }
+    // this.state = {
+    //   payPalPayee: null
+    //   ,confirmation: null
+    // }
   }
 
   async componentWillMount() {
@@ -80,6 +83,12 @@ console.log(confirmation)
     try {
       const payPalPayee = await NativeModules.PayPalManager.connectPayPal()
       this.setState({payPalPayee: payPalPayee})
+
+      this.props.navigation.dispatch(ToastActionsCreators.displayInfo("PayPal enabled successfully"));
+      // NOTE: would need to update confirmation screen to show PayPal success and after closing stay on this screen...
+      // const friend = this.props.navigation ? this.props.navigation.state.params.friend : {}
+      // const resetAction = getResetAction({ routeName:'Confirmation', params: { type: 'confirm', friend } })
+      // this.props.navigation.dispatch(resetAction)
     } catch (e) {
       // user cancelled
       console.log(e)
@@ -96,14 +105,15 @@ console.log(confirmation)
   renderPaymentMessage() {
     const friend = this.props.navigation ? this.props.navigation.state.params.friend : {}
     if (this.hasPayPalPayee()) {
-      if (!this.isPayee())
-        return null // no message, we're ready to transact
-
-      return (
-        <View style={general.centeredColumn}>
-          <Text style={style.recentText}>{"Ask @" + friend.nickname + " to pay you with PayPal?"}</Text>
-        </View>
-      )
+      return null
+      // if (!this.isPayee())
+      //   return null // no message, we're ready to transact
+      //
+      // return (
+      //   <View style={general.centeredColumn}>
+      //     <Text style={style.recentText}>{"Ask @" + friend.nickname + " to pay you with PayPal?"}</Text>
+      //   </View>
+      // )
     }
 
     if (this.isPayee()) {

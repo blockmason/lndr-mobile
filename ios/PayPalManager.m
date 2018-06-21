@@ -28,7 +28,7 @@ RCT_EXPORT_METHOD(initPayPal) {
   dispatch_async(dispatch_get_main_queue(), ^{
     // initiate PayPal session
     // Start out working with the mock environment. When you are ready, switch to PayPalEnvironmentProduction.
-    [PayPalMobile preconnectWithEnvironment:PayPalEnvironmentSandbox];//PayPalEnvironmentProduction];//PayPalEnvironmentNoNetwork
+    [PayPalMobile preconnectWithEnvironment:PayPalEnvironmentNoNetwork];//PayPalEnvironmentSandbox];//PayPalEnvironmentProduction];//
 
     _payPalConfiguration = [[PayPalConfiguration alloc] init];
     // See PayPalConfiguration.h for details and default values.
