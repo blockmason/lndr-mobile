@@ -15,6 +15,9 @@ import { getUser, getPrimaryCurrency } from 'reducers/app'
 import { connect } from 'react-redux'
 import { ToastActionsCreators } from 'react-native-redux-toast'
 
+import language from 'language'
+const { payPalLanguage } = language
+
 const loadingPayPal = new LoadingContext()
 
 interface Props {
@@ -81,7 +84,7 @@ console.log(confirmation)
     try {
       const payPalPayee = await NativeModules.PayPalManager.connectPayPal()
       this.setState({payPalPayee: payPalPayee})
-      this.props.navigation.dispatch(ToastActionsCreators.displayInfo("PayPal enabled successfully"));
+      this.props.navigation.dispatch(ToastActionsCreators.displayInfo(payPalLanguage.connectSuccess));
     } catch (e) {
       // user cancelled
       console.log(e)
@@ -99,7 +102,7 @@ console.log(confirmation)
     }
 
     if (this.isPayee()) {
-      const message = "Enabling PayPal allows @" + friend.nickname + " to pay you"
+      const message = payPalLanguage.enablePayPalForFriend(friend.nickname)
       return (
         <View style={[general.centeredColumn]}>
           <View style={formStyle.infoText}>
@@ -108,7 +111,7 @@ console.log(confirmation)
         </View>
       )
     } else {
-      const message = "@" + friend.nickname + " has not enabled PayPal payments."
+      const message = payPalLanguage.friendNotEnabled(friend.nickname)
       return (
         <View style={[general.centeredColumn]}>
           <View style={formStyle.warningText}>
@@ -125,14 +128,14 @@ console.log(confirmation)
 
     if (this.hasPayPalPayee()) {
         if (this.isPayee()) // we'd like to receive a PayPal payment and we're connected
-          button = (<Button large round wide onPress={() => this.requestPayPalPayment()} text="Request PayPal Payment" />)
+          button = (<Button large round wide onPress={() => this.requestPayPalPayment()} text={payPalLanguage.requestPayPalPayment} />)
         else // we're ready to send payment
-          button = (<Button large round wide onPress={() => this.handlePayPalPayment()} text="Send With PayPal" />)
+          button = (<Button large round wide onPress={() => this.handlePayPalPayment()} text={payPalLanguage.sendWithPayPal} />)
     } else {
       if (this.isPayee()) // user is Payee and needs to connect PayPal
-        button = (<Button large round wide onPress={() => this.handleConnectPayPal()} text="Enable PayPal" />)
+        button = (<Button large round wide onPress={() => this.handleConnectPayPal()} text={payPalLanguage.enablePayPal} />)
       else // friend needs to connect PayPal
-        button = (<Button large round wide onPress={() => this.requestPayPalPayee()} text={"Request PayPal"} />)
+        button = (<Button large round wide onPress={() => this.requestPayPalPayee()} text={payPalLanguage.requestPayPalPayee} />)
     }
     return (
       <View>

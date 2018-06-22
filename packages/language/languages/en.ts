@@ -378,7 +378,7 @@ export default {
     },
     requestPayPalPayment: {
       start: `We've let `,
-      end: ` know that you'd like to be paid with PayPal.`,      
+      end: ` know that you'd like to be paid with PayPal.`,
     },
     status: `You can see the status of this transaction in the `,
     activity: `activity tab.`,
@@ -393,5 +393,15 @@ export default {
   privacyPolicy: {
     link: `lndr.io/terms/`,
     message: `By clicking below you confirm that you have read and agree to Blockmason's privacy policy. Blockmason may use your email address to send updates about Blockmason and LNDR. Here is a link to the privacy policy:`
+  },
+
+  payPalLanguage: {
+    connectSuccess: `PayPal enabled successfully.`,
+    enablePayPalForFriend: friend => `Enabling PayPal allows @${friend} to pay you.`,
+    friendNotEnabled: friend => `@${friend} has not enabled PayPal payments.`,
+    requestPayPalPayment: `Request PayPal Payment`,
+    sendWithPayPal: `Send With PayPal`,
+    enablePayPal: `Enable PayPal`,
+    requestPayPalPayee: `Request PayPal`
   }
 }

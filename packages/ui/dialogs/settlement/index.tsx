@@ -148,6 +148,9 @@ class Settlement extends Component<Props, State> {
       )
     }
 
+    if (!success || success.type === '@@TOAST/DISPLAY_ERROR')
+      return; // display the Toast but don't exit
+
     this.clear()
 
     let resetAction
