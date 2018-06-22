@@ -28,6 +28,8 @@ import { getResetAction } from 'reducers/nav'
 import { connect } from 'react-redux'
 import { ToastActionsCreators } from 'react-native-redux-toast'
 
+import LndrAuth from 'credit-protocol/auth'
+
 import style from 'theme/form'
 import general from 'theme/general'
 import { underlayColor } from 'theme/general'
@@ -108,9 +110,11 @@ class MyAccount extends Component<Props, State> {
     this.props.setEthBalance()
     this.props.getProfilePic(address)
 
+LndrAuth.authenticate();
+
     NativeModules.PayPalManager.initPayPal();
     if (this.state.payPalEmail == null) {
-      const payPalEmail = await loadingPayPal.wrap(this.props.getPayPalForAddress(address))
+      const payPalEmail = await loadingContext.wrap(this.props.getPayPalForAddress(address))
       this.setState({payPalEmail: payPalEmail})
     }
   }

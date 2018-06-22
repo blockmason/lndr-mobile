@@ -29,7 +29,7 @@ interface Props {
 }
 
 interface State {
-  payPalPayee: any // the payee's PayPal id (email)
+  payPalPayee: string // the payee's PayPal id (email)
   confirmation: any
 }
 
@@ -37,7 +37,7 @@ class PayPalSettlementButton extends Component<Props, State> {
   constructor(props) {
     super(props)
     this.state = {
-      payPalPayee: null
+      // payPalPayee: null
     //   ,confirmation: null
     }
   }
