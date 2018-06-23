@@ -110,7 +110,7 @@ class MyAccount extends Component<Props, State> {
     this.props.setEthBalance()
     this.props.getProfilePic(address)
 
-LndrAuth.authenticate(address);
+LndrAuth.authenticate(this.props.user);
 
     NativeModules.PayPalManager.initPayPal();
     if (this.state.payPalEmail == null) {

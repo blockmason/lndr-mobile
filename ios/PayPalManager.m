@@ -34,7 +34,7 @@ RCT_EXPORT_METHOD(initPayPal) {
     // See PayPalConfiguration.h for details and default values.
     // Minimally, you will need to set three merchant information properties.
     // These should be the same values that you provided to PayPal when you registered your app.
-    _payPalConfiguration.merchantName = @"BlockMason";
+    _payPalConfiguration.merchantName = @"Blockmason";
     _payPalConfiguration.merchantPrivacyPolicyURL = [NSURL URLWithString:@"https://blockmason.io/privacy"];
     _payPalConfiguration.merchantUserAgreementURL = [NSURL URLWithString:@"https://blockmason.io/agreement"];
     _payPalConfiguration.acceptCreditCards = NO;
