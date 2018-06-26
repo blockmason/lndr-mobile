@@ -10,6 +10,7 @@
 #import "AppDelegate.h"
 #import <React/RCTLog.h>
 
+// TODO: move these outta here
 const NSString *PAYPAL_CLIENT_ID_PROD = @"AXOXl_tY00hi203wiplGZSDfP1T0W463wnDqfd4jFh3yG1ABkbPrrNCex1F8YXEROmqcVnSzVNTF80D2";
 const NSString *PAYPAL_CLIENT_ID_DEV = @"AQabZLoBTVKngs5UNiUWKk4CCjzh8EvPGoqz07nzzWPjYsVypvPRN9vVafll8Op-r3CKMHoBeygbf0pW";
 
