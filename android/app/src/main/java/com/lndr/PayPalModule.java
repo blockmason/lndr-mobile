@@ -26,6 +26,7 @@ import java.util.Set;
 
 // PayPal Android SDK:
 // https://github.com/paypal/PayPal-Android-SDK
+// http://paypal.github.io/PayPal-Android-SDK/
 
 public class PayPalModule extends ReactContextBaseJavaModule {
   // TODO: move these outta here
@@ -81,16 +82,15 @@ public class PayPalModule extends ReactContextBaseJavaModule {
 */
   @ReactMethod
   public void connectPayPal(Promise promise) {
-// not finished, this needs to be inside an activity
-/* as described here:
+// TODO: not finished, this needs to be inside an activity
     // https://github.com/paypal/PayPal-Android-SDK/blob/master/docs/profile_sharing_mobile.md
     this.promise = promise;
-    Intent intent = new Intent(SampleActivity.this, PayPalProfileSharingActivity.class);
+    Intent intent = new Intent(null/*SampleActivity.this*/, PayPalProfileSharingActivity.class);
     // send the same configuration for restart resiliency
     intent.putExtra(PayPalService.EXTRA_PAYPAL_CONFIGURATION, config);
     intent.putExtra(PayPalProfileSharingActivity.EXTRA_REQUESTED_SCOPES, getOauthScopes());
-    startActivityForResult(intent, REQUEST_CODE_PROFILE_SHARING);
-  */
+// PUT THIS BACK IN:    
+// startActivityForResult(intent, REQUEST_CODE_PROFILE_SHARING);
   }
 
   private PayPalOAuthScopes getOauthScopes() {
