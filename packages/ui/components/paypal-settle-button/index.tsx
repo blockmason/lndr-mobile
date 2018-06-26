@@ -1,10 +1,9 @@
 import React, { Component } from 'react'
 import { NativeModules, Text, View } from 'react-native'
 import Button from 'ui/components/button'
-import Loading, { LoadingContext } from 'ui/components/loading'
+// import Loading, { LoadingContext } from 'ui/components/loading'
 
 import { getResetAction } from 'reducers/nav'
-import { getPayPalForAddress } from 'actions'
 import { UserData } from 'lndr/user'
 
 import style from 'theme/friend'
@@ -18,7 +17,8 @@ import { ToastActionsCreators } from 'react-native-redux-toast'
 import language from 'language'
 const { payPalLanguage } = language
 
-const loadingPayPal = new LoadingContext()
+import PALSClient from 'credit-protocol/pals-client'
+// const loadingPayPal = new LoadingContext()
 
 interface Props {
   user: UserData
@@ -27,7 +27,6 @@ interface Props {
   direction: string
   primaryCurrency: string
   memo:string
-  getPayPalForAddress: (address: string) => any
   onPress: () => any
 }
 
@@ -37,21 +36,27 @@ interface State {
 }
 
 class PayPalSettlementButton extends Component<Props, State> {
+  palsClient: PALSClient
+
   constructor(props) {
     super(props)
-    this.state = {
-      // payPalPayee: null
-    //   ,confirmation: null
-    }
+    // this.state = {
+    // }
+    this.palsClient = new PALSClient()
   }
 
   async componentWillMount() {
     NativeModules.PayPalManager.initPayPal()
+
     if (this.state.payPalPayee == null) {
       // load payee's PayPal info, if available
-      const friend = this.props.navigation ? this.props.navigation.state.params.friend : {}
-      const payPalAddress = (this.isPayee()) ? friend.address : this.props.user.address
-      const payPalPayee = await loadingPayPal.wrap(this.props.getPayPalForAddress(payPalAddress))
+      let payPalPayee
+      if (this.isPayee()) {
+        payPalPayee = await this.palsClient.getPayPalAccount(this.props.user)
+      } else {
+        const friend = this.props.navigation ? this.props.navigation.state.params.friend : {}
+        payPalPayee = await this.palsClient.getPayPalAccountForFriend(this.props.user, friend)
+      }
       this.setState({payPalPayee:payPalPayee})
     }
   }
@@ -64,7 +69,12 @@ class PayPalSettlementButton extends Component<Props, State> {
     return (this.props.direction == 'borrow')
   }
 
-  requestPayPalPayment() {
+  async requestPayPalPayment() {
+// TODO: add LoadingContext + Loading
+    // send server authorization for friend to pay us via PayPal
+    const friend = this.props.navigation ? this.props.navigation.state.params.friend : {}
+    await this.palsClient.authorizeFriend(this.props.user, friend)
+    // navigate onwards
     this.props.onPress()
   }
 
@@ -72,6 +82,7 @@ class PayPalSettlementButton extends Component<Props, State> {
     try {
       const confirmation = await NativeModules.PayPalManager.sendPayPalPayment(this.props.displayAmount, this.props.primaryCurrency, this.state.payPalPayee, this.props.memo)
 console.log(confirmation)
+// TODO: send confirmation to server
       this.setState({confirmation: confirmation})
       // TODO: popup confirmation and close this window
     } catch (e) {
@@ -84,6 +95,13 @@ console.log(confirmation)
     try {
       const payPalPayee = await NativeModules.PayPalManager.connectPayPal()
       this.setState({payPalPayee: payPalPayee})
+      // send response to server
+      await this.palsClient.createPayPalAccount(this.props.user, payPalPayee)
+      // if we are the Payee, also authorize our friend to pay us
+      if (this.isPayee()) {
+        const friend = this.props.navigation ? this.props.navigation.state.params.friend : {}
+        await this.palsClient.authorizeFriend(this.props.user, friend)
+      }
       this.props.navigation.dispatch(ToastActionsCreators.displayInfo(payPalLanguage.connectSuccess));
     } catch (e) {
       // user cancelled
@@ -146,5 +164,4 @@ console.log(confirmation)
   }
 }
 
-export default connect((state) => ({ user: getUser(state)(), primaryCurrency: getPrimaryCurrency(state)}),
-  { getPayPalForAddress })(PayPalSettlementButton)
+export default connect((state) => ({ user: getUser(state)(), primaryCurrency: getPrimaryCurrency(state)}))(PayPalSettlementButton)

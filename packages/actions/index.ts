@@ -151,22 +151,6 @@ export const updateEmail = (accountData: any) => {
   }
 }
 
-export const updatePayPal = (payPal: string) => {
-  // NOTE: sample code, going away
-  return async (dispatch, getState) => {
-    const { address, privateKeyBuffer } = getUser(getState())()
-//    const { "email": payPal } = payPal
-    try {
-      await creditProtocol.setPayPal(address, payPal, privateKeyBuffer)
-      dispatch(displaySuccess(accountManagement.setPayPal.success))
-      dispatch(getAccountInformation())
-    } catch (error) {
-      dispatch(displayError(accountManagement.setPayPal.error))
-      throw error
-    }
-  }
-}
-
 export const updatePin = (password: string, confirmPassword: string) =>  {
   return async (dispatch, getState) => {
     if (password !== confirmPassword) {
@@ -286,25 +270,6 @@ export async function getNicknameForAddress(address) {
   }
   catch (e) {
     return address.substr(0, 8)
-  }
-}
-
-/*
-const getPayPal = async (user) => {
-  let payPal = ''
-  try {
-    payPal = await creditProtocol.getPayPal(user)
-  } catch (e) {}
-  return { payPal }
-}
-*/
-//Not a redux action
-export async function getPayPalForAddress(address) {
-  try {
-    return await creditProtocol.getPayPal(address)
-  }
-  catch (e) {
-    return '';//address.substr(0, 8)
   }
 }
 

@@ -62,28 +62,29 @@ RCT_REMAP_METHOD(connectPayPal,
 }
 
 - (void)payPalProfileSharingViewController:(nonnull PayPalProfileSharingViewController *)profileSharingViewController userDidLogInWithAuthorization:(nonnull NSDictionary *)profileSharingAuthorization {
-// send the authorization response to your server.
-//  [[WorkerService sharedService] savePayPalAuth:profileSharingAuthorization];
-//  if (![@"authorization_code" isEqualToString:[paypalAuthD safeStringForKey:@"response_type"]]) {
-//    NSLog(@"ERROR: Unexpected PayPal Auth response: %@", [paypalAuthD safeStringForKey:@"response_type"]);
-//    return NO;
-//  }
-//
-//  NSDictionary *responseD = [paypalAuthD objectForKey:@"response"];
-//  NSString *code = [responseD safeStringForKey:@"code"];
-//  if ([code length] == 0) {
-//    NSLog(@"ERROR: Unexpected PayPal Auth response");
-//    return NO;
-//  }
-//
-//  NSDictionary *paypalD = @{@"uuid": _currentWorker.uuid
-//                            ,@"code": code
-//                            };
-//  NSString *endpoint = [NSString stringWithFormat:@"/ledger/paypal"];
-//  [super postEndpoint:endpoint data:paypalD completion:^(NSObject *resultObj, NSError *error) {
+  // sample authorization response:
+  //    {
+  //      client: {
+  //        product_name: 'PayPal iOS SDK',
+  //        platform: 'iOS',
+  //        paypal_sdk_version: '2.18.1',
+  //        environment: 'mock'
+  //      },
+  //      response_type: 'authorization_code',
+  //      response: {
+  //        code: 'AuthorizationCodeForNoNetworkEnvironment'
+  //      }
+  //    }
 
+  NSString *paypalEmail = nil;
+  NSString *responseType = [profileSharingAuthorization objectForKey:@"response_type"];
+  if ([@"authorization_code" isEqualToString:responseType]) {
+    NSObject *responseObj = [profileSharingAuthorization objectForKey:@"response"];
+    if ( (responseObj) && ([responseObj isKindOfClass:[NSDictionary class]]) )
+      paypalEmail = [(NSDictionary *)responseObj objectForKey:@"code"];
+  }
   if (self.resolver) {
-    self.resolver(profileSharingAuthorization);
+    self.resolver(paypalEmail);
     self.rejecter = nil;
     self.resolver = nil;
   }

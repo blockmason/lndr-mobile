@@ -22,13 +22,13 @@ import { currencySymbols, transferLimits  } from 'lndr/currencies'
 
 import { getAccountInformation, updateNickname, updateEmail, logoutAccount, toggleNotifications,
   setEthBalance, updateLockTimeout, updatePin, getProfilePic, setProfilePic, takenNick, takenEmail,
-  copyToClipboard, validatePin, setPrimaryCurrency, getPayPalForAddress, updatePayPal } from 'actions'
+  copyToClipboard, validatePin, setPrimaryCurrency } from 'actions'
 import { getUser, getStore, getAllUcacCurrencies, getPrimaryCurrency } from 'reducers/app'
 import { getResetAction } from 'reducers/nav'
 import { connect } from 'react-redux'
 import { ToastActionsCreators } from 'react-native-redux-toast'
 
-import LndrAuth from 'credit-protocol/auth'
+import PALSClient from 'credit-protocol/pals-client'
 
 import style from 'theme/form'
 import general from 'theme/general'
@@ -67,7 +67,6 @@ interface Props {
   setProfilePic: (imageURI: string, imageData: string) => any
   copyToClipboard: (text: string) => any
   setPrimaryCurrency: (value: string) => any
-  getPayPalForAddress: (address: string) => any
 }
 
 interface State {
@@ -89,6 +88,8 @@ interface State {
 }
 
 class MyAccount extends Component<Props, State> {
+  palsClient: PALSClient
+
   constructor(props) {
     super(props)
     this.state = {
@@ -101,8 +102,9 @@ class MyAccount extends Component<Props, State> {
       currency: props.primaryCurrency,
       scrollY: 0,
       shouldPickCurrency: false,
-      payPalEmail: null
+      payPalEmail: null,
     }
+    this.palsClient = new PALSClient()
   }
 
   async componentWillMount() {
@@ -110,11 +112,12 @@ class MyAccount extends Component<Props, State> {
     this.props.setEthBalance()
     this.props.getProfilePic(address)
 
-LndrAuth.authenticate(this.props.user);
+    NativeModules.PayPalManager.initPayPal()
 
-    NativeModules.PayPalManager.initPayPal();
     if (this.state.payPalEmail == null) {
-      const payPalEmail = await loadingContext.wrap(this.props.getPayPalForAddress(address))
+      // palsClient.authenticate(this.props.user)
+      const payPalEmail = await this.palsClient.getPayPalAccount(this.props.user)
+//      const payPalEmail = await loadingContext.wrap(this.props.getPayPalForAddress(address))
       this.setState({payPalEmail: payPalEmail})
     }
   }
@@ -256,8 +259,10 @@ LndrAuth.authenticate(this.props.user);
   async connectPayPal() {
     try {
       const payPalEmail = await NativeModules.PayPalManager.connectPayPal()
+      // console.log(payPalEmail)
       this.setState({payPalEmail: payPalEmail})
-      // TODO: send response to server
+      // send response to server
+      await this.palsClient.createPayPalAccount(this.props.user, payPalEmail)
       this.props.navigation.dispatch(ToastActionsCreators.displayInfo("PayPal enabled"));
     } catch (e) {
       // user cancelled
@@ -268,8 +273,9 @@ LndrAuth.authenticate(this.props.user);
   async disconnectPayPal() {
     try {
       // TODO: popup confirmation
+      // tell server to delete user's PayPal info
+      await this.palsClient.deletePayPalAccount(this.props.user, this.state.payPalEmail)
       this.setState({payPalEmail: null})
-      // TODO: tell server to delete user's PayPal info
       this.props.navigation.dispatch(ToastActionsCreators.displayInfo("PayPal disconnected"));
     } catch (e) {
       // user cancelled
@@ -500,4 +506,4 @@ LndrAuth.authenticate(this.props.user);
 export default connect((state) => ({ user: getUser(state)(), state: getStore(state)(), allCurrencies: getAllUcacCurrencies(state),
   primaryCurrency: getPrimaryCurrency(state)}), { updateEmail, updateNickname,
   getAccountInformation, logoutAccount, toggleNotifications, setEthBalance, updateLockTimeout, updatePin,
-  getProfilePic, setProfilePic, copyToClipboard, setPrimaryCurrency, getPayPalForAddress })(MyAccount)
+  getProfilePic, setProfilePic, copyToClipboard, setPrimaryCurrency })(MyAccount)
