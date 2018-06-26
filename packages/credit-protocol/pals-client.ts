@@ -80,6 +80,20 @@ export default class PALSClient {
     }
   }
 
+  async getPayPalAccountForFriend(user, friend) {
+    const authorized = await this.checkAuthorized(user)
+    if (!authorized)
+      return null
+
+    try {
+      const fullResponse = await this.client.get(`/paypal-accounts?filter=0x${friend.address}`)
+      const response = this.handleResponse(fullResponse)
+      return (response) ? this.processAccountsResponse(response) : null
+    } catch (e) {
+      return null
+    }
+  }
+
   processAccountsResponse(response) {
     if ( (response) && (response.length > 0) ) {
       // NOTE: the API returns an array of payPal accounts, we only need the first one
@@ -136,20 +150,6 @@ export default class PALSClient {
       const response = await this.client.post(`/authorizations`, payload)
       const result = this.handleResponse(response)
       return result
-    } catch (e) {
-      return null
-    }
-  }
-
-  async getPayPalAccountForFriend(user, friend) {
-    const authorized = await this.checkAuthorized(user)
-    if (!authorized)
-      return null
-
-    try {
-      const fullResponse = await this.client.get(`/paypal-accounts?filter=0x${friend.address}`)
-      const response = this.handleResponse(fullResponse)
-      return (response) ? this.processAccountsResponse(response) : null
     } catch (e) {
       return null
     }
