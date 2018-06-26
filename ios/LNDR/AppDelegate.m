@@ -26,8 +26,7 @@
 {
   [FIRApp configure];
   
-  [PayPalMobile initializeWithClientIdsForEnvironments:@{PayPalEnvironmentProduction : PAYPAL_CLIENT_ID_PROD,
-                                                         PayPalEnvironmentSandbox : PAYPAL_CLIENT_ID_DEV}];
+  [PayPalManager setup];
 
   NSURL *jsCodeLocation;
 

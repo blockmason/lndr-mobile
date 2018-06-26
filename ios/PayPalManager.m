@@ -23,6 +23,11 @@ const NSString *PAYPAL_CLIENT_ID_DEV = @"AQabZLoBTVKngs5UNiUWKk4CCjzh8EvPGoqz07n
 
 RCT_EXPORT_MODULE();
 
++ (void)setup {
+  [PayPalMobile initializeWithClientIdsForEnvironments:@{PayPalEnvironmentProduction: PAYPAL_CLIENT_ID_PROD,
+                                                         PayPalEnvironmentSandbox: PAYPAL_CLIENT_ID_DEV}];
+}
+
 RCT_EXPORT_METHOD(initPayPal) {
   RCTLogInfo(@"Initializing PayPalManager");
   dispatch_async(dispatch_get_main_queue(), ^{

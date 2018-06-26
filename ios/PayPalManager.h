@@ -10,9 +10,6 @@
 #import <PayPalMobile.h>
 #import <React/RCTBridgeModule.h>
 
-extern const NSString *PAYPAL_CLIENT_ID_PROD;
-extern const NSString *PAYPAL_CLIENT_ID_DEV;
-
 @interface PayPalManager : NSObject <RCTBridgeModule, PayPalProfileSharingDelegate, PayPalPaymentDelegate>
-
++ (void)setup;
 @end
