@@ -34,7 +34,7 @@ RCT_EXPORT_METHOD(initPayPal) {
   dispatch_async(dispatch_get_main_queue(), ^{
     // initiate PayPal session
     // Start out working with the mock environment. When you are ready, switch to PayPalEnvironmentProduction.
-    [PayPalMobile preconnectWithEnvironment:PayPalEnvironmentNoNetwork];//PayPalEnvironmentSandbox];//PayPalEnvironmentProduction];//
+    [PayPalMobile preconnectWithEnvironment:PayPalEnvironmentSandbox];//PayPalEnvironmentNoNetwork//PayPalEnvironmentProduction];//
 
     _payPalConfiguration = [[PayPalConfiguration alloc] init];
     // See PayPalConfiguration.h for details and default values.
@@ -82,15 +82,15 @@ RCT_REMAP_METHOD(connectPayPal,
   //      }
   //    }
 
-  NSString *paypalEmail = nil;
+  NSString *authCode = nil;
   NSString *responseType = [profileSharingAuthorization objectForKey:@"response_type"];
   if ([@"authorization_code" isEqualToString:responseType]) {
     NSObject *responseObj = [profileSharingAuthorization objectForKey:@"response"];
     if ( (responseObj) && ([responseObj isKindOfClass:[NSDictionary class]]) )
-      paypalEmail = [(NSDictionary *)responseObj objectForKey:@"code"];
+      authCode = [(NSDictionary *)responseObj objectForKey:@"code"];
   }
   if (self.resolver) {
-    self.resolver(paypalEmail);
+    self.resolver(authCode);
     self.rejecter = nil;
     self.resolver = nil;
   }
