@@ -88,7 +88,7 @@ export default StyleSheet.create({
     ...verticalMargin,
     backgroundColor: warning,
     color: warningDark,
-    overflow: 'hidden'
+    overflow: 'hidden',
     ...medium
   },
   infoView: {
@@ -106,9 +106,9 @@ export default StyleSheet.create({
     ...verticalMargin,
     backgroundColor: softGray,
     color: gray,
-    overflow: 'hidden'
+    overflow: 'hidden',
     ...medium
-  }
+  },
   header: {
     ...xlarge,
     ...verticalMargin,

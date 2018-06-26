@@ -9,14 +9,14 @@ const PEM = {
   encodePrivateKey: (pubHex, privHex) => {
     return `-----BEGIN PRIVATE KEY-----
 ${Buffer.from(`308184020100301006072a8648ce3d020106052b8104000a046d306b0201010420${privHex}a144034200${pubHex}`, 'hex').toString('base64')}
------END PRIVATE KEY-----`;
+-----END PRIVATE KEY-----`
   },
   encodePublicKey: (pubHex) => {
     return `-----BEGIN PUBLIC KEY-----
 ${Buffer.from(`3056301006072a8648ce3d020106052b8104000a034200${pubHex}`, 'hex').toString('base64')}
------END PUBLIC KEY-----`;
+-----END PUBLIC KEY-----`
   }
-};
+}
 
 export default class PALSClient {
   client: Client
@@ -72,52 +72,54 @@ export default class PALSClient {
       return null
 
     try {
-      const response = await this.client.get(`/paypal-accounts`)
-      const result = this.handleResponse(response)
-      if ( (result) && (result.length > 0) ) {
-        // NOTE: the API returns an array of payPal accounts, we only need the first one
-        const account = result[0]
-        if ( (account.type) && (account.type == "paypal-account") ) {
-          const accountId = account.id
-          const payPalAccount = (account.attributes) ? account.attributes.externalId : null
-          if (payPalAccount)
-            this.accountMap[payPalAccount] = accountId
-          return payPalAccount
-        }
-      }
-      return null
-      // Sample Response:
-      // [{
-      //   "attributes":{
-      //     "externalId":"AuthorizationCodeForNoNetworkEnvironment"
-      //   },
-      //   "id":"b-hiNcnum1HqC_7lE5v8yFNOXkMYfr6wXJkpfTitXRM"
-      //   ,"relationships":{
-      //     "owner":{
-      //       "data":{
-      //         "id":"0xfe31df89d6152bb89744d41095339c0a9206c9f7"
-      //         ,"type":"ethereum-account"
-      //       }
-      //     }
-      //   }
-      //   ,"type":"paypal-account"
-      // }]
+      const fullResponse = await this.client.get(`/paypal-accounts`)
+      const response = this.handleResponse(fullResponse)
+      return (response) ? this.processAccountsResponse(response) : null
     } catch (e) {
       return null
     }
   }
 
+  processAccountsResponse(response) {
+    if ( (response) && (response.length > 0) ) {
+      // NOTE: the API returns an array of payPal accounts, we only need the first one
+      const account = response[0]
+      if ( (account.type) && (account.type == "paypal-account") ) {
+        const accountId = account.id
+        const payPalAccount = (account.attributes) ? account.attributes.externalId : null
+        if (payPalAccount)
+          this.accountMap[payPalAccount] = accountId
+        return payPalAccount
+      }
+    }
+    return null
+    // Sample Response:
+    // [{
+    //   "attributes":{
+    //     "externalId":"AuthorizationCodeForNoNetworkEnvironment"
+    //   },
+    //   "id":"b-hiNcnum1HqC_7lE5v8yFNOXkMYfr6wXJkpfTitXRM"
+    //   ,"relationships":{
+    //     "owner":{
+    //       "data":{
+    //         "id":"0xfe31df89d6152bb89744d41095339c0a9206c9f7"
+    //         ,"type":"ethereum-account"
+    //       }
+    //     }
+    //   }
+    //   ,"type":"paypal-account"
+    // }]
+  }
+
   async authorizeFriend(user, friend) {
     const authorized = await this.checkAuthorized(user)
     if (!authorized)
-      return null;
+      return null
 
     const payload = {
       data: {
         attributes: {
-          externalId: {
-            scope: "paypal-accounts:list"
-          }
+          scope: "paypal-accounts:list"
         }
         ,relationships: {
           grantee: {
@@ -142,13 +144,12 @@ export default class PALSClient {
   async getPayPalAccountForFriend(user, friend) {
     const authorized = await this.checkAuthorized(user)
     if (!authorized)
-      return null;
+      return null
 
     try {
-      const response = await this.client.get(`/paypal-accounts?filter=0x${friend.address}`)
-      const result = this.handleResponse(response)
-      // NOTE: the API returns an array of payPal accounts, we only need the first one
-      return (result) ? result[0] : null
+      const fullResponse = await this.client.get(`/paypal-accounts?filter=0x${friend.address}`)
+      const response = this.handleResponse(fullResponse)
+      return (response) ? this.processAccountsResponse(response) : null
     } catch (e) {
       return null
     }
@@ -157,7 +158,7 @@ export default class PALSClient {
   async createPayPalAccount(user, payPalEmail) {
     const authorized = await this.checkAuthorized(user)
     if (!authorized)
-      return null;
+      return null
 
     const payload = {
       data: {
@@ -179,7 +180,7 @@ export default class PALSClient {
   async deletePayPalAccount(user, payPalEmail) {
     const authorized = await this.checkAuthorized(user)
     if (!authorized)
-      return null;
+      return null
 
     // look up the Id from our accountMap
     const accountId = this.accountMap[payPalEmail]
@@ -205,7 +206,7 @@ export default class PALSClient {
     if ( (response.jsonapi == null) || (response.data == null) ) {
       // incorrect formats
       console.log(`Response is not JSONAPI: ${JSON.stringify(response)}`)
-      return null;
+      return null
     }
 
 console.log(`RESPONSE: ${JSON.stringify(response.data)}`)
