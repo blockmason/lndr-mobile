@@ -258,12 +258,17 @@ class MyAccount extends Component<Props, State> {
 
   async connectPayPal() {
     try {
-      const payPalEmail = await NativeModules.PayPalManager.connectPayPal()
-      // console.log(payPalEmail)
-      this.setState({payPalEmail: payPalEmail})
-      // send response to server
-      await this.palsClient.createPayPalAccount(this.props.user, payPalEmail)
-      this.props.navigation.dispatch(ToastActionsCreators.displayInfo("PayPal enabled"));
+      const authToken = await NativeModules.PayPalManager.connectPayPal()
+      if (authToken) {
+        // send response to server
+        await this.palsClient.createPayPalAccount(this.props.user, authToken)
+        const payPalEmail = await this.palsClient.getPayPalAccount(this.props.user)
+        // console.log(payPalEmail)
+        this.setState({payPalEmail: payPalEmail})
+        this.props.navigation.dispatch(ToastActionsCreators.displayInfo("PayPal enabled"));
+      } else {
+        this.setState({payPalEmail: null})
+      }
     } catch (e) {
       // user cancelled
       console.log(e)

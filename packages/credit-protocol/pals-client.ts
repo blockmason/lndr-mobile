@@ -155,7 +155,7 @@ export default class PALSClient {
     }
   }
 
-  async createPayPalAccount(user, payPalEmail) {
+  async createPayPalAccount(user, authToken) {
     const authorized = await this.checkAuthorized(user)
     if (!authorized)
       return null
@@ -163,13 +163,14 @@ export default class PALSClient {
     const payload = {
       data: {
         attributes: {
-          externalId: payPalEmail
+          authorizationCode: authToken
         }
+        ,type: "paypal-oauth-authorization"
       }
     }
 
     try {
-      const response = await this.client.post(`/paypal-accounts`, payload)
+      const response = await this.client.post(`/paypal-oauth-authorizations`, payload)
       const result = this.handleResponse(response)
       return result
     } catch (e) {

@@ -95,16 +95,21 @@ console.log(confirmation)
 
   async handleConnectPayPal() {
     try {
-      const payPalPayee = await NativeModules.PayPalManager.connectPayPal()
-      this.setState({payPalPayee: payPalPayee})
-      // send response to server
-      await this.palsClient.createPayPalAccount(this.props.user, payPalPayee)
-      // if we are the Payee, also authorize our friend to pay us
-      if (this.isPayee()) {
-        const friend = this.props.navigation ? this.props.navigation.state.params.friend : {}
-        await this.palsClient.authorizeFriend(this.props.user, friend)
+      const authToken = await NativeModules.PayPalManager.connectPayPal()
+      if (authToken) {
+        // send response to server
+        await this.palsClient.createPayPalAccount(this.props.user, authToken)
+        const payPalPayee = await this.palsClient.getPayPalAccount(this.props.user)
+        this.setState({payPalPayee: payPalPayee})
+        // if we are the Payee, also authorize our friend to pay us
+        if (this.isPayee()) {
+          const friend = this.props.navigation ? this.props.navigation.state.params.friend : {}
+          await this.palsClient.authorizeFriend(this.props.user, friend)
+        }
+        this.props.navigation.dispatch(ToastActionsCreators.displayInfo(payPalLanguage.connectSuccess));
+      } else {
+        this.setState({payPalPayee: null})
       }
-      this.props.navigation.dispatch(ToastActionsCreators.displayInfo(payPalLanguage.connectSuccess));
     } catch (e) {
       // user cancelled
       console.log(e)
