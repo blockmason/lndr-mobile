@@ -31,7 +31,7 @@ interface Props {
 }
 
 interface State {
-  payPalPayee: string // the payee's PayPal id (email)
+  payPalPayee: any // the payee's PayPal id (email)
   confirmation: any
 }
 
@@ -40,8 +40,10 @@ class PayPalSettlementButton extends Component<Props, State> {
 
   constructor(props) {
     super(props)
-    // this.state = {
-    // }
+    this.state = {
+      payPalPayee: null
+      ,confirmation: null
+    }
     this.palsClient = new PALSClient()
   }
 
@@ -122,8 +124,8 @@ console.log(confirmation)
     if (this.isPayee()) {
       const message = payPalLanguage.enablePayPalForFriend(friend.nickname)
       return (
-        <View style={[general.centeredColumn]}>
-          <View style={formStyle.infoText}>
+        <View style={general.centeredColumn}>
+          <View style={formStyle.infoView}>
             <Text style={[formStyle.title, {marginTop:0}]}>{message}</Text>
           </View>
         </View>
@@ -131,8 +133,8 @@ console.log(confirmation)
     } else {
       const message = payPalLanguage.friendNotEnabled(friend.nickname)
       return (
-        <View style={[general.centeredColumn]}>
-          <View style={formStyle.warningText}>
+        <View style={general.centeredColumn}>
+          <View style={formStyle.warningView}>
             <Text style={[formStyle.title, {marginTop:0}]}>{message}</Text>
           </View>
         </View>

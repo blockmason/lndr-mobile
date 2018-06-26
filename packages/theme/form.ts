@@ -73,26 +73,42 @@ export default StyleSheet.create({
   horizontalElem: {
     ...mediumPad
   },
+  warningView: {
+    paddingVertical: s,
+    paddingHorizontal: m,
+    ...radius,
+    ...verticalMargin,
+    backgroundColor: warning,
+    overflow: 'hidden'
+  },
   warningText: {
     paddingVertical: s,
     paddingHorizontal: m,
-    ...medium,
     ...radius,
     ...verticalMargin,
     backgroundColor: warning,
     color: warningDark,
     overflow: 'hidden'
+    ...medium
+  },
+  infoView: {
+    paddingVertical: s,
+    paddingHorizontal: m,
+    ...radius,
+    ...verticalMargin,
+    backgroundColor: softGray,
+    overflow: 'hidden'
   },
   infoText: {
     paddingVertical: s,
     paddingHorizontal: m,
-    ...medium,
     ...radius,
     ...verticalMargin,
     backgroundColor: softGray,
     color: gray,
     overflow: 'hidden'
-  },
+    ...medium
+  }
   header: {
     ...xlarge,
     ...verticalMargin,
@@ -128,10 +144,10 @@ export default StyleSheet.create({
     ...verticalMarginXS
   },
   settleAmount: {
-    width: '80%', 
-    borderRadius: 30, 
-    borderWidth: 1, 
-    borderColor: softGray, 
+    width: '80%',
+    borderRadius: 30,
+    borderWidth: 1,
+    borderColor: softGray,
     ...verticalMarginXS
   },
   textInputContainerMinor: {
