@@ -1,4 +1,7 @@
 {
+  "ignore": [
+    "**/__tests__"
+  ],
   "presets": ["react-native"],
   "plugins": [
     ["module-alias", [

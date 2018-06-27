@@ -1,0 +1,195 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Initialization renders correctly 1`] = `
+<View
+  accessibilityComponentType={undefined}
+  accessibilityLabel={undefined}
+  accessibilityTraits={undefined}
+  accessible={true}
+  hasTVPreferredFocus={undefined}
+  hitSlop={undefined}
+  isTVSelectable={true}
+  nativeID={undefined}
+  onLayout={undefined}
+  onResponderGrant={[Function]}
+  onResponderMove={[Function]}
+  onResponderRelease={[Function]}
+  onResponderTerminate={[Function]}
+  onResponderTerminationRequest={[Function]}
+  onStartShouldSetResponder={[Function]}
+  style={
+    Array [
+      Object {
+        "backgroundColor": "transparent",
+      },
+      undefined,
+    ]
+  }
+  testID={undefined}
+  tvParallaxProperties={undefined}
+>
+  <View
+    style={
+      Object {
+        "paddingBottom": 9,
+        "paddingLeft": 15,
+        "paddingRight": 15,
+        "paddingTop": 10,
+      }
+    }
+  >
+    <View
+      style={
+        Object {
+          "flexDirection": "row",
+          "justifyContent": "space-between",
+        }
+      }
+    >
+      <View
+        style={
+          Array [
+            Object {
+              "flexDirection": "row",
+            },
+            Object {
+              "alignItems": "center",
+            },
+          ]
+        }
+      >
+        <Image
+          source={
+            Object {
+              "testUri": "../../../packages/images/person-outline-dark.png",
+            }
+          }
+          style={
+            Object {
+              "borderRadius": 30,
+              "height": 60,
+              "marginRight": 15,
+              "width": 60,
+            }
+          }
+        />
+        <View
+          style={
+            Object {
+              "flexDirection": "column",
+            }
+          }
+        >
+          <Text
+            accessible={true}
+            allowFontScaling={true}
+            ellipsizeMode="tail"
+            style={
+              Object {
+                "color": "#01c5d9",
+                "fontSize": 16,
+                "fontWeight": "bold",
+                "maxWidth": 375,
+              }
+            }
+          >
+            Joe
+          </Text>
+        </View>
+      </View>
+      <View
+        accessibilityComponentType={undefined}
+        accessibilityLabel={undefined}
+        accessibilityTraits={undefined}
+        accessible={true}
+        hasTVPreferredFocus={undefined}
+        hitSlop={undefined}
+        isTVSelectable={true}
+        nativeID={undefined}
+        onLayout={undefined}
+        onResponderGrant={[Function]}
+        onResponderMove={[Function]}
+        onResponderRelease={[Function]}
+        onResponderTerminate={[Function]}
+        onResponderTerminationRequest={[Function]}
+        onStartShouldSetResponder={[Function]}
+        style={
+          Array [
+            Object {
+              "backgroundColor": "transparent",
+            },
+            undefined,
+          ]
+        }
+        testID={undefined}
+        tvParallaxProperties={undefined}
+      >
+        <View
+          style={
+            Array [
+              Object {
+                "alignItems": "center",
+                "backgroundColor": "#01c5d9",
+                "borderRadius": 4,
+                "elevation": 2,
+                "flexDirection": "row",
+                "justifyContent": "center",
+                "marginBottom": 10,
+                "marginTop": 10,
+                "minHeight": 40,
+                "minWidth": 45,
+                "paddingBottom": 5,
+                "paddingLeft": 15,
+                "paddingRight": 15,
+                "paddingTop": 5,
+                "shadowColor": "#000",
+                "shadowOffset": Object {
+                  "height": 1,
+                  "width": 0,
+                },
+                "shadowOpacity": 0.5,
+                "shadowRadius": 1,
+              },
+              Object {
+                "borderRadius": 100,
+              },
+              Object {
+                "marginRight": 10,
+              },
+              Object {
+                "width": 140,
+              },
+            ]
+          }
+        >
+          <Text
+            accessible={true}
+            allowFontScaling={true}
+            ellipsizeMode="tail"
+            style={
+              Array [
+                Object {
+                  "alignSelf": "center",
+                  "backgroundColor": "transparent",
+                  "color": "#f8f8f8",
+                  "fontSize": 16,
+                  "letterSpacing": 0.5,
+                  "marginBottom": 6,
+                  "marginTop": 6,
+                  "paddingLeft": 10,
+                  "paddingRight": 10,
+                },
+                Object {
+                  "fontSize": 14,
+                },
+              ]
+            }
+          >
+            + ADD FRIEND
+          </Text>
+        </View>
+      </View>
+    </View>
+  </View>
+</View>
+`;

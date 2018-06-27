@@ -6,14 +6,12 @@ import Button from 'ui/components/button'
 import Friend from 'lndr/friend'
 import profilePic from 'lndr/profile-pic'
 
-import { white } from 'theme/include/colors'
-
 import style from 'theme/account'
 import general from 'theme/general'
 import friendStyle from 'theme/friend'
 
 import language from 'language'
-const { alreadyFriendsButton, addFriendButton } = language
+const { addFriendButton } = language
 
 interface Props {
   onPress: () => void

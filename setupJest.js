@@ -9,9 +9,27 @@ global.console = {
 };
 global.fetch = require('jest-fetch-mock');
 
-jest.mock('react-native-fetch-blob', () => ({
-  DocumentDir: () => {},
-}));
+jest.mock('react-native-fetch-blob', () => {
+  return {
+    fs: {
+      dirs: {
+        MainBundleDir: () => {},
+        CacheDir: () => {},
+        DocumentDir: () => {},
+      },
+    },
+    DocumentDir: () => {},
+    fetch: () => {},
+    base64: () => {},
+    android: () => {},
+    ios: () => {},
+    config: () => {},
+    session: () => {},
+    wrap: () => {},
+    polyfill: () => {},
+    JSONStream: () => {}
+  }
+});
 
 jest.mock('urbanairship-react-native', () => jest.fn());
 jest.mock('secp256k1', () => jest.fn());
