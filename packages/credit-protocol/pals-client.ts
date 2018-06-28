@@ -165,12 +165,13 @@ export default class PALSClient {
         attributes: {
           authorizationCode: authToken
         }
-        ,type: "paypal-oauth-authorization"
+        ,type: "paypal-oauth-token"
       }
     }
 
+console.log(JSON.stringify(payload))
     try {
-      const response = await this.client.post(`/paypal-oauth-authorizations`, payload)
+      const response = await this.client.post(`/paypal-oauth-tokens`, payload)
       const result = this.handleResponse(response)
       return result
     } catch (e) {
