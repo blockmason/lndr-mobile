@@ -424,15 +424,6 @@ export async function searchUsers(searchData) {
   }
 }
 
-export const getFriendRequests = () => {
-  return async (dispatch, getState) => {
-    const { address } = getUser(getState())()
-    const rawPendingFriends = await creditProtocol.getFriendRequests(address)
-    const pendingFriends = rawPendingFriends.map(jsonToPendingFriend)
-    dispatch(setState({ pendingFriends, pendingFriendsLoaded: true }))
-  }
-}
-
 export const getRecentTransactions = () => {
   return async (dispatch, getState) => {
     const { address } = getUser(getState())()
@@ -456,13 +447,14 @@ export const getPending = () => {
     const pendingSettlements = filterMultiTransactions(user.address, rawPendingSettlements.unilateralSettlements.map(jsonToPendingUnilateral), getState())
     const bilateralSettlements = filterMultiTransactions(user.address, rawPendingSettlements.bilateralSettlements.map(jsonToPendingBilateral), getState())
     settleBilateral(user, bilateralSettlements, dispatch, getState)
+    
+    const rawPendingFriends = await creditProtocol.getFriendRequests(user.address)
+    const pendingFriends = rawPendingFriends.map(jsonToPendingFriend)
+    
     await ensureTransactionNicknames(pendingSettlements)
     await ensureTransactionNicknames(bilateralSettlements)
-    dispatch(setState({ pendingSettlements, pendingSettlementsLoaded: true, bilateralSettlements }))
-
     await ensureTransactionNicknames(pendingTransactions)
-
-    dispatch(setState({ pendingTransactions, pendingTransactionsLoaded: true, pendingSettlements, pendingSettlementsLoaded: true, bilateralSettlements }))
+    dispatch(setState({ pendingTransactions, pendingTransactionsLoaded: true, pendingSettlements, pendingSettlementsLoaded: true, bilateralSettlements, pendingFriends, pendingFriendsLoaded: true }))
   }
 }
 
@@ -990,7 +982,6 @@ const refreshTransactions = () => {
   getPending()
   getRecentTransactions()
   setEthBalance()
-  getFriendRequests()
 }
 
 const settleBilateral = async (user, bilateralSettlements, dispatch, getState) => {

@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import { Text, TextInput, TouchableHighlight, View, Image, ScrollView, KeyboardAvoidingView, Platform, NativeModules } from 'react-native'
+import { Text, TextInput, TouchableHighlight, View, Image, ScrollView, KeyboardAvoidingView, Platform } from 'react-native'
 import { getResetAction } from 'reducers/nav'
 
 import { UserData } from 'lndr/user'

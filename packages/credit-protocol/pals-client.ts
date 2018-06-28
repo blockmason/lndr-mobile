@@ -169,7 +169,7 @@ export default class PALSClient {
       }
     }
 
-    //console.log(JSON.stringify(payload))
+    console.log(JSON.stringify(payload))
     try {
       const response = await this.client.post(`/paypal-oauth-tokens`, payload)
       const result = this.handleResponse(response)

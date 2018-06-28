@@ -3,10 +3,8 @@ import { NativeModules, Text, View } from 'react-native'
 import Button from 'ui/components/button'
 // import Loading, { LoadingContext } from 'ui/components/loading'
 
-import { getResetAction } from 'reducers/nav'
 import { UserData } from 'lndr/user'
 
-import style from 'theme/friend'
 import formStyle from 'theme/form'
 import general from 'theme/general'
 

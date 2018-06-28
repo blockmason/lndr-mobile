@@ -31,6 +31,7 @@ project.xcworkspace
 ios/LNDR.xcworkspace
 ios/Pods
 ios/AirshipConfig.plist
+ios/PayPalConfig.plist
 
 # Android/IntelliJ
 #
@@ -40,6 +41,7 @@ build/
 local.properties
 *.iml
 android/app/src/main/assets/airshipconfig.properties
+android/app/src/main/assets/paypalconfig.properties
 
 android/app/src/main/assets/index.android.bundle
 android/app/src/main/assets/index.android.bundle.meta

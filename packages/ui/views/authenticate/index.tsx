@@ -2,7 +2,6 @@ import React, { Component } from 'react'
 
 import { View, ActivityIndicator, ScrollView } from 'react-native'
 
-import ThemeImage from 'ui/components/images/theme-image'
 import FadeInView from 'ui/components/fade-in-view'
 
 import LoginView from './login'
@@ -25,8 +24,6 @@ interface Props {
 
 class AuthenticateView extends Component<Props> {
   render() {
-    const { hasStoredUser, shouldRemoveAccount, shouldDisplayMnemonic } = this.props.state
-
     return <ScrollView contentContainerStyle={general.whiteFlex} keyboardShouldPersistTaps="always">
       <FadeInView style={style.main}>
         {this.renderView()}
