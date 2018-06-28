@@ -78,3 +78,4 @@ android/app/google-services.json
 packages/lndr/profile-pic/config.json
 
 ios/GoogleService-Info.plist
+ios/PayPalConfig.plist
