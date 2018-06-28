@@ -99,8 +99,8 @@ export default class PALSClient {
       // NOTE: the API returns an array of payPal accounts, we only need the first one
       const account = response[0]
       if ( (account.type) && (account.type == "paypal-account") ) {
-        const accountId = account.id
-        const payPalAccount = (account.attributes) ? account.attributes.externalId : null
+        const accountId = (account.attributes) ? account.attributes.id : null
+        const payPalAccount = (account.attributes) ? account.attributes.email : null
         if (payPalAccount)
           this.accountMap[payPalAccount] = accountId
         return payPalAccount
@@ -169,7 +169,7 @@ export default class PALSClient {
       }
     }
 
-console.log(JSON.stringify(payload))
+    //console.log(JSON.stringify(payload))
     try {
       const response = await this.client.post(`/paypal-oauth-tokens`, payload)
       const result = this.handleResponse(response)
