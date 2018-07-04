@@ -27,7 +27,7 @@ const {
 
 import { getUser, recentTransactions, getEthBalance, getEthExchange, getWeeklyEthTotal,
   hasPendingTransaction, calculateBalance, getUcacCurrency, getPrimaryCurrency } from 'reducers/app'
-import { settleUp, addDebt, getEthTxCost } from 'actions'
+import { addDebt, getEthTxCost } from 'actions'
 import { connect } from 'react-redux'
 
 const submittingTransaction = new LoadingContext()
@@ -35,14 +35,10 @@ const submittingTransaction = new LoadingContext()
 let unmounting = false
 
 interface Props {
-  settleUp: (
+  requestPayPalSettlement: (
     friend: Friend,
     amount: string,
-    memo: string,
-    direction: string,
-    denomination: string,
-    currency: string,
-    settleTotal?: boolean
+    memo: string
   ) => any
   addDebt: (
     friend: Friend,
@@ -50,7 +46,8 @@ interface Props {
     memo: string,
     direction: string,
     currency: string,
-    settleTotal?: boolean
+    settleTotal?: boolean,
+    denomination?: string
   ) => any
   hasPendingTransaction: (friend: Friend) => boolean
   user: UserData
@@ -89,7 +86,7 @@ class Settlement extends Component<Props, State> {
     const friend = this.props.navigation ? this.props.navigation.state.params.friend : {}
     const ethSettlement = this.props.navigation ? (this.isEthSettlement()) : false
 
-    const amount = ethSettlement ? undefined :   this.setAmount(String(Math.abs(this.state.balance)))
+    const amount = ethSettlement ? undefined : this.setAmount(String(Math.abs(this.state.balance)))
 
     unmounting = false
     let pic
@@ -106,11 +103,23 @@ class Settlement extends Component<Props, State> {
     unmounting = true
   }
 
+  getDenomination() {
+    if(this.props.navigation) {
+      if(this.isEthSettlement()) {
+        return 'ETH'
+      } else if(this.isPayPalSettlement()) {
+        return 'PAYPAL'
+      }
+    } else {
+      return undefined
+    }
+  }
+
   async submit() {
     const { amount, direction, formInputError } = this.state
     const { primaryCurrency } = this.props
     const friend = this.props.navigation ? this.props.navigation.state.params.friend : {}
-    const ethSettlement = this.props.navigation ? (this.isEthSettlement()) : false
+    const denomination = this.getDenomination()
 
     if ( formInputError || sanitizeAmount(amount, primaryCurrency) === 0 ) {
       return
@@ -120,19 +129,12 @@ class Settlement extends Component<Props, State> {
     const settleTotal = Math.abs(this.getRecentTotal()) === Math.abs(sanitizeAmount(amount, primaryCurrency))
     let success
 
-    if( (this.props.navigation)
-        && ((this.isEthSettlement()) || (this.isPayPalSettlement())) ) {
-      // NOTE: using 'denomination' for PayPal
-      const denomination = (this.isEthSettlement()) ? 'ETH' : 'PAYPAL'
+    if(denomination === 'PAYPAL' && direction === 'lend') {
       success = await submittingTransaction.wrap(
-        this.props.settleUp(
+        this.props.requestPayPalSettlement(
           friend as Friend,
           amount as string,
-          memo as string,
-          direction as string,
-          denomination as string,
-          primaryCurrency as string,
-          settleTotal as boolean
+          memo as string
         )
       )
     } else {
@@ -143,7 +145,8 @@ class Settlement extends Component<Props, State> {
           memo as string,
           direction as string,
           primaryCurrency as string,
-          settleTotal as boolean
+          settleTotal as boolean,
+          denomination as string
         )
       )
     }
@@ -247,7 +250,7 @@ class Settlement extends Component<Props, State> {
 
   renderPaymentButton() {
     const { amount, balance, direction } = this.state
-    const isPayee = (direction == 'borrow')
+    const isPayee = direction === 'borrow'
 
     if (!amount) {
         return (
@@ -337,4 +340,4 @@ class Settlement extends Component<Props, State> {
 export default connect((state) => ({ user: getUser(state)(), ethBalance: getEthBalance(state), ethExchange: getEthExchange(state),
   recentTransactions: recentTransactions(state), ethSentPastWeek: getWeeklyEthTotal(state), hasPendingTransaction: hasPendingTransaction(state),
   calculateBalance: calculateBalance(state), getUcacCurrency: getUcacCurrency(state), primaryCurrency: getPrimaryCurrency(state)}),
-  { settleUp, addDebt })(Settlement)
+  { addDebt, requestPayPalSettlement })(Settlement)

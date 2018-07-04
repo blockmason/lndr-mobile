@@ -45,13 +45,13 @@ const sessionStorage = new Storage('session')
 const userStorage = new Storage('user')
 export const primaryCurrencyStorage = new Storage('primary-currency')
 
-const creditProtocol = new CreditProtocol('https://api.lndr.blockmason.io')
-// let creditProtocol
-// if (Platform.OS === 'ios' ) {
-//   creditProtocol = new CreditProtocol('http://localhost:7402')
-// } else {
-//   creditProtocol = new CreditProtocol('http://10.0.2.2:7402')
-// }
+// const creditProtocol = new CreditProtocol('https://api.lndr.blockmason.io')
+let creditProtocol
+if (Platform.OS === 'ios' ) {
+  creditProtocol = new CreditProtocol('http://localhost:7402')
+} else {
+  creditProtocol = new CreditProtocol('http://10.0.2.2:7402')
+}
 
 // TODO REMOVE setState FUNCTION as the sole purpose was to transition from using
 // the custom engine design to redux storage
@@ -545,73 +545,7 @@ export const rejectPendingSettlement = (pendingSettlement: PendingUnilateral) =>
   }
 }
 
-export const addDebt = (friend: Friend, amount: string, memo: string, direction: string, currency: string, settleTotal?: boolean) => {
-  return async (dispatch, getState) => {
-    const { address, privateKeyBuffer } = getUser(getState())()
-    const ucacBalances = calculateUcacBalances(getState())(friend.address)
-    const sanitizedAmount = sanitizeAmount(amount, currency)
-
-    if(direction !== 'borrow' && direction !== 'lend') {
-      return
-    }
-
-    if (sanitizedAmount <= 0) {
-      return dispatch(displayError(debtManagement.createError.amountTooLow))
-    } else if (sanitizedAmount >= 1e11) {
-      return dispatch(displayError(debtManagement.createError.amountTooHigh))
-    }
-
-    if(settleTotal && Object.keys(ucacBalances).length > 1) {
-      const { transactions, tooLow, tooHigh } = await generateMultiTransaction(address, friend.address, ucacBalances, memo, getState, privateKeyBuffer)
-
-      if (tooLow) {
-        return dispatch(displayError(debtManagement.createError.amountTooLow))
-      } else if (tooHigh) {
-        return dispatch(displayError(debtManagement.createError.amountTooHigh))
-      }
-
-      try {
-        await creditProtocol.submitMultiSettlement(transactions)
-        refreshTransactions()
-
-        dispatch(displaySuccess(debtManagement.pending.success(friend)))
-        return true
-      } catch (e) {
-        dispatch(displayError(debtManagement.pending.error))
-      }
-    }
-
-    const [ creditorAddress, debtorAddress ] = {
-      lend: [ address, friend.address ],
-      borrow: [ friend.address, address ]
-    }[direction]
-
-    const ucac = getUcacAddr(getState())(currency)
-    try {
-      const creditRecord = await creditProtocol.createCreditRecord(
-        ucac,
-        creditorAddress,
-        debtorAddress,
-        sanitizedAmount,
-        memo
-      )
-
-      const signature = creditRecord.sign(privateKeyBuffer)
-      await creditProtocol.submitCreditRecord(creditRecord, direction, signature)
-      refreshTransactions()
-
-      dispatch(displaySuccess(debtManagement.pending.success(friend)))
-
-      return true
-    }
-
-    catch (e) {
-      dispatch(displayError(debtManagement.pending.error))
-    }
-  }
-}
-
-export const settleUp = (friend: Friend, amount: string, memo: string, direction: string, denomination: string, currency: string, settleTotal?: boolean) => {
+export const addDebt = (friend: Friend, amount: string, memo: string, direction: string, currency: string, settleTotal?: boolean, denomination?: string) => {
   return async (dispatch, getState) => {
     const { address, privateKeyBuffer } = getUser(getState())()
     const ucacBalances = calculateUcacBalances(getState())(friend.address)
@@ -643,9 +577,7 @@ export const settleUp = (friend: Friend, amount: string, memo: string, direction
         dispatch(displaySuccess(debtManagement.pending.success(friend)))
         return true
       } catch (e) {
-        console.log('WHAT IS HAPPENING', e)
         dispatch(displayError(debtManagement.pending.error))
-        return false
       }
     }
 
@@ -655,7 +587,6 @@ export const settleUp = (friend: Friend, amount: string, memo: string, direction
     }[direction]
 
     const ucac = await getUcacAddr(getState())(currency)
-
     try {
       const creditRecord = await creditProtocol.createCreditRecord(
         ucac,
@@ -670,10 +601,12 @@ export const settleUp = (friend: Friend, amount: string, memo: string, direction
       refreshTransactions()
 
       dispatch(displaySuccess(debtManagement.pending.success(friend)))
+
       return true
-    } catch (e) {
+    }
+
+    catch (e) {
       dispatch(displayError(debtManagement.pending.error))
-      return false
     }
   }
 }

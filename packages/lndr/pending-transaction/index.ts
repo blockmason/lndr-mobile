@@ -6,14 +6,16 @@ export default class PendingTransaction {
   creditRecord: CreditRecord
   submitter: string
   hash: string
+  settlementCurrency: string
   multiTransactions?: PendingTransaction[]
 
   constructor(data) {
-    const { creditor, debtor, amount, memo, nonce, ucac, submitter, hash, multiTransactions } = data
+    const { creditor, debtor, amount, memo, nonce, ucac, submitter, hash, multiTransactions, settlementCurrency } = data
     this.creditRecord = new CreditRecord(ucac, creditor, debtor, amount, memo, 0)
     this.submitter = submitter.replace('0x', '')
     this.hash = hash
     this.multiTransactions = multiTransactions
+    this.settlementCurrency = typeof settlementCurrency === 'string' ? settlementCurrency.trim() : settlementCurrency
   }
 
   get creditorAddress() {

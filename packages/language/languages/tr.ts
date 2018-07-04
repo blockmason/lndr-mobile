@@ -354,7 +354,7 @@ export default {
     },
     reject: {
       start: `Bu kaydı reddettiğinizi `,
-      end: `’a bildirdij.`,
+      end: `’a bildirdik.`,
     },
     confirmFriend: {
       start: ``,

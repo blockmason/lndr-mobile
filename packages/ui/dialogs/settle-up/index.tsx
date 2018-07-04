@@ -1,35 +1,18 @@
 import React, { Component } from 'react'
 
 import { View, ScrollView, Dimensions } from 'react-native'
-import { getResetAction } from 'reducers/nav'
-
-import { UserData } from 'lndr/user'
-import { debounce } from 'lndr/time'
-import { currencyFormats, amountFormat } from 'lndr/format'
-import Friend from 'lndr/friend'
-import { currencySymbols, transferLimits  } from 'lndr/currencies'
-import profilePic from 'lndr/profile-pic'
 
 import Button from 'ui/components/button'
 import Loading, { LoadingContext } from 'ui/components/loading'
 import DashboardShell from 'ui/components/dashboard-shell'
-import RecentView from 'ui/views/account/activity/recent'
 
-import style from 'theme/friend'
-import formStyle from 'theme/form'
 import general from 'theme/general'
-import accountStyle from 'theme/account'
 
 import language from 'language'
 const {
   settlementManagement,
   debtManagement
 } = language
-
-import { getUser, recentTransactions, getEthBalance, getEthExchange, getWeeklyEthTotal } from 'reducers/app'
-import { addDebt } from 'actions'
-import { connect } from 'react-redux'
-import { addNavigationHelpers } from 'react-navigation';
 
 const submittingTransaction = new LoadingContext()
 

@@ -1,15 +1,14 @@
 import React, { Component } from 'react'
 
-import { Text, TextInput, TouchableHighlight, View, Image, ScrollView } from 'react-native'
+import { Text, View, Image, ScrollView } from 'react-native'
 import { getResetAction } from 'reducers/nav'
 import { getUcacCurrency } from 'reducers/app'
 
 import { UserData } from 'lndr/user'
-import { debounce } from 'lndr/time'
 import { currencyFormats } from 'lndr/format'
 import PendingTransaction from 'lndr/pending-transaction'
 import profilePic from 'lndr/profile-pic'
-import { currencySymbols, transferLimits  } from 'lndr/currencies'
+import { currencySymbols } from 'lndr/currencies'
 
 import Button from 'ui/components/button'
 import Loading, { LoadingContext } from 'ui/components/loading'
@@ -17,7 +16,6 @@ import DashboardShell from 'ui/components/dashboard-shell'
 import PendingTransactionRow from 'ui/components/pending-transaction-row'
 
 import style from 'theme/pending'
-import formStyle from 'theme/form'
 import general from 'theme/general'
 import accountStyle from 'theme/account'
 
@@ -157,7 +155,7 @@ class PendingTransactionDetail extends Component<Props, State> {
   }
 
   render() {
-    const { user, submitterIsMe, navigation, getUcacCurrency } = this.props
+    const { user, navigation, getUcacCurrency } = this.props
     const { userPic } = this.state
     const pendingTransaction = navigation.state ? navigation.state.params.pendingTransaction : {}
     const imageSource = userPic ? {uri: userPic} : require('images/person-outline-dark.png')
