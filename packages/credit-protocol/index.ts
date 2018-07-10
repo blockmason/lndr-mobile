@@ -449,7 +449,17 @@ export default class CreditProtocol {
     }
   }
 
-  async submitMultiSettlement(transactions: Object[]) {
+  submitMultiSettlement(transactions: Object[]) {
     return this.client.post('/multi_settlement', transactions)
+  }
+
+  requestPayPalSettlement(friend: string, requestor: string, privateKeyBuffer: any) {
+    const hashBuffer = Buffer.concat([
+      hexToBuffer(friend),
+      hexToBuffer(requestor)
+    ])
+    const hash = bufferToHex(ethUtil.sha3(hashBuffer))
+    const paypalRequestSignature = this.serverSign(hash, privateKeyBuffer)
+    return this.client.post('/request_paypal', { friend, requestor, paypalRequestSignature })
   }
 }

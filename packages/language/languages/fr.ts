@@ -280,6 +280,7 @@ export default {
       }
     },
     eth: `Régler avec de l'ETH`,
+    paypal: `Régler avec de PayPal`,
     nonPayment: `Enregistrement un règlement`,
   },
 

@@ -22,7 +22,7 @@ export default class ConfirmationScreen extends Component<Props> {
     const rejectList = ['reject', 'rejectFriend']
     if (acceptList.indexOf(type) >= 0) {
       return <Image source={require('images/check-circle.png')} style={style.image} />
-    } else if (rejectList.indexOf(type) > 0) {
+    } else if (rejectList.indexOf(type) >= 0) {
       return <Image source={require('images/thumbs-down.png')} style={style.image} />
     } else {
       return null

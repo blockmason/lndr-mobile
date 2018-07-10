@@ -279,6 +279,7 @@ export default {
       }
     },
     eth: `ชำระหนี้ด้วย ETH`,
+    paypal: `ชำระหนี้ด้วย PayPal`,
     nonPayment: `บันทึกการชำระหนี้`,
   },
 

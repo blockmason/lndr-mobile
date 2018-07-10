@@ -4,6 +4,7 @@ import Button from 'ui/components/button'
 import { LoadingContext } from 'ui/components/loading'
 
 import { UserData } from 'lndr/user'
+import Friend from 'lndr/friend'
 
 import formStyle from 'theme/form'
 import general from 'theme/general'
@@ -28,6 +29,7 @@ interface Props {
   primaryCurrency: string
   memo:string
   onPress: () => any
+  friend?: Friend
 }
 
 interface State {
@@ -56,7 +58,7 @@ class PayPalSettlementButton extends Component<Props, State> {
       if (this.isPayee()) {
         payPalPayee = await loadingPayPalAction.wrap(this.palsClient.getPayPalAccount(this.props.user))
       } else {
-        const friend = this.props.navigation ? this.props.navigation.state.params.friend : {}
+        const friend = this.props.navigation.state.params.friend ? this.props.navigation.state.params.friend : this.props.friend
         payPalPayee = await loadingPayPalAction.wrap(this.palsClient.getPayPalAccountForFriend(this.props.user, friend))
       }
       this.setState({ payPalPayee })
@@ -74,7 +76,7 @@ class PayPalSettlementButton extends Component<Props, State> {
   async requestPayPalPayment() {
     // TODO: add LoadingContext + Loading
     // send server authorization for friend to pay us via PayPal
-    const friend = this.props.navigation ? this.props.navigation.state.params.friend : {}
+    const friend = this.props.navigation.state.params.friend ? this.props.navigation.state.params.friend : this.props.friend
     await loadingPayPalAction.wrap(this.palsClient.authorizeFriend(this.props.user, friend))
     // navigate onwards
     this.props.onPress()
@@ -105,7 +107,7 @@ class PayPalSettlementButton extends Component<Props, State> {
         this.setState({payPalPayee: payPalPayee})
         // if we are the Payee, also authorize our friend to pay us
         if (this.isPayee()) {
-          const friend = this.props.navigation ? this.props.navigation.state.params.friend : {}
+          const friend = this.props.navigation.state.params.friend ? this.props.navigation.state.params.friend : this.props.friend
           await loadingPayPalAction.wrap(this.palsClient.authorizeFriend(this.props.user, friend))
         }
         this.props.navigation.dispatch(ToastActionsCreators.displayInfo(payPalLanguage.connectSuccess));
@@ -123,7 +125,7 @@ class PayPalSettlementButton extends Component<Props, State> {
   }
 
   renderPaymentMessage() {
-    const friend = this.props.navigation ? this.props.navigation.state.params.friend : {}
+    const friend = this.props.navigation.state.params.friend ? this.props.navigation.state.params.friend : this.props.friend
     if (this.hasPayPalPayee()) {
       return null
     }

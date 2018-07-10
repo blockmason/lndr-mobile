@@ -2,7 +2,6 @@ import { Platform, Clipboard } from 'react-native'
 import { UrbanAirship } from 'urbanairship-react-native'
 import ethUtil from 'ethereumjs-util'
 import moment from 'moment'
-import { bufferToHex } from '../credit-protocol/lib/buffer-utils'
 
 import Balance from 'lndr/balance'
 import User, { CreateAccountData, RecoverAccountData, LoginAccountData } from 'lndr/user'
@@ -11,20 +10,21 @@ import Friend from 'lndr/friend'
 import PendingTransaction from 'lndr/pending-transaction'
 import RecentTransaction from 'lndr/recent-transaction'
 import PendingUnilateral from 'lndr/pending-unilateral'
-import PendingBilateral from 'lndr/pending-bilateral'
+
 import EthTransaction from 'lndr/eth-transaction'
 import BcptTransaction from 'lndr/bcpt-transaction'
 import Storage from 'lndr/storage'
 import { getEthBalance, web3 } from 'lndr/settlement'
 import { isTouchIdSupported } from 'lndr/touch-id'
-import TouchID from 'react-native-touch-id'
+
 import profilePic from 'lndr/profile-pic'
-import { getBcptBalance, transferBcpt } from 'lndr/bcpt-utils'
+import { transferBcpt } from 'lndr/bcpt-utils'
 import { getEtherscanTransactions } from 'lndr/etherscan'
-import { sanitizeAmount, currencyFormats } from 'lndr/format'
+import { sanitizeAmount } from 'lndr/format'
 import { jsonToPendingFriend, jsonToPendingTransaction, jsonToRecentTransaction, jsonToPendingUnilateral,
   jsonToPendingBilateral } from 'lndr/json-mapping'
-import { CreditRecord } from 'credit-protocol'
+
+import { triggerTouchId, getEthInfo, generateMultiTransaction, filterMultiTransactions } from './util'
 
 import CreditProtocol from 'credit-protocol'
 
@@ -32,8 +32,8 @@ import language from 'language'
 const { accountManagement, debtManagement, settlementManagement, copiedClipboard } = language
 
 import { ToastActionsCreators } from 'react-native-redux-toast'
-import { getUser, getUcacAddr, calculateUcacBalances, convertCurrency, getPrimaryCurrency } from 'reducers/app'
-import { defaultCurrency, currencySymbols } from 'lndr/currencies'
+import { getUser, getUcacAddr, calculateUcacBalances, getPrimaryCurrency } from 'reducers/app'
+import { defaultCurrency } from 'lndr/currencies'
 
 const bcrypt = require('bcryptjs')
 
@@ -78,7 +78,7 @@ export const initializeStorage = () => {
 
     if (storedUser && moment(storedSession).add(storedUser.lockTimeout, 'minute') > moment()) {
       await sessionStorage.set(moment())
-      let { ethBalance, ethPrices, bcptBalance } = await getEthInfo(storedUser)
+      let { ethBalance, ethPrices, bcptBalance } = await getEthInfo(storedUser, creditProtocol)
       let ucacAddresses = await creditProtocol.getUcacAddresses()
       let ethTransactions = await ethTransactionsStorage.get()
       const payload = { hasStoredUser: true, welcomeComplete: true, privacyPolicyVerified: true, user: storedUser, notificationsEnabled, ethBalance,
@@ -86,10 +86,10 @@ export const initializeStorage = () => {
       dispatch(setState(payload))
 
     } else if (touchIdSupported && storedMnemonic && storedUser) {
-      let { ethBalance, ethPrices, bcptBalance } = await getEthInfo(storedUser)
+      let { ethBalance, ethPrices, bcptBalance } = await getEthInfo(storedUser, creditProtocol)
       let ucacAddresses = await creditProtocol.getUcacAddresses()
       let ethTransactions = await ethTransactionsStorage.get()
-      const payload = await triggerTouchId(storedUser, notificationsEnabled)
+      const payload = await triggerTouchId(storedUser, notificationsEnabled, sessionStorage)
       payload.ethBalance = ethBalance
       payload.ethPrices = ethPrices
       payload.bcptBalance = bcptBalance
@@ -227,7 +227,7 @@ export const confirmAccount = async (recovery: boolean, shouldDisplayMnemonic: b
     const hashedPassword = bcrypt.hashSync(password)
     const user = await createUserFromCredentials(mnemonic, hashedPassword, 15)
     await storeUserSession(user)
-    let { ethBalance, ethPrices, bcptBalance } = await getEthInfo(user)
+    let { ethBalance, ethPrices, bcptBalance } = await getEthInfo(user, creditProtocol)
     let ucacAddresses = await creditProtocol.getUcacAddresses()
     let ethTransactions = await getEthTransactions(user.address, recovery)
     const payload = { user, hasStoredUser: true, ethBalance, ethPrices, bcptBalance, ucacAddresses, ethTransactions, shouldDisplayMnemonic, password, mnemonic }
@@ -469,7 +469,7 @@ export const confirmPendingTransaction = (pendingTransaction: PendingTransaction
 
     if(multiTransactions !== undefined) {
       const ucacBalances = calculateUcacBalances(getState())(friendAddress)
-      const { transactions } = await generateMultiTransaction(address, friendAddress, ucacBalances, memo, getState, privateKeyBuffer)
+      const { transactions } = await generateMultiTransaction(address, friendAddress, ucacBalances, memo, getState, privateKeyBuffer, creditProtocol)
 
       try {
         await creditProtocol.submitMultiSettlement(transactions)
@@ -562,7 +562,7 @@ export const addDebt = (friend: Friend, amount: string, memo: string, direction:
     }
 
     if(settleTotal && Object.keys(ucacBalances).length > 1) {
-      const { transactions, tooLow, tooHigh } = await generateMultiTransaction(address, friend.address, ucacBalances, memo, getState, privateKeyBuffer, denomination)
+      const { transactions, tooLow, tooHigh } = await generateMultiTransaction(address, friend.address, ucacBalances, memo, getState, privateKeyBuffer, creditProtocol, denomination)
 
       if (tooLow) {
         return dispatch(displayError(debtManagement.createError.amountTooLow))
@@ -627,7 +627,7 @@ export const loginAccount = (loginData: LoginAccountData) => {
     const user = await createUserFromCredentials(mnemonic, hashedPassword, lockTimeout)
 
     await storeUserSession(user)
-    let { ethBalance, ethPrices, bcptBalance } = await getEthInfo(user)
+    let { ethBalance, ethPrices, bcptBalance } = await getEthInfo(user, creditProtocol)
     let ucacAddresses = await creditProtocol.getUcacAddresses()
     let ethTransactions = await ethTransactionsStorage.get()
 
@@ -897,6 +897,18 @@ export const setPrimaryCurrency = (primaryCurrency: string) => {
   }
 }
 
+export const requestPayPalSettlement = (friend: Friend) => {
+  return async (dispatch, getState) => {
+    const { address, privateKeyBuffer } = getUser(getState())()
+    try {
+      await creditProtocol.requestPayPalSettlement(friend.address, address, privateKeyBuffer)
+      return 'SUCCESS'
+    } catch(e) {
+      return dispatch (displayError(debtManagement.createError.pending))
+    }
+  }
+}
+
 const getEthTransactions = async (addr: string, recovery: boolean) => {
   let ethTransactions = []
   //get all transactions from etherscan and add relevant txs to the list
@@ -958,162 +970,4 @@ const settleBilateral = async (user, bilateralSettlements, dispatch, getState) =
       }
     }
   })
-}
-
-const getEthRequired = async (getState, amount) => {
-  const primaryCurrency = await primaryCurrencyStorage.get()
-  const { ethBalance } = getState().store
-  let ethAmount = 0
-  try {
-    ethAmount = await creditProtocol.getSettlementCost(amount, primaryCurrency)
-  } catch (e) {
-    console.log('ERROR GETTING SETTLEMENT AMOUNT: ', e)
-  }
-  return ethAmount > Number(ethBalance) ? `${ethAmount}`.slice(0, 10) : 0
-}
-
-const triggerTouchId = (user, notificationsEnabled) => {
-  const optionalConfigObject = { title: 'Authentication Required', color: '#e00606' }
-  return TouchID.authenticate('Please sign in using your fingerprint', optionalConfigObject)
-  .then( () => {
-    sessionStorage.set(moment())
-    return { hasStoredUser: true, welcomeComplete: true, privacyPolicyVerified: true, notificationsEnabled, user }
-  })
-  .catch(_error => {
-    return { hasStoredUser: true, welcomeComplete: true, privacyPolicyVerified: true, notificationsEnabled }
-  })
-}
-
-const getEthInfo = async (user) => {
-  let ethBalance = '0' as any, ethPrices = {}, bcptBalance = '0'
-  try {
-    ethPrices = await creditProtocol.getEthPrices()
-  } catch (e) {}
-  try {
-    ethBalance = await getEthBalance(user.address)
-    const attoBcpts = await getBcptBalance(user.address)
-    bcptBalance = String ( Number(attoBcpts) / Math.pow(10, 18) )
-  } catch (e) {}
-  return { ethBalance, ethPrices, bcptBalance }
-}
-
-const generateMultiTransaction = async (address: string, friendAddress: string, ucacBalances: Object, memo: string, getState: Function, privateKeyBuffer: any, settlementCurrency?: string) => {
-  const startNonce = await creditProtocol.getNonce(address, friendAddress)
-  let tooLow = false, tooHigh = false
-
-  const transactions = Object.keys(ucacBalances).map( (ucacCur, index) => {
-    const balance = ucacBalances[ucacCur]
-    const sanAmount = Math.abs(balance)
-    const creditor = balance > 0 ? friendAddress : address
-    const debtor = balance > 0 ? address : friendAddress
-    const ucac = getUcacAddr(getState())(ucacCur)
-
-    tooLow = tooLow || sanAmount <= 0
-    tooHigh = tooHigh || sanAmount >= 1e11
-
-    const creditRecord = new CreditRecord(ucac, creditor, debtor, sanAmount, memo, startNonce + index)
-    const signature = creditRecord.sign(privateKeyBuffer)
-
-    return {
-      ucac,
-      creditor,
-      debtor,
-      amount: sanAmount,
-      memo,
-      submitter: address,
-      hash: bufferToHex(creditRecord.hash),
-      nonce: startNonce + index,
-      signature,
-      settlementAmount: undefined,
-      settlementCurrency
-    }
-  })
-
-  return { transactions, tooLow, tooHigh }
-}
-
-const filterMultiTransactions = (address: string, pending: any, state: Object) => {
-  let txs = {}
-
-  //helper function
-  const storeTx = (txs: Object, addr: string, pend: PendingTransaction | PendingUnilateral | PendingBilateral) => {
-    if(txs[addr] === undefined) {
-      txs[addr] = [ pend ]
-    } else {
-      txs[addr].push(pend)
-    }
-    return txs
-  }
-
-  //create an object of all the transactions/settlements, stored by friend
-  pending.forEach( pendTx => pendTx.debtorAddress === address ?
-    txs = storeTx(txs, pendTx.creditorAddress, pendTx) :
-    txs = storeTx(txs, pendTx.debtorAddress, pendTx)
-  )
-
-  for(let tx in txs) {
-    if(txs[tx].length === 1) {
-      delete txs[tx]
-    }
-  }
-
-  //remove all transactions/settlements that are part of a multi settlement
-  const newList = pending.filter( pendTx => {
-    for(let tx in txs) {
-      if(pendTx.creditorAddress === tx || pendTx.debtorAddress === tx) {
-        return false
-      }
-    }
-    return true
-  })
-
-  //make a new transaction/settlement for display purposes
-  const primaryCurrency = getPrimaryCurrency(state)
-  for(let tx in txs) {
-    const balance = txs[tx].reduce( (acc, pendTx) => {
-      const txAmt = convertCurrency(state)(pendTx.ucac, pendTx.amount)
-      return pendTx.creditorAddress === address ? acc + txAmt: acc - txAmt
-    }, 0)
-
-    let multiTransactions, settlementAmount, settlementCurrency, settlementBlockNumber, txHash, multiSettlements
-
-    const creditor = balance > 0 ? address : tx
-    const debtor = balance > 0 ? tx : address
-    const submitter = txs[tx][0].submitter
-    const ucac = getUcacAddr(state)(primaryCurrency)
-    const amount = Math.round(Math.abs(balance))
-    const memo = `Request to settle for ${currencySymbols(primaryCurrency)}${currencyFormats(primaryCurrency)(amount)}`
-    const nonce = 0
-    const hash = txs[tx][0].hash
-
-    const data = { creditor, debtor, amount, memo, nonce, ucac, submitter, hash, multiTransactions,
-      settlementAmount, settlementCurrency, settlementBlockNumber, multiSettlements, txHash }
-
-    if(pending[0] instanceof PendingTransaction) {
-      data.multiTransactions = txs[tx]
-      console.log('something screwy here', data.multiTransactions)
-      newList.push(new PendingTransaction(data))
-
-    } else if(pending[0] instanceof PendingUnilateral) {
-      data.settlementAmount = txs[tx].reduce( (acc, pendTx) => {
-        return pendTx.creditorAddress === address ? acc + pendTx.settlementAmount: acc - pendTx.settlementAmount
-      }, 0)
-      data.settlementCurrency = txs[tx][0].settlementCurrency
-      data.settlementBlockNumber
-      data.multiSettlements = txs[tx]
-      newList.push(new PendingUnilateral(data))
-
-    } else if(pending[0] instanceof PendingBilateral) {
-      data.settlementAmount = txs[tx].reduce( (acc, pendTx) => {
-        return pendTx.creditorAddress === address ? acc + pendTx.settlementAmount: acc - pendTx.settlementAmount
-      }, 0)
-      data.settlementCurrency = txs[tx][0].settlementCurrency
-      data.settlementBlockNumber
-      data.multiSettlements = txs[tx]
-      data.txHash = txs[tx][0].txHash
-      newList.push(new PendingBilateral({ txHash, creditRecord: data }))
-    }
-  }
-
-  return newList
 }

@@ -1,9 +1,9 @@
 import React, { Component } from 'react'
-import { Text, TextInput, TouchableHighlight, View, Image, ScrollView, KeyboardAvoidingView, Platform } from 'react-native'
+import { Text, TextInput, View, Image, ScrollView, KeyboardAvoidingView, Platform } from 'react-native'
 import { getResetAction } from 'reducers/nav'
 
 import { UserData } from 'lndr/user'
-import { currencyFormats, amountFormat, sanitizeAmount } from 'lndr/format'
+import { currencyFormats, amountFormat, sanitizeAmount, convertCommaDecimalToPoint } from 'lndr/format'
 import Friend from 'lndr/friend'
 import { currencySymbols, transferLimits, hasNoDecimals } from 'lndr/currencies'
 import profilePic from 'lndr/profile-pic'
@@ -27,7 +27,7 @@ const {
 
 import { getUser, recentTransactions, getEthBalance, getEthExchange, getWeeklyEthTotal,
   hasPendingTransaction, calculateBalance, getUcacCurrency, getPrimaryCurrency } from 'reducers/app'
-import { addDebt, getEthTxCost } from 'actions'
+import { addDebt, getEthTxCost, requestPayPalSettlement } from 'actions'
 import { connect } from 'react-redux'
 
 const submittingTransaction = new LoadingContext()
@@ -36,9 +36,7 @@ let unmounting = false
 
 interface Props {
   requestPayPalSettlement: (
-    friend: Friend,
-    amount: string,
-    memo: string
+    friend: Friend
   ) => any
   addDebt: (
     friend: Friend,
@@ -86,7 +84,10 @@ class Settlement extends Component<Props, State> {
     const friend = this.props.navigation ? this.props.navigation.state.params.friend : {}
     const ethSettlement = this.props.navigation ? (this.isEthSettlement()) : false
 
-    const amount = ethSettlement ? undefined : this.setAmount(String(Math.abs(this.state.balance)))
+    let amount: string | undefined = ''
+    if(this.state.balance) {
+      amount = ethSettlement ? undefined : this.setAmount(String(Math.abs(this.state.balance)))
+    }
 
     unmounting = false
     let pic
@@ -110,9 +111,8 @@ class Settlement extends Component<Props, State> {
       } else if(this.isPayPalSettlement()) {
         return 'PAYPAL'
       }
-    } else {
-      return undefined
     }
+    return undefined
   }
 
   async submit() {
@@ -132,9 +132,7 @@ class Settlement extends Component<Props, State> {
     if(denomination === 'PAYPAL' && direction === 'lend') {
       success = await submittingTransaction.wrap(
         this.props.requestPayPalSettlement(
-          friend as Friend,
-          amount as string,
-          memo as string
+          friend as Friend
         )
       )
     } else {
@@ -158,6 +156,9 @@ class Settlement extends Component<Props, State> {
 
     let resetAction
     if (success && success.type !== '@@TOAST/DISPLAY_ERROR') {
+      console.log(
+        'BOOYAH'
+      )
       let type = 'create'
       if (this.isPayPalSettlement()) {
         const isPayee = (direction == 'borrow')
@@ -198,13 +199,15 @@ class Settlement extends Component<Props, State> {
   setAmount(amount) {
     const { balance } = this.state
     const { primaryCurrency } = this.props
-    const cleanAmount = Number(amount.replace(/[^0-9\.]/g, ''))
+    const formattedAmount = convertCommaDecimalToPoint(amount, primaryCurrency)
+
+    const cleanAmount = Number(formattedAmount.replace(/[^0-9\.\,]/g, ''))
     const adjustedBalance = hasNoDecimals(primaryCurrency) ? balance : balance / 100
 
     if (cleanAmount > Math.abs(adjustedBalance)) {
       return amountFormat(String(adjustedBalance), primaryCurrency)
     } else {
-      return amountFormat(amount, primaryCurrency)
+      return amountFormat(formattedAmount, primaryCurrency)
     }
   }
 
@@ -239,7 +242,7 @@ class Settlement extends Component<Props, State> {
 
     if ( direction === 'lend' && totalEthCost > Number(ethBalance) ) {
       formInputError = accountManagement.sendEth.error.insufficient
-    }else if ( direction === 'lend' && ethSentPastWeek * Number(ethExchange(primaryCurrency)) + Number(cleanAmount) > Number(transferLimits(primaryCurrency)) ) {
+    } else if ( direction === 'lend' && ethSentPastWeek * Number(ethExchange(primaryCurrency)) + Number(cleanAmount) > Number(transferLimits(primaryCurrency)) ) {
       formInputError = accountManagement.sendEth.error.limitExceeded(primaryCurrency)
     } else if (hasPendingTransaction(friend)) {
       formInputError = debtManagement.createError.pending
@@ -249,16 +252,11 @@ class Settlement extends Component<Props, State> {
   }
 
   renderPaymentButton() {
-    const { amount, balance, direction } = this.state
-    const isPayee = direction === 'borrow'
+    const { amount, direction } = this.state
 
-    if (!amount) {
-        return (
-          <Button large round wide onPress={() => this.updateAmount(currencyFormats(this.props.primaryCurrency)(Math.abs(balance)))} text={debtManagement.settleTotal} />
-      )
-    }
-
-    if (this.isPayPalSettlement()) {
+    if (typeof amount !== 'string') {
+      return null
+    } else if (this.isPayPalSettlement()) {
       const cleanAmount = amount.replace(/[^0-9\.]/g, '')
       const memo = debtManagement.settleUpMemo(direction, amount)
       return (
@@ -279,8 +277,8 @@ class Settlement extends Component<Props, State> {
   }
 
   render() {
-    const { amount, balance, direction, txCost, formInputError, pic } = this.state
-    const { ethBalance, ethExchange, ethSentPastWeek, primaryCurrency } = this.props
+    const { amount, balance, txCost, formInputError, pic } = this.state
+    const { ethBalance, ethExchange, primaryCurrency } = this.props
     const ethSettlement = this.props.navigation ? (this.props.navigation.state.params.settlementType == "eth") : false
     const friend = this.props.navigation ? this.props.navigation.state.params.friend : {}
     const imageSource = pic ? { uri: pic } : require('images/person-outline-dark.png')

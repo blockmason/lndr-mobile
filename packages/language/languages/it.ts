@@ -280,6 +280,7 @@ export default {
       }
     },
     eth: `Salda debito con ETH`,
+    paypal: `Salda debito con PayPal`,
     nonPayment: `Registrare un pagamento`,
   },
 

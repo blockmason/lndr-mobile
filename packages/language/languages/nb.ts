@@ -279,6 +279,7 @@ export default {
       }
     },
     eth: `Gjør opp med ETH`,
+    paypal: `Gjør opp med PayPal`,
     nonPayment: `Ta opp et oppgjør`,
   },
 

@@ -279,6 +279,7 @@ export default {
       }
     },
     eth: `用ETH偿清债务`,
+    paypal: `用PAYPAL偿清债务`,
     nonPayment: `偿清债务`,
   },
 

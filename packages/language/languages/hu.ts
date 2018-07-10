@@ -280,6 +280,7 @@ export default {
       }
     },
     eth: `Kiegyenlítés ETH használatával`,
+    paypal: `Kiegyenlítés PayPal használatával`,
     nonPayment: `Kifizetés Rögzítése`,
   },
 

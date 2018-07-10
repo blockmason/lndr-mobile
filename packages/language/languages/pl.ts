@@ -279,6 +279,7 @@ export default {
       }
     },
     eth: `Rozliczenia z ETH`,
+    paypal: `Rozliczenia z PayPal`,
     nonPayment: `Zapisz Rozliczenie`,
   },
 

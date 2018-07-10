@@ -9,11 +9,13 @@ import { currencyFormats } from 'lndr/format'
 import PendingTransaction from 'lndr/pending-transaction'
 import profilePic from 'lndr/profile-pic'
 import { currencySymbols } from 'lndr/currencies'
+import Friend from 'lndr/friend'
 
 import Button from 'ui/components/button'
 import Loading, { LoadingContext } from 'ui/components/loading'
 import DashboardShell from 'ui/components/dashboard-shell'
 import PendingTransactionRow from 'ui/components/pending-transaction-row'
+import PayPalSettlementButton from 'ui/components/paypal-settle-button'
 
 import style from 'theme/pending'
 import general from 'theme/general'
@@ -21,13 +23,11 @@ import accountStyle from 'theme/account'
 
 import language from 'language'
 const {
-  back,
-  cancel,
   pendingTransactionsLanguage,
   debtManagement
 } = language
 
-import { getUser, submitterIsMe } from 'reducers/app'
+import { getUser, submitterIsMe, getFriendFromAddress } from 'reducers/app'
 import { confirmPendingTransaction, rejectPendingTransaction } from 'actions'
 import { connect } from 'react-redux'
 
@@ -40,6 +40,7 @@ interface Props {
   user: UserData
   submitterIsMe: (pendingTransaction: PendingTransaction) => boolean
   navigation: any
+  getFriendFromAddress: (address: string) => Friend | undefined
 }
 
 interface State {
@@ -141,6 +142,29 @@ class PendingTransactionDetail extends Component<Props, State> {
     </View>
   }
 
+  renderPaymentButton() {
+    const { navigation, user, getUcacCurrency } = this.props
+    const pendingTransaction = navigation.state ? navigation.state.params.pendingTransaction : {}
+
+    if (pendingTransaction.settlementCurrency === 'PAYPAL') {
+      const friend = this.props.getFriendFromAddress(pendingTransaction.debtorAddress)
+
+      return (
+        <PayPalSettlementButton user={user}
+          navigation={navigation}
+          displayAmount={pendingTransaction.amount}
+          memo={pendingTransaction.memo}
+          direction={'lend'}
+          primaryCurrency={getUcacCurrency(pendingTransaction.ucac)}
+          onPress={() => this.confirmPendingTransaction(pendingTransaction)}
+          friend={friend}
+        />
+      )
+    }
+
+    return <Button round large onPress={() => this.confirmPendingTransaction(pendingTransaction)} text={pendingTransactionsLanguage.confirm} />
+  }
+
   showButtons() {
     const { submitterIsMe, navigation } = this.props
     const pendingTransaction = navigation.state ? navigation.state.params.pendingTransaction : {}
@@ -148,8 +172,8 @@ class PendingTransactionDetail extends Component<Props, State> {
       return <Button danger round onPress={() => this.rejectPendingTransaction(pendingTransaction)} text={pendingTransactionsLanguage.cancel} />
     }
 
-    return <View style={{marginBottom: 10}}>
-      <Button round large onPress={() => this.confirmPendingTransaction(pendingTransaction)} text={pendingTransactionsLanguage.confirm} />
+    return <View style={{marginBottom: 10, width: '80%'}}>
+      {this.renderPaymentButton()}
       <Button danger round onPress={() => this.rejectPendingTransaction(pendingTransaction)} text={pendingTransactionsLanguage.reject} />
     </View>
   }
@@ -190,7 +214,6 @@ class PendingTransactionDetail extends Component<Props, State> {
   }
 }
 
-export default connect((state) => ({ user: getUser(state)(),
-  submitterIsMe: submitterIsMe(state),
-  getUcacCurrency: getUcacCurrency(state)
+export default connect((state) => ({ user: getUser(state)(), submitterIsMe: submitterIsMe(state), 
+  getUcacCurrency: getUcacCurrency(state), getFriendFromAddress: getFriendFromAddress(state)
 }), { confirmPendingTransaction, rejectPendingTransaction })(PendingTransactionDetail)
