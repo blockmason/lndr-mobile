@@ -177,6 +177,7 @@ export default {
       setSuccess: `Profile picture updated`,
     },
     logoutSuccess: `You have successfully logged out!`,
+    logoutError: generalCommunicationError,
   },
 
   currentBalance: {

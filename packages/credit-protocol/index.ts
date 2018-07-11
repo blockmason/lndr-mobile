@@ -182,7 +182,7 @@ export default class CreditProtocol {
     const hash = bufferToHex(ethUtil.sha3(hashBuffer))
     const signature = this.serverSign(hash, privateKeyBuffer)
 
-    return this.client.delete(`/register_push`, { address, signature })
+    return this.client.post(`/unregister_push`, { address, signature })
   }
 
   takenNick(nick: string) {

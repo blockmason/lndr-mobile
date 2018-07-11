@@ -39,8 +39,8 @@ class RemoveAccountView extends Component<Props> {
   }
 
   async removeAccount() {
-    this.props.navigation.dispatch(getResetAction( { routeName: 'Dashboard' } ))
     await removingAccount.wrap(this.props.removeAccount())
+    this.props.navigation.dispatch(getResetAction( { routeName: 'Dashboard' } ))
   }
 
   render() {

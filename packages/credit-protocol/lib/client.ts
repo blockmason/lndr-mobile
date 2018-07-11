@@ -55,20 +55,4 @@ export default class Client {
       })
     )
   }
-
-  delete(path, data) {
-    console.log(`[fetch] DELETE ${this.baseUrl}${path} {${Object.keys(data).join(', ')}:${Object.values(data).join(', ')}}`)
-
-    return this.handleResponse(
-      this.fetch(`${this.baseUrl}${path}`, {
-        method: 'delete',
-        headers: {
-          'Accept': 'application/json, text/plain, */*',
-          'Content-Type': 'application/json'
-        },
-        body: JSON.stringify(data)
-      })
-    )
-  }
-
 }

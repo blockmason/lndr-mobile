@@ -29,7 +29,7 @@ import { CreditRecord } from 'credit-protocol'
 import CreditProtocol from 'credit-protocol'
 
 import language from 'language'
-const { accountManagement, debtManagement, settlementManagement, copiedClipboard } = language
+const { accountManagement, debtManagement, settlementManagement, copiedClipboard, genericError } = language
 
 import { ToastActionsCreators } from 'react-native-redux-toast'
 import { getUser, getUcacAddr, calculateUcacBalances, convertCurrency, getPrimaryCurrency } from 'reducers/app'
@@ -718,12 +718,17 @@ export const logoutAccount = () => {
 export const removeAccount = () => {
   return async (dispatch, getState) => {
     const { address, privateKeyBuffer } = getUser(getState())()
-    await mnemonicStorage.remove()
-    await hashedPasswordStorage.remove()
-    await creditProtocol.deleteChannelID(address, privateKeyBuffer)
-    const payload = { hasStoredUser: false, user: undefined }
-    dispatch(displaySuccess(accountManagement.logoutSuccess))
-    dispatch(setState(payload))
+
+    try {
+      await creditProtocol.deleteChannelID(address, privateKeyBuffer)
+      await mnemonicStorage.remove()
+      await hashedPasswordStorage.remove()
+      const payload = { hasStoredUser: false, user: undefined }
+      dispatch(displaySuccess(accountManagement.logoutSuccess))
+      dispatch(setState(payload))
+    } catch (e) {
+      dispatch(displaySuccess(errorTitle))
+    }
   }
 }
 

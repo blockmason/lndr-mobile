@@ -161,6 +161,7 @@ export default {
       `Địa chỉ ETH (& BCPT)`,
       `Số dư ETH`,
       `Số dư BCPT`,
+      `Xoá tài khoản`,
       `Lịch sử giao dịch ETH`,
       `Thay đổi tiền tệ chính`,
       `Thay đổi mã PIN`,
@@ -179,6 +180,7 @@ export default {
       setSuccess: `Đã cập nhật ảnh đại diện`,
     },
     logoutSuccess: `Bạn đã đăng xuất thành công!`,
+    logoutError: generalCommunicationError,
   },
 
   currentBalance: {
