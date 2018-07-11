@@ -27,20 +27,33 @@ const removingAccount = new LoadingContext()
 
 interface Props {
   removeAccount: () => any
-  hasStoredUser: boolean
+  hasStoredUser: () => boolean
   navigation: any
 }
 
-class RemoveAccountView extends Component<Props> {
+interface State {
+  updating: boolean
+}
+
+class RemoveAccountView extends Component<Props, State> {
   constructor(props) {
     super(props)
+    this.state = {
+      updating: false
+    }
 
     this.removeAccount = this.removeAccount.bind(this)
   }
 
+  componentDidUpdate() {
+    if(this.state.updating && !this.props.hasStoredUser()) {
+      this.props.navigation.dispatch(getResetAction( { routeName: 'Dashboard' } ))
+    }
+  }
+
   async removeAccount() {
     await removingAccount.wrap(this.props.removeAccount())
-    this.props.navigation.dispatch(getResetAction( { routeName: 'Dashboard' } ))
+    this.setState({ updating: true })
   }
 
   render() {
