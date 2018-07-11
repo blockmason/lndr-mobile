@@ -175,6 +175,16 @@ export default class CreditProtocol {
     return this.tempStorage.registerId[channelID] = this.client.post(`/register_push`, { channelID, platform, address, signature })
   }
 
+  deleteChannelID(address: string, privateKeyBuffer: any) {
+    const hashBuffer = Buffer.concat([
+      hexToBuffer(address)
+    ])
+    const hash = bufferToHex(ethUtil.sha3(hashBuffer))
+    const signature = this.serverSign(hash, privateKeyBuffer)
+
+    return this.client.delete(`/register_push`, { address, signature })
+  }
+
   takenNick(nick: string) {
     return this.client.get(`/user?nick=${nick}`)
   }

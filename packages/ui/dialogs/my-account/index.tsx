@@ -1,7 +1,7 @@
 import React, { Component } from 'react'
 
 import { Text, TextInput, View, Dimensions, ScrollView, Linking, Modal,
-  TouchableHighlight, Image, FlatList, KeyboardAvoidingView, Platform } from 'react-native'
+  TouchableHighlight, Image, KeyboardAvoidingView, Platform } from 'react-native'
 
 import ImagePicker from 'react-native-image-picker'
 
@@ -9,7 +9,6 @@ import Button from 'ui/components/button'
 import Pinpad from 'ui/components/pinpad'
 import DashboardShell from 'ui/components/dashboard-shell'
 import Loading, { LoadingContext } from 'ui/components/loading'
-import TextLogo from 'ui/components/images/text-logo'
 import BMLogo from 'ui/components/images/bm-logo'
 import InputImage from 'ui/components/images/input-image'
 import SpinningPicker from 'ui/components/spinning-picker'
@@ -34,8 +33,8 @@ import popupStyle from 'theme/popup'
 
 import language from 'language'
 const { nickname, setNickname, email, setEmail, copy, accountManagement, changePin, enterNewPin, confirmPin, pleaseWait,
-  cancel, mnemonicExhortation, addressExhortation, logoutAction, notifications, currentBalance, showMnemonic, enterCurrentPin,
-  myAccount, debtManagement, changePrimaryCurrency
+  mnemonicExhortation, addressExhortation, logoutAction, notifications, currentBalance, showMnemonic, enterCurrentPin,
+  myAccount, debtManagement, changePrimaryCurrency, removeAccount
 } = language
 const updateAccountText = language.updateAccount
 
@@ -284,6 +283,9 @@ class MyAccount extends Component<Props, State> {
         <Text style={[style.text, style.spaceTopL, style.center]}>{currentBalance.bcpt}</Text>
         <Text selectable style={style.displayText}>{bcptBalance}</Text>
         <Button round onPress={() => this.props.navigation.navigate('TransferBcpt')} text={accountManagement.sendBcpt.transfer} />
+      </View>),
+      (<View style={style.spaceHorizontalL}>
+        <Button round onPress={() => this.props.navigation.navigate('RemoveAccount')} text={removeAccount} />
       </View>),
       (<View style={style.spaceHorizontalL}>
         <Button round onPress={() =>  Linking.openURL(`https://etherscan.io/address/${user.address}`)} text={accountManagement.viewEtherscan} />

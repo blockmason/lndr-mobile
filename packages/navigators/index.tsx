@@ -11,9 +11,10 @@ import FriendDetail from 'ui/dialogs/friend-detail'
 import TransferEth from 'ui/dialogs/transfer-eth'
 import TransferBcpt from 'ui/dialogs/transfer-bcpt'
 import FriendRequest from 'ui/dialogs/friend-request'
-import { addNavigationHelpers, StackNavigator, NavigationActions } from 'react-navigation'
+import RemoveAccountView from 'ui/dialogs/remove-account'
+import { addNavigationHelpers, StackNavigator } from 'react-navigation'
 import { connect } from 'react-redux'
-import { View, ScrollView, Text, StyleSheet, Button, BackHandler } from 'react-native'
+import { BackHandler } from 'react-native'
 
 import {
   createReactNavigationReduxMiddleware,
@@ -64,6 +65,9 @@ export const AppNavigator = StackNavigator({
   },
   FriendRequest: {
     screen: FriendRequest
+  },
+  RemoveAccount: {
+    screen: RemoveAccountView
   }
 },
   {

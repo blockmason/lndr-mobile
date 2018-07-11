@@ -45,13 +45,13 @@ const sessionStorage = new Storage('session')
 const userStorage = new Storage('user')
 export const primaryCurrencyStorage = new Storage('primary-currency')
 
-const creditProtocol = new CreditProtocol('https://api.lndr.blockmason.io')
-// let creditProtocol
-// if (Platform.OS === 'ios' ) {
-//   creditProtocol = new CreditProtocol('http://localhost:7402')
-// } else {
-//   creditProtocol = new CreditProtocol('http://10.0.2.2:7402')
-// }
+// const creditProtocol = new CreditProtocol('https://api.lndr.blockmason.io')
+let creditProtocol
+if (Platform.OS === 'ios' ) {
+  creditProtocol = new CreditProtocol('http://localhost:7402')
+} else {
+  creditProtocol = new CreditProtocol('http://10.0.2.2:7402')
+}
 
 // TODO REMOVE setState FUNCTION as the sole purpose was to transition from using
 // the custom engine design to redux storage
@@ -715,6 +715,18 @@ export const logoutAccount = () => {
   }
 }
 
+export const removeAccount = () => {
+  return async (dispatch, getState) => {
+    const { address, privateKeyBuffer } = getUser(getState())()
+    await mnemonicStorage.remove()
+    await hashedPasswordStorage.remove()
+    await creditProtocol.deleteChannelID(address, privateKeyBuffer)
+    const payload = { hasStoredUser: false, user: undefined }
+    dispatch(displaySuccess(accountManagement.logoutSuccess))
+    dispatch(setState(payload))
+  }
+}
+
 export const recoverAccount = (recoverData: RecoverAccountData) => {
   return async (dispatch) => {
     const { password, confirmPassword, mnemonic } = recoverData
@@ -742,15 +754,6 @@ export const recoverAccount = (recoverData: RecoverAccountData) => {
   }
 }
 
-export const removeAccount = () => {
-  return async (dispatch) => {
-    await mnemonicStorage.remove()
-    await hashedPasswordStorage.remove()
-    const payload = { hasStoredUser: false, shouldRemoveAccount: false }
-    dispatch(setState(payload))
-  }
-}
-
 export const toggleNotifications = () => {
   return async (dispatch, getState) => {
     const oldSetting = getState().store.notificationsEnabled
@@ -773,16 +776,6 @@ export const goToRecoverAccount = () => {
 
 export const cancelRecoverAccount = () => {
   const payload = { shouldRecoverAccount: false }
-  return setState(payload)
-}
-
-export const goToRemoveAccount = () => {
-  const payload = { shouldRemoveAccount: true }
-  return setState(payload)
-}
-
-export const cancelRemoveAccount = () => {
-  const payload = { shouldRemoveAccount: false }
   return setState(payload)
 }
 

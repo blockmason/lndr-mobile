@@ -158,6 +158,7 @@ export default {
       `ETH (& BCPT) Address`,
       `ETH Balance`,
       `BCPT Balance`,
+      `Remove Account`,
       `ETH Transaction History`,
       `Change Primary Currency`,
       `Change PIN`,

@@ -207,3 +207,5 @@ export const getPendingFromFriend = (state) => (nick: string) => {
     return {}
   }
 }
+
+export const hasStoredUser = (state) : boolean => state.store.hasStoredUser
