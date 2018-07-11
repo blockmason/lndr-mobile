@@ -32,7 +32,8 @@ import language from 'language'
 const { accountManagement, debtManagement, settlementManagement, copiedClipboard } = language
 
 import { ToastActionsCreators } from 'react-native-redux-toast'
-import { getUser, getUcacAddr, calculateUcacBalances, convertCurrency, getPrimaryCurrency } from 'reducers/app'
+import { getUser, getUcacAddr, calculateUcacBalances, convertCurrency, getPrimaryCurrency,
+  getChannelID } from 'reducers/app'
 import { defaultCurrency, currencySymbols } from 'lndr/currencies'
 
 const bcrypt = require('bcryptjs')
@@ -45,13 +46,13 @@ const sessionStorage = new Storage('session')
 const userStorage = new Storage('user')
 export const primaryCurrencyStorage = new Storage('primary-currency')
 
-const creditProtocol = new CreditProtocol('https://api.lndr.blockmason.io')
-// let creditProtocol
-// if (Platform.OS === 'ios' ) {
-//   creditProtocol = new CreditProtocol('http://localhost:7402')
-// } else {
-//   creditProtocol = new CreditProtocol('http://10.0.2.2:7402')
-// }
+// const creditProtocol = new CreditProtocol('https://api.lndr.blockmason.io')
+let creditProtocol
+if (Platform.OS === 'ios' ) {
+  creditProtocol = new CreditProtocol('http://localhost:7402')
+} else {
+  creditProtocol = new CreditProtocol('http://10.0.2.2:7402')
+}
 
 // TODO REMOVE setState FUNCTION as the sole purpose was to transition from using
 // the custom engine design to redux storage
@@ -178,9 +179,10 @@ export const updatePin = (password: string, confirmPassword: string) =>  {
 }
 
 export const registerChannelID = (channelID: string, platform: string) => {
-  return async (_dispatch, getState) => {
+  return async (dispatch, getState) => {
     const { address, privateKeyBuffer } = getUser(getState())()
     creditProtocol.registerChannelID(address, channelID, platform, privateKeyBuffer)
+    dispatch(setState({ channelID }))
   }
 }
 
@@ -718,16 +720,18 @@ export const logoutAccount = () => {
 export const removeAccount = () => {
   return async (dispatch, getState) => {
     const { address, privateKeyBuffer } = getUser(getState())()
+    const channelID = getChannelID(getState())
 
     try {
-      await creditProtocol.deleteChannelID(address, privateKeyBuffer)
+      await creditProtocol.deleteChannelID(address, channelID, Platform.OS, privateKeyBuffer)
       await mnemonicStorage.remove()
       await hashedPasswordStorage.remove()
       const payload = { hasStoredUser: false, user: undefined }
       dispatch(displaySuccess(accountManagement.logoutSuccess))
       dispatch(setState(payload))
     } catch (e) {
-      dispatch(displaySuccess(accountManagement.logoutError))
+      console.log('ACCOUNT REMOVAL ERROR: ', e)
+      dispatch(displayError(accountManagement.logoutError))
     }
   }
 }

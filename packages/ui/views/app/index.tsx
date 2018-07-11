@@ -58,7 +58,8 @@ const initialState = {
   userPic: '',
   ucacAddresses: {},
   ethTransactions: [],
-  primaryCurrency: defaultCurrency
+  primaryCurrency: defaultCurrency,
+  channelID: ''
 }
 
 const store = createStore(initialState)
