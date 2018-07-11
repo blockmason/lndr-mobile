@@ -34,7 +34,6 @@ const { accountManagement, debtManagement, settlementManagement, copiedClipboard
 import { ToastActionsCreators } from 'react-native-redux-toast'
 import { getUser, getUcacAddr, calculateUcacBalances, convertCurrency, getPrimaryCurrency } from 'reducers/app'
 import { defaultCurrency, currencySymbols } from 'lndr/currencies'
-import account from 'theme/account';
 
 const bcrypt = require('bcryptjs')
 
