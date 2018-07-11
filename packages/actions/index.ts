@@ -29,11 +29,12 @@ import { CreditRecord } from 'credit-protocol'
 import CreditProtocol from 'credit-protocol'
 
 import language from 'language'
-const { accountManagement, debtManagement, settlementManagement, copiedClipboard, genericError } = language
+const { accountManagement, debtManagement, settlementManagement, copiedClipboard } = language
 
 import { ToastActionsCreators } from 'react-native-redux-toast'
 import { getUser, getUcacAddr, calculateUcacBalances, convertCurrency, getPrimaryCurrency } from 'reducers/app'
 import { defaultCurrency, currencySymbols } from 'lndr/currencies'
+import account from 'theme/account';
 
 const bcrypt = require('bcryptjs')
 
@@ -727,7 +728,7 @@ export const removeAccount = () => {
       dispatch(displaySuccess(accountManagement.logoutSuccess))
       dispatch(setState(payload))
     } catch (e) {
-      dispatch(displaySuccess(errorTitle))
+      dispatch(displaySuccess(accountManagement.logoutError))
     }
   }
 }
