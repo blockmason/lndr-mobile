@@ -45,13 +45,13 @@ const sessionStorage = new Storage('session')
 const userStorage = new Storage('user')
 export const primaryCurrencyStorage = new Storage('primary-currency')
 
-// const creditProtocol = new CreditProtocol('https://api.lndr.blockmason.io')
-let creditProtocol
-if (Platform.OS === 'ios' ) {
-  creditProtocol = new CreditProtocol('http://localhost:7402')
-} else {
-  creditProtocol = new CreditProtocol('http://10.0.2.2:7402')
-}
+const creditProtocol = new CreditProtocol('https://api.lndr.blockmason.io')
+// let creditProtocol
+// if (Platform.OS === 'ios' ) {
+//   creditProtocol = new CreditProtocol('http://localhost:7402')
+// } else {
+//   creditProtocol = new CreditProtocol('http://10.0.2.2:7402')
+// }
 
 // TODO REMOVE setState FUNCTION as the sole purpose was to transition from using
 // the custom engine design to redux storage
