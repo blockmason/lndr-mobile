@@ -161,6 +161,7 @@ export default {
       `عنوان إثيريوم (& BCPT)`,
       `رصيد الإثيريوم`,
       `رصيد BCPT`,
+      `إزالة الحساب`,
       `سجل معاملات إثيريوم`,
       `تغيير العملات الرئيسية`,
       `تغيير رمز PIN‏`,
@@ -179,6 +180,7 @@ export default {
       setSuccess: `تم تحديث صورة الملف الشخصي`,
     },
     logoutSuccess: `تم تسجيل الخروج بنجاح!`,
+    logoutError: generalCommunicationError,
   },
 
   currentBalance: {

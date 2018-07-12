@@ -207,3 +207,7 @@ export const getPendingFromFriend = (state) => (nick: string) => {
     return {}
   }
 }
+
+export const hasStoredUser = (state) => () : boolean => state.store.hasStoredUser
+
+export const getChannelID = (state) : string => state.store.channelID

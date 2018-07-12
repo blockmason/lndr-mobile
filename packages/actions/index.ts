@@ -32,7 +32,8 @@ import language from 'language'
 const { accountManagement, debtManagement, settlementManagement, copiedClipboard } = language
 
 import { ToastActionsCreators } from 'react-native-redux-toast'
-import { getUser, getUcacAddr, calculateUcacBalances, convertCurrency, getPrimaryCurrency } from 'reducers/app'
+import { getUser, getUcacAddr, calculateUcacBalances, convertCurrency, getPrimaryCurrency,
+  getChannelID } from 'reducers/app'
 import { defaultCurrency, currencySymbols } from 'lndr/currencies'
 
 const bcrypt = require('bcryptjs')
@@ -178,9 +179,10 @@ export const updatePin = (password: string, confirmPassword: string) =>  {
 }
 
 export const registerChannelID = (channelID: string, platform: string) => {
-  return async (_dispatch, getState) => {
+  return async (dispatch, getState) => {
     const { address, privateKeyBuffer } = getUser(getState())()
     creditProtocol.registerChannelID(address, channelID, platform, privateKeyBuffer)
+    dispatch(setState({ channelID }))
   }
 }
 
@@ -715,6 +717,25 @@ export const logoutAccount = () => {
   }
 }
 
+export const removeAccount = () => {
+  return async (dispatch, getState) => {
+    const { address, privateKeyBuffer } = getUser(getState())()
+    const channelID = getChannelID(getState())
+
+    try {
+      await creditProtocol.deleteChannelID(address, channelID, Platform.OS, privateKeyBuffer)
+      await mnemonicStorage.remove()
+      await hashedPasswordStorage.remove()
+      const payload = { hasStoredUser: false, user: undefined }
+      dispatch(displaySuccess(accountManagement.logoutSuccess))
+      dispatch(setState(payload))
+    } catch (e) {
+      console.log('ACCOUNT REMOVAL ERROR: ', e)
+      dispatch(displayError(accountManagement.logoutError))
+    }
+  }
+}
+
 export const recoverAccount = (recoverData: RecoverAccountData) => {
   return async (dispatch) => {
     const { password, confirmPassword, mnemonic } = recoverData
@@ -742,15 +763,6 @@ export const recoverAccount = (recoverData: RecoverAccountData) => {
   }
 }
 
-export const removeAccount = () => {
-  return async (dispatch) => {
-    await mnemonicStorage.remove()
-    await hashedPasswordStorage.remove()
-    const payload = { hasStoredUser: false, shouldRemoveAccount: false }
-    dispatch(setState(payload))
-  }
-}
-
 export const toggleNotifications = () => {
   return async (dispatch, getState) => {
     const oldSetting = getState().store.notificationsEnabled
@@ -773,16 +785,6 @@ export const goToRecoverAccount = () => {
 
 export const cancelRecoverAccount = () => {
   const payload = { shouldRecoverAccount: false }
-  return setState(payload)
-}
-
-export const goToRemoveAccount = () => {
-  const payload = { shouldRemoveAccount: true }
-  return setState(payload)
-}
-
-export const cancelRemoveAccount = () => {
-  const payload = { shouldRemoveAccount: false }
   return setState(payload)
 }
 

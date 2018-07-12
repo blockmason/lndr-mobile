@@ -161,6 +161,7 @@ export default {
       `ETH (и BCPT) Адрес`,
       `ETH Баланс`,
       `BCPT Баланс`,
+      `Удалить учетную запись`,
       `История транзакций ETH`,
       `Изменение первичной валюты`,
       `Измененить ПИН-код`,
@@ -179,6 +180,7 @@ export default {
       setSuccess: `Фотография профиля обновлен`,
     },
     logoutSuccess: `Вы успешно вышли!`,
+    logoutError: generalCommunicationError,
   },
 
   currentBalance: {

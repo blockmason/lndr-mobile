@@ -161,6 +161,7 @@ export default {
       `Alamat ETH (& BCPT)`,
       `Saldo ETH`,
       `Saldo BCPT`,
+      `Hapus Akun`,
       `Riwayat Transaksi ETH`,
       `Ubah Mata Uang Primer`,
       `Ubah PIN`,
@@ -179,6 +180,7 @@ export default {
       setSuccess: `Foto profil diperbarui`,
     },
     logoutSuccess: `Anda berhasil keluar!`,
+    logoutError: generalCommunicationError,
   },
 
   currentBalance: {

@@ -161,6 +161,7 @@ export default {
       `ETH (& BCPT) Adresse`,
       `ETH Saldo`,
       `BCPT Saldo`,
+      `Fjern konto`,
       `ETH Transaktionshistorik`,
       `Skift primære valuta`,
       `Skift PIN`,
@@ -179,6 +180,7 @@ export default {
       setSuccess: `Profilbilledet blev opdateret`,
     },
     logoutSuccess: `Du har logget ud!`,
+    logoutError: generalCommunicationError,
   },
 
   currentBalance: {

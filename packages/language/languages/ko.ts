@@ -180,7 +180,8 @@ export default {
     getError: '프로필 사진을 가져오는데 실패했습니다',
     setSuccess: '프로필 사진이 업데이트됐습니다'
   },
-  logoutSuccess: '성공적으로 로그아웃했습니다!'
+  logoutSuccess: '성공적으로 로그아웃했습니다!',
+  logoutError: generalCommunicationError,
 },
 
   currentBalance: {

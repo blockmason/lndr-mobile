@@ -18,7 +18,6 @@ import EthTransaction from 'lndr/eth-transaction'
 import Tx from 'ethereumjs-tx'
 import Web3 from 'web3'
 import { hasNoDecimals } from 'lndr/currencies';
-import PendingBilateral from 'lndr/pending-bilateral';
 
 const fetchUtil = new FetchUtil(fetch)
 export const web3 = new Web3(new Web3.providers.HttpProvider('https://mainnet.infura.io/EoLr1OVfUMDqq3N2KaKA'))
@@ -173,6 +172,18 @@ export default class CreditProtocol {
     const signature = this.serverSign(hash, privateKeyBuffer)
 
     return this.tempStorage.registerId[channelID] = this.client.post(`/register_push`, { channelID, platform, address, signature })
+  }
+
+  deleteChannelID(address: string, channelID: string, platform: string, privateKeyBuffer: any) {
+    const hashBuffer = Buffer.concat([
+      utf8ToBuffer(platform),
+      utf8ToBuffer(channelID),
+      hexToBuffer(address)
+    ])
+    const hash = bufferToHex(ethUtil.sha3(hashBuffer))
+    const signature = this.serverSign(hash, privateKeyBuffer)
+
+    return this.client.post(`/unregister_push`, { channelID, platform, address, signature })
   }
 
   takenNick(nick: string) {

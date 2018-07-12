@@ -161,6 +161,7 @@ export default {
       `ETH (a BCPT) adresa`,
       `Zůstatek ETH`,
       `Zůstatek BCPT`,
+      `Odstranit účet`,
       `ETH Transakční historie`,
       `Změnit hlavní měně`,
       `Změna PIN`,
@@ -179,6 +180,7 @@ export default {
       setSuccess: `Profilová fotka změněna`,
     },
     logoutSuccess: `Došlo k úspěšnému odhlášení!`,
+    logoutError: generalCommunicationError,
   },
 
   currentBalance: {

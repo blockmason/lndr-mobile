@@ -161,6 +161,7 @@ export default {
       `ETH (& BCPT) Cím`,
       `ETH Egyenleg`,
       `BCPT Egyenleg`,
+      `Fiók Törlése`,
       `ETH Tranzakció Előzmények`,
       `Megváltoztathatja az elsődleges pénzneme`,
       `PiN-kód Módosítása`,
@@ -179,6 +180,7 @@ export default {
       setSuccess: `Profilképe frissítve`,
     },
     logoutSuccess: `Sikeresen kijelentkezett!`,
+    logoutError: generalCommunicationError,
   },
 
   currentBalance: {

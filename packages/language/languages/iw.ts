@@ -161,6 +161,7 @@ export default {
       `ETH (& BCPT) כתובת`,
       `יתרת ETH`,
       `יתרת BCPT`,
+      `להסיר חשבון`,
       `היסטוריית עסקאות ETH`,
       `שינוי מטבע ראשי`,
       `לשנות PIN`,
@@ -179,6 +180,7 @@ export default {
       setSuccess: `תמונת הפרופיל עודכנה`,
     },
     logoutSuccess: `התנתקת בהצלחה!`,
+    logoutError: generalCommunicationError,
   },
 
   currentBalance: {

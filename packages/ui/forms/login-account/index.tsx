@@ -1,20 +1,14 @@
 import React, { Component } from 'react'
-import { View, ScrollView, Text, TextInput } from 'react-native'
+import { View, ScrollView } from 'react-native'
 
-import Button from 'ui/components/button'
-import InputImage from 'ui/components/images/input-image'
 import Pinpad from 'ui/components/pinpad'
 
-import Loading, { LoadingContext } from 'ui/components/loading'
+import { LoadingContext } from 'ui/components/loading'
 
-import { LoginAccountData, defaultLoginAccountData } from 'lndr/user'
+import { LoginAccountData } from 'lndr/user'
 
 import language from 'language'
 const {
-  loginAccount,
-  loginAction,
-  removeAccount,
-  confirmPassword,
   enterPin
 } = language
 
@@ -25,7 +19,6 @@ const loadingContext = new LoadingContext()
 
 interface Props {
   onSubmit: (formData: LoginAccountData) => void
-  onRemoveAccount: () => void
 }
 
 interface State {
@@ -73,13 +66,11 @@ export default class LoginAccountForm extends Component<Props, State> {
   }
 
   render() {
-    const { onRemoveAccount } = this.props
     const { confirmPassword } = this.state
 
     return <ScrollView keyboardShouldPersistTaps="always">
       <View style={[style.form, general.centeredColumn]}>
         <Pinpad onNumPress={(pin) => this.enterPin(pin)} onBackspace={() => this.clearPin()} pin={confirmPassword} headerText={enterPin} />
-        <Button alternate small arrow onPress={() => onRemoveAccount()} style={style.submitButton}  containerStyle={general.spaceBelow} text={removeAccount} />
       </View>
     </ScrollView>
   }
