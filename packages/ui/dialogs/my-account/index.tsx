@@ -130,14 +130,13 @@ class MyAccount extends Component<Props, State> {
 
   async componentDidUpdate() {
     const { password, confirmPassword, step, scrollY } = this.state
-    const { failedValidatePin } = this.props
 
     if (step === 4 && confirmPassword.length === 4 ) {
       const authenticated = await loadingContext.wrap(validatePin(confirmPassword))
 
       const self = this as any
       if(!authenticated) {
-        failedValidatePin()
+        this.props.failedValidatePin()
       }
       setTimeout( () => self.refs.scrollContent.scrollTo({ x: 0, y: scrollY, animated: true }), 200)
       this.setState({ step: 1, confirmPassword: '', authenticated })
