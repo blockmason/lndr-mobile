@@ -864,6 +864,12 @@ export const validatePin = async (confirmPassword: string) => {
   return bcrypt.compareSync(confirmPassword, hashedPassword)
 }
 
+export const failedValidatePin = () => {
+  return async (dispatch) => {
+    dispatch(displayError(accountManagement.pin.failedHashComparison))
+  }
+}
+
 export const updateLockTimeout = (timeout: number) => {
   return async (dispatch, getState) => {
     try {
