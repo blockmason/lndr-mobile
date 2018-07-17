@@ -179,22 +179,53 @@ export default class PALSClient {
     }
   }
 
+  async getPayPalOAuthTokens(user) {
+    const authorized = await this.checkAuthorized(user)
+    if (!authorized)
+      return null
+
+    try {
+      const fullResponse = await this.client.get(`/paypal-oauth-tokens`)
+      const response = this.handleResponse(fullResponse)
+//      return (response) ? this.processAccountsResponse(response) : null
+      return (response) ? response : null
+    } catch (e) {
+      return null
+    }
+  }
+
   async deletePayPalAccount(user, payPalEmail) {
     const authorized = await this.checkAuthorized(user)
     if (!authorized)
       return null
 
-    // look up the Id from our accountMap
-    const accountId = this.accountMap[payPalEmail]
-    if (!accountId) {
-      console.warn(`No account found: ${payPalEmail}`)
-      return null
-    }
+    // // look up the Id from our accountMap
+    // const accountId = this.accountMap[payPalEmail]
+    // if (!accountId) {
+    //   console.warn(`No account found: ${payPalEmail}`)
+    //   return null
+    // }
+
+    // TODO: go through each token and delete
 
     try {
-      const response = await this.client.delete(`/paypal-accounts/${accountId}`)
-      const result = this.handleResponse(response)
-      return result
+      const oauthTokens = await this.getPayPalOAuthTokens(user)
+
+      for (const oauthToken of oauthTokens) {
+        if (oauthToken.type !== 'paypal-oauth-token') {
+          console.warn('Invalid token type')
+          continue
+        }
+
+        const response = await this.client.delete(`/paypal-oauth-tokens/${oauthToken.id}`)
+        const result = this.handleResponse(response)
+        if (!result)
+          return null
+      }
+
+      // const response = await this.client.delete(`/paypal-accounts/${accountId}`)
+      // const result = this.handleResponse(response)
+      // return result
     } catch (e) {
       return null
     }
