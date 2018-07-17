@@ -76,7 +76,7 @@ class PayPalSettlementButton extends Component<Props, State> {
     // TODO: add LoadingContext + Loading
     // send server authorization for friend to pay us via PayPal
     const friend = this.props.navigation.state.params.friend ? this.props.navigation.state.params.friend : this.props.friend
-    await loadingPayPalAction.wrap(this.palsClient.authorizeFriend(this.props.user, friend))
+    await loadingContext.wrap(this.palsClient.authorizeFriend(this.props.user, friend))
     // navigate onwards
     this.props.onPress()
   }
@@ -98,16 +98,16 @@ class PayPalSettlementButton extends Component<Props, State> {
 
   async handleConnectPayPal() {
     try {
-      const authToken = await loadingPayPalAction.wrap(NativeModules.PayPalManager.connectPayPal())
+      const authToken = await loadingContext.wrap(NativeModules.PayPalManager.connectPayPal())
       if (authToken) {
         // send response to server
-        await loadingPayPalAction.wrap(this.palsClient.createPayPalAccount(this.props.user, authToken))
-        const payPalPayee = await loadingPayPalAction.wrap(this.palsClient.getPayPalAccount(this.props.user))
+        await loadingContext.wrap(this.palsClient.createPayPalAccount(this.props.user, authToken))
+        const payPalPayee = await loadingContext.wrap(this.palsClient.getPayPalAccount(this.props.user))
         this.setState({payPalPayee: payPalPayee})
         // if we are the Payee, also authorize our friend to pay us
         if (this.isPayee()) {
           const friend = this.props.navigation.state.params.friend ? this.props.navigation.state.params.friend : this.props.friend
-          await loadingPayPalAction.wrap(this.palsClient.authorizeFriend(this.props.user, friend))
+          await loadingContext.wrap(this.palsClient.authorizeFriend(this.props.user, friend))
         }
         this.props.navigation.dispatch(ToastActionsCreators.displayInfo(payPalLanguage.connectSuccess));
       } else {
