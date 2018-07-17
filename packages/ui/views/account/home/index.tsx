@@ -125,7 +125,8 @@ class HomeView extends Component<Props, State> {
         const { type, user } = actions
         if(type === 'NewPendingCredit') {
           const { route, pendingTransaction, pendingSettlement } = this.props.getPendingFromFriend(user)
-          if(pendingTransaction !== undefined && pendingSettlement !== undefined) {
+          if(pendingTransaction !== undefined || pendingSettlement !== undefined) {
+            console.log(2)
             navigation.navigate(route, { pendingTransaction, pendingSettlement })
           }
         } else if(type === 'RequestPayPal') {

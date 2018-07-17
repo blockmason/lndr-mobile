@@ -92,11 +92,9 @@ class Settlement extends Component<Props, State> {
     unmounting = false
     let pic
 
-    try {
-      if (friend.address !== undefined) {
-        pic = await profilePic.get(friend.address)
-      }
-    } catch (e) {}
+    if (friend.address !== undefined) {
+      pic = await profilePic.get(friend.address)
+    }
     this.setState({txCost, pic, amount})
   }
 
