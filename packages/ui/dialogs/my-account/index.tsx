@@ -88,7 +88,7 @@ class MyAccount extends Component<Props, State> {
     this.state = {
       ...defaultUpdateAccountData(),
       lockTimeout: '',
-      hiddenPanels: [true, true, true, true, true, true, true, true, true, true, true, true, true],
+      hiddenPanels: accountManagement.panelHeaders.map( () => true),
       step: 1,
       photos: [],
       authenticated: false,
