@@ -262,7 +262,8 @@ class MyAccount extends Component<Props, State> {
         const payPalEmail = await this.palsClient.getPayPalAccount(this.props.user)
         // console.log(payPalEmail)
         this.setState({payPalEmail: payPalEmail})
-        this.props.navigation.dispatch(ToastActionsCreators.displayInfo("PayPal enabled"));
+        if (payPalEmail)
+          this.props.navigation.dispatch(ToastActionsCreators.displayInfo("PayPal enabled"));
       } else {
         this.setState({payPalEmail: null})
       }
