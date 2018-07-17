@@ -18,8 +18,7 @@ const { payPalLanguage } = language
 
 import PALSClient from 'credit-protocol/pals-client'
 
-const loadingPayPalInit = new LoadingContext()
-const loadingPayPalAction = new LoadingContext()
+const loadingContext = new LoadingContext()
 
 interface Props {
   user: UserData
@@ -50,18 +49,18 @@ class PayPalSettlementButton extends Component<Props, State> {
   }
 
   async componentWillMount() {
-    await loadingPayPalInit.wrap(NativeModules.PayPalManager.initPayPal())
+    await NativeModules.PayPalManager.initPayPal()
 
     if (this.state.payPalPayee == null) {
       // load payee's PayPal info, if available
       let payPalPayee
       if (this.isPayee()) {
-        payPalPayee = await loadingPayPalAction.wrap(this.palsClient.getPayPalAccount(this.props.user))
+        payPalPayee = await loadingContext.wrap(this.palsClient.getPayPalAccount(this.props.user))
       } else {
         const friend = this.props.navigation.state.params.friend ? this.props.navigation.state.params.friend : this.props.friend
-        payPalPayee = await loadingPayPalAction.wrap(this.palsClient.getPayPalAccountForFriend(this.props.user, friend))
+        payPalPayee = await loadingContext.wrap(this.palsClient.getPayPalAccountForFriend(this.props.user, friend))
       }
-      this.setState({ payPalPayee })
+      this.setState({ payPalPayee: payPalPayee })
     }
   }
 
@@ -87,7 +86,7 @@ class PayPalSettlementButton extends Component<Props, State> {
       const confirmation = NativeModules.PayPalManager.sendPayPalPayment(this.props.displayAmount, this.props.primaryCurrency, this.state.payPalPayee, this.props.memo)
       console.log('PayPal Server Confirmation', confirmation)
       // TODO: send confirmation to server. Note: is this necessary?
-      
+
       // TODO: popup confirmation and close this window
       // this.setState({ confirmation })
       this.props.onPress()
@@ -155,7 +154,7 @@ class PayPalSettlementButton extends Component<Props, State> {
     let button
     const message = this.renderPaymentMessage()
 
-    // only send 
+    // only send
     if (this.hasPayPalPayee()) {
       if (this.isPayee()) // we'd like to receive a PayPal payment and we're connected
         button = (<Button large round wide onPress={() => this.requestPayPalPayment()} text={payPalLanguage.requestPayPalPayment} />)
