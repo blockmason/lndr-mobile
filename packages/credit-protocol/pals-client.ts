@@ -56,7 +56,8 @@ export default class PALSClient {
       subject: `0x${address}`
     })
 
-    console.log(`Authorized: 0x${address}`)
+    // console.log(`Authorized: 0x${address}`)
+    console.log(`Bearer ${token}`)
     this.client.setAuthorization(`Bearer ${token}`)
   }
 
