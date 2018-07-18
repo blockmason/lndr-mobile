@@ -7,7 +7,6 @@ import FadeInView from 'ui/components/fade-in-view'
 import LoginView from './login'
 import CreateAccountView from './create-account'
 import RecoverAccountView from './recover-account'
-import RemoveAccountView from './remove-account'
 import ConfirmAccountView from './confirm-account'
 
 import general from 'theme/general'
@@ -54,8 +53,6 @@ class AuthenticateView extends Component<Props> {
 
     if (shouldDisplayMnemonic) {
       return <ConfirmAccountView />
-    } else if (shouldRemoveAccount) {
-      return <RemoveAccountView />
     } else if (hasStoredUser) {
       return <LoginView />
     } else if (shouldRecoverAccount) {
