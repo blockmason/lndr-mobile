@@ -151,7 +151,7 @@ class CreateAccountForm extends Component<Props, State> {
       </View>
     } else {
       const vertOffset = (Platform.OS === 'android') ? -300 : 0;
-      return (<ScrollView keyboardShouldPersistTaps="always">
+      return (<ScrollView keyboardShouldPersistTaps="never">
         <View style={style.form}>
           <KeyboardAvoidingView behavior={Platform.OS === 'ios' ? 'position' : 'padding'} keyboardVerticalOffset={vertOffset} >
             <ThemeImage name='logo' size={0.4} />
