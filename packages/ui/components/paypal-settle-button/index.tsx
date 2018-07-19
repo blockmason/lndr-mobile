@@ -157,7 +157,7 @@ class PayPalSettlementButton extends Component<Props, State> {
     // only send
     if (this.hasPayPalPayee()) {
       if (this.isPayee()) // we'd like to receive a PayPal payment and we're connected
-        button = (<Button large round wide onPress={() => this.requestPayPalPayment()} text={payPalLanguage.requestPayPalPayment} />)
+        button = (<Button round wide onPress={() => this.requestPayPalPayment()} text={payPalLanguage.requestPayPalPayment} />)
       else // we're ready to send payment AND friend has PayPal connected
         button = (<Button large round wide onPress={() => this.handlePayPalPayment()} text={payPalLanguage.sendWithPayPal} />)
     } else {

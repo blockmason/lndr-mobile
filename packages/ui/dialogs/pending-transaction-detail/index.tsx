@@ -162,9 +162,9 @@ class PendingTransactionDetail extends Component<Props, State> {
     const { navigation, user, getUcacCurrency } = this.props
     const pendingTransaction = navigation.state ? navigation.state.params.pendingTransaction : {}
 
-    if (this.isPayPalSettlement()) {
+    const isCreditor = (user.address === pendingTransaction.creditorAddress)
+    if (this.isPayPalSettlement() && isCreditor) {
       const friend = this.props.getFriendFromAddress(pendingTransaction.debtorAddress)
-
       return (
         <PayPalSettlementButton user={user}
           navigation={navigation}
