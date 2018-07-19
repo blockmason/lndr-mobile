@@ -312,7 +312,7 @@ class MyAccount extends Component<Props, State> {
         <Icon.Button name="paypal" backgroundColor="#21c5d7" onPress={() => this.connectPayPal()}>
           <Text style={[{color:"white"},{fontSize:18.0},{marginLeft:10}]}>Connect PayPal</Text>
         </Icon.Button>
-        <Button round onPress={() => this.disconnectPayPal()} text='clear' />
+{/*        <Button round onPress={() => this.disconnectPayPal()} text='clear' /> */}
       </View>)
   }
 
