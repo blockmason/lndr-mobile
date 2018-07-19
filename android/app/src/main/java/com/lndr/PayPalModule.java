@@ -109,7 +109,7 @@ public class PayPalModule extends ReactContextBaseJavaModule implements Lifecycl
     String PAYPAL_CLIENT_ID_SANDBOX = getConfigProperty("sandboxId", getCurrentActivity().getApplicationContext());
 
     this.config = new PayPalConfiguration()
-      .environment(PayPalConfiguration.ENVIRONMENT_NO_NETWORK)
+      .environment(PayPalConfiguration.ENVIRONMENT_SANDBOX)
       .clientId(PAYPAL_CLIENT_ID_SANDBOX)
       .merchantName("Blockmason")
       .merchantPrivacyPolicyUri(Uri.parse("https://blockmason.io/privacy"))

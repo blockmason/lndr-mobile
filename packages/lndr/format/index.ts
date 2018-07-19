@@ -110,7 +110,6 @@ export const amountFormat = (amount: string, currency: string) => {
         left = `${left}${right[0]}`
         right = right.substr(1)
       }
-      right = right.length === 1 ? right + '0' : right
       return `${currencySymbols(currency)}${commas(left, currency)}.${right}`
     }
   
