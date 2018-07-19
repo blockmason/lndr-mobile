@@ -28,7 +28,7 @@ const {
 } = language
 
 import { getUser, submitterIsMe, getFriendFromAddress } from 'reducers/app'
-import { confirmPendingTransaction, rejectPendingTransaction } from 'actions'
+import { confirmPendingTransaction, rejectPendingTransaction, requestPayPalSettlement } from 'actions'
 import { connect } from 'react-redux'
 
 const loadingContext = new LoadingContext()
@@ -41,6 +41,9 @@ interface Props {
   submitterIsMe: (pendingTransaction: PendingTransaction) => boolean
   navigation: any
   getFriendFromAddress: (address: string) => Friend | undefined
+  requestPayPalSettlement: (
+    friend: Friend
+  ) => any
 }
 
 interface State {
@@ -100,11 +103,9 @@ class PendingTransactionDetail extends Component<Props, State> {
   async handleRequestPayPalPayee() {
     const pendingTransaction = this.props.navigation.state ? this.props.navigation.state.params.pendingTransaction : {}
     const friend = this.props.getFriendFromAddress(pendingTransaction.debtorAddress)
-
-// TODO: IMPLEMENT THIS
-    // const success = await submittingTransaction.wrap(this.props.requestPayPalSettlement(friend as Friend))
-    // if (success)
-    //   this.closePopup('requestPayPalPayee')
+    const success = await loadingContext.wrap(this.props.requestPayPalSettlement(friend as Friend))
+    if (success)
+      this.closePopup('requestPayPalPayee')
   }
 
   closePopup(type) {
@@ -233,4 +234,4 @@ class PendingTransactionDetail extends Component<Props, State> {
 
 export default connect((state) => ({ user: getUser(state)(), submitterIsMe: submitterIsMe(state),
   getUcacCurrency: getUcacCurrency(state), getFriendFromAddress: getFriendFromAddress(state)
-}), { confirmPendingTransaction, rejectPendingTransaction })(PendingTransactionDetail)
+}), { confirmPendingTransaction, rejectPendingTransaction, requestPayPalSettlement })(PendingTransactionDetail)
