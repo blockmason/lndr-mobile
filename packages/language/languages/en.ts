@@ -380,6 +380,10 @@ export default {
       start: `We've let `,
       end: ` know that you'd like to be paid with PayPal.`,
     },
+    settledWithPayPal: {
+      start: `We've let `,
+      end: ` know that you've settled with PayPal.`,
+    },
     status: `You can see the status of this transaction in the `,
     activity: `activity tab.`,
   },
@@ -397,6 +401,7 @@ export default {
 
   payPalLanguage: {
     connectSuccess: `PayPal enabled successfully.`,
+    disconnected: `PayPal disconnected.`,
     enablePayPalForFriend: friend => `Enabling PayPal allows @${friend} to pay you.`,
     friendNotEnabled: friend => `@${friend} has not enabled PayPal payments.`,
     requestPayPalPayment: `Request PayPal Payment`,

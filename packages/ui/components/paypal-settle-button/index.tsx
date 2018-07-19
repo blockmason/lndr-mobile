@@ -73,7 +73,6 @@ class PayPalSettlementButton extends Component<Props, State> {
   }
 
   async requestPayPalPayment() {
-    // TODO: add LoadingContext + Loading
     // send server authorization for friend to pay us via PayPal
     const friend = this.props.navigation.state.params.friend ? this.props.navigation.state.params.friend : this.props.friend
     await loadingContext.wrap(this.palsClient.authorizeFriend(this.props.user, friend))
@@ -104,12 +103,14 @@ class PayPalSettlementButton extends Component<Props, State> {
         await loadingContext.wrap(this.palsClient.createPayPalAccount(this.props.user, authToken))
         const payPalPayee = await loadingContext.wrap(this.palsClient.getPayPalAccount(this.props.user))
         this.setState({payPalPayee: payPalPayee})
-        // if we are the Payee, also authorize our friend to pay us
-        if (this.isPayee()) {
-          const friend = this.props.navigation.state.params.friend ? this.props.navigation.state.params.friend : this.props.friend
-          await loadingContext.wrap(this.palsClient.authorizeFriend(this.props.user, friend))
+        if (payPalPayee) {
+          // if we are the Payee, also authorize our friend to pay us
+          if (this.isPayee()) {
+            const friend = this.props.navigation.state.params.friend ? this.props.navigation.state.params.friend : this.props.friend
+            await loadingContext.wrap(this.palsClient.authorizeFriend(this.props.user, friend))
+          }
+          this.props.navigation.dispatch(ToastActionsCreators.displayInfo(payPalLanguage.connectSuccess));
         }
-        this.props.navigation.dispatch(ToastActionsCreators.displayInfo(payPalLanguage.connectSuccess));
       } else {
         this.setState({payPalPayee: null})
       }

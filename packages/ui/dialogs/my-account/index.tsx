@@ -36,7 +36,7 @@ import popupStyle from 'theme/popup'
 import language from 'language'
 const { nickname, setNickname, email, setEmail, copy, accountManagement, changePin, enterNewPin, confirmPin, pleaseWait,
   cancel, mnemonicExhortation, addressExhortation, logoutAction, notifications, currentBalance, showMnemonic, enterCurrentPin,
-  myAccount, debtManagement, changePrimaryCurrency
+  myAccount, debtManagement, changePrimaryCurrency, payPalLanguage
 } = language
 const updateAccountText = language.updateAccount
 
@@ -263,7 +263,7 @@ class MyAccount extends Component<Props, State> {
         // console.log(payPalEmail)
         this.setState({payPalEmail: payPalEmail})
         if (payPalEmail)
-          this.props.navigation.dispatch(ToastActionsCreators.displayInfo("PayPal enabled"));
+          this.props.navigation.dispatch(ToastActionsCreators.displayInfo(payPalLanguage.connectSuccess));
       } else {
         this.setState({payPalEmail: null})
       }
@@ -279,7 +279,7 @@ class MyAccount extends Component<Props, State> {
       // tell server to delete user's PayPal info
       await this.palsClient.deletePayPalAccount(this.props.user, this.state.payPalEmail)
       this.setState({payPalEmail: null})
-      this.props.navigation.dispatch(ToastActionsCreators.displayInfo("PayPal disconnected"));
+      this.props.navigation.dispatch(ToastActionsCreators.displayInfo(payPalLanguage.disconnected));
     } catch (e) {
       // user cancelled
       console.log(e)
@@ -312,6 +312,7 @@ class MyAccount extends Component<Props, State> {
         <Icon.Button name="paypal" backgroundColor="#21c5d7" onPress={() => this.connectPayPal()}>
           <Text style={[{color:"white"},{fontSize:18.0},{marginLeft:10}]}>Connect PayPal</Text>
         </Icon.Button>
+        <Button round onPress={() => this.disconnectPayPal()} text='clear' />
       </View>)
   }
 

@@ -127,7 +127,7 @@ class Settlement extends Component<Props, State> {
     const settleTotal = Math.abs(this.getRecentTotal()) === Math.abs(sanitizeAmount(amount, primaryCurrency))
     let success
 
-    if(denomination === 'PAYPAL' && direction === 'lend') {
+    if ( denomination === 'PAYPAL' && (!this.isPayee()) ) {
       success = await submittingTransaction.wrap(
         this.props.requestPayPalSettlement(
           friend as Friend
@@ -154,13 +154,9 @@ class Settlement extends Component<Props, State> {
 
     let resetAction
     if (success && success.type !== '@@TOAST/DISPLAY_ERROR') {
-      console.log(
-        'BOOYAH'
-      )
       let type = 'create'
       if (this.isPayPalSettlement()) {
-        const isPayee = (direction == 'borrow')
-        type = (isPayee) ? 'requestPayPalPayment' : 'requestPayPalPayee'
+        type = (this.isPayee()) ? 'requestPayPalPayment' : 'requestPayPalPayee'
       }
       resetAction = getResetAction({ routeName:'Confirmation', params: { type: type, friend } })
     } else {
@@ -168,6 +164,10 @@ class Settlement extends Component<Props, State> {
     }
 
     this.props.navigation.dispatch(resetAction)
+  }
+
+  isPayee() {
+    return (this.state.direction === 'borrow')
   }
 
   isPayPalSettlement() {
@@ -238,9 +238,9 @@ class Settlement extends Component<Props, State> {
     const cleanAmount = amount.replace(/[^0-9\.]/g, '')
     const totalEthCost = ( Number(txCost) + Number(cleanAmount) ) / Number(ethExchange(primaryCurrency))
 
-    if ( direction === 'lend' && totalEthCost > Number(ethBalance) ) {
+    if ( (!this.isPayee()) && totalEthCost > Number(ethBalance) ) {
       formInputError = accountManagement.sendEth.error.insufficient
-    } else if ( direction === 'lend' && ethSentPastWeek * Number(ethExchange(primaryCurrency)) + Number(cleanAmount) > Number(transferLimits(primaryCurrency)) ) {
+    } else if ( (!this.isPayee()) && ethSentPastWeek * Number(ethExchange(primaryCurrency)) + Number(cleanAmount) > Number(transferLimits(primaryCurrency)) ) {
       formInputError = accountManagement.sendEth.error.limitExceeded(primaryCurrency)
     } else if (hasPendingTransaction(friend)) {
       formInputError = debtManagement.createError.pending
