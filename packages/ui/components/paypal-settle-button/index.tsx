@@ -33,7 +33,6 @@ interface Props {
 
 interface State {
   payPalPayee: any // the payee's PayPal id (email)
-  confirmation: any
 }
 
 class PayPalSettlementButton extends Component<Props, State> {
@@ -43,7 +42,6 @@ class PayPalSettlementButton extends Component<Props, State> {
     super(props)
     this.state = {
       payPalPayee: null
-      ,confirmation: null
     }
     this.palsClient = new PALSClient()
   }
@@ -82,16 +80,16 @@ class PayPalSettlementButton extends Component<Props, State> {
 
   async handlePayPalPayment() {
     try {
-      const confirmation = NativeModules.PayPalManager.sendPayPalPayment(this.props.displayAmount, this.props.primaryCurrency, this.state.payPalPayee, this.props.memo)
-      console.log('PayPal Server Confirmation', confirmation)
-      // TODO: send confirmation to server. Note: is this necessary?
-
-      // TODO: popup confirmation and close this window
-      // this.setState({ confirmation })
-      this.props.onPress()
+      const confirmationCode = await loadingContext.wrap(NativeModules.PayPalManager.sendPayPalPayment(this.props.displayAmount, this.props.primaryCurrency, this.state.payPalPayee, this.props.memo))
+      console.log('PayPal Server Confirmation', confirmationCode)
+      if (confirmationCode) {
+        // TODO: send confirmation to PALS server for validation
+        // TODO: record settlement with Lndr server
+        this.props.onPress()
+      }
     } catch (e) {
       // user cancelled
-      console.log('User Cancelled PayPal Transaction', e)
+      console.log('User cancelled PayPal transaction')
     }
   }
 
