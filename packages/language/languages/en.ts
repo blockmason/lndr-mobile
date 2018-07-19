@@ -391,7 +391,7 @@ export default {
   pendingFriendRequestsLanguage: {
     shell: `Friend Request`,
     message: `Friend Requests`,
-    request: friend => `${friend} wants to be friends with you!`,
+    request: friend => `@${friend} wants to be friends with you!`,
   },
 
   privacyPolicy: {
