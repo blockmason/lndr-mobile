@@ -381,7 +381,7 @@ export default {
   pendingFriendRequestsLanguage: {
     shell: `Permintaan Pertemanan`,
     message: `Permintaan Pertemanan`,
-    request: F => `${F} ingin berteman dengan Anda!`,
+    request: F => `@${F} ingin berteman dengan Anda!`,
   },
 
   privacyPolicy: {

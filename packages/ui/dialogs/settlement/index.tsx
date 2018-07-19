@@ -210,10 +210,9 @@ class Settlement extends Component<Props, State> {
   }
 
   displayMessage() {
-    const { balance } = this.state
     const friend = this.props.navigation ? this.props.navigation.state.params.friend : {}
 
-    return balance > 0 ? debtManagement.direction.pendingLend(friend.nickname) : debtManagement.direction.pendingBorrow(friend.nickname)
+    return `@${friend.nickname}`
   }
 
   displayTotal(balance) {

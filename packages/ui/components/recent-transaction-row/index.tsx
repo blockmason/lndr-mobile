@@ -53,11 +53,11 @@ class RecentTransactionRow extends Component<Props, State> {
     const { recentTransaction, user } = this.props
 
     if (user.address === recentTransaction.creditorAddress) {
-      return recentTransaction.debtorNickname
+      return `@${recentTransaction.debtorNickname}`
     }
 
     else if (user.address === recentTransaction.debtorAddress) {
-      return recentTransaction.creditorNickname
+      return `@${recentTransaction.creditorNickname}`
     }
 
     else {

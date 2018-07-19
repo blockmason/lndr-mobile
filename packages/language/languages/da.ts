@@ -381,7 +381,7 @@ export default {
   pendingFriendRequestsLanguage: {
     shell: `Venneanmodning`,
     message: `Venneanmodninger`,
-    request: F => `${F} ønsker at være venner med dig!`,
+    request: F => `@${F} ønsker at være venner med dig!`,
   },
 
   privacyPolicy: {

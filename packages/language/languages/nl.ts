@@ -380,7 +380,7 @@ export default {
   pendingFriendRequestsLanguage: {
     shell: `Vriendschapsverzoek`,
     message: `Vriendschapsverzoeken`,
-    request: F => `${F} wil vrienden met u worden! `,
+    request: F => `@${F} wil vrienden met u worden! `,
   },
 
   privacyPolicy: {

@@ -380,7 +380,7 @@ export default {
   pendingFriendRequestsLanguage: {
     shell: `Yêu cầu kết bạn`,
     message: `Yêu cầu kết bạn`,
-    request: F => `${F} muốn kết bạn với bạn!`,
+    request: F => `@${F} muốn kết bạn với bạn!`,
   },
 
   privacyPolicy: {

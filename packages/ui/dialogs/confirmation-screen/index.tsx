@@ -61,7 +61,7 @@ export default class ConfirmationScreen extends Component<Props> {
           {this.getConfirmationImage(type)}
           <Text style={style.text}>
             <Text>{confirmation[type].start}</Text>
-            <Text style={style.nickname}>{type !== 'ethSent' && type !== 'bcptSent' ? friend.nickname : amount}</Text>
+            <Text style={style.nickname}>{type !== 'ethSent' && type !== 'bcptSent' ? `@${friend.nickname}` : amount}</Text>
             <Text>{confirmation[type].end}</Text>
             {type === 'ethSent' || type === 'bcptSent' ? <Text style={style.nickname}>{txHash}</Text> : null}
           </Text>

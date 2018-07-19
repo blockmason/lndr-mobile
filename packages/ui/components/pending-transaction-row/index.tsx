@@ -61,11 +61,11 @@ class PendingTransactionRow extends Component<Props, State> {
     const { pendingTransaction, user } = this.props
 
     if (user.address === pendingTransaction.creditorAddress) {
-      return debtManagement.direction.pendingLend(pendingTransaction.debtorNickname)
+      return `@${pendingTransaction.debtorNickname}`
     }
 
     else if (user.address === pendingTransaction.debtorAddress) {
-      return debtManagement.direction.pendingBorrow(pendingTransaction.creditorNickname)
+      return `@${pendingTransaction.creditorNickname}`
     }
 
     else {
@@ -105,7 +105,7 @@ class PendingTransactionRow extends Component<Props, State> {
             {!friend ? <Image source={imageSource} style={style.pendingIcon}/> : null }
             <View style={general.flexColumn}>
               {!friend ? <Text style={style.titledPending}>{this.getTitle()}</Text> : null }
-              <Text style={style.pendingMemo}>{friend ? pendingTransaction.memo : debtManagement.for(pendingTransaction.memo)}</Text>
+              <Text style={style.pendingMemo}>{pendingTransaction.memo}</Text>
             </View>
           </View>
           <Text style={[style.pendingAmount, this.getColor()]}>{this.getAmount()}</Text>

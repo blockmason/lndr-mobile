@@ -380,7 +380,7 @@ export default {
   pendingFriendRequestsLanguage: {
     shell: `Prośba o Przyjęcie do grona Znajomych`,
     message: `Prośby o Przyjęcie do grona Znajomych`,
-    request: F => `${F} chce być Twoim znajomym!`,
+    request: F => `@${F} chce być Twoim znajomym!`,
   },
 
   privacyPolicy: {

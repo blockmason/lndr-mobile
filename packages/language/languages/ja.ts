@@ -371,6 +371,12 @@ export default {
     activity: `アクティビティタブ.`,
   },
 
+  pendingFriendRequestsLanguage: {
+    shell: `友達リクエスト`,
+    message: `友達リクエスト`,
+    request: F => `@${F}はあなたと友達になりたい！`
+  },
+
   privacyPolicy: {
     link: `lndr.io/terms/`,
     message: `ボタンをクリックすると、Blockmasonのプライバシーポリシーに同意したことになります。 Blockmasonは、あなたのEメールアドレスを使ってBlockmasonとLNDRに関する最新情報をあなたに送信することができます。 ここでのプライバシーポリシーへのリンクは次のとおりです:`,

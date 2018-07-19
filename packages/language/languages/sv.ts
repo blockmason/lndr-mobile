@@ -380,7 +380,7 @@ export default {
   pendingFriendRequestsLanguage: {
     shell: `Vänförfrågan`,
     message: `Vänförfrågningar`,
-    request: F => `${F} vill vara vän med dig!`,
+    request: F => `@${F} vill vara vän med dig!`,
   },
 
   privacyPolicy: {

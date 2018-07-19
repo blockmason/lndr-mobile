@@ -381,7 +381,7 @@ export default {
   pendingFriendRequestsLanguage: {
     shell: `Žádost o přátelství`,
     message: `Žádosti o přátelství`,
-    request: F => `${F} si vás chce přidat mezi přátele!`,
+    request: F => `@${F} si vás chce přidat mezi přátele!`,
   },
 
   privacyPolicy: {

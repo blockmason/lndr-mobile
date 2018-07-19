@@ -381,7 +381,7 @@ export default {
   pendingFriendRequestsLanguage: {
     shell: `Solicitud de amistad`,
     message: `Solicitudes de amistad`,
-    request: F => `${F} quiere ser su Amigo!`,
+    request: F => `@${F} quiere ser su Amigo!`,
   },
 
   privacyPolicy: {

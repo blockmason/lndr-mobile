@@ -381,7 +381,7 @@ export default {
   pendingFriendRequestsLanguage: {
     shell: `Ismerősnek Jelölés`,
     message: `Ismerősnek Jelölések`,
-    request: F => `${F} szeretne az ismerőse lenni! `,
+    request: F => `@${F} szeretne az ismerőse lenni! `,
   },
 
   privacyPolicy: {

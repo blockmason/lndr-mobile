@@ -381,7 +381,7 @@ export default {
   pendingFriendRequestsLanguage: {
     shell: `Ystäväpyyntö`,
     message: `Ystäväpyynnöt`,
-    request: F => `${F} haluaa olla ystäväsi! `,
+    request: F => `@${F} haluaa olla ystäväsi! `,
   },
 
   privacyPolicy: {

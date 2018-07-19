@@ -121,9 +121,9 @@ class PendingTransactionDetail extends Component<Props, State> {
     const pendingTransaction = navigation.state ? navigation.state.params.pendingTransaction : {}
 
     if (user.address === pendingTransaction.creditorAddress) {
-      return debtManagement.direction.pendingLend(pendingTransaction.debtorNickname)
+      return `@${pendingTransaction.debtorNickname}`
     } else if (user.address === pendingTransaction.debtorAddress) {
-      return debtManagement.direction.pendingBorrow(pendingTransaction.creditorNickname)
+      return `@${pendingTransaction.creditorNickname}`
     } else {
       return 'Unknown Transaction'
     }

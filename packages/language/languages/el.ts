@@ -381,7 +381,7 @@ export default {
   pendingFriendRequestsLanguage: {
     shell: `Αίτημα Φιλίας`,
     message: `Αιτήματα φιλίας`,
-    request: F => `Ο/Η ${F} θέλει να γίνετε φίλοι!`,
+    request: F => `Ο/Η @${F} θέλει να γίνετε φίλοι!`,
   },
 
   privacyPolicy: {
