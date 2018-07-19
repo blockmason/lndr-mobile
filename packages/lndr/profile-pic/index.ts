@@ -40,7 +40,7 @@ export default {
       return `data:image/jpg;base64,${base64Data}`
     })
     .catch( err => {
-      console.log('Profile Pic Error: ', err)
+      console.log('Error getting profile pic: ', err)
     })
   },
 
