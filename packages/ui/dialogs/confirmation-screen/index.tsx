@@ -18,7 +18,7 @@ interface Props {
 
 export default class ConfirmationScreen extends Component<Props> {
   getConfirmationImage(type) {
-    const acceptList = ['create', 'confirm', 'ethSent', 'bcptSent', 'confirmFriend', 'requestPayPalPayee', 'requestPayPalPayment']
+    const acceptList = ['create', 'confirm', 'ethSent', 'bcptSent', 'confirmFriend', 'requestPayPalPayee', 'requestPayPalPayment', 'settledWithPayPal']
     const rejectList = ['reject', 'rejectFriend']
     if (acceptList.indexOf(type) >= 0) {
       return <Image source={require('images/check-circle.png')} style={style.image} />

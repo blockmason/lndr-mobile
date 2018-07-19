@@ -27,7 +27,9 @@ interface Props {
   direction: string
   primaryCurrency: string
   memo:string
-  onPress: () => any
+  onRequestPayPalPayment: () => any
+  onPayPalPaymentSuccess: () => any
+  onRequestPayPalPayee: () => any
   friend?: Friend
 }
 
@@ -73,9 +75,9 @@ class PayPalSettlementButton extends Component<Props, State> {
   async requestPayPalPayment() {
     // send server authorization for friend to pay us via PayPal
     const friend = this.props.navigation.state.params.friend ? this.props.navigation.state.params.friend : this.props.friend
-    await loadingContext.wrap(this.palsClient.authorizeFriend(this.props.user, friend))
-    // navigate onwards
-    this.props.onPress()
+    const response = await loadingContext.wrap(this.palsClient.authorizeFriend(this.props.user, friend))
+    if (response)
+      this.props.onRequestPayPalPayment()
   }
 
   async handlePayPalPayment() {
@@ -83,9 +85,8 @@ class PayPalSettlementButton extends Component<Props, State> {
       const confirmationCode = await loadingContext.wrap(NativeModules.PayPalManager.sendPayPalPayment(this.props.displayAmount, this.props.primaryCurrency, this.state.payPalPayee, this.props.memo))
       console.log('PayPal Server Confirmation', confirmationCode)
       if (confirmationCode) {
-        // TODO: send confirmation to PALS server for validation
-        // TODO: record settlement with Lndr server
-        this.props.onPress()
+        // TODO: send confirmation to PALS server for validation before finalizing this
+        this.props.onPayPalPaymentSuccess()
       }
     } catch (e) {
       // user cancelled
@@ -119,7 +120,7 @@ class PayPalSettlementButton extends Component<Props, State> {
   }
 
   requestPayPalPayee() {
-    this.props.onPress()
+    this.props.onRequestPayPalPayee()
   }
 
   renderPaymentMessage() {

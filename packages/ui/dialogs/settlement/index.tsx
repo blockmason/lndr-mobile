@@ -125,16 +125,16 @@ class Settlement extends Component<Props, State> {
 
     const memo = debtManagement.settleUpMemo(direction, amount)
     const settleTotal = Math.abs(this.getRecentTotal()) === Math.abs(sanitizeAmount(amount, primaryCurrency))
-    let success
+    // let success
 
-    if ( denomination === 'PAYPAL' && (!this.isPayee()) ) {
-      success = await submittingTransaction.wrap(
-        this.props.requestPayPalSettlement(
-          friend as Friend
-        )
-      )
-    } else {
-      success = await submittingTransaction.wrap(
+    // if ( denomination === 'PAYPAL' && (!this.isPayee()) ) {
+    //   success = await submittingTransaction.wrap(
+    //     this.props.requestPayPalSettlement(
+    //       friend as Friend
+    //     )
+    //   )
+    // } else {
+    const success = await submittingTransaction.wrap(
         this.props.addDebt(
           friend as Friend,
           amount as string,
@@ -145,25 +145,34 @@ class Settlement extends Component<Props, State> {
           denomination as string
         )
       )
-    }
+    // }
+    let type = 'create'
+    if (this.isPayPalSettlement())
+      type = (this.isPayee()) ? 'requestPayPalPayment' : 'settledWithPayPal'
 
-    if (!success || success.type === '@@TOAST/DISPLAY_ERROR')
-      return; // display the Toast but don't exit
+    this.displayConfirmation(success, type, friend)
+  }
+
+  async handleRequestPayPalPayee() {
+    const friend = this.props.navigation.state.params.friend
+    const success = await submittingTransaction.wrap(this.props.requestPayPalSettlement(friend as Friend))
+    this.displayConfirmation(success, 'requestPayPalPayee', friend)
+  }
+
+  displayConfirmation(success, type, friend) {
+    if (!success)
+      return
 
     this.clear()
 
-    let resetAction
-    if (success && success.type !== '@@TOAST/DISPLAY_ERROR') {
-      let type = 'create'
-      if (this.isPayPalSettlement()) {
-        type = (this.isPayee()) ? 'requestPayPalPayment' : 'requestPayPalPayee'
-      }
-      resetAction = getResetAction({ routeName:'Confirmation', params: { type: type, friend } })
+    let navAction
+    if (success.type === '@@TOAST/DISPLAY_ERROR') {
+      navAction = getResetAction({ routeName:'Dashboard' })
     } else {
-      resetAction = getResetAction({ routeName:'Dashboard' })
+      navAction = getResetAction({ routeName:'Confirmation', params: { type: type, friend } })
     }
 
-    this.props.navigation.dispatch(resetAction)
+    this.props.navigation.dispatch(navAction)
   }
 
   isPayee() {
@@ -263,7 +272,9 @@ class Settlement extends Component<Props, State> {
           memo={memo}
           direction={this.state.direction}
           primaryCurrency={this.props.primaryCurrency}
-          onPress={() => this.submit()}
+          onRequestPayPalPayment={() => this.submit()}
+          onPayPalPaymentSuccess={() => this.submit()}
+          onRequestPayPalPayee={() => this.handleRequestPayPalPayee()}
         />
       )
     }

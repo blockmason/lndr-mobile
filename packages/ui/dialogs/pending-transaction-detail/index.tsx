@@ -79,7 +79,7 @@ class PendingTransactionDetail extends Component<Props, State> {
     )
 
     if (success) {
-      this.closePopup('confirm')
+      this.closePopup(this.isPayPalSettlement() ? 'settledWithPayPal' : 'confirm')
     } else {
       this.props.navigation.goBack()
     }
@@ -95,6 +95,16 @@ class PendingTransactionDetail extends Component<Props, State> {
     } else {
       this.props.navigation.goBack()
     }
+  }
+
+  async handleRequestPayPalPayee() {
+    const pendingTransaction = this.props.navigation.state ? this.props.navigation.state.params.pendingTransaction : {}
+    const friend = this.props.getFriendFromAddress(pendingTransaction.debtorAddress)
+
+// TODO: IMPLEMENT THIS
+    // const success = await submittingTransaction.wrap(this.props.requestPayPalSettlement(friend as Friend))
+    // if (success)
+    //   this.closePopup('requestPayPalPayee')
   }
 
   closePopup(type) {
@@ -142,21 +152,28 @@ class PendingTransactionDetail extends Component<Props, State> {
     </View>
   }
 
+  isPayPalSettlement() {
+    const pendingTransaction = this.props.navigation.state ? this.props.navigation.state.params.pendingTransaction : {}
+    return (pendingTransaction.settlementCurrency === 'PAYPAL')
+  }
+
   renderPaymentButton() {
     const { navigation, user, getUcacCurrency } = this.props
     const pendingTransaction = navigation.state ? navigation.state.params.pendingTransaction : {}
 
-    if (pendingTransaction.settlementCurrency === 'PAYPAL') {
+    if (this.isPayPalSettlement()) {
       const friend = this.props.getFriendFromAddress(pendingTransaction.debtorAddress)
 
       return (
         <PayPalSettlementButton user={user}
           navigation={navigation}
-          displayAmount={pendingTransaction.amount}
+          displayAmount={String(pendingTransaction.amount)}
           memo={pendingTransaction.memo}
           direction={'lend'}
           primaryCurrency={getUcacCurrency(pendingTransaction.ucac)}
-          onPress={() => this.confirmPendingTransaction(pendingTransaction)}
+          onRequestPayPalPayment={() => console.warn("Can't happen")}
+          onPayPalPaymentSuccess={() => this.confirmPendingTransaction(pendingTransaction)}
+          onRequestPayPalPayee={() => this.handleRequestPayPalPayee()}
           friend={friend}
         />
       )
@@ -214,6 +231,6 @@ class PendingTransactionDetail extends Component<Props, State> {
   }
 }
 
-export default connect((state) => ({ user: getUser(state)(), submitterIsMe: submitterIsMe(state), 
+export default connect((state) => ({ user: getUser(state)(), submitterIsMe: submitterIsMe(state),
   getUcacCurrency: getUcacCurrency(state), getFriendFromAddress: getFriendFromAddress(state)
 }), { confirmPendingTransaction, rejectPendingTransaction })(PendingTransactionDetail)
