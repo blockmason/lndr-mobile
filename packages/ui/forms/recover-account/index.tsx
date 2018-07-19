@@ -29,7 +29,7 @@ import style from 'theme/form'
 const loadingContext = new LoadingContext()
 
 interface Props {
-  onSubmitRecoverUser: (formData: RecoverAccountData) => void
+  onSubmitRecoverUser: (formData: RecoverAccountData) => any
   onCancel: () => void
   user: User
 }
@@ -135,6 +135,7 @@ class RecoverAccountForm extends Component<Props, State> {
   }
 
   setPIN() {
+    console.log('WHAT ', this.state.mnemonicLengthError)
     if (this.state.mnemonicLengthError) {
       return
     }
@@ -162,7 +163,7 @@ class RecoverAccountForm extends Component<Props, State> {
       </View>
     } else {
       const vertOffset = (Platform.OS === 'android') ? -300 : 0;
-      return <ScrollView keyboardShouldPersistTaps="always">
+      return <ScrollView keyboardShouldPersistTaps="never">
         <View style={style.form}>
           <ThemeImage name='logo' size={0.4} />
           <Text style={[style.text, style.spaceBottom]}>{recoverExistingAccount}</Text>

@@ -20,7 +20,7 @@ import { currencySymbols, transferLimits  } from 'lndr/currencies'
 
 import { getAccountInformation, updateNickname, updateEmail, logoutAccount, toggleNotifications,
   setEthBalance, updateLockTimeout, updatePin, getProfilePic, setProfilePic, takenNick, takenEmail,
-  copyToClipboard, validatePin, setPrimaryCurrency } from 'actions'
+  copyToClipboard, validatePin, setPrimaryCurrency, failedValidatePin } from 'actions'
 import { getUser, getStore, getAllUcacCurrencies, getPrimaryCurrency } from 'reducers/app'
 import { getResetAction } from 'reducers/nav'
 import { connect } from 'react-redux'
@@ -62,6 +62,7 @@ interface Props {
   setProfilePic: (imageURI: string, imageData: string) => any
   copyToClipboard: (text: string) => any
   setPrimaryCurrency: (value: string) => any
+  failedValidatePin: () => void
 }
 
 interface State {
@@ -87,7 +88,7 @@ class MyAccount extends Component<Props, State> {
     this.state = {
       ...defaultUpdateAccountData(),
       lockTimeout: '',
-      hiddenPanels: [true, true, true, true, true, true, true, true, true, true, true],
+      hiddenPanels: accountManagement.panelHeaders.map( () => true),
       step: 1,
       photos: [],
       authenticated: false,
@@ -131,11 +132,14 @@ class MyAccount extends Component<Props, State> {
     const { password, confirmPassword, step, scrollY } = this.state
 
     if (step === 4 && confirmPassword.length === 4 ) {
-      const authenticated = loadingContext.wrap(validatePin(confirmPassword))
-      this.setState({ step: 1, confirmPassword: '', authenticated })
+      const authenticated = await loadingContext.wrap(validatePin(confirmPassword))
 
       const self = this as any
-      setTimeout(function() {self.refs.scrollContent.scrollTo({ x: 0, y: scrollY + 200, animated: true })}, 200)
+      if(!authenticated) {
+        this.props.failedValidatePin()
+      }
+      setTimeout( () => self.refs.scrollContent.scrollTo({ x: 0, y: scrollY, animated: true }), 200)
+      this.setState({ step: 1, confirmPassword: '', authenticated })
     } else if (step === 3 && password.length === 4 && confirmPassword.length === 4) {
       this.setState({ step: 5 })
     } else if (password.length === 4 && step === 2) {
@@ -449,4 +453,4 @@ class MyAccount extends Component<Props, State> {
 export default connect((state) => ({ user: getUser(state)(), state: getStore(state)(), allCurrencies: getAllUcacCurrencies(state),
   primaryCurrency: getPrimaryCurrency(state)}), { updateEmail, updateNickname,
   getAccountInformation, logoutAccount, toggleNotifications, setEthBalance, updateLockTimeout, updatePin,
-  getProfilePic, setProfilePic, copyToClipboard, setPrimaryCurrency })(MyAccount)
+  getProfilePic, setProfilePic, copyToClipboard, setPrimaryCurrency, failedValidatePin })(MyAccount)
