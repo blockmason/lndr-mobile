@@ -188,7 +188,7 @@ export default class PALSClient {
   async deletePayPalAccount(user) {
     const authorized = await this.checkAuthorized(user)
     if (!authorized)
-      return
+      return null
 
     try {
       // go through each token and delete
@@ -203,12 +203,12 @@ export default class PALSClient {
         const result = this.handleResponse(response)
         if (!result) {
           console.warn("Unexpected response from server: deletePayPalAccount")
-          return
         }
       }
+      return null
     } catch (e) {
-      console.warn(e)
-      return
+      // console.warn(e)
+      return null
     }
   }
 
