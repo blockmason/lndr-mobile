@@ -32,6 +32,7 @@ import general from 'theme/general'
 import { underlayColor } from 'theme/general'
 import slideStyle from 'theme/slide'
 import popupStyle from 'theme/popup'
+import buttonStyle from 'theme/button'
 
 import language from 'language'
 const { nickname, setNickname, email, setEmail, copy, accountManagement, changePin, enterNewPin, confirmPin, pleaseWait,
@@ -308,12 +309,9 @@ class MyAccount extends Component<Props, State> {
         <Switch value={true} onValueChange={() => this.disconnectPayPal()} />
       </View>
     ) : (
-      <View style={[style.spaceTopS, style.spaceBottomS, style.spaceHorizontalBig]}>
+      <View style={[style.spaceTopS, style.spaceBottomS, style.spaceHorizontalL]}>
         <Loading context={loadingPayPal} />
-        <Icon.Button name="paypal" backgroundColor="#21c5d7" onPress={() => this.connectPayPal()}>
-          <Text style={[{color:"white"},{fontSize:18.0},{marginLeft:10}]}>Connect PayPal</Text>
-        </Icon.Button>
-{/*        <Button round onPress={() => this.disconnectPayPal()} text='clear' /> */}
+        <Button zicon="paypal" round text={payPalLanguage.connectPayPal} onPress={() => this.connectPayPal()} />
       </View>)
   }
 

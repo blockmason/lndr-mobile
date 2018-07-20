@@ -96,7 +96,7 @@ class PendingSettlementDetail extends Component<Props, State> {
     const direction = user.address === debtorAddress ? 'borrow' : 'lend'
     const settleTotal = multiSettlements !== undefined
     const formattedAmount = hasNoDecimals(this.props.getUcacCurrency(ucac)) ? amount : amount / 100
-    
+
     if ( creditorAddress === user.address && ( ethSentPastWeek * Number(ethExchange(primaryCurrency)) + formattedAmount > Number(transferLimits(primaryCurrency)) ) ) {
       this.setState({ confirmationError: accountManagement.sendEth.error.limitExceeded(primaryCurrency) })
       return
@@ -218,14 +218,6 @@ class PendingSettlementDetail extends Component<Props, State> {
     return remaining.slice(0, end)
   }
 
-  isPayPalSettlement() {
-    const pendingSettlement = this.getPendingSettlement()
-
-    if(pendingSettlement.settlementCurrency === 'PAYPAL') {
-
-    }
-  }
-
   render() {
     const { txCost, confirmationError } = this.state
     const { user, settlerIsMe, primaryCurrency } = this.props
@@ -264,6 +256,6 @@ class PendingSettlementDetail extends Component<Props, State> {
   }
 }
 
-export default connect((state) => ({ user: getUser(state)(), settlerIsMe: settlerIsMe(state), ethExchange: getEthExchange(state), 
+export default connect((state) => ({ user: getUser(state)(), settlerIsMe: settlerIsMe(state), ethExchange: getEthExchange(state),
   ethSentPastWeek: getWeeklyEthTotal(state), calculateBalance: calculateBalance(state), getUcacCurrency: getUcacCurrency(state),
   primaryCurrency: getPrimaryCurrency(state) }), { addDebt, rejectPendingSettlement })(PendingSettlementDetail)

@@ -1,7 +1,7 @@
 import React, { Component } from 'react'
 
 import { Text, TouchableHighlight, View, Image } from 'react-native'
-import Icon from 'react-native-vector-icons/Ionicons'
+import ZIcon from 'react-native-vector-icons/Zocial'
 import { connect } from 'react-redux'
 
 import { currencyFormats } from 'lndr/format'
@@ -11,7 +11,7 @@ import profilePic from 'lndr/profile-pic'
 import { currencySymbols, transferLimits  } from 'lndr/currencies'
 import { getUcacCurrency } from 'reducers/app'
 
-import { white } from 'theme/include/colors'
+import { white, darkAqua } from 'theme/include/colors'
 import formStyle from 'theme/form'
 import style from 'theme/account'
 import general from 'theme/general'
@@ -93,10 +93,15 @@ class PendingTransactionRow extends Component<Props, State> {
     return this.getAmount().includes('-') ? style.redAmount : style.greenAmount
   }
 
+  isPayPalSettlement() {
+    return (this.props.pendingTransaction.settlementCurrency === 'PAYPAL')
+  }
+
   render() {
     const { onPress, pendingTransaction, friend } = this.props
     const { pic } = this.state
     const imageSource = pic ? { uri: pic } : require('images/person-outline-dark.png')
+    const paymentIcon = (this.isPayPalSettlement()) ? (<ZIcon name='paypal' color={darkAqua} style={{fontSize:15}}/>) : null
 
     return (
       <TouchableHighlight style={style.pendingTransaction} onPress={onPress} underlayColor={white} activeOpacity={1}>
@@ -108,7 +113,10 @@ class PendingTransactionRow extends Component<Props, State> {
               <Text style={style.pendingMemo}>{pendingTransaction.memo}</Text>
             </View>
           </View>
-          <Text style={[style.pendingAmount, this.getColor()]}>{this.getAmount()}</Text>
+          <View>
+            <Text style={[style.pendingAmount, this.getColor()]}>{this.getAmount()}</Text>
+            {paymentIcon}
+          </View>
         </View>
       </TouchableHighlight>
     )

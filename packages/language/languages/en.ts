@@ -400,6 +400,7 @@ export default {
   },
 
   payPalLanguage: {
+    connectPayPal: `Connect PayPal`,
     connectSuccess: `PayPal enabled successfully.`,
     disconnected: `PayPal disconnected.`,
     enablePayPalForFriend: friend => `Enabling PayPal allows @${friend} to pay you.`,
