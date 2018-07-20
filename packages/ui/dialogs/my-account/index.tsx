@@ -41,6 +41,7 @@ const { nickname, setNickname, email, setEmail, copy, accountManagement, changeP
 const updateAccountText = language.updateAccount
 
 const loadingContext = new LoadingContext()
+const loadingPayPal = new LoadingContext()
 
 const { height } = Dimensions.get('window');
 
@@ -109,12 +110,10 @@ class MyAccount extends Component<Props, State> {
     this.props.setEthBalance()
     this.props.getProfilePic(address)
 
+    // init PayPal and check if user is connected
     await NativeModules.PayPalManager.initPayPal()
-
     if (this.state.payPalEmail == null) {
-      // palsClient.authenticate(this.props.user)
       const payPalEmail = await this.palsClient.getPayPalAccount(this.props.user)
-//      const payPalEmail = await loadingContext.wrap(this.props.getPayPalForAddress(address))
       this.setState({payPalEmail: payPalEmail})
     }
   }
@@ -255,11 +254,11 @@ class MyAccount extends Component<Props, State> {
 
   async connectPayPal() {
     try {
-      const authToken = await NativeModules.PayPalManager.connectPayPal()
+      const authToken = await loadingPayPal.wrap(NativeModules.PayPalManager.connectPayPal())
       if (authToken) {
         // send response to server
-        await this.palsClient.createPayPalAccount(this.props.user, authToken)
-        const payPalEmail = await this.palsClient.getPayPalAccount(this.props.user)
+        await loadingPayPal.wrap(this.palsClient.createPayPalAccount(this.props.user, authToken))
+        const payPalEmail = await loadingPayPal.wrap(this.palsClient.getPayPalAccount(this.props.user))
         // console.log(payPalEmail)
         this.setState({payPalEmail: payPalEmail})
         if (payPalEmail)
@@ -277,7 +276,7 @@ class MyAccount extends Component<Props, State> {
     try {
       // TODO: popup confirmation
       // tell server to delete user's PayPal info
-      await this.palsClient.deletePayPalAccount(this.props.user, this.state.payPalEmail)
+      await loadingPayPal.wrap(this.palsClient.deletePayPalAccount(this.props.user, this.state.payPalEmail))
       this.setState({payPalEmail: null})
       this.props.navigation.dispatch(ToastActionsCreators.displayInfo(payPalLanguage.disconnected));
     } catch (e) {
@@ -304,11 +303,13 @@ class MyAccount extends Component<Props, State> {
 
   renderPayPalContent() {
     return (this.state.payPalEmail) ? (
-        <View style={[general.flexRow, style.spaceTopS, style.spaceBottomS, style.spaceHorizontalBig]}>
-          <Image source={require('images/PayPalLogo.png')} style={{marginRight: 20}} />
-          <Switch value={true} onValueChange={() => this.disconnectPayPal()} />
-        </View>
-    ) : (<View style={[style.spaceTopS, style.spaceBottomS, style.spaceHorizontalBig]}>
+      <View style={[general.flexRow, style.spaceTopS, style.spaceBottomS, style.spaceHorizontalBig]}>
+        <Image source={require('images/PayPalLogo.png')} style={{marginRight: 20}} />
+        <Switch value={true} onValueChange={() => this.disconnectPayPal()} />
+      </View>
+    ) : (
+      <View style={[style.spaceTopS, style.spaceBottomS, style.spaceHorizontalBig]}>
+        <Loading context={loadingPayPal} />
         <Icon.Button name="paypal" backgroundColor="#21c5d7" onPress={() => this.connectPayPal()}>
           <Text style={[{color:"white"},{fontSize:18.0},{marginLeft:10}]}>Connect PayPal</Text>
         </Icon.Button>
