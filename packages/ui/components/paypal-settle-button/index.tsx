@@ -1,7 +1,7 @@
 import React, { Component } from 'react'
 import { NativeModules, Text, View } from 'react-native'
 import Button from 'ui/components/button'
-import { LoadingContext } from 'ui/components/loading'
+import Loading, { LoadingContext } from 'ui/components/loading'
 
 import { UserData } from 'lndr/user'
 import Friend from 'lndr/friend'
@@ -168,6 +168,7 @@ class PayPalSettlementButton extends Component<Props, State> {
     }
     return (
       <View>
+        <Loading context={loadingContext} />
         {button}
         {message}
       </View>
