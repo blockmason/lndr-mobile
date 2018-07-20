@@ -135,7 +135,7 @@ public class PayPalModule extends ReactContextBaseJavaModule implements Lifecycl
   }
 
   @ReactMethod
-  public void sendPayPalPayment(String amount, String currencyCode, String payeeEmail, String description, Promise promise) {
+  public void sendPayPalPayment(Double amount, String currencyCode, String payeeEmail, String description, Promise promise) {
     // TODO: open PayPal's Android SendPaymentView and capture confirmation, similar to above
     this.promise = promise;
 

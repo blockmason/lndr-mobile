@@ -5,6 +5,7 @@ import Loading, { LoadingContext } from 'ui/components/loading'
 
 import { UserData } from 'lndr/user'
 import Friend from 'lndr/friend'
+import { hasNoDecimals } from 'lndr/currencies'
 
 import formStyle from 'theme/form'
 import general from 'theme/general'
@@ -78,7 +79,9 @@ class PayPalSettlementButton extends Component<Props, State> {
 
   async handlePayPalPayment() {
     try {
-      const confirmationCode = await loadingContext.wrap(NativeModules.PayPalManager.sendPayPalPayment(this.props.displayAmount, this.props.primaryCurrency, this.state.payPalPayee, this.props.memo))
+      const cleanAmount = Number(this.props.displayAmount.replace(/[^0-9\.\,]/g, ''))
+      const adjustedAmount = hasNoDecimals(this.props.primaryCurrency) ? cleanAmount : cleanAmount / 100
+      const confirmationCode = await loadingContext.wrap(NativeModules.PayPalManager.sendPayPalPayment(adjustedAmount, this.props.primaryCurrency, this.state.payPalPayee, this.props.memo))
       console.log('PayPal Server Confirmation', confirmationCode)
       if (confirmationCode) {
         // TODO: send confirmation to PALS server for validation before finalizing this

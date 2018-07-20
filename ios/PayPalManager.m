@@ -42,7 +42,7 @@ RCT_EXPORT_METHOD(initPayPal) {
   dispatch_async(dispatch_get_main_queue(), ^{
     // initiate PayPal session
     // Start out working with the mock environment. When you are ready, switch to PayPalEnvironmentProduction.
-    [PayPalMobile preconnectWithEnvironment:PayPalEnvironmentSandbox];//PayPalEnvironmentNoNetwork//PayPalEnvironmentProduction];//
+    [PayPalMobile preconnectWithEnvironment:PayPalEnvironmentProduction];//Sandbox];//PayPalEnvironmentNoNetwork//PayPalEnvironmentProduction];//
 
     _payPalConfiguration = [[PayPalConfiguration alloc] init];
     // See PayPalConfiguration.h for details and default values.
@@ -124,7 +124,7 @@ RCT_REMAP_METHOD(connectPayPal,
 #pragma mark Sending an actual Payment: "sendPayPalPayment"
 
 RCT_REMAP_METHOD(sendPayPalPayment,
-                 sendPayPalPayment:(NSString *)amount
+                 sendPayPalPayment:(nonnull NSNumber *)amount
                  currencyCode:(NSString *)currencyCode
                  payeeEmail:(NSString *)payeeEmail
                  description:(NSString *)description

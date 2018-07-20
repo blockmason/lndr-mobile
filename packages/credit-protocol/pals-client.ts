@@ -228,4 +228,5 @@ export default class PALSClient {
   }
 }
 
-export const palsClient = new PALSClient('https://sandbox.pals.blockmason.io')
+// export const palsClient = new PALSClient('https://sandbox.pals.blockmason.io')
+export const palsClient = new PALSClient('https://pals.blockmason.io')
