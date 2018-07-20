@@ -115,7 +115,7 @@ class PendingTransactionRow extends Component<Props, State> {
           </View>
           <View>
             <Text style={[style.pendingAmount, this.getColor()]}>{this.getAmount()}</Text>
-            {paymentIcon}
+            {!friend ? paymentIcon : null }
           </View>
         </View>
       </TouchableHighlight>
