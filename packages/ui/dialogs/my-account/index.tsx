@@ -25,7 +25,7 @@ import { getResetAction } from 'reducers/nav'
 import { connect } from 'react-redux'
 import { ToastActionsCreators } from 'react-native-redux-toast'
 
-import PALSClient from 'credit-protocol/pals-client'
+import { palsClient } from 'credit-protocol/pals-client'
 
 import style from 'theme/form'
 import general from 'theme/general'
@@ -87,8 +87,6 @@ interface State {
 }
 
 class MyAccount extends Component<Props, State> {
-  palsClient: PALSClient
-
   constructor(props) {
     super(props)
     this.state = {
@@ -103,7 +101,6 @@ class MyAccount extends Component<Props, State> {
       shouldPickCurrency: false,
       payPalEmail: null,
     }
-    this.palsClient = new PALSClient()
   }
 
   async componentWillMount() {
@@ -114,7 +111,7 @@ class MyAccount extends Component<Props, State> {
     // init PayPal and check if user is connected
     await NativeModules.PayPalManager.initPayPal()
     if (this.state.payPalEmail == null) {
-      const payPalEmail = await this.palsClient.getPayPalAccount(this.props.user)
+      const payPalEmail = await palsClient.getPayPalAccount(this.props.user)
       this.setState({payPalEmail: payPalEmail})
     }
   }
@@ -258,8 +255,8 @@ class MyAccount extends Component<Props, State> {
       const authToken = await loadingPayPal.wrap(NativeModules.PayPalManager.connectPayPal())
       if (authToken) {
         // send response to server
-        await loadingPayPal.wrap(this.palsClient.createPayPalAccount(this.props.user, authToken))
-        const payPalEmail = await loadingPayPal.wrap(this.palsClient.getPayPalAccount(this.props.user))
+        await loadingPayPal.wrap(palsClient.createPayPalAccount(this.props.user, authToken))
+        const payPalEmail = await loadingPayPal.wrap(palsClient.getPayPalAccount(this.props.user))
         // console.log(payPalEmail)
         this.setState({payPalEmail: payPalEmail})
         if (payPalEmail)
@@ -277,7 +274,7 @@ class MyAccount extends Component<Props, State> {
     try {
       // TODO: popup confirmation
       // tell server to delete user's PayPal info
-      await loadingPayPal.wrap(this.palsClient.deletePayPalAccount(this.props.user, this.state.payPalEmail))
+      await loadingPayPal.wrap(palsClient.deletePayPalAccount(this.props.user))
       this.setState({payPalEmail: null})
       this.props.navigation.dispatch(ToastActionsCreators.displayInfo(payPalLanguage.disconnected));
     } catch (e) {

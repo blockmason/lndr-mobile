@@ -3,8 +3,6 @@ import Client from './lib/client'
 import JWT from 'jsonwebtoken'
 import ethUtil from 'ethereumjs-util'
 
-const baseUrl = 'https://pals.blockmason.io' // TODO: move to configuration
-
 const PEM = {
   encodePrivateKey: (pubHex, privHex) => {
     return `-----BEGIN PRIVATE KEY-----
@@ -20,12 +18,10 @@ ${Buffer.from(`3056301006072a8648ce3d020106052b8104000a034200${pubHex}`, 'hex').
 
 export default class PALSClient {
   client: Client
-  accountMap: any
 
-  constructor(/*baseUrl: string,*/ fetch?: any) {
+  constructor(baseUrl: string, fetch?: any) {
     this.client = new Client(baseUrl, fetch)
     this.client.setAccept('application/vnd.api+json')
-    this.accountMap = {}
   }
 
   async authorize(user) {
@@ -46,12 +42,11 @@ export default class PALSClient {
     // console.log("address: " + address)
     // console.log("==============================")
 
-    // TODO: store token in keychain?
     const token = JWT.sign({
       pub: pub64
     }, PEM.encodePrivateKey(pubHex, privHex), {
       algorithm: 'ES256',
-      audience: baseUrl,
+      audience: this.client.baseUrl,
       issuer: pub64,
       subject: `0x${address}`
     })
@@ -100,11 +95,7 @@ export default class PALSClient {
       // NOTE: the API returns an array of payPal accounts, we only need the first one
       const account = response[0]
       if ( (account.type) && (account.type == "paypal-account") ) {
-        const accountId = (account.attributes) ? account.attributes.id : null
-        const payPalAccount = (account.attributes) ? account.attributes.email : null
-        if (payPalAccount)
-          this.accountMap[payPalAccount] = accountId
-        return payPalAccount
+        return (account.attributes) ? account.attributes.email : null
       }
     }
     return null
@@ -188,30 +179,20 @@ export default class PALSClient {
     try {
       const fullResponse = await this.client.get(`/paypal-oauth-tokens`)
       const response = this.handleResponse(fullResponse)
-//      return (response) ? this.processAccountsResponse(response) : null
       return (response) ? response : null
     } catch (e) {
       return null
     }
   }
 
-  async deletePayPalAccount(user, payPalEmail) {
+  async deletePayPalAccount(user) {
     const authorized = await this.checkAuthorized(user)
     if (!authorized)
-      return null
-
-    // // look up the Id from our accountMap
-    // const accountId = this.accountMap[payPalEmail]
-    // if (!accountId) {
-    //   console.warn(`No account found: ${payPalEmail}`)
-    //   return null
-    // }
-
-    // TODO: go through each token and delete
+      return
 
     try {
+      // go through each token and delete
       const oauthTokens = await this.getPayPalOAuthTokens(user)
-
       for (const oauthToken of oauthTokens) {
         if (oauthToken.type !== 'paypal-oauth-token') {
           console.warn('Invalid token type')
@@ -220,15 +201,14 @@ export default class PALSClient {
 
         const response = await this.client.delete(`/paypal-oauth-tokens/${oauthToken.id}`)
         const result = this.handleResponse(response)
-        if (!result)
-          return null
+        if (!result) {
+          console.warn("Unexpected response from server: deletePayPalAccount")
+          return
+        }
       }
-
-      // const response = await this.client.delete(`/paypal-accounts/${accountId}`)
-      // const result = this.handleResponse(response)
-      // return result
     } catch (e) {
-      return null
+      console.warn(e)
+      return
     }
   }
 
@@ -243,8 +223,9 @@ export default class PALSClient {
       return null
     }
 
-console.log(`RESPONSE: ${JSON.stringify(response.data)}`)
+    console.log(`RESPONSE: ${JSON.stringify(response.data)}`)
     return response.data
   }
-
 }
+
+export const palsClient = new PALSClient('https://sandbox.pals.blockmason.io')
