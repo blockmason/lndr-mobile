@@ -161,6 +161,7 @@ export default {
       `Dirección de ETH (y BCPT)`,
       `Saldo de Ethereum`,
       `Saldo de BCPT`,
+      `Eliminar Cuenta`,
       `Historial de Transacciones en Ethereum`,
       `Cambiar divisa principal`,
       `Cambiar PIN`,
@@ -179,6 +180,7 @@ export default {
       setSuccess: `Imagen de Perfil Actualizada`,
     },
     logoutSuccess: `¡Ha cerrado sesión satisfactoriamente!`,
+    logoutError: generalCommunicationError,
   },
 
   currentBalance: {

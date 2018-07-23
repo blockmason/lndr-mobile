@@ -181,6 +181,7 @@ export default {
     setSuccess: `프로필 사진이 업데이트됐습니다`,
   },
   logoutSuccess: `성공적으로 로그아웃했습니다!`,
+  logoutError: generalCommunicationError,
 },
 
   currentBalance: {

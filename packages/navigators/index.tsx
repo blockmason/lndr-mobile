@@ -1,6 +1,6 @@
 import React from 'react'
 import { BackHandler } from 'react-native'
-import { addNavigationHelpers, StackNavigator, NavigationActions } from 'react-navigation'
+import { addNavigationHelpers, StackNavigator } from 'react-navigation'
 import { connect } from 'react-redux'
 
 import DashboardNavigator from './dashboard'
@@ -16,6 +16,7 @@ import TransferEth from 'ui/dialogs/transfer-eth'
 import TransferBcpt from 'ui/dialogs/transfer-bcpt'
 import FriendRequest from 'ui/dialogs/friend-request'
 import PayPalRequestDetail from 'ui/dialogs/paypal-request-detail'
+import RemoveAccountView from 'ui/dialogs/remove-account'
 
 import {
   createReactNavigationReduxMiddleware,
@@ -67,6 +68,9 @@ export const AppNavigator = StackNavigator(
     },
     FriendRequest: {
       screen: FriendRequest
+    },
+    RemoveAccount: {
+      screen: RemoveAccountView
     },
     PayPalRequest: PayPalRequestDetail
   },

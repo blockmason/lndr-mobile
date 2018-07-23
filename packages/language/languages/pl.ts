@@ -161,6 +161,7 @@ export default {
       `Adres ETH (& BCPT)`,
       `Bilans ETH`,
       `Bilans BCPT`,
+      `Usuń Konto`,
       `Historia transakcji ETH`,
       `Zmień walutę podstawowy`,
       `Zmień PIN`,
@@ -179,6 +180,7 @@ export default {
       setSuccess: `Zdjęcie profilowe zostało zaktualizowane`,
     },
     logoutSuccess: `Wylogowanie zakończone sukcesem`,
+    logoutError: generalCommunicationError,
   },
 
   currentBalance: {

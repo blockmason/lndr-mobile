@@ -161,6 +161,7 @@ export default {
       `ที่อยู่ ETH (และ BCPT)`,
       `ยอด ETH คงเหลือ`,
       `ยอด BCPT คงเหลือ`,
+      `ปิดบัญชี`,
       `ประวัติการทำธุรกรรม ETH`,
       `เปลี่ยนสกุลเงินหลัก`,
       `เปลี่ยน PIN`,
@@ -179,6 +180,7 @@ export default {
       setSuccess: `ภาพโปรไฟล์ได้รับการอัพเดตแล้ว`,
     },
     logoutSuccess: `คุณออกจากระบบเรียบร้อยแล้ว!`,
+    logoutError: generalCommunicationError,
   },
 
   currentBalance: {

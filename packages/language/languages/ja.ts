@@ -162,6 +162,7 @@ export default {
     `ETH (& BCPT) アドレス`,
     `EHT残高`,
     `BCPT残高`,
+    `アカウントを削除する`,
     `ETHのやりとり履歴`,
     `プライマリ通貨を変更`,
     `暗証番号を変える`,
@@ -180,6 +181,7 @@ export default {
     setSuccess: `プロフィール画像がアップロードされました`,
   },
   logoutSuccess: `ログアウトしました!`,
+  logoutError: generalCommunicationError,
 },
 
   currentBalance: {

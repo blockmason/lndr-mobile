@@ -1,7 +1,7 @@
 import React, { Component } from 'react'
 
 import { Text, TextInput, View, Dimensions, ScrollView, Linking, Modal, Switch,
-  TouchableHighlight, Image, FlatList, KeyboardAvoidingView, Platform, NativeModules } from 'react-native'
+  TouchableHighlight, Image, KeyboardAvoidingView, Platform, NativeModules } from 'react-native'
 
 import ImagePicker from 'react-native-image-picker'
 import Icon from 'react-native-vector-icons/Zocial'
@@ -19,7 +19,7 @@ import { defaultUpdateAccountData, UpdateAccountData, UserData } from 'lndr/user
 
 import { getAccountInformation, updateNickname, updateEmail, logoutAccount, toggleNotifications,
   setEthBalance, updateLockTimeout, updatePin, getProfilePic, setProfilePic, takenNick, takenEmail,
-  copyToClipboard, validatePin, setPrimaryCurrency } from 'actions'
+  copyToClipboard, validatePin, setPrimaryCurrency, failedValidatePin } from 'actions'
 import { getUser, getStore, getAllUcacCurrencies, getPrimaryCurrency } from 'reducers/app'
 import { getResetAction } from 'reducers/nav'
 import { connect } from 'react-redux'
@@ -36,8 +36,8 @@ import buttonStyle from 'theme/button'
 
 import language from 'language'
 const { nickname, setNickname, email, setEmail, copy, accountManagement, changePin, enterNewPin, confirmPin, pleaseWait,
-  cancel, mnemonicExhortation, addressExhortation, logoutAction, notifications, currentBalance, showMnemonic, enterCurrentPin,
-  myAccount, debtManagement, changePrimaryCurrency, payPalLanguage
+  mnemonicExhortation, addressExhortation, logoutAction, notifications, currentBalance, showMnemonic, enterCurrentPin,
+  myAccount, debtManagement, removeAccount, payPalLanguage
 } = language
 const updateAccountText = language.updateAccount
 
@@ -66,6 +66,7 @@ interface Props {
   setProfilePic: (imageURI: string, imageData: string) => any
   copyToClipboard: (text: string) => any
   setPrimaryCurrency: (value: string) => any
+  failedValidatePin: () => void
 }
 
 interface State {
@@ -92,7 +93,7 @@ class MyAccount extends Component<Props, State> {
     this.state = {
       ...defaultUpdateAccountData(),
       lockTimeout: '',
-      hiddenPanels: [true, true, true, true, true, true, true, true, true, true, true],
+      hiddenPanels: accountManagement.panelHeaders.map( () => true),
       step: 1,
       photos: [],
       authenticated: false,
@@ -144,11 +145,14 @@ class MyAccount extends Component<Props, State> {
     const { password, confirmPassword, step, scrollY } = this.state
 
     if (step === 4 && confirmPassword.length === 4 ) {
-      const authenticated = loadingContext.wrap(validatePin(confirmPassword))
-      this.setState({ step: 1, confirmPassword: '', authenticated })
+      const authenticated = await loadingContext.wrap(validatePin(confirmPassword))
 
       const self = this as any
-      setTimeout(function() {self.refs.scrollContent.scrollTo({ x: 0, y: scrollY + 200, animated: true })}, 200)
+      if(!authenticated) {
+        this.props.failedValidatePin()
+      }
+      setTimeout( () => self.refs.scrollContent.scrollTo({ x: 0, y: scrollY, animated: true }), 200)
+      this.setState({ step: 1, confirmPassword: '', authenticated })
     } else if (step === 3 && password.length === 4 && confirmPassword.length === 4) {
       this.setState({ step: 5 })
     } else if (password.length === 4 && step === 2) {
@@ -344,7 +348,10 @@ class MyAccount extends Component<Props, State> {
         <Button round onPress={() => this.props.navigation.navigate('TransferBcpt')} text={accountManagement.sendBcpt.transfer} />
       </View>),
       (<View style={style.spaceHorizontalL}>
-        <Button round onPress={() => Linking.openURL(`https://etherscan.io/address/${user.address}`)} text={accountManagement.viewEtherscan} />
+        <Button round onPress={() => this.props.navigation.navigate('RemoveAccount')} text={removeAccount} />
+      </View>),
+      (<View style={style.spaceHorizontalL}>
+        <Button round onPress={() =>  Linking.openURL(`https://etherscan.io/address/${user.address}`)} text={accountManagement.viewEtherscan} />
       </View>),
       this.renderPayPalContent(),
       (<View style={style.spaceHorizontalL}>
@@ -506,4 +513,4 @@ class MyAccount extends Component<Props, State> {
 export default connect((state) => ({ user: getUser(state)(), state: getStore(state)(), allCurrencies: getAllUcacCurrencies(state),
   primaryCurrency: getPrimaryCurrency(state)}), { updateEmail, updateNickname,
   getAccountInformation, logoutAccount, toggleNotifications, setEthBalance, updateLockTimeout, updatePin,
-  getProfilePic, setProfilePic, copyToClipboard, setPrimaryCurrency })(MyAccount)
+  getProfilePic, setProfilePic, copyToClipboard, setPrimaryCurrency, failedValidatePin })(MyAccount)

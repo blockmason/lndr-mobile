@@ -161,6 +161,7 @@ export default {
       `ETH (ve BCPT) Adresi`,
       `ETH Bakiyesi`,
       `BCPT Bakiyesi`,
+      `Hesabı Kaldır`,
       `ETH İşlem Geçmişi`,
       `Birincil Para değiştirme`,
       `Pin'i Değiştir`,
@@ -179,6 +180,7 @@ export default {
       setSuccess: `Profil resmi güncellendi`,
     },
     logoutSuccess: `Başarıyla çıkış yaptınız!`,
+    logoutError: generalCommunicationError,
   },
 
   currentBalance: {

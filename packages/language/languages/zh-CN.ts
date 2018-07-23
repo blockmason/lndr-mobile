@@ -161,6 +161,7 @@ export default {
       `ETH（BCPT）地址`,
       `ETH平衡`,
       `BCPT平衡`,
+      `删除帐户`,
       `ETH交易记录`,
       `更改主货币`,
       `更改密码`,
@@ -179,6 +180,7 @@ export default {
       setSuccess: `头像被更新了`,
     },
     logoutSuccess: `您退出了！`,
+    logoutError: generalCommunicationError,
   },
 
   currentBalance: {

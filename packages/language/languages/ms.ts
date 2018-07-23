@@ -161,6 +161,7 @@ export default {
       `Alamat ETH (& BCPT)`,
       `Baki ETH`,
       `Baki BCPT`,
+      `Hapus Akaun`,
       `Sejarah Transaksi ETH`,
       `Tukar Mata Wang Utama`,
       `Tukar PIN`,
@@ -179,6 +180,7 @@ export default {
       setSuccess: `Gambar profil telah dikemas kini`,
     },
     logoutSuccess: `Anda telah berjaya log keluar!`,
+    logoutError: generalCommunicationError,
   },
 
   currentBalance: {

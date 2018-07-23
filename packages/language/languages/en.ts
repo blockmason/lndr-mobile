@@ -158,6 +158,7 @@ export default {
       `ETH (& BCPT) Address`,
       `ETH Balance`,
       `BCPT Balance`,
+      `Remove Account`,
       `ETH Transaction History`,
       `Receive PayPal Payments`,
       `Change Primary Currency`,
@@ -177,6 +178,7 @@ export default {
       setSuccess: `Profile picture updated`,
     },
     logoutSuccess: `You have successfully logged out!`,
+    logoutError: generalCommunicationError,
   },
 
   currentBalance: {

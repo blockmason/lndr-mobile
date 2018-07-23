@@ -60,7 +60,8 @@ const initialState = {
   ethTransactions: [],
   primaryCurrency: defaultCurrency,
   payPalRequests: [],
-  payPalRequestsLoaded: false
+  payPalRequestsLoaded: false,
+  channelID: ''
 }
 
 const store = createStore(initialState)

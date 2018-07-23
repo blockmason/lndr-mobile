@@ -161,6 +161,7 @@ export default {
       `Διεύθυνση ETH (& BCPT)`,
       `Yπόλοιπο ETH`,
       `Yπόλοιπο BCPT`,
+      `Κατάργηση Λογαριασμού`,
       `Ιστορικό Συναλλαγών ETH`,
       `Αλλαγή Πρωτοβάθμια νομίσματος`,
       `Αλλαγή PIN`,
@@ -179,6 +180,7 @@ export default {
       setSuccess: `Ενημερώθηκε η εικόνα του προφίλ σας`,
     },
     logoutSuccess: `Έχετε αποσυνδεθεί με επιτυχία!`,
+    logoutError: generalCommunicationError,
   },
 
   currentBalance: {

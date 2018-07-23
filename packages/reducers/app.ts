@@ -214,3 +214,7 @@ export const getPendingFromFriend = state => (nick: string) => {
 export const getFriendFromNick = state => (nick: string) : Friend | undefined => getFriendList(state)().find( friend => friend.nickname === nick)
 
 export const getFriendFromAddress = state => (address: string) : Friend | undefined => getFriendList(state)().find( friend => friend.address === address)
+
+export const hasStoredUser = (state) => () : boolean => state.store.hasStoredUser
+
+export const getChannelID = (state) : string => state.store.channelID

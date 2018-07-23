@@ -161,6 +161,7 @@ export default {
       `ETH (& BCPT) Adres`,
       `ETH saldo`,
       `BCPT saldo`,
+      `Verwijder account`,
       `ETH transactiegeschiedenis`,
       `Wijzig primaire valuta`,
       `Wijzig pincode`,
@@ -179,6 +180,7 @@ export default {
       setSuccess: `Profielfoto bijgewerkt`,
     },
     logoutSuccess: `U bent succesvol uitgelogd!`,
+    logoutError: generalCommunicationError,
   },
 
   currentBalance: {

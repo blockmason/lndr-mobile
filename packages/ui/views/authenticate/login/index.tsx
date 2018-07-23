@@ -1,19 +1,16 @@
 import React, { Component } from 'react'
 
-import { View, Text } from 'react-native'
-
 import LoginAccountForm from 'ui/forms/login-account'
 
 import { connect } from 'react-redux'
 
-import { setAuthLoading, loginAccount, goToRemoveAccount } from 'actions'
+import { setAuthLoading, loginAccount } from 'actions'
 
 import { LoginAccountData } from 'lndr/user'
 
 interface Props {
   setAuthLoading: (state: boolean) => any
   loginAccount: (formData: LoginAccountData) => any
-  goToRemoveAccount: () => any
 }
 
 class LoginView extends Component<Props> {
@@ -28,12 +25,11 @@ class LoginView extends Component<Props> {
     return (
       <LoginAccountForm
         onSubmit={this.handleOnSubmitLoginAccount.bind(this)}
-        onRemoveAccount={this.props.goToRemoveAccount}
       />
     )
   }
 }
 
-const mapDispatchToProps = { setAuthLoading, loginAccount, goToRemoveAccount }
+const mapDispatchToProps = { setAuthLoading, loginAccount }
 
 export default connect(null, mapDispatchToProps)(LoginView)

@@ -161,6 +161,7 @@ export default {
       `ETH (और BCPT) पता`,
       `ETH बैलेंस`,
       `BCPT बैलेंस`,
+      `अकाउंट डिलीट करें`,
       `ETH बैलेंस हिस्ट्री`,
       `प्राथमिक मुद्रा परिवर्तित करें`,
       `पिन बदलिए`,
@@ -179,6 +180,7 @@ export default {
       setSuccess: `प्रोफ़ाइल फोटो अपडेट हो गई`,
     },
     logoutSuccess: `आप लॉग-आउट हो गए हैं!`,
+    logoutError: generalCommunicationError,
   },
 
   currentBalance: {
