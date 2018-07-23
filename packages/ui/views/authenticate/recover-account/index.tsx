@@ -10,7 +10,7 @@ import RecoverAccountForm from 'ui/forms/recover-account'
 
 import { RecoverAccountData } from 'lndr/user'
 
-import Loading, { LoadingContext } from 'ui/components/loading'
+import { LoadingContext } from 'ui/components/loading'
 
 const loadingContext = new LoadingContext()
 
@@ -21,11 +21,6 @@ interface Props {
 }
 
 class RecoverAccountView extends Component<Props> {
-  constructor(props) {
-    super(props)
-
-    this.handleOnSubmitRecoverUser.bind(this)
-  }
 
   async handleOnSubmitRecoverUser(formData: RecoverAccountData) {
     this.props.setAuthLoading(true)
@@ -37,7 +32,7 @@ class RecoverAccountView extends Component<Props> {
     return (
       <View>
         <RecoverAccountForm
-          onSubmitRecoverUser={this.handleOnSubmitRecoverUser}
+          onSubmitRecoverUser={this.handleOnSubmitRecoverUser.bind(this)}
           onCancel={this.props.cancelRecoverAccount}
         />
       </View>

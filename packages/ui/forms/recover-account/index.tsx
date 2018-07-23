@@ -135,7 +135,6 @@ class RecoverAccountForm extends Component<Props, State> {
   }
 
   setPIN() {
-    console.log('WHAT ', this.state.mnemonicLengthError)
     if (this.state.mnemonicLengthError) {
       return
     }
