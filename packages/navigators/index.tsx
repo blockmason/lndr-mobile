@@ -111,7 +111,7 @@ class AppWithNavigationState extends React.Component<Props> {
 
   onBackPress = () => {
     const { nav, navigation } = this.props;
-    if(nav.routes && nav.routes[1] && nav.routes[1].routeName === 'FriendDetail') {
+    if(nav.routes instanceof Array && nav.routes[1] && nav.routes[1].routeName === 'FriendDetail') {
       return true
     } else if (nav.index === 0 && nav.routes[0].index === 0) {
       BackHandler.exitApp()
