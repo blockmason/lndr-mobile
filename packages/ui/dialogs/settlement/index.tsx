@@ -125,16 +125,16 @@ class Settlement extends Component<Props, State> {
 
     const memo = debtManagement.settleUpMemo(direction, amount)
     const settleTotal = Math.abs(this.getRecentTotal()) === Math.abs(sanitizeAmount(amount, primaryCurrency))
-    // let success
+    let success
 
-    // if ( denomination === 'PAYPAL' && (!this.isPayee()) ) {
-    //   success = await submittingTransaction.wrap(
-    //     this.props.requestPayPalSettlement(
-    //       friend as Friend
-    //     )
-    //   )
-    // } else {
-    const success = await submittingTransaction.wrap(
+    if ( denomination === 'PAYPAL' && (!this.isPayee()) ) {
+      success = await submittingTransaction.wrap(
+        this.props.requestPayPalSettlement(
+          friend as Friend
+        )
+      )
+    } else {
+      success = await submittingTransaction.wrap(
         this.props.addDebt(
           friend as Friend,
           amount as string,
@@ -145,7 +145,7 @@ class Settlement extends Component<Props, State> {
           denomination as string
         )
       )
-    // }
+    }
     let type = 'create'
     if (this.isPayPalSettlement())
       type = (this.isPayee()) ? 'requestPayPalPayment' : 'settledWithPayPal'

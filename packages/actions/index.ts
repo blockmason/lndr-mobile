@@ -948,7 +948,7 @@ export const requestPayPalSettlement = (friend: Friend) => {
       await creditProtocol.requestPayPalSettlement(friend.address, address, privateKeyBuffer)
       return 'SUCCESS'
     } catch(e) {
-      return dispatch (displayError(debtManagement.createError.pending))
+      return dispatch (displayError(debtManagement.pending.error))
     }
   }
 }
