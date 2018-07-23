@@ -2,6 +2,8 @@ import { Text, View } from 'react-native'
 import React, { Component } from 'react'
 import { connect } from 'react-redux'
 
+import Friend from 'lndr/friend'
+
 import BalanceRow from 'ui/components/balance-row'
 
 import style from 'theme/account'
@@ -13,7 +15,7 @@ import language from 'language'
 const { debtManagement } = language
 
 interface Props {
-  friend: any
+  friend: Friend
   calculateUcacBalances: (friendAddr: string) => object
 }
 
