@@ -58,7 +58,9 @@ const initialState = {
   userPic: '',
   ucacAddresses: {},
   ethTransactions: [],
-  primaryCurrency: defaultCurrency
+  primaryCurrency: defaultCurrency,
+  payPalRequests: [],
+  payPalRequestsLoaded: false
 }
 
 const store = createStore(initialState)

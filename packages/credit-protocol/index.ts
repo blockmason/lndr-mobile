@@ -462,4 +462,20 @@ export default class CreditProtocol {
     const paypalRequestSignature = this.serverSign(hash, privateKeyBuffer)
     return this.client.post('/request_paypal', { friend, requestor, paypalRequestSignature })
   }
-}
+
+  retrievePayPalSettlementRequests(addr: string) {
+    return this.client.get(`/request_paypal/${addr}`)
+  }
+
+  deletePayPalSettlementRequest(friend: string, requestor: string, privateKeyBuffer: any) {
+    const hashBuffer = Buffer.concat([
+      hexToBuffer(friend),
+      hexToBuffer(requestor)
+    ])
+    const hash = bufferToHex(ethUtil.sha3(hashBuffer))
+    const paypalRequestSignature = this.serverSign(hash, privateKeyBuffer)
+    console.log('HERE IS MY DATA', { friend, requestor, paypalRequestSignature })
+
+    return this.client.post('/remove_paypal_request', { friend, requestor, paypalRequestSignature })
+  }
+ }

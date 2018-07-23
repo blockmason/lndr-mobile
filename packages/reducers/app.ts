@@ -3,7 +3,8 @@ import PendingTransaction from 'lndr/pending-transaction'
 import moment from 'moment'
 import { UserData } from 'lndr/user'
 import Friend from 'lndr/friend'
-import { currencySymbols, transferLimits, hasNoDecimals } from 'lndr/currencies'
+import { hasNoDecimals } from 'lndr/currencies'
+import PayPalRequest from 'lndr/paypal-request';
 
 export const initialState = ({})
 
@@ -20,14 +21,14 @@ const reducer = (state = initialState, action) => {
   }
 }
 
-export const getUser = (state) => () : UserData => state.store.user
+export const getUser = state => () : UserData => state.store.user
 
-export const submitterIsMe = (state) => (pendingTransaction: PendingTransaction) => {
+export const submitterIsMe = state => (pendingTransaction: PendingTransaction) => {
   const { address } = getUser(state)()
   return pendingTransaction.submitter === address
 }
 
-export const settlerIsMe = (state) => (pendingSettlement: any) => {
+export const settlerIsMe = state => (pendingSettlement: any) => {
   const { address } = getUser(state)()
   return pendingSettlement.submitter === address
 }
@@ -35,30 +36,31 @@ export const settlerIsMe = (state) => (pendingSettlement: any) => {
 // TODO - Remove this function.  It is not decriptive and only is here for temp
 // purposes.  We will need to find all uses of this function and write proper
 // selectors
-export const getStore = (state) => () => (state.store)
+export const getStore = state => () => (state.store)
 
 // Place any addtional app reducers here
 export default reduceReducers(
   reducer
 )
 
-export const getPendingTransactionsCount = (state) => state.store.pendingTransactions.length
+export const getPendingTransactionsCount = state => state.store.pendingTransactions.length
 
-export const getNeedsReviewCount = (state) => {
+export const getNeedsReviewCount = state => {
   const result = (
-    state.store.pendingTransactions.filter( (transaction) => !submitterIsMe(state)(transaction) ).length +
-    state.store.pendingSettlements.filter( (settlement) => !settlerIsMe(state)(settlement) ).length +
+    state.store.pendingTransactions.filter( transaction => !submitterIsMe(state)(transaction) ).length +
+    state.store.pendingSettlements.filter( settlement => !settlerIsMe(state)(settlement) ).length +
+    state.store.payPalRequests.filter( request => !request.requestorIsMe ).length +
     state.store.pendingFriends.length
   )
   return result
 }
 
-export const getUcacAddr = (state) => (currency: string) => {
+export const getUcacAddr = state => (currency: string) => {
   const { ucacAddresses } = getStore(state)()
   return ucacAddresses[currency]
 }
 
-export const getUcacCurrency = (state) => (ucac: string) => {
+export const getUcacCurrency = state => (ucac: string) => {
   const { ucacAddresses } = getStore(state)()
 
   for(let currency in ucacAddresses) {
@@ -69,9 +71,9 @@ export const getUcacCurrency = (state) => (ucac: string) => {
   return 'USD'
 }
 
-export const getAllUcacCurrencies = (state) => Object.keys(state.store.ucacAddresses);
+export const getAllUcacCurrencies = state => Object.keys(state.store.ucacAddresses);
 
-export const getWeeklyEthTotal = (state) => {
+export const getWeeklyEthTotal = state => {
   let { ethTransactions, pendingSettlements, bilateralSettlements, user } = getStore(state)()
   if (!ethTransactions) {
     ethTransactions = []
@@ -82,7 +84,7 @@ export const getWeeklyEthTotal = (state) => {
   return (lastWeekWei + bilateralWei) / Math.pow(10, 18)
 }
 
-export const hasPendingTransaction = (state) => (friend) => {
+export const hasPendingTransaction = state => (friend) => {
   function friendMatch(list: any) {
     return list.some( ele => ele.creditorAddress === friend.address || ele.debtorAddress === friend.address )
   }
@@ -90,19 +92,21 @@ export const hasPendingTransaction = (state) => (friend) => {
   return friendMatch(pendingTransactions) || friendMatch(pendingSettlements) || friendMatch(bilateralSettlements)
 }
 
-export const recentTransactions = (state) => state.store.recentTransactions
+export const recentTransactions = state => state.store.recentTransactions
 
-export const pendingTransactions = (state) => state.store.pendingTransactions
+export const pendingTransactions = state => state.store.pendingTransactions
 
-export const pendingSettlements = (state) => state.store.pendingSettlements
+export const pendingSettlements = state => state.store.pendingSettlements
 
-export const bilateralSettlements = (state) => state.store.bilateralSettlements
+export const bilateralSettlements = state => state.store.bilateralSettlements
 
-export const pendingFriends = (state) => state.store.pendingFriends
+export const pendingFriends = state => state.store.pendingFriends
+
+export const payPalRequests = (state) : [PayPalRequest] => state.store.payPalRequests
 
 export const getEthBalance = (state) : string => state.store.ethBalance
 
-export const getEthExchange = (state) => (currency: string) : string => {
+export const getEthExchange = state => (currency: string) : string => {
   return state.store.ethPrices[currency.toLowerCase()] === undefined ? '1000' : state.store.ethPrices[currency.toLowerCase()]
 }
 
@@ -110,7 +114,7 @@ export const getEthPrices = (state) : object => state.store.ethPrices
 
 export const getBcptBalance = (state) : string => state.store.bcptBalance
 
-export const convertCurrency = (state) => (fromUcac: string, amount: number) : number => {
+export const convertCurrency = state => (fromUcac: string, amount: number) : number => {
   const primaryCurrency = getPrimaryCurrency(state)
   let fromExchange = Number(getEthExchange(state)(getUcacCurrency(state)(fromUcac)))
   fromExchange = hasNoDecimals(getUcacCurrency(state)(fromUcac)) ? fromExchange : fromExchange * 100
@@ -120,7 +124,7 @@ export const convertCurrency = (state) => (fromUcac: string, amount: number) : n
   return amount / fromExchange * toExchange
 }
 
-export const calculateBalance = (state) => (friend: Friend) : number => {
+export const calculateBalance = state => (friend: Friend) : number => {
   const recent = recentTransactions(state)
   const user = getUser(state)()
 
@@ -145,7 +149,7 @@ export const calculateBalance = (state) => (friend: Friend) : number => {
   return Math.round(total)
 }
 
-export const calculateCounterparties = (state) => () : number => {
+export const calculateCounterparties = state => () : number => {
   const recent = recentTransactions(state)
   if(recent.length === 0) {
     return 0
@@ -160,9 +164,8 @@ export const calculateCounterparties = (state) => () : number => {
   return Object.keys(friends).length - 1
 }
 
-export const calculateUcacBalances = (state) => (friendAddress: string) : Object => {
+export const calculateUcacBalances = state => (friendAddress: string) : Object => {
   const recents = recentTransactions(state)
-  const user = getUser(state)()
   const ucacBalances = {}
 
   recents.map( tx => {
@@ -194,9 +197,9 @@ export const calculateUcacBalances = (state) => (friendAddress: string) : Object
 
 export const getPrimaryCurrency = (state) : string => state.store.primaryCurrency
 
-export const getFriendList = (state) => () : Friend[] => state.store.friends
+export const getFriendList = state => () : Friend[] => state.store.friends
 
-export const getPendingFromFriend = (state) => (nick: string) => {
+export const getPendingFromFriend = state => (nick: string) => {
   const friend = state.store.friends.find(fr => fr.nickname === nick)
   if(friend) {
     const pendingTransaction = state.store.pendingTransactions.find(tx => tx.creditorAddress === friend.address || tx.debtorAddress === friend.address)
@@ -208,6 +211,6 @@ export const getPendingFromFriend = (state) => (nick: string) => {
   }
 }
 
-export const getFriendFromNick = (state) => (nick: string) : Friend | undefined => getFriendList(state)().find( friend => friend.nickname === nick)
+export const getFriendFromNick = state => (nick: string) : Friend | undefined => getFriendList(state)().find( friend => friend.nickname === nick)
 
-export const getFriendFromAddress = (state) => (address: string) : Friend | undefined => getFriendList(state)().find( friend => friend.address === address)
+export const getFriendFromAddress = state => (address: string) : Friend | undefined => getFriendList(state)().find( friend => friend.address === address)

@@ -21,6 +21,12 @@ interface Props {
 }
 
 class RecoverAccountView extends Component<Props> {
+  constructor(props) {
+    super(props)
+
+    this.handleOnSubmitRecoverUser.bind(this)
+  }
+
   async handleOnSubmitRecoverUser(formData: RecoverAccountData) {
     this.props.setAuthLoading(true)
     await loadingContext.wrap(this.props.recoverAccount(formData))
@@ -31,7 +37,7 @@ class RecoverAccountView extends Component<Props> {
     return (
       <View>
         <RecoverAccountForm
-          onSubmitRecoverUser={this.handleOnSubmitRecoverUser.bind(this)}
+          onSubmitRecoverUser={this.handleOnSubmitRecoverUser}
           onCancel={this.props.cancelRecoverAccount}
         />
       </View>

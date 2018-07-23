@@ -7,7 +7,7 @@ import { currencyFormats } from 'lndr/format'
 import Balance from 'lndr/balance'
 
 import Button from 'ui/components/button'
-import { LoadingContext } from 'ui/components/loading'
+import Loading, { LoadingContext } from 'ui/components/loading'
 import Section from 'ui/components/section'
 import PendingView from 'ui/views/account/activity/pending'
 
@@ -19,7 +19,7 @@ import { isFocusingOn } from 'reducers/nav'
 import { getStore, getUser, getNeedsReviewCount, calculateBalance, calculateCounterparties,
   getPrimaryCurrency, getFriendList, getPendingFromFriend, getEthExchange, getFriendFromNick } from 'reducers/app'
 import { getAccountInformation, displayError, getPending, getFriends,
-  getRecentTransactions, registerChannelID } from 'actions'
+  getRecentTransactions, registerChannelID, getPayPalRequests } from 'actions'
 import { UrbanAirship } from 'urbanairship-react-native'
 import { currencySymbols } from 'lndr/currencies'
 
@@ -45,12 +45,14 @@ const { width } = Dimensions.get('window')
 const loadingRecentTransactions = new LoadingContext()
 const loadingPending = new LoadingContext()
 const loadingFriends = new LoadingContext()
+const loadingPayPalRequests = new LoadingContext()
 
 interface Props {
   navigation: any
   isFocused: boolean
   getPending: () => any
   getFriends: () => any
+  getPayPalRequests: () => any
   getRecentTransactions: () => any
   getAccountInformation: () => any
   getBalances: () => any
@@ -95,6 +97,7 @@ class HomeView extends Component<Props, State> {
     await loadingPending.wrap(this.props.getPending())
     await loadingRecentTransactions.wrap(this.props.getRecentTransactions())
     await loadingFriends.wrap(this.props.getFriends())
+    await loadingPayPalRequests.wrap(this.props.getPayPalRequests())
   }
 
   componentWillReceiveProps(nextProps) {
@@ -117,16 +120,25 @@ class HomeView extends Component<Props, State> {
     UrbanAirship.setUserNotificationsEnabled(notificationsEnabled)
     UrbanAirship.addListener("pushReceived", async(notification) => {
       console.log('Received push: ', JSON.stringify(notification))
-      await loadingPending.wrap(this.props.getPending())
+      const actions = JSON.parse(notification.extras['com.urbanairship.actions'])
+      const { type } = actions
+
+      if(type === 'NewPendingCredit') {
+        loadingPending.wrap(this.props.getPending())
+      } else if(type === 'NewFriendRequest') {
+        loadingFriends.wrap(this.props.getFriends())
+      } else if(type === 'RequestPayPal') {
+        loadingPayPalRequests.wrap(this.props.getPayPalRequests())
+      }
     })
     UrbanAirship.addListener("notificationResponse", async(incoming) => {
       try{
         const actions = JSON.parse(incoming.notification.extras['com.urbanairship.actions'])
         const { type, user } = actions
+        
         if(type === 'NewPendingCredit') {
           const { route, pendingTransaction, pendingSettlement } = this.props.getPendingFromFriend(user)
           if(pendingTransaction !== undefined || pendingSettlement !== undefined) {
-            console.log(2)
             navigation.navigate(route, { pendingTransaction, pendingSettlement })
           }
         } else if(type === 'RequestPayPal') {
@@ -246,4 +258,4 @@ export default connect((state) => ({ state: getStore(state)(), user: getUser(sta
 needsReviewCount: getNeedsReviewCount(state), calculateBalance: calculateBalance(state), calculateCounterparties: calculateCounterparties(state),
 primaryCurrency: getPrimaryCurrency(state), friendList: getFriendList(state)(), getPendingFromFriend: getPendingFromFriend(state),
 ethExchange: getEthExchange(state), getFriendFromNick: getFriendFromNick(state) }), 
-{ getAccountInformation, displayError, getPending, getRecentTransactions, getFriends, registerChannelID })(HomeView)
+{ getAccountInformation, displayError, getPending, getPayPalRequests, getRecentTransactions, getFriends, registerChannelID })(HomeView)

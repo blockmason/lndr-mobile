@@ -403,11 +403,13 @@ export default {
     connectPayPal: `Connect PayPal`,
     connectSuccess: `PayPal enabled successfully.`,
     disconnected: `PayPal disconnected.`,
-    enablePayPalForFriend: friend => `Enabling PayPal allows @${friend} to pay you.`,
-    friendNotEnabled: friend => `@${friend} has not enabled PayPal payments.`,
     requestPayPalPayment: `Request PayPal Payment`,
     sendWithPayPal: `Send With PayPal`,
     enablePayPal: `Enable PayPal`,
-    requestPayPalPayee: `Request PayPal`
+    requestPayPalPayee: `Request PayPal`,
+    enablePayPalForFriend: friend => `Enabling PayPal allows @${friend} to pay you.`,
+    friendNotEnabled: friend => `@${friend} has not enabled PayPal payments.`,
+    friendRequestedConnect: friend => `@${friend} wants to pay you via PayPal`,
+    requestFriendConnect: friend => `You asked @${friend} to enable PayPal`,
   }
 }

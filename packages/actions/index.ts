@@ -22,7 +22,7 @@ import { transferBcpt } from 'lndr/bcpt-utils'
 import { getEtherscanTransactions } from 'lndr/etherscan'
 import { sanitizeAmount } from 'lndr/format'
 import { jsonToPendingFriend, jsonToPendingTransaction, jsonToRecentTransaction, jsonToPendingUnilateral,
-  jsonToPendingBilateral } from 'lndr/json-mapping'
+  jsonToPendingBilateral, jsonToPayPalRequest } from 'lndr/json-mapping'
 
 import { triggerTouchId, getEthInfo, generateMultiTransaction, filterMultiTransactions } from './util'
 
@@ -32,7 +32,7 @@ import language from 'language'
 const { accountManagement, debtManagement, settlementManagement, copiedClipboard } = language
 
 import { ToastActionsCreators } from 'react-native-redux-toast'
-import { getUser, getUcacAddr, calculateUcacBalances, getPrimaryCurrency } from 'reducers/app'
+import { getUser, getUcacAddr, calculateUcacBalances, getPrimaryCurrency, getFriendList } from 'reducers/app'
 import { defaultCurrency } from 'lndr/currencies'
 
 const bcrypt = require('bcryptjs')
@@ -448,13 +448,48 @@ export const getPending = () => {
     const bilateralSettlements = filterMultiTransactions(user.address, rawPendingSettlements.bilateralSettlements.map(jsonToPendingBilateral), getState())
     settleBilateral(user, bilateralSettlements, dispatch, getState)
     
-    const rawPendingFriends = await creditProtocol.getFriendRequests(user.address)
-    const pendingFriends = rawPendingFriends.map(jsonToPendingFriend)
-    
     await ensureTransactionNicknames(pendingSettlements)
     await ensureTransactionNicknames(bilateralSettlements)
     await ensureTransactionNicknames(pendingTransactions)
-    dispatch(setState({ pendingTransactions, pendingTransactionsLoaded: true, pendingSettlements, pendingSettlementsLoaded: true, bilateralSettlements, pendingFriends, pendingFriendsLoaded: true }))
+    dispatch(setState({ pendingTransactions, pendingTransactionsLoaded: true, pendingSettlements, pendingSettlementsLoaded: true, bilateralSettlements }))
+  }
+}
+
+export const getFriendRequests = () => {
+  return async (dispatch, getState) => {
+    const user = getUser(getState())()
+    const rawPendingFriends = await creditProtocol.getFriendRequests(user.address)
+    const pendingFriends = rawPendingFriends.map(jsonToPendingFriend)
+  
+    dispatch(setState({ pendingFriends, pendingFriendsLoaded: true }))
+  }
+}
+
+export const getPayPalRequests = () => {
+  return async (dispatch, getState) => {
+    const user = getUser(getState())()
+    const rawPayPalRequests = await creditProtocol.retrievePayPalSettlementRequests(user.address)
+
+    const payPalRequests = rawPayPalRequests.map( request => {
+      const { target, requestor } = request
+      
+      const requestorIsMe = target.addr.indexOf(user.address) === -1
+      const friend = requestorIsMe ? target : requestor
+
+      return jsonToPayPalRequest({ requestorIsMe, friend })
+    })
+  
+    dispatch(setState({ payPalRequests, payPalRequestsLoaded: true }))
+  }
+}
+
+export const cancelPayPalRequest = (friendAddress: string, address: string, privateKey: any) => {
+  return creditProtocol.deletePayPalSettlementRequest(friendAddress, address, privateKey)
+}
+
+export const cancelPayPalRequestFail = () => {
+  return async (dispatch) => {
+    dispatch(displayError(debtManagement.rejection.error))
   }
 }
 
@@ -501,7 +536,7 @@ export const confirmPendingTransaction = (pendingTransaction: PendingTransaction
 
 export const rejectPendingTransaction = (pendingTransaction: PendingTransaction) => {
   return async (dispatch, getState) => {
-    const { address, privateKeyBuffer } = getUser(getState())()
+    const { privateKeyBuffer } = getUser(getState())()
     const { hash, multiTransactions } = pendingTransaction
     try {
       if(multiTransactions === undefined) {
@@ -925,6 +960,8 @@ const getEthTransactions = async (addr: string, recovery: boolean) => {
 
 const refreshTransactions = () => {
   getPending()
+  getFriendRequests()
+  getPayPalRequests()
   getRecentTransactions()
   setEthBalance()
 }
