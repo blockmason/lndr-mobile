@@ -471,7 +471,8 @@ export const getPayPalRequests = () => {
     const rawPayPalRequests = await creditProtocol.retrievePayPalSettlementRequests(user.address)
 
     const payPalRequests = rawPayPalRequests.map( request => {
-      const { target, requestor } = request
+      const { requestor } = request
+      const target = request.friend
       
       const requestorIsMe = target.addr.indexOf(user.address) === -1
       const friend = requestorIsMe ? target : requestor
