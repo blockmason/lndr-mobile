@@ -409,9 +409,9 @@ export default {
     sendWithPayPal: `Send With PayPal`,
     enablePayPal: `Enable PayPal`,
     requestPayPalPayee: `Request PayPal`,
-    enablePayPalForFriend: friend => `Enabling PayPal allows @${friend} to pay you.`,
-    friendNotEnabled: friend => `@${friend} has not enabled PayPal payments.`,
-    friendRequestedConnect: friend => `@${friend} wants to pay you via PayPal`,
-    requestFriendConnect: friend => `You asked @${friend} to enable PayPal`,
+    enablePayPalForFriend: F => `Enabling PayPal allows @${F} to pay you.`,
+    friendNotEnabled: F => `@${F} has not enabled PayPal payments.`,
+    friendRequestedConnect: F => `@${F} wants to pay you via PayPal`,
+    requestFriendConnect: F => `You asked @${F} to enable PayPal`,
   }
 }

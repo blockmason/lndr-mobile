@@ -388,5 +388,19 @@ export default {
   privacyPolicy: {
     link: `lndr.io/terms/`,
     message: `Altınızda tıklayarak okuyup Blockmason gizlilik politikasına kabul ettiğinizi onaylayın. Blockmason Blockmason ve LNDR hakkında güncellemeleri göndermek için e-posta adresinizi kullanabiliriz. İşte gizlilik politikasına bir link:`
+  },
+
+  payPalLanguage: {
+    connectPayPal: `PayPal bağlayın`,
+    connectSuccess: `PayPal başarıyla sağladı.`,
+    disconnected: `PayPal bağlantısı kesildi.`,
+    requestPayPalPayment: `Talep PayPal Ödeme`,
+    sendWithPayPal: `PayPal ile gönder`,
+    enablePayPal: `Paypal etkinleştirme`,
+    requestPayPalPayee: `PayPal talep`,
+    enablePayPalForFriend: F => `PayPal @${F} ödeme yapmanıza izin verir etkinleştirilmesiq`,
+    friendNotEnabled: F => `@${F} etkinleştirmedi Paypal payments`,
+    friendRequestedConnect: F => `@${F} PayPal aracılığıyla sana ödeme yapmak istiyor`,
+    requestFriendConnect: F => `Sen, @${F} PayPal etkinleştirmek istedi`,
   }
 }

@@ -32,7 +32,6 @@ import general from 'theme/general'
 import { underlayColor } from 'theme/general'
 import slideStyle from 'theme/slide'
 import popupStyle from 'theme/popup'
-import buttonStyle from 'theme/button'
 
 import language from 'language'
 const { nickname, setNickname, email, setEmail, copy, accountManagement, changePin, enterNewPin, confirmPin, pleaseWait,

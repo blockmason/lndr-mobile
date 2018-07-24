@@ -389,5 +389,19 @@ export default {
   privacyPolicy: {
     link: `lndr.io/terms/`,
     message: `नीचे क्लिक करके आप पुष्टि करते हैं कि आपने ब्लॉकमसन गोपनीयता नीति को पढ़ और सहमति दी है। ब्लॉकमेसन ब्लॉकमसन और एलएनडीआर के बारे में अपडेट भेजने के लिए आपके ईमेल पते का उपयोग कर सकता है। गोपनीयता नीति का एक लिंक यहां दिया गया है:`
+  },
+
+  payPalLanguage: {
+    connectPayPal: `पेपैल कनेक्ट करें`,
+    connectSuccess: `पेपैल को सफलतापूर्वक सक्षम।`,
+    disconnected: `पेपैल काट दिया।`,
+    requestPayPalPayment: `अनुरोध पेपैल भुगतान`,
+    sendWithPayPal: `पेपैल के साथ भेजें`,
+    enablePayPal: `पेपैल सक्षम करें`,
+    requestPayPalPayee: `पेपैल का अनुरोध करें`,
+    enablePayPalForFriend: F => `पेपैल को सक्षम करने से आपको @${F} भुगतान करने की अनुमति मिलती है।`,
+    friendNotEnabled: F => `@${F} पेपैल भुगतान सक्षम नहीं किया है।`,
+    friendRequestedConnect: F => `@${F} पेपैल के माध्यम से आपको भुगतान करना चाहता है`,
+    requestFriendConnect: F => `आपने पेपैल को सक्षम करने के लिए @${F} पूछा`,
   }
 }

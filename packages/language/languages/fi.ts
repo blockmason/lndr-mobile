@@ -389,5 +389,19 @@ export default {
   privacyPolicy: {
     link: `lndr.io/terms/`,
     message: `Klikkaamalla alla olevaa linkkiä vahvistaa, että olet lukenut ja hyväksynyt Blockmason-tietosuojakäytännön. Blockmason voi käyttää sähköpostiosoitteesi lähettää päivityksiä Blockmason ja LNDR. Tässä on linkki tietosuojakäytäntöön:`
+  },
+
+  payPalLanguage: {
+    connectPayPal: `Yhdistä PayPal`,
+    connectSuccess: `PayPal käytössä onnistuneesti.`,
+    disconnected: `PayPal irrotettu.`,
+    requestPayPalPayment: `Pyydä PayPal`,
+    sendWithPayPal: `Send PayPalin`,
+    enablePayPal: `Ota PayPal`,
+    requestPayPalPayee: `Pyydä PayPal`,
+    enablePayPalForFriend: F => `ottaminen PayPalin avulla @${F} maksaa you.`,
+    friendNotEnabled: F => `@${F} ei käytössä PayPal maksut.`,
+    friendRequestedConnect: F => `@${F} haluaa maksaa sinulle kautta PayPal`,
+    requestFriendConnect: F => `Kysyit @${F} jotta PayPal`,
   }
 }

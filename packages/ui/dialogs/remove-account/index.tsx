@@ -31,11 +31,7 @@ interface Props {
   navigation: any
 }
 
-interface State {
-  updating: boolean
-}
-
-class RemoveAccountView extends Component<Props, State> {
+class RemoveAccountView extends Component<Props> {
   constructor(props) {
     super(props)
     this.state = {
@@ -43,17 +39,15 @@ class RemoveAccountView extends Component<Props, State> {
     }
 
     this.removeAccount = this.removeAccount.bind(this)
-  }
-
-  componentDidUpdate() {
-    if(this.state.updating && !this.props.hasStoredUser()) {
-      this.props.navigation.dispatch(getResetAction( { routeName: 'Dashboard' } ))
-    }
+    this.goBack = this.goBack.bind(this)
   }
 
   async removeAccount() {
     await removingAccount.wrap(this.props.removeAccount())
-    this.setState({ updating: true })
+  }
+
+  goBack() {
+    this.props.navigation.goBack()
   }
 
   render() {
@@ -64,7 +58,7 @@ class RemoveAccountView extends Component<Props, State> {
           <Text style={[style.header, style.center, style.spaceTop]}>{removeAccountTitle}</Text>
           <Text style={[style.text, style.center, style.spaceTop]}>{removeAccountExhortation}</Text>
           <Button round fat style={style.submitButton} onPress={this.removeAccount} text={removeAccountText} />
-          <Button alternate small arrow style={style.submitButton} containerStyle={general.spaceBelow} onPress={() => this.props.navigation.goBack()} text={cancel} />
+          <Button alternate small arrow style={style.submitButton} containerStyle={general.spaceBelow} onPress={this.goBack} text={cancel} />
         </View>
       </ScrollView>
     )

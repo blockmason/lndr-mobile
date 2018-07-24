@@ -476,7 +476,7 @@ export const getPayPalRequests = () => {
       const { requestor } = request
       const target = request.friend
       
-      const requestorIsMe = target.addr.indexOf(user.address) === -1
+      const requestorIsMe = requestor.addr.indexOf(user.address) >= 0
       const friend = requestorIsMe ? target : requestor
 
       return jsonToPayPalRequest({ requestorIsMe, friend })
@@ -682,7 +682,7 @@ export const logoutAccount = () => {
     userStorage.remove()
     sessionStorage.remove()
     dispatch(displaySuccess(accountManagement.logoutSuccess))
-    return dispatch(setState(payload))
+    dispatch(setState(payload))
   }
 }
 
@@ -690,14 +690,16 @@ export const removeAccount = () => {
   return async (dispatch, getState) => {
     const { address, privateKeyBuffer } = getUser(getState())()
     const channelID = getChannelID(getState())
+    console.log(3)
 
     try {
       await creditProtocol.deleteChannelID(address, channelID, Platform.OS, privateKeyBuffer)
+      await userStorage.remove()
       await mnemonicStorage.remove()
       await hashedPasswordStorage.remove()
       const payload = { hasStoredUser: false, user: undefined }
-      dispatch(displaySuccess(accountManagement.logoutSuccess))
       dispatch(setState(payload))
+      dispatch(displaySuccess(accountManagement.logoutSuccess))
     } catch (e) {
       console.log('ACCOUNT REMOVAL ERROR: ', e)
       dispatch(displayError(accountManagement.logoutError))

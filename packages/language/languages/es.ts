@@ -389,5 +389,19 @@ export default {
   privacyPolicy: {
     link: `lndr.io/terms/`,
     message: `Al hacer clic debajo de usted confirma que ha leído y acepto la política de privacidad de Blockmason. Blockmason puede utilizar su dirección de correo electrónico para enviar actualizaciones sobre Blockmason y LNDR. Aquí hay un enlace a la política de privacidad:`
+  },
+
+  payPalLanguage: {
+    connectPayPal: `Conecte PayPal`,
+    connectSuccess: `PayPal activado con éxito.`,
+    disconnected: `PayPal desconectado.`,
+    requestPayPalPayment: `Solicitud de pago de PayPal`,
+    sendWithPayPal: `Enviar con PayPal`,
+    enablePayPal: `Activar PayPal`,
+    requestPayPalPayee: `solicitar PayPal`,
+    enablePayPalForFriend: F => `Habilitar PayPal permite @${F} para pagar you.`,
+    friendNotEnabled: F => `@${F} no ha permitido PayPal pagos.`,
+    friendRequestedConnect: F => `@${F} quiere pagar vía PayPal`,
+    requestFriendConnect: F => `Se preguntó @${F} para habilitar PayPal`,
   }
 }

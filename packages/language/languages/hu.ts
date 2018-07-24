@@ -389,5 +389,19 @@ export default {
   privacyPolicy: {
     link: `lndr.io/terms/`,
     message: `Az alábbi linkre kattintva Ön megerősíti, hogy elolvasta és elfogadja a Blockmason adatvédelmi irányelveit. Blockmason használhatja az e-mail címét, hogy küldjön frissítéseket Blockmason és LNDR. Itt van egy link, hogy az adatvédelmi politika:`
+  },
+
+  payPalLanguage: {
+    connectPayPal: `Kapcsolatba PayPal`,
+    connectSuccess: `PayPal engedélyezése sikeresen.`,
+    disconnected: `PayPal csatlakoztatva.`,
+    requestPayPalPayment: `Request PayPal fizetés`,
+    sendWithPayPal: `Küldj A PayPal`,
+    enablePayPal: `Engedélyezze a PayPalt`,
+    requestPayPalPayee: `Kérjen PayPal`,
+    enablePayPalForFriend: F => `engedélyezése PayPal lehetővé teszi @${F} fizetni you.`,
+    friendNotEnabled: F => `@${F} nem tette lehetővé PayPal kifizetések.`,
+    friendRequestedConnect: F => `@${F} akar fizetni ön keresztül PayPal`,
+    requestFriendConnect: F => `Te kérdezted @${F}, hogy PayPal`,
   }
 }

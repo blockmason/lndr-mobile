@@ -388,5 +388,19 @@ export default {
   privacyPolicy: {
     link: `lndr.io/terms/`,
     message: `โดยการคลิกที่ด้านล่างคุณยืนยันว่าคุณได้อ่านและยอมรับนโยบายความเป็นส่วนตัวของ Blockmason Blockmason อาจใช้ที่อยู่อีเมลของคุณที่จะส่งการปรับปรุงเกี่ยวกับ Blockmason และ LNDR นี่คือการเชื่อมโยงกับนโยบายความเป็นส่วนตัว:`
+  },
+
+  payPalLanguage: {
+    connectPayPal: `เชื่อมต่อ PayPal`,
+    connectSuccess: `เปิดการใช้งาน PayPal ประสบความสำเร็จ`,
+    disconnected: `PayPal ตัดการเชื่อมต่อ`,
+    requestPayPalPayment: `ขอใช้บริการชำระเงิน PayPal`,
+    sendWithPayPal: `ส่งด้วย PayPal`,
+    enablePayPal: `เปิดใช้งาน PayPal`,
+    requestPayPalPayee: `ขอ PayPal`,
+    enablePayPalForFriend: F => `การเปิดใช้งาน PayPal ช่วยให้ @${F} จะจ่าย you.`,
+    friendNotEnabled: F => `@${F} ยังไม่ได้เปิดใช้งาน PayPal การชำระเงิน`,
+    friendRequestedConnect: F => `@${F} ต้องการจ่ายเงินให้คุณผ่าน PayPal`,
+    requestFriendConnect: F => `คุณถาม @${F} เพื่อเปิดใช้งาน PayPal`,
   }
 }

@@ -388,5 +388,19 @@ export default {
   privacyPolicy: {
     link: `lndr.io/terms/`,
     message: `通过点击下面您确认您已阅读并同意Blockmason的隐私政策。 Blockmason可以使用您的电子邮件地址发送有关Blockmason和LNDR更新。这是对隐私政策的链接：`
+  },
+
+  payPalLanguage: {
+    connectPayPal: `连接贝宝`,
+    connectSuccess: `贝宝成功启用。`,
+    disconnected: `贝宝断开。`,
+    requestPayPalPayment: `要求贝宝付款`,
+    sendWithPayPal: `发送使用贝宝`,
+    enablePayPal: `启用贝宝`,
+    requestPayPalPayee: `要求贝宝`,
+    enablePayPalForFriend: F => `启用的PayPal允许@${F}支付you.`,
+    friendNotEnabled: F => `@${F}没有启用贝宝payments.`,
+    friendRequestedConnect: F => `@${F}想通过PayPal付给你`,
+    requestFriendConnect: F => `你问@${F}启用PayPal`,
   }
 }

@@ -389,5 +389,19 @@ export default {
   privacyPolicy: {
     link: `lndr.io/terms/`,
     message: `Ved at klikke herunder bekræfter du at du har læst og accepteret Blockmasons privatlivspolitik. Blockmason kan bruge din email-adresse til at sende opdateringer om Blockmason og LNDR. Her er et link til privatlivspolitikken:`
+  },
+
+  payPalLanguage: {
+    connectPayPal: `Slut PayPal`,
+    connectSuccess: `PayPal aktiveret med succes.`,
+    disconnected: `PayPal afbrudt.`,
+    requestPayPalPayment: `Anmodning PayPal Payment`,
+    sendWithPayPal: `Send med PayPal`,
+    enablePayPal: `Aktiver PayPal`,
+    requestPayPalPayee: `Bed om PayPal`,
+    enablePayPalForFriend: F => `Aktivering PayPal tillader @${F} at betale you.`,
+    friendNotEnabled: F => `@${F} er ikke aktiveret PayPal betalinger.`,
+    friendRequestedConnect: F => `@${F} ønsker at betale dig via PayPal`,
+    requestFriendConnect: F => `Du bad @${F} for at aktivere PayPal`,
   }
 }

@@ -389,5 +389,19 @@ export default {
   privacyPolicy: {
     link: `lndr.io/terms/`,
     message: `על ידי לחיצה בהמשך שתאשר כי קראת מסכים למדיניות הפרטיות של Blockmason. Blockmason עשויים להשתמש בכתובת הדוא"ל שלך כדי לשלוח עדכונים על Blockmason ו LNDR. הנה קישור למדיניות הפרטיות`
+  },
+
+  payPalLanguage: {
+    connectPayPal: `חבר PayPal`,
+    connectSuccess: `PayPal הופעלו בהצלחה.`,
+    disconnected: `PayPal מנותק.`,
+    requestPayPalPayment: `תשלום בקשת PayPal`,
+    sendWithPayPal: `שלח עם PayPal`,
+    enablePayPal: `הפוך את PayPal`,
+    requestPayPalPayee: `בקש PayPal`,
+    enablePayPalForFriend: F => `הפעלת PayPal מאפשרת ל- @${F} לשלם לך.`,
+    friendNotEnabled: F => `@${F} לא אפשר תשלומים PayPal.`,
+    friendRequestedConnect: F => `@${F} רוצה לשלם לך באמצעות PayPal`,
+    requestFriendConnect: F => `ביקשת מ- @${F} להפעיל את PayPal`,
   }
 }
