@@ -149,9 +149,16 @@ RCT_REMAP_METHOD(sendPayPalPayment,
 
   // Create a PayPalPayment
   PayPalPayment *payment = [[PayPalPayment alloc] init];
+  // iOS experiences precision errors when converting to double
+  // we are forced to first convert to a string
+  NSNumberFormatter *formatter = [[NSNumberFormatter alloc] init];
+  [formatter setNumberStyle:NSNumberFormatterDecimalStyle];
+  [formatter setMaximumFractionDigits:2];
+  [formatter setRoundingMode: NSNumberFormatterRoundCeiling];//Up];
+  NSString *amountS = [formatter stringFromNumber:amount];
 
   // Amount, currency, and description
-  payment.amount = [[NSDecimalNumber alloc] initWithDouble:[amount doubleValue]];
+  payment.amount = [[NSDecimalNumber alloc] initWithString:amountS];
   payment.currencyCode = currencyCode;
   payment.shortDescription = description;
   payment.payeeEmail = payeeEmail; // set destination payee
