@@ -486,8 +486,8 @@ export const getPayPalRequests = () => {
   }
 }
 
-export const cancelPayPalRequest = (friendAddress: string, address: string, privateKey: any) => {
-  return creditProtocol.deletePayPalSettlementRequest(friendAddress, address, privateKey)
+export const cancelPayPalRequest = (friendAddress: string, address: string, privateKeyBuffer: any) => {
+  return creditProtocol.deletePayPalSettlementRequest(friendAddress, address, privateKeyBuffer)
 }
 
 export const cancelPayPalRequestFail = () => {
@@ -610,6 +610,10 @@ export const addDebt = (friend: Friend, amount: string, memo: string, direction:
 
       try {
         await creditProtocol.submitMultiSettlement(transactions)
+
+        if(denomination === 'PAYPAL' && direction === 'borrow') {
+          await creditProtocol.deletePayPalSettlementRequest(friend.address, address, privateKeyBuffer)
+        }
         refreshTransactions()
 
         dispatch(displaySuccess(debtManagement.pending.success(friend)))
@@ -636,6 +640,10 @@ export const addDebt = (friend: Friend, amount: string, memo: string, direction:
 
       const signature = creditRecord.sign(privateKeyBuffer)
       await creditProtocol.submitCreditRecord(creditRecord, direction, signature, denomination)
+
+      if(denomination === 'PAYPAL' && direction === 'borrow') {
+        await creditProtocol.deletePayPalSettlementRequest(friend.address, address, privateKeyBuffer)
+      }
       refreshTransactions()
 
       dispatch(displaySuccess(debtManagement.pending.success(friend)))
