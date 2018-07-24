@@ -1,6 +1,6 @@
 import React, { Component } from 'react'
 
-import { View, ScrollView, Text, TextInput, TouchableHighlight, Image, Platform, Modal, Keyboard, KeyboardAvoidingView } from 'react-native'
+import { View, ScrollView, Text, TextInput, TouchableHighlight, Platform, Modal, Keyboard, KeyboardAvoidingView } from 'react-native'
 import { getResetAction } from 'reducers/nav'
 
 import Friend from 'lndr/friend'
@@ -24,7 +24,7 @@ import language from 'language'
 const { debtManagement, noFriends, submit, nickname } = language
 
 import { getStore, pendingTransactions, recentTransactions, getAllUcacCurrencies, hasPendingTransaction, getPrimaryCurrency } from 'reducers/app'
-import { addDebt, getFriends, getRecentTransactions, hasPendingMessage } from 'actions'
+import { addDebt, getFriends, hasPendingMessage } from 'actions'
 import { connect } from 'react-redux'
 
 const loadingFriends = new LoadingContext()
@@ -200,10 +200,23 @@ class AddDebt extends Component<Props, State> {
     }
   }
 
+  renderSubmit() {
+    const { friend, amount, memo } = this.state
+    if (friend && amount && memo) {
+      return (
+        <View>
+          <Loading context={submittingTransaction} />
+          <Button large round wide onPress={() => this.submit()} text={submit} />
+        </View>
+      )
+    }
+    return null
+  }
+
   render() {
     const direction = this.props.navigation.state.params ? this.props.navigation.state.params.direction : 'lend'
 
-    const { shouldSelectFriend, friend, amount, memo, currency, shouldPickCurrency } = this.state
+    const { shouldSelectFriend, amount, memo, currency, shouldPickCurrency } = this.state
 
     if (shouldSelectFriend) {
       return this.renderSelectFriend()
@@ -212,7 +225,6 @@ class AddDebt extends Component<Props, State> {
     const vertOffset = (Platform.OS === 'android') ? -300 : 0;
     return <View style={general.whiteFlex}>
       <View style={general.view}>
-        <Loading context={submittingTransaction} />
         <DashboardShell text={debtManagement.shell} navigation={this.props.navigation} />
         <Button close onPress={() => this.cancel()} />
       </View>
@@ -249,7 +261,7 @@ class AddDebt extends Component<Props, State> {
                     keyboardType='numeric'
                     onChangeText={amount => this.setState({ amount: this.setAmount(amount) })}
                     ref={ref => this.textInput = ref }
-                    autoCorrect={false} 
+                    autoCorrect={false}
                   />
                 </View>
               </View>
@@ -263,7 +275,7 @@ class AddDebt extends Component<Props, State> {
                 onChangeText={memo => this.setState({ memo: formatMemo(memo) })}
               />
             </View>
-            { friend && amount && memo ? <Button large round wide onPress={() => this.submit()} text={submit} /> : null }
+            {this.renderSubmit()}
           </View>
         </ScrollView>
       </KeyboardAvoidingView>

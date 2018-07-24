@@ -281,6 +281,7 @@ export default {
       }
     },
     eth: `Betala genom ETH`,
+    paypal: `Betala genom PayPal`,
     nonPayment: `Registrera betalning`,
   },
 
@@ -381,11 +382,25 @@ export default {
   pendingFriendRequestsLanguage: {
     shell: `Vänförfrågan`,
     message: `Vänförfrågningar`,
-    request: F => `${F} vill vara vän med dig!`,
+    request: F => `@${F} vill vara vän med dig!`,
   },
 
   privacyPolicy: {
     link: `lndr.io/terms/`,
     message: `Genom att klicka nedan bekräftar du att du har läst och godkänt Blockmason sekretesspolicy. Blockmason kan använda din e-postadress för att skicka uppdateringar om Blockmason och LNDR. Här är en länk till sekretesspolicy:`
+  },
+
+  payPalLanguage: {
+    connectPayPal: `Anslut PayPal`,
+    connectSuccess: `PayPal aktiverat framgångsrikt.`,
+    disconnected: `PayPal kopplad.`,
+    requestPayPalPayment: `Begär PayPal Payment`,
+    sendWithPayPal: `Skicka med PayPal`,
+    enablePayPal: `Aktivera PayPal`,
+    requestPayPalPayee: `Begär PayPal`,
+    enablePayPalForFriend: F => `Aktivera PayPal tillåter @${F} att betala you.`,
+    friendNotEnabled: F => `@${F} har inte aktiverat PayPal betalningar.`,
+    friendRequestedConnect: F => `@${F} vill betala via PayPal`,
+    requestFriendConnect: F => `Du frågade @${F} för att aktivera PayPal`,
   }
 }

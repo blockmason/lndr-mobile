@@ -282,6 +282,7 @@ export default {
       }
     },
     eth: `سدد الحساب بالإثيريوم`,
+    paypal: `دفع الفاتورة مع باي بال`,
     nonPayment: `سجّل مبلغ سداد`,
   },
 
@@ -382,11 +383,25 @@ export default {
   pendingFriendRequestsLanguage: {
     shell: `طلب صداقة`,
     message: `طلبات الصداقة`,
-    request: F => `${F} يريد أن يصبح صديقاً معك!`,
+    request: F => `@${F} يريد أن يصبح صديقاً معك!`,
   },
 
   privacyPolicy: {
     link: `lndr.io/terms/`,
     message: `بالنقر أدناه فأنت تؤكد أنك قرأت وتوافق على سياسة الخصوصية Blockmason ل. Blockmason قد تستخدم عنوان البريد الإلكتروني لإرسال تحديثات حول Blockmason وLNDR. هنا هو وجود صلة لسياسة الخصوصية:`
+  },
+
+  payPalLanguage: {
+    connectPayPal: `ربط باي بال`,
+    connectSuccess: `باي بال تمكين بنجاح.`,
+    disconnected: `باي بال قطع الاتصال.`,
+    requestPayPalPayment: `طلب الدفع باي بال`,
+    sendWithPayPal: `إرسال مع باي بال`,
+    enablePayPal: `تمكين باي بال`,
+    requestPayPalPayee: `طلب باي بال`,
+    enablePayPalForFriend: F => `يتيح تمكين PayPal لـ @${F} أن يدفع لك.`,
+    friendNotEnabled: F => `لم يقم @${F} بتمكين دفعات PayPal`,
+    friendRequestedConnect: F => `يريد @${F} الدفع لك عبر PayPal`,
+    requestFriendConnect: F => `لقد طلبت من @${F} تمكين PayPal`,
   }
 }

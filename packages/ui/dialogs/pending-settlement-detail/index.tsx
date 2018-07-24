@@ -1,11 +1,10 @@
 import React, { Component } from 'react'
 
-import { Text, TextInput, TouchableHighlight, View, Image, ScrollView } from 'react-native'
+import { Text, View, Image, ScrollView } from 'react-native'
 import { getResetAction } from 'reducers/nav'
 
 import { UserData } from 'lndr/user'
-import { debounce } from 'lndr/time'
-import { currencyFormats, amountFormat } from 'lndr/format'
+import { currencyFormats } from 'lndr/format'
 import PendingUnilateral from 'lndr/pending-unilateral'
 import profilePic from 'lndr/profile-pic'
 import Friend from 'lndr/friend'
@@ -23,7 +22,6 @@ import general from 'theme/general'
 
 import language from 'language'
 const {
-  back,
   cancel,
   pendingSettlementsLanguage,
   debtManagement,
@@ -31,20 +29,20 @@ const {
 } = language
 
 import { getUser, settlerIsMe, getEthExchange, getWeeklyEthTotal, calculateBalance, getUcacCurrency, getPrimaryCurrency } from 'reducers/app'
-import { settleUp, rejectPendingSettlement, getEthTxCost } from 'actions'
+import { addDebt, rejectPendingSettlement, getEthTxCost } from 'actions'
 import { connect } from 'react-redux'
 
 const loadingContext = new LoadingContext()
 
 interface Props {
-  settleUp: (
+  addDebt: (
     friend: Friend,
     amount: string,
     memo: string,
     direction: string,
-    settlementCurrency: string,
     currency: string,
-    settleTotal?: boolean
+    settleTotal?: boolean,
+    denomination?: string
   ) => any
   rejectPendingSettlement: (pendingSettlement: PendingUnilateral, settlementCurrency: string) => any
   user: UserData
@@ -91,28 +89,28 @@ class PendingSettlementDetail extends Component<Props, State> {
     this.setState({unmounting: true})
   }
 
-  async settleUp(pendingSettlement: PendingUnilateral) {
+  async addDebt(pendingSettlement: PendingUnilateral) {
     const { ethExchange, ethSentPastWeek, user, calculateBalance, primaryCurrency } = this.props
     const { memo, amount, ucac, settlementCurrency, debtorAddress, debtorNickname, creditorAddress, creditorNickname, multiSettlements } = pendingSettlement
     const friend = user.address === debtorAddress ? new Friend(creditorAddress, creditorNickname) : new Friend(debtorAddress, debtorNickname)
     const direction = user.address === debtorAddress ? 'borrow' : 'lend'
     const settleTotal = multiSettlements !== undefined
     const formattedAmount = hasNoDecimals(this.props.getUcacCurrency(ucac)) ? amount : amount / 100
-    
+
     if ( creditorAddress === user.address && ( ethSentPastWeek * Number(ethExchange(primaryCurrency)) + formattedAmount > Number(transferLimits(primaryCurrency)) ) ) {
       this.setState({ confirmationError: accountManagement.sendEth.error.limitExceeded(primaryCurrency) })
       return
     }
 
     const success = await loadingContext.wrap(
-      this.props.settleUp(
+      this.props.addDebt(
         friend as Friend,
         String(formattedAmount) as string,
         memo as string,
         direction as string,
-        settlementCurrency as string,
         primaryCurrency as string,
-        settleTotal as boolean
+        settleTotal as boolean,
+        settlementCurrency as string
       )
     )
 
@@ -207,7 +205,7 @@ class PendingSettlementDetail extends Component<Props, State> {
     }
 
     return <View style={{marginBottom: 50}}>
-      <Button round large onPress={() => this.settleUp(pendingSettlement)} text={pendingSettlementsLanguage.confirm} />
+      <Button round large onPress={() => this.addDebt(pendingSettlement)} text={pendingSettlementsLanguage.confirm} />
       <Button danger round onPress={() => this.rejectPendingSettlement(pendingSettlement)} text={pendingSettlementsLanguage.reject} />
     </View>
   }
@@ -258,6 +256,6 @@ class PendingSettlementDetail extends Component<Props, State> {
   }
 }
 
-export default connect((state) => ({ user: getUser(state)(), settlerIsMe: settlerIsMe(state), ethExchange: getEthExchange(state), 
+export default connect((state) => ({ user: getUser(state)(), settlerIsMe: settlerIsMe(state), ethExchange: getEthExchange(state),
   ethSentPastWeek: getWeeklyEthTotal(state), calculateBalance: calculateBalance(state), getUcacCurrency: getUcacCurrency(state),
-  primaryCurrency: getPrimaryCurrency(state) }), { settleUp, rejectPendingSettlement })(PendingSettlementDetail)
+  primaryCurrency: getPrimaryCurrency(state) }), { addDebt, rejectPendingSettlement })(PendingSettlementDetail)

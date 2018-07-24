@@ -282,6 +282,7 @@ export default {
       }
     },
     eth: `Vyrovnat prostřednictvím ETH`,
+    paypal: `Vyrovnat prostřednictvím PayPal`,
     nonPayment: `Nahrát vyrovnání`,
   },
 
@@ -382,11 +383,25 @@ export default {
   pendingFriendRequestsLanguage: {
     shell: `Žádost o přátelství`,
     message: `Žádosti o přátelství`,
-    request: F => `${F} si vás chce přidat mezi přátele!`,
+    request: F => `@${F} si vás chce přidat mezi přátele!`,
   },
 
   privacyPolicy: {
     link: `lndr.io/terms/`,
     message: `Click the button below to confirm that you have read and agreed to Blockmason's Privacy Policy. Blockmason can send updates about Blockmason and LNDR using your e-mail address. Here is a link to the privacy policy:`
+  },
+
+  payPalLanguage: {
+    connectPayPal: `Připojit PayPal`,
+    connectSuccess: `PayPal úspěšně povoleno.`,
+    disconnected: `PayPal odpojen.`,
+    requestPayPalPayment: `Požadavek PayPal Payment`,
+    sendWithPayPal: `Poslat PayPal`,
+    enablePayPal: `Umožnit PayPal`,
+    requestPayPalPayee: `Vyžádat PayPal`,
+    enablePayPalForFriend: F => `Povolení PayPal umožňuje @${F} zaplatit you.`,
+    friendNotEnabled: F => `${F} není povoleno PayPal platby.`,
+    friendRequestedConnect: F => `${F} chce zaplatit přes PayPal`,
+    requestFriendConnect: F => `Ptal ses @${F} umožnit PayPal`,
   }
 }

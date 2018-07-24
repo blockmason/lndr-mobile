@@ -282,6 +282,7 @@ export default {
       }
     },
     eth: `Διακανονισμός Με ETH`,
+    paypal: `Διακανονισμός Με PayPal`,
     nonPayment: `Καταγράψτε έναν Διακανονισμό`,
   },
 
@@ -382,11 +383,25 @@ export default {
   pendingFriendRequestsLanguage: {
     shell: `Αίτημα Φιλίας`,
     message: `Αιτήματα φιλίας`,
-    request: F => `Ο/Η ${F} θέλει να γίνετε φίλοι!`,
+    request: F => `Ο/Η @${F} θέλει να γίνετε φίλοι!`,
   },
 
   privacyPolicy: {
     link: `lndr.io/terms/`,
     message: `Κάνοντας κλικ παρακάτω, επιβεβαιώνετε ότι έχετε διαβάσει και συμφωνήσετε με την πολιτική απορρήτου της Blockmason. Το Blockmason μπορεί να χρησιμοποιήσει τη διεύθυνση ηλεκτρονικού ταχυδρομείου σας για να στείλει ενημερώσεις σχετικά με το Blockmason και το LNDR. Ακολουθεί ένας σύνδεσμος προς την πολιτική απορρήτου μας:`
+  },
+
+  payPalLanguage: {
+    connectPayPal: `Συνδέστε το PayPal`,
+    connectSuccess: `PayPal ενεργοποιηθεί με επιτυχία.`,
+    disconnected: `PayPal αποσυνδεθεί.`,
+    requestPayPalPayment: `Αίτηση PayPal Πληρωμή`,
+    sendWithPayPal: `Αποστολή με PayPal`,
+    enablePayPal: `Ενεργοποίηση PayPal`,
+    requestPayPalPayee: `Ζητήστε PayPal`,
+    enablePayPalForFriend: F => `Η ενεργοποίηση PayPal επιτρέπει @${F} για να πληρώσει you.`,
+    friendNotEnabled: F => `@${F} δεν έχει ενεργοποιηθεί PayPal πληρωμές.`,
+    friendRequestedConnect: F => `@${F} θέλει να σας πληρώσει μέσω PayPal`,
+    requestFriendConnect: F => `Θα ζητηθεί @${F} για να ενεργοποιήσετε PayPal`,
   }
 }

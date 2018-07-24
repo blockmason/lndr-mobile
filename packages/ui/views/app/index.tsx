@@ -59,6 +59,8 @@ const initialState = {
   ucacAddresses: {},
   ethTransactions: [],
   primaryCurrency: defaultCurrency,
+  payPalRequests: [],
+  payPalRequestsLoaded: false,
   channelID: ''
 }
 

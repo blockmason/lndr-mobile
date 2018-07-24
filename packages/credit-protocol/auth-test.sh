@@ -1,0 +1,10 @@
+#!/usr/bin/env bash
+
+AUTH_TOKEN="eyJhbGciOiJFUzI1NiIsInR5cCI6IkpXVCJ9.eyJwdWIiOiJCRFB1R29Sa1FCd3NTZCtFRE8zN2Y3SDZKNDdEZVZES2V4cjN3RUI3VWhMdnZGRUFvZHVNVndNR0JValBKVkVBa0xtMzhianRSK2tjQkxMRFZxTDVnWkE9IiwiaWF0IjoxNTI5NzIzMTE4LCJhdWQiOiJodHRwczovL3BhbHMuYmxvY2ttYXNvbi5pbyIsImlzcyI6IkJEUHVHb1JrUUJ3c1NkK0VETzM3ZjdINko0N0RlVkRLZXhyM3dFQjdVaEx2dkZFQW9kdU1Wd01HQlVqUEpWRUFrTG0zOGJqdFIra2NCTExEVnFMNWdaQT0iLCJzdWIiOiIweDEzY2M1NGFkZDViNjQyN2Y2NDZhMWQwOGM3YmI1YzRjYTI4OGEyNmMifQ.DPwUnT2TM_38GZW8q0mphP5fdaOMXKkvpR8o5glDXXeQamR1MbipiZFOOZt06iSPOgQdXHcrEnSrXl8dMyAdeQ"
+
+curl \
+    -ksSL \
+    -H'Accept: application/vnd.api+json' \
+    -H"Authorization: Bearer ${AUTH_TOKEN}" \
+    'https://pals.blockmason.io/paypal-accounts'
+

@@ -9,7 +9,7 @@ import { white } from 'theme/include/colors'
 
 import { currencyFormats } from 'lndr/format'
 import profilePic from 'lndr/profile-pic'
-import { currencySymbols, transferLimits  } from 'lndr/currencies'
+import { currencySymbols } from 'lndr/currencies'
 
 import style from 'theme/account'
 import general from 'theme/general'
@@ -65,7 +65,7 @@ class FriendRow extends Component<Props, State> {
   }
 
   getAmountTotal() {
-    const { friend, primaryCurrency } = this.props
+    const { primaryCurrency } = this.props
     let total = this.getRecentTotal()
     let sign = ''
 
@@ -115,7 +115,7 @@ class FriendRow extends Component<Props, State> {
           <View style={[general.flexRow, general.alignCenter]}>
             <Image source={imageSource} style={style.friendIcon}/>
             <View style={general.flexColumn}>
-              <Text style={style.titledPending}>{friend.nickname}</Text>
+              <Text style={style.titledPending}>{`@${friend.nickname}`}</Text>
               <Text style={style.pendingMemo}>{this.getTransactionTotal()}</Text>
             </View>
           </View>

@@ -1,7 +1,6 @@
 import React, { Component } from 'react'
 
 import { Text, TouchableHighlight, View, Image } from 'react-native'
-import Icon from 'react-native-vector-icons/Ionicons'
 import { connect } from 'react-redux'
 
 import { currencyFormats } from 'lndr/format'
@@ -9,11 +8,10 @@ import PendingUnilateral from 'lndr/pending-unilateral'
 import PendingBilateral from 'lndr/pending-bilateral'
 import UserData from 'lndr/user'
 import profilePic from 'lndr/profile-pic'
-import { currencySymbols, transferLimits  } from 'lndr/currencies'
+import { currencySymbols } from 'lndr/currencies'
 import { getUcacCurrency } from 'reducers/app'
 
 import { white } from 'theme/include/colors'
-import formStyle from 'theme/form'
 import style from 'theme/account'
 import general from 'theme/general'
 

@@ -160,6 +160,7 @@ export default {
       `BCPT Balance`,
       `Remove Account`,
       `ETH Transaction History`,
+      `Receive PayPal Payments`,
       `Change Primary Currency`,
       `Change PIN`,
       `Change Nickname`,
@@ -216,7 +217,7 @@ export default {
     record: `record`,
     records: `records`,
     chooseCurrency: `Choose a Currency`,
-    
+
     createError: {
       amountTooLow: `Amount must be greater than $0`,
       amountTooHigh: `Amount must be less than $1,000,000,000`,
@@ -279,6 +280,7 @@ export default {
       }
     },
     eth: `Settle With ETH`,
+    paypal: `Settle With PayPal`,
     nonPayment: `Record a Settlement`,
   },
 
@@ -372,6 +374,18 @@ export default {
       start: `You have successfully sent `,
       end: ` BCPT and your transaction hash is `,
     },
+    requestPayPalPayee: {
+      start: `We've let `,
+      end: ` know that you would like to settle with PayPal.`,
+    },
+    requestPayPalPayment: {
+      start: `We've let `,
+      end: ` know that you'd like to be paid with PayPal.`,
+    },
+    settledWithPayPal: {
+      start: `We've let `,
+      end: ` know that you've settled with PayPal.`,
+    },
     status: `You can see the status of this transaction in the `,
     activity: `activity tab.`,
   },
@@ -379,11 +393,25 @@ export default {
   pendingFriendRequestsLanguage: {
     shell: `Friend Request`,
     message: `Friend Requests`,
-    request: friend => `${friend} wants to be friends with you!`,
+    request: friend => `@${friend} wants to be friends with you!`,
   },
 
   privacyPolicy: {
     link: `lndr.io/terms/`,
     message: `By clicking below you confirm that you have read and agree to Blockmason's privacy policy. Blockmason may use your email address to send updates about Blockmason and LNDR. Here is a link to the privacy policy:`
+  },
+
+  payPalLanguage: {
+    connectPayPal: `Connect PayPal`,
+    connectSuccess: `PayPal enabled successfully.`,
+    disconnected: `PayPal disconnected.`,
+    requestPayPalPayment: `Request PayPal Payment`,
+    sendWithPayPal: `Send With PayPal`,
+    enablePayPal: `Enable PayPal`,
+    requestPayPalPayee: `Request PayPal`,
+    enablePayPalForFriend: F => `Enabling PayPal allows @${F} to pay you.`,
+    friendNotEnabled: F => `@${F} has not enabled PayPal payments.`,
+    friendRequestedConnect: F => `@${F} wants to pay you via PayPal`,
+    requestFriendConnect: F => `You asked @${F} to enable PayPal`,
   }
 }

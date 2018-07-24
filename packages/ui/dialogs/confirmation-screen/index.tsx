@@ -18,10 +18,11 @@ interface Props {
 
 export default class ConfirmationScreen extends Component<Props> {
   getConfirmationImage(type) {
-    let imageName = 'create'
-    if (type === 'create' || type === 'confirm' || type === 'ethSent' || type === 'bcptSent' || type === 'confirmFriend') {
+    const acceptList = ['create', 'confirm', 'ethSent', 'bcptSent', 'confirmFriend', 'requestPayPalPayee', 'requestPayPalPayment', 'settledWithPayPal']
+    const rejectList = ['reject', 'rejectFriend']
+    if (acceptList.indexOf(type) >= 0) {
       return <Image source={require('images/check-circle.png')} style={style.image} />
-    } else if (type === 'reject' || type === 'rejectFriend') {
+    } else if (rejectList.indexOf(type) >= 0) {
       return <Image source={require('images/thumbs-down.png')} style={style.image} />
     } else {
       return null
@@ -42,9 +43,12 @@ export default class ConfirmationScreen extends Component<Props> {
     let txHash = ''
     let amount = ''
     if (this.props.navigation.state.params) {
-      friend = this.props.navigation.state.params.friend
-      txHash = this.props.navigation.state.params.txHash
-      amount = this.props.navigation.state.params.amount
+      if (this.props.navigation.state.params.friend)
+        friend = this.props.navigation.state.params.friend
+      if (this.props.navigation.state.params.txHash)
+        txHash = this.props.navigation.state.params.txHash
+      if (this.props.navigation.state.params.amount)
+        amount = this.props.navigation.state.params.amount
     }
 
     return <View style={general.whiteFlex}>
@@ -57,7 +61,7 @@ export default class ConfirmationScreen extends Component<Props> {
           {this.getConfirmationImage(type)}
           <Text style={style.text}>
             <Text>{confirmation[type].start}</Text>
-            <Text style={style.nickname}>{type !== 'ethSent' && type !== 'bcptSent' ? friend.nickname : amount}</Text>
+            <Text style={style.nickname}>{type !== 'ethSent' && type !== 'bcptSent' ? `@${friend.nickname}` : amount}</Text>
             <Text>{confirmation[type].end}</Text>
             {type === 'ethSent' || type === 'bcptSent' ? <Text style={style.nickname}>{txHash}</Text> : null}
           </Text>

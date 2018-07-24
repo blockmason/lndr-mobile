@@ -281,6 +281,7 @@ export default {
       }
     },
     eth: `Gjør opp med ETH`,
+    paypal: `Gjør opp med PayPal`,
     nonPayment: `Ta opp et oppgjør`,
   },
 
@@ -381,11 +382,25 @@ export default {
   pendingFriendRequestsLanguage: {
     shell: `Venneforespørsel`,
     message: `Venneforespørsler`,
-    request: F => `${F} ønsker å være venner med deg!`,
+    request: F => `@${F} ønsker å være venner med deg!`,
   },
 
   privacyPolicy: {
     link: `lndr.io/terms/`,
     message: `Ved å klikke nedenfor bekrefter du at du har lest og aksepterer Blockmasons personvernreglene. Blockmason kan bruke e-postadressen din til å sende oppdateringer om Blockmason og LNDR. Her er en lenke til personvernreglene:`
+  },
+
+  payPalLanguage: {
+    connectPayPal: `Koble PayPal`,
+    connectSuccess: `PayPal aktivert vellykket.`,
+    disconnected: `PayPal frakoblet.`,
+    requestPayPalPayment: `Forespørsel om PayPal Payment`,
+    sendWithPayPal: `Send Med PayPal`,
+    enablePayPal: `Aktiver PayPal`,
+    requestPayPalPayee: `Be om PayPal`,
+    enablePayPalForFriend: F => `Aktivering PayPal tillater @${F} for å betale you.`,
+    friendNotEnabled: F => `@${F} har ikke aktivert PayPal betalinger.`,
+    friendRequestedConnect: F => `@${F} ønsker å betale deg via PayPal`,
+    requestFriendConnect: F => `Du ba @${F} for å muliggjøre PayPal`,
   }
 }

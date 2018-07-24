@@ -2,8 +2,6 @@ import React, { Component } from 'react'
 import { Text, TouchableHighlight, View, Image } from 'react-native'
 import { connect } from 'react-redux'
 
-import Button from 'ui/components/button'
-
 import Friend from 'lndr/friend'
 import profilePic from 'lndr/profile-pic'
 

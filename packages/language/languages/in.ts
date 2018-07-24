@@ -282,6 +282,7 @@ export default {
       }
     },
     eth: `Lunasi dengan ETH`,
+    paypal: `Lunasi dengan PayPal`,
     nonPayment: `Catat Pelunasan`,
   },
 
@@ -382,11 +383,25 @@ export default {
   pendingFriendRequestsLanguage: {
     shell: `Permintaan Pertemanan`,
     message: `Permintaan Pertemanan`,
-    request: F => `${F} ingin berteman dengan Anda!`,
+    request: F => `@${F} ingin berteman dengan Anda!`,
   },
 
   privacyPolicy: {
     link: `lndr.io/terms/`,
     message: `Dengan mengklik di bawah Anda mengkonfirmasi bahwa Anda telah membaca dan setuju dengan kebijakan privasi Blockmason ini. Blockmason dapat menggunakan alamat email Anda untuk mengirim pembaruan tentang Blockmason dan LNDR. Berikut ini adalah link ke kebijakan privasi:`
+  },
+
+  payPalLanguage: {
+    connectPayPal: `Terhubung PayPal`,
+    connectSuccess: `PayPal diaktifkan berhasil.`,
+    disconnected: `PayPal terputus.`,
+    requestPayPalPayment: `Permintaan Pembayaran PayPal`,
+    sendWithPayPal: `Kirim Dengan PayPal`,
+    enablePayPal: `Aktifkan PayPal`,
+    requestPayPalPayee: `Meminta PayPal`,
+    enablePayPalForFriend: F => `Mengaktifkan PayPal memungkinkan @${F} membayar you.`,
+    friendNotEnabled: F => `@${F} belum diaktifkan PayPal pembayaran.`,
+    friendRequestedConnect: F => `@${F} ingin membayar Anda melalui PayPal`,
+    requestFriendConnect: F => `Anda bertanya @${F} untuk mengaktifkan PayPal`,
   }
 }

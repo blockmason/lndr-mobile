@@ -1,10 +1,9 @@
 import React, { Component } from 'react'
-
-import { Text, TextInput, TouchableHighlight, View, Image, ScrollView, KeyboardAvoidingView, Platform } from 'react-native'
+import { Text, TextInput, View, Image, ScrollView, KeyboardAvoidingView, Platform } from 'react-native'
 import { getResetAction } from 'reducers/nav'
 
 import { UserData } from 'lndr/user'
-import { currencyFormats, amountFormat, sanitizeAmount } from 'lndr/format'
+import { currencyFormats, amountFormat, sanitizeAmount, convertCommaDecimalToPoint } from 'lndr/format'
 import Friend from 'lndr/friend'
 import { currencySymbols, transferLimits, hasNoDecimals } from 'lndr/currencies'
 import profilePic from 'lndr/profile-pic'
@@ -13,6 +12,7 @@ import Button from 'ui/components/button'
 import Loading, { LoadingContext } from 'ui/components/loading'
 import DashboardShell from 'ui/components/dashboard-shell'
 import BalanceSection from 'ui/components/balance-section'
+import PayPalSettlementButton from 'ui/components/paypal-settle-button'
 
 import style from 'theme/friend'
 import formStyle from 'theme/form'
@@ -27,7 +27,7 @@ const {
 
 import { getUser, recentTransactions, getEthBalance, getEthExchange, getWeeklyEthTotal,
   hasPendingTransaction, calculateBalance, getUcacCurrency, getPrimaryCurrency } from 'reducers/app'
-import { settleUp, addDebt, getEthTxCost } from 'actions'
+import { addDebt, getEthTxCost, requestPayPalSettlement } from 'actions'
 import { connect } from 'react-redux'
 
 const submittingTransaction = new LoadingContext()
@@ -35,14 +35,8 @@ const submittingTransaction = new LoadingContext()
 let unmounting = false
 
 interface Props {
-  settleUp: (
-    friend: Friend,
-    amount: string,
-    memo: string,
-    direction: string,
-    denomination: string,
-    currency: string,
-    settleTotal?: boolean
+  requestPayPalSettlement: (
+    friend: Friend
   ) => any
   addDebt: (
     friend: Friend,
@@ -50,7 +44,8 @@ interface Props {
     memo: string,
     direction: string,
     currency: string,
-    settleTotal?: boolean
+    settleTotal?: boolean,
+    denomination?: string
   ) => any
   hasPendingTransaction: (friend: Friend) => boolean
   user: UserData
@@ -87,18 +82,19 @@ class Settlement extends Component<Props, State> {
     const { primaryCurrency } = this.props
     const txCost = await getEthTxCost(primaryCurrency)
     const friend = this.props.navigation ? this.props.navigation.state.params.friend : {}
-    const ethSettlement = this.props.navigation ? this.props.navigation.state.params.ethSettlement : false
+    const ethSettlement = this.props.navigation ? (this.isEthSettlement()) : false
 
-    const amount = ethSettlement ? undefined :   this.setAmount(String(Math.abs(this.state.balance)))
+    let amount: string | undefined = ''
+    if(this.state.balance) {
+      amount = ethSettlement ? undefined : this.setAmount(String(Math.abs(this.state.balance)))
+    }
 
     unmounting = false
     let pic
 
-    try {
-      if (friend.address !== undefined) {
-        pic = await profilePic.get(friend.address)
-      }
-    } catch (e) {}
+    if (friend.address !== undefined) {
+      pic = await profilePic.get(friend.address)
+    }
     this.setState({txCost, pic, amount})
   }
 
@@ -106,31 +102,35 @@ class Settlement extends Component<Props, State> {
     unmounting = true
   }
 
+  getDenomination() {
+    if(this.props.navigation) {
+      if(this.isEthSettlement()) {
+        return 'ETH'
+      } else if(this.isPayPalSettlement()) {
+        return 'PAYPAL'
+      }
+    }
+    return undefined
+  }
+
   async submit() {
     const { amount, direction, formInputError } = this.state
     const { primaryCurrency } = this.props
     const friend = this.props.navigation ? this.props.navigation.state.params.friend : {}
-    const ethSettlement = this.props.navigation ? this.props.navigation.state.params.ethSettlement : false
+    const denomination = this.getDenomination()
 
     if ( formInputError || sanitizeAmount(amount, primaryCurrency) === 0 ) {
       return
     }
 
     const memo = debtManagement.settleUpMemo(direction, amount)
-    const denomination = 'ETH'
     const settleTotal = Math.abs(this.getRecentTotal()) === Math.abs(sanitizeAmount(amount, primaryCurrency))
     let success
 
-    if( ethSettlement ) {
+    if ( denomination === 'PAYPAL' && (!this.isPayee()) ) {
       success = await submittingTransaction.wrap(
-        this.props.settleUp(
-          friend as Friend,
-          amount as string,
-          memo as string,
-          direction as string,
-          denomination as string,
-          primaryCurrency as string,
-          settleTotal as boolean
+        this.props.requestPayPalSettlement(
+          friend as Friend
         )
       )
     } else {
@@ -141,22 +141,50 @@ class Settlement extends Component<Props, State> {
           memo as string,
           direction as string,
           primaryCurrency as string,
-          settleTotal as boolean
+          settleTotal as boolean,
+          denomination as string
         )
       )
     }
+    let type = 'create'
+    if (this.isPayPalSettlement())
+      type = (this.isPayee()) ? 'requestPayPalPayment' : 'settledWithPayPal'
+
+    this.displayConfirmation(success, type, friend)
+  }
+
+  async handleRequestPayPalPayee() {
+    const friend = this.props.navigation.state.params.friend
+    const success = await submittingTransaction.wrap(this.props.requestPayPalSettlement(friend as Friend))
+    this.displayConfirmation(success, 'requestPayPalPayee', friend)
+  }
+
+  displayConfirmation(success, type, friend) {
+    if (!success)
+      return
 
     this.clear()
 
-    let resetAction
-
-    if (success && success.type !== '@@TOAST/DISPLAY_ERROR') {
-      resetAction = getResetAction({ routeName:'Confirmation', params: { type: 'create', friend } })
+    let navAction
+    if (success.type === '@@TOAST/DISPLAY_ERROR') {
+      navAction = getResetAction({ routeName:'Dashboard' })
     } else {
-      resetAction = getResetAction({ routeName:'Dashboard' })
+      navAction = getResetAction({ routeName:'Confirmation', params: { type: type, friend } })
     }
 
-    this.props.navigation.dispatch(resetAction)
+    this.props.navigation.dispatch(navAction)
+  }
+
+  isPayee() {
+    return (this.state.direction === 'borrow')
+  }
+
+  isPayPalSettlement() {
+    return ( (this.props.navigation) && (this.props.navigation.state.params.settlementType == 'paypal') )
+  }
+
+  isEthSettlement() {
+    return ( (this.props.navigation) && (this.props.navigation.state.params.settlementType == 'eth') )
   }
 
   getRecentTotal() {
@@ -178,21 +206,22 @@ class Settlement extends Component<Props, State> {
   setAmount(amount) {
     const { balance } = this.state
     const { primaryCurrency } = this.props
-    const cleanAmount = Number(amount.replace(/[^0-9\.]/g, ''))
+    const formattedAmount = convertCommaDecimalToPoint(amount, primaryCurrency)
+
+    const cleanAmount = Number(formattedAmount.replace(/[^0-9\.\,]/g, ''))
     const adjustedBalance = hasNoDecimals(primaryCurrency) ? balance : balance / 100
 
     if (cleanAmount > Math.abs(adjustedBalance)) {
       return amountFormat(String(adjustedBalance), primaryCurrency)
     } else {
-      return amountFormat(amount, primaryCurrency)
+      return amountFormat(formattedAmount, primaryCurrency)
     }
   }
 
   displayMessage() {
-    const { balance } = this.state
     const friend = this.props.navigation ? this.props.navigation.state.params.friend : {}
 
-    return balance > 0 ? debtManagement.direction.pendingLend(friend.nickname) : debtManagement.direction.pendingBorrow(friend.nickname)
+    return `@${friend.nickname}`
   }
 
   displayTotal(balance) {
@@ -213,12 +242,13 @@ class Settlement extends Component<Props, State> {
     const friend = this.props.navigation ? this.props.navigation.state.params.friend : {}
 
     let formInputError
+
     const cleanAmount = amount.replace(/[^0-9\.]/g, '')
     const totalEthCost = ( Number(txCost) + Number(cleanAmount) ) / Number(ethExchange(primaryCurrency))
 
-    if ( direction === 'lend' && totalEthCost > Number(ethBalance) ) {
+    if ( (!this.isPayee()) && totalEthCost > Number(ethBalance) ) {
       formInputError = accountManagement.sendEth.error.insufficient
-    }else if ( direction === 'lend' && ethSentPastWeek * Number(ethExchange(primaryCurrency)) + Number(cleanAmount) > Number(transferLimits(primaryCurrency)) ) {
+    } else if ( (!this.isPayee()) && ethSentPastWeek * Number(ethExchange(primaryCurrency)) + Number(cleanAmount) > Number(transferLimits(primaryCurrency)) ) {
       formInputError = accountManagement.sendEth.error.limitExceeded(primaryCurrency)
     } else if (hasPendingTransaction(friend)) {
       formInputError = debtManagement.createError.pending
@@ -227,17 +257,48 @@ class Settlement extends Component<Props, State> {
     this.setState({ amount: this.setAmount(amount), formInputError })
   }
 
+  renderPaymentButton() {
+    const { amount, direction } = this.state
+    if (typeof amount !== 'string')
+      return null
+
+    let paymentButton = <Button large round wide onPress={() => this.submit()} text={debtManagement.settleUp} />
+    if (this.isPayPalSettlement()) {
+      const cleanAmount = amount.replace(/[^0-9\.]/g, '')
+      const memo = debtManagement.settleUpMemo(direction, amount)
+      paymentButton = (
+        <PayPalSettlementButton user={this.props.user}
+          navigation={this.props.navigation}
+          displayAmount={cleanAmount}
+          memo={memo}
+          direction={this.state.direction}
+          primaryCurrency={this.props.primaryCurrency}
+          onRequestPayPalPayment={() => this.submit()}
+          onPayPalPaymentSuccess={() => this.submit()}
+          onRequestPayPalPayee={() => this.handleRequestPayPalPayee()}
+        />
+      )
+    }
+    return (
+      <View>
+        <Loading context={submittingTransaction} />
+        {paymentButton}
+      </View>
+    )
+  }
+
   render() {
     const { amount, balance, txCost, formInputError, pic } = this.state
-    const { ethBalance, ethExchange, ethSentPastWeek, primaryCurrency } = this.props
-    const ethSettlement = this.props.navigation ? this.props.navigation.state.params.ethSettlement : false
+    const { ethBalance, ethExchange, primaryCurrency } = this.props
+    const ethSettlement = this.props.navigation ? (this.props.navigation.state.params.settlementType == "eth") : false
     const friend = this.props.navigation ? this.props.navigation.state.params.friend : {}
     const imageSource = pic ? { uri: pic } : require('images/person-outline-dark.png')
-    const vertOffset = (Platform.OS === 'android') ? -300 : 20;
+    const vertOffset = (Platform.OS === 'android') ? -300 : 20
+
+    const paymentButton = this.renderPaymentButton()
 
     return <View style={general.whiteFlex}>
       <View style={general.view}>
-        <Loading context={submittingTransaction} />
         <DashboardShell text={debtManagement.settleUpLower} navigation={this.props.navigation} />
         <Button close onPress={() => this.props.navigation.goBack()} />
       </View>
@@ -276,7 +337,7 @@ class Settlement extends Component<Props, State> {
               </View>
             </View>
             { formInputError && <Text style={[formStyle.warningText, {alignSelf: 'center', marginHorizontal: 15}]}>{formInputError}</Text>}
-            { amount ? <Button large round wide onPress={() => this.submit()} text={debtManagement.settleUp} /> : <Button large round wide onPress={() => this.updateAmount(currencyFormats(primaryCurrency)(Math.abs(balance)))} text={debtManagement.settleTotal} />}
+            { paymentButton }
           </View>
         </ScrollView>
       </KeyboardAvoidingView>
@@ -286,5 +347,5 @@ class Settlement extends Component<Props, State> {
 
 export default connect((state) => ({ user: getUser(state)(), ethBalance: getEthBalance(state), ethExchange: getEthExchange(state),
   recentTransactions: recentTransactions(state), ethSentPastWeek: getWeeklyEthTotal(state), hasPendingTransaction: hasPendingTransaction(state),
-  calculateBalance: calculateBalance(state), getUcacCurrency: getUcacCurrency(state), primaryCurrency: getPrimaryCurrency(state) }),
-   { settleUp, addDebt })(Settlement)
+  calculateBalance: calculateBalance(state), getUcacCurrency: getUcacCurrency(state), primaryCurrency: getPrimaryCurrency(state)}),
+  { addDebt, requestPayPalSettlement })(Settlement)
