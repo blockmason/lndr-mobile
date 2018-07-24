@@ -183,18 +183,21 @@ class PendingTransactionDetail extends Component<Props, State> {
     return <Button round large onPress={() => this.confirmPendingTransaction(pendingTransaction)} text={pendingTransactionsLanguage.confirm} />
   }
 
-  showButtons() {
+  renderButtons() {
     const { submitterIsMe, navigation } = this.props
     const pendingTransaction = navigation.state ? navigation.state.params.pendingTransaction : {}
-    if (submitterIsMe(pendingTransaction)) {
-      return <Button danger round onPress={() => this.rejectPendingTransaction(pendingTransaction)} text={pendingTransactionsLanguage.cancel} />
-    }
-
-    return <View style={{marginBottom: 10, width: '80%'}}>
-      {this.renderPaymentButton()}
-      <Button danger round onPress={() => this.rejectPendingTransaction(pendingTransaction)} text={pendingTransactionsLanguage.reject} />
+    const buttons = (submitterIsMe(pendingTransaction))
+        ? (<Button danger round onPress={() => this.rejectPendingTransaction(pendingTransaction)} text={pendingTransactionsLanguage.cancel} />)
+        : (<View style={{marginBottom: 10, width: '80%'}}>
+            {this.renderPaymentButton()}
+            <Button danger round onPress={() => this.rejectPendingTransaction(pendingTransaction)} text={pendingTransactionsLanguage.reject} />
+          </View>)
+    return <View>
+      <Loading context={loadingContext} />
+      {buttons}
     </View>
   }
+
 
   render() {
     const { user, navigation, getUcacCurrency } = this.props
@@ -224,7 +227,7 @@ class PendingTransactionDetail extends Component<Props, State> {
             pendingTransaction.multiTransactions.map(tx => <PendingTransactionRow user={user} key={tx.hash} pendingTransaction={tx} friend={true} onPress={() => null} />)
           }
           </View>
-          {this.showButtons()}
+          {this.renderButtons()}
           <View style={general.spaceBelow}/>
         </View>
       </ScrollView>
