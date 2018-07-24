@@ -259,13 +259,14 @@ class Settlement extends Component<Props, State> {
 
   renderPaymentButton() {
     const { amount, direction } = this.state
-
-    if (typeof amount !== 'string') {
+    if (typeof amount !== 'string')
       return null
-    } else if (this.isPayPalSettlement()) {
+
+    let paymentButton = <Button large round wide onPress={() => this.submit()} text={debtManagement.settleUp} />
+    if (this.isPayPalSettlement()) {
       const cleanAmount = amount.replace(/[^0-9\.]/g, '')
       const memo = debtManagement.settleUpMemo(direction, amount)
-      return (
+      paymentButton = (
         <PayPalSettlementButton user={this.props.user}
           navigation={this.props.navigation}
           displayAmount={cleanAmount}
@@ -278,9 +279,11 @@ class Settlement extends Component<Props, State> {
         />
       )
     }
-
     return (
-      <Button large round wide onPress={() => this.submit()} text={debtManagement.settleUp} />
+      <View>
+        <Loading context={submittingTransaction} />
+        {paymentButton}
+      </View>
     )
   }
 
@@ -296,7 +299,6 @@ class Settlement extends Component<Props, State> {
 
     return <View style={general.whiteFlex}>
       <View style={general.view}>
-        <Loading context={submittingTransaction} />
         <DashboardShell text={debtManagement.settleUpLower} navigation={this.props.navigation} />
         <Button close onPress={() => this.props.navigation.goBack()} />
       </View>
