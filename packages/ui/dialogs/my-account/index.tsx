@@ -1,7 +1,7 @@
 import React, { Component } from 'react'
 
 import { Text, TextInput, View, Dimensions, ScrollView, Linking, Modal, Switch,
-  TouchableHighlight, Image, KeyboardAvoidingView, Platform, NativeModules } from 'react-native'
+  TouchableHighlight, Image, KeyboardAvoidingView, Platform, NativeModules, Alert } from 'react-native'
 
 import ImagePicker from 'react-native-image-picker'
 import Icon from 'react-native-vector-icons/Zocial'
@@ -36,7 +36,7 @@ import popupStyle from 'theme/popup'
 import language from 'language'
 const { nickname, setNickname, email, setEmail, copy, accountManagement, changePin, enterNewPin, confirmPin, pleaseWait,
   mnemonicExhortation, addressExhortation, logoutAction, notifications, currentBalance, showMnemonic, enterCurrentPin,
-  myAccount, debtManagement, removeAccount, payPalLanguage
+  myAccount, debtManagement, removeAccount, payPalLanguage, cancel
 } = language
 const updateAccountText = language.updateAccount
 
@@ -273,9 +273,20 @@ class MyAccount extends Component<Props, State> {
     }
   }
 
+  confirmDisconnectPayPal() {
+      Alert.alert(
+        payPalLanguage.disconnectPayPal,
+        "",
+        [
+          {text: cancel.toUpperCase(), onPress: () => null, style: 'destructive'},
+          {text: payPalLanguage.confirm.toUpperCase(), onPress: () => this.disconnectPayPal()},
+        ],
+        { cancelable: true }
+      )
+  }
+
   async disconnectPayPal() {
     try {
-      // TODO: popup confirmation
       // tell server to delete user's PayPal info
       await loadingPayPal.wrap(palsClient.deletePayPalAccount(this.props.user))
       this.setState({payPalEmail: null})
@@ -306,7 +317,7 @@ class MyAccount extends Component<Props, State> {
     return (this.state.payPalEmail) ? (
       <View style={[general.flexRow, style.spaceTopS, style.spaceBottomS, style.spaceHorizontalBig]}>
         <Image source={require('images/PayPalLogo.png')} style={{marginRight: 20}} />
-        <Switch value={true} onValueChange={() => this.disconnectPayPal()} />
+        <Switch value={true} onValueChange={() => this.confirmDisconnectPayPal()} />
       </View>
     ) : (
       <View style={[style.spaceTopS, style.spaceBottomS, style.spaceHorizontalL]}>
