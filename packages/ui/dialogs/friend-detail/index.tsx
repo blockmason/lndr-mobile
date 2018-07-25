@@ -100,7 +100,7 @@ class RemoveFriend extends Component<Props, State> {
       removeFriendText,
       removeFriendConfirmationQuestion,
       [
-        {text: cancel.toUpperCase(), onPress: () => null},
+        {text: cancel.toUpperCase(), onPress: () => null, style: 'destructive'},
         {text: confirmAccount.toUpperCase(), onPress: this.removeFriend},
       ],
       { cancelable: true }
