@@ -1,6 +1,6 @@
 import React, { Component } from 'react'
 
-import { Text, View, Image, ScrollView, BackHandler } from 'react-native'
+import { Text, View, Image, ScrollView, BackHandler, Alert } from 'react-native'
 
 import Balance from 'lndr/balance'
 import Friend from 'lndr/friend'
@@ -54,7 +54,6 @@ interface Props {
 interface State {
   balanceLoaded: boolean
   balance: Balance
-  removeFriend: boolean
   pic?: string
 }
 
@@ -63,15 +62,13 @@ class RemoveFriend extends Component<Props, State> {
     super(props)
     this.state = {
       balanceLoaded: false,
-      balance: new Balance({ relativeToNickname: "", relativeTo: "", amount: 0 }),
-      removeFriend: false
+      balance: new Balance({ relativeToNickname: "", relativeTo: "", amount: 0 })
     }
 
     this.removeFriend = this.removeFriend.bind(this)
     this.goBack = this.goBack.bind(this)
     this.goSettleUp = this.goSettleUp.bind(this)
     this.confirmRemoveFriend = this.confirmRemoveFriend.bind(this)
-    this.unconfirmRemoveFriend = this.unconfirmRemoveFriend.bind(this)
   }
 
   async componentWillMount() {
@@ -83,13 +80,6 @@ class RemoveFriend extends Component<Props, State> {
     }
   }
 
-  async removeFriend() {
-    const friend = this.props.navigation ? this.props.navigation.state.params.friend : {}
-    await loadingContext.wrap(this.props.removeFriend(friend))
-
-    this.props.navigation.goBack()
-  }
-
   async componentDidMount() {
     const { user, getTwoPartyBalance } = this.props
     const friend = this.props.navigation ? this.props.navigation.state.params.friend : {}
@@ -97,20 +87,34 @@ class RemoveFriend extends Component<Props, State> {
     BackHandler.addEventListener("hardwareBackPress", this.onBackPress);
     this.setState({ balance, balanceLoaded: true })
   }
+  
+  async removeFriend() {
+    const friend = this.props.navigation ? this.props.navigation.state.params.friend : {}
+    await loadingContext.wrap(this.props.removeFriend(friend))
+
+    this.props.navigation.goBack()
+  }
+
+  confirmRemoveFriend() {
+    Alert.alert(
+      removeFriendText,
+      removeFriendConfirmationQuestion,
+      [
+        {text: cancel.toUpperCase(), onPress: () => null},
+        {text: confirmAccount.toUpperCase(), onPress: this.removeFriend},
+      ],
+      { cancelable: true }
+    )
+  }
 
   componentWillUnmount() {
     BackHandler.removeEventListener("hardwareBackPress", this.onBackPress);
   }
 
   onBackPress = () => {
-    if(this.state.removeFriend) {
-      this.setState({ removeFriend: false })
-      return true
-    } else {
       this.props.navigation.goBack(null)
       return true
     }
-  }
 
   getRecentTotal() {
     const friend = this.props.navigation ? this.props.navigation.state.params.friend : {}
@@ -132,34 +136,11 @@ class RemoveFriend extends Component<Props, State> {
     this.props.navigation.navigate('SettleUp', { friend })
   }
 
-  confirmRemoveFriend() {
-    this.setState({ removeFriend: true })
-  }
-
-  unconfirmRemoveFriend() {
-    this.setState({ removeFriend: false })
-  }
-
   render() {
     const friend = this.props.navigation ? this.props.navigation.state.params.friend : {}
     const { navigation, primaryCurrency } = this.props
-    const { pic, removeFriend } = this.state
+    const { pic } = this.state
     const imageSource = pic ? { uri: pic } : require('images/person-outline-dark.png')
-
-    if(removeFriend) {
-      return <View style={general.whiteFlex}>
-        <View style={general.view}>
-          <DashboardShell text={friendShell} navigation={this.props.navigation} />
-          <Loading context={loadingContext} />
-          <Button close onPress={this.unconfirmRemoveFriend} />
-        </View>
-        <Text style={accountStyle.removeFriendMessage}>{removeFriendConfirmationQuestion}</Text>
-        <View style={[general.flexRow, {justifyContent: 'center'}]}>
-          <Button round fat danger onPress={this.unconfirmRemoveFriend} text={cancel.toUpperCase()} containerStyle={accountStyle.removeFriendConfirmation}/>
-          <Button round fat onPress={this.removeFriend} text={confirmAccount.toUpperCase()} containerStyle={accountStyle.removeFriendConfirmation}/>
-        </View>
-      </View>
-    }
 
     return <View style={general.whiteFlex}>
       <View style={general.view}>
