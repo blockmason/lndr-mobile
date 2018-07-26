@@ -41,16 +41,15 @@ RCT_EXPORT_METHOD(initPayPal) {
   RCTLogInfo(@"Initializing PayPalManager");
   dispatch_async(dispatch_get_main_queue(), ^{
     // initiate PayPal session
-    // Start out working with the mock environment. When you are ready, switch to PayPalEnvironmentProduction.
-    [PayPalMobile preconnectWithEnvironment:PayPalEnvironmentProduction];//Sandbox];//PayPalEnvironmentNoNetwork//PayPalEnvironmentProduction];//
+    [PayPalMobile preconnectWithEnvironment:PayPalEnvironmentProduction];//Sandbox];//PayPalEnvironmentNoNetwork
 
     _payPalConfiguration = [[PayPalConfiguration alloc] init];
     // See PayPalConfiguration.h for details and default values.
     // Minimally, you will need to set three merchant information properties.
     // These should be the same values that you provided to PayPal when you registered your app.
     _payPalConfiguration.merchantName = @"Blockmason";
-    _payPalConfiguration.merchantPrivacyPolicyURL = [NSURL URLWithString:@"https://blockmason.io/privacy"];
-    _payPalConfiguration.merchantUserAgreementURL = [NSURL URLWithString:@"https://blockmason.io/agreement"];
+    _payPalConfiguration.merchantPrivacyPolicyURL = [NSURL URLWithString:@"https://blockmason.io/privacypolicy.html"];
+    _payPalConfiguration.merchantUserAgreementURL = [NSURL URLWithString:@"https://blockmason.io/paypalagreement.html"];
     _payPalConfiguration.acceptCreditCards = NO;
   });
 }
@@ -60,7 +59,7 @@ RCT_REMAP_METHOD(connectPayPal,
                  connectPayPalWithResolver:(RCTPromiseResolveBlock)resolver
                  rejecter:(RCTPromiseRejectBlock)rejecter) {
   // obtain user consent for PayPal info
-  NSSet *scopeValues = [NSSet setWithArray:@[kPayPalOAuth2ScopeOpenId, kPayPalOAuth2ScopeEmail]];//, kPayPalOAuth2ScopeAddress, kPayPalOAuth2ScopePhone]];
+  NSSet *scopeValues = [NSSet setWithArray:@[kPayPalOAuth2ScopeOpenId, kPayPalOAuth2ScopeEmail]];
 
   PayPalProfileSharingViewController *psViewController;
   psViewController = [[PayPalProfileSharingViewController alloc] initWithScopeValues:scopeValues configuration:self.payPalConfiguration delegate:self];
