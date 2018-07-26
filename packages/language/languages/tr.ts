@@ -393,6 +393,7 @@ export default {
   payPalLanguage: {
     connectPayPal: `PayPal bağlayın`,
     connectSuccess: `PayPal başarıyla sağladı.`,
+    disconnectPayPal: `Disconnect PayPal`,
     disconnected: `PayPal bağlantısı kesildi.`,
     requestPayPalPayment: `Talep PayPal Ödeme`,
     sendWithPayPal: `PayPal ile gönder`,

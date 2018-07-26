@@ -219,7 +219,7 @@ export default {
     record: `سجل`,
     records: `سجلات`,
     chooseCurrency: `اختيار العملة`,
-    
+
     createError: {
       amountTooLow: `يجب أن يكون المبلغ أكبر من 0$.`,
       amountTooHigh: `يجب أن يكون المبلغ أقل من 1,000,000,000$.`,
@@ -394,6 +394,7 @@ export default {
   payPalLanguage: {
     connectPayPal: `ربط باي بال`,
     connectSuccess: `باي بال تمكين بنجاح.`,
+    disconnectPayPal: `Disconnect PayPal`,
     disconnected: `باي بال قطع الاتصال.`,
     requestPayPalPayment: `طلب الدفع باي بال`,
     sendWithPayPal: `إرسال مع باي بال`,

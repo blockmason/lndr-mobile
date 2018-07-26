@@ -393,6 +393,7 @@ export default {
   payPalLanguage: {
     connectPayPal: `连接贝宝`,
     connectSuccess: `贝宝成功启用。`,
+    disconnectPayPal: `Disconnect PayPal`,
     disconnected: `贝宝断开。`,
     requestPayPalPayment: `要求贝宝付款`,
     sendWithPayPal: `发送使用贝宝`,

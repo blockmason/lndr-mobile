@@ -404,7 +404,9 @@ export default {
   payPalLanguage: {
     connectPayPal: `Connect PayPal`,
     connectSuccess: `PayPal enabled successfully.`,
+    disconnectPayPal: `Disconnect PayPal`,
     disconnected: `PayPal disconnected.`,
+    confirm: `CONFIRM`,
     requestPayPalPayment: `Request PayPal Payment`,
     sendWithPayPal: `Send With PayPal`,
     enablePayPal: `Enable PayPal`,

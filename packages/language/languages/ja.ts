@@ -220,7 +220,7 @@ export default {
   record: `やりとり`,
   records: `やりとり`,
   chooseCurrency: `通貨を選択する`,
-  
+
   createError: {
     amountTooLow: `金額は$0以上にしてください`,
     amountTooHigh: `金額は$1,000,000,000未満にしてください`,
@@ -387,6 +387,7 @@ export default {
   payPalLanguage: {
     connectPayPal: `ペイパルを接続します`,
     connectSuccess: `PayPalは正常に有効化。`,
+    disconnectPayPal: `Disconnect PayPal`,
     disconnected: `PayPalは切断されました。`,
     requestPayPalPayment: `PayPalの支払いを要求`,
     sendWithPayPal: `PayPalで送ります`,

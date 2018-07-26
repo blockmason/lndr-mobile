@@ -219,7 +219,7 @@ export default {
     record: `Eintrag`,
     records: `Einträge`,
     chooseCurrency: `Wählen Sie eine Währung`,
-    
+
     createError: {
       amountTooLow: `Betrag muss größer sein als $ 0`,
       amountTooHigh: `Betrag muss kleiner sein als $ 1000000000`,
@@ -394,6 +394,7 @@ export default {
   payPalLanguage: {
     connectPayPal: `Schließen Sie PayPal`,
     connectSuccess: `PayPal erfolgreich aktiviert.`,
+    disconnectPayPal: `Disconnect PayPal`,
     disconnected: `PayPal getrennt.`,
     requestPayPalPayment: `Anfrage PayPal Payment`,
     sendWithPayPal: `Senden Mit PayPal`,

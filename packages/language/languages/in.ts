@@ -219,7 +219,7 @@ export default {
     record: `catatan`,
     records: `catatan`,
     chooseCurrency: `Pilih mata uang`,
-    
+
     createError: {
       amountTooLow: `Jumlah harus lebih besar dari $0.`,
       amountTooHigh: `Jumlah harus kurang dari $1,000,000,000.`,
@@ -394,6 +394,7 @@ export default {
   payPalLanguage: {
     connectPayPal: `Terhubung PayPal`,
     connectSuccess: `PayPal diaktifkan berhasil.`,
+    disconnectPayPal: `Disconnect PayPal`,
     disconnected: `PayPal terputus.`,
     requestPayPalPayment: `Permintaan Pembayaran PayPal`,
     sendWithPayPal: `Kirim Dengan PayPal`,

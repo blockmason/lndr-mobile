@@ -219,7 +219,7 @@ export default {
     record: `रिकॉर्ड`,
     records: `रिकॉर्ड्स`,
     chooseCurrency: `एक मुद्रा चुनें`,
-    
+
     createError: {
       amountTooLow: `राशि $0 से ज़्यादा होनी चाहिए`,
       amountTooHigh: `राशि कम से कम $ 1,000,000,000  होना चाहिए`,
@@ -394,6 +394,7 @@ export default {
   payPalLanguage: {
     connectPayPal: `पेपैल कनेक्ट करें`,
     connectSuccess: `पेपैल को सफलतापूर्वक सक्षम।`,
+    disconnectPayPal: `Disconnect PayPal`,
     disconnected: `पेपैल काट दिया।`,
     requestPayPalPayment: `अनुरोध पेपैल भुगतान`,
     sendWithPayPal: `पेपैल के साथ भेजें`,

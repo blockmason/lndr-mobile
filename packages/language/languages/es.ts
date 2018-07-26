@@ -219,7 +219,7 @@ export default {
     record: `Historial`,
     records: `Archivos`,
     chooseCurrency: `Elija una moneda`,
-    
+
     createError: {
       amountTooLow: `El monto debe ser mayor a $ 0`,
       amountTooHigh: `El monto debe ser menor a $ 1.000.000.000`,
@@ -394,6 +394,7 @@ export default {
   payPalLanguage: {
     connectPayPal: `Conecte PayPal`,
     connectSuccess: `PayPal activado con éxito.`,
+    disconnectPayPal: `Disconnect PayPal`,
     disconnected: `PayPal desconectado.`,
     requestPayPalPayment: `Solicitud de pago de PayPal`,
     sendWithPayPal: `Enviar con PayPal`,

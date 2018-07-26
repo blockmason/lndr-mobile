@@ -219,7 +219,7 @@ export default {
     record: `רשומה`,
     records: `רמשומות`,
     chooseCurrency: `בחר מטבע`,
-    
+
     createError: {
       amountTooLow: `הסכום חייב להיות גדול מ 0 $`,
       amountTooHigh: `הסכום חייב להיות פחות מ $ 1,000,000,000`,
@@ -394,6 +394,7 @@ export default {
   payPalLanguage: {
     connectPayPal: `חבר PayPal`,
     connectSuccess: `PayPal הופעלו בהצלחה.`,
+    disconnectPayPal: `Disconnect PayPal`,
     disconnected: `PayPal מנותק.`,
     requestPayPalPayment: `תשלום בקשת PayPal`,
     sendWithPayPal: `שלח עם PayPal`,
