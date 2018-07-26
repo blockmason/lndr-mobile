@@ -22,7 +22,7 @@ const { debtManagement } = language
 
 interface Props {
   onPress?: () => void
-  friend: any
+  friend: Friend
   friendScreen?: boolean
   recentTransactions?: any
   navigation: any

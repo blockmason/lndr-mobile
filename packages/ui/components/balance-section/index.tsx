@@ -1,4 +1,4 @@
-import { Text, TouchableHighlight, View, Image } from 'react-native'
+import { Text, View } from 'react-native'
 import React, { Component } from 'react'
 import { connect } from 'react-redux'
 
