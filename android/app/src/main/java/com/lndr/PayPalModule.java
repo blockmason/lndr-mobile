@@ -105,12 +105,12 @@ public class PayPalModule extends ReactContextBaseJavaModule implements Lifecycl
   public void initPayPal() {
     // Start with mock environment.  When ready, switch to sandbox (ENVIRONMENT_SANDBOX)
 		// or live (ENVIRONMENT_PRODUCTION)
-    String PAYPAL_CLIENT_ID_PROD = getConfigProperty("productionId", getCurrentActivity().getApplicationContext());
+    String PAYPAL_CLIENT_ID_PRODUCTION = getConfigProperty("productionId", getCurrentActivity().getApplicationContext());
     String PAYPAL_CLIENT_ID_SANDBOX = getConfigProperty("sandboxId", getCurrentActivity().getApplicationContext());
 
     this.config = new PayPalConfiguration()
-      .environment(PayPalConfiguration.ENVIRONMENT_SANDBOX)
-      .clientId(PAYPAL_CLIENT_ID_SANDBOX)
+      .environment(PayPalConfiguration.ENVIRONMENT_PRODUCTION)
+      .clientId(PAYPAL_CLIENT_ID_PRODUCTION)
       .merchantName("Blockmason")
       .merchantPrivacyPolicyUri(Uri.parse("https://blockmason.io/privacy"))
       .merchantUserAgreementUri(Uri.parse("https://blockmason.io/agreement"))
