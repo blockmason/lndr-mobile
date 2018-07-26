@@ -18,6 +18,7 @@ import com.facebook.soloader.SoLoader;
 import com.RNFetchBlob.RNFetchBlobPackage;
 import fr.bamlab.rnimageresizer.ImageResizerPackage;
 import com.lndr.react.modules.paypal.PayPalPackage;
+import com.lndr.react.modules.localization.LocalizationPackage;
 
 import java.util.Arrays;
 import java.util.List;
@@ -44,7 +45,8 @@ public class MainApplication extends Application implements ReactApplication {
             new BlurViewPackage(),
             new RNFetchBlobPackage(),
             new ImageResizerPackage(),
-            new PayPalPackage()
+            new PayPalPackage(),
+            new LocalizationPackage()
       );
     }
 

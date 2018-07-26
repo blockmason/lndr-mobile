@@ -57,7 +57,7 @@ interface State {
   pic?: string
 }
 
-class RemoveFriend extends Component<Props, State> {
+class FriendDetail extends Component<Props, State> {
   constructor(props) {
     super(props)
     this.state = {
@@ -177,4 +177,4 @@ class RemoveFriend extends Component<Props, State> {
 export default connect((state) => ({ user: getUser(state)(), pendingTransactions: pendingTransactions(state), getTwoPartyBalance: getTwoPartyBalance(state),
   recentTransactions: recentTransactions(state), calculateBalance: calculateBalance(state), convertCurrency: convertCurrency(state), 
   primaryCurrency: getPrimaryCurrency(state) }),
-  { removeFriend })(RemoveFriend)
+  { removeFriend })(FriendDetail)

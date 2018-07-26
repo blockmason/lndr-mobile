@@ -6,7 +6,7 @@ try {
   if (Platform.OS === 'ios') {
     locale = NativeModules.SettingsManager.settings.AppleLocale
   } else {
-    locale = NativeModules.I18nManager.localeIdentifier
+    locale = NativeModules.Localization.deviceLocale.replace('-', '_')
   }
 } catch (e) {}
 
@@ -108,6 +108,8 @@ const getCurrency = (country: string) => {
 
 export const hasNoDecimals = (currency: string) : boolean => currency === 'KRW' || currency === 'JPY' || currency === 'IDR' || currency === 'VND'
 
-export const isCommaDecimal = (currency: string) : boolean => currency === 'CHF' || currency === 'EUR' || currency === 'DKK' || currency === 'NOK' || currency === 'SEK' || currency === 'IDR' || currency === 'VND'
+export const isCommaDecimal = () : boolean => {
+  return country === 'AL' || country === 'DZ' || country === 'AD' || country === 'AO' || country === 'AR' || country === 'AM' || country === 'AT' || country === 'AZ' || country === 'BY' || country === 'BE' || country === 'BO' || country === 'BA' || country === 'BR' || country === 'BG' || country === 'CM' || locale === 'fr_CA' || country === 'CL' || country === 'CO' || country === 'CN' || country === 'CN' || country === 'CU' || country === 'CY' || country === 'CZ' || country === 'DK' || country === 'DO' || country === 'EC' || country === 'EE' || country === 'FO' || country === 'FI' || country === 'FR' || country === 'DE' || country === 'GE' || country === 'GR' || country === 'GL' || country === 'HU' || country === 'IS' || country === 'ID' || country === 'IT' || country === 'KZ' || country === 'KR' || country === 'KG' || country === 'LV' || country === 'LB' || country === 'LT' || country === 'LU' || country === 'LU' || country === 'LU' || country === 'MD' || country === 'MN' || country === 'MA' || country === 'MZ' || country === 'NA' || country === 'TH' || country === 'NO' || country === 'PY' || country === 'PE' || country === 'PL' || country === 'PT' || country === 'RO' || country === 'RO' || country === 'RS' || country === 'SK' || country === 'SI' || country === 'ZA' || country === 'ES' || country === 'SE' || country === 'CH' || country === 'TN' || country === 'TR' || country === 'TM' || country === 'UA' || country === 'UY' || country === 'UZ' || country === 'VU' || country === 'VN'
+}
 
 export const defaultCurrency = getCurrency(country)

@@ -10,7 +10,7 @@ import { CreateAccountData, defaultCreateAccountData } from 'lndr/user'
 import { formatNick, formatEmail, formatPin, emailFormatIncorrect, nickLengthIncorrect } from 'lndr/format'
 import Pinpad from 'ui/components/pinpad'
 import InputImage from 'ui/components/images/input-image'
-import Loading, { LoadingContext } from 'ui/components/loading'
+import { LoadingContext } from 'ui/components/loading'
 
 import { createAccount } from 'actions'
 import { connect } from 'react-redux'
@@ -155,7 +155,7 @@ class CreateAccountForm extends Component<Props, State> {
         <View style={style.form}>
           <KeyboardAvoidingView behavior={Platform.OS === 'ios' ? 'position' : 'padding'} keyboardVerticalOffset={vertOffset} >
             <ThemeImage name='logo' size={0.4} />
-            <Text style={[style.text, style.spaceBottom]}>{newAccount}</Text>
+            <Text style={[style.text, style.spaceBottom, style.centerText]}>{newAccount}</Text>
             <View style={style.textInputContainer}>
               <InputImage name='person'/>
               <TextInput
