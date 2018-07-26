@@ -73,7 +73,8 @@ export default StyleSheet.create({
     color: light,
     paddingLeft: 10,
     paddingRight: 10,
-    backgroundColor: transparent
+    backgroundColor: transparent,
+    textAlign: 'center'
   },
   blackText: {
     color: black,

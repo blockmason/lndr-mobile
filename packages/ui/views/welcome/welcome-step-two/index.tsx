@@ -1,6 +1,6 @@
 import React, { Component } from 'react'
 
-import { View, Text } from 'react-native'
+import { View, Text, ScrollView } from 'react-native'
 
 import style from 'theme/slide'
 
@@ -15,15 +15,17 @@ import ThemeImage from 'ui/components/images/theme-image'
 export default class WelcomeStepTwoView extends Component {
   render() {
     return (
-      <View style={style.topView}>
-        <TextLogo name='black'/>
-        <Text style={style.text}>{welcomeView.youPlayWithFriends}</Text>
-        <ThemeImage size={mediumImage} name='dinner'/>
-        <Text style={style.caption}>{welcomeView.shareDinner}</Text>
-        <ThemeImage size={mediumImage} name='tank'/>
-        <Text style={style.caption}>{welcomeView.fillTank}</Text>
-        <View style={style.bottomSpacing}/>
-      </View>
+      <ScrollView>
+        <View style={style.topView}>
+          <TextLogo name='black'/>
+          <Text style={style.text}>{welcomeView.youPlayWithFriends}</Text>
+          <ThemeImage size={mediumImage} name='dinner'/>
+          <Text style={style.caption}>{welcomeView.shareDinner}</Text>
+          <ThemeImage size={mediumImage} name='tank'/>
+          <Text style={style.caption}>{welcomeView.fillTank}</Text>
+          <View style={style.bottomSpacing}/>
+        </View>
+      </ScrollView>
     )
   }
 }

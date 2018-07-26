@@ -282,5 +282,8 @@ export default StyleSheet.create({
     width: 100,
     borderRadius: 50,
     margin: 10
+  },
+  centerText: {
+    textAlign: 'center'
   }
 } as any)
