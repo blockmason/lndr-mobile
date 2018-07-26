@@ -386,7 +386,7 @@ export default {
   payPalLanguage: {
     connectPayPal: `페이팔 연결`,
     connectSuccess: `페이팔이 성공적으로 활성화.`,
-    disconnectPayPal: `Disconnect PayPal`,
+    disconnectPayPal: `분리 페이팔`,
     disconnected: `페이팔 연결이 끊어.`,
     requestPayPalPayment: `요청 페이팔 지불`,
     sendWithPayPal: `페이팔로 보내기`,

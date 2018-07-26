@@ -394,7 +394,7 @@ export default {
   payPalLanguage: {
     connectPayPal: `Kapcsolatba PayPal`,
     connectSuccess: `PayPal engedélyezése sikeresen.`,
-    disconnectPayPal: `Disconnect PayPal`,
+    disconnectPayPal: `Bontása PayPal`,
     disconnected: `PayPal csatlakoztatva.`,
     requestPayPalPayment: `Request PayPal fizetés`,
     sendWithPayPal: `Küldj A PayPal`,

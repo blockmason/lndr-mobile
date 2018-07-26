@@ -394,7 +394,7 @@ export default {
   payPalLanguage: {
     connectPayPal: `Připojit PayPal`,
     connectSuccess: `PayPal úspěšně povoleno.`,
-    disconnectPayPal: `Disconnect PayPal`,
+    disconnectPayPal: `Odpojení PayPal`,
     disconnected: `PayPal odpojen.`,
     requestPayPalPayment: `Požadavek PayPal Payment`,
     sendWithPayPal: `Poslat PayPal`,

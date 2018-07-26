@@ -394,7 +394,7 @@ export default {
   payPalLanguage: {
     connectPayPal: `पेपैल कनेक्ट करें`,
     connectSuccess: `पेपैल को सफलतापूर्वक सक्षम।`,
-    disconnectPayPal: `Disconnect PayPal`,
+    disconnectPayPal: `डिस्कनेक्ट पेपैल`,
     disconnected: `पेपैल काट दिया।`,
     requestPayPalPayment: `अनुरोध पेपैल भुगतान`,
     sendWithPayPal: `पेपैल के साथ भेजें`,
