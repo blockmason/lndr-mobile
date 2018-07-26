@@ -393,7 +393,7 @@ export default {
   payPalLanguage: {
     connectPayPal: `Kết nối PayPal`,
     connectSuccess: `PayPal kích hoạt thành công.`,
-    disconnectPayPal: `Disconnect PayPal`,
+    disconnectPayPal: `Ngắt kết nối PayPal`,
     disconnected: `PayPal bị ngắt kết nối.`,
     requestPayPalPayment: `Yêu cầu thanh toán PayPal`,
     sendWithPayPal: `Gửi Với PayPal`,

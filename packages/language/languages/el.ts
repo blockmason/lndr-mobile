@@ -394,7 +394,7 @@ export default {
   payPalLanguage: {
     connectPayPal: `Συνδέστε το PayPal`,
     connectSuccess: `PayPal ενεργοποιηθεί με επιτυχία.`,
-    disconnectPayPal: `Disconnect PayPal`,
+    disconnectPayPal: `Αποσύνδεση PayPal`,
     disconnected: `PayPal αποσυνδεθεί.`,
     requestPayPalPayment: `Αίτηση PayPal Πληρωμή`,
     sendWithPayPal: `Αποστολή με PayPal`,

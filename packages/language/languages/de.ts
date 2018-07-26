@@ -394,7 +394,7 @@ export default {
   payPalLanguage: {
     connectPayPal: `Schließen Sie PayPal`,
     connectSuccess: `PayPal erfolgreich aktiviert.`,
-    disconnectPayPal: `Disconnect PayPal`,
+    disconnectPayPal: `Trennen Sie PayPal`,
     disconnected: `PayPal getrennt.`,
     requestPayPalPayment: `Anfrage PayPal Payment`,
     sendWithPayPal: `Senden Mit PayPal`,

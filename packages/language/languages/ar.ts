@@ -394,7 +394,7 @@ export default {
   payPalLanguage: {
     connectPayPal: `ربط باي بال`,
     connectSuccess: `باي بال تمكين بنجاح.`,
-    disconnectPayPal: `Disconnect PayPal`,
+    disconnectPayPal: `قطع باي بال`,
     disconnected: `باي بال قطع الاتصال.`,
     requestPayPalPayment: `طلب الدفع باي بال`,
     sendWithPayPal: `إرسال مع باي بال`,

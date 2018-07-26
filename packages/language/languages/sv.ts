@@ -393,7 +393,7 @@ export default {
   payPalLanguage: {
     connectPayPal: `Anslut PayPal`,
     connectSuccess: `PayPal aktiverat framgångsrikt.`,
-    disconnectPayPal: `Disconnect PayPal`,
+    disconnectPayPal: `Koppla PayPal`,
     disconnected: `PayPal kopplad.`,
     requestPayPalPayment: `Begär PayPal Payment`,
     sendWithPayPal: `Skicka med PayPal`,

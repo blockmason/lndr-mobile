@@ -393,7 +393,7 @@ export default {
   payPalLanguage: {
     connectPayPal: `เชื่อมต่อ PayPal`,
     connectSuccess: `เปิดการใช้งาน PayPal ประสบความสำเร็จ`,
-    disconnectPayPal: `Disconnect PayPal`,
+    disconnectPayPal: `ยกเลิกการเชื่อมต่อ PayPal`,
     disconnected: `PayPal ตัดการเชื่อมต่อ`,
     requestPayPalPayment: `ขอใช้บริการชำระเงิน PayPal`,
     sendWithPayPal: `ส่งด้วย PayPal`,

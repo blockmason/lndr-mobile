@@ -394,7 +394,7 @@ export default {
   payPalLanguage: {
     connectPayPal: `Terhubung PayPal`,
     connectSuccess: `PayPal diaktifkan berhasil.`,
-    disconnectPayPal: `Disconnect PayPal`,
+    disconnectPayPal: `Putus PayPal`,
     disconnected: `PayPal terputus.`,
     requestPayPalPayment: `Permintaan Pembayaran PayPal`,
     sendWithPayPal: `Kirim Dengan PayPal`,

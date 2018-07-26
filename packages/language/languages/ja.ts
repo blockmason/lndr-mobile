@@ -386,16 +386,16 @@ export default {
 
   payPalLanguage: {
     connectPayPal: `ペイパルを接続します`,
-    connectSuccess: `PayPalは正常に有効化。`,
-    disconnectPayPal: `Disconnect PayPal`,
-    disconnected: `PayPalは切断されました。`,
-    requestPayPalPayment: `PayPalの支払いを要求`,
-    sendWithPayPal: `PayPalで送ります`,
+    connectSuccess: `ペイパルは正常に有効化。`,
+    disconnectPayPal: `外しペイパル`,
+    disconnected: `ペイパルは切断されました。`,
+    requestPayPalPayment: `ペイパルの支払いを要求`,
+    sendWithPayPal: `ペイパルで送ります`,
     enablePayPal: `ペイパルを有効にします`,
     requestPayPalPayee: `ペイパルをリクエスト`,
-    enablePayPalForFriend: F => `PayPalを有効にすると、@${F}があなたに支払うことができます。`,
-    friendNotEnabled: F => `@${F}はPayPal支払いを有効にしていません。`,
-    friendRequestedConnect: F => `@${F}がPayPal経由でお支払いをご希望の場合`,
-    requestFriendConnect: F => `@${F}にPayPalを有効にするように頼んだ`,
+    enablePayPalForFriend: F => `ペイパルを有効にすると、@${F}があなたに支払うことができます。`,
+    friendNotEnabled: F => `@${F}はペイパル支払いを有効にしていません。`,
+    friendRequestedConnect: F => `@${F}がペイパル経由でお支払いをご希望の場合`,
+    requestFriendConnect: F => `@${F}にペイパルを有効にするように頼んだ`,
   }
 }
