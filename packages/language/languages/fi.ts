@@ -219,7 +219,7 @@ export default {
     record: `merkintä`,
     records: `merkinnät`,
     chooseCurrency: `Valitse valuutta`,
-    
+
     createError: {
       amountTooLow: `Summan on oltava suurempi kuin $ 0`,
       amountTooHigh: `Summan on oltava alle $ 1000000000`,
@@ -394,6 +394,7 @@ export default {
   payPalLanguage: {
     connectPayPal: `Yhdistä PayPal`,
     connectSuccess: `PayPal käytössä onnistuneesti.`,
+    disconnectPayPal: `Disconnect PayPal`,
     disconnected: `PayPal irrotettu.`,
     requestPayPalPayment: `Pyydä PayPal`,
     sendWithPayPal: `Send PayPalin`,

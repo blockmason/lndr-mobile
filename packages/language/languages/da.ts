@@ -219,7 +219,7 @@ export default {
     record: `optegnelse`,
     records: `optegnelser`,
     chooseCurrency: `Vælg en valuta`,
-    
+
     createError: {
       amountTooLow: `Beløb skal være større end $0`,
       amountTooHigh: `Beløb skal være mindre end $1.000.000.000`,
@@ -394,6 +394,7 @@ export default {
   payPalLanguage: {
     connectPayPal: `Slut PayPal`,
     connectSuccess: `PayPal aktiveret med succes.`,
+    disconnectPayPal: `Disconnect PayPal`,
     disconnected: `PayPal afbrudt.`,
     requestPayPalPayment: `Anmodning PayPal Payment`,
     sendWithPayPal: `Send med PayPal`,

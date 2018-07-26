@@ -219,7 +219,7 @@ export default {
     record: `záznam`,
     records: `záznamy`,
     chooseCurrency: `Vyberte měnu`,
-    
+
     createError: {
       amountTooLow: `Částka musí být větší než 0 $`,
       amountTooHigh: `Částka musí být menší než 1.000.000.000 $`,
@@ -394,6 +394,7 @@ export default {
   payPalLanguage: {
     connectPayPal: `Připojit PayPal`,
     connectSuccess: `PayPal úspěšně povoleno.`,
+    disconnectPayPal: `Disconnect PayPal`,
     disconnected: `PayPal odpojen.`,
     requestPayPalPayment: `Požadavek PayPal Payment`,
     sendWithPayPal: `Poslat PayPal`,

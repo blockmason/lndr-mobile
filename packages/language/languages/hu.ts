@@ -219,7 +219,7 @@ export default {
     record: `feljegyzés`,
     records: `feljegyzések`,
     chooseCurrency: `Válasszon pénznemet`,
-    
+
     createError: {
       amountTooLow: `Az összegnek nagyobbnak kell lennie, mint $ 0`,
       amountTooHigh: `Az összegnek kevesebbnek kell lennie, mint $ 1.000.000.000`,
@@ -394,6 +394,7 @@ export default {
   payPalLanguage: {
     connectPayPal: `Kapcsolatba PayPal`,
     connectSuccess: `PayPal engedélyezése sikeresen.`,
+    disconnectPayPal: `Disconnect PayPal`,
     disconnected: `PayPal csatlakoztatva.`,
     requestPayPalPayment: `Request PayPal fizetés`,
     sendWithPayPal: `Küldj A PayPal`,

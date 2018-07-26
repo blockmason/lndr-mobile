@@ -219,7 +219,7 @@ export default {
     record: `rekod`,
     records: `rekod`,
     chooseCurrency: `Pilih mata wang`,
-    
+
     createError: {
       amountTooLow: `Jumlah mesti lebih besar daripada $0`,
       amountTooHigh: `Jumlah mesti kurang daripada $ 1,000,000,000`,
@@ -394,6 +394,7 @@ export default {
   payPalLanguage: {
     connectPayPal: `Connect PayPal`,
     connectSuccess: `PayPal enabled successfully.`,
+    disconnectPayPal: `Disconnect PayPal`,
     disconnected: `PayPal disconnected.`,
     requestPayPalPayment: `Request PayPal Payment`,
     sendWithPayPal: `Send With PayPal`,

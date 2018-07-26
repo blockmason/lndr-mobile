@@ -36,7 +36,7 @@ import popupStyle from 'theme/popup'
 import language from 'language'
 const { nickname, setNickname, email, setEmail, copy, accountManagement, changePin, enterNewPin, confirmPin, pleaseWait,
   mnemonicExhortation, addressExhortation, logoutAction, notifications, currentBalance, showMnemonic, enterCurrentPin,
-  myAccount, debtManagement, removeAccount, payPalLanguage, cancel
+  myAccount, debtManagement, removeAccount, payPalLanguage, cancel, confirmAccount
 } = language
 const updateAccountText = language.updateAccount
 
@@ -279,7 +279,7 @@ class MyAccount extends Component<Props, State> {
         "",
         [
           {text: cancel.toUpperCase(), onPress: () => null, style: 'destructive'},
-          {text: payPalLanguage.confirm.toUpperCase(), onPress: () => this.disconnectPayPal()},
+          {text: confirmAccount.toUpperCase(), onPress: () => this.disconnectPayPal()},
         ],
         { cancelable: true }
       )

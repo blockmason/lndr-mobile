@@ -219,7 +219,7 @@ export default {
     record: `καταγραφή`,
     records: `καταγραφές`,
     chooseCurrency: `Επιλέξτε ένα νόμισμα`,
-    
+
     createError: {
       amountTooLow: `Το ποσό πρέπει να είναι μεγαλύτερο από $0`,
       amountTooHigh: `Το ποσό πρέπει να είναι μικρότερο από $1.000.000.000`,
@@ -394,6 +394,7 @@ export default {
   payPalLanguage: {
     connectPayPal: `Συνδέστε το PayPal`,
     connectSuccess: `PayPal ενεργοποιηθεί με επιτυχία.`,
+    disconnectPayPal: `Disconnect PayPal`,
     disconnected: `PayPal αποσυνδεθεί.`,
     requestPayPalPayment: `Αίτηση PayPal Πληρωμή`,
     sendWithPayPal: `Αποστολή με PayPal`,
