@@ -239,7 +239,7 @@ export default {
       example: `Geben Sie das Memo hier ein`,
     },
     direction: {
-      lend: X => `$ X => '{X} schuldet mir`,
+      lend: X => `${X} schuldet mir`,
       borrow: X => `Ich schulde ${X}`,
       initiatedLend: X => `${X}, sagt er / sie schuldet`,
       initiatedBorrow: X => `${X} sagt, Sie schulden`,
