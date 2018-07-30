@@ -16,7 +16,6 @@ _*Note:* this file is over 50 lines long because it contains a lot of relevant i
 - all snake-case directory names and file names, leads to less issues
 - code under ui should generally begin with `import React, { Component } from 'react'` to avoid linter errors for `React`
 - ui components generally look like `export default class ComponentName extends Component<Props, State>`
-- no files over 50 lines long without an explanation at the top
 
 # Packages
 
