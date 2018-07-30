@@ -95,6 +95,16 @@ Running Android
 - ```cd android```
 - ```./gradlew assembleDebug```
 
+# Testing
+
+This project uses (Jest)[http://jestjs.io/docs/en/tutorial-react-native.html], which is the preferred testing framework for React Native.
+
+Tests are stored in the top-level "__tests__" folder which mimics the structure of the "packages" folder.
+
+To run tests type ```yarn test```
+
+To create a new snapshot after changing a ```.tsx``` file, run ```jest -u```
+
 # Building
 
 ### Prerequisites

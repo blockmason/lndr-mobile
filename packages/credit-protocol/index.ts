@@ -13,13 +13,11 @@ import Client from './lib/client'
 import CreditRecord from './lib/credit-record'
 export { default as CreditRecord } from './lib/credit-record'
 
-import FetchUtil from 'lndr/fetch-util'
 import EthTransaction from 'lndr/eth-transaction'
 import Tx from 'ethereumjs-tx'
 import Web3 from 'web3'
 import { hasNoDecimals } from 'lndr/currencies';
 
-const fetchUtil = new FetchUtil(fetch)
 export const web3 = new Web3(new Web3.providers.HttpProvider('https://mainnet.infura.io/EoLr1OVfUMDqq3N2KaKA'))
 // export const web3 = Platform.OS === 'ios' ? new Web3(new Web3.providers.HttpProvider('http://localhost:7545')) : new Web3(new Web3.providers.HttpProvider('http://10.0.2.2:7545'))
 
@@ -345,8 +343,8 @@ export default class CreditProtocol {
     tx.sign(privateKeyBuffer)
     const serializedTx = tx.serialize()
 
-    console.log('TOTAL ETH TO BE SENT: ',Number(transaction.value), ', ', Number(transaction.value) + Number(transaction.gas * transaction.gasPrice) )
-
+    console.log('TOTAL ETH TO BE SENT: ', Number(transaction.value), ', ', Number(transaction.value) + Number(transaction.gas * transaction.gasPrice) )
+    
     return new Promise((resolve, reject) => {
       web3.eth.sendRawTransaction(('0x' + serializedTx.toString('hex')), (e, data) => {
         if (e) {

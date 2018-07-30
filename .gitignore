@@ -81,3 +81,6 @@ packages/lndr/profile-pic/config.json
 
 ios/GoogleService-Info.plist
 ios/PayPalConfig.plist
+
+#JEST
+.jest

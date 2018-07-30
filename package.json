@@ -8,7 +8,8 @@
     "start": "node node_modules/react-native/local-cli/cli.js start",
     "setup:env": "node scripts/env.js",
     "postinstall": "node_modules/.bin/rn-nodeify --install stream,crypto --hack",
-    "debug": "open 'rndebugger://set-debugger-loc?host=localhost&port=8081'"
+    "debug": "open 'rndebugger://set-debugger-loc?host=localhost&port=8081'",
+    "test": "jest"
   },
   "dependencies": {
     "assert": "^1.4.1",
@@ -20,6 +21,7 @@
     "ethereumjs-tx": "^1.3.3",
     "ethereumjs-util": "^5.1.2",
     "events": "^1.1.1",
+    "jest-fetch-mock": "^1.6.5",
     "jsonwebtoken": "8.3.0",
     "metro-bundler": "^0.22.1",
     "react": "^16.0.0",
@@ -58,6 +60,7 @@
     "solidity-sha3": "^0.4.1",
     "stream": "^0.0.2",
     "stream-browserify": "^1.0.0",
+    "ts-jest": "^22.4.6",
     "underscore": "^1.8.3",
     "urbanairship-react-native": "^1.3.0",
     "url": "^0.11.0",
@@ -78,7 +81,36 @@
     "typescript": "^2.6.1"
   },
   "jest": {
-    "preset": "react-native"
+    "preset": "react-native",
+    "moduleFileExtensions": [
+      "ts",
+      "tsx",
+      "js"
+    ],
+    "transform": {
+      "^.+\\.(js)$": "<rootDir>/node_modules/babel-jest",
+      "\\.(ts|tsx)$": "<rootDir>/node_modules/ts-jest/preprocessor.js"
+    },
+    "testRegex": "(/__tests__/.*|\\.(test|spec))\\.(ts|tsx|js)$",
+    "testPathIgnorePatterns": [
+      "\\.snap$",
+      "<rootDir>/node_modules/",
+      "lib/"
+    ],
+    "cacheDirectory": ".jest/cache",
+    "moduleNameMapper": {
+      "^actions": "<rootDir>/packages/actions",
+      "^credit-protocol": "<rootDir>/packages/credit-protocol",
+      "^language": "<rootDir>/packages/language",
+      "^navigators": "<rootDir>/packages/navigators",
+      "^lndr/(.*)": "<rootDir>/packages/lndr/$1",
+      "^reducers": "<rootDir>/packages/reducers",
+      "^reducers/(.*)": "<rootDir>/packages/reducers/$1",
+      "^store": "<rootDir>/packages/store",
+      "^theme/(.*)": "<rootDir>/packages/theme/$1",
+      "^ui/(.*)": "<rootDir>/packages/ui/$1",
+      "^images/(.*)": "<rootDir>/packages/images/$1"
+    }
   },
   "react-native": {
     "crypto": "react-native-crypto",
