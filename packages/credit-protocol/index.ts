@@ -30,6 +30,7 @@ export default class CreditProtocol {
     this.tempStorage = {
       nicknames: {},
       emails: {},
+      paypal: {},
       registerId: {},
       searchUsers: {}
     }
@@ -106,6 +107,22 @@ export default class CreditProtocol {
     })
   }
 
+  setPayPal(addr: string, paypal: string, privateKeyBuffer: string) {
+    //hash the paypal, including null
+    const hashBuffer = Buffer.concat([
+      hexToBuffer(addr),
+      utf8ToBuffer(paypal)
+    ])
+    const hash = bufferToHex(ethUtil.sha3(hashBuffer))
+    const signature = this.serverSign(hash, privateKeyBuffer)
+
+    return this.client.post('/paypal', {
+      addr,
+      paypal,
+      signature
+    })
+  }
+
   getConfig () {
     if (this.tempStorage.config) {
       return this.tempStorage.config
@@ -151,6 +168,14 @@ export default class CreditProtocol {
     return this.tempStorage.emails[user] = this.client.get(`/email/${user}`)
   }
 
+  getPayPal(user: string) {
+    const paypal = this.tempStorage.paypal[user]
+    if (paypal) {
+      return paypal
+    }
+    return this.tempStorage.paypal[user] = this.client.get(`/paypal/${user}`)
+  }
+
   searchUsers(nick: string) {
     return this.tempStorage.searchUsers[nick] = this.client.get(`/search_nick/${nick}`)
   }
@@ -170,6 +195,18 @@ export default class CreditProtocol {
     const signature = this.serverSign(hash, privateKeyBuffer)
 
     return this.tempStorage.registerId[channelID] = this.client.post(`/register_push`, { channelID, platform, address, signature })
+  }
+
+  deleteChannelID(address: string, channelID: string, platform: string, privateKeyBuffer: any) {
+    const hashBuffer = Buffer.concat([
+      utf8ToBuffer(platform),
+      utf8ToBuffer(channelID),
+      hexToBuffer(address)
+    ])
+    const hash = bufferToHex(ethUtil.sha3(hashBuffer))
+    const signature = this.serverSign(hash, privateKeyBuffer)
+
+    return this.client.post(`/unregister_push`, { channelID, platform, address, signature })
   }
 
   takenNick(nick: string) {
@@ -347,7 +384,7 @@ export default class CreditProtocol {
 
     const IMAGE_TARGET_SIZE = 240
     let resizedImageResponse, base64ImageData
-    
+
     if (Platform.OS === 'android') {
       resizedImageResponse = await ImageResizer.createResizedImage(imageURI, IMAGE_TARGET_SIZE, IMAGE_TARGET_SIZE, "JPEG", 100, 0)
       base64ImageData = await RNFetchBlob.fs.readFile(resizedImageResponse.uri, 'base64')
@@ -372,18 +409,18 @@ export default class CreditProtocol {
       return Number(amount) / 100 / Number(conversionRate)
     }
   }
-  
+
   async getSettlementCost(amount: number, currency: string) {
     const settlementAmount = await this.fiatToEth(amount, currency)
     const transactionCost = await this.getGasPrice()
     return settlementAmount + ( Number(transactionCost) / Math.pow(10, 18) )
   }
-  
+
   async getGasPrice() {
     const config = await this.getConfig()
     return config.gasPrice
   }
-  
+
   async getTxCost(currency: string) {
     try {
       const gasPrice = await this.getGasPrice()
@@ -391,10 +428,10 @@ export default class CreditProtocol {
 
       return `${Math.max( 0.01, gasPrice * Number(rate) * 21000 / Math.pow(10, 18) )}`.slice(0,6)
     } catch (e) {}
-  
+
     return '0.00'
   }
-  
+
   async getEthExchange(currency: string) {
     const prices = await this.getEthPrices()
     return prices[currency.toLowerCase()] === 'undefined' ? '0' : prices[currency.toLowerCase()]
@@ -404,11 +441,11 @@ export default class CreditProtocol {
     const config = await this.getConfig()
     return config.ethereumPrices
   }
-  
+
   async ethToFiat(eth, currency) {
     const exchange = await this.getEthExchange(currency)
     const fiat = String(Number(eth) * Number(exchange))
-  
+
     if (hasNoDecimals(currency)) {
       const decimalIndex = fiat.indexOf('.')
       return fiat.slice(0, decimalIndex)
@@ -421,7 +458,33 @@ export default class CreditProtocol {
     }
   }
 
-  async submitMultiSettlement(transactions: Object[]) {
+  submitMultiSettlement(transactions: Object[]) {
     return this.client.post('/multi_settlement', transactions)
   }
-}
+
+  requestPayPalSettlement(friend: string, requestor: string, privateKeyBuffer: any) {
+    const hashBuffer = Buffer.concat([
+      hexToBuffer(friend),
+      hexToBuffer(requestor)
+    ])
+    const hash = bufferToHex(ethUtil.sha3(hashBuffer))
+    const paypalRequestSignature = this.serverSign(hash, privateKeyBuffer)
+    return this.client.post('/request_paypal', { friend, requestor, paypalRequestSignature })
+  }
+
+  retrievePayPalSettlementRequests(addr: string) {
+    return this.client.get(`/request_paypal/${addr}`)
+  }
+
+  deletePayPalSettlementRequest(friend: string, requestor: string, privateKeyBuffer: any) {
+    const hashBuffer = Buffer.concat([
+      hexToBuffer(friend),
+      hexToBuffer(requestor)
+    ])
+    const hash = bufferToHex(ethUtil.sha3(hashBuffer))
+    const paypalRequestSignature = this.serverSign(hash, privateKeyBuffer)
+    console.log('HERE IS MY DATA', { friend, requestor, paypalRequestSignature })
+
+    return this.client.post('/remove_paypal_request', { friend, requestor, paypalRequestSignature })
+  }
+ }

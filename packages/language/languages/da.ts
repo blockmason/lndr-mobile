@@ -161,6 +161,7 @@ export default {
       `ETH (& BCPT) Adresse`,
       `ETH Saldo`,
       `BCPT Saldo`,
+      `Fjern konto`,
       `ETH Transaktionshistorik`,
       `Skift primære valuta`,
       `Skift PIN`,
@@ -179,6 +180,7 @@ export default {
       setSuccess: `Profilbilledet blev opdateret`,
     },
     logoutSuccess: `Du har logget ud!`,
+    logoutError: generalCommunicationError,
   },
 
   currentBalance: {
@@ -217,7 +219,7 @@ export default {
     record: `optegnelse`,
     records: `optegnelser`,
     chooseCurrency: `Vælg en valuta`,
-    
+
     createError: {
       amountTooLow: `Beløb skal være større end $0`,
       amountTooHigh: `Beløb skal være mindre end $1.000.000.000`,
@@ -280,6 +282,7 @@ export default {
       }
     },
     eth: `Gør op med ETH`,
+    paypal: `Gør op med PayPal`,
     nonPayment: `Gem afregningen`,
   },
 
@@ -380,11 +383,26 @@ export default {
   pendingFriendRequestsLanguage: {
     shell: `Venneanmodning`,
     message: `Venneanmodninger`,
-    request: F => `${F} ønsker at være venner med dig!`,
+    request: F => `@${F} ønsker at være venner med dig!`,
   },
 
   privacyPolicy: {
     link: `lndr.io/terms/`,
     message: `Ved at klikke herunder bekræfter du at du har læst og accepteret Blockmasons privatlivspolitik. Blockmason kan bruge din email-adresse til at sende opdateringer om Blockmason og LNDR. Her er et link til privatlivspolitikken:`
+  },
+
+  payPalLanguage: {
+    connectPayPal: `Slut PayPal`,
+    connectSuccess: `PayPal aktiveret med succes.`,
+    disconnectPayPal: `Afbryd PayPal`,
+    disconnected: `PayPal afbrudt.`,
+    requestPayPalPayment: `Anmodning PayPal Payment`,
+    sendWithPayPal: `Send med PayPal`,
+    enablePayPal: `Aktiver PayPal`,
+    requestPayPalPayee: `Bed om PayPal`,
+    enablePayPalForFriend: F => `Aktivering PayPal tillader @${F} at betale you.`,
+    friendNotEnabled: F => `@${F} er ikke aktiveret PayPal betalinger.`,
+    friendRequestedConnect: F => `@${F} ønsker at betale dig via PayPal`,
+    requestFriendConnect: F => `Du bad @${F} for at aktivere PayPal`,
   }
 }

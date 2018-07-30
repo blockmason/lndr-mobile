@@ -1,7 +1,7 @@
 import React, { Component } from 'react'
 
 // TODO Remove button / go through the entire import dependecy list
-import { View, ScrollView, Button } from 'react-native'
+import { View } from 'react-native'
 
 import firebase from 'react-native-firebase'
 import SplashScreen from 'react-native-splash-screen'
@@ -12,7 +12,6 @@ import AuthenticateView from 'ui/views/authenticate'
 import WelcomeView from 'ui/views/welcome'
 import PrivacyPolicyView from 'ui/views/privacy-policy'
 import { PopupTarget } from 'ui/components/popup'
-import ThemeImage from 'ui/components/images/theme-image'
 import AndroidStatusBar from 'ui/components/android-status-bar'
 
 import { UserData } from 'lndr/user'
@@ -23,8 +22,6 @@ import { getStore, getUser } from 'reducers/app'
 import AppWithNavigationState from 'navigators'
 
 import style from 'theme/general'
-
-interface Props {}
 
 interface AppContentsProps {
   initializeStorage: () => any
@@ -61,7 +58,10 @@ const initialState = {
   userPic: '',
   ucacAddresses: {},
   ethTransactions: [],
-  primaryCurrency: defaultCurrency
+  primaryCurrency: defaultCurrency,
+  payPalRequests: [],
+  payPalRequestsLoaded: false,
+  channelID: ''
 }
 
 const store = createStore(initialState)

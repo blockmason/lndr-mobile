@@ -161,6 +161,7 @@ export default {
       `Adresse ETH (& BCPT)`,
       `Solde ETH`,
       `Solde BCPT`,
+      `Supprimer le compte`,
       `Historique des transactions en ETH`,
       `Changer la devise primaire`,
       `Modifier le code PIN`,
@@ -179,6 +180,7 @@ export default {
       setSuccess: `Photo de profil mise à jour`,
     },
     logoutSuccess: `Vous avez bien été déconnecté !`,
+    logoutError: generalCommunicationError,
   },
 
   currentBalance: {
@@ -217,7 +219,7 @@ export default {
     record: `Enregistrement`,
     records: `Enregistrements`,
     chooseCurrency: `Choisissez une devise`,
-    
+
     createError: {
       amountTooLow: `Le montant doit être supérieur à 0 $`,
       amountTooHigh: `Le montant doit être inférieur à $ 1.000.000.000`,
@@ -280,6 +282,7 @@ export default {
       }
     },
     eth: `Régler avec de l'ETH`,
+    paypal: `Régler avec de PayPal`,
     nonPayment: `Enregistrement un règlement`,
   },
 
@@ -380,11 +383,26 @@ export default {
   pendingFriendRequestsLanguage: {
     shell: `Demande d'ami`,
     message: `Demandes d'ami`,
-    request: F => `${F} veut être ami avec vous !`,
+    request: F => `@${F} veut être ami avec vous !`,
   },
 
   privacyPolicy: {
     link: `lndr.io/terms/`,
     message: `En cliquant ci-dessous vous confirmez que vous avez lu et accepté la politique de confidentialité de Blockmason. Blockmason peut utiliser votre adresse e-mail pour envoyer des mises à jour sur les Blockmason et LNDR. Voici un lien vers la politique de confidentialité:`
+  },
+
+  payPalLanguage: {
+    connectPayPal: `Se connecter PayPal`,
+    connectSuccess: `PayPal a permis avec succès.`,
+    disconnectPayPal: `Déconnecter PayPal`,
+    disconnected: `PayPal déconnecté.`,
+    requestPayPalPayment: `Demande de paiement PayPal`,
+    sendWithPayPal: `Envoyer avec PayPal`,
+    enablePayPal: `Activer PayPal`,
+    requestPayPalPayee: `Demande PayPal`,
+    enablePayPalForFriend: F => `Activation PayPal permet @${F} pour vous payer`,
+    friendNotEnabled: F => `@${F} n'a pas activé PayPal paiements.`,
+    friendRequestedConnect: F => `@${F} veut vous payer par PayPal`,
+    requestFriendConnect: F => `Vous avez demandé @${F} pour permettre PayPal`,
   }
 }

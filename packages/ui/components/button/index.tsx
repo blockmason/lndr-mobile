@@ -1,5 +1,6 @@
 import React from 'react'
 import Icon from 'react-native-vector-icons/Ionicons'
+import ZIcon from 'react-native-vector-icons/Zocial'
 
 import { TouchableHighlight, View, Text, Image } from 'react-native'
 
@@ -26,6 +27,7 @@ interface Props {
   onPress: () => void
   text?: string
   icon?: string
+  zicon?: string
   containerStyle?: any
   style?: any
 }
@@ -112,7 +114,7 @@ const getIconStyle = (round?: boolean) => {
   return buttonStyle.icon
 }
 
-export default ({ action, danger, black, blackText, friend, check, close, large, small, round, wide, narrow, arrow, arrowRed, fat, dark, alternate, containerStyle, style, icon, text, onPress }: Props) => {
+export default ({ action, danger, black, blackText, friend, check, close, large, small, round, wide, narrow, arrow, arrowRed, fat, dark, alternate, containerStyle, style, icon, zicon, text, onPress }: Props) => {
   if (close) {
     return (<TouchableHighlight
       underlayColor='#fff'
@@ -130,6 +132,7 @@ export default ({ action, danger, black, blackText, friend, check, close, large,
   >
     <View style={getStyle(danger, round, wide, narrow, alternate, action, dark, black, friend, style)}>
       {icon ? <Icon style={getIconStyle(round)} name={icon} /> : null}
+      {zicon ? <ZIcon style={[getIconStyle(round), {color:'white'}, {padding: 0}, {marginTop:-2}]} name={zicon} /> : null}
       {showText(text, alternate, blackText, large, small, fat)}
       {arrow ? <Image style={buttonStyle.arrow} source={require('images/button-arrow.png')} /> : null}
       {arrowRed ? <Image style={buttonStyle.arrow} source={require('images/button-arrow-red.png')} /> : null}

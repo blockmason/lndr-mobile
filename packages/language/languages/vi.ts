@@ -161,6 +161,7 @@ export default {
       `Địa chỉ ETH (& BCPT)`,
       `Số dư ETH`,
       `Số dư BCPT`,
+      `Xoá tài khoản`,
       `Lịch sử giao dịch ETH`,
       `Thay đổi tiền tệ chính`,
       `Thay đổi mã PIN`,
@@ -179,6 +180,7 @@ export default {
       setSuccess: `Đã cập nhật ảnh đại diện`,
     },
     logoutSuccess: `Bạn đã đăng xuất thành công!`,
+    logoutError: generalCommunicationError,
   },
 
   currentBalance: {
@@ -279,6 +281,7 @@ export default {
       }
     },
     eth: `Thanh toán bằng ​​ETH`,
+    paypal: `Thanh toán bằng ​​PayPal`,
     nonPayment: `Ghi chép Thanh toán`,
   },
 
@@ -379,11 +382,26 @@ export default {
   pendingFriendRequestsLanguage: {
     shell: `Yêu cầu kết bạn`,
     message: `Yêu cầu kết bạn`,
-    request: F => `${F} muốn kết bạn với bạn!`,
+    request: F => `@${F} muốn kết bạn với bạn!`,
   },
 
   privacyPolicy: {
     link: `lndr.io/terms/`,
     message: `Bằng cách nhấp bên dưới, bạn xác nhận rằng bạn đã đọc và đồng ý với chính sách bảo mật của Blockmason. Blockmason có thể sử dụng địa chỉ email của bạn để gửi thông tin cập nhật về Blockmason và LNDR. Dưới đây là một liên kết đến chính sách bảo mật:`
+  },
+
+  payPalLanguage: {
+    connectPayPal: `Kết nối PayPal`,
+    connectSuccess: `PayPal kích hoạt thành công.`,
+    disconnectPayPal: `Ngắt kết nối PayPal`,
+    disconnected: `PayPal bị ngắt kết nối.`,
+    requestPayPalPayment: `Yêu cầu thanh toán PayPal`,
+    sendWithPayPal: `Gửi Với PayPal`,
+    enablePayPal: `Bật PayPal`,
+    requestPayPalPayee: `Yêu cầu PayPal`,
+    enablePayPalForFriend: F => `Cho phép PayPal cho phép @${F} trả you.`,
+    friendNotEnabled: F => `@${F} chưa kích hoạt PayPal thanh toán.`,
+    friendRequestedConnect: F => `@${F} muốn trả tiền cho bạn thông qua PayPal`,
+    requestFriendConnect: F => `Bạn hỏi @${F} để cho phép PayPal`,
   }
 }

@@ -391,6 +391,20 @@ export default StyleSheet.create({
     width: '100%',
     color: black,
     textAlign: 'center'
+  },
+  removeFriendConfirmation: {
+    width: '40%',
+    marginHorizontal: 10
+  },
+  removeFriendMessage: {
+    ...large,
+    ...bold,
+    marginBottom: 3,
+    color: black,
+    textAlign: 'center',
+    marginVertical: 40,
+    paddingBottom: 20,
+    marginHorizontal: 20
   }
 
 } as any)

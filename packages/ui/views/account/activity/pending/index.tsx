@@ -3,26 +3,26 @@ import React, { Component } from 'react'
 import { Text, View } from 'react-native'
 
 import { UserData } from 'lndr/user'
-import Friend from 'lndr/friend'
-import { currencySymbols, transferLimits  } from 'lndr/currencies'
 import PendingTransaction from 'lndr/pending-transaction'
 import PendingUnilateral from 'lndr/pending-unilateral'
+import PayPalRequest from 'lndr/paypal-request'
+import PendingBilateral from 'lndr/pending-bilateral'
 
 import Section from 'ui/components/section'
-import Popup, { closePopup } from 'ui/components/popup'
+import { closePopup } from 'ui/components/popup'
 import Loading, { LoadingContext } from 'ui/components/loading'
-import PendingTransactionDetail from 'ui/dialogs/pending-transaction-detail'
 import PendingTransactionRow from 'ui/components/pending-transaction-row'
 import PendingSettlementRow from 'ui/components/pending-settlement-row'
 import PendingFriendRow from 'ui/components/pending-friend-row'
+import PayPalRequestRow from 'ui/components/paypal-request-row'
 
 import style from 'theme/account'
-import general from 'theme/general'
 
 import language from 'language'
 const { pendingTransactionsLanguage, pendingFriendRequestsLanguage } = language
 
-import { getStore, getUser, submitterIsMe, settlerIsMe, pendingSettlements, bilateralSettlements } from 'reducers/app'
+import { getStore, getUser, submitterIsMe, settlerIsMe, pendingSettlements, bilateralSettlements,
+  payPalRequests } from 'reducers/app'
 import { isFocusingOn } from 'reducers/nav'
 import { getPending } from 'actions'
 import { connect } from 'react-redux'
@@ -33,12 +33,12 @@ interface Props {
   navigation: any
   homeScreen?: boolean
   friend?: any
-
   state: any
   user: UserData
   isFocused: boolean
-  pendingSettlements: any
-  bilateralSettlements: any
+  pendingSettlements: [PendingUnilateral]
+  bilateralSettlements: [PendingBilateral]
+  payPalRequests: [PayPalRequest]
   submitterIsMe: (pendingTransaction: PendingTransaction) => any
   settlerIsMe: (pendingSettlement: PendingUnilateral) => any
   getPending: () => any
@@ -76,7 +76,7 @@ class PendingView extends Component<Props, State> {
   }
 
   showNoneMessage() {
-    const { pendingTransactionsLoaded, pendingTransactions, pendingSettlements, bilateralSettlements, pendingFriends } = this.props.state
+    const { pendingTransactionsLoaded, pendingTransactions, pendingSettlements, bilateralSettlements, pendingFriends, payPalRequests } = this.props.state
     const { friend } = this.props
 
     let showNone = false
@@ -86,7 +86,8 @@ class PendingView extends Component<Props, State> {
     } else if (!friend) {
       showNone = (pendingTransactions.length
         + pendingSettlements.length
-        + pendingFriends.length) === 0
+        + pendingFriends.length
+        + payPalRequests.length) === 0
     } else if (friend) {
       showNone = true
       pendingTransactions.map( (pending) => {
@@ -114,16 +115,14 @@ class PendingView extends Component<Props, State> {
   }
 
   render() {
-    const { pendingTransactionsLoaded, pendingTransactions, bilateralSettlements, pendingFriends } = this.props.state
-    const { pendingSettlements, settlerIsMe } = this.props
-    const { user, friend, homeScreen, navigation } = this.props
+    const { pendingTransactions, pendingFriends } = this.props.state
+    const { pendingSettlements, settlerIsMe, payPalRequests, bilateralSettlements, user, friend, homeScreen, navigation } = this.props
 
     return <View>
       <Section contentContainerStyle={style.list}>
         <Loading context={loadingPending} />
         {this.showNoneMessage()}
-        {
-          pendingTransactions.map(pendingTransaction => {
+        { pendingTransactions.map(pendingTransaction => {
             if (friend && friend.address !== pendingTransaction.creditorAddress && friend.address !== pendingTransaction.debtorAddress) {
                 return null
             }
@@ -137,10 +136,9 @@ class PendingView extends Component<Props, State> {
               friend={friend ? true : false }
               onPress={() => navigation.navigate('PendingTransaction', { pendingTransaction })}
             />
-          }
-        )}
-        {
-          pendingSettlements.map( pendingSettlement => {
+          })
+        }
+        { pendingSettlements.map( pendingSettlement => {
             if (homeScreen && this.props.settlerIsMe(pendingSettlement)) {
               return null
             }
@@ -152,9 +150,21 @@ class PendingView extends Component<Props, State> {
               onPress={() => this.props.navigation.navigate('PendingSettlement', { pendingSettlement })}
               settlerIsMe={settlerIsMe}
             />
-          })}
-          { this.hideBilateralMsg() ? null : <Text style={style.transactionHeader}>{pendingTransactionsLanguage.bilateral}</Text> }
-          { homeScreen ? null :
+          })
+        }
+        { payPalRequests.map( payPalRequest => {
+            if(homeScreen && payPalRequest.requestorIsMe) {
+              return null
+            }
+            return <PayPalRequestRow
+              payPalRequest={payPalRequest}
+              navigation={navigation}
+              key={payPalRequest.friend.address}
+            />
+          })
+        }
+        { this.hideBilateralMsg() ? null : <Text style={style.transactionHeader}>{pendingTransactionsLanguage.bilateral}</Text> }
+        { homeScreen ? null :
           bilateralSettlements.map( bilateralSettlement => {
             if (friend && friend.address !== bilateralSettlement.creditorAddress && friend.address !== bilateralSettlement.debtorAddress) {
               return null
@@ -170,16 +180,18 @@ class PendingView extends Component<Props, State> {
               onPress={() => null}
               settlerIsMe={settlerIsMe}
             />
-          })}
-          { homeScreen || pendingFriends.length === 0 ? null : <Text style={style.transactionHeader}>{pendingFriendRequestsLanguage.message}</Text>}
-          { pendingFriends.length === 0 ? null :
+          })
+        }
+        { homeScreen || pendingFriends.length === 0 ? null : <Text style={style.transactionHeader}>{pendingFriendRequestsLanguage.message}</Text>}
+        { pendingFriends.length === 0 ? null :
           pendingFriends.map( friend => {
             return <PendingFriendRow
               key={friend.address}
               friend={friend}
               navigation={this.props.navigation}
             />
-          })}
+          })
+        }
       </Section>
     </View>
   }
@@ -187,4 +199,4 @@ class PendingView extends Component<Props, State> {
 
 export default connect((state) => ({ state: getStore(state)(), user: getUser(state)(), isFocused: isFocusingOn(state)('Activity'),
 pendingSettlements: pendingSettlements(state), bilateralSettlements: bilateralSettlements(state), submitterIsMe: submitterIsMe(state),
-settlerIsMe: settlerIsMe(state) }), { getPending })(PendingView)
+settlerIsMe: settlerIsMe(state), payPalRequests: payPalRequests(state) }), { getPending })(PendingView)

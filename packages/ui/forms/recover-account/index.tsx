@@ -29,7 +29,7 @@ import style from 'theme/form'
 const loadingContext = new LoadingContext()
 
 interface Props {
-  onSubmitRecoverUser: (formData: RecoverAccountData) => void
+  onSubmitRecoverUser: (formData: RecoverAccountData) => any
   onCancel: () => void
   user: User
 }
@@ -162,11 +162,11 @@ class RecoverAccountForm extends Component<Props, State> {
       </View>
     } else {
       const vertOffset = (Platform.OS === 'android') ? -300 : 0;
-      return <ScrollView keyboardShouldPersistTaps="always">
-        <View style={style.form}>
-          <ThemeImage name='logo' size={0.4} />
-          <Text style={[style.text, style.spaceBottom]}>{recoverExistingAccount}</Text>
-          <KeyboardAvoidingView behavior={Platform.OS === 'ios' ? 'position' : 'padding'} keyboardVerticalOffset={vertOffset} >
+      return <ScrollView keyboardShouldPersistTaps="never">
+        <KeyboardAvoidingView behavior={Platform.OS === 'ios' ? 'position' : 'padding'} keyboardVerticalOffset={vertOffset} >
+          <View style={style.form}>
+            <ThemeImage name='logo' size={0.4} />
+            <Text style={[style.text, style.spaceBottom]}>{recoverExistingAccount}</Text>
             <View style={style.textInputContainer}>
               <TextInput
                 multiline
@@ -178,11 +178,11 @@ class RecoverAccountForm extends Component<Props, State> {
                 onBlur={this.checkMnemonicLength}
               />
             </View>
-          </KeyboardAvoidingView>
-          { mnemonicLengthError && <Text style={style.warningText}>{mnemonicLengthError}</Text> }
-          <Button round fat style={style.submitButton} onPress={this.setPIN} text={recoverAccount} />
-          <Button alternate small arrow style={style.submitButton} onPress={this.cancel} text={cancel} />
-        </View>
+            { mnemonicLengthError && <Text style={style.warningText}>{mnemonicLengthError}</Text> }
+            <Button round fat style={style.submitButton} onPress={this.setPIN} text={recoverAccount} />
+            <Button alternate small arrow style={style.submitButton} onPress={this.cancel} text={cancel} />
+          </View>
+        </KeyboardAvoidingView>
       </ScrollView>
     }
   }

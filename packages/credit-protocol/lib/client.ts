@@ -3,10 +3,25 @@ declare const global
 export default class Client {
   baseUrl: String
   fetch: any
+  accept: String
+  contentType: String
+  authorization: any
 
   constructor(baseUrl, fetch) {
     this.baseUrl = baseUrl
     this.fetch = fetch || global.fetch
+  }
+
+  setAccept(accept) {
+    this.accept = accept
+  }
+
+  setContentType(contentType) {
+    this.contentType = contentType
+  }
+
+  setAuthorization(authorization) {
+    this.authorization = authorization
   }
 
   async handleResponse(promise) {
@@ -37,23 +52,50 @@ export default class Client {
 
   get(path) {
     console.log(`[fetch] GET ${this.baseUrl}${path}`)
+    let headers:any = {
+      'Accept': (this.accept) ? this.accept : 'application/json, text/plain, */*'
+    }
+    if (this.authorization)
+      headers.Authorization = this.authorization
 
-    return this.handleResponse(this.fetch(`${this.baseUrl}${path}`))
+    return this.handleResponse(
+      this.fetch(`${this.baseUrl}${path}`, {
+        headers: headers
+      })
+    )
   }
 
   post(path, data) {
     console.log(`[fetch] POST ${this.baseUrl}${path} {${Object.keys(data).join(', ')}:${Object.values(data).join(', ')}}`)
+    let headers:any = {
+      'Accept': (this.accept) ? this.accept : 'application/json, text/plain, */*'
+      ,'Content-Type': (this.contentType) ? this.contentType : 'application/json'
+    }
+    if (this.authorization)
+      headers.Authorization = this.authorization
 
     return this.handleResponse(
       this.fetch(`${this.baseUrl}${path}`, {
         method: 'post',
-        headers: {
-          'Accept': 'application/json, text/plain, */*',
-          'Content-Type': 'application/json'
-        },
+        headers: headers,
         body: JSON.stringify(data)
       })
     )
   }
 
+  delete(path) {
+    console.log(`[fetch] DELETE ${this.baseUrl}${path}`)
+    let headers:any = {
+      'Accept': (this.accept) ? this.accept : 'application/json, text/plain, */*'
+    }
+    if (this.authorization)
+      headers.Authorization = this.authorization
+
+    return this.handleResponse(
+      this.fetch(`${this.baseUrl}${path}`,  {
+        method: 'delete',
+        headers: headers
+      })
+    )
+  }
 }

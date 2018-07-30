@@ -1,6 +1,6 @@
 import React, { Component } from 'react'
 
-import { Text, View, Image, ScrollView } from 'react-native'
+import { Text, View, Image, ScrollView, BackHandler, Alert } from 'react-native'
 
 import Balance from 'lndr/balance'
 import Friend from 'lndr/friend'
@@ -26,7 +26,10 @@ const {
   friendShell,
   debtManagement,
   pendingTransactionsLanguage,
-  recentTransactionsLanguage
+  recentTransactionsLanguage,
+  removeFriendConfirmationQuestion,
+  confirmAccount,
+  cancel
 } = language
 const removeFriendText = language.removeFriend
 
@@ -49,7 +52,7 @@ interface Props {
 }
 
 interface State {
-  balanceLoaded?: boolean
+  balanceLoaded: boolean
   balance: Balance
   pic?: string
 }
@@ -61,34 +64,57 @@ class RemoveFriend extends Component<Props, State> {
       balanceLoaded: false,
       balance: new Balance({ relativeToNickname: "", relativeTo: "", amount: 0 })
     }
+
+    this.removeFriend = this.removeFriend.bind(this)
+    this.goBack = this.goBack.bind(this)
+    this.goSettleUp = this.goSettleUp.bind(this)
+    this.confirmRemoveFriend = this.confirmRemoveFriend.bind(this)
   }
 
   async componentWillMount() {
     const friend = this.props.navigation ? this.props.navigation.state.params.friend : {}
-    let pic
 
-    try {
-      if (friend.address !== undefined) {
-        pic = await profilePic.get(friend.address)
-      }
-    } catch (e) {}
-    if (pic) {
+    if (friend.address !== undefined) {
+      const pic = await profilePic.get(friend.address)
       this.setState({ pic })
     }
-  }
-
-  async removeFriend(friend: Friend) {
-    await loadingContext.wrap(this.props.removeFriend(friend))
-
-    this.props.navigation.goBack()
   }
 
   async componentDidMount() {
     const { user, getTwoPartyBalance } = this.props
     const friend = this.props.navigation ? this.props.navigation.state.params.friend : {}
     const balance = await getTwoPartyBalance(user, friend)
+    BackHandler.addEventListener("hardwareBackPress", this.onBackPress);
     this.setState({ balance, balanceLoaded: true })
   }
+  
+  async removeFriend() {
+    const friend = this.props.navigation ? this.props.navigation.state.params.friend : {}
+    await loadingContext.wrap(this.props.removeFriend(friend))
+
+    this.props.navigation.goBack()
+  }
+
+  confirmRemoveFriend() {
+    Alert.alert(
+      removeFriendText,
+      removeFriendConfirmationQuestion,
+      [
+        {text: cancel.toUpperCase(), onPress: () => null, style: 'destructive'},
+        {text: confirmAccount.toUpperCase(), onPress: this.removeFriend},
+      ],
+      { cancelable: true }
+    )
+  }
+
+  componentWillUnmount() {
+    BackHandler.removeEventListener("hardwareBackPress", this.onBackPress);
+  }
+
+  onBackPress = () => {
+      this.props.navigation.goBack(null)
+      return true
+    }
 
   getRecentTotal() {
     const friend = this.props.navigation ? this.props.navigation.state.params.friend : {}
@@ -97,25 +123,17 @@ class RemoveFriend extends Component<Props, State> {
     return calculateBalance(friend)
   }
 
-  getTransactionNumber() {
-    const { recentTransactions, pendingTransactions } = this.props
-    const friend = this.props.navigation ? this.props.navigation.state.params.friend : {}
-
-    let total = 0
-
-    recentTransactions.map( transaction => {
-      total += (transaction.creditorAddress === friend.address || transaction.debtorAddress === friend.address) ? 1 : 0
-    })
-
-    pendingTransactions.map( transaction => {
-      total += (transaction.creditorAddress === friend.address || transaction.debtorAddress === friend.address) ? 1 : 0
-    })
-
-    return total
-  }
-
   getColor() {
     return this.getRecentTotal() < 0 ? accountStyle.redAmount : accountStyle.greenAmount
+  }
+
+  goBack() {
+    this.props.navigation.goBack(null)
+  }
+
+  goSettleUp() {
+    const friend = this.props.navigation ? this.props.navigation.state.params.friend : {}
+    this.props.navigation.navigate('SettleUp', { friend })
   }
 
   render() {
@@ -128,12 +146,13 @@ class RemoveFriend extends Component<Props, State> {
       <View style={general.view}>
         <DashboardShell text={friendShell} navigation={this.props.navigation} />
         <Loading context={loadingContext} />
-        <Button close onPress={() => this.props.navigation.goBack(null)} />
+        <Button close onPress={this.goBack} />
       </View>
       <ScrollView style={general.view}  keyboardShouldPersistTaps="always">
         <View style={general.centeredColumn}>
           <Image source={imageSource} style={pendingStyle.image}/>
           <Text style={pendingStyle.title}>{`  @${friend.nickname}  `}</Text>
+          <Button round danger onPress={this.confirmRemoveFriend} text={removeFriendText} containerStyle={style.spaceBottom} />
           <Text style={pendingStyle.subTitle}>{`${recentTransactionsLanguage.consolidatedBalance}:`}</Text>
           <View style={pendingStyle.balanceRow}>
             <Text style={pendingStyle.balanceInfo}>{currencySymbols(primaryCurrency)}</Text>
@@ -142,8 +161,7 @@ class RemoveFriend extends Component<Props, State> {
           <View style={[general.centeredColumn, {marginBottom: 10}]}>
             <BalanceSection friend={friend} />
           </View>
-          {this.getRecentTotal() === 0 ? null : <Button round large fat wide onPress={() => this.props.navigation.navigate('SettleUp', { friend: friend })} text={debtManagement.settleUp} containerStyle={style.spaceBottom} />}
-          {this.getTransactionNumber() === 0 ? <Button round large danger wide onPress={() => this.removeFriend(friend)} text={removeFriendText} containerStyle={style.spaceBottom} /> : null }
+          {this.getRecentTotal() === 0 ? null : <Button round large fat wide onPress={this.goSettleUp} text={debtManagement.settleUp} containerStyle={style.spaceBottom} />}
           <View style={style.fullWidth}>
             <Text style={accountStyle.transactionHeader}>{pendingTransactionsLanguage.title}</Text>
             <PendingView friend={friend} navigation={navigation} />

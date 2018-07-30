@@ -161,6 +161,7 @@ export default {
       `ETH (और BCPT) पता`,
       `ETH बैलेंस`,
       `BCPT बैलेंस`,
+      `अकाउंट डिलीट करें`,
       `ETH बैलेंस हिस्ट्री`,
       `प्राथमिक मुद्रा परिवर्तित करें`,
       `पिन बदलिए`,
@@ -179,6 +180,7 @@ export default {
       setSuccess: `प्रोफ़ाइल फोटो अपडेट हो गई`,
     },
     logoutSuccess: `आप लॉग-आउट हो गए हैं!`,
+    logoutError: generalCommunicationError,
   },
 
   currentBalance: {
@@ -217,7 +219,7 @@ export default {
     record: `रिकॉर्ड`,
     records: `रिकॉर्ड्स`,
     chooseCurrency: `एक मुद्रा चुनें`,
-    
+
     createError: {
       amountTooLow: `राशि $0 से ज़्यादा होनी चाहिए`,
       amountTooHigh: `राशि कम से कम $ 1,000,000,000  होना चाहिए`,
@@ -280,6 +282,7 @@ export default {
       }
     },
     eth: `ETH से निपटाएँ`,
+    paypal: `PayPal से निपटाएँ`,
     nonPayment: `कोई निपटान रिकॉर्ड करें`,
   },
 
@@ -380,11 +383,26 @@ export default {
   pendingFriendRequestsLanguage: {
     shell: `फ्रेंड रिक्वेस्ट`,
     message: `फ्रेंड रिक्वेस्ट्स`,
-    request: F => `${F} आपका फ्रेंड बनना चाहता/चाहती है!`,
+    request: F => `@${F} आपका फ्रेंड बनना चाहता/चाहती है!`,
   },
 
   privacyPolicy: {
     link: `lndr.io/terms/`,
     message: `नीचे क्लिक करके आप पुष्टि करते हैं कि आपने ब्लॉकमसन गोपनीयता नीति को पढ़ और सहमति दी है। ब्लॉकमेसन ब्लॉकमसन और एलएनडीआर के बारे में अपडेट भेजने के लिए आपके ईमेल पते का उपयोग कर सकता है। गोपनीयता नीति का एक लिंक यहां दिया गया है:`
+  },
+
+  payPalLanguage: {
+    connectPayPal: `पेपैल कनेक्ट करें`,
+    connectSuccess: `पेपैल को सफलतापूर्वक सक्षम।`,
+    disconnectPayPal: `डिस्कनेक्ट पेपैल`,
+    disconnected: `पेपैल काट दिया।`,
+    requestPayPalPayment: `अनुरोध पेपैल भुगतान`,
+    sendWithPayPal: `पेपैल के साथ भेजें`,
+    enablePayPal: `पेपैल सक्षम करें`,
+    requestPayPalPayee: `पेपैल का अनुरोध करें`,
+    enablePayPalForFriend: F => `पेपैल को सक्षम करने से आपको @${F} भुगतान करने की अनुमति मिलती है।`,
+    friendNotEnabled: F => `@${F} पेपैल भुगतान सक्षम नहीं किया है।`,
+    friendRequestedConnect: F => `@${F} पेपैल के माध्यम से आपको भुगतान करना चाहता है`,
+    requestFriendConnect: F => `आपने पेपैल को सक्षम करने के लिए @${F} पूछा`,
   }
 }

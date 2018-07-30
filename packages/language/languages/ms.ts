@@ -161,6 +161,7 @@ export default {
       `Alamat ETH (& BCPT)`,
       `Baki ETH`,
       `Baki BCPT`,
+      `Hapus Akaun`,
       `Sejarah Transaksi ETH`,
       `Tukar Mata Wang Utama`,
       `Tukar PIN`,
@@ -179,6 +180,7 @@ export default {
       setSuccess: `Gambar profil telah dikemas kini`,
     },
     logoutSuccess: `Anda telah berjaya log keluar!`,
+    logoutError: generalCommunicationError,
   },
 
   currentBalance: {
@@ -217,7 +219,7 @@ export default {
     record: `rekod`,
     records: `rekod`,
     chooseCurrency: `Pilih mata wang`,
-    
+
     createError: {
       amountTooLow: `Jumlah mesti lebih besar daripada $0`,
       amountTooHigh: `Jumlah mesti kurang daripada $ 1,000,000,000`,
@@ -280,6 +282,7 @@ export default {
       }
     },
     eth: `Selesaikan dengan ETH`,
+    paypal: `Selesaikan dengan PayPal`,
     nonPayment: `Rekodkan Penyelesaian`,
   },
 
@@ -380,11 +383,26 @@ export default {
   pendingFriendRequestsLanguage: {
     shell: `Permintaan jadi rakan`,
     message: `Permintaan jadi rakan`,
-    request: F => `${F} mahu menjadi rakan anda!`,
+    request: F => `@${F} mahu menjadi rakan anda!`,
   },
 
   privacyPolicy: {
     link: `lndr.io/terms/`,
     message: `Dengan mengklik di bawah anda mengesahkan yang anda telah membaca dan bersetuju dengan dasar privasi Blockmason ini. Blockmason boleh menggunakan alamat e-mel anda untuk menghantar kemas kini mengenai Blockmason dan LNDR. Berikut adalah pautan kepada dasar privasi:`
+  },
+
+  payPalLanguage: {
+    connectPayPal: `Sambung PayPal`,
+    connectSuccess: `PayPal berjaya yang aktif.`,
+    disconnectPayPal: `Cabut PayPal`,
+    disconnected: `PayPal diputuskan.`,
+    requestPayPalPayment: `Permintaan PayPal Payment`,
+    sendWithPayPal: `Menghantar Dengan PayPal`,
+    enablePayPal: `Membolehkan PayPal`,
+    requestPayPalPayee: `Meminta PayPal`,
+    enablePayPalForFriend: F => `Membolehkan PayPal membolehkan @${F} membayar anda.`,
+    friendNotEnabled: F => `@${F} belum mendayakan PayPal pembayaran.`,
+    friendRequestedConnect: F => `@${F} mahu membayar anda melalui PayPal`,
+    requestFriendConnect: F => `Anda meminta @${F} untuk membolehkan PayPal`,
   }
 }

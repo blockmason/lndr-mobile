@@ -2,13 +2,11 @@ import React, { Component } from 'react'
 
 import { View, ActivityIndicator, ScrollView } from 'react-native'
 
-import ThemeImage from 'ui/components/images/theme-image'
 import FadeInView from 'ui/components/fade-in-view'
 
 import LoginView from './login'
 import CreateAccountView from './create-account'
 import RecoverAccountView from './recover-account'
-import RemoveAccountView from './remove-account'
 import ConfirmAccountView from './confirm-account'
 
 import general from 'theme/general'
@@ -25,8 +23,6 @@ interface Props {
 
 class AuthenticateView extends Component<Props> {
   render() {
-    const { hasStoredUser, shouldRemoveAccount, shouldDisplayMnemonic } = this.props.state
-
     return <ScrollView contentContainerStyle={general.whiteFlex} keyboardShouldPersistTaps="always">
       <FadeInView style={style.main}>
         {this.renderView()}
@@ -57,8 +53,6 @@ class AuthenticateView extends Component<Props> {
 
     if (shouldDisplayMnemonic) {
       return <ConfirmAccountView />
-    } else if (shouldRemoveAccount) {
-      return <RemoveAccountView />
     } else if (hasStoredUser) {
       return <LoginView />
     } else if (shouldRecoverAccount) {

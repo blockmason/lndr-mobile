@@ -72,7 +72,7 @@ export const amountFormat = (amount: string, currency: string) => {
 
     return `${currencySymbols(currency)}${commas(raw, currency)}`
   } else if (isCommaDecimal(currency)) {
-    const raw = amount
+    const raw = convertToCommaDecimal(amount)
       .replace(/[^,\d]/g, '')
       .replace(',', 'DOT')
       .replace(/,/g, '')
@@ -110,7 +110,6 @@ export const amountFormat = (amount: string, currency: string) => {
         left = `${left}${right[0]}`
         right = right.substr(1)
       }
-      right = right.length === 1 ? right + '0' : right
       return `${currencySymbols(currency)}${commas(left, currency)}.${right}`
     }
   
@@ -167,3 +166,37 @@ export const emailFormatIncorrect = email => !( /^(([^<>()\[\]\.,;:\s@\"]+(\.[^<
 export const nickLengthIncorrect = nick => typeof nick === 'string' && nick.length < 3
 
 export const bcptAmount = amount => amount.replace(/[^0-9]/g, '')
+
+function convertToCommaDecimal(amount: string) : string {
+  if(amount.match(/\.[0-9]{2}$/) !== null) {
+    const end = amount.slice(-2)
+
+    return amount.slice(0, -3)
+    .replace(/,/, '.')
+    .concat(',').concat(end)
+  } else if(amount.match(/\.[0-9]{1}$/) !== null) {
+    const end = amount.slice(-1)
+
+    return amount.slice(0, -2).replace(/,/, '.').concat(',').concat(end)
+  }
+  return amount
+}
+
+export const convertCommaDecimalToPoint = (amount: string, currency: string) : string => {
+  if(!isCommaDecimal(currency)) {
+    return amount
+  }
+  if(amount.match(/\,[0-9]{3}$/) !== null) {
+    amount = amount.slice(-1)
+  }
+  if(amount.match(/\,[0-9]{2}$/) !== null) {
+    const end = amount.slice(-2)
+
+    return amount.slice(0, -3).replace(/\./, ',').concat('.').concat(end)
+  } else if(amount.match(/\,[0-9]{1}$/) !== null) {
+    const end = amount.slice(-1)
+
+    return amount.slice(0, -2).replace(/\./, ',').concat('.').concat(end)
+  }
+  return amount
+}

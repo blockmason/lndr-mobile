@@ -1,4 +1,8 @@
 import React from 'react'
+import { BackHandler } from 'react-native'
+import { addNavigationHelpers, StackNavigator } from 'react-navigation'
+import { connect } from 'react-redux'
+
 import DashboardNavigator from './dashboard'
 import MyAccount from 'ui/dialogs/my-account'
 import AddDebt from 'ui/dialogs/add-debt'
@@ -11,9 +15,8 @@ import FriendDetail from 'ui/dialogs/friend-detail'
 import TransferEth from 'ui/dialogs/transfer-eth'
 import TransferBcpt from 'ui/dialogs/transfer-bcpt'
 import FriendRequest from 'ui/dialogs/friend-request'
-import { addNavigationHelpers, StackNavigator, NavigationActions } from 'react-navigation'
-import { connect } from 'react-redux'
-import { View, ScrollView, Text, StyleSheet, Button, BackHandler } from 'react-native'
+import PayPalRequestDetail from 'ui/dialogs/paypal-request-detail'
+import RemoveAccountView from 'ui/dialogs/remove-account'
 
 import {
   createReactNavigationReduxMiddleware,
@@ -28,44 +31,49 @@ const middleware = createReactNavigationReduxMiddleware(
 
 const addListener = createReduxBoundAddListener("root");
 
-export const AppNavigator = StackNavigator({
-  Dashboard: {
-    screen: DashboardNavigator
+export const AppNavigator = StackNavigator(
+  {
+    Dashboard: {
+      screen: DashboardNavigator
+    },
+    MyAccount: {
+      screen: MyAccount
+    },
+    PendingTransaction: {
+      screen: PendingTransactionDetail
+    },
+    SettleUp: {
+      screen: SettleUp
+    },
+    Settlement: {
+      screen: Settlement
+    },
+    PendingSettlement: {
+      screen: PendingSettlementDetail
+    },
+    FriendDetail: {
+      screen: FriendDetail
+    },
+    TransferEth: {
+      screen: TransferEth
+    },
+    TransferBcpt: {
+      screen: TransferBcpt
+    },
+    AddDebt: {
+      screen: AddDebt
+    },
+    Confirmation: {
+      screen: ConfirmationScreen
+    },
+    FriendRequest: {
+      screen: FriendRequest
+    },
+    RemoveAccount: {
+      screen: RemoveAccountView
+    },
+    PayPalRequest: PayPalRequestDetail
   },
-  MyAccount: {
-    screen: MyAccount
-  },
-  PendingTransaction: {
-    screen: PendingTransactionDetail
-  },
-  SettleUp: {
-    screen: SettleUp
-  },
-  Settlement: {
-    screen: Settlement
-  },
-  PendingSettlement: {
-    screen: PendingSettlementDetail
-  },
-  FriendDetail: {
-    screen: FriendDetail
-  },
-  TransferEth: {
-    screen: TransferEth
-  },
-  TransferBcpt: {
-    screen: TransferBcpt
-  },
-  AddDebt: {
-    screen: AddDebt
-  },
-  Confirmation: {
-    screen: ConfirmationScreen
-  },
-  FriendRequest: {
-    screen: FriendRequest
-  }
-},
   {
     mode: 'modal',
     headerMode: 'none',
@@ -103,7 +111,9 @@ class AppWithNavigationState extends React.Component<Props> {
 
   onBackPress = () => {
     const { nav, navigation } = this.props;
-    if (nav.index === 0 && nav.routes[0].index === 0) {
+    if(nav.routes instanceof Array && nav.routes[1] && nav.routes[1].routeName === 'FriendDetail') {
+      return true
+    } else if (nav.index === 0 && nav.routes[0].index === 0) {
       BackHandler.exitApp()
       return false
     }

@@ -161,6 +161,7 @@ export default {
       `ETH (a BCPT) adresa`,
       `Zůstatek ETH`,
       `Zůstatek BCPT`,
+      `Odstranit účet`,
       `ETH Transakční historie`,
       `Změnit hlavní měně`,
       `Změna PIN`,
@@ -179,6 +180,7 @@ export default {
       setSuccess: `Profilová fotka změněna`,
     },
     logoutSuccess: `Došlo k úspěšnému odhlášení!`,
+    logoutError: generalCommunicationError,
   },
 
   currentBalance: {
@@ -217,7 +219,7 @@ export default {
     record: `záznam`,
     records: `záznamy`,
     chooseCurrency: `Vyberte měnu`,
-    
+
     createError: {
       amountTooLow: `Částka musí být větší než 0 $`,
       amountTooHigh: `Částka musí být menší než 1.000.000.000 $`,
@@ -280,6 +282,7 @@ export default {
       }
     },
     eth: `Vyrovnat prostřednictvím ETH`,
+    paypal: `Vyrovnat prostřednictvím PayPal`,
     nonPayment: `Nahrát vyrovnání`,
   },
 
@@ -380,11 +383,26 @@ export default {
   pendingFriendRequestsLanguage: {
     shell: `Žádost o přátelství`,
     message: `Žádosti o přátelství`,
-    request: F => `${F} si vás chce přidat mezi přátele!`,
+    request: F => `@${F} si vás chce přidat mezi přátele!`,
   },
 
   privacyPolicy: {
     link: `lndr.io/terms/`,
     message: `Click the button below to confirm that you have read and agreed to Blockmason's Privacy Policy. Blockmason can send updates about Blockmason and LNDR using your e-mail address. Here is a link to the privacy policy:`
+  },
+
+  payPalLanguage: {
+    connectPayPal: `Připojit PayPal`,
+    connectSuccess: `PayPal úspěšně povoleno.`,
+    disconnectPayPal: `Odpojení PayPal`,
+    disconnected: `PayPal odpojen.`,
+    requestPayPalPayment: `Požadavek PayPal Payment`,
+    sendWithPayPal: `Poslat PayPal`,
+    enablePayPal: `Umožnit PayPal`,
+    requestPayPalPayee: `Vyžádat PayPal`,
+    enablePayPalForFriend: F => `Povolení PayPal umožňuje @${F} zaplatit you.`,
+    friendNotEnabled: F => `${F} není povoleno PayPal platby.`,
+    friendRequestedConnect: F => `${F} chce zaplatit přes PayPal`,
+    requestFriendConnect: F => `Ptal ses @${F} umožnit PayPal`,
   }
 }

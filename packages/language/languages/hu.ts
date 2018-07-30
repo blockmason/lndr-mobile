@@ -161,6 +161,7 @@ export default {
       `ETH (& BCPT) Cím`,
       `ETH Egyenleg`,
       `BCPT Egyenleg`,
+      `Fiók Törlése`,
       `ETH Tranzakció Előzmények`,
       `Megváltoztathatja az elsődleges pénzneme`,
       `PiN-kód Módosítása`,
@@ -179,6 +180,7 @@ export default {
       setSuccess: `Profilképe frissítve`,
     },
     logoutSuccess: `Sikeresen kijelentkezett!`,
+    logoutError: generalCommunicationError,
   },
 
   currentBalance: {
@@ -217,7 +219,7 @@ export default {
     record: `feljegyzés`,
     records: `feljegyzések`,
     chooseCurrency: `Válasszon pénznemet`,
-    
+
     createError: {
       amountTooLow: `Az összegnek nagyobbnak kell lennie, mint $ 0`,
       amountTooHigh: `Az összegnek kevesebbnek kell lennie, mint $ 1.000.000.000`,
@@ -280,6 +282,7 @@ export default {
       }
     },
     eth: `Kiegyenlítés ETH használatával`,
+    paypal: `Kiegyenlítés PayPal használatával`,
     nonPayment: `Kifizetés Rögzítése`,
   },
 
@@ -380,11 +383,26 @@ export default {
   pendingFriendRequestsLanguage: {
     shell: `Ismerősnek Jelölés`,
     message: `Ismerősnek Jelölések`,
-    request: F => `${F} szeretne az ismerőse lenni! `,
+    request: F => `@${F} szeretne az ismerőse lenni! `,
   },
 
   privacyPolicy: {
     link: `lndr.io/terms/`,
     message: `Az alábbi linkre kattintva Ön megerősíti, hogy elolvasta és elfogadja a Blockmason adatvédelmi irányelveit. Blockmason használhatja az e-mail címét, hogy küldjön frissítéseket Blockmason és LNDR. Itt van egy link, hogy az adatvédelmi politika:`
+  },
+
+  payPalLanguage: {
+    connectPayPal: `Kapcsolatba PayPal`,
+    connectSuccess: `PayPal engedélyezése sikeresen.`,
+    disconnectPayPal: `Bontása PayPal`,
+    disconnected: `PayPal csatlakoztatva.`,
+    requestPayPalPayment: `Request PayPal fizetés`,
+    sendWithPayPal: `Küldj A PayPal`,
+    enablePayPal: `Engedélyezze a PayPalt`,
+    requestPayPalPayee: `Kérjen PayPal`,
+    enablePayPalForFriend: F => `engedélyezése PayPal lehetővé teszi @${F} fizetni you.`,
+    friendNotEnabled: F => `@${F} nem tette lehetővé PayPal kifizetések.`,
+    friendRequestedConnect: F => `@${F} akar fizetni ön keresztül PayPal`,
+    requestFriendConnect: F => `Te kérdezted @${F}, hogy PayPal`,
   }
 }

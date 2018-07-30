@@ -161,6 +161,7 @@ export default {
       `ETH (ve BCPT) Adresi`,
       `ETH Bakiyesi`,
       `BCPT Bakiyesi`,
+      `Hesabı Kaldır`,
       `ETH İşlem Geçmişi`,
       `Birincil Para değiştirme`,
       `Pin'i Değiştir`,
@@ -179,6 +180,7 @@ export default {
       setSuccess: `Profil resmi güncellendi`,
     },
     logoutSuccess: `Başarıyla çıkış yaptınız!`,
+    logoutError: generalCommunicationError,
   },
 
   currentBalance: {
@@ -279,6 +281,7 @@ export default {
       }
     },
     eth: `Eth kullanarak ödeşin`,
+    paypal: `PayPal kullanarak ödeşin`,
     nonPayment: `Bir ödeme kaydı oluşturun`,
   },
 
@@ -354,7 +357,7 @@ export default {
     },
     reject: {
       start: `Bu kaydı reddettiğinizi `,
-      end: `’a bildirdij.`,
+      end: `’a bildirdik.`,
     },
     confirmFriend: {
       start: ``,
@@ -379,11 +382,26 @@ export default {
   pendingFriendRequestsLanguage: {
     shell: `Arkadaşlık isteği`,
     message: `Arkadaş istekleri`,
-    request: F => `${F} seninle arkadaş olmak istiyor!`,
+    request: F => `@${F} seninle arkadaş olmak istiyor!`,
   },
 
   privacyPolicy: {
     link: `lndr.io/terms/`,
     message: `Altınızda tıklayarak okuyup Blockmason gizlilik politikasına kabul ettiğinizi onaylayın. Blockmason Blockmason ve LNDR hakkında güncellemeleri göndermek için e-posta adresinizi kullanabiliriz. İşte gizlilik politikasına bir link:`
+  },
+
+  payPalLanguage: {
+    connectPayPal: `PayPal bağlayın`,
+    connectSuccess: `PayPal başarıyla sağladı.`,
+    disconnectPayPal: `Kes PayPal`,
+    disconnected: `PayPal bağlantısı kesildi.`,
+    requestPayPalPayment: `Talep PayPal Ödeme`,
+    sendWithPayPal: `PayPal ile gönder`,
+    enablePayPal: `Paypal etkinleştirme`,
+    requestPayPalPayee: `PayPal talep`,
+    enablePayPalForFriend: F => `PayPal @${F} ödeme yapmanıza izin verir etkinleştirilmesiq`,
+    friendNotEnabled: F => `@${F} etkinleştirmedi Paypal payments`,
+    friendRequestedConnect: F => `@${F} PayPal aracılığıyla sana ödeme yapmak istiyor`,
+    requestFriendConnect: F => `Sen, @${F} PayPal etkinleştirmek istedi`,
   }
 }

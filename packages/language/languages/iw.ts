@@ -161,6 +161,7 @@ export default {
       `ETH (& BCPT) כתובת`,
       `יתרת ETH`,
       `יתרת BCPT`,
+      `להסיר חשבון`,
       `היסטוריית עסקאות ETH`,
       `שינוי מטבע ראשי`,
       `לשנות PIN`,
@@ -179,6 +180,7 @@ export default {
       setSuccess: `תמונת הפרופיל עודכנה`,
     },
     logoutSuccess: `התנתקת בהצלחה!`,
+    logoutError: generalCommunicationError,
   },
 
   currentBalance: {
@@ -217,7 +219,7 @@ export default {
     record: `רשומה`,
     records: `רמשומות`,
     chooseCurrency: `בחר מטבע`,
-    
+
     createError: {
       amountTooLow: `הסכום חייב להיות גדול מ 0 $`,
       amountTooHigh: `הסכום חייב להיות פחות מ $ 1,000,000,000`,
@@ -280,6 +282,7 @@ export default {
       }
     },
     eth: `החזרה בעזרת ETH`,
+    paypal: `החזרה בעזרת PayPal`,
     nonPayment: `לרשום הסדר`,
   },
 
@@ -380,11 +383,26 @@ export default {
   pendingFriendRequestsLanguage: {
     shell: `בקשת חברות`,
     message: `בקשות חברות`,
-    request: F => `!רוצה להיות חבר שלך ${F}`,
+    request: F => `!רוצה להיות חבר שלך @${F}`,
   },
 
   privacyPolicy: {
     link: `lndr.io/terms/`,
     message: `על ידי לחיצה בהמשך שתאשר כי קראת מסכים למדיניות הפרטיות של Blockmason. Blockmason עשויים להשתמש בכתובת הדוא"ל שלך כדי לשלוח עדכונים על Blockmason ו LNDR. הנה קישור למדיניות הפרטיות`
+  },
+
+  payPalLanguage: {
+    connectPayPal: `חבר PayPal`,
+    connectSuccess: `PayPal הופעלו בהצלחה.`,
+    disconnectPayPal: `נתק PayPal`,
+    disconnected: `PayPal מנותק.`,
+    requestPayPalPayment: `תשלום בקשת PayPal`,
+    sendWithPayPal: `שלח עם PayPal`,
+    enablePayPal: `הפוך את PayPal`,
+    requestPayPalPayee: `בקש PayPal`,
+    enablePayPalForFriend: F => `הפעלת PayPal מאפשרת ל- @${F} לשלם לך.`,
+    friendNotEnabled: F => `@${F} לא אפשר תשלומים PayPal.`,
+    friendRequestedConnect: F => `@${F} רוצה לשלם לך באמצעות PayPal`,
+    requestFriendConnect: F => `ביקשת מ- @${F} להפעיל את PayPal`,
   }
 }

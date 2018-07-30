@@ -7,7 +7,7 @@ import { currencyFormats } from 'lndr/format'
 import Balance from 'lndr/balance'
 
 import Button from 'ui/components/button'
-import { LoadingContext } from 'ui/components/loading'
+import Loading, { LoadingContext } from 'ui/components/loading'
 import Section from 'ui/components/section'
 import PendingView from 'ui/views/account/activity/pending'
 
@@ -17,9 +17,9 @@ import Friend from 'lndr/friend'
 
 import { isFocusingOn } from 'reducers/nav'
 import { getStore, getUser, getNeedsReviewCount, calculateBalance, calculateCounterparties,
-  getPrimaryCurrency, getFriendList, getPendingFromFriend, getEthExchange } from 'reducers/app'
+  getPrimaryCurrency, getFriendList, getPendingFromFriend, getEthExchange, getFriendFromNick } from 'reducers/app'
 import { getAccountInformation, displayError, getPending, getFriends,
-  getFriendRequests, getRecentTransactions, registerChannelID } from 'actions'
+  getRecentTransactions, registerChannelID, getPayPalRequests } from 'actions'
 import { UrbanAirship } from 'urbanairship-react-native'
 import { currencySymbols } from 'lndr/currencies'
 
@@ -44,15 +44,15 @@ const { width } = Dimensions.get('window')
 
 const loadingRecentTransactions = new LoadingContext()
 const loadingPending = new LoadingContext()
-const loadingPendingFriends = new LoadingContext()
 const loadingFriends = new LoadingContext()
+const loadingPayPalRequests = new LoadingContext()
 
 interface Props {
   navigation: any
   isFocused: boolean
   getPending: () => any
   getFriends: () => any
-  getFriendRequests: () => any
+  getPayPalRequests: () => any
   getRecentTransactions: () => any
   getAccountInformation: () => any
   getBalances: () => any
@@ -67,6 +67,7 @@ interface Props {
   friendList: Friend[]
   getPendingFromFriend: (friendNickname: string) => any
   ethExchange: (currency: string) => string
+  getFriendFromNick: (nickname: string) => Friend | undefined
 }
 
 interface State {
@@ -94,9 +95,9 @@ class HomeView extends Component<Props, State> {
     }
 
     await loadingPending.wrap(this.props.getPending())
-    await loadingPendingFriends.wrap(this.props.getFriendRequests())
     await loadingRecentTransactions.wrap(this.props.getRecentTransactions())
     await loadingFriends.wrap(this.props.getFriends())
+    await loadingPayPalRequests.wrap(this.props.getPayPalRequests())
   }
 
   componentWillReceiveProps(nextProps) {
@@ -119,25 +120,34 @@ class HomeView extends Component<Props, State> {
     UrbanAirship.setUserNotificationsEnabled(notificationsEnabled)
     UrbanAirship.addListener("pushReceived", async(notification) => {
       console.log('Received push: ', JSON.stringify(notification))
-      await loadingPending.wrap(this.props.getPending())
+      const actions = JSON.parse(notification.extras['com.urbanairship.actions'])
+      const { type } = actions
+
+      if(type === 'NewPendingCredit') {
+        loadingPending.wrap(this.props.getPending())
+      } else if(type === 'NewFriendRequest') {
+        loadingFriends.wrap(this.props.getFriends())
+      } else if(type === 'RequestPayPal') {
+        loadingPayPalRequests.wrap(this.props.getPayPalRequests())
+      }
     })
     UrbanAirship.addListener("notificationResponse", async(incoming) => {
-      const { getPendingFromFriend } = this.props
       try{
         const actions = JSON.parse(incoming.notification.extras['com.urbanairship.actions'])
-        const type = actions.type
-        const nick = actions.user
+        const { type, user } = actions
+        
         if(type === 'NewPendingCredit') {
-          const { route, pendingTransaction, pendingSettlement } = getPendingFromFriend(nick)
-          if(pendingTransaction !== undefined && pendingSettlement !== undefined) {
+          const { route, pendingTransaction, pendingSettlement } = this.props.getPendingFromFriend(user)
+          if(pendingTransaction !== undefined || pendingSettlement !== undefined) {
             navigation.navigate(route, { pendingTransaction, pendingSettlement })
           }
+        } else if(type === 'RequestPayPal') {
+          const friend = this.props.getFriendFromNick(user)
+          navigation.navigate('Settlement', { friend, settlementType: 'paypal' })
         } else {
           navigation.navigate('Activity')
         }
-      } catch(e) {
-        navigation.navigate('Activity')
-      }
+      } catch(e) {}
     })
     UrbanAirship.setForegroundPresentationOptions({
       alert: true,
@@ -245,7 +255,7 @@ class HomeView extends Component<Props, State> {
 }
 
 export default connect((state) => ({ state: getStore(state)(), user: getUser(state)(), isFocused: isFocusingOn(state)('Home'),
-needsReviewCount: getNeedsReviewCount(state), calculateBalance: calculateBalance(state), calculateCounterparties: calculateCounterparties(state),
-primaryCurrency: getPrimaryCurrency(state), friendList: getFriendList(state)(), getPendingFromFriend: getPendingFromFriend(state),
-ethExchange: getEthExchange(state) }), 
-{ getAccountInformation, displayError, getPending, getFriendRequests, getRecentTransactions, getFriends, registerChannelID })(HomeView)
+  needsReviewCount: getNeedsReviewCount(state), calculateBalance: calculateBalance(state), calculateCounterparties: calculateCounterparties(state),
+  primaryCurrency: getPrimaryCurrency(state), friendList: getFriendList(state)(), getPendingFromFriend: getPendingFromFriend(state),
+  ethExchange: getEthExchange(state), getFriendFromNick: getFriendFromNick(state) }), 
+  { getAccountInformation, displayError, getPending, getPayPalRequests, getRecentTransactions, getFriends, registerChannelID })(HomeView)

@@ -1,30 +1,31 @@
 import React, { Component } from 'react'
 
-import { Text, TextInput, View, Dimensions, ScrollView, Linking, Modal,
-  TouchableHighlight, Image, FlatList, KeyboardAvoidingView, Platform } from 'react-native'
+import { Text, TextInput, View, Dimensions, ScrollView, Linking, Modal, Switch,
+  TouchableHighlight, Image, KeyboardAvoidingView, Platform, NativeModules, Alert } from 'react-native'
 
 import ImagePicker from 'react-native-image-picker'
+import Icon from 'react-native-vector-icons/Zocial'
 
 import Button from 'ui/components/button'
 import Pinpad from 'ui/components/pinpad'
 import DashboardShell from 'ui/components/dashboard-shell'
 import Loading, { LoadingContext } from 'ui/components/loading'
-import TextLogo from 'ui/components/images/text-logo'
 import BMLogo from 'ui/components/images/bm-logo'
 import InputImage from 'ui/components/images/input-image'
 import SpinningPicker from 'ui/components/spinning-picker'
 
 import { formatNick, formatLockTimeout, formatEmail, emailFormatIncorrect } from 'lndr/format'
 import { defaultUpdateAccountData, UpdateAccountData, UserData } from 'lndr/user'
-import { getBcptBalance } from 'lndr/bcpt-utils'
-import { currencySymbols, transferLimits  } from 'lndr/currencies'
 
 import { getAccountInformation, updateNickname, updateEmail, logoutAccount, toggleNotifications,
   setEthBalance, updateLockTimeout, updatePin, getProfilePic, setProfilePic, takenNick, takenEmail,
-  copyToClipboard, validatePin, setPrimaryCurrency } from 'actions'
+  copyToClipboard, validatePin, setPrimaryCurrency, failedValidatePin } from 'actions'
 import { getUser, getStore, getAllUcacCurrencies, getPrimaryCurrency } from 'reducers/app'
 import { getResetAction } from 'reducers/nav'
 import { connect } from 'react-redux'
+import { ToastActionsCreators } from 'react-native-redux-toast'
+
+import { palsClient } from 'credit-protocol/pals-client'
 
 import style from 'theme/form'
 import general from 'theme/general'
@@ -34,12 +35,13 @@ import popupStyle from 'theme/popup'
 
 import language from 'language'
 const { nickname, setNickname, email, setEmail, copy, accountManagement, changePin, enterNewPin, confirmPin, pleaseWait,
-  cancel, mnemonicExhortation, addressExhortation, logoutAction, notifications, currentBalance, showMnemonic, enterCurrentPin,
-  myAccount, debtManagement, changePrimaryCurrency
+  mnemonicExhortation, addressExhortation, logoutAction, notifications, currentBalance, showMnemonic, enterCurrentPin,
+  myAccount, debtManagement, removeAccount, payPalLanguage, cancel, confirmAccount
 } = language
 const updateAccountText = language.updateAccount
 
 const loadingContext = new LoadingContext()
+const loadingPayPal = new LoadingContext()
 
 const { height } = Dimensions.get('window');
 
@@ -63,6 +65,7 @@ interface Props {
   setProfilePic: (imageURI: string, imageData: string) => any
   copyToClipboard: (text: string) => any
   setPrimaryCurrency: (value: string) => any
+  failedValidatePin: () => void
 }
 
 interface State {
@@ -80,6 +83,7 @@ interface State {
   nickTextInputErrorText?: string
   emailTextInputErrorText?: string
   shouldPickCurrency: boolean
+  payPalEmail: any // the user's PayPal id (email)
 }
 
 class MyAccount extends Component<Props, State> {
@@ -88,13 +92,14 @@ class MyAccount extends Component<Props, State> {
     this.state = {
       ...defaultUpdateAccountData(),
       lockTimeout: '',
-      hiddenPanels: [true, true, true, true, true, true, true, true, true, true, true],
+      hiddenPanels: accountManagement.panelHeaders.map( () => true),
       step: 1,
       photos: [],
       authenticated: false,
       currency: props.primaryCurrency,
       scrollY: 0,
-      shouldPickCurrency: false
+      shouldPickCurrency: false,
+      payPalEmail: null,
     }
   }
 
@@ -102,6 +107,13 @@ class MyAccount extends Component<Props, State> {
     const { address } = this.props.user
     this.props.setEthBalance()
     this.props.getProfilePic(address)
+
+    // init PayPal and check if user is connected
+    await NativeModules.PayPalManager.initPayPal()
+    if (this.state.payPalEmail == null) {
+      const payPalEmail = await palsClient.getPayPalAccount(this.props.user)
+      this.setState({payPalEmail: payPalEmail})
+    }
   }
 
   async componentDidMount() {
@@ -132,11 +144,14 @@ class MyAccount extends Component<Props, State> {
     const { password, confirmPassword, step, scrollY } = this.state
 
     if (step === 4 && confirmPassword.length === 4 ) {
-      const authenticated = loadingContext.wrap(validatePin(confirmPassword))
-      this.setState({ step: 1, confirmPassword: '', authenticated })
+      const authenticated = await loadingContext.wrap(validatePin(confirmPassword))
 
       const self = this as any
-      setTimeout(function() {self.refs.scrollContent.scrollTo({ x: 0, y: scrollY + 200, animated: true })}, 200)
+      if(!authenticated) {
+        this.props.failedValidatePin()
+      }
+      setTimeout( () => self.refs.scrollContent.scrollTo({ x: 0, y: scrollY, animated: true }), 200)
+      this.setState({ step: 1, confirmPassword: '', authenticated })
     } else if (step === 3 && password.length === 4 && confirmPassword.length === 4) {
       this.setState({ step: 5 })
     } else if (password.length === 4 && step === 2) {
@@ -238,6 +253,50 @@ class MyAccount extends Component<Props, State> {
     }
   }
 
+  async connectPayPal() {
+    try {
+      const authToken = await loadingPayPal.wrap(NativeModules.PayPalManager.connectPayPal())
+      if (authToken) {
+        // send response to server
+        await loadingPayPal.wrap(palsClient.createPayPalAccount(this.props.user, authToken))
+        const payPalEmail = await loadingPayPal.wrap(palsClient.getPayPalAccount(this.props.user))
+        // console.log(payPalEmail)
+        this.setState({payPalEmail: payPalEmail})
+        if (payPalEmail)
+          this.props.navigation.dispatch(ToastActionsCreators.displayInfo(payPalLanguage.connectSuccess));
+      } else {
+        this.setState({payPalEmail: null})
+      }
+    } catch (e) {
+      // user cancelled
+      console.log(e)
+    }
+  }
+
+  confirmDisconnectPayPal() {
+      Alert.alert(
+        payPalLanguage.disconnectPayPal,
+        "",
+        [
+          {text: cancel.toUpperCase(), onPress: () => null, style: 'destructive'},
+          {text: confirmAccount.toUpperCase(), onPress: () => this.disconnectPayPal()},
+        ],
+        { cancelable: true }
+      )
+  }
+
+  async disconnectPayPal() {
+    try {
+      // tell server to delete user's PayPal info
+      await loadingPayPal.wrap(palsClient.deletePayPalAccount(this.props.user))
+      this.setState({payPalEmail: null})
+      this.props.navigation.dispatch(ToastActionsCreators.displayInfo(payPalLanguage.disconnected));
+    } catch (e) {
+      // user cancelled
+      console.log(e)
+    }
+  }
+
   logout() {
     this.props.navigation.dispatch( getResetAction({ routeName: 'Dashboard' }) )
     this.props.logoutAccount()
@@ -253,6 +312,19 @@ class MyAccount extends Component<Props, State> {
   }
 
   _keyExtractor = (_item, index) => index
+
+  renderPayPalContent() {
+    return (this.state.payPalEmail) ? (
+      <View style={[general.flexRow, style.spaceTopS, style.spaceBottomS, style.spaceHorizontalBig]}>
+        <Image source={require('images/PayPalLogo.png')} style={{marginRight: 20}} />
+        <Switch value={true} onValueChange={() => this.confirmDisconnectPayPal()} />
+      </View>
+    ) : (
+      <View style={[style.spaceTopS, style.spaceBottomS, style.spaceHorizontalL]}>
+        <Loading context={loadingPayPal} />
+        <Button zicon="paypal" round text={payPalLanguage.connectPayPal} onPress={() => this.connectPayPal()} />
+      </View>)
+  }
 
   renderPanels() {
     const { user, updateNickname, updateEmail, copyToClipboard } = this.props
@@ -286,8 +358,12 @@ class MyAccount extends Component<Props, State> {
         <Button round onPress={() => this.props.navigation.navigate('TransferBcpt')} text={accountManagement.sendBcpt.transfer} />
       </View>),
       (<View style={style.spaceHorizontalL}>
+        <Button round onPress={() => this.props.navigation.navigate('RemoveAccount')} text={removeAccount} />
+      </View>),
+      (<View style={style.spaceHorizontalL}>
         <Button round onPress={() =>  Linking.openURL(`https://etherscan.io/address/${user.address}`)} text={accountManagement.viewEtherscan} />
       </View>),
+      this.renderPayPalContent(),
       (<View style={style.spaceHorizontalL}>
         <Button black onPress={() => this.setState({shouldPickCurrency: true})} text={currency} />
       </View>),
@@ -447,4 +523,4 @@ class MyAccount extends Component<Props, State> {
 export default connect((state) => ({ user: getUser(state)(), state: getStore(state)(), allCurrencies: getAllUcacCurrencies(state),
   primaryCurrency: getPrimaryCurrency(state)}), { updateEmail, updateNickname,
   getAccountInformation, logoutAccount, toggleNotifications, setEthBalance, updateLockTimeout, updatePin,
-  getProfilePic, setProfilePic, copyToClipboard, setPrimaryCurrency })(MyAccount)
+  getProfilePic, setProfilePic, copyToClipboard, setPrimaryCurrency, failedValidatePin })(MyAccount)

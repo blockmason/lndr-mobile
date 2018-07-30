@@ -161,6 +161,7 @@ export default {
       `ETH (& BCPT) Osoite`,
       `ETH-saldo`,
       `BCPT-saldo`,
+      `Poista tili`,
       `ETH-tapahtumahistoria`,
       `Muuta päävaluutta`,
       `Muuta PIN-koodisi`,
@@ -179,6 +180,7 @@ export default {
       setSuccess: `Profiilikuva on päivitetty`,
     },
     logoutSuccess: `Olet onnistuneesti kirjautunut ulos!`,
+    logoutError: generalCommunicationError,
   },
 
   currentBalance: {
@@ -217,7 +219,7 @@ export default {
     record: `merkintä`,
     records: `merkinnät`,
     chooseCurrency: `Valitse valuutta`,
-    
+
     createError: {
       amountTooLow: `Summan on oltava suurempi kuin $ 0`,
       amountTooHigh: `Summan on oltava alle $ 1000000000`,
@@ -280,6 +282,7 @@ export default {
       }
     },
     eth: `Maksa velkasi ETH:lla`,
+    paypal: `Maksa velkasi PAYPAL:lla`,
     nonPayment: `Kirjaa maksu`,
   },
 
@@ -380,11 +383,26 @@ export default {
   pendingFriendRequestsLanguage: {
     shell: `Ystäväpyyntö`,
     message: `Ystäväpyynnöt`,
-    request: F => `${F} haluaa olla ystäväsi! `,
+    request: F => `@${F} haluaa olla ystäväsi! `,
   },
 
   privacyPolicy: {
     link: `lndr.io/terms/`,
     message: `Klikkaamalla alla olevaa linkkiä vahvistaa, että olet lukenut ja hyväksynyt Blockmason-tietosuojakäytännön. Blockmason voi käyttää sähköpostiosoitteesi lähettää päivityksiä Blockmason ja LNDR. Tässä on linkki tietosuojakäytäntöön:`
+  },
+
+  payPalLanguage: {
+    connectPayPal: `Yhdistä PayPal`,
+    connectSuccess: `PayPal käytössä onnistuneesti.`,
+    disconnectPayPal: `Katkaise PayPal`,
+    disconnected: `PayPal irrotettu.`,
+    requestPayPalPayment: `Pyydä PayPal`,
+    sendWithPayPal: `Send PayPalin`,
+    enablePayPal: `Ota PayPal`,
+    requestPayPalPayee: `Pyydä PayPal`,
+    enablePayPalForFriend: F => `ottaminen PayPalin avulla @${F} maksaa you.`,
+    friendNotEnabled: F => `@${F} ei käytössä PayPal maksut.`,
+    friendRequestedConnect: F => `@${F} haluaa maksaa sinulle kautta PayPal`,
+    requestFriendConnect: F => `Kysyit @${F} jotta PayPal`,
   }
 }

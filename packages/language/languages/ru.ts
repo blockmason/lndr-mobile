@@ -161,6 +161,7 @@ export default {
       `ETH (и BCPT) Адрес`,
       `ETH Баланс`,
       `BCPT Баланс`,
+      `Удалить учетную запись`,
       `История транзакций ETH`,
       `Изменение первичной валюты`,
       `Измененить ПИН-код`,
@@ -179,6 +180,7 @@ export default {
       setSuccess: `Фотография профиля обновлен`,
     },
     logoutSuccess: `Вы успешно вышли!`,
+    logoutError: generalCommunicationError,
   },
 
   currentBalance: {
@@ -279,6 +281,7 @@ export default {
       }
     },
     eth: `Рассчитываться с помощью ETH`,
+    paypal: `Рассчитываться с помощью PayPal`,
     nonPayment: `Записать расчет`,
   },
 
@@ -379,11 +382,26 @@ export default {
   pendingFriendRequestsLanguage: {
     shell: `Запрос в друзья`,
     message: `Запросы в друзья`,
-    request: F => `${F} хочет с вами дружить!`,
+    request: F => `@${F} хочет с вами дружить!`,
   },
 
   privacyPolicy: {
     link: `lndr.io/terms/`,
     message: `Нажав ниже вы подтверждаете, что вы прочитали и согласны с политикой конфиденциальности Blockmason в. Blockmason может использовать ваш адрес электронной почты для отправки обновлений о Blockmason и LNDR. Вот ссылка на политику конфиденциальности:`
+  },
+
+  payPalLanguage: {
+    connectPayPal: `Подключение PayPal`,
+    connectSuccess: `успешно активировали PayPal.`,
+    disconnectPayPal: `Отключить PayPal`,
+    disconnected: `PayPal отключен.`,
+    requestPayPalPayment: `Запрос PayPal оплаты`,
+    sendWithPayPal: `Отправить С PayPal`,
+    enablePayPal: `Включить PayPal`,
+    requestPayPalPayee: `запрос PayPal`,
+    enablePayPalForFriend: F => `Включение PayPal позволяет @${F} платить you.`,
+    friendNotEnabled: F => `@${F} не включен PayPal платежи.`,
+    friendRequestedConnect: F => `@${F} хочет платить вам через PayPal`,
+    requestFriendConnect: F => `Вы просили @${F}, чтобы включить PayPal`,
   }
 }

@@ -161,6 +161,7 @@ export default {
       `Adres ETH (& BCPT)`,
       `Bilans ETH`,
       `Bilans BCPT`,
+      `Usuń Konto`,
       `Historia transakcji ETH`,
       `Zmień walutę podstawowy`,
       `Zmień PIN`,
@@ -179,6 +180,7 @@ export default {
       setSuccess: `Zdjęcie profilowe zostało zaktualizowane`,
     },
     logoutSuccess: `Wylogowanie zakończone sukcesem`,
+    logoutError: generalCommunicationError,
   },
 
   currentBalance: {
@@ -279,6 +281,7 @@ export default {
       }
     },
     eth: `Rozliczenia z ETH`,
+    paypal: `Rozliczenia z PayPal`,
     nonPayment: `Zapisz Rozliczenie`,
   },
 
@@ -379,11 +382,26 @@ export default {
   pendingFriendRequestsLanguage: {
     shell: `Prośba o Przyjęcie do grona Znajomych`,
     message: `Prośby o Przyjęcie do grona Znajomych`,
-    request: F => `${F} chce być Twoim znajomym!`,
+    request: F => `@${F} chce być Twoim znajomym!`,
   },
 
   privacyPolicy: {
     link: `lndr.io/terms/`,
     message: `Klikając poniżej, potwierdzasz, że przeczytałeś i zgadzasz się z polityką prywatności Blockmason użytkownika. Blockmason może wykorzystywać Twój adres e-mail do wysyłania aktualizacji o Blockmason i LNDR. Oto link do polityki prywatności:`
+  },
+
+  payPalLanguage: {
+    connectPayPal: `Podłączyć PayPal`,
+    connectSuccess: `PayPal włączona pomyślnie.`,
+    disconnectPayPal: `Odłączyć PayPal`,
+    disconnected: `PayPal odłączony.`,
+    requestPayPalPayment: `Żądanie płatności PayPal`,
+    sendWithPayPal: `Wyślij Z PayPal`,
+    enablePayPal: `Włącz PayPal`,
+    requestPayPalPayee: `Prośba PayPal`,
+    enablePayPalForFriend: F => `Włączanie PayPal umożliwia @${F} zapłacić you.`,
+    friendNotEnabled: F => `@${F} nie włączył PayPal płatności.`,
+    friendRequestedConnect: F => `@${F} chce zapłacić za PayPal`,
+    requestFriendConnect: F => `Pytałeś @${F}, aby umożliwić PayPal`,
   }
 }
