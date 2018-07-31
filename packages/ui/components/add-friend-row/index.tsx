@@ -6,6 +6,8 @@ import Button from 'ui/components/button'
 import Friend from 'lndr/friend'
 import profilePic from 'lndr/profile-pic'
 
+import { white, light } from 'theme/include/colors'
+
 import style from 'theme/account'
 import general from 'theme/general'
 import friendStyle from 'theme/friend'
@@ -40,7 +42,7 @@ export default class AddFriendRow extends Component<Props, State> {
     try {
       pic = await profilePic.get(friend.address)
     } catch (e) {}
-    
+
     if ((!unmounting || selected) && pic) {
       this.setState({ pic })
     }
@@ -53,16 +55,16 @@ export default class AddFriendRow extends Component<Props, State> {
   addFriendButton() {
     const { onPress } = this.props
     //need check to see if person is friend
-    return <Button small round friend onPress={onPress} text={addFriendButton} style={{marginRight: 10}} />
+    return <Button icon="md-add-circle" round onPress={onPress} text='ADD' />
   }
 
   render() {
     const { friend, selected, onPress } = this.props
     const { pic } = this.state
     const imageSource = pic ? { uri: pic } : require('images/person-outline-dark.png')
-    
+
     return (
-      <TouchableHighlight onPress={onPress}>
+      <TouchableHighlight onPress={onPress} underlayColor={light}>
         <View style={friendStyle.searchRow} >
           <View style={style.pendingTransactionRow}>
             <View style={[general.flexRow, general.alignCenter]}>
