@@ -183,6 +183,7 @@ class AddDebt extends Component<Props, State> {
 
   setAmount(amount) {
     const { currency } = this.state
+    console.log(1, amount, currency)
     return amountFormat(amount, currency)
   }
 
@@ -256,7 +257,7 @@ class AddDebt extends Component<Props, State> {
                     placeholder={`${currencySymbols(currency)}0`}
                     placeholderTextColor='black'
                     value={amount}
-                    maxLength={10}
+                    maxLength={14}
                     underlineColorAndroid='transparent'
                     keyboardType='numeric'
                     onChangeText={amount => this.setState({ amount: this.setAmount(amount) })}

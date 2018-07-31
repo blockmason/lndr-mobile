@@ -178,6 +178,7 @@ exports[`Initialization renders correctly 1`] = `
                   "marginTop": 6,
                   "paddingLeft": 10,
                   "paddingRight": 10,
+                  "textAlign": "center",
                 },
                 Object {
                   "fontSize": 14,
