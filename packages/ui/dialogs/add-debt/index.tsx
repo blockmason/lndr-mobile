@@ -111,7 +111,9 @@ class AddDebt extends Component<Props, State> {
 
   blurCurrencyFormat() {
     let { amount } = this.state
-    if(amount && (amount.slice(-1) === ',' || amount.slice(-1) === '.')) {
+    if(amount && (amount === ',' || amount === '.')) {
+      this.setState({ amount: undefined })
+    } else if(amount && (amount.slice(-1) === ',' || amount.slice(-1) === '.')) {
       amount = amount.slice(0, -1)
       this.setState({ amount })
     } else if(amount && (amount.slice(-2, -1) === ',' || amount.slice(-2, -1) === '.')) {
@@ -270,7 +272,7 @@ class AddDebt extends Component<Props, State> {
                     placeholder={`${currencySymbols(currency)}0`}
                     placeholderTextColor='black'
                     value={amount}
-                    maxLength={11}
+                    maxLength={10}
                     underlineColorAndroid='transparent'
                     keyboardType='numeric'
                     onChangeText={amount => this.setState({ amount: this.setAmount(amount) })}
