@@ -27,13 +27,13 @@ import { connect } from 'react-redux'
 const sendingEthLoader = new LoadingContext()
 
 interface Props {
-  sendEth: (address: string, amount: string) => any
   user: UserData
   ethBalance: string
   ethSentPastWeek: number
-  ethExchange: (currency: string) => string
   navigation: any
   primaryCurrency: string
+  ethExchange: (currency: string) => string
+  sendEth: (address: string, amount: string) => any
 }
 
 interface State {
@@ -114,25 +114,24 @@ class TransferEth extends Component<Props, State> {
   }
 
   getLimit() {
-    const { formInputError } = this.state
     const { ethExchange, ethSentPastWeek, primaryCurrency } = this.props
     const remaining = String(Number(transferLimits(primaryCurrency)) - Number(ethSentPastWeek) * Number(ethExchange(primaryCurrency)))
     const end = remaining.indexOf('.') === -1 ? remaining.length : remaining.indexOf('.') + 3
     return remaining.slice(0, end)
   }
 
-  toFiat(amount, exchange, primaryCurrency) {
+  toFiat(amount, exchange) {
     if (amount === undefined) {
       amount = '0'
     }
-    const remaining = `${currencySymbols(primaryCurrency)}${Number(amount) * Number(exchange)}`
+    const remaining = `${Number(amount) * Number(exchange)}`
     const end = remaining.indexOf('.') === -1 ? remaining.length : remaining.indexOf('.') + 3
     return remaining.slice(0, end)
   }
 
   render() {
     const { amount, address, txCost, formInputError } = this.state
-    const { ethBalance, ethExchange, ethSentPastWeek, primaryCurrency } = this.props
+    const { ethBalance, ethExchange, primaryCurrency } = this.props
 
     return <View style={general.whiteFlex}>
       <View style={general.view}>
@@ -172,7 +171,7 @@ class TransferEth extends Component<Props, State> {
                   />
                 </View>
               </View>
-              <Text style={[formStyle.smallText, formStyle.center, formStyle.spaceTopS]}>{this.toFiat(amount, ethExchange(primaryCurrency), primaryCurrency)}</Text>
+              <Text style={[formStyle.smallText, formStyle.center, formStyle.spaceTopS]}>{`${currencySymbols(primaryCurrency)}${this.toFiat(amount, ethExchange(primaryCurrency))}`}</Text>
               <Text style={[accountStyle.txCost, formStyle.spaceTop]}>{accountManagement.sendEth.txCost(txCost, primaryCurrency)}</Text>
             </View>
             { formInputError && <Text style={[formStyle.warningText, {alignSelf: 'center'}]}>{formInputError}</Text>}

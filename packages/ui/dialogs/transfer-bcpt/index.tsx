@@ -1,41 +1,36 @@
 import React, { Component } from 'react'
 
-import { Text, TextInput, TouchableHighlight, View, Image, ScrollView, KeyboardAvoidingView, Platform } from 'react-native'
+import { Text, TextInput, View, ScrollView, KeyboardAvoidingView, Platform } from 'react-native'
 import { getResetAction } from 'reducers/nav'
 
 import { UserData } from 'lndr/user'
-import { debounce } from 'lndr/time'
 import { bcptAmount, ethAddress } from 'lndr/format'
-import Friend from 'lndr/friend'
 
 import Button from 'ui/components/button'
 import Loading, { LoadingContext } from 'ui/components/loading'
 import DashboardShell from 'ui/components/dashboard-shell'
-import RecentView from 'ui/views/account/activity/recent'
 
-import style from 'theme/friend'
-import formStyle from 'theme/form'
 import general from 'theme/general'
+import formStyle from 'theme/form'
+import accountStyle from 'theme/account'
 
 import language from 'language'
 const {
-  back,
-  cancel,
   accountManagement
 } = language
 
-import { getUser, getBcptBalance } from 'reducers/app'
-import { sendBcpt } from 'actions'
+import { getUser, getBcptBalance, getPrimaryCurrency } from 'reducers/app'
+import { sendBcpt, getEthTxCost } from 'actions'
 import { connect } from 'react-redux'
-import { addNavigationHelpers } from 'react-navigation';
 
 const sendingBcptLoader = new LoadingContext()
 
 interface Props {
-  sendBcpt: (address: string, amount: string) => any
+  primaryCurrency: string
   user: UserData
   bcptBalance: string
   navigation: any
+  sendBcpt: (address: string, amount: string) => any
 }
 
 interface State {
@@ -43,12 +38,21 @@ interface State {
   address?: string
   formInputError?: string
   error?: string
+  txCost: string
 }
 
 class TransferBcpt extends Component<Props, State> {
   constructor(props) {
     super(props)
-    this.state = {}
+    this.state = {
+      txCost: '0.00'
+    }
+  }
+
+  async componentWillMount() {
+    const { primaryCurrency } = this.props
+    const txCost = await getEthTxCost(primaryCurrency)
+    this.setState({ txCost })
   }
 
   async submit() {
@@ -102,8 +106,8 @@ class TransferBcpt extends Component<Props, State> {
   }
 
   render() {
-    const { amount, address, formInputError, error } = this.state
-    const { bcptBalance } = this.props
+    const { amount, address, formInputError, txCost } = this.state
+    const { bcptBalance, primaryCurrency } = this.props
     const vertOffset = (Platform.OS === 'android') ? -300 : 0;
 
     return <View style={general.whiteFlex}>
@@ -142,6 +146,7 @@ class TransferBcpt extends Component<Props, State> {
                     onChangeText={amount => this.setState({ amount: this.setAmount(amount) })}
                   />
                 </View>
+                <Text style={[accountStyle.txCost, formStyle.spaceTop]}>{accountManagement.sendEth.txCost(txCost, primaryCurrency)}</Text>
               </View>
             </View>
             { !!formInputError && <Text style={formStyle.warningText}>{formInputError}</Text>}
@@ -153,5 +158,5 @@ class TransferBcpt extends Component<Props, State> {
   }
 }
 
-export default connect((state) => ({ user: getUser(state)(), bcptBalance: getBcptBalance(state) }),
+export default connect((state) => ({ user: getUser(state)(), bcptBalance: getBcptBalance(state), primaryCurrency: getPrimaryCurrency(state) }),
 { sendBcpt })(TransferBcpt)
