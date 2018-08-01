@@ -120,15 +120,37 @@ export const displaySuccess = (success: string) => {
   return ToastActionsCreators.displayInfo(success)
 }
 
+export const getAccountInformation = () => {
+  return async (dispatch, getState) => {
+    const user = getUser(getState())()
+
+    if (user.nickname.length === 0) {
+      try {
+        user.nickname = await creditProtocol.getNickname(user.address)
+      } catch (e) { console.log('ERROR GETTING NICKNAME: ', e) }
+    } else if(user.email.length === 0) {
+      try {
+        user.email = await creditProtocol.getEmail(user.address)
+      } catch (e) { console.log('ERROR GETTING EMAIL: ', e) }
+    }
+
+    await userStorage.set(user)
+    dispatch(setState({ user }))
+  }
+}
+
 export const updateNickname = (accountData: any) => {
   return async (dispatch, getState) => {
-    const { address, privateKeyBuffer } = getUser(getState())()
+    const user = getUser(getState())()
+    const { address, privateKeyBuffer } = user
     const { nickname } = accountData
 
     try {
       await creditProtocol.setNickname(address, nickname, privateKeyBuffer)
+      user.nickname = nickname
+      userStorage.set(user)
+      dispatch(setState({ user }))
       dispatch(displaySuccess(accountManagement.setNickname.success))
-      dispatch(getAccountInformation())
     } catch (error) {
       dispatch(displayError(accountManagement.setNickname.error))
       throw error
@@ -138,13 +160,16 @@ export const updateNickname = (accountData: any) => {
 
 export const updateEmail = (accountData: any) => {
   return async (dispatch, getState) => {
-    const { address, privateKeyBuffer } = getUser(getState())()
+    const user = getUser(getState())()
+    const { address, privateKeyBuffer } = user
     const { email } = accountData
 
     try {
       await creditProtocol.setEmail(address, email, privateKeyBuffer)
+      user.email = email
+      userStorage.set(user)
+      dispatch(setState({ user }))
       dispatch(displaySuccess(accountManagement.setEmail.success))
-      dispatch(getAccountInformation())
     } catch (error) {
       dispatch(displayError(accountManagement.setEmail.error))
       throw error
@@ -280,28 +305,6 @@ export const getTwoPartyBalance = (state) => async(user: User, friend: Friend) =
   const { address } = user
   const amount = await creditProtocol.getBalanceBetween(address, friend.address, getPrimaryCurrency(state))
   return new Balance({ relativeToNickname: friend.nickname, relativeTo: friend.address, amount: amount })
-}
-
-//Needs a selector
-export const getAccountInformation = () => {
-  return async (dispatch, getState) => {
-    let { address, nickname, email } = getUser(getState())()
-
-    if (nickname.length === 0 || email.length === 0) {
-      try {
-        nickname = await creditProtocol.getNickname(address)
-        email = await creditProtocol.getEmail(address)
-      } catch (e) {}
-    }
-
-    const accountInformation: { nickname?: string, email?: string, balance?: number } = { nickname, email }
-    try {
-      accountInformation.balance = await creditProtocol.getBalance(address, getPrimaryCurrency(getState()))
-    }
-    catch (e) {}
-    dispatch(setState({ accountInformation }))
-    return accountInformation
-  }
 }
 
 //Not a redux action

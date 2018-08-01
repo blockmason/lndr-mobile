@@ -15,9 +15,9 @@ import InputImage from 'ui/components/images/input-image'
 import SpinningPicker from 'ui/components/spinning-picker'
 
 import { formatNick, formatLockTimeout, formatEmail, emailFormatIncorrect } from 'lndr/format'
-import { defaultUpdateAccountData, UpdateAccountData, UserData } from 'lndr/user'
+import { UpdateAccountData, UserData } from 'lndr/user'
 
-import { getAccountInformation, updateNickname, updateEmail, logoutAccount, toggleNotifications,
+import { updateNickname, updateEmail, logoutAccount, toggleNotifications, getAccountInformation,
   setEthBalance, updateLockTimeout, updatePin, getProfilePic, setProfilePic, takenNick, takenEmail,
   copyToClipboard, validatePin, setPrimaryCurrency, failedValidatePin } from 'actions'
 import { getUser, getStore, getAllUcacCurrencies, getPrimaryCurrency } from 'reducers/app'
@@ -90,7 +90,10 @@ class MyAccount extends Component<Props, State> {
   constructor(props) {
     super(props)
     this.state = {
-      ...defaultUpdateAccountData(),
+      nickname: props.user.nickname,
+      email: props.user.email,
+      password: '',
+      confirmPassword: '',
       lockTimeout: '',
       hiddenPanels: accountManagement.panelHeaders.map( () => true),
       step: 1,
@@ -99,7 +102,7 @@ class MyAccount extends Component<Props, State> {
       currency: props.primaryCurrency,
       scrollY: 0,
       shouldPickCurrency: false,
-      payPalEmail: null,
+      payPalEmail: null
     }
   }
 
@@ -107,22 +110,13 @@ class MyAccount extends Component<Props, State> {
     const { address } = this.props.user
     this.props.setEthBalance()
     this.props.getProfilePic(address)
+    this.props.getAccountInformation()
 
     // init PayPal and check if user is connected
     await NativeModules.PayPalManager.initPayPal()
     if (this.state.payPalEmail == null) {
       const payPalEmail = await palsClient.getPayPalAccount(this.props.user)
       this.setState({payPalEmail: payPalEmail})
-    }
-  }
-
-  async componentDidMount() {
-    unmounting = false
-    const accountInfo = await loadingContext.wrap(
-      this.props.getAccountInformation()
-    )
-    if(!unmounting) {
-      this.setState(accountInfo)
     }
   }
 

@@ -84,6 +84,8 @@ export default class CreditProtocol {
     const hash = bufferToHex(ethUtil.sha3(hashBuffer))
     const signature = this.serverSign(hash, privateKeyBuffer)
 
+    delete this.tempStorage.nicknames[addr]
+
     return this.client.post('/nick', {
       addr,
       nick,
@@ -99,6 +101,8 @@ export default class CreditProtocol {
     ])
     const hash = bufferToHex(ethUtil.sha3(hashBuffer))
     const signature = this.serverSign(hash, privateKeyBuffer)
+
+    delete this.tempStorage.emails[addr]
 
     return this.client.post('/email', {
       addr,
@@ -152,20 +156,20 @@ export default class CreditProtocol {
     return this.client.get(`/counterparties/${user}`)
   }
 
-  getNickname(user: string) {
-    const nickname = this.tempStorage.nicknames[user]
+  getNickname(addr: string) {
+    const nickname = this.tempStorage.nicknames[addr]
     if (nickname) {
       return nickname
     }
-    return this.tempStorage.nicknames[user] = this.client.get(`/nick/${user}`)
+    return this.tempStorage.nicknames[addr] = this.client.get(`/nick/${addr}`)
   }
 
-  getEmail(user: string) {
-    const email = this.tempStorage.emails[user]
+  getEmail(addr: string) {
+    const email = this.tempStorage.emails[addr]
     if (email) {
       return email
     }
-    return this.tempStorage.emails[user] = this.client.get(`/email/${user}`)
+    return this.tempStorage.emails[addr] = this.client.get(`/email/${addr}`)
   }
 
   getPayPal(user: string) {
