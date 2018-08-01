@@ -206,7 +206,7 @@ class Settlement extends Component<Props, State> {
   setAmount(amount) {
     const { balance } = this.state
     const { primaryCurrency } = this.props
-    const formattedAmount = convertCommaDecimalToPoint(amount, primaryCurrency)
+    const formattedAmount = convertCommaDecimalToPoint(amount)
 
     const cleanAmount = Number(formattedAmount.replace(/[^0-9\.\,]/g, ''))
     const adjustedBalance = hasNoDecimals(primaryCurrency) ? balance : balance / 100

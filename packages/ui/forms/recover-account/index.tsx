@@ -166,7 +166,7 @@ class RecoverAccountForm extends Component<Props, State> {
         <KeyboardAvoidingView behavior={Platform.OS === 'ios' ? 'position' : 'padding'} keyboardVerticalOffset={vertOffset} >
           <View style={style.form}>
             <ThemeImage name='logo' size={0.4} />
-            <Text style={[style.text, style.spaceBottom]}>{recoverExistingAccount}</Text>
+            <Text style={[style.text, style.spaceBottom, style.centerText]}>{recoverExistingAccount}</Text>
             <View style={style.textInputContainer}>
               <TextInput
                 multiline

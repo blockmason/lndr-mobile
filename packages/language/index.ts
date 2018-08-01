@@ -35,7 +35,7 @@ try {
   if (Platform.OS === 'ios') {
     locale = NativeModules.SettingsManager.settings.AppleLocale
   } else {
-    locale = NativeModules.I18nManager.localeIdentifier
+    locale = NativeModules.Localization.deviceLocale.replace('-', '_')
   }
 } catch (e) {}
 
@@ -49,7 +49,7 @@ const languages = {
   hu, "in": indo, it, iw, ko,
   ja, ms, nl, nb, no,
   pl, pt, ru, sv, th,
-  tr, vi, "zh-CN": zh_CN
+  tr, vi, zh: zh_CN
 }
 
 let exportLanguage = languages[language]

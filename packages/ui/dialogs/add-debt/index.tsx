@@ -5,7 +5,7 @@ import { getResetAction } from 'reducers/nav'
 
 import Friend from 'lndr/friend'
 import { formatMemo, amountFormat } from 'lndr/format'
-import { currencySymbols } from 'lndr/currencies'
+import { currencySymbols, isCommaDecimal } from 'lndr/currencies'
 
 import Button from 'ui/components/button'
 import Loading, { LoadingContext } from 'ui/components/loading'
@@ -71,6 +71,8 @@ class AddDebt extends Component<Props, State> {
       shouldPickCurrency: false,
       searchText: ''
     }
+
+    this.blurCurrencyFormat = this.blurCurrencyFormat.bind(this)
   }
 
   async componentDidMount() {
@@ -105,6 +107,19 @@ class AddDebt extends Component<Props, State> {
     }
 
     navigation.dispatch(resetAction)
+  }
+
+  blurCurrencyFormat() {
+    let { amount } = this.state
+    if(amount && (amount === ',' || amount === '.')) {
+      this.setState({ amount: undefined })
+    } else if(amount && (amount.slice(-1) === ',' || amount.slice(-1) === '.')) {
+      amount = amount.slice(0, -1)
+      this.setState({ amount })
+    } else if(amount && (amount.slice(-2, -1) === ',' || amount.slice(-2, -1) === '.')) {
+      amount += '0'
+      this.setState({ amount })
+    }
   }
 
   renderSelectedFriend() {
@@ -183,6 +198,7 @@ class AddDebt extends Component<Props, State> {
 
   setAmount(amount) {
     const { currency } = this.state
+    console.log(1, amount, currency)
     return amountFormat(amount, currency)
   }
 
@@ -262,6 +278,7 @@ class AddDebt extends Component<Props, State> {
                     onChangeText={amount => this.setState({ amount: this.setAmount(amount) })}
                     ref={ref => this.textInput = ref }
                     autoCorrect={false}
+                    onBlur={this.blurCurrencyFormat}
                   />
                 </View>
               </View>
