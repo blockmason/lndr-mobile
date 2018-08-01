@@ -124,15 +124,10 @@ export const getAccountInformation = () => {
   return async (dispatch, getState) => {
     const user = getUser(getState())()
 
-    if (user.nickname.length === 0) {
-      try {
-        user.nickname = await creditProtocol.getNickname(user.address)
-      } catch (e) { console.log('ERROR GETTING NICKNAME: ', e) }
-    } else if(user.email.length === 0) {
-      try {
-        user.email = await creditProtocol.getEmail(user.address)
-      } catch (e) { console.log('ERROR GETTING EMAIL: ', e) }
-    }
+    try {
+      user.nickname = await creditProtocol.getNickname(user.address)
+      user.email = await creditProtocol.getEmail(user.address)
+    } catch (e) { console.log('ERROR GETTING EMAIL OR NICKNAME: ', e) }
 
     await userStorage.set(user)
     dispatch(setState({ user }))
