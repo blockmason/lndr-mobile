@@ -1,11 +1,11 @@
 import React, { Component } from 'react'
 
-import { Text, TextInput, View, ScrollView, KeyboardAvoidingView } from 'react-native'
+import { Text, TextInput, View, ScrollView, KeyboardAvoidingView, Platform } from 'react-native'
 import { getResetAction } from 'reducers/nav'
 
 import { UserData } from 'lndr/user'
 import { ethAmount, ethAddress } from 'lndr/format'
-import { currencySymbols, transferLimits  } from 'lndr/currencies'
+import { currencySymbols, transferLimits, isCommaDecimal } from 'lndr/currencies'
 
 import Button from 'ui/components/button'
 import Loading, { LoadingContext } from 'ui/components/loading'
@@ -49,6 +49,8 @@ class TransferEth extends Component<Props, State> {
     this.state = {
       txCost: '0.00'
     }
+
+    this.blurAmountFormat = this.blurAmountFormat.bind(this)
   }
 
   async componentWillMount() {
@@ -100,11 +102,11 @@ class TransferEth extends Component<Props, State> {
     this.props.navigation.goBack()
   }
 
-  setAmount(amount) {
+  setAmount(amount: string) {
     return `${ethAmount(amount)}`
   }
 
-  setAddress(address) {
+  setAddress(address: string) {
     return `${ethAddress(address)}`
   }
 
@@ -120,26 +122,37 @@ class TransferEth extends Component<Props, State> {
     return remaining.slice(0, end)
   }
 
-  toFiat(amount, exchange) {
-    if (amount === undefined) {
+  toFiat(amount: string | undefined, exchange: string) {
+    if ( amount === undefined || amount === '' || amount === '.' || amount === ',' ) {
       amount = '0'
+    } else if(isCommaDecimal()) {
+      amount = amount.replace(',', '.')
     }
     const remaining = `${Number(amount) * Number(exchange)}`
     const end = remaining.indexOf('.') === -1 ? remaining.length : remaining.indexOf('.') + 3
-    return remaining.slice(0, end)
+    const result = remaining.slice(0, end)
+    return isCommaDecimal() ? result.replace('.', ',') : result
+  }
+
+  blurAmountFormat() {
+    let { amount } = this.state
+    if(amount && (amount.slice(-1) === '.' || amount.slice(-1) === ',')) {
+      amount = amount.slice(0, -1)
+      this.setState({ amount })
+    }
   }
 
   render() {
     const { amount, address, txCost, formInputError } = this.state
     const { ethBalance, ethExchange, primaryCurrency } = this.props
 
-    return <View style={general.whiteFlex}>
+    return <ScrollView style={general.whiteFlex}>
       <View style={general.view}>
         <Loading context={sendingEthLoader} />
         <DashboardShell text={accountManagement.sendEth.transferLowercase} navigation={this.props.navigation} />
         <Button close onPress={() => this.props.navigation.goBack()} />
       </View>
-      <KeyboardAvoidingView style={general.whiteFlex} behavior={'padding'} keyboardVerticalOffset={0} >
+      <KeyboardAvoidingView style={general.whiteFlex} behavior={Platform.OS === 'ios' ? 'padding' : 'position'} keyboardVerticalOffset={-200} >
         <ScrollView style={general.view} keyboardShouldPersistTaps='handled'>
           <View style={general.largeHMargin} >
             <View style={[general.centeredColumn, {marginBottom: 20}]}>
@@ -168,6 +181,7 @@ class TransferEth extends Component<Props, State> {
                     underlineColorAndroid='transparent'
                     keyboardType='numeric'
                     onChangeText={amount => this.setState({ amount: this.setAmount(amount), formInputError: undefined })}
+                    onBlur={this.blurAmountFormat}
                   />
                 </View>
               </View>
@@ -179,7 +193,7 @@ class TransferEth extends Component<Props, State> {
           </View>
         </ScrollView>
       </KeyboardAvoidingView>
-    </View>
+    </ScrollView>
   }
 }
 

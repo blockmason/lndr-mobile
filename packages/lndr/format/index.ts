@@ -156,7 +156,13 @@ export const formatLockTimeout = timeout => timeout.replace(/[^0-9]/g, '')
 
 export const ethAddress = addr => addr.replace(/[g-z]/gi, '').replace(/[^a-z0-9]/gi, '').toLowerCase()
 
-export const ethAmount = amount => amount.replace(/[^0-9\.]/g, '')
+export const ethAmount = amount => {
+  if(isCommaDecimal()) {
+    return amount.replace(/[^0-9,]/g, '')
+  } else {
+    return amount.replace(/[^0-9\.]/g, '')
+  }
+}
 
 export const emailFormatIncorrect = email => !( /^(([^<>()\[\]\.,;:\s@\"]+(\.[^<>()\[\]\.,;:\s@\"]+)*)|(\".+\"))@(([^<>()[\]\.,;:\s@\"]+\.)+[^<>()[\]\.,;:\s@\"]{2,})$/i.test(email) )
 
