@@ -125,10 +125,12 @@ export const getAccountInformation = () => {
     const user = getUser(getState())()
 
     try {
-      const [ nickname, email ] = await Promise.all([creditProtocol.getNickname(user.address), creditProtocol.getEmail(user.address)])
-      user.nickname = nickname
-      user.email = email
-    } catch (e) { console.log('ERROR GETTING EMAIL OR NICKNAME: ', e) }
+      user.nickname = await creditProtocol.getNickname(user.address)
+    } catch (e) { console.log('ERROR GETTING NICKNAME: ', e) }
+
+    try {
+      user.email = await creditProtocol.getEmail(user.address)
+    } catch (e) { console.log('ERROR GETTING EMAIL: ', e) }
 
     await userStorage.set(user)
     dispatch(setState({ user }))
