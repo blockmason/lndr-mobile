@@ -23,22 +23,31 @@ interface State {
   pic?: string
 }
 
-export default class FriendRow extends Component<Props, State> {
+let unmounting = false;
+
+export default class AddFriendRow extends Component<Props, State> {
   constructor(props) {
     super(props)
     this.state = {}
   }
 
   async componentWillMount() {
-    const { friend } = this.props
+    const { friend, selected } = this.props
     let pic
+
+    unmounting = false;
 
     try {
       pic = await profilePic.get(friend.address)
     } catch (e) {}
-    if (pic) {
-      this.setState(pic)
+    
+    if ((!unmounting || selected) && pic) {
+      this.setState({ pic })
     }
+  }
+
+  componentWillUnmount() {
+    unmounting = true;
   }
 
   addFriendButton() {
@@ -51,7 +60,7 @@ export default class FriendRow extends Component<Props, State> {
     const { friend, selected, onPress } = this.props
     const { pic } = this.state
     const imageSource = pic ? { uri: pic } : require('images/person-outline-dark.png')
-
+    
     return (
       <TouchableHighlight onPress={onPress}>
         <View style={friendStyle.searchRow} >
@@ -59,7 +68,7 @@ export default class FriendRow extends Component<Props, State> {
             <View style={[general.flexRow, general.alignCenter]}>
               <Image source={imageSource} style={style.friendIcon}/>
               <View style={general.flexColumn}>
-                <Text style={style.titledPending}>{friend.nickname}</Text>
+                <Text style={style.titledPending}>{`@${friend.nickname}`}</Text>
               </View>
             </View>
             {!selected && this.addFriendButton()}

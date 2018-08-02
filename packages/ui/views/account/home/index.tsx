@@ -18,7 +18,7 @@ import Friend from 'lndr/friend'
 import { isFocusingOn } from 'reducers/nav'
 import { getStore, getUser, getNeedsReviewCount, calculateBalance, calculateCounterparties,
   getPrimaryCurrency, getFriendList, getPendingFromFriend, getEthExchange, getFriendFromNick } from 'reducers/app'
-import { getAccountInformation, displayError, getPending, getFriends,
+import { getAccountInformation, displayError, getPending, getFriends, getFriendRequests,
   getRecentTransactions, registerChannelID, getPayPalRequests } from 'actions'
 import { UrbanAirship } from 'urbanairship-react-native'
 import { currencySymbols } from 'lndr/currencies'
@@ -46,10 +46,18 @@ const loadingRecentTransactions = new LoadingContext()
 const loadingPending = new LoadingContext()
 const loadingFriends = new LoadingContext()
 const loadingPayPalRequests = new LoadingContext()
+const loadingFriendRequests = new LoadingContext()
 
 interface Props {
   navigation: any
   isFocused: boolean
+  user: UserData
+  state: any
+  needsReviewCount: number
+  primaryCurrency: string
+  friendList: Friend[]
+  calculateBalance: () => number
+  calculateCounterparties: () => number
   getPending: () => any
   getFriends: () => any
   getPayPalRequests: () => any
@@ -58,16 +66,10 @@ interface Props {
   getBalances: () => any
   displayError: (errorMsg: string) => any
   registerChannelID: (channelID: string, platform: string) => any
-  user: UserData
-  state: any
-  needsReviewCount: number
-  calculateBalance: () => number
-  calculateCounterparties: () => number
-  primaryCurrency: string
-  friendList: Friend[]
   getPendingFromFriend: (friendNickname: string) => any
   ethExchange: (currency: string) => string
   getFriendFromNick: (nickname: string) => Friend | undefined
+  getFriendRequests: () => void
 }
 
 interface State {
@@ -95,6 +97,7 @@ class HomeView extends Component<Props, State> {
     }
 
     await loadingPending.wrap(this.props.getPending())
+    await loadingFriendRequests.wrap(this.props.getFriendRequests())
     await loadingRecentTransactions.wrap(this.props.getRecentTransactions())
     await loadingFriends.wrap(this.props.getFriends())
     await loadingPayPalRequests.wrap(this.props.getPayPalRequests())
@@ -258,4 +261,4 @@ export default connect((state) => ({ state: getStore(state)(), user: getUser(sta
   needsReviewCount: getNeedsReviewCount(state), calculateBalance: calculateBalance(state), calculateCounterparties: calculateCounterparties(state),
   primaryCurrency: getPrimaryCurrency(state), friendList: getFriendList(state)(), getPendingFromFriend: getPendingFromFriend(state),
   ethExchange: getEthExchange(state), getFriendFromNick: getFriendFromNick(state) }), 
-  { getAccountInformation, displayError, getPending, getPayPalRequests, getRecentTransactions, getFriends, registerChannelID })(HomeView)
+  { getAccountInformation, displayError, getPending, getPayPalRequests, getRecentTransactions, getFriends, registerChannelID, getFriendRequests })(HomeView)

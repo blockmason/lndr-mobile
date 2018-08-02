@@ -1,6 +1,6 @@
 import React, { Component } from 'react'
 
-import { Text, TextInput, TouchableHighlight, View, ScrollView } from 'react-native'
+import { Text, TextInput, View, ScrollView } from 'react-native'
 
 import { debounce } from 'lndr/time'
 import { minimumNicknameLength } from 'lndr/user'
@@ -19,7 +19,6 @@ import general from 'theme/general'
 import language from 'language'
 const {
   nickname,
-  cancel,
   back,
   noMatches,
   addFriendConfirmationQuestion
@@ -27,7 +26,6 @@ const {
 const addFriendText = language.addFriend
 
 import { searchUsers } from 'actions'
-import { connect } from 'react-redux'
 
 const loadingContext = new LoadingContext()
 
