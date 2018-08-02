@@ -30,11 +30,11 @@ interface Props {
   primaryCurrency: string
 }
 
-let unmounting = false;
-
 interface State {
   pic?: string
 }
+
+let unmounting = false;
 
 class FriendRow extends Component<Props, State> {
   constructor(props) {
