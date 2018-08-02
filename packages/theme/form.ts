@@ -285,5 +285,13 @@ export default StyleSheet.create({
   },
   centerText: {
     textAlign: 'center'
+  },
+  emptyState: {
+    ...verticalMargin,
+    ...medium,
+    ...center,
+    color: gray,
+    fontStyle: 'italic',
+    marginTop: 30
   }
 } as any)

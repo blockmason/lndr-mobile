@@ -143,7 +143,7 @@ export default class SearchFriend extends Component<Props, State> {
       { hasSearchTerm &&
       <View style={friendStyle.searchList}>
         <Loading context={loadingContext} />
-        {hasSearchTerm && matches.length === 0 ? <Text style={[style.emptyState, {paddingLeft: 30}]}>{noMatches}</Text> : null}
+        {hasSearchTerm && matches.length === 0 ? <Text style={style.emptyState}>{noMatches}</Text> : null}
         {matches.map(
           match => {
             if (match.address === address || (addDebt && !this.isFriend(match)) ) {
