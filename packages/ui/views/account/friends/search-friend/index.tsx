@@ -136,6 +136,7 @@ export default class SearchFriend extends Component<Props, State> {
             underlineColorAndroid='transparent'
             autoCapitalize='none'
             placeholder={nickname}
+            clearButtonMode='always'
             onChangeText={text => this.searchAction(text)}
           />
         </View>

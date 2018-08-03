@@ -36,7 +36,6 @@ export default StyleSheet.create({
     borderRadius: 100
   },
   iconRound: {
-    marginTop: -2,
     marginLeft: -4,
     padding: 0,
     fontSize: 22,
