@@ -53,9 +53,7 @@ export default class AddFriendRow extends Component<Props, State> {
   }
 
   addFriendButton() {
-    const { onPress } = this.props
-    //need check to see if person is friend
-    return <Button icon="md-add-circle" round onPress={onPress} text='ADD' />
+    return <Button icon="md-add-circle" round onPress={this.props.onPress} text='ADD' />
   }
 
   render() {
@@ -70,7 +68,7 @@ export default class AddFriendRow extends Component<Props, State> {
             <View style={[general.flexRow, general.alignCenter]}>
               <Image source={imageSource} style={style.friendIcon}/>
               <View style={general.flexColumn}>
-                <Text style={style.titledPending}>{`@${friend.nickname}`}</Text>
+                <Text numberOfLines={1} style={[style.titledPending, {maxWidth:160}]}>{`@${friend.nickname}`}</Text>
               </View>
             </View>
             {!selected && this.addFriendButton()}
