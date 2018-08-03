@@ -12,6 +12,7 @@ import Loading, { LoadingContext } from 'ui/components/loading'
 import FriendRow from 'ui/components/friend-row'
 
 import SearchFriend from './search-friend'
+import PendingView from 'ui/views/account/activity/pending'
 
 import style from 'theme/account'
 import general from 'theme/general'
@@ -21,12 +22,13 @@ const { noFriends, currentFriends, inviteFriends, tryLndr } = language
 
 import { isFocusingOn } from 'reducers/nav'
 import { getStore, pendingTransactions, recentTransactions, getPrimaryCurrency } from 'reducers/app'
-import { getFriends, getRecentTransactions, addFriend } from 'actions'
+import { getFriends, getRecentTransactions, addFriend, getFriendRequests } from 'actions'
 import { connect } from 'react-redux'
 
 const loadingFriends = new LoadingContext()
 const loadingAddFriend = new LoadingContext()
 const loadingRecentTransactions = new LoadingContext()
+const loadingFriendRequests = new LoadingContext()
 
 const { width } = Dimensions.get('window')
 
@@ -40,6 +42,7 @@ interface Props {
   recentTransactions: any
   navigation: any
   primaryCurrency: string
+  getFriendRequests: () => void
 }
 
 interface State {
@@ -60,6 +63,7 @@ class FriendsView extends Component<Props, State> {
   async componentDidMount() {
     this.stillRelevant = true
     await loadingFriends.wrap(this.props.getFriends())
+    await loadingFriendRequests.wrap(this.props.getFriendRequests())
     await loadingRecentTransactions.wrap(this.props.getRecentTransactions())
     this.stillRelevant
   }
@@ -107,9 +111,23 @@ class FriendsView extends Component<Props, State> {
     }
   }
 
+  renderFriendRequests() {
+    return (<View>
+        <Loading context={loadingFriendRequests} />
+        <PendingView navigation={this.props.navigation} onlyFriends />
+      </View>
+    )
+  }
+
   render() {
-    const { friendsLoaded, friends, recentTransactions, pendingTransactions } = this.props.state
+    const { friendsLoaded, friends, recentTransactions, pendingTransactions, pendingFriends } = this.props.state
     const friendScrollView = this.refs._friendScrollView as any
+
+    let friendListTitle = []
+    if (pendingFriends && pendingFriends.length > 0)
+      friendListTitle.push(<Text style={style.transactionHeader}>{currentFriends}</Text>)
+    if (friendsLoaded && friends.length === 0)
+      friendListTitle.push(<Text style={style.emptyState}>{noFriends}</Text>)
 
     return <ScrollView style={general.view} keyboardShouldPersistTaps='handled' ref='_friendScrollView'
       refreshControl={
@@ -123,7 +141,7 @@ class FriendsView extends Component<Props, State> {
         <Button round onPress={() => this.shareLndr()} text={inviteFriends} style={{width: width / 4 * 3}} />
       </View>
       <Section>
-        <SearchFriend 
+        <SearchFriend
           onSuccess={() => this.refresh()}
           removeFriend={(friend) => this.props.navigation.navigate('FriendDetail', { friend })}
           selectFriend={(friend) => this.addFriend(friend)}
@@ -132,9 +150,10 @@ class FriendsView extends Component<Props, State> {
           scrollUp={() => friendScrollView.scrollTo({ x: 0, y: 0, animated: true })}
          />
       </Section>
+      {this.renderFriendRequests()}
       <Section contentContainerStyle={[style.list, style.friendList]}>
         <Loading context={loadingFriends} />
-        {friendsLoaded && friends.length === 0 ? <Text style={style.emptyState}>{noFriends}</Text> : null}
+        {friendListTitle}
         {friends.map(
           friend => (
             <FriendRow
@@ -153,6 +172,6 @@ class FriendsView extends Component<Props, State> {
   }
 }
 
-export default connect((state) => ({ state: getStore(state)(), isFocused: isFocusingOn(state)('Friends'), 
-pendingTransactions: pendingTransactions(state), recentTransactions: recentTransactions(state), 
-primaryCurrency: getPrimaryCurrency(state) }), { getFriends, getRecentTransactions, addFriend })(FriendsView)
+export default connect((state) => ({ state: getStore(state)(), isFocused: isFocusingOn(state)('Friends'),
+pendingTransactions: pendingTransactions(state), recentTransactions: recentTransactions(state),
+primaryCurrency: getPrimaryCurrency(state) }), { getFriends, getRecentTransactions, addFriend, getFriendRequests })(FriendsView)

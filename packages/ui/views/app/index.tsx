@@ -46,6 +46,7 @@ const initialState = {
   recentTransactionsLoaded: false,
   recentTransactions: [],
   pendingTransactionsLoaded: false,
+  pendingFriendsLoaded: false,
   pendingTransactions: [],
   pendingSettlements: [],
   pendingFriends: [],
