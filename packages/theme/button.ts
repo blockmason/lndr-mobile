@@ -4,7 +4,7 @@ import { mediumPad, largePad, verticalMargin, verticalMarginXS } from 'theme/inc
 import { center } from 'theme/include/align'
 import { radius } from 'theme/include/borders'
 import { small, medium, large, wide, bold } from 'theme/include/fonts'
-import { light, gray, danger, transparent, moneyGreen, aqua, darkGray, black } from 'theme/include/colors'
+import { light, gray, danger, transparent, moneyGreen, aqua, darkGray, black, white } from 'theme/include/colors'
 
 export default StyleSheet.create({
   button: {
@@ -36,13 +36,13 @@ export default StyleSheet.create({
     borderRadius: 100
   },
   iconRound: {
-    marginTop: 2,
     marginLeft: -4,
-    padding: 5,
+    padding: 0,
     fontSize: 22,
     width: 23,
     height: 23,
-    backgroundColor: transparent
+    backgroundColor: transparent,
+    color: white
   },
   arrow: {
     height: 16,
