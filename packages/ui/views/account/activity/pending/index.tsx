@@ -32,6 +32,7 @@ const loadingPending = new LoadingContext()
 interface Props {
   navigation: any
   homeScreen?: boolean
+  onlyFriends?: boolean
   friend?: any
   state: any
   user: UserData
@@ -116,7 +117,28 @@ class PendingView extends Component<Props, State> {
 
   render() {
     const { pendingTransactions, pendingFriends } = this.props.state
-    const { pendingSettlements, settlerIsMe, payPalRequests, bilateralSettlements, user, friend, homeScreen, navigation } = this.props
+    const { pendingSettlements, settlerIsMe, payPalRequests, bilateralSettlements, user, friend, homeScreen, onlyFriends, navigation } = this.props
+
+    if (onlyFriends) {
+      if (pendingFriends.length === 0)
+        return null
+      const friendList = pendingFriends.map( friend => {
+        return <PendingFriendRow
+          key={friend.address}
+          friend={friend}
+          navigation={this.props.navigation}
+        />
+      })
+      return (
+        <View>
+          <Section contentContainerStyle={style.list}>
+            <Loading context={loadingPending} />
+              <Text style={style.transactionHeader}>{pendingFriendRequestsLanguage.message}</Text>
+              { friendList }
+          </Section>
+        </View>
+      )
+    }
 
     return <View>
       <Section contentContainerStyle={style.list}>
