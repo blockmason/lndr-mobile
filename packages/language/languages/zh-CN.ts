@@ -122,7 +122,6 @@ export default {
     },
     ethBalance: {
       display: Y =>`你ETH余额是${String(Y).slice(0,8) }`,
-      inFiat: (Z, B, A) => ` (${CUR(A)}${String(Number(Z) * Number(B)).slice(0, 8)})`,
       getError: `检索的Eth有错误`,
       manage: `管理ETH`,
     },
@@ -163,6 +162,7 @@ export default {
       `BCPT平衡`,
       `删除帐户`,
       `ETH交易记录`,
+      `启用贝宝`,
       `更改主货币`,
       `更改密码`,
       `更改昵称`,

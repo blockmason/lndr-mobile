@@ -122,7 +122,6 @@ export default {
     },
     ethBalance: {
       display: Y => `Baki ETH anda adalah ${String(Y).slice(0,8)}`,
-      inFiat: (Z, B, A) => `(${CUR[A]}${String(Number(Z) * Number(B)).slice(0, 8)})`,
       getError: `Tidak dapat mencari data baki ETH`,
       manage: `Uruskan ETH`,
     },
@@ -163,6 +162,7 @@ export default {
       `Baki BCPT`,
       `Hapus Akaun`,
       `Sejarah Transaksi ETH`,
+      `Membolehkan PayPal`,
       `Tukar Mata Wang Utama`,
       `Tukar PIN`,
       `Tukar Nama Samaran`,

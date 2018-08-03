@@ -120,11 +120,6 @@ export default {
     },
     ethBalance: {
       display: balance => `당신의 이더리움 잔액은 ${String(balance).slice(0,8)} `,
-      inFiat: (amount, exchange, currency) => {
-        const strAmnt = String(Number(amount) * Number(exchange))
-        const perInd = strAmnt.indexOf('.') === -1 ? strAmnt.length : strAmnt.indexOf('.')
-        return ` (${currencySymbols(currency)}${strAmnt.slice(0, perInd)})`
-      },
       getError: `이더리움 잔액내역을 불러오지 못했습니다`,
       manage: `이더리움 관리`,
     },
@@ -163,8 +158,10 @@ export default {
       `이더리움 (& BCPT) 주소`,
       `이더리움 잔액`,
       `BCPT 잔액`,
+      `계정 삭제`,
       `이더리움 거래 내역`,
       `차 환율 변경`,
+      `페이팔 사용`,
       `비밀번호 변경`,
       `닉네임 변경`,
       `이메일 주소`,

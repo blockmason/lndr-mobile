@@ -122,7 +122,6 @@ export default {
     },
     ethBalance: {
       display: Y => `Votre solde en ETH est de ${String (Y) .slice (0,8)}`,
-      inFiat: (Z, B, A) => ` (${CUR(A)}${String(Number(Z) * Number(B)).slice(0, 8)})`,
       getError: `Impossible de récupérer votre solde en ETH`,
       manage: `Gérer vos ETH`,
     },
@@ -163,6 +162,7 @@ export default {
       `Solde BCPT`,
       `Supprimer le compte`,
       `Historique des transactions en ETH`,
+      `Activer PayPal`,
       `Changer la devise primaire`,
       `Modifier le code PIN`,
       `Modifier le pseudonyme`,

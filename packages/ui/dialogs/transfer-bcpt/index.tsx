@@ -4,7 +4,7 @@ import { Text, TextInput, View, ScrollView, KeyboardAvoidingView, Platform } fro
 import { getResetAction } from 'reducers/nav'
 
 import { UserData } from 'lndr/user'
-import { bcptAmount, ethAddress } from 'lndr/format'
+import { bcptAmount, ethAddress, formatCommaDecimal } from 'lndr/format'
 
 import Button from 'ui/components/button'
 import Loading, { LoadingContext } from 'ui/components/loading'
@@ -146,7 +146,7 @@ class TransferBcpt extends Component<Props, State> {
                     onChangeText={amount => this.setState({ amount: this.setAmount(amount) })}
                   />
                 </View>
-                <Text style={[accountStyle.txCost, formStyle.spaceTop]}>{accountManagement.sendEth.txCost(txCost, primaryCurrency)}</Text>
+                <Text style={[accountStyle.txCost, formStyle.spaceTop]}>{accountManagement.sendEth.txCost(formatCommaDecimal(txCost), primaryCurrency)}</Text>
               </View>
             </View>
             { !!formInputError && <Text style={formStyle.warningText}>{formInputError}</Text>}

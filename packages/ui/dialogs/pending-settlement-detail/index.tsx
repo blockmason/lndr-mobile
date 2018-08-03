@@ -4,7 +4,7 @@ import { Text, View, Image, ScrollView } from 'react-native'
 import { getResetAction } from 'reducers/nav'
 
 import { UserData } from 'lndr/user'
-import { currencyFormats } from 'lndr/format'
+import { currencyFormats, formatCommaDecimal, formatEthRemaining } from 'lndr/format'
 import PendingUnilateral from 'lndr/pending-unilateral'
 import profilePic from 'lndr/profile-pic'
 import Friend from 'lndr/friend'
@@ -212,10 +212,7 @@ class PendingSettlementDetail extends Component<Props, State> {
 
   getLimit() {
     const { ethExchange, ethSentPastWeek, primaryCurrency } = this.props
-
-    const remaining = String(Number(transferLimits(primaryCurrency)) - Number(ethSentPastWeek) * Number(ethExchange(primaryCurrency)))
-    const end = remaining.indexOf('.') === -1 ? remaining.length : remaining.indexOf('.') + 3
-    return remaining.slice(0, end)
+    return formatEthRemaining(ethExchange, ethSentPastWeek, primaryCurrency)
   }
 
   render() {
@@ -246,7 +243,7 @@ class PendingSettlementDetail extends Component<Props, State> {
           }
           <View style={{marginBottom: 20}}/>
           {user.address === pendingSettlement.debtorAddress ? null : <Text style={[formStyle.smallText, formStyle.spaceTop, formStyle.center]}>{accountManagement.sendEth.warning(this.getLimit(), primaryCurrency)}</Text>}
-          <Text style={[accountStyle.txCost, formStyle.spaceBottom, {marginLeft: '2%'}]}>{accountManagement.sendEth.txCost(txCost, primaryCurrency)}</Text>
+          <Text style={[accountStyle.txCost, formStyle.spaceBottom, {marginLeft: '2%'}]}>{accountManagement.sendEth.txCost(formatCommaDecimal(txCost), primaryCurrency)}</Text>
           { confirmationError && <Text style={[formStyle.warningText, {alignSelf: 'center'}]}>{confirmationError}</Text>}
           {this.showButtons()}
           <View style={general.spaceBelow}/>

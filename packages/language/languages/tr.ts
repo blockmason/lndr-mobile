@@ -122,7 +122,6 @@ export default {
     },
     ethBalance: {
       display: Y => `ETH bakiyeniz ${String (Y) .slice (0,8)}`,
-      inFiat: (Z, B, A) => ` (${CUR(A)}${String(Number(Z) * Number(B)).slice(0, 8)})`,
       getError: `Eth bakiyesi çekilemedi`,
       manage: `ETH yönetimi`,
     },
@@ -163,6 +162,7 @@ export default {
       `BCPT Bakiyesi`,
       `Hesabı Kaldır`,
       `ETH İşlem Geçmişi`,
+      `Paypal etkinleştirme`,
       `Birincil Para değiştirme`,
       `Pin'i Değiştir`,
       `Kullanıcı Adını Değiştir`,

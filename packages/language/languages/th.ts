@@ -122,7 +122,6 @@ export default {
     },
     ethBalance: {
       display: Y => `ยอด ETH คงเหลือของคุณคือ ${String(Y).slice(0,8)}`,
-      inFiat: (Z, B, A) => ` (${CUR(A)}${String(Number(Z) * Number(B)).slice(0, 8)})`,
       getError: `ไม่สามารถเรียกข้อมูลยอด ETH คงเหลือคืนมาได้ `,
       manage: `จัดการ ETH`,
     },
@@ -163,6 +162,7 @@ export default {
       `ยอด BCPT คงเหลือ`,
       `ปิดบัญชี`,
       `ประวัติการทำธุรกรรม ETH`,
+      `เปิดใช้งาน PayPal`,
       `เปลี่ยนสกุลเงินหลัก`,
       `เปลี่ยน PIN`,
       `เปลี่ยนชื่อเล่น`,

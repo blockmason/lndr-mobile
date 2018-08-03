@@ -122,7 +122,6 @@ export default {
     },
     ethBalance: {
       display: Y => `Su Saldo en ETH (Ethereum) es: ${String (Y) .slice (0,8)}`,
-      inFiat: (Z, B, A) => ` (${CUR(A)}${String(Number(Z) * Number(B)).slice(0, 8)})`,
       getError: `No se pudo recuperar su balance de ETH (Ethereum)`,
       manage: `Administrar ETH (Ethereum)`,
     },
@@ -163,6 +162,7 @@ export default {
       `Saldo de BCPT`,
       `Eliminar Cuenta`,
       `Historial de Transacciones en Ethereum`,
+      `Activar PayPal`,
       `Cambiar divisa principal`,
       `Cambiar PIN`,
       `Cambio Nombre de Usuario`,

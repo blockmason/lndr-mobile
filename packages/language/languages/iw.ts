@@ -122,7 +122,6 @@ export default {
     },
     ethBalance: {
       display: Y => `${String(Y).slice(0,8)} שלך היא ETH -יתרת ה`,
-      inFiat: (Z, B, A) => ` (${CUR(A)}${String(Number(Z) * Number(B)).slice(0, 8)})`,
       getError: `לא ניתן לאחזר את יתרת Eth`,
       manage: `ניהול ETH`,
     },
@@ -163,6 +162,7 @@ export default {
       `יתרת BCPT`,
       `להסיר חשבון`,
       `היסטוריית עסקאות ETH`,
+      `הפוך את PayPal`,
       `שינוי מטבע ראשי`,
       `לשנות PIN`,
       `לשנות כינוי`,

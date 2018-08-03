@@ -122,7 +122,6 @@ export default {
     },
     ethBalance: {
       display: Y => `आपका ETH बैलेन्स $ है ${String(Y).slice(0,8)}`,
-      inFiat: (Z, B, A) => ` (${CUR(A)}${String(Number(Z) * Number(B)).slice(0, 8)})`,
       getError: `Eth बैलेन्स प्राप्त नहीं कर पा रहा`,
       manage: `ETH मैनेज करें`,
     },
@@ -163,6 +162,7 @@ export default {
       `BCPT बैलेंस`,
       `अकाउंट डिलीट करें`,
       `ETH बैलेंस हिस्ट्री`,
+      `पेपैल सक्षम करें`,
       `प्राथमिक मुद्रा परिवर्तित करें`,
       `पिन बदलिए`,
       `छोटा नाम बदलें`,

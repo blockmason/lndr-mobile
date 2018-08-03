@@ -163,6 +163,7 @@ export default {
       `BCPT-saldo`,
       `Poista tili`,
       `ETH-tapahtumahistoria`,
+      `Ota PayPal`,
       `Muuta päävaluutta`,
       `Muuta PIN-koodisi`,
       `Muuta käyttäjänimesi`,

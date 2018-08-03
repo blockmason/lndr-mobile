@@ -119,7 +119,6 @@ export default {
     },
     ethBalance: {
       display: balance => `Your ETH balance is ${String(balance).slice(0,8)}`,
-      inFiat: (amount, exchange, currency) => ` (${currencySymbols(currency)}${String(Number(amount) * Number(exchange)).slice(0, 8)})`,
       getError: `Unable to retrieve Eth balance`,
       manage: `Manage ETH`,
     },

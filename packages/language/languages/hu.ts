@@ -122,7 +122,6 @@ export default {
     },
     ethBalance: {
       display: Y => `ETH egyenlege ${String (Y) .slice (0,8)}`,
-      inFiat: (Z, B, A) => ` (${CUR(A)}${String(Number(Z) * Number(B)).slice(0, 8)})`,
       getError: `Az Eth egyenleg lekérdezése nem sikerült`,
       manage: `ETH KEZELÉSE`,
     },
@@ -163,6 +162,7 @@ export default {
       `BCPT Egyenleg`,
       `Fiók Törlése`,
       `ETH Tranzakció Előzmények`,
+      `Engedélyezze a PayPalt`,
       `Megváltoztathatja az elsődleges pénzneme`,
       `PiN-kód Módosítása`,
       `Becenév Módosítása`,

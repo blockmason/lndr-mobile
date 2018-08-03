@@ -122,7 +122,6 @@ export default {
     },
     ethBalance: {
       display: Y => `Váš zůstatek ETH je ${String(Y).slice(0,8)}`,
-      inFiat: (Z, B, A) => ` (${CUR(A)}${String(Number(Z) * Number(B)).slice(0, 8)})`,
       getError: `Nelze načíst Eth rovnováhu`,
       manage: `Správovat ETH`,
     },
@@ -163,6 +162,7 @@ export default {
       `Zůstatek BCPT`,
       `Odstranit účet`,
       `ETH Transakční historie`,
+      `Umožnit PayPal`,
       `Změnit hlavní měně`,
       `Změna PIN`,
       `Změna přezdívky`,

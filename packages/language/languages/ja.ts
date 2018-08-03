@@ -119,11 +119,6 @@ export default {
   },
   ethBalance: {
     display: balance => `あなたのETH残高はこちら ${String(balance).slice(0,8)} `,
-    inFiat: (amount, exchange, currency) => {
-      const strAmnt = String(Number(amount) * Number(exchange))
-      const perInd = strAmnt.indexOf('.') === -1 ? strAmnt.length : strAmnt.indexOf('.')
-      return ` (${currencySymbols(currency)}${strAmnt.slice(0, perInd)})`
-    },
     getError: `ETH残高を取得できません`,
     manage: `ETHを管理する`,
   },
@@ -164,6 +159,7 @@ export default {
     `BCPT残高`,
     `アカウントを削除する`,
     `ETHのやりとり履歴`,
+    `ペイパルを有効にします`,
     `プライマリ通貨を変更`,
     `暗証番号を変える`,
     `ニックネームを変える`,

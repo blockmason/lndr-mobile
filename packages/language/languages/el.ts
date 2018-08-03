@@ -122,7 +122,6 @@ export default {
     },
     ethBalance: {
       display: Y => `Το υπόλοιπο ETH σας είναι ${String(Y).slice (0,8)}`,
-      inFiat: (Z, B, A) => ` (${CUR(A)}${String(Number(Z) * Number(B)).slice(0, 8)})`,
       getError: `Αδυναμία ενημέρωσης υπολοίπου Eth`,
       manage: `Διαχείριση ETH`,
     },
@@ -163,6 +162,7 @@ export default {
       `Yπόλοιπο BCPT`,
       `Κατάργηση Λογαριασμού`,
       `Ιστορικό Συναλλαγών ETH`,
+      `Ενεργοποίηση PayPal`,
       `Αλλαγή Πρωτοβάθμια νομίσματος`,
       `Αλλαγή PIN`,
       `Αλλαγή Ψευδώνυμου`,

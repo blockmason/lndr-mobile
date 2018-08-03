@@ -122,7 +122,6 @@ export default {
     },
     ethBalance: {
       display: Y => `Saldo ETH Anda adalah ${String(Y).slice(0,8)}.`,
-      inFiat: (Z, B, A) => `(${CUR(A)}${String(Number(Z) * Number(B)).slice(0, 8)})`,
       getError: `Tidak dapat memuat saldo ETH`,
       manage: `Kelola ETH`,
     },
@@ -163,6 +162,7 @@ export default {
       `Saldo BCPT`,
       `Hapus Akun`,
       `Riwayat Transaksi ETH`,
+      `Aktifkan PayPal`,
       `Ubah Mata Uang Primer`,
       `Ubah PIN`,
       `Ubah Nama Panggilan`,

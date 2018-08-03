@@ -3,7 +3,7 @@ import { connect } from 'react-redux'
 
 import { Text, View, ScrollView, Platform, Dimensions, Image, TouchableHighlight, RefreshControl } from 'react-native'
 
-import { currencyFormats } from 'lndr/format'
+import { currencyFormats, formatEthToFiat, formatCommaDecimal } from 'lndr/format'
 import Balance from 'lndr/balance'
 
 import Button from 'ui/components/button'
@@ -205,9 +205,9 @@ class HomeView extends Component<Props, State> {
         />
       </View>
       <View style={[style.balanceRow, {marginTop: 10}]}>
-        <Text style={[style.balance, {marginLeft: '2%'}]}>{accountManagement.ethBalance.display(ethBalance)}</Text>
+        <Text style={[style.balance, {marginLeft: '2%'}]}>{accountManagement.ethBalance.display(formatCommaDecimal(ethBalance))}</Text>
         <Button alternate blackText narrow arrow small onPress={() => {this.props.navigation.navigate('MyAccount')}}
-          text={accountManagement.ethBalance.inFiat(ethBalance, ethExchange(primaryCurrency), primaryCurrency)}
+          text={formatEthToFiat(ethBalance, ethExchange(primaryCurrency), primaryCurrency)}
           containerStyle={{marginTop: -6}}
         />
       </View>

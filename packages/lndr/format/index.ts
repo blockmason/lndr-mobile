@@ -1,4 +1,4 @@
-import { currencySymbols, hasNoDecimals, isCommaDecimal } from 'lndr/currencies'
+import { currencySymbols, hasNoDecimals, isCommaDecimal, transferLimits } from 'lndr/currencies'
 
 declare const Buffer
 
@@ -187,4 +187,37 @@ export const convertCommaDecimalToPoint = (amount: string) : string => {
     return amount.slice(0, -2).replace(/\./, ',').concat('.').concat(end)
   }
   return amount
+}
+
+export const formatEthToFiat = (ethBalance: string, ethExchange: string, currency: string) : string => {
+  let converted = String( Number(ethBalance) * Number(ethExchange) ).slice(0, 8)
+  if(converted.slice(-2, -1) === '.') {
+    converted = converted + '0'
+  } else if(converted.slice(-1) === '.') {
+    converted = converted.slice(-1)
+  }
+  
+  return ` (${currencySymbols(currency)}${isCommaDecimal() ? converted.replace('.', ',') : converted})`
+}
+
+export const formatCommaDecimal = (amount: string) : string => isCommaDecimal() ? amount.replace('.', ',') : amount
+
+export const formatSettlementAmount = (amount: string, balance: number, primaryCurrency: string) : string => {
+  const adjustedBalance = hasNoDecimals(primaryCurrency) ? balance : balance / 100
+
+  const commaAdjusted = isCommaDecimal() ? String(adjustedBalance).replace('.', ',') : String(adjustedBalance)
+
+  let formattedAmount = amountFormat(commaAdjusted, primaryCurrency)
+  
+  if(amount && (formattedAmount.slice(-2, -1) === ',' || formattedAmount.slice(-2, -1) === '.')) {
+    formattedAmount += '0'
+  }
+  
+  return formattedAmount
+}
+
+export const formatEthRemaining = (ethExchange: Function, ethSentPastWeek: number, primaryCurrency: string) => {
+  const remaining = String(Number(transferLimits(primaryCurrency)) - Number(ethSentPastWeek) * Number(ethExchange(primaryCurrency)))
+  const end = remaining.indexOf('.') === -1 ? remaining.length : remaining.indexOf('.') + 3
+  return isCommaDecimal() ? remaining.slice(0, end).replace('.', ',') : remaining.slice(0, end)
 }

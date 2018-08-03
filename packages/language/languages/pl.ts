@@ -122,7 +122,6 @@ export default {
     },
     ethBalance: {
       display: Y => `Bilans ETH wynosi ${String (Y) .slice (0,8)}`,
-      inFiat: (Z, B, A) => ` (${CUR(A)}${String(Number(Z) * Number(B)).slice(0, 8)})`,
       getError: `Nie udało się uzyskać bilansu Eth`,
       manage: `Zarządzaj ETH`,
     },
@@ -163,6 +162,7 @@ export default {
       `Bilans BCPT`,
       `Usuń Konto`,
       `Historia transakcji ETH`,
+      `Włącz PayPal`,
       `Zmień walutę podstawowy`,
       `Zmień PIN`,
       `Zmień Nazwę Użytkownika`,

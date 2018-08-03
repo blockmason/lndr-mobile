@@ -4,7 +4,7 @@ import { Text, TextInput, View, ScrollView, KeyboardAvoidingView, Platform } fro
 import { getResetAction } from 'reducers/nav'
 
 import { UserData } from 'lndr/user'
-import { ethAmount, ethAddress } from 'lndr/format'
+import { ethAmount, ethAddress, formatCommaDecimal, formatEthRemaining } from 'lndr/format'
 import { currencySymbols, transferLimits, isCommaDecimal } from 'lndr/currencies'
 
 import Button from 'ui/components/button'
@@ -117,9 +117,7 @@ class TransferEth extends Component<Props, State> {
 
   getLimit() {
     const { ethExchange, ethSentPastWeek, primaryCurrency } = this.props
-    const remaining = String(Number(transferLimits(primaryCurrency)) - Number(ethSentPastWeek) * Number(ethExchange(primaryCurrency)))
-    const end = remaining.indexOf('.') === -1 ? remaining.length : remaining.indexOf('.') + 3
-    return remaining.slice(0, end)
+    return formatEthRemaining(ethExchange, ethSentPastWeek, primaryCurrency)
   }
 
   toFiat(amount: string | undefined, exchange: string) {
@@ -157,7 +155,7 @@ class TransferEth extends Component<Props, State> {
           <View style={general.largeHMargin} >
             <View style={[general.centeredColumn, {marginBottom: 20}]}>
               <View style={general.centeredColumn} >
-                <Text style={[formStyle.header, {textAlign: 'center'}]}>{accountManagement.sendEth.balance(ethBalance)}</Text>
+                <Text style={[formStyle.header, {textAlign: 'center'}]}>{accountManagement.sendEth.balance(formatCommaDecimal(ethBalance))}</Text>
                 <View style={formStyle.textInputContainer}>
                   <TextInput
                     style={[formStyle.textInput,  {paddingVertical: 3}]}
@@ -186,7 +184,7 @@ class TransferEth extends Component<Props, State> {
                 </View>
               </View>
               <Text style={[formStyle.smallText, formStyle.center, formStyle.spaceTopS]}>{`${currencySymbols(primaryCurrency)}${this.toFiat(amount, ethExchange(primaryCurrency))}`}</Text>
-              <Text style={[accountStyle.txCost, formStyle.spaceTop]}>{accountManagement.sendEth.txCost(txCost, primaryCurrency)}</Text>
+              <Text style={[accountStyle.txCost, formStyle.spaceTop]}>{accountManagement.sendEth.txCost(formatCommaDecimal(txCost), primaryCurrency)}</Text>
             </View>
             { formInputError && <Text style={[formStyle.warningText, {alignSelf: 'center'}]}>{formInputError}</Text>}
             <Button large round wide onPress={() => this.submit()} text={accountManagement.sendEth.transfer} />
