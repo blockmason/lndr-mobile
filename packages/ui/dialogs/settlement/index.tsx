@@ -237,7 +237,7 @@ class Settlement extends Component<Props, State> {
   }
 
   updateAmount(amount: string) {
-    const { direction, txCost } = this.state
+    const { txCost } = this.state
     const { ethExchange, ethSentPastWeek, hasPendingTransaction, ethBalance, primaryCurrency } = this.props
     const friend = this.props.navigation ? this.props.navigation.state.params.friend : {}
 

@@ -4,17 +4,16 @@ import { Text, TouchableHighlight, View, Image } from 'react-native'
 import Button from 'ui/components/button'
 
 import Friend from 'lndr/friend'
-
-import { white } from 'theme/include/colors'
-
+import PendingUnilateral from 'lndr/pending-unilateral'
 import { currencyFormats } from 'lndr/format'
 import profilePic from 'lndr/profile-pic'
 import { currencySymbols } from 'lndr/currencies'
 
+import { white } from 'theme/include/colors'
 import style from 'theme/account'
 import general from 'theme/general'
 
-import { calculateBalance, convertCurrency, getPrimaryCurrency } from 'reducers/app'
+import { calculateBalance, convertCurrency, getPrimaryCurrency, getPendingFromFriend } from 'reducers/app'
 import { connect } from 'react-redux'
 
 import language from 'language'
@@ -28,6 +27,7 @@ interface Props {
   navigation: any
   calculateBalance: (friend: Friend) => number
   primaryCurrency: string
+  getPendingFromFriend: (friendNick: string) => any
 }
 
 interface State {
@@ -40,6 +40,8 @@ class FriendRow extends Component<Props, State> {
   constructor(props) {
     super(props)
     this.state = {}
+
+    this.navigateToSettlement = this.navigateToSettlement.bind(this)
   }
 
   async componentWillMount() {
@@ -96,8 +98,19 @@ class FriendRow extends Component<Props, State> {
   }
 
   showEthSettlement() {
-    const { friend, friendScreen } = this.props
-    return this.getRecentTotal() === 0 || !friendScreen ? null : <Button narrow small round onPress={() => this.props.navigation.navigate('SettleUp', { friend: friend })} text={debtManagement.settleUp} style={{maxWidth: 130, alignSelf:'flex-end'}} />
+    const { friendScreen } = this.props
+    
+    return this.getRecentTotal() === 0 || !friendScreen ? null : <Button narrow small round onPress={this.navigateToSettlement} text={debtManagement.settleUp} style={{maxWidth: 130, alignSelf:'flex-end'}} />
+  }
+
+  navigateToSettlement() {
+    const { friend, getPendingFromFriend } = this.props
+    const { route, pendingTransaction, pendingSettlement } = getPendingFromFriend(friend.nickname)
+    if(route) {
+      this.props.navigation.navigate(route, { pendingSettlement, pendingTransaction })
+    } else {
+      this.props.navigation.navigate('SettleUp', { friend })
+    }
   }
 
   getColor() {
@@ -131,4 +144,5 @@ class FriendRow extends Component<Props, State> {
   }
 }
 
-export default connect((state) => ({ calculateBalance: calculateBalance(state), primaryCurrency: getPrimaryCurrency(state), convertCurrency: convertCurrency(state) }))(FriendRow)
+export default connect((state) => ({ calculateBalance: calculateBalance(state), primaryCurrency: getPrimaryCurrency(state),
+  getPendingFromFriend: getPendingFromFriend(state), convertCurrency: convertCurrency(state) }))(FriendRow)

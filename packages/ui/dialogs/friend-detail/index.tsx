@@ -11,6 +11,7 @@ import PendingView from 'ui/views/account/activity/pending'
 import RecentView from 'ui/views/account/activity/recent'
 import DashboardShell from 'ui/components/dashboard-shell'
 import { currencySymbols } from 'lndr/currencies'
+import PendingUnilateral from 'lndr/pending-unilateral'
 
 import Button from 'ui/components/button'
 import Loading, { LoadingContext } from 'ui/components/loading'
@@ -34,7 +35,7 @@ const {
 const removeFriendText = language.removeFriend
 
 import { getUser, pendingTransactions, recentTransactions, convertCurrency, calculateBalance, 
-  getPrimaryCurrency } from 'reducers/app'
+  getPrimaryCurrency, getPendingFromFriend } from 'reducers/app'
 import { getTwoPartyBalance, removeFriend } from 'actions'
 import { connect } from 'react-redux'
 
@@ -49,6 +50,7 @@ interface Props {
   calculateBalance: (friend: Friend) => number
   getTwoPartyBalance: (user, friend) => Balance
   primaryCurrency: string
+  getPendingFromFriend: (friendNick: string) => any
 }
 
 interface State {
@@ -133,7 +135,13 @@ class FriendDetail extends Component<Props, State> {
 
   goSettleUp() {
     const friend = this.props.navigation ? this.props.navigation.state.params.friend : {}
-    this.props.navigation.navigate('SettleUp', { friend })
+    const { getPendingFromFriend } = this.props
+    const { route, pendingTransaction, pendingSettlement } = getPendingFromFriend(friend.nickname)
+    if(route) {
+      this.props.navigation.navigate(route, { pendingSettlement, pendingTransaction })
+    } else {
+      this.props.navigation.navigate('SettleUp', { friend })
+    }
   }
 
   render() {
@@ -176,5 +184,5 @@ class FriendDetail extends Component<Props, State> {
 
 export default connect((state) => ({ user: getUser(state)(), pendingTransactions: pendingTransactions(state), getTwoPartyBalance: getTwoPartyBalance(state),
   recentTransactions: recentTransactions(state), calculateBalance: calculateBalance(state), convertCurrency: convertCurrency(state), 
-  primaryCurrency: getPrimaryCurrency(state) }),
+  primaryCurrency: getPrimaryCurrency(state), getPendingFromFriend: getPendingFromFriend(state) }),
   { removeFriend })(FriendDetail)
