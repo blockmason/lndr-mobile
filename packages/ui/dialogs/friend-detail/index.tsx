@@ -11,7 +11,6 @@ import PendingView from 'ui/views/account/activity/pending'
 import RecentView from 'ui/views/account/activity/recent'
 import DashboardShell from 'ui/components/dashboard-shell'
 import { currencySymbols } from 'lndr/currencies'
-import PendingUnilateral from 'lndr/pending-unilateral'
 
 import Button from 'ui/components/button'
 import Loading, { LoadingContext } from 'ui/components/loading'

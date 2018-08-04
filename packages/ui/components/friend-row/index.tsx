@@ -4,7 +4,6 @@ import { Text, TouchableHighlight, View, Image } from 'react-native'
 import Button from 'ui/components/button'
 
 import Friend from 'lndr/friend'
-import PendingUnilateral from 'lndr/pending-unilateral'
 import { currencyFormats } from 'lndr/format'
 import profilePic from 'lndr/profile-pic'
 import { currencySymbols } from 'lndr/currencies'
