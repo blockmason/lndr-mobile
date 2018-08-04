@@ -375,6 +375,18 @@ export default {
       start: `U heeft succesvol `,
       end: ` BCPT verzonden en uw transactiekenmerk is `,
     },
+    requestPayPalPayee: {
+      start: `We've let `,
+      end: ` know that you would like to settle with PayPal.`,
+    },
+    requestPayPalPayment: {
+      start: `We've let `,
+      end: ` know that you'd like to be paid with PayPal.`,
+    },
+    settledWithPayPal: {
+      start: `We've let `,
+      end: ` know that you've settled with PayPal.`,
+    },
     status: `U kunt de status van deze transactie zien in het `,
     activity: `tabblad activiteit.`,
   },

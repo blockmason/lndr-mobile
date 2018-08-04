@@ -376,6 +376,18 @@ export default {
       start: ` بنجاح ورقم الهاش لمعاملتك هو `,
       end: ` لقد أرسلت  BCPT `,
     },
+    requestPayPalPayee: {
+      start: `We've let `,
+      end: ` know that you would like to settle with PayPal.`,
+    },
+    requestPayPalPayment: {
+      start: `We've let `,
+      end: ` know that you'd like to be paid with PayPal.`,
+    },
+    settledWithPayPal: {
+      start: `We've let `,
+      end: ` know that you've settled with PayPal.`,
+    },
     status: ` حالة هذه المعاملة من تبويب النشاط`,
     activity: `يمكنك رؤية`,
   },

@@ -375,6 +375,18 @@ export default {
       start: `คุณได้ส่ง `,
       end: ` BCPT เรียบร้อยแล้ว และแฮชธุรกรรมของคุณคือ `,
     },
+    requestPayPalPayee: {
+      start: `We've let `,
+      end: ` know that you would like to settle with PayPal.`,
+    },
+    requestPayPalPayment: {
+      start: `We've let `,
+      end: ` know that you'd like to be paid with PayPal.`,
+    },
+    settledWithPayPal: {
+      start: `We've let `,
+      end: ` know that you've settled with PayPal.`,
+    },
     status: `คุณสามารถดูสถานะของธุรกร`,
     activity: `รมนี้ได้ในแท็บกิจกรรม.`,
   },

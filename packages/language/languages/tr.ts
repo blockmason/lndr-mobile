@@ -375,6 +375,18 @@ export default {
       start: `Başarıyla `,
       end: ` BCPT gönderdiniz ve işlem sağlama kodunuz `,
     },
+    requestPayPalPayee: {
+      start: `We've let `,
+      end: ` know that you would like to settle with PayPal.`,
+    },
+    requestPayPalPayment: {
+      start: `We've let `,
+      end: ` know that you'd like to be paid with PayPal.`,
+    },
+    settledWithPayPal: {
+      start: `We've let `,
+      end: ` know that you've settled with PayPal.`,
+    },
     status: ``,
     activity: `Hareketler sekmesinde bu işlemin durumunu görebilirsiniz.`,
   },

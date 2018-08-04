@@ -376,6 +376,18 @@ export default {
       start: `שלחת BCPT `,
       end: `בהצלחה ומספר העסקה שלך הוא `,
     },
+    requestPayPalPayee: {
+      start: `We've let `,
+      end: ` know that you would like to settle with PayPal.`,
+    },
+    requestPayPalPayment: {
+      start: `We've let `,
+      end: ` know that you'd like to be paid with PayPal.`,
+    },
+    settledWithPayPal: {
+      start: `We've let `,
+      end: ` know that you've settled with PayPal.`,
+    },
     status: `אתה יכול לראות את סטטוס העסקה הזאת `,
     activity: `.בלשונית הפעילות`,
   },

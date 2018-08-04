@@ -375,6 +375,18 @@ export default {
       start: `您发送`,
       end: `BCPT和您的交易记录号是`,
     },
+    requestPayPalPayee: {
+      start: `We've let `,
+      end: ` know that you would like to settle with PayPal.`,
+    },
+    requestPayPalPayment: {
+      start: `We've let `,
+      end: ` know that you'd like to be paid with PayPal.`,
+    },
+    settledWithPayPal: {
+      start: `We've let `,
+      end: ` know that you've settled with PayPal.`,
+    },
     status: `你可以在活动选项卡看到`,
     activity: `这个交易的状态。`,
   },

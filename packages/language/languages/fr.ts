@@ -376,6 +376,18 @@ export default {
       start: `Vous avez envoyé avec succès `,
       end: ` BCPT et le hachage de votre transaction est `,
     },
+    requestPayPalPayee: {
+      start: `We've let `,
+      end: ` know that you would like to settle with PayPal.`,
+    },
+    requestPayPalPayment: {
+      start: `We've let `,
+      end: ` know that you'd like to be paid with PayPal.`,
+    },
+    settledWithPayPal: {
+      start: `We've let `,
+      end: ` know that you've settled with PayPal.`,
+    },
     status: `Vous pouvez voir l'état de cette opération dans `,
     activity: `l'onglet d'activité.`,
   },

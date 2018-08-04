@@ -375,6 +375,18 @@ export default {
       start: `Вы успешно отправили `,
       end: ` BCPT, а хеш транзакции `,
     },
+    requestPayPalPayee: {
+      start: `We've let `,
+      end: ` know that you would like to settle with PayPal.`,
+    },
+    requestPayPalPayment: {
+      start: `We've let `,
+      end: ` know that you'd like to be paid with PayPal.`,
+    },
+    settledWithPayPal: {
+      start: `We've let `,
+      end: ` know that you've settled with PayPal.`,
+    },
     status: `Статус этой транзакции можно увидеть на вкладке `,
     activity: `«Активность».`,
   },

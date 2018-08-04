@@ -379,6 +379,18 @@ export default {
       start: `Sie haben erfolgreich `,
       end: ` BCPT gesendet und Ihre Transaktion-Hash ist `,
     },
+    requestPayPalPayee: {
+      start: `We've let `,
+      end: ` know that you would like to settle with PayPal.`,
+    },
+    requestPayPalPayment: {
+      start: `We've let `,
+      end: ` know that you'd like to be paid with PayPal.`,
+    },
+    settledWithPayPal: {
+      start: `We've let `,
+      end: ` know that you've settled with PayPal.`,
+    },
     status: `Sie können den Status dieser Transaktion in der `,
     activity: `Aktivität-Registerkarte sehen.`,
   },

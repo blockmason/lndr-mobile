@@ -375,6 +375,18 @@ export default {
       start: `Bạn đã gửi thành công `,
       end: ` BCPT và mã hóa giao dịch của bạn là `,
     },
+    requestPayPalPayee: {
+      start: `We've let `,
+      end: ` know that you would like to settle with PayPal.`,
+    },
+    requestPayPalPayment: {
+      start: `We've let `,
+      end: ` know that you'd like to be paid with PayPal.`,
+    },
+    settledWithPayPal: {
+      start: `We've let `,
+      end: ` know that you've settled with PayPal.`,
+    },
     status: `Bạn có thể xem trạng thái của giao dịch này trong `,
     activity: `tab hoạt động.`,
   },

@@ -482,7 +482,7 @@ export const getPayPalRequests = () => {
 
       return jsonToPayPalRequest({ requestorIsMe, friend })
     })
-  
+
     dispatch(setState({ payPalRequests, payPalRequestsLoaded: true }))
   }
 }
@@ -650,9 +650,7 @@ export const addDebt = (friend: Friend, amount: string, memo: string, direction:
       dispatch(displaySuccess(debtManagement.pending.success(friend)))
 
       return true
-    }
-
-    catch (e) {
+    } catch (e) {
       dispatch(displayError(debtManagement.pending.error))
     }
   }

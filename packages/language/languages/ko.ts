@@ -365,6 +365,18 @@ export default {
       start: "성공적으로 보냈습니다 ",
       end: " BCPT 당신의 거래는 "
     },
+    requestPayPalPayee: {
+      start: `We've let `,
+      end: ` know that you would like to settle with PayPal.`,
+    },
+    requestPayPalPayment: {
+      start: `We've let `,
+      end: ` know that you'd like to be paid with PayPal.`,
+    },
+    settledWithPayPal: {
+      start: `We've let `,
+      end: ` know that you've settled with PayPal.`,
+    },
     status: `거래 내역을 볼 수 있는 곳은 `,
     activity: ` 액티비티 탭.`,
   },

@@ -376,6 +376,18 @@ export default {
       start: `Anda telah berjaya menghantar `,
       end: ` BCPT dan cincangan transaksi anda adalah `,
     },
+    requestPayPalPayee: {
+      start: `We've let `,
+      end: ` know that you would like to settle with PayPal.`,
+    },
+    requestPayPalPayment: {
+      start: `We've let `,
+      end: ` know that you'd like to be paid with PayPal.`,
+    },
+    settledWithPayPal: {
+      start: `We've let `,
+      end: ` know that you've settled with PayPal.`,
+    },
     status: `Anda boleh melihat status transaksi ini dalam tab `,
     activity: `aktiviti tersebut.`,
   },

@@ -376,6 +376,18 @@ export default {
       start: `Du har nu sendt `,
       end: ` BCPT og dit transaktion ID er `,
     },
+    requestPayPalPayee: {
+      start: `We've let `,
+      end: ` know that you would like to settle with PayPal.`,
+    },
+    requestPayPalPayment: {
+      start: `We've let `,
+      end: ` know that you'd like to be paid with PayPal.`,
+    },
+    settledWithPayPal: {
+      start: `We've let `,
+      end: ` know that you've settled with PayPal.`,
+    },
     status: `Du kan se statussen for denne transaktion `,
     activity: `i aktivitetsfanen.`,
   },
