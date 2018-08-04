@@ -204,6 +204,9 @@ export const getPendingFromFriend = state => (nick: string) => {
   if(friend) {
     const pendingTransaction = state.store.pendingTransactions.find(tx => tx.creditorAddress === friend.address || tx.debtorAddress === friend.address)
     const pendingSettlement = state.store.pendingSettlements.find(stmt => stmt.creditorAddress === friend.address || stmt.debtorAddress === friend.address)
+    if(pendingSettlement === undefined && pendingTransaction === undefined) {
+      return {}
+    }
     const route = pendingSettlement ? 'PendingSettlement' : 'PendingTransaction'
     return { route, pendingTransaction, pendingSettlement }
   } else {
