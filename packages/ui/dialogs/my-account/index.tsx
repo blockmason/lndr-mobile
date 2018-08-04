@@ -187,12 +187,12 @@ class MyAccount extends Component<Props, State> {
 
   togglePanel(index: number) {
     const { hiddenPanels, scrollY } = this.state
-    const panelHeights = [170, 140, 140, 60, 60, 190, 190, 190, 190, 60, 100]
+    const panelHeights = [150, 140, 140, 60, 60, 60, 60, 60, 190, 190, 190, 180, 60, 120]
     const y = panelHeights[index]
 
     hiddenPanels[index] = !hiddenPanels[index]
     const scrollContent = this.refs.scrollContent as any
-    scrollContent.scrollTo({ x: 0, y: scrollY + (hiddenPanels[index] ? -y : y), animated: true })
+    setTimeout( () => scrollContent.scrollTo({ x: 0, y: scrollY + (hiddenPanels[index] ? -y : y), animated: true }), 100)
     this.setState({ hiddenPanels })
   }
 
@@ -262,8 +262,7 @@ class MyAccount extends Component<Props, State> {
         this.setState({payPalEmail: null})
       }
     } catch (e) {
-      // user cancelled
-      console.log(e)
+      console.log('USER CANCELLED PAYPAL CONNECTION: ', e)
     }
   }
 
@@ -281,13 +280,11 @@ class MyAccount extends Component<Props, State> {
 
   async disconnectPayPal() {
     try {
-      // tell server to delete user's PayPal info
       await loadingPayPal.wrap(palsClient.deletePayPalAccount(this.props.user))
       this.setState({payPalEmail: null})
       this.props.navigation.dispatch(ToastActionsCreators.displayInfo(payPalLanguage.disconnected));
     } catch (e) {
-      // user cancelled
-      console.log(e)
+      console.log('USER CANCELLED PAYPAL DISCONNECTION: ', e)
     }
   }
 
@@ -456,7 +453,7 @@ class MyAccount extends Component<Props, State> {
   }
 
   render() {
-    const { password, confirmPassword, step, scrollY, shouldPickCurrency, currency } = this.state
+    const { password, confirmPassword, step, shouldPickCurrency, currency } = this.state
 
     if (step === 5) {
       return <View style={[general.fullHeight, general.view]}>
