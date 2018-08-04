@@ -4,7 +4,7 @@ import { getResetAction } from 'reducers/nav'
 
 import { UserData } from 'lndr/user'
 import { currencyFormats, sanitizeAmount, formatSettlementAmount, formatEthToFiat, formatCommaDecimal, formatMemo,
-  formatEthRemaining } from 'lndr/format'
+  formatEthRemaining, amountFormat, cleanFiatAmount } from 'lndr/format'
 import Friend from 'lndr/friend'
 import { currencySymbols, transferLimits } from 'lndr/currencies'
 import profilePic from 'lndr/profile-pic'
@@ -66,6 +66,7 @@ interface State {
   balance: number
   direction: string
   txCost: string
+  ethCost: string
   pic?: string
 }
 
@@ -75,19 +76,21 @@ class Settlement extends Component<Props, State> {
     this.state = {
       balance: this.getRecentTotal(),
       direction: this.getRecentTotal() > 0 ? 'borrow' : 'lend',
-      txCost: '0.00'
+      txCost: '0.00',
+      ethCost: ''
     }
+
+    this.blurCurrencyFormat = this.blurCurrencyFormat.bind(this)
   }
 
   async componentWillMount() {
     const { primaryCurrency } = this.props
     const txCost = await getEthTxCost(primaryCurrency)
     const friend = this.props.navigation ? this.props.navigation.state.params.friend : {}
-    const ethSettlement = this.props.navigation ? (this.isEthSettlement()) : false
 
-    let amount: string | undefined = ''
+    let amount
     if(this.state.balance) {
-      amount = ethSettlement ? undefined : this.setAmount(String(Math.abs(this.state.balance)))
+      amount = formatSettlementAmount(String(Math.abs(this.state.balance)), primaryCurrency)
     }
 
     unmounting = false
@@ -96,6 +99,8 @@ class Settlement extends Component<Props, State> {
     if (friend.address !== undefined) {
       pic = await profilePic.get(friend.address)
     }
+
+    console.log('LOADING AMOUNT ', amount)
     this.setState({txCost, pic, amount})
   }
 
@@ -204,13 +209,6 @@ class Settlement extends Component<Props, State> {
     this.props.navigation.navigate('Friends')
   }
 
-  setAmount(amount) {
-    const { balance } = this.state
-    const { primaryCurrency } = this.props
-
-    return formatSettlementAmount(amount, balance, primaryCurrency)
-  }
-
   displayMessage() {
     const friend = this.props.navigation ? this.props.navigation.state.params.friend : {}
 
@@ -234,8 +232,8 @@ class Settlement extends Component<Props, State> {
 
     let formInputError
 
-    const cleanAmount = amount.replace(/[^0-9\.]/g, '')
-    const totalEthCost = ( Number(txCost) + Number(cleanAmount) ) / Number(ethExchange(primaryCurrency))
+    const cleanAmount = cleanFiatAmount(amount)
+    const totalEthCost = ( Number(txCost) + cleanAmount ) / Number(ethExchange(primaryCurrency))
 
     if ( (!this.isPayee()) && totalEthCost > Number(ethBalance) ) {
       formInputError = accountManagement.sendEth.error.insufficient
@@ -245,7 +243,15 @@ class Settlement extends Component<Props, State> {
       formInputError = debtManagement.createError.pending
     }
 
-    this.setState({ amount: this.setAmount(amount), formInputError })
+    const ethCost = String(totalEthCost)
+
+    this.setState({ amount: amountFormat(amount, primaryCurrency, false), formInputError, ethCost })
+  }
+
+  blurCurrencyFormat() {
+    const { amount } = this.state
+    const { primaryCurrency } = this.props
+    this.setState({ amount: amount === undefined ? amount : amountFormat(amount, primaryCurrency, true) })
   }
 
   renderPaymentButton() {
@@ -279,7 +285,7 @@ class Settlement extends Component<Props, State> {
   }
 
   render() {
-    const { amount, balance, txCost, formInputError, pic } = this.state
+    const { amount, balance, txCost, formInputError, pic, ethCost } = this.state
     const { ethBalance, ethExchange, primaryCurrency } = this.props
     const ethSettlement = this.props.navigation ? (this.props.navigation.state.params.settlementType == "eth") : false
     const friend = this.props.navigation ? this.props.navigation.state.params.friend : {}
@@ -320,13 +326,15 @@ class Settlement extends Component<Props, State> {
                   placeholder={`${currencySymbols(primaryCurrency)}0`}
                   placeholderTextColor='black'
                   value={amount}
-                  maxLength={9}
+                  maxLength={11}
                   underlineColorAndroid='transparent'
                   keyboardType='numeric'
                   onChangeText={amount => this.updateAmount(amount)}
+                  onBlur={this.blurCurrencyFormat}
                 /> : <Text style={formStyle.jumboInput}>{amount}</Text>}
               </View>
             </View>
+            { ethCost !== '' && <Text style={[formStyle.smallText, formStyle.spaceTop, formStyle.center]}>{`${formatCommaDecimal(ethCost.slice(0, 6))} ETH`}</Text>}
             { formInputError && <Text style={[formStyle.warningText, {alignSelf: 'center', marginHorizontal: 15}]}>{formInputError}</Text>}
             { paymentButton }
           </View>

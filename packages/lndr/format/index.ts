@@ -64,12 +64,13 @@ export const currencyFormats = (formatType: string) => {
   }
 }
 
-export const amountFormat = (amount: string, currency: string) => {
+export const amountFormat = (amount: string, currency: string, notTextInput: boolean) => {
+  let result = ''
   if (hasNoDecimals(currency)) {
     const raw = amount
     .replace(/[^\d]/g, '')
 
-    return `${currencySymbols(currency)}${commas(raw)}`
+    result = `${currencySymbols(currency)}${commas(raw)}`
   } else if (isCommaDecimal()) {
     const raw = amount
       .replace(/[^,\d]/g, '')
@@ -78,7 +79,7 @@ export const amountFormat = (amount: string, currency: string) => {
       .replace('DOT', ',')
       .replace(/^0\d/, x => x[1])
       .replace(/,\d{3\.}/, x => `,${x.substr(-2)}`)
-  
+
     const hasDecimal = amount.indexOf(',') !== -1
 
     if (hasDecimal) {
@@ -87,9 +88,10 @@ export const amountFormat = (amount: string, currency: string) => {
         left = `${left}${right[0]}`
         right = right.substr(1)
       }
-      return `${currencySymbols(currency)}${commas(left)},${right}`
+      result = `${currencySymbols(currency)}${commas(left)},${right}`
+    } else {
+      result = `${currencySymbols(currency)}${commas(raw)}`
     }
-    return `${currencySymbols(currency)}${commas(raw)}`
   } else {
     const raw = amount
       .replace(/[^\.\d]/g, '')
@@ -107,11 +109,21 @@ export const amountFormat = (amount: string, currency: string) => {
         left = `${left}${right[0]}`
         right = right.substr(1)
       }
-      return `${currencySymbols(currency)}${commas(left)}.${right}`
+      result = `${currencySymbols(currency)}${commas(left)}.${right}`
+    } else {
+      result = `${currencySymbols(currency)}${commas(raw)}`
     }
-  
-    return `${currencySymbols(currency)}${commas(raw)}`
   }
+
+  if(notTextInput) {
+    if(result && (result.slice(-1) === ',' || result.slice(-1) === '.')) {
+      result = result.slice(0, -1)
+    } else if(result && (result.slice(-2, -1) === ',' || result.slice(-2, -1) === '.')) {
+      result += '0'
+    }
+  }
+  
+  return result
 }
 
 export const formatNick = nick => nick.toLowerCase().replace(/[^a-z0-9]/g, '')
@@ -202,16 +214,12 @@ export const formatEthToFiat = (ethBalance: string, ethExchange: string, currenc
 
 export const formatCommaDecimal = (amount: string) : string => isCommaDecimal() ? amount.replace('.', ',') : amount
 
-export const formatSettlementAmount = (amount: string, balance: number, primaryCurrency: string) : string => {
-  const adjustedBalance = hasNoDecimals(primaryCurrency) ? balance : balance / 100
+export const formatSettlementAmount = (amount: string, primaryCurrency: string) : string => {
+  const adjustedBalance = hasNoDecimals(primaryCurrency) ? Number(amount) : Number(amount) / 100
 
   const commaAdjusted = isCommaDecimal() ? String(adjustedBalance).replace('.', ',') : String(adjustedBalance)
 
-  let formattedAmount = amountFormat(commaAdjusted, primaryCurrency)
-  
-  if(amount && (formattedAmount.slice(-2, -1) === ',' || formattedAmount.slice(-2, -1) === '.')) {
-    formattedAmount += '0'
-  }
+  let formattedAmount = amountFormat(commaAdjusted, primaryCurrency, true)
   
   return formattedAmount
 }
@@ -220,4 +228,13 @@ export const formatEthRemaining = (ethExchange: Function, ethSentPastWeek: numbe
   const remaining = String(Number(transferLimits(primaryCurrency)) - Number(ethSentPastWeek) * Number(ethExchange(primaryCurrency)))
   const end = remaining.indexOf('.') === -1 ? remaining.length : remaining.indexOf('.') + 3
   return isCommaDecimal() ? remaining.slice(0, end).replace('.', ',') : remaining.slice(0, end)
+}
+
+export const cleanFiatAmount = (amount: string) : number => {
+  if(isCommaDecimal()) {
+    amount = amount.replace('.', '').replace(',', '.')
+  } else {
+    amount = amount.replace(',', '')
+  }
+  return Number(amount.replace(/[^0-9\.]/g, ''))
 }

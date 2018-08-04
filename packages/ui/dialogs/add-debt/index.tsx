@@ -110,14 +110,11 @@ class AddDebt extends Component<Props, State> {
   }
 
   blurCurrencyFormat() {
-    let { amount } = this.state
-    if(amount && (amount === ',' || amount === '.')) {
+    let { amount, currency } = this.state
+    if(amount === undefined || amount === '' || (amount && (amount === ',' || amount === '.'))) {
       this.setState({ amount: undefined })
-    } else if(amount && (amount.slice(-1) === ',' || amount.slice(-1) === '.')) {
-      amount = amount.slice(0, -1)
-      this.setState({ amount })
-    } else if(amount && (amount.slice(-2, -1) === ',' || amount.slice(-2, -1) === '.')) {
-      amount += '0'
+    } else {
+      amount = amountFormat(amount, currency, true)
       this.setState({ amount })
     }
   }
@@ -198,8 +195,7 @@ class AddDebt extends Component<Props, State> {
 
   setAmount(amount) {
     const { currency } = this.state
-    console.log(1, amount, currency)
-    return amountFormat(amount, currency)
+    return amountFormat(amount, currency, false)
   }
 
   handlePickerDone(value) {

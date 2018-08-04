@@ -2,7 +2,8 @@ import 'react-native'
 
 // Note: test renderer must be required after react-native.
 
-import { commas, amountFormat, formatEthToFiat, formatCommaDecimal, formatSettlementAmount, formatMemo, formatEthRemaining } from 'lndr/format'
+import { commas, amountFormat, formatEthToFiat, formatCommaDecimal, formatSettlementAmount, formatMemo, formatEthRemaining,
+  cleanFiatAmount } from 'lndr/format'
 import { getEthExchange } from 'reducers/app';
 
 describe('commas', () => {
@@ -14,10 +15,10 @@ describe('commas', () => {
 
 describe('amountFormat', () => {
   it('Formats an amount correctly', () => {
-    expect(amountFormat('1000', 'USD')).toBe('US$1,000')
-    expect(amountFormat('1000.10', 'INR')).toBe('₹1,000.10')
-    expect(amountFormat('1,000.10', 'THB')).toBe('฿1,000.10')
-    expect(amountFormat('1,0100.10', 'TRY')).toBe('₺10,100.10')
+    expect(amountFormat('1000', 'USD', false)).toBe('US$1,000')
+    expect(amountFormat('1000.1', 'INR', false)).toBe('₹1,000.1')
+    expect(amountFormat('1,000.1', 'THB', true)).toBe('฿1,000.10')
+    expect(amountFormat('1,0100.10', 'TRY', false)).toBe('₺10,100.10')
   })
 })
 
@@ -29,10 +30,10 @@ describe('formatEthToFiat', () => {
 
 describe('formatSettlementAmount', () => {
   it('Formats an ETH amount correctly', () => {
-    expect(formatSettlementAmount('2', 110, 'USD')).toBe('US$1.10')
-    expect(formatSettlementAmount('1', 210, 'USD')).toBe('US$2.10')
-    expect(formatSettlementAmount('410', 410, 'USD')).toBe('US$4.10')
-    expect(formatSettlementAmount('3.11', 311, 'USD')).toBe('US$3.11')
+    expect(formatSettlementAmount('110', 'USD')).toBe('US$1.10')
+    expect(formatSettlementAmount('210', 'USD')).toBe('US$2.10')
+    expect(formatSettlementAmount('410', 'USD')).toBe('US$4.10')
+    expect(formatSettlementAmount('311', 'USD')).toBe('US$3.11')
   })
 })
 
@@ -44,11 +45,17 @@ describe('formatMemo', () => {
 })
 
 describe('formatEthRemaining', () => {
-  function getEthExchange(currency) {
+  function getEthExchange() {
     return 400
   }
 
   it('should return the correct amount of transfer capacity remaining', () => {
     expect(formatEthRemaining(getEthExchange, 0.123432, 'USD')).toBe('150.62')
+  })
+})
+
+describe('cleanFiatAmount', () => {
+  it('should return an amount in number format', () => {
+    expect(cleanFiatAmount('CA$1.21')).toBe(1.21)
   })
 })

@@ -128,7 +128,8 @@ class TransferEth extends Component<Props, State> {
     }
     const remaining = `${Number(amount) * Number(exchange)}`
     const end = remaining.indexOf('.') === -1 ? remaining.length : remaining.indexOf('.') + 3
-    const result = remaining.slice(0, end)
+    let result = remaining.slice(0, end)
+    result = result.slice(-2, -1) === '.' ? result += '0' : result
     return isCommaDecimal() ? result.replace('.', ',') : result
   }
 
