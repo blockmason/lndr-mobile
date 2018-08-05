@@ -28,12 +28,18 @@ export default class CreditProtocol {
   constructor(baseUrl: string, fetch?: any) {
     this.client = new Client(baseUrl, fetch)
     this.tempStorage = {
-      nicknames: {},
-      emails: {},
-      paypal: {},
-      registerId: {},
-      searchUsers: {}
+      registerId: {}
     }
+  }
+
+  cacheHttpRequest(endpoint: string, milliseconds: number) {
+    const cachedData = this.tempStorage[endpoint]
+    if (cachedData && cachedData.request && cachedData.timestamp && moment(cachedData.timestamp).add(milliseconds, 'ms') > moment()) {
+      return cachedData.request
+    }
+    const request = this.client.get(endpoint)
+    this.tempStorage[endpoint] = { request, timestamp: Date.now() }
+    return request
   }
 
   // TODO this should go away once serverSign works and nick endpoint is
@@ -84,7 +90,7 @@ export default class CreditProtocol {
     const hash = bufferToHex(ethUtil.sha3(hashBuffer))
     const signature = this.serverSign(hash, privateKeyBuffer)
 
-    delete this.tempStorage.nicknames[addr]
+    delete this.tempStorage[`/nick/${addr}`]
 
     return this.client.post('/nick', {
       addr,
@@ -102,7 +108,7 @@ export default class CreditProtocol {
     const hash = bufferToHex(ethUtil.sha3(hashBuffer))
     const signature = this.serverSign(hash, privateKeyBuffer)
 
-    delete this.tempStorage.emails[addr]
+    delete this.tempStorage[`/email/${addr}`]
 
     return this.client.post('/email', {
       addr,
@@ -128,10 +134,7 @@ export default class CreditProtocol {
   }
 
   getConfig () {
-    if (this.tempStorage.config) {
-      return this.tempStorage.config
-    }
-    return this.tempStorage.config = this.client.get(`/config`)
+    return this.cacheHttpRequest(`/config`, 15000)
   }
 
   async getUcacAddresses() {
@@ -157,31 +160,19 @@ export default class CreditProtocol {
   }
 
   getNickname(addr: string) {
-    const nickname = this.tempStorage.nicknames[addr]
-    if (nickname) {
-      return nickname
-    }
-    return this.tempStorage.nicknames[addr] = this.client.get(`/nick/${addr}`)
+    return this.cacheHttpRequest(`/nick/${addr}`, 10000)
   }
 
   getEmail(addr: string) {
-    const email = this.tempStorage.emails[addr]
-    if (email) {
-      return email
-    }
-    return this.tempStorage.emails[addr] = this.client.get(`/email/${addr}`)
+    return this.cacheHttpRequest(`/email/${addr}`, 10000)
   }
 
   getPayPal(user: string) {
-    const paypal = this.tempStorage.paypal[user]
-    if (paypal) {
-      return paypal
-    }
-    return this.tempStorage.paypal[user] = this.client.get(`/paypal/${user}`)
+    return this.cacheHttpRequest(`/paypal/${user}`, 5000)
   }
 
   searchUsers(nick: string) {
-    return this.tempStorage.searchUsers[nick] = this.client.get(`/search_nick/${nick}`)
+    return this.cacheHttpRequest(`/search_nick/${nick}`, 5000)
   }
 
   registerChannelID(address: string, channelID: string, platform: string, privateKeyBuffer: any) {
@@ -222,7 +213,7 @@ export default class CreditProtocol {
   }
 
   addFriend(user: string, addr: string/*, privateKeyBuffer: any*/) {
-    delete this.tempStorage.getFriends
+    delete this.tempStorage[`/friends/${user}`]
     return this.client.post(`/add_friends/${user}`, [ addr ])
     // {
     //   addr,
@@ -231,7 +222,7 @@ export default class CreditProtocol {
   }
 
   removeFriend(user: string, addr: string/*, privateKeyBuffer: any*/) {
-    delete this.tempStorage.getFriends
+    delete this.tempStorage[`/friends/${user}`]
     return this.client.post(`/remove_friends/${user}`, [ addr ])
     // {
     //   addr,
@@ -240,27 +231,19 @@ export default class CreditProtocol {
   }
 
   getFriends(user: string) {
-    return this.tempStorage.getFriends = this.client.get(`/friends/${user}`)
+    return this.cacheHttpRequest(`/friends/${user}`, 5000)
   }
 
   getFriendRequests(user: string) {
-    return this.tempStorage.getFriendRequests = this.client.get(`/friend_requests/${user}`)
+    return this.cacheHttpRequest(`/friend_requests/${user}`, 5000)
   }
 
   getPendingTransactions(user: string) {
-    if ( this.tempStorage.lastPending && moment(this.tempStorage.lastPendingTime).add(1, 'second') > moment() ) {
-      return this.tempStorage.lastPending
-    }
-    this.tempStorage.lastPendingTime = new Date()
-    return this.tempStorage.lastPending = this.client.get(`/pending/${user}`)
+    return this.cacheHttpRequest(`/pending/${user}`, 1000)
   }
 
   getPendingSettlements(user: string) {
-    if ( this.tempStorage.lastPendingSettlements && moment(this.tempStorage.lastPendingSettlementsTime).add(1, 'second') > moment() ) {
-      return this.tempStorage.lastPendingSettlements
-    }
-    this.tempStorage.lastPendingSettlementsTime = new Date()
-    return this.tempStorage.lastPendingSettlements = this.client.get(`/pending_settlements/${user}`)
+    return this.cacheHttpRequest(`/pending_settlements/${user}`, 1000)
   }
 
   getNonce(address1, address2) {
@@ -268,11 +251,11 @@ export default class CreditProtocol {
   }
 
   getTransactions(user: string) {
-    return this.client.get(`/transactions?user=${user}`)
+    return this.cacheHttpRequest(`/transactions?user=${user}`, 3000)
   }
 
   pendingTransactions() {
-    return this.client.get('/pending')
+    return this.cacheHttpRequest('/pending', 1000)
   }
 
   rejectPendingByHash(hash: string, privateKeyBuffer: any) {
@@ -477,7 +460,7 @@ export default class CreditProtocol {
   }
 
   retrievePayPalSettlementRequests(addr: string) {
-    return this.client.get(`/request_paypal/${addr}`)
+    return this.cacheHttpRequest(`/request_paypal/${addr}`, 3000)
   }
 
   deletePayPalSettlementRequest(friend: string, requestor: string, privateKeyBuffer: any) {
@@ -487,7 +470,6 @@ export default class CreditProtocol {
     ])
     const hash = bufferToHex(ethUtil.sha3(hashBuffer))
     const paypalRequestSignature = this.serverSign(hash, privateKeyBuffer)
-    console.log('HERE IS MY DATA', { friend, requestor, paypalRequestSignature })
 
     return this.client.post('/remove_paypal_request', { friend, requestor, paypalRequestSignature })
   }
