@@ -88,9 +88,14 @@ class Settlement extends Component<Props, State> {
     const txCost = await getEthTxCost(primaryCurrency)
     const friend = this.props.navigation ? this.props.navigation.state.params.friend : {}
 
-    let amount
+    let amount, formInputError, ethCost
+
     if(this.state.balance) {
       amount = formatSettlementAmount(String(Math.abs(this.state.balance)), primaryCurrency)
+
+      const result = this.ethCostAndError(amount, txCost)
+      ethCost = result.ethCost
+      formInputError = result.formInputError
     }
 
     unmounting = false
@@ -101,7 +106,7 @@ class Settlement extends Component<Props, State> {
     }
 
     console.log('LOADING AMOUNT ', amount)
-    this.setState({txCost, pic, amount})
+    this.setState({txCost, pic, amount, ethCost, formInputError})
   }
 
   componentWillUnmount() {
@@ -220,13 +225,7 @@ class Settlement extends Component<Props, State> {
     return `${balance < 0 ? '' : '+'}${currencySymbols(primaryCurrency)}${currencyFormats(primaryCurrency)(balance)}`
   }
 
-  getLimit() {
-    const { ethExchange, ethSentPastWeek, primaryCurrency } = this.props
-    return formatEthRemaining(ethExchange, ethSentPastWeek, primaryCurrency)
-  }
-
-  updateAmount(amount: string) {
-    const { txCost } = this.state
+  ethCostAndError(amount: string, txCost: string) {
     const { ethExchange, ethSentPastWeek, hasPendingTransaction, ethBalance, primaryCurrency } = this.props
     const friend = this.props.navigation ? this.props.navigation.state.params.friend : {}
 
@@ -234,6 +233,7 @@ class Settlement extends Component<Props, State> {
 
     const cleanAmount = cleanFiatAmount(amount)
     const totalEthCost = ( Number(txCost) + cleanAmount ) / Number(ethExchange(primaryCurrency))
+    const ethCost = String(totalEthCost)
 
     if ( (!this.isPayee()) && totalEthCost > Number(ethBalance) ) {
       formInputError = accountManagement.sendEth.error.insufficient
@@ -243,9 +243,18 @@ class Settlement extends Component<Props, State> {
       formInputError = debtManagement.createError.pending
     }
 
-    const ethCost = String(totalEthCost)
+    return { formInputError, ethCost }
+  }
 
-    this.setState({ amount: amountFormat(amount, primaryCurrency, false), formInputError, ethCost })
+  getLimit() {
+    const { ethExchange, ethSentPastWeek, primaryCurrency } = this.props
+    return formatEthRemaining(ethExchange, ethSentPastWeek, primaryCurrency)
+  }
+
+  updateAmount(amount: string) {
+    const { ethCost, formInputError } = this.ethCostAndError(amount, this.state.txCost)
+
+    this.setState({ amount: amountFormat(amount, this.props.primaryCurrency, false), formInputError, ethCost })
   }
 
   blurCurrencyFormat() {
