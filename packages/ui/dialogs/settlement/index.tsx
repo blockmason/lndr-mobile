@@ -232,6 +232,7 @@ class Settlement extends Component<Props, State> {
     let formInputError
 
     const cleanAmount = cleanFiatAmount(amount)
+    console.log('clean ', cleanAmount)
     const totalEthCost = ( Number(txCost) + cleanAmount ) / Number(ethExchange(primaryCurrency))
     const ethCost = String(totalEthCost)
 

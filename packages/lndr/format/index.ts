@@ -236,5 +236,9 @@ export const cleanFiatAmount = (amount: string) : number => {
   } else {
     amount = amount.replace(',', '')
   }
-  return Number(amount.replace(/[^0-9\.]/g, ''))
+  const cleanAmount = amount.replace(/[^0-9\.]/g, '')
+  if(cleanAmount.slice(-1) === '.') {
+    return 0
+  }
+  return Number(cleanAmount)
 }

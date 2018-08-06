@@ -29,6 +29,6 @@ jest.mock('react-native-fetch-blob', () => {
 describe('Initialization', () => {
   it('initializes successfully', () => {
     const creditProtocol = new CreditProtocol('https://api.lndr.blockmason.io')
-    expect(creditProtocol.tempStorage.nicknames).toEqual({})
+    expect(creditProtocol.tempStorage.registerId).toEqual({})
   })
 })

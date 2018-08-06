@@ -57,5 +57,6 @@ describe('formatEthRemaining', () => {
 describe('cleanFiatAmount', () => {
   it('should return an amount in number format', () => {
     expect(cleanFiatAmount('CA$1.21')).toBe(1.21)
+    expect(cleanFiatAmount('CA$.')).toBe(0)
   })
 })
