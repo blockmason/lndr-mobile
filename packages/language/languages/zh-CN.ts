@@ -376,16 +376,16 @@ export default {
       end: `BCPT和您的交易记录号是`,
     },
     requestPayPalPayee: {
-      start: `We've let `,
-      end: ` know that you would like to settle with PayPal.`,
+      start: `我们让 `,
+      end: ` 知道你想用贝宝结算。`,
     },
     requestPayPalPayment: {
-      start: `We've let `,
-      end: ` know that you'd like to be paid with PayPal.`,
+      start: `我们让 `,
+      end: ` 知道你想用贝宝支付。`,
     },
     settledWithPayPal: {
-      start: `We've let `,
-      end: ` know that you've settled with PayPal.`,
+      start: `我们让 `,
+      end: ` 知道你已经与贝宝结算。`,
     },
     status: `你可以在活动选项卡看到`,
     activity: `这个交易的状态。`,
@@ -415,5 +415,19 @@ export default {
     friendNotEnabled: F => `@${F}没有启用贝宝payments.`,
     friendRequestedConnect: F => `@${F}想通过PayPal付给你`,
     requestFriendConnect: F => `你问@${F}启用PayPal`,
+    feesNotification: `不包括PayPal的收费`,
+    feesInformationHeader: `贝宝费用信息`,
+    feesInformation: `1.您的支付宝账户必须与银行账户。
+    
+2.从您的银行的货币不同的货币支付将收取$ 0.35的费用。
+
+3.国际转会费：
+    美国到加拿大/欧洲：$ 2.99
+    美国到其他地方：$ 4.99
+
+4.这些费用是不全面的。对于最新的信息，请访问：
+
+    https://www.paypal.com/us/webapps/mpp/paypal-fees#sending-us`,
+  payPalSite: `PayPal.com`,
   }
 }

@@ -377,16 +377,16 @@ export default {
       end: ` BCPT a hash vaší transakce je `,
     },
     requestPayPalPayee: {
-      start: `We've let `,
-      end: ` know that you would like to settle with PayPal.`,
+      start: `Máme nechat `,
+      end: ` vědět, že byste chtěli usadit přes PayPal.`,
     },
     requestPayPalPayment: {
-      start: `We've let `,
-      end: ` know that you'd like to be paid with PayPal.`,
+      start: `Máme nechat `,
+      end: ` vědět, že byste chtěli být zaplacena přes PayPal.`,
     },
     settledWithPayPal: {
-      start: `We've let `,
-      end: ` know that you've settled with PayPal.`,
+      start: `Máme nechat `,
+      end: ` vědět, že jste se vyrovnal s PayPal.`,
     },
     status: `Stav této transakce můžete sledovat v `,
     activity: `záložce Aktivita.`,
@@ -416,5 +416,19 @@ export default {
     friendNotEnabled: F => `${F} není povoleno PayPal platby.`,
     friendRequestedConnect: F => `${F} chce zaplatit přes PayPal`,
     requestFriendConnect: F => `Ptal ses @${F} umožnit PayPal`,
+    feesNotification: `Nezahrnuje PayPal poplatky`,
+    feesInformationHeader: `PayPal Poplatky Informace`,
+    feesInformation: `1. Váš účet PayPal musí být vázána na bankovní účet.
+    
+2. Platba v měně odlišné od měny vaší banky bude vynakládat $ 0.35 poplatek.
+
+3. Mezinárodní poplatky za převod:
+    USA do Kanady / Evropa: $ 2,99
+    USA se nikde jinde: $ 4,99
+
+4. Tyto poplatky nejsou vyčerpávající. Pro většinu aktualizované informace naleznete na adrese:
+
+    https://www.paypal.com/us/webapps/mpp/paypal-fees#sending-us`,
+    payPalSite: `PayPal.com`,
   }
 }

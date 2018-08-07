@@ -376,16 +376,16 @@ export default {
       end: ` BCPT og transaksjonens referanse er `,
     },
     requestPayPalPayee: {
-      start: `We've let `,
-      end: ` know that you would like to settle with PayPal.`,
+      start: `Vi har latt `,
+      end: ` vet at du ønsker å bosette seg med PayPal.`,
     },
     requestPayPalPayment: {
-      start: `We've let `,
-      end: ` know that you'd like to be paid with PayPal.`,
+      start: `Vi har latt `,
+      end: ` vet at du ønsker å bli betalt med PayPal.`,
     },
     settledWithPayPal: {
-      start: `We've let `,
-      end: ` know that you've settled with PayPal.`,
+      start: `Vi har latt `,
+      end: ` vet at du har avgjort med PayPal.`,
     },
     status: `Du kan se statusen for denne transaksjonen `,
     activity: `i aktivitetsfanen.`,
@@ -415,5 +415,19 @@ export default {
     friendNotEnabled: F => `@${F} is niet ingeschakeld PayPal betalingen.`,
     friendRequestedConnect: F => `@${F} ønsker å betale deg via PayPal`,
     requestFriendConnect: F => `Du ba @${F} for å muliggjøre PayPal`,
+    feesNotification: `Inkluderer ikke PayPal avgifter`,
+    feesInformationHeader: `PayPal gebyrer Informasjon`,
+    feesInformation: `1. PayPal-kontoen din må være knyttet til en bankkonto.
+    
+2. Betale i en annen valuta enn bankens valuta vil medføre en $ 0.35 gebyr.
+
+3. Internasjonale overføre avgifter:
+    USA til Canada / Europa: $ 2.99
+    USA til noe annet: $ 4.99
+
+4. Disse avgiftene er ikke fullstendig. For den mest oppdaterte informasjon vennligst gå til:
+
+    https://www.paypal.com/us/webapps/mpp/paypal-fees#sending-us`,
+    payPalSite: `PayPal.com`,
   }
 }

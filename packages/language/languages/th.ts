@@ -376,16 +376,16 @@ export default {
       end: ` BCPT เรียบร้อยแล้ว และแฮชธุรกรรมของคุณคือ `,
     },
     requestPayPalPayee: {
-      start: `We've let `,
-      end: ` know that you would like to settle with PayPal.`,
+      start: `เราได้แจ้งให้ `,
+      end: ` รู้ว่าคุณต้องการที่จะชำระด้วย PayPal`,
     },
     requestPayPalPayment: {
-      start: `We've let `,
-      end: ` know that you'd like to be paid with PayPal.`,
+      start: `เราได้แจ้งให้ `,
+      end: ` รู้ว่าคุณต้องการที่จะได้รับการชำระเงินด้วย PayPal`,
     },
     settledWithPayPal: {
-      start: `We've let `,
-      end: ` know that you've settled with PayPal.`,
+      start: `เราได้แจ้งให้ `,
+      end: ` ทราบว่าคุณได้ตกลงกับ PayPal`,
     },
     status: `คุณสามารถดูสถานะของธุรกร`,
     activity: `รมนี้ได้ในแท็บกิจกรรม.`,
@@ -415,5 +415,19 @@ export default {
     friendNotEnabled: F => `@${F} ยังไม่ได้เปิดใช้งาน PayPal การชำระเงิน`,
     friendRequestedConnect: F => `@${F} ต้องการจ่ายเงินให้คุณผ่าน PayPal`,
     requestFriendConnect: F => `คุณถาม @${F} เพื่อเปิดใช้งาน PayPal`,
+    feesNotification: `ไม่รวมค่าธรรมเนียม PayPal`,
+    feesInformationHeader: `ข้อมูลค่าธรรมเนียม PayPal`,
+    feesInformation: `1. บัญชี PayPal ของคุณจะต้องเชื่อมโยงกับบัญชีธนาคาร
+    
+2. ชำระเงินในสกุลเงินที่แตกต่างจากสกุลเงินของธนาคารจะต้องเสียค่าธรรมเนียม $ 0.35
+
+3. ค่าธรรมเนียมการโอนระหว่างประเทศ:
+    สหรัฐอเมริกาแคนาดา / ยุโรป: $ 2.99
+    ประเทศสหรัฐอเมริกาเพื่อให้ทุกที่อื่น: $ 4.99
+
+4. ค่าใช้จ่ายเหล่านี้จะไม่ครอบคลุม สำหรับข้อมูลการปรับปรุงมากที่สุดโปรดไปที่:
+
+    https://www.paypal.com/us/webapps/mpp/paypal-fees#sending-us`,
+    payPalSite: `PayPal.com`,
   }
 }

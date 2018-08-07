@@ -377,16 +377,16 @@ export default {
       end: ` BCPT dan cincangan transaksi anda adalah `,
     },
     requestPayPalPayee: {
-      start: `We've let `,
-      end: ` know that you would like to settle with PayPal.`,
+      start: `Kami telah biarkan `,
+      end: ` tahu bahawa anda ingin untuk menyelesaikan dengan PayPal.`,
     },
     requestPayPalPayment: {
-      start: `We've let `,
-      end: ` know that you'd like to be paid with PayPal.`,
+      start: `Kami telah biarkan `,
+      end: ` tahu bahawa anda sedang dibayar dengan PayPal.`,
     },
     settledWithPayPal: {
-      start: `We've let `,
-      end: ` know that you've settled with PayPal.`,
+      start: `Kami telah biarkan `,
+      end: ` tahu yang anda telah diselesaikan dengan PayPal.`,
     },
     status: `Anda boleh melihat status transaksi ini dalam tab `,
     activity: `aktiviti tersebut.`,
@@ -416,5 +416,19 @@ export default {
     friendNotEnabled: F => `@${F} belum mendayakan PayPal pembayaran.`,
     friendRequestedConnect: F => `@${F} mahu membayar anda melalui PayPal`,
     requestFriendConnect: F => `Anda meminta @${F} untuk membolehkan PayPal`,
+    feesNotification: `Tidak termasuk yuran PayPal`,
+    feesInformationHeader: `PayPal Maklumat Bayaran`,
+    feesInformation: `1. akaun PayPal anda mesti terikat kepada akaun bank.
+    
+2. Membayar dalam mata wang yang berbeza daripada mata wang bank anda akan dikenakan bayaran $ 0.35.
+
+3. yuran pemindahan Antarabangsa:
+    Amerika Syarikat ke Kanada / Europe: $ 2.99
+    Amerika Syarikat ke mana-mana yang lain: $ 4.99
+
+4. Yuran tersebut tidak menyeluruh. Untuk maklumat yang terkini sila ke:
+
+    https://www.paypal.com/us/webapps/mpp/paypal-fees#sending-us`,
+    payPalSite: `PayPal.com`,
   }
 }

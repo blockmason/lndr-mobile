@@ -380,16 +380,16 @@ export default {
       end: ` BCPT gesendet und Ihre Transaktion-Hash ist `,
     },
     requestPayPalPayee: {
-      start: `We've let `,
-      end: ` know that you would like to settle with PayPal.`,
+      start: `Wir haben lassen `,
+      end: ` wissen, dass Sie mit Hilfe von PayPal begleichen möchten.`,
     },
     requestPayPalPayment: {
-      start: `We've let `,
-      end: ` know that you'd like to be paid with PayPal.`,
+      start: `Wir haben lassen `,
+      end: ` wissen, dass Sie mit PayPal bezahlt werden möchten.`,
     },
     settledWithPayPal: {
-      start: `We've let `,
-      end: ` know that you've settled with PayPal.`,
+      start: `Wir haben lassen `,
+      end: ` wissen, dass Sie mit PayPal entschieden haben.`,
     },
     status: `Sie können den Status dieser Transaktion in der `,
     activity: `Aktivität-Registerkarte sehen.`,
@@ -419,5 +419,19 @@ export default {
     friendNotEnabled: F => `@${F} hat PayPal Zahlungen nicht aktiviert`,
     friendRequestedConnect: F => `@${F} möchte Sie über PayPal zahlen`,
     requestFriendConnect: F => `Sie werden gefragt @${F} PayPal zu ermöglichen`,
+    feesNotification: `Darin nicht enthalten sind PayPal-Gebühren`,
+    feesInformationHeader: `PayPal Gebühren Informationen`,
+    feesInformation: `1. Ihr PayPal-Konto muss auf ein Bankkonto gebunden werden.
+    
+2. Bezahlen in einer anderen Währung als Ihrer Bank Währung wird ein $ 0,35 Gebühr anfallen.
+    
+3. Internationale Transfergebühren:
+    USA nach Kanada / Europa: $ 2.99
+    USA anderswo: $ 4.99
+    
+4. Diese Gebühren sind nicht alle Informationen. Die aktuellsten Informationen erhalten Sie unter:
+
+    https://www.paypal.com/us/webapps/mpp/paypal-fees#sending-us`,
+    payPalSite: `PayPal.com`,
   }
 }

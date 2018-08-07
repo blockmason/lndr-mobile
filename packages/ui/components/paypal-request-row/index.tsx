@@ -52,7 +52,7 @@ export default class PayPalRequestRow extends Component<Props, State> {
     if(payPalRequest.requestorIsMe) {
       navigation.navigate('PayPalRequest', { friend })
     } else {
-      navigation.navigate('Settlement', { friend, settlementType: 'paypal' })
+      navigation.navigate('Settlement', { friend, settlementType: 'paypal', fromPayPalRequest: true })
     }
   }
 

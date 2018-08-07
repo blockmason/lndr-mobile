@@ -376,16 +376,16 @@ export default {
       end: ` BCPT e seu hash de transação é `,
     },
     requestPayPalPayee: {
-      start: `We've let `,
-      end: ` know that you would like to settle with PayPal.`,
+      start: `Deixamos `,
+      end: ` saber que você gostaria de se contentar com o PayPal.`,
     },
     requestPayPalPayment: {
-      start: `We've let `,
-      end: ` know that you'd like to be paid with PayPal.`,
+      start: `Deixamos `,
+      end: ` saber que você gostaria de ser pago com PayPal.`,
     },
     settledWithPayPal: {
-      start: `We've let `,
-      end: ` know that you've settled with PayPal.`,
+      start: `Deixamos `,
+      end: ` saber que você tenha resolvido com PayPal.`,
     },
     status: `Você pode ver o status da operação na aba atividade.`,
     activity: `.`,
@@ -415,5 +415,19 @@ export default {
     friendNotEnabled: F => `@${F} não permitiu PayPal pagamentos.`,
     friendRequestedConnect: F => `@${F} quer pagar via PayPal`,
     requestFriendConnect: F => `Você pediu @${F} para permitir PayPal`,
+    feesNotification: `Não inclui taxas do PayPal`,
+    feesInformationHeader: `PayPal Taxas Informação`,
+    feesInformation: `1. A sua conta PayPal deve estar vinculado a uma conta bancária.
+    
+2. Pagar em uma moeda diferente da moeda do seu banco irá incorrer em uma taxa de US $ 0,35.
+
+3. taxas de transferência internacionais:
+    EUA para o Canadá / Europa: $ 2.99
+    EUA para qualquer outro lugar: $ 4.99
+
+4. Estas taxas não são abrangentes. Para obter as informações mais atualizadas acesse:
+
+    https://www.paypal.com/us/webapps/mpp/paypal-fees#sending-us`,
+    payPalSite: `PayPal.com`,
   }
 }

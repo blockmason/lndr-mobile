@@ -377,16 +377,16 @@ export default {
       end: ` BCPT-t, és a tranzakciós hash `,
     },
     requestPayPalPayee: {
-      start: `We've let `,
-      end: ` know that you would like to settle with PayPal.`,
+      start: `Már hagyja `,
+      end: ` tudja, hogy szeretne rendezni a PayPal.`,
     },
     requestPayPalPayment: {
-      start: `We've let `,
-      end: ` know that you'd like to be paid with PayPal.`,
+      start: `Már hagyja `,
+      end: ` tudja, hogy azt szeretné, hogy kell fizetni a PayPal.`,
     },
     settledWithPayPal: {
-      start: `We've let `,
-      end: ` know that you've settled with PayPal.`,
+      start: `Már hagyja `,
+      end: ` tudom, hogy már állandó PayPal.`,
     },
     status: `A tevékenység fülön megtekintheti a jelen `,
     activity: `tranzakció státuszát.`,
@@ -416,5 +416,19 @@ export default {
     friendNotEnabled: F => `@${F} nem tette lehetővé PayPal kifizetések.`,
     friendRequestedConnect: F => `@${F} akar fizetni ön keresztül PayPal`,
     requestFriendConnect: F => `Te kérdezted @${F}, hogy PayPal`,
+    feesNotification: `Nem tartoznak ide a PayPal díjakat`,
+    feesInformationHeader: `PayPal díjak információ`,
+    feesInformation: `1. A PayPal számla kell kötni a bankszámlára.
+    
+2. Pénznemben fizet eltér a bank deviza fizeti $ 0.35 díjat.
+    
+3. Nemzetközi átutalási díj:
+    USA Kanada / Európa: $ 2.99
+    USA bárhol máshol: $ 4.99
+    
+4. Ezek a díjak nem teljes körű. A legfrissebb információkért kérjük, látogasson el a:
+
+    https://www.paypal.com/us/webapps/mpp/paypal-fees#sending-us`,
+    payPalSite: `PayPal.com`,
   }
 }

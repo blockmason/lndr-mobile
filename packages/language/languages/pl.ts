@@ -376,16 +376,16 @@ export default {
       end: ` BCPT, hash dla tej transakcji to `,
     },
     requestPayPalPayee: {
-      start: `We've let `,
-      end: ` know that you would like to settle with PayPal.`,
+      start: `Mamy `,
+      end: ` niech wiedzą, że chcesz się rozliczyć z PayPal.`,
     },
     requestPayPalPayment: {
-      start: `We've let `,
-      end: ` know that you'd like to be paid with PayPal.`,
+      start: `Mamy `,
+      end: ` niech wiedzą, że chcesz być wypłacane w systemie PayPal.`,
     },
     settledWithPayPal: {
-      start: `We've let `,
-      end: ` know that you've settled with PayPal.`,
+      start: `Mamy `,
+      end: ` niech wiedzą, że już rozliczane w systemie PayPal.`,
     },
     status: `Można sprawdzić status transakcji w `,
     activity: `zakładce aktywności.`,
@@ -415,5 +415,19 @@ export default {
     friendNotEnabled: F => `@${F} nie włączył PayPal płatności.`,
     friendRequestedConnect: F => `@${F} chce zapłacić za PayPal`,
     requestFriendConnect: F => `Pytałeś @${F}, aby umożliwić PayPal`,
+    feesNotification: `Nie obejmuje opłat PayPal`,
+    feesInformationHeader: `PayPal Opłaty Informacje`,
+    feesInformation: `1. Twoje konto PayPal musi być przywiązany do konta bankowego.
+    
+2. Dodatkowo płatne w walucie innej niż waluta Twojego banku będzie ponieść opłatę $ 0,35.
+
+3. Międzynarodowe opłaty transferowe:
+    USA do Kanada / Europa: $ +2,99
+    USA gdziekolwiek indziej: $ 4.99
+
+4. Opłaty te nie są wyczerpujące. Do najbardziej aktualnych informacji prosimy odwiedzić:
+
+    https://www.paypal.com/us/webapps/mpp/paypal-fees#sending-us`,
+    payPalSite: `PayPal.com`,
   }
 }

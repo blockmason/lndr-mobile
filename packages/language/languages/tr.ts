@@ -376,16 +376,16 @@ export default {
       end: ` BCPT gönderdiniz ve işlem sağlama kodunuz `,
     },
     requestPayPalPayee: {
-      start: `We've let `,
-      end: ` know that you would like to settle with PayPal.`,
+      start: `Biz `,
+      end: ` PayPal ile yerleşmek istiyoruz bildirmiştiniz.`,
     },
     requestPayPalPayment: {
-      start: `We've let `,
-      end: ` know that you'd like to be paid with PayPal.`,
+      start: `Biz `,
+      end: ` PayPal ile ödenecek istediğinizi bildirdiniz.`,
     },
     settledWithPayPal: {
-      start: `We've let `,
-      end: ` know that you've settled with PayPal.`,
+      start: `Biz `,
+      end: ` PayPal ile sonuçlandığını bildirmiştiniz.`,
     },
     status: ``,
     activity: `Hareketler sekmesinde bu işlemin durumunu görebilirsiniz.`,
@@ -415,5 +415,19 @@ export default {
     friendNotEnabled: F => `@${F} etkinleştirmedi Paypal payments`,
     friendRequestedConnect: F => `@${F} PayPal aracılığıyla sana ödeme yapmak istiyor`,
     requestFriendConnect: F => `Sen, @${F} PayPal etkinleştirmek istedi`,
+    feesNotification: `PayPal ücretlerini içermez`,
+    feesInformationHeader: `PayPal Ücret Bilgileri`,
+    feesInformation: `1. PayPal hesabınız bir banka hesabına bağlı olması gerekir.
+    
+2. Bankanızın para biriminden farklı bir para ödeme bir 0,35 $ ücreti alınacaktır.
+
+3. Uluslararası transfer ücretleri:
+    Kanada / Avrupa'ya ABD: $ 2.99
+    Başka bir yerde için ABD: $ 4.99
+
+4. Bu ücretler kapsamlı değildir. En güncel bilgiler için lütfen şu adrese gidin:
+
+    https://www.paypal.com/us/webapps/mpp/paypal-fees#sending-us`,
+    payPalSite: `PayPal.com`,
   }
 }

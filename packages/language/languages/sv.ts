@@ -376,16 +376,16 @@ export default {
       end: ` BCPT och din transaktionshash är `,
     },
     requestPayPalPayee: {
-      start: `We've let `,
-      end: ` know that you would like to settle with PayPal.`,
+      start: `Vi har låtit `,
+      end: ` vet att du vill nöja sig med PayPal.`,
     },
     requestPayPalPayment: {
-      start: `We've let `,
-      end: ` know that you'd like to be paid with PayPal.`,
+      start: `Vi har låtit `,
+      end: ` vet att du vill att betala med PayPal.`,
     },
     settledWithPayPal: {
-      start: `We've let `,
-      end: ` know that you've settled with PayPal.`,
+      start: `Vi har låtit `,
+      end: ` veta att du har fast med PayPal.`,
     },
     status: `Du kan se status för denna `,
     activity: `transaktion på aktivitetsfliken.`,
@@ -415,5 +415,19 @@ export default {
     friendNotEnabled: F => `@${F} har inte aktiverat PayPal betalningar.`,
     friendRequestedConnect: F => `@${F} vill betala via PayPal`,
     requestFriendConnect: F => `Du frågade @${F} för att aktivera PayPal`,
+    feesNotification: `Inkluderar inte PayPal avgifter`,
+    feesInformationHeader: `PayPal avgifter Information`,
+    feesInformation: `1. Din PayPal-konto måste knytas till ett bankkonto.
+    
+2. betala i en annan valuta än din bank valuta kommer att medföra en $ 0.35 avgift.
+
+3. Internationella överföringsavgifterna:
+    USA till Kanada / Europa: $ 2.99
+    USA till någon annanstans: $ 4.99
+
+4. Dessa avgifter är inte heltäckande. För den mest uppdaterade informationen vänligen gå till:
+
+    https://www.paypal.com/us/webapps/mpp/paypal-fees#sending-us`,
+    payPalSite: `PayPal.com`,
   }
 }

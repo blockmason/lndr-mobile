@@ -377,16 +377,16 @@ export default {
       end: ` BCPT et le hachage de votre transaction est `,
     },
     requestPayPalPayee: {
-      start: `We've let `,
-      end: ` know that you would like to settle with PayPal.`,
+      start: `Nous avons laissé `,
+      end: ` savoir que vous souhaitez régler avec PayPal.`,
     },
     requestPayPalPayment: {
-      start: `We've let `,
-      end: ` know that you'd like to be paid with PayPal.`,
+      start: `Nous avons laissé `,
+      end: ` savoir que vous souhaitez payer avec PayPal.`,
     },
     settledWithPayPal: {
-      start: `We've let `,
-      end: ` know that you've settled with PayPal.`,
+      start: `Nous avons laissé `,
+      end: ` savoir que vous avez réglé avec PayPal.`,
     },
     status: `Vous pouvez voir l'état de cette opération dans `,
     activity: `l'onglet d'activité.`,
@@ -416,5 +416,19 @@ export default {
     friendNotEnabled: F => `@${F} n'a pas activé PayPal paiements.`,
     friendRequestedConnect: F => `@${F} veut vous payer par PayPal`,
     requestFriendConnect: F => `Vous avez demandé @${F} pour permettre PayPal`,
+    feesNotification: `Ne comprend pas les frais de PayPal`,
+    feesInformationHeader: `Informations sur les frais PayPal`,
+    feesInformation: `1. Votre compte PayPal doit être liée à un compte bancaire.
+    
+2. Payer dans une devise différente de la monnaie de votre banque entraînera des frais de 0,35 $.
+    
+3. Frais de transfert international:
+    États-Unis au Canada / Europe: 2,99 $
+    Etats nulle part ailleurs: 4,99 $
+    
+4. Ces frais ne sont pas exhaustives. Pour les informations les plus à jour s'il vous plaît visitez:
+
+    https://www.paypal.com/us/webapps/mpp/paypal-fees#sending-us`,
+    payPalSite: `PayPal.com`,
   }
 }

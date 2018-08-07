@@ -376,16 +376,16 @@ export default {
       end: ` BCPT, а хеш транзакции `,
     },
     requestPayPalPayee: {
-      start: `We've let `,
-      end: ` know that you would like to settle with PayPal.`,
+      start: `Мы позволили `,
+      end: ` знать, что вы хотели бы, чтобы рассчитаться с PayPal.`,
     },
     requestPayPalPayment: {
-      start: `We've let `,
-      end: ` know that you'd like to be paid with PayPal.`,
+      start: `Мы позволили `,
+      end: ` знать, что вы хотите быть оплачены с PayPal.`,
     },
     settledWithPayPal: {
-      start: `We've let `,
-      end: ` know that you've settled with PayPal.`,
+      start: `Мы позволили `,
+      end: ` знать, что вы поселились с PayPal.`,
     },
     status: `Статус этой транзакции можно увидеть на вкладке `,
     activity: `«Активность».`,
@@ -415,5 +415,19 @@ export default {
     friendNotEnabled: F => `@${F} не включен PayPal платежи.`,
     friendRequestedConnect: F => `@${F} хочет платить вам через PayPal`,
     requestFriendConnect: F => `Вы просили @${F}, чтобы включить PayPal`,
+    feesNotification: `Не включает в себя сборы PayPal`,
+    feesInformationHeader: `PayPal платежи Информация`,
+    feesInformation: `1. Ваша учетная запись PayPal должна быть привязана к банковскому счету.
+    
+2. Оплата в валюте, отличной от валюты Вашего банка взимается комиссия в размере $ 0.35.
+
+3. Международные таксы:
+    США в Канаде / Европе: $ 2,99
+    США в другом месте: $ 4,99
+
+4. Эти сборы не являются исчерпывающими. Для самой последней информации, пожалуйста, перейдите по ссылке:
+
+    https://www.paypal.com/us/webapps/mpp/paypal-fees#sending-us`,
+    payPalSite: `PayPal.com`,
   }
 }

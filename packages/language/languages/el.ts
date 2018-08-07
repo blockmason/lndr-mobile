@@ -377,16 +377,16 @@ export default {
       end: ` BCPT και το hash της συναλλαγής σας είναι `,
     },
     requestPayPalPayee: {
-      start: `We've let `,
-      end: ` know that you would like to settle with PayPal.`,
+      start: `Έχουμε αφήσει `,
+      end: ` γνωρίζουμε ότι θα θέλατε να εγκατασταθούν με PayPal.`,
     },
     requestPayPalPayment: {
-      start: `We've let `,
-      end: ` know that you'd like to be paid with PayPal.`,
+      start: `Έχουμε αφήσει `,
+      end: ` γνωρίζουμε ότι θα θέλατε να πληρώσει με PayPal.`,
     },
     settledWithPayPal: {
-      start: `We've let `,
-      end: ` know that you've settled with PayPal.`,
+      start: `Έχουμε αφήσει `,
+      end: ` ξέρετε ότι έχετε εγκαταστάθηκαν με PayPal.`,
     },
     status: `Μπορείτε να δείτε την κατάσταση της συναλλαγής στην `,
     activity: `καρτέλα δραστηριότητας.`,
@@ -416,5 +416,19 @@ export default {
     friendNotEnabled: F => `@${F} δεν έχει ενεργοποιηθεί PayPal πληρωμές.`,
     friendRequestedConnect: F => `@${F} θέλει να σας πληρώσει μέσω PayPal`,
     requestFriendConnect: F => `Θα ζητηθεί @${F} για να ενεργοποιήσετε PayPal`,
+    feesNotification: `Δεν περιλαμβάνονται αμοιβές PayPal`,
+    feesInformationHeader: `PayPal Τέλη πληροφορίες`,
+    feesInformation: `1. Ο λογαριασμός σας PayPal πρέπει να συνδέεται με έναν τραπεζικό λογαριασμό.
+    
+2. Πληρωμή σε νόμισμα διαφορετικό από το νόμισμα της τράπεζάς σας θα υποστούν ένα πρόστιμο $ 0,35.
+    
+3. Διεθνής τέλη μεταφοράς:
+    ΗΠΑ στον Καναδά / Ευρώπης: $ 2.99
+    ΗΠΑ για να οπουδήποτε αλλού: $ 4.99
+    
+4. Τα τέλη αυτά δεν είναι ολοκληρωμένη. Για τις πιο πρόσφατες πληροφορίες, παρακαλούμε επισκεφθείτε την ιστοσελίδα:
+
+    https://www.paypal.com/us/webapps/mpp/paypal-fees#sending-us`,
+    payPalSite: `PayPal.com`,
   }
 }

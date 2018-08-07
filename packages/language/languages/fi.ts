@@ -378,16 +378,16 @@ export default {
       end: ` BCPT:tä ja tapahtumasi tunnusnumero on `,
     },
     requestPayPalPayee: {
-      start: `We've let `,
-      end: ` know that you would like to settle with PayPal.`,
+      start: `Olemme ilmoittaneet `,
+      end: ` tietää, että haluat asettua PayPal.`,
     },
     requestPayPalPayment: {
-      start: `We've let `,
-      end: ` know that you'd like to be paid with PayPal.`,
+      start: `Olemme ilmoittaneet `,
+      end: ` tietää, että haluat maksaa PayPal.`,
     },
     settledWithPayPal: {
-      start: `We've let `,
-      end: ` know that you've settled with PayPal.`,
+      start: `Olemme ilmoittaneet `,
+      end: ` tietää, että olet ratkaistaan ​​PayPal.`,
     },
     status: `Tämän tapahtuman tila `,
     activity: `näkyy tapahtumavalikossa.`,
@@ -417,5 +417,19 @@ export default {
     friendNotEnabled: F => `@${F} ei käytössä PayPal maksut.`,
     friendRequestedConnect: F => `@${F} haluaa maksaa sinulle kautta PayPal`,
     requestFriendConnect: F => `Kysyit @${F} jotta PayPal`,
+    feesNotification: `Ei sisällä PayPal maksut`,
+    feesInformationHeader: `PayPal maksut Tietoja`,
+    feesInformation: `1. PayPal-tili on sidottava pankkitilille.
+    
+2. Ottaen valuutassa eri pankista valuutta aiheutuu $ 0.35 maksu.
+    
+3. Kansainvälinen siirtomaksut:
+    Yhdysvalloista Kanadaan / Eurooppa: $ 2.99
+    USA missään muualla: $ 4.99
+    
+4. Nämä maksut eivät ole kattavia. Saat päivitetyt tiedot osoitteessa:
+
+    https://www.paypal.com/us/webapps/mpp/paypal-fees#sending-us`,
+    payPalSite: `PayPal.com`,
   }
 }

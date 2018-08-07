@@ -377,16 +377,16 @@ export default {
       end: `בהצלחה ומספר העסקה שלך הוא `,
     },
     requestPayPalPayee: {
-      start: `We've let `,
-      end: ` know that you would like to settle with PayPal.`,
+      start: ` שאתה רוצה להתיישב עם PayPal`,
+      end: `אנחנו ספרנו `,
     },
     requestPayPalPayment: {
-      start: `We've let `,
-      end: ` know that you'd like to be paid with PayPal.`,
+      start: ` יודע שאתה רוצה להיות משולם עם PayPal`,
+      end: `הודעתי ל- `,
     },
     settledWithPayPal: {
-      start: `We've let `,
-      end: ` know that you've settled with PayPal.`,
+      start: ` כי אתה כבר התיישבת עם PayPal`,
+      end: `אנחנו ספרנו `,
     },
     status: `אתה יכול לראות את סטטוס העסקה הזאת `,
     activity: `.בלשונית הפעילות`,
@@ -416,5 +416,19 @@ export default {
     friendNotEnabled: F => `@${F} לא אפשר תשלומים PayPal.`,
     friendRequestedConnect: F => `@${F} רוצה לשלם לך באמצעות PayPal`,
     requestFriendConnect: F => `ביקשת מ- @${F} להפעיל את PayPal`,
+    feesNotification: `לא כולל דמי PayPal`,
+    feesInformationHeader: `מידע דמי PayPal`,
+    feesInformation: `1. חשבון PayPal שלך חייב להיות קשור לחשבון בנק.
+    
+2. משלמים במטבע שונה מהמטבע של הבנק שלך, עליך לשלם עמלה 0.35 $.
+
+3. דמי העברה בינלאומיים:
+    ארה""ב לקנדה / אירופה: 2.99 $
+    ארה""ב לכל מקום אחר: 4.99 $
+
+4. עמלות אלה אינן מקיפות. לקבלת המידע העדכני ביותר אנא בקרו באתר:
+
+    https://www.paypal.com/us/webapps/mpp/paypal-fees#sending-us`,
+    payPalSite: `PayPal.com`,
   }
 }
