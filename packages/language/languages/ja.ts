@@ -405,5 +405,19 @@ export default {
     friendNotEnabled: F => `@${F}はペイパル支払いを有効にしていません。`,
     friendRequestedConnect: F => `@${F}がペイパル経由でお支払いをご希望の場合`,
     requestFriendConnect: F => `@${F}にペイパルを有効にするように頼んだ`,
+    feesNotification: `PayPalの手数料が含まれていません`,
+    feesInformationHeader: `PayPalの手数料情報`,
+    feesInformation: `1.あなたのPayPalアカウントは、銀行口座に接続する必要があります。
+    
+2.あなたの銀行の通貨と異なる通貨で支払うこと$ 0.35の手数料がかかります。
+
+3.国際転送料：
+    カナダ/ヨーロッパへUSA：$ 2.99
+    どこか他にUSA：$ 4.99
+
+4.これらの手数料は、包括的ではありません。最新の情報についてをご覧ください。
+
+    https://www.paypal.com/us/webapps/mpp/paypal-fees#sending-us`,
+    payPalSite: `PayPal.com`,
   }
 }

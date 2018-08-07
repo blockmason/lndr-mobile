@@ -415,5 +415,19 @@ export default {
     friendNotEnabled: F => `@${F} nie włączył PayPal płatności.`,
     friendRequestedConnect: F => `@${F} chce zapłacić za PayPal`,
     requestFriendConnect: F => `Pytałeś @${F}, aby umożliwić PayPal`,
+    feesNotification: `Nie obejmuje opłat PayPal`,
+    feesInformationHeader: `PayPal Opłaty Informacje`,
+    feesInformation: `1. Twoje konto PayPal musi być przywiązany do konta bankowego.
+    
+2. Dodatkowo płatne w walucie innej niż waluta Twojego banku będzie ponieść opłatę $ 0,35.
+
+3. Międzynarodowe opłaty transferowe:
+    USA do Kanada / Europa: $ +2,99
+    USA gdziekolwiek indziej: $ 4.99
+
+4. Opłaty te nie są wyczerpujące. Do najbardziej aktualnych informacji prosimy odwiedzić:
+
+    https://www.paypal.com/us/webapps/mpp/paypal-fees#sending-us`,
+    payPalSite: `PayPal.com`,
   }
 }

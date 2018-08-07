@@ -416,5 +416,19 @@ export default {
     friendNotEnabled: F => `@${F} לא אפשר תשלומים PayPal.`,
     friendRequestedConnect: F => `@${F} רוצה לשלם לך באמצעות PayPal`,
     requestFriendConnect: F => `ביקשת מ- @${F} להפעיל את PayPal`,
+    feesNotification: `לא כולל דמי PayPal`,
+    feesInformationHeader: `מידע דמי PayPal`,
+    feesInformation: `1. חשבון PayPal שלך חייב להיות קשור לחשבון בנק.
+    
+2. משלמים במטבע שונה מהמטבע של הבנק שלך, עליך לשלם עמלה 0.35 $.
+
+3. דמי העברה בינלאומיים:
+    ארה""ב לקנדה / אירופה: 2.99 $
+    ארה""ב לכל מקום אחר: 4.99 $
+
+4. עמלות אלה אינן מקיפות. לקבלת המידע העדכני ביותר אנא בקרו באתר:
+
+    https://www.paypal.com/us/webapps/mpp/paypal-fees#sending-us`,
+    payPalSite: `PayPal.com`,
   }
 }

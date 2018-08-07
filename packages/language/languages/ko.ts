@@ -405,5 +405,19 @@ export default {
     friendNotEnabled: F => `@${F} 에서 PayPal 결제를 사용하도록 설정하지 않았습니다.`,
     friendRequestedConnect: F => `@${F} 가 PayPal을 통해 지불하려고합니다.`,
     requestFriendConnect: F => `@${F} 에 PAYPAL 사용 요청`,
+    feesNotification: `페이팔 수수료를 포함하지 않습니다`,
+    feesInformationHeader: `페이팔 수수료 정보`,
+    feesInformation: `1. 페이팔 계정은 은행 계좌에 연결해야합니다.
+    
+2. 은행의 통화와 다른 통화로 지불하는 것은 $ 0.35 수수료가 부과됩니다.
+
+3. 국제 송금 수수료 :
+    캐나다 / 유럽 미국 : $ 2.99
+    다른 곳으로 미국 : $ 4.99
+
+4. 이러한 비용은 포괄적 인 없습니다. 가장 최근에 업데이트 된 정보는 다음으로 이동하십시오 :
+
+    https://www.paypal.com/us/webapps/mpp/paypal-fees#sending-us`,
+    payPalSite: `PayPal.com`,
   }
 }
