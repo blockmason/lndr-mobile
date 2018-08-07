@@ -376,16 +376,16 @@ export default {
       end: ` BCPT, hash dla tej transakcji to `,
     },
     requestPayPalPayee: {
-      start: `We've let `,
-      end: ` know that you would like to settle with PayPal.`,
+      start: `Mamy `,
+      end: ` niech wiedzą, że chcesz się rozliczyć z PayPal.`,
     },
     requestPayPalPayment: {
-      start: `We've let `,
-      end: ` know that you'd like to be paid with PayPal.`,
+      start: `Mamy `,
+      end: ` niech wiedzą, że chcesz być wypłacane w systemie PayPal.`,
     },
     settledWithPayPal: {
-      start: `We've let `,
-      end: ` know that you've settled with PayPal.`,
+      start: `Mamy `,
+      end: ` niech wiedzą, że już rozliczane w systemie PayPal.`,
     },
     status: `Można sprawdzić status transakcji w `,
     activity: `zakładce aktywności.`,

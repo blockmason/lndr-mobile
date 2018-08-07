@@ -377,16 +377,16 @@ export default {
       end: ` BCPT-t, és a tranzakciós hash `,
     },
     requestPayPalPayee: {
-      start: `We've let `,
-      end: ` know that you would like to settle with PayPal.`,
+      start: `Már hagyja `,
+      end: ` tudja, hogy szeretne rendezni a PayPal.`,
     },
     requestPayPalPayment: {
-      start: `We've let `,
-      end: ` know that you'd like to be paid with PayPal.`,
+      start: `Már hagyja `,
+      end: ` tudja, hogy azt szeretné, hogy kell fizetni a PayPal.`,
     },
     settledWithPayPal: {
-      start: `We've let `,
-      end: ` know that you've settled with PayPal.`,
+      start: `Már hagyja `,
+      end: ` tudom, hogy már állandó PayPal.`,
     },
     status: `A tevékenység fülön megtekintheti a jelen `,
     activity: `tranzakció státuszát.`,

@@ -376,16 +376,16 @@ export default {
       end: ` BCPT เรียบร้อยแล้ว และแฮชธุรกรรมของคุณคือ `,
     },
     requestPayPalPayee: {
-      start: `We've let `,
-      end: ` know that you would like to settle with PayPal.`,
+      start: `เราได้แจ้งให้ `,
+      end: ` รู้ว่าคุณต้องการที่จะชำระด้วย PayPal`,
     },
     requestPayPalPayment: {
-      start: `We've let `,
-      end: ` know that you'd like to be paid with PayPal.`,
+      start: `เราได้แจ้งให้ `,
+      end: ` รู้ว่าคุณต้องการที่จะได้รับการชำระเงินด้วย PayPal`,
     },
     settledWithPayPal: {
-      start: `We've let `,
-      end: ` know that you've settled with PayPal.`,
+      start: `เราได้แจ้งให้ `,
+      end: ` ทราบว่าคุณได้ตกลงกับ PayPal`,
     },
     status: `คุณสามารถดูสถานะของธุรกร`,
     activity: `รมนี้ได้ในแท็บกิจกรรม.`,

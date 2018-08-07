@@ -366,16 +366,16 @@ export default {
       end: " BCPT 당신의 거래는 "
     },
     requestPayPalPayee: {
-      start: `We've let `,
-      end: ` know that you would like to settle with PayPal.`,
+      start: `우리는 `,
+      end: `는 PayPal로 정착하고 싶다고 알려했습니다.`,
     },
     requestPayPalPayment: {
-      start: `We've let `,
-      end: ` know that you'd like to be paid with PayPal.`,
+      start: `우리는 `,
+      end: `는 PayPal로 지불하고 싶습니다 있음을 알려했습니다.`,
     },
     settledWithPayPal: {
-      start: `We've let `,
-      end: ` know that you've settled with PayPal.`,
+      start: `우리는 `,
+      end: `는 PayPal로 정착 한 것으로 알려했습니다.`,
     },
     status: `거래 내역을 볼 수 있는 곳은 `,
     activity: ` 액티비티 탭.`,

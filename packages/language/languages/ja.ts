@@ -366,16 +366,16 @@ export default {
       end: ` あなたのBCPTとトランザクションハッシュは `,
     },
     requestPayPalPayee: {
-      start: `We've let `,
-      end: ` know that you would like to settle with PayPal.`,
+      start: `私たちは、`,
+      end: `は、あなたがPayPalで和解したいことを知らせてきました。`,
     },
     requestPayPalPayment: {
-      start: `We've let `,
-      end: ` know that you'd like to be paid with PayPal.`,
+      start: `私たちは、`,
+      end: `は、あなたがPayPalで支払うことがしたいことを知らせてきました。`,
     },
     settledWithPayPal: {
-      start: `We've let `,
-      end: ` know that you've settled with PayPal.`,
+      start: `私たちは、`,
+      end: `は、あなたがPayPalで落ち着いたことをお知らせしました。`,
     },
     status: `取引のステータスを確認するにはここ `,
     activity: `アクティビティタブ.`,

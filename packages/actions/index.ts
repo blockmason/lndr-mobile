@@ -613,7 +613,7 @@ export const addDebt = (friend: Friend, amount: string, memo: string, direction:
         await creditProtocol.submitMultiSettlement(transactions)
 
         if(denomination === 'PAYPAL' && direction === 'borrow') {
-          await creditProtocol.deletePayPalSettlementRequest(friend.address, address, privateKeyBuffer)
+          await creditProtocol.deletePayPalSettlementRequest(address, friend.address, privateKeyBuffer)
         }
         refreshTransactions()
 
@@ -643,7 +643,7 @@ export const addDebt = (friend: Friend, amount: string, memo: string, direction:
       await creditProtocol.submitCreditRecord(creditRecord, direction, signature, denomination)
 
       if(denomination === 'PAYPAL' && direction === 'borrow') {
-        await creditProtocol.deletePayPalSettlementRequest(friend.address, address, privateKeyBuffer)
+        await creditProtocol.deletePayPalSettlementRequest(address, friend.address, privateKeyBuffer)
       }
       refreshTransactions()
 

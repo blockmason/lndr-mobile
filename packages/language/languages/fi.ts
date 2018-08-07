@@ -378,16 +378,16 @@ export default {
       end: ` BCPT:tä ja tapahtumasi tunnusnumero on `,
     },
     requestPayPalPayee: {
-      start: `We've let `,
-      end: ` know that you would like to settle with PayPal.`,
+      start: `Olemme ilmoittaneet `,
+      end: ` tietää, että haluat asettua PayPal.`,
     },
     requestPayPalPayment: {
-      start: `We've let `,
-      end: ` know that you'd like to be paid with PayPal.`,
+      start: `Olemme ilmoittaneet `,
+      end: ` tietää, että haluat maksaa PayPal.`,
     },
     settledWithPayPal: {
-      start: `We've let `,
-      end: ` know that you've settled with PayPal.`,
+      start: `Olemme ilmoittaneet `,
+      end: ` tietää, että olet ratkaistaan ​​PayPal.`,
     },
     status: `Tämän tapahtuman tila `,
     activity: `näkyy tapahtumavalikossa.`,

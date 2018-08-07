@@ -377,16 +377,16 @@ export default {
       end: ` BCPT og dit transaktion ID er `,
     },
     requestPayPalPayee: {
-      start: `We've let `,
-      end: ` know that you would like to settle with PayPal.`,
+      start: `Vi har ladet `,
+      end: ` vide, at du gerne vil nøjes med PayPal.`,
     },
     requestPayPalPayment: {
-      start: `We've let `,
-      end: ` know that you'd like to be paid with PayPal.`,
+      start: `Vi har ladet `,
+      end: ` vide, at du gerne vil blive betalt med PayPal.`,
     },
     settledWithPayPal: {
-      start: `We've let `,
-      end: ` know that you've settled with PayPal.`,
+      start: `Vi har ladet `,
+      end: ` vide, at du har afgjort med PayPal.`,
     },
     status: `Du kan se statussen for denne transaktion `,
     activity: `i aktivitetsfanen.`,

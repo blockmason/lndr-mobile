@@ -377,16 +377,16 @@ export default {
       end: ` BCPT και το hash της συναλλαγής σας είναι `,
     },
     requestPayPalPayee: {
-      start: `We've let `,
-      end: ` know that you would like to settle with PayPal.`,
+      start: `Έχουμε αφήσει `,
+      end: ` γνωρίζουμε ότι θα θέλατε να εγκατασταθούν με PayPal.`,
     },
     requestPayPalPayment: {
-      start: `We've let `,
-      end: ` know that you'd like to be paid with PayPal.`,
+      start: `Έχουμε αφήσει `,
+      end: ` γνωρίζουμε ότι θα θέλατε να πληρώσει με PayPal.`,
     },
     settledWithPayPal: {
-      start: `We've let `,
-      end: ` know that you've settled with PayPal.`,
+      start: `Έχουμε αφήσει `,
+      end: ` ξέρετε ότι έχετε εγκαταστάθηκαν με PayPal.`,
     },
     status: `Μπορείτε να δείτε την κατάσταση της συναλλαγής στην `,
     activity: `καρτέλα δραστηριότητας.`,

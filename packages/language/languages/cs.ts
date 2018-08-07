@@ -377,16 +377,16 @@ export default {
       end: ` BCPT a hash vaší transakce je `,
     },
     requestPayPalPayee: {
-      start: `We've let `,
-      end: ` know that you would like to settle with PayPal.`,
+      start: `Máme nechat `,
+      end: ` vědět, že byste chtěli usadit přes PayPal.`,
     },
     requestPayPalPayment: {
-      start: `We've let `,
-      end: ` know that you'd like to be paid with PayPal.`,
+      start: `Máme nechat `,
+      end: ` vědět, že byste chtěli být zaplacena přes PayPal.`,
     },
     settledWithPayPal: {
-      start: `We've let `,
-      end: ` know that you've settled with PayPal.`,
+      start: `Máme nechat `,
+      end: ` vědět, že jste se vyrovnal s PayPal.`,
     },
     status: `Stav této transakce můžete sledovat v `,
     activity: `záložce Aktivita.`,

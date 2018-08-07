@@ -377,16 +377,16 @@ export default {
       end: ` لقد أرسلت  BCPT `,
     },
     requestPayPalPayee: {
-      start: `We've let `,
-      end: ` know that you would like to settle with PayPal.`,
+      start: ` أعرف أن كنت ترغب في تسوية مع باي بال`,
+      end: `لقد ترك `, 
     },
     requestPayPalPayment: {
-      start: `We've let `,
-      end: ` know that you'd like to be paid with PayPal.`,
+      start: ` أعرف أنك تريد أن تدفع مع باي بال`,
+      end: `لقد ترك `, 
     },
     settledWithPayPal: {
-      start: `We've let `,
-      end: ` know that you've settled with PayPal.`,
+      start: ` تعرف أنك قد استقر مع باي بال`,
+      end: `لقد ترك `, 
     },
     status: ` حالة هذه المعاملة من تبويب النشاط`,
     activity: `يمكنك رؤية`,

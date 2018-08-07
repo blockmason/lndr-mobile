@@ -376,16 +376,16 @@ export default {
       end: `BCPT和您的交易记录号是`,
     },
     requestPayPalPayee: {
-      start: `We've let `,
-      end: ` know that you would like to settle with PayPal.`,
+      start: `我们让 `,
+      end: ` 知道你想用贝宝结算。`,
     },
     requestPayPalPayment: {
-      start: `We've let `,
-      end: ` know that you'd like to be paid with PayPal.`,
+      start: `我们让 `,
+      end: ` 知道你想用贝宝支付。`,
     },
     settledWithPayPal: {
-      start: `We've let `,
-      end: ` know that you've settled with PayPal.`,
+      start: `我们让 `,
+      end: ` 知道你已经与贝宝结算。`,
     },
     status: `你可以在活动选项卡看到`,
     activity: `这个交易的状态。`,

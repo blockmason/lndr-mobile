@@ -376,16 +376,16 @@ export default {
       end: ` BCPT gönderdiniz ve işlem sağlama kodunuz `,
     },
     requestPayPalPayee: {
-      start: `We've let `,
-      end: ` know that you would like to settle with PayPal.`,
+      start: `Biz `,
+      end: ` PayPal ile yerleşmek istiyoruz bildirmiştiniz.`,
     },
     requestPayPalPayment: {
-      start: `We've let `,
-      end: ` know that you'd like to be paid with PayPal.`,
+      start: `Biz `,
+      end: ` PayPal ile ödenecek istediğinizi bildirdiniz.`,
     },
     settledWithPayPal: {
-      start: `We've let `,
-      end: ` know that you've settled with PayPal.`,
+      start: `Biz `,
+      end: ` PayPal ile sonuçlandığını bildirmiştiniz.`,
     },
     status: ``,
     activity: `Hareketler sekmesinde bu işlemin durumunu görebilirsiniz.`,

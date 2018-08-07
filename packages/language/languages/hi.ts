@@ -377,16 +377,16 @@ export default {
       end: ` BCPT भेज दिए हैं और आपका ट्रैंज़ैक्शन हैश `,
     },
     requestPayPalPayee: {
-      start: `We've let `,
-      end: ` know that you would like to settle with PayPal.`,
+      start: `हम `,
+      end: ` जानते हैं कि आप पेपैल के साथ व्यवस्थित करना चाहते हैं है।`,
     },
     requestPayPalPayment: {
-      start: `We've let `,
-      end: ` know that you'd like to be paid with PayPal.`,
+      start: `हम `,
+      end: ` जानते हैं कि आप पेपैल के साथ भुगतान किया जाना चाहते हैं गए हैं।`,
     },
     settledWithPayPal: {
-      start: `We've let `,
-      end: ` know that you've settled with PayPal.`,
+      start: `हम `,
+      end: ` जानते हैं कि आप पेपैल के साथ बसे कर दिया है है।`,
     },
     status: `आप इस ट्रैंज़ैक्शन का स्टेटस एक्टिविटी टैब `,
     activity: `में देख सकते हैं।`,

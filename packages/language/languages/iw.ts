@@ -377,16 +377,16 @@ export default {
       end: `בהצלחה ומספר העסקה שלך הוא `,
     },
     requestPayPalPayee: {
-      start: `We've let `,
-      end: ` know that you would like to settle with PayPal.`,
+      start: ` שאתה רוצה להתיישב עם PayPal`,
+      end: `אנחנו ספרנו `,
     },
     requestPayPalPayment: {
-      start: `We've let `,
-      end: ` know that you'd like to be paid with PayPal.`,
+      start: ` יודע שאתה רוצה להיות משולם עם PayPal`,
+      end: `הודעתי ל- `,
     },
     settledWithPayPal: {
-      start: `We've let `,
-      end: ` know that you've settled with PayPal.`,
+      start: ` כי אתה כבר התיישבת עם PayPal`,
+      end: `אנחנו ספרנו `,
     },
     status: `אתה יכול לראות את סטטוס העסקה הזאת `,
     activity: `.בלשונית הפעילות`,
