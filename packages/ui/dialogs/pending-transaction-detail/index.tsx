@@ -1,6 +1,6 @@
 import React, { Component } from 'react'
 
-import { Text, View, Image, ScrollView } from 'react-native'
+import { Text, View, Image, ScrollView, Linking, Alert } from 'react-native'
 import { getResetAction } from 'reducers/nav'
 import { getUcacCurrency } from 'reducers/app'
 
@@ -23,8 +23,10 @@ import accountStyle from 'theme/account'
 
 import language from 'language'
 const {
+  back,
   pendingTransactionsLanguage,
-  debtManagement
+  debtManagement,
+  payPalLanguage
 } = language
 
 import { getUser, submitterIsMe, getFriendFromAddress } from 'reducers/app'
@@ -50,6 +52,7 @@ interface State {
   userPic: string
   pic?: string
   unmounting?: boolean
+  isPayPalSettlement?: boolean
 }
 
 class PendingTransactionDetail extends Component<Props, State> {
@@ -61,8 +64,10 @@ class PendingTransactionDetail extends Component<Props, State> {
   async componentWillMount() {
     const { user, navigation } = this.props
     const pendingTransaction = navigation.state ? navigation.state.params.pendingTransaction : {}
+    const isPayPalSettlement = pendingTransaction.settlementCurrency === 'PAYPAL'
     let pic
 
+    this.setState({ isPayPalSettlement })
     try {
       const addr = user.address === pendingTransaction.creditorAddress ? pendingTransaction.debtorAddress : pendingTransaction.creditorAddress
       pic = await profilePic.get(addr)
@@ -82,7 +87,7 @@ class PendingTransactionDetail extends Component<Props, State> {
     )
 
     if (success) {
-      this.closePopup(this.isPayPalSettlement() ? 'settledWithPayPal' : 'confirm')
+      this.closePopup(this.state.isPayPalSettlement ? 'settledWithPayPal' : 'confirm')
     } else {
       this.props.navigation.goBack()
     }
@@ -153,9 +158,16 @@ class PendingTransactionDetail extends Component<Props, State> {
     </View>
   }
 
-  isPayPalSettlement() {
-    const pendingTransaction = this.props.navigation.state ? this.props.navigation.state.params.pendingTransaction : {}
-    return (pendingTransaction.settlementCurrency === 'PAYPAL')
+  payPalFeesAlert() {
+    Alert.alert(
+      payPalLanguage.feesInformationHeader,
+      payPalLanguage.feesInformation,
+      [
+        {text: back, onPress: () => null},
+        {text: payPalLanguage.payPalSite, onPress: () => Linking.openURL('https://www.paypal.com/us/webapps/mpp/paypal-fees#sending-us')},
+      ],
+      { cancelable: true }
+    )
   }
 
   renderPaymentButton() {
@@ -163,7 +175,7 @@ class PendingTransactionDetail extends Component<Props, State> {
     const pendingTransaction = navigation.state ? navigation.state.params.pendingTransaction : {}
 
     const isCreditor = (user.address === pendingTransaction.creditorAddress)
-    if (this.isPayPalSettlement() && isCreditor) {
+    if (this.state.isPayPalSettlement && isCreditor) {
       const friend = this.props.getFriendFromAddress(pendingTransaction.debtorAddress)
       return (
         <PayPalSettlementButton user={user}
@@ -201,7 +213,7 @@ class PendingTransactionDetail extends Component<Props, State> {
 
   render() {
     const { user, navigation, getUcacCurrency } = this.props
-    const { userPic } = this.state
+    const { userPic, isPayPalSettlement } = this.state
     const pendingTransaction = navigation.state ? navigation.state.params.pendingTransaction : {}
     const imageSource = userPic ? {uri: userPic} : require('images/person-outline-dark.png')
     const currency = getUcacCurrency(pendingTransaction.ucac)
@@ -227,6 +239,7 @@ class PendingTransactionDetail extends Component<Props, State> {
             pendingTransaction.multiTransactions.map(tx => <PendingTransactionRow user={user} key={tx.hash} pendingTransaction={tx} friend={true} onPress={() => null} />)
           }
           </View>
+          { isPayPalSettlement ? <Button alternate small arrow style={style.submitButton} onPress={this.payPalFeesAlert} text={payPalLanguage.feesNotification} /> : null }
           {this.renderButtons()}
           <View style={general.spaceBelow}/>
         </View>
