@@ -122,7 +122,6 @@ export default {
     },
     ethBalance: {
       display: Y => `ETH bakiyeniz ${String (Y) .slice (0,8)}`,
-      inFiat: (Z, B, A) => ` (${CUR(A)}${String(Number(Z) * Number(B)).slice(0, 8)})`,
       getError: `Eth bakiyesi çekilemedi`,
       manage: `ETH yönetimi`,
     },
@@ -163,6 +162,7 @@ export default {
       `BCPT Bakiyesi`,
       `Hesabı Kaldır`,
       `ETH İşlem Geçmişi`,
+      `Paypal etkinleştirme`,
       `Birincil Para değiştirme`,
       `Pin'i Değiştir`,
       `Kullanıcı Adını Değiştir`,
@@ -374,6 +374,18 @@ export default {
     bcptSent: {
       start: `Başarıyla `,
       end: ` BCPT gönderdiniz ve işlem sağlama kodunuz `,
+    },
+    requestPayPalPayee: {
+      start: `We've let `,
+      end: ` know that you would like to settle with PayPal.`,
+    },
+    requestPayPalPayment: {
+      start: `We've let `,
+      end: ` know that you'd like to be paid with PayPal.`,
+    },
+    settledWithPayPal: {
+      start: `We've let `,
+      end: ` know that you've settled with PayPal.`,
     },
     status: ``,
     activity: `Hareketler sekmesinde bu işlemin durumunu görebilirsiniz.`,

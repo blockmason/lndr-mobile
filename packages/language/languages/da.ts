@@ -122,7 +122,6 @@ export default {
     },
     ethBalance: {
       display: Y => `Din ETH saldo er ${String(Y).slice(0,8)}`,
-      inFiat: (Z, B, A) => ` (${CUR(A)}${String(Number(Z) * Number(B)).slice(0, 8)})`,
       getError: `Kunne ikke indlæse Eth saldo`,
       manage: `Administrer ETH`,
     },
@@ -163,6 +162,7 @@ export default {
       `BCPT Saldo`,
       `Fjern konto`,
       `ETH Transaktionshistorik`,
+      `Aktiver PayPal`,
       `Skift primære valuta`,
       `Skift PIN`,
       `Skift brugernavn`,
@@ -375,6 +375,18 @@ export default {
     bcptSent: {
       start: `Du har nu sendt `,
       end: ` BCPT og dit transaktion ID er `,
+    },
+    requestPayPalPayee: {
+      start: `We've let `,
+      end: ` know that you would like to settle with PayPal.`,
+    },
+    requestPayPalPayment: {
+      start: `We've let `,
+      end: ` know that you'd like to be paid with PayPal.`,
+    },
+    settledWithPayPal: {
+      start: `We've let `,
+      end: ` know that you've settled with PayPal.`,
     },
     status: `Du kan se statussen for denne transaktion `,
     activity: `i aktivitetsfanen.`,

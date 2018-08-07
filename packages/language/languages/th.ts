@@ -122,7 +122,6 @@ export default {
     },
     ethBalance: {
       display: Y => `ยอด ETH คงเหลือของคุณคือ ${String(Y).slice(0,8)}`,
-      inFiat: (Z, B, A) => ` (${CUR(A)}${String(Number(Z) * Number(B)).slice(0, 8)})`,
       getError: `ไม่สามารถเรียกข้อมูลยอด ETH คงเหลือคืนมาได้ `,
       manage: `จัดการ ETH`,
     },
@@ -163,6 +162,7 @@ export default {
       `ยอด BCPT คงเหลือ`,
       `ปิดบัญชี`,
       `ประวัติการทำธุรกรรม ETH`,
+      `เปิดใช้งาน PayPal`,
       `เปลี่ยนสกุลเงินหลัก`,
       `เปลี่ยน PIN`,
       `เปลี่ยนชื่อเล่น`,
@@ -374,6 +374,18 @@ export default {
     bcptSent: {
       start: `คุณได้ส่ง `,
       end: ` BCPT เรียบร้อยแล้ว และแฮชธุรกรรมของคุณคือ `,
+    },
+    requestPayPalPayee: {
+      start: `We've let `,
+      end: ` know that you would like to settle with PayPal.`,
+    },
+    requestPayPalPayment: {
+      start: `We've let `,
+      end: ` know that you'd like to be paid with PayPal.`,
+    },
+    settledWithPayPal: {
+      start: `We've let `,
+      end: ` know that you've settled with PayPal.`,
     },
     status: `คุณสามารถดูสถานะของธุรกร`,
     activity: `รมนี้ได้ในแท็บกิจกรรม.`,

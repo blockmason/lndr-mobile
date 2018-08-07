@@ -122,7 +122,6 @@ export default {
     },
     ethBalance: {
       display: Y => `आपका ETH बैलेन्स $ है ${String(Y).slice(0,8)}`,
-      inFiat: (Z, B, A) => ` (${CUR(A)}${String(Number(Z) * Number(B)).slice(0, 8)})`,
       getError: `Eth बैलेन्स प्राप्त नहीं कर पा रहा`,
       manage: `ETH मैनेज करें`,
     },
@@ -163,6 +162,7 @@ export default {
       `BCPT बैलेंस`,
       `अकाउंट डिलीट करें`,
       `ETH बैलेंस हिस्ट्री`,
+      `पेपैल सक्षम करें`,
       `प्राथमिक मुद्रा परिवर्तित करें`,
       `पिन बदलिए`,
       `छोटा नाम बदलें`,
@@ -375,6 +375,18 @@ export default {
     bcptSent: {
       start: `आपने `,
       end: ` BCPT भेज दिए हैं और आपका ट्रैंज़ैक्शन हैश `,
+    },
+    requestPayPalPayee: {
+      start: `We've let `,
+      end: ` know that you would like to settle with PayPal.`,
+    },
+    requestPayPalPayment: {
+      start: `We've let `,
+      end: ` know that you'd like to be paid with PayPal.`,
+    },
+    settledWithPayPal: {
+      start: `We've let `,
+      end: ` know that you've settled with PayPal.`,
     },
     status: `आप इस ट्रैंज़ैक्शन का स्टेटस एक्टिविटी टैब `,
     activity: `में देख सकते हैं।`,

@@ -122,7 +122,6 @@ export default {
     },
     ethBalance: {
       display: Y => `ETH egyenlege ${String (Y) .slice (0,8)}`,
-      inFiat: (Z, B, A) => ` (${CUR(A)}${String(Number(Z) * Number(B)).slice(0, 8)})`,
       getError: `Az Eth egyenleg lekérdezése nem sikerült`,
       manage: `ETH KEZELÉSE`,
     },
@@ -163,6 +162,7 @@ export default {
       `BCPT Egyenleg`,
       `Fiók Törlése`,
       `ETH Tranzakció Előzmények`,
+      `Engedélyezze a PayPalt`,
       `Megváltoztathatja az elsődleges pénzneme`,
       `PiN-kód Módosítása`,
       `Becenév Módosítása`,
@@ -375,6 +375,18 @@ export default {
     bcptSent: {
       start: `Sikeresen elküldött `,
       end: ` BCPT-t, és a tranzakciós hash `,
+    },
+    requestPayPalPayee: {
+      start: `We've let `,
+      end: ` know that you would like to settle with PayPal.`,
+    },
+    requestPayPalPayment: {
+      start: `We've let `,
+      end: ` know that you'd like to be paid with PayPal.`,
+    },
+    settledWithPayPal: {
+      start: `We've let `,
+      end: ` know that you've settled with PayPal.`,
     },
     status: `A tevékenység fülön megtekintheti a jelen `,
     activity: `tranzakció státuszát.`,

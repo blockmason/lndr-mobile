@@ -122,7 +122,6 @@ export default {
     },
     ethBalance: {
       display: Y => `${String(Y).slice(0,8)} שלך היא ETH -יתרת ה`,
-      inFiat: (Z, B, A) => ` (${CUR(A)}${String(Number(Z) * Number(B)).slice(0, 8)})`,
       getError: `לא ניתן לאחזר את יתרת Eth`,
       manage: `ניהול ETH`,
     },
@@ -163,6 +162,7 @@ export default {
       `יתרת BCPT`,
       `להסיר חשבון`,
       `היסטוריית עסקאות ETH`,
+      `הפוך את PayPal`,
       `שינוי מטבע ראשי`,
       `לשנות PIN`,
       `לשנות כינוי`,
@@ -375,6 +375,18 @@ export default {
     bcptSent: {
       start: `שלחת BCPT `,
       end: `בהצלחה ומספר העסקה שלך הוא `,
+    },
+    requestPayPalPayee: {
+      start: `We've let `,
+      end: ` know that you would like to settle with PayPal.`,
+    },
+    requestPayPalPayment: {
+      start: `We've let `,
+      end: ` know that you'd like to be paid with PayPal.`,
+    },
+    settledWithPayPal: {
+      start: `We've let `,
+      end: ` know that you've settled with PayPal.`,
     },
     status: `אתה יכול לראות את סטטוס העסקה הזאת `,
     activity: `.בלשונית הפעילות`,

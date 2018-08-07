@@ -122,7 +122,6 @@ export default {
     },
     ethBalance: {
       display: Y => `Ваш ETH баланс ${String (Y) .slice (0,8)} `,
-      inFiat: (Z, B, A) => ` (${CUR(A)}${String(Number(Z) * Number(B)).slice(0, 8)})`,
       getError: `Невозможно получить ETH баланс`,
       manage: `Управление ETH`,
     },
@@ -163,6 +162,7 @@ export default {
       `BCPT Баланс`,
       `Удалить учетную запись`,
       `История транзакций ETH`,
+      `Включить PayPal`,
       `Изменение первичной валюты`,
       `Измененить ПИН-код`,
       `Изменить Прозвище`,
@@ -374,6 +374,18 @@ export default {
     bcptSent: {
       start: `Вы успешно отправили `,
       end: ` BCPT, а хеш транзакции `,
+    },
+    requestPayPalPayee: {
+      start: `We've let `,
+      end: ` know that you would like to settle with PayPal.`,
+    },
+    requestPayPalPayment: {
+      start: `We've let `,
+      end: ` know that you'd like to be paid with PayPal.`,
+    },
+    settledWithPayPal: {
+      start: `We've let `,
+      end: ` know that you've settled with PayPal.`,
     },
     status: `Статус этой транзакции можно увидеть на вкладке `,
     activity: `«Активность».`,

@@ -122,7 +122,6 @@ export default {
     },
     ethBalance: {
       display: Y => `Saldo ETH Anda adalah ${String(Y).slice(0,8)}.`,
-      inFiat: (Z, B, A) => `(${CUR(A)}${String(Number(Z) * Number(B)).slice(0, 8)})`,
       getError: `Tidak dapat memuat saldo ETH`,
       manage: `Kelola ETH`,
     },
@@ -163,6 +162,7 @@ export default {
       `Saldo BCPT`,
       `Hapus Akun`,
       `Riwayat Transaksi ETH`,
+      `Aktifkan PayPal`,
       `Ubah Mata Uang Primer`,
       `Ubah PIN`,
       `Ubah Nama Panggilan`,
@@ -375,6 +375,18 @@ export default {
     bcptSent: {
       start: `Anda berhasil mengirimkan `,
       end: ` BCPT, dan hash transaksi Anda adalah `,
+    },
+    requestPayPalPayee: {
+      start: `We've let `,
+      end: ` know that you would like to settle with PayPal.`,
+    },
+    requestPayPalPayment: {
+      start: `We've let `,
+      end: ` know that you'd like to be paid with PayPal.`,
+    },
+    settledWithPayPal: {
+      start: `We've let `,
+      end: ` know that you've settled with PayPal.`,
     },
     status: `Anda dapat melihat status transaksi ini di `,
     activity: `tab aktivitas.`,

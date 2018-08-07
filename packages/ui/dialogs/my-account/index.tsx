@@ -14,7 +14,7 @@ import BMLogo from 'ui/components/images/bm-logo'
 import InputImage from 'ui/components/images/input-image'
 import SpinningPicker from 'ui/components/spinning-picker'
 
-import { formatNick, formatLockTimeout, formatEmail, emailFormatIncorrect } from 'lndr/format'
+import { formatNick, formatLockTimeout, formatEmail, emailFormatIncorrect, formatCommaDecimal } from 'lndr/format'
 import { UpdateAccountData, UserData } from 'lndr/user'
 
 import { updateNickname, updateEmail, logoutAccount, toggleNotifications, getAccountInformation,
@@ -340,7 +340,7 @@ class MyAccount extends Component<Props, State> {
       </View>),
       (<View style={style.spaceHorizontalL}>
         <Text style={[style.text, style.spaceTopL, style.center]}>{currentBalance.eth}</Text>
-        <Text selectable style={style.displayText}>{ethBalance}</Text>
+        <Text selectable style={style.displayText}>{formatCommaDecimal(ethBalance)}</Text>
         <Button round onPress={() => this.props.navigation.navigate('TransferEth')} text={accountManagement.sendEth.transfer} />
       </View>),
       (<View style={style.spaceHorizontalL}>

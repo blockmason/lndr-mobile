@@ -122,7 +122,6 @@ export default {
     },
     ethBalance: {
       display: Y =>`你ETH余额是${String(Y).slice(0,8) }`,
-      inFiat: (Z, B, A) => ` (${CUR(A)}${String(Number(Z) * Number(B)).slice(0, 8)})`,
       getError: `检索的Eth有错误`,
       manage: `管理ETH`,
     },
@@ -163,6 +162,7 @@ export default {
       `BCPT平衡`,
       `删除帐户`,
       `ETH交易记录`,
+      `启用贝宝`,
       `更改主货币`,
       `更改密码`,
       `更改昵称`,
@@ -374,6 +374,18 @@ export default {
     bcptSent: {
       start: `您发送`,
       end: `BCPT和您的交易记录号是`,
+    },
+    requestPayPalPayee: {
+      start: `We've let `,
+      end: ` know that you would like to settle with PayPal.`,
+    },
+    requestPayPalPayment: {
+      start: `We've let `,
+      end: ` know that you'd like to be paid with PayPal.`,
+    },
+    settledWithPayPal: {
+      start: `We've let `,
+      end: ` know that you've settled with PayPal.`,
     },
     status: `你可以在活动选项卡看到`,
     activity: `这个交易的状态。`,

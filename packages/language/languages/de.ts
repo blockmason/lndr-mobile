@@ -122,7 +122,6 @@ export default {
     },
     ethBalance: {
       display: Y => `Ihr ETH-Kontostand ist ${String (Y) .slice (0,8)}`,
-      inFiat: (Z, B, A) => ` (${CUR(A)}${String(Number(Z) * Number(B)).slice(0, 8)})`,
       getError: `Eth-Kontostand kann nicht abgerufen werden`,
       manage: `ETH verwalten`,
     },
@@ -132,7 +131,7 @@ export default {
         generic: `Es gab einen Fehler bei der Übertragung, bitte versuchen Sie es später noch einmal`,
         address: `Bitte geben Sie eine gültige Adresse ein`,
         amount: `Bitte geben Sie einen Betrag größer als 0 ein`,
-        limitExceeded: A => `Sie können nur ${CUR [A]} ${TL [A]} pro Woche senden, wählen Sie bitte einen kleineren Betrag`,
+        limitExceeded: A => `Sie können nur ${CUR(A)} ${TL(A)} pro Woche senden, wählen Sie bitte einen kleineren Betrag`,
       },
       amount: `Betrag, der gesendet werden soll`,
       address: `Zieladresse (ohne ‚0x‘ Präfix)`,
@@ -140,10 +139,13 @@ export default {
       transferAll: `Überweisen Sie alles`,
       balance: Y => `Ihr aktueller ETH-Kontostand ist ${typeof Y === 'string'? Y.slice (0,8): ''} `,
       ethAddress: `Ethereum-Adresse`,
-      txCost: (B, A) => `Die aktuelle Transaktion kostet ${CUR [A]} ${B}`,
+      txCost: (B, A) => {
+        console.log('AHWTEWT ',  A)
+        return `Die aktuelle Transaktion kostet ${CUR(A)} ${B}`}
+        ,
       transferLowercase: `Eth-Überweisung`,
-      note: A => `Bitte beachten Sie: Sie können nur ${CUR [A]} ${TL [A]} pro Woche aus Lndr überweisen`,
-      warning: (Z, A) => `Sie haben ${CUR [A]} ${Z} übrig von Ihrem ${CUR [A]} ${TL [A]} Limit`,
+      note: A => `Bitte beachten Sie: Sie können nur ${CUR(A)} ${TL(A)} pro Woche aus Lndr überweisen`,
+      warning: (Z, A) => `Sie haben ${CUR(A)} ${Z} übrig von Ihrem ${CUR(A)} ${TL(A)} Limit`,
     },
     sendBcpt: {
       error: {
@@ -163,6 +165,7 @@ export default {
       `BCPT-Kontostand`,
       `Konto Entfernen`,
       `ETH-Transaktionshistorie`,
+      `Aktivieren Sie PayPal`,
       `Hauptwährung ändern`,
       `PIN ändern`,
       `Nickname ändern`,
@@ -375,6 +378,18 @@ export default {
     bcptSent: {
       start: `Sie haben erfolgreich `,
       end: ` BCPT gesendet und Ihre Transaktion-Hash ist `,
+    },
+    requestPayPalPayee: {
+      start: `We've let `,
+      end: ` know that you would like to settle with PayPal.`,
+    },
+    requestPayPalPayment: {
+      start: `We've let `,
+      end: ` know that you'd like to be paid with PayPal.`,
+    },
+    settledWithPayPal: {
+      start: `We've let `,
+      end: ` know that you've settled with PayPal.`,
     },
     status: `Sie können den Status dieser Transaktion in der `,
     activity: `Aktivität-Registerkarte sehen.`,

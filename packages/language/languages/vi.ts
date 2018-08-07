@@ -122,7 +122,6 @@ export default {
     },
     ethBalance: {
       display: Y => `Số dư ETH của bạn là ${String(Y).slice(0,8)}`,
-      inFiat: (Z, B, A) => ` (${CUR(A)}${String(Number(Z) * Number(B)).slice(0, 8)})`,
       getError: `Không thể lấy số dư Eth`,
       manage: `Quản lý ETH`,
     },
@@ -163,6 +162,7 @@ export default {
       `Số dư BCPT`,
       `Xoá tài khoản`,
       `Lịch sử giao dịch ETH`,
+      `Bật PayPal`,
       `Thay đổi tiền tệ chính`,
       `Thay đổi mã PIN`,
       `Thay đổi Biệt danh`,
@@ -374,6 +374,18 @@ export default {
     bcptSent: {
       start: `Bạn đã gửi thành công `,
       end: ` BCPT và mã hóa giao dịch của bạn là `,
+    },
+    requestPayPalPayee: {
+      start: `We've let `,
+      end: ` know that you would like to settle with PayPal.`,
+    },
+    requestPayPalPayment: {
+      start: `We've let `,
+      end: ` know that you'd like to be paid with PayPal.`,
+    },
+    settledWithPayPal: {
+      start: `We've let `,
+      end: ` know that you've settled with PayPal.`,
     },
     status: `Bạn có thể xem trạng thái của giao dịch này trong `,
     activity: `tab hoạt động.`,

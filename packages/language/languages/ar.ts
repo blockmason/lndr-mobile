@@ -122,7 +122,6 @@ export default {
     },
     ethBalance: {
       display: Y => `رصيد الإثيريوم الخاص بك هو ${String(Y).slice(0,8)}`,
-      inFiat: (Z, B, A) => ` (${CUR(A)}${String(Number(Z) * Number(B)).slice(0, 8)})`,
       getError: `تعذر استرداد رصيد إثيريوم`,
       manage: `إدارة إثيريوم`,
     },
@@ -163,6 +162,7 @@ export default {
       `رصيد BCPT`,
       `إزالة الحساب`,
       `سجل معاملات إثيريوم`,
+      `تمكين باي بال`,
       `تغيير العملات الرئيسية`,
       `تغيير رمز PIN‏`,
       `تغيير الاسم المستعار`,
@@ -375,6 +375,18 @@ export default {
     bcptSent: {
       start: ` بنجاح ورقم الهاش لمعاملتك هو `,
       end: ` لقد أرسلت  BCPT `,
+    },
+    requestPayPalPayee: {
+      start: `We've let `,
+      end: ` know that you would like to settle with PayPal.`,
+    },
+    requestPayPalPayment: {
+      start: `We've let `,
+      end: ` know that you'd like to be paid with PayPal.`,
+    },
+    settledWithPayPal: {
+      start: `We've let `,
+      end: ` know that you've settled with PayPal.`,
     },
     status: ` حالة هذه المعاملة من تبويب النشاط`,
     activity: `يمكنك رؤية`,

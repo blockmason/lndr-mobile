@@ -1,11 +1,11 @@
 import React, { Component } from 'react'
 
-import { Text, TextInput, View, ScrollView, KeyboardAvoidingView } from 'react-native'
+import { Text, TextInput, View, ScrollView, KeyboardAvoidingView, Platform } from 'react-native'
 import { getResetAction } from 'reducers/nav'
 
 import { UserData } from 'lndr/user'
-import { ethAmount, ethAddress } from 'lndr/format'
-import { currencySymbols, transferLimits  } from 'lndr/currencies'
+import { ethAmount, ethAddress, formatCommaDecimal, formatEthRemaining } from 'lndr/format'
+import { currencySymbols, transferLimits, isCommaDecimal } from 'lndr/currencies'
 
 import Button from 'ui/components/button'
 import Loading, { LoadingContext } from 'ui/components/loading'
@@ -27,13 +27,13 @@ import { connect } from 'react-redux'
 const sendingEthLoader = new LoadingContext()
 
 interface Props {
-  sendEth: (address: string, amount: string) => any
   user: UserData
   ethBalance: string
   ethSentPastWeek: number
-  ethExchange: (currency: string) => string
   navigation: any
   primaryCurrency: string
+  ethExchange: (currency: string) => string
+  sendEth: (address: string, amount: string) => any
 }
 
 interface State {
@@ -49,6 +49,8 @@ class TransferEth extends Component<Props, State> {
     this.state = {
       txCost: '0.00'
     }
+
+    this.blurAmountFormat = this.blurAmountFormat.bind(this)
   }
 
   async componentWillMount() {
@@ -100,11 +102,11 @@ class TransferEth extends Component<Props, State> {
     this.props.navigation.goBack()
   }
 
-  setAmount(amount) {
+  setAmount(amount: string) {
     return `${ethAmount(amount)}`
   }
 
-  setAddress(address) {
+  setAddress(address: string) {
     return `${ethAddress(address)}`
   }
 
@@ -114,38 +116,47 @@ class TransferEth extends Component<Props, State> {
   }
 
   getLimit() {
-    const { formInputError } = this.state
     const { ethExchange, ethSentPastWeek, primaryCurrency } = this.props
-    const remaining = String(Number(transferLimits(primaryCurrency)) - Number(ethSentPastWeek) * Number(ethExchange(primaryCurrency)))
-    const end = remaining.indexOf('.') === -1 ? remaining.length : remaining.indexOf('.') + 3
-    return remaining.slice(0, end)
+    return formatEthRemaining(ethExchange, ethSentPastWeek, primaryCurrency)
   }
 
-  toFiat(amount, exchange, primaryCurrency) {
-    if (amount === undefined) {
+  toFiat(amount: string | undefined, exchange: string) {
+    if ( amount === undefined || amount === '' || amount === '.' || amount === ',' ) {
       amount = '0'
+    } else if(isCommaDecimal()) {
+      amount = amount.replace(',', '.')
     }
-    const remaining = `${currencySymbols(primaryCurrency)}${Number(amount) * Number(exchange)}`
+    const remaining = `${Number(amount) * Number(exchange)}`
     const end = remaining.indexOf('.') === -1 ? remaining.length : remaining.indexOf('.') + 3
-    return remaining.slice(0, end)
+    let result = remaining.slice(0, end)
+    result = result.slice(-2, -1) === '.' ? result += '0' : result
+    return isCommaDecimal() ? result.replace('.', ',') : result
+  }
+
+  blurAmountFormat() {
+    let { amount } = this.state
+    if(amount && (amount.slice(-1) === '.' || amount.slice(-1) === ',')) {
+      amount = amount.slice(0, -1)
+      this.setState({ amount })
+    }
   }
 
   render() {
     const { amount, address, txCost, formInputError } = this.state
-    const { ethBalance, ethExchange, ethSentPastWeek, primaryCurrency } = this.props
+    const { ethBalance, ethExchange, primaryCurrency } = this.props
 
-    return <View style={general.whiteFlex}>
+    return <ScrollView style={general.whiteFlex}>
       <View style={general.view}>
         <Loading context={sendingEthLoader} />
         <DashboardShell text={accountManagement.sendEth.transferLowercase} navigation={this.props.navigation} />
         <Button close onPress={() => this.props.navigation.goBack()} />
       </View>
-      <KeyboardAvoidingView style={general.whiteFlex} behavior={'padding'} keyboardVerticalOffset={0} >
+      <KeyboardAvoidingView style={general.whiteFlex} behavior={Platform.OS === 'ios' ? 'padding' : 'position'} keyboardVerticalOffset={-200} >
         <ScrollView style={general.view} keyboardShouldPersistTaps='handled'>
           <View style={general.largeHMargin} >
             <View style={[general.centeredColumn, {marginBottom: 20}]}>
               <View style={general.centeredColumn} >
-                <Text style={[formStyle.header, {textAlign: 'center'}]}>{accountManagement.sendEth.balance(ethBalance)}</Text>
+                <Text style={[formStyle.header, {textAlign: 'center'}]}>{accountManagement.sendEth.balance(formatCommaDecimal(ethBalance))}</Text>
                 <View style={formStyle.textInputContainer}>
                   <TextInput
                     style={[formStyle.textInput,  {paddingVertical: 3}]}
@@ -169,18 +180,19 @@ class TransferEth extends Component<Props, State> {
                     underlineColorAndroid='transparent'
                     keyboardType='numeric'
                     onChangeText={amount => this.setState({ amount: this.setAmount(amount), formInputError: undefined })}
+                    onBlur={this.blurAmountFormat}
                   />
                 </View>
               </View>
-              <Text style={[formStyle.smallText, formStyle.center, formStyle.spaceTopS]}>{this.toFiat(amount, ethExchange(primaryCurrency), primaryCurrency)}</Text>
-              <Text style={[accountStyle.txCost, formStyle.spaceTop]}>{accountManagement.sendEth.txCost(txCost, primaryCurrency)}</Text>
+              <Text style={[formStyle.smallText, formStyle.center, formStyle.spaceTopS]}>{`${currencySymbols(primaryCurrency)}${this.toFiat(amount, ethExchange(primaryCurrency))}`}</Text>
+              <Text style={[accountStyle.txCost, formStyle.spaceTop]}>{accountManagement.sendEth.txCost(formatCommaDecimal(txCost), primaryCurrency)}</Text>
             </View>
             { formInputError && <Text style={[formStyle.warningText, {alignSelf: 'center'}]}>{formInputError}</Text>}
             <Button large round wide onPress={() => this.submit()} text={accountManagement.sendEth.transfer} />
           </View>
         </ScrollView>
       </KeyboardAvoidingView>
-    </View>
+    </ScrollView>
   }
 }
 
