@@ -415,5 +415,19 @@ export default {
     friendNotEnabled: F => `@${F} is niet ingeschakeld PayPal betalingen.`,
     friendRequestedConnect: F => `@${F} wil je betalen via PayPal`,
     requestFriendConnect: F => `Je vroeg @${F} om PayPal mogelijk te maken`,
+    feesNotification: `Omvat niet PayPal kosten`,
+    feesInformationHeader: `PayPal Fees Informatie`,
+    feesInformation: `1. Uw PayPal-rekening moet worden gekoppeld aan een bankrekening.
+    
+2. Niet gratis in een andere valuta dan de valuta van uw bank zal oplopen een $ 0.35 kosten.
+    
+3. Internationale transfersommen:
+    Verenigde Staten naar Canada / Europa: $ 2.99
+    USA om ergens anders: $ 4.99
+    
+4. Deze kosten zijn niet volledig. Voor de meest actuele informatie ga naar:
+
+    https://www.paypal.com/us/webapps/mpp/paypal-fees#sending-us`,
+    payPalSite: `PayPal.com`,
   }
 }

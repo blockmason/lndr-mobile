@@ -413,5 +413,19 @@ export default {
     friendNotEnabled: F => `@${F} has not enabled PayPal payments.`,
     friendRequestedConnect: F => `@${F} wants to pay you via PayPal`,
     requestFriendConnect: F => `You asked @${F} to enable PayPal`,
+    feesNotification: `Does not include PayPal fees`,
+    feesInformationHeader: `PayPal Fees Information`,
+    feesInformation: `1. Your PayPal account must be tied to a bank account.
+    
+2. Paying in a currency different from your bank's currency will incur a $0.35 fee.
+
+3. International transfer fees:
+    U.S. to Canada/Europe: $2.99
+    U.S. to anywhere else: $4.99
+
+4. These fees are not comprehensive. For the most updated information please go to:
+
+    https://www.paypal.com/us/webapps/mpp/paypal-fees#sending-us`,
+    payPalSite: `PayPal.com`,
   }
 }

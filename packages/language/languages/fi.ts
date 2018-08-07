@@ -417,5 +417,19 @@ export default {
     friendNotEnabled: F => `@${F} ei käytössä PayPal maksut.`,
     friendRequestedConnect: F => `@${F} haluaa maksaa sinulle kautta PayPal`,
     requestFriendConnect: F => `Kysyit @${F} jotta PayPal`,
+    feesNotification: `Ei sisällä PayPal maksut`,
+    feesInformationHeader: `PayPal maksut Tietoja`,
+    feesInformation: `1. PayPal-tili on sidottava pankkitilille.
+    
+2. Ottaen valuutassa eri pankista valuutta aiheutuu $ 0.35 maksu.
+    
+3. Kansainvälinen siirtomaksut:
+    Yhdysvalloista Kanadaan / Eurooppa: $ 2.99
+    USA missään muualla: $ 4.99
+    
+4. Nämä maksut eivät ole kattavia. Saat päivitetyt tiedot osoitteessa:
+
+    https://www.paypal.com/us/webapps/mpp/paypal-fees#sending-us`,
+    payPalSite: `PayPal.com`,
   }
 }

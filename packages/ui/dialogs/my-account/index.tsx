@@ -352,7 +352,7 @@ class MyAccount extends Component<Props, State> {
         <Button round onPress={() => this.props.navigation.navigate('RemoveAccount')} text={removeAccount} />
       </View>),
       (<View style={style.spaceHorizontalL}>
-        <Button round onPress={() =>  Linking.openURL(`https://etherscan.io/address/${user.address}`)} text={accountManagement.viewEtherscan} />
+        <Button round onPress={() => Linking.openURL(`https://etherscan.io/address/${user.address}`)} text={accountManagement.viewEtherscan} />
       </View>),
       this.renderPayPalContent(),
       (<View style={style.spaceHorizontalL}>

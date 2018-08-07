@@ -416,5 +416,19 @@ export default {
     friendNotEnabled: F => `لم يقم @${F} بتمكين دفعات PayPal`,
     friendRequestedConnect: F => `يريد @${F} الدفع لك عبر PayPal`,
     requestFriendConnect: F => `لقد طلبت من @${F} تمكين PayPal`,
+    feesNotification: `لا تشمل رسوم باي بال`,
+    feesInformationHeader: `باي بال معلومات الرسوم`,
+    feesInformation: `1. يجب أن تكون مرتبطة حساب باي بال الخاص بك إلى حساب مصرفي.
+    
+2. دفع بعملة مختلفة عن العملة البنك الذي تتعامل معه سوف تتحمل رسوم $ 0.35.
+
+3. رسوم نقل دولية:
+    الولايات المتحدة الأمريكية إلى كندا / أوروبا: $ 2.99
+    الولايات المتحدة الأمريكية إلى أي مكان آخر: $ 4.99
+
+4. هذه الرسوم ليست شاملة. لأحدث المعلومات يرجى زيارة:
+
+    https://www.paypal.com/us/webapps/mpp/paypal-fees#sending-us`,
+    payPalSite: `PayPal.com`,
   }
 }
