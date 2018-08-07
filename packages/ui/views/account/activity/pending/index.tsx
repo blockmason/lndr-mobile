@@ -178,10 +178,11 @@ class PendingView extends Component<Props, State> {
             if(homeScreen && payPalRequest.requestorIsMe) {
               return null
             }
+            const uniquifier = (payPalRequest.requestorIsMe) ? 'm' : ''
             return <PayPalRequestRow
               payPalRequest={payPalRequest}
               navigation={navigation}
-              key={payPalRequest.friend.address}
+              key={`${uniquifier}${payPalRequest.friend.address}`}
             />
           })
         }
