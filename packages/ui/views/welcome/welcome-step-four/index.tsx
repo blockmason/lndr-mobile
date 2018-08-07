@@ -23,10 +23,10 @@ export default class WelcomeStepFourView extends Component<Props> {
       <ScrollView>
         <View style={style.topView}>
           <TextLogo name='black'/>
-          <Text style={[style.text, style.topSpacing]}>{welcomeView.firstLendingApp}</Text>
-          <ThemeImage size={largeImage} name='blockchain'/>
-          <Text style={[style.caption, style.boldCaption]}>{welcomeView.runEthereum}</Text>
+          <Text style={[style.caption, style.boldCaption, style.topSpacing]}>{welcomeView.runEthereum}</Text>
           <Button large round wide onPress={this.props.onComplete} containerStyle={style.completeButton} text={welcomeView.start} />
+          <Text style={[style.text]}>{welcomeView.firstLendingApp}</Text>
+          <ThemeImage size={largeImage} name='blockchain'/>
         </View>
       </ScrollView>
     )
