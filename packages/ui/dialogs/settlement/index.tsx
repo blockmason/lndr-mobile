@@ -25,19 +25,27 @@ const {
   back,
   debtManagement,
   accountManagement,
-  payPalLanguage
+  payPalLanguage,
+  pendingTransactionsLanguage
 } = language
 
 import { getUser, recentTransactions, getEthBalance, getEthExchange, getWeeklyEthTotal,
   hasPendingTransaction, calculateBalance, getUcacCurrency, getPrimaryCurrency } from 'reducers/app'
-import { addDebt, getEthTxCost, requestPayPalSettlement } from 'actions'
+import { addDebt, getEthTxCost, requestPayPalSettlement, cancelPayPalRequest, cancelPayPalRequestFail } from 'actions'
 import { connect } from 'react-redux'
 
 const submittingTransaction = new LoadingContext()
+const loadingContext = new LoadingContext()
 
 let unmounting = false
 
 interface Props {
+  user: UserData
+  ethBalance: string
+  primaryCurrency: string
+  ethSentPastWeek: number
+  recentTransactions: any
+  navigation: any
   requestPayPalSettlement: (
     friend: Friend
   ) => any
@@ -51,15 +59,10 @@ interface Props {
     denomination?: string
   ) => any
   hasPendingTransaction: (friend: Friend) => boolean
-  user: UserData
-  ethBalance: string
   ethExchange: (currency: string) => string
-  ethSentPastWeek: number
-  recentTransactions: any
-  navigation: any
   calculateBalance: (friend: Friend) => number
   getUcacCurrency: (ucac: string) => string
-  primaryCurrency: string
+  cancelPayPalRequestFail: () => void
 }
 
 interface State {
@@ -72,6 +75,7 @@ interface State {
   pic?: string
   settlementType?: string
   friend: Friend
+  fromPayPalRequest?: boolean
 }
 
 class Settlement extends Component<Props, State> {
@@ -86,6 +90,7 @@ class Settlement extends Component<Props, State> {
     }
 
     this.blurCurrencyFormat = this.blurCurrencyFormat.bind(this)
+    this.rejectPayPalRequest = this.rejectPayPalRequest.bind(this)
   }
 
   async componentWillMount() {
@@ -93,6 +98,7 @@ class Settlement extends Component<Props, State> {
     const txCost = await getEthTxCost(primaryCurrency)
     const friend = this.props.navigation ? this.props.navigation.state.params.friend : {}
     const settlementType = this.props.navigation ? this.props.navigation.state.params.settlementType : ''
+    const fromPayPalRequest = this.props.navigation ? this.props.navigation.state.params.fromPayPalRequest : false
 
     let amount, formInputError, ethCost
 
@@ -114,7 +120,7 @@ class Settlement extends Component<Props, State> {
     }
 
     console.log('LOADING AMOUNT ', amount)
-    this.setState({txCost, pic, amount, ethCost, formInputError, settlementType, friend})
+    this.setState({txCost, pic, amount, ethCost, formInputError, settlementType, friend, fromPayPalRequest})
   }
 
   componentWillUnmount() {
@@ -284,6 +290,20 @@ class Settlement extends Component<Props, State> {
     )
   }
 
+  async rejectPayPalRequest() {
+    const { friend } = this.state
+    const { address, privateKeyBuffer } = this.props.user
+
+    try {
+      await loadingContext.wrap(cancelPayPalRequest(address, friend.address, privateKeyBuffer))
+      const resetAction = getResetAction({ routeName:'Confirmation', params: { type: 'reject', friend } })
+      this.props.navigation.dispatch(resetAction)
+    } catch(e) {
+      console.log('CANCEL PAYPAL REQUEST FAIL: ', e)
+      this.props.cancelPayPalRequestFail()
+    }
+  }
+
   renderPaymentButton() {
     const { amount, direction } = this.state
     if (typeof amount !== 'string')
@@ -315,7 +335,7 @@ class Settlement extends Component<Props, State> {
   }
 
   render() {
-    const { amount, balance, formInputError, pic, ethCost, settlementType, friend, txCost } = this.state
+    const { amount, balance, formInputError, pic, ethCost, settlementType, friend, txCost, fromPayPalRequest } = this.state
     const { primaryCurrency, ethBalance, ethExchange } = this.props
     const imageSource = pic ? { uri: pic } : require('images/person-outline-dark.png')
     const vertOffset = (Platform.OS === 'android') ? -300 : 20
@@ -366,6 +386,7 @@ class Settlement extends Component<Props, State> {
             { settlementType === 'eth' && ethCost !== '' && <Text style={[formStyle.smallText, formStyle.spaceTop, formStyle.center]}>{`${formatCommaDecimal(ethCost.slice(0, 6))} ETH`}</Text>}
             { formInputError && <Text style={[formStyle.warningText, {alignSelf: 'center', marginHorizontal: 15}]}>{formInputError}</Text>}
             { paymentButton }
+            { fromPayPalRequest ? <Button danger round containerStyle={{width: '80%'}} onPress={this.rejectPayPalRequest} text={pendingTransactionsLanguage.rejectRequest} /> : null }
           </View>
         </ScrollView>
       </KeyboardAvoidingView>
@@ -376,4 +397,4 @@ class Settlement extends Component<Props, State> {
 export default connect((state) => ({ user: getUser(state)(), ethBalance: getEthBalance(state), ethExchange: getEthExchange(state),
   recentTransactions: recentTransactions(state), ethSentPastWeek: getWeeklyEthTotal(state), hasPendingTransaction: hasPendingTransaction(state),
   calculateBalance: calculateBalance(state), getUcacCurrency: getUcacCurrency(state), primaryCurrency: getPrimaryCurrency(state)}),
-  { addDebt, requestPayPalSettlement })(Settlement)
+  { addDebt, requestPayPalSettlement, cancelPayPalRequestFail })(Settlement)
