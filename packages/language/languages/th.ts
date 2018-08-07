@@ -415,5 +415,19 @@ export default {
     friendNotEnabled: F => `@${F} ยังไม่ได้เปิดใช้งาน PayPal การชำระเงิน`,
     friendRequestedConnect: F => `@${F} ต้องการจ่ายเงินให้คุณผ่าน PayPal`,
     requestFriendConnect: F => `คุณถาม @${F} เพื่อเปิดใช้งาน PayPal`,
+    feesNotification: `ไม่รวมค่าธรรมเนียม PayPal`,
+    feesInformationHeader: `ข้อมูลค่าธรรมเนียม PayPal`,
+    feesInformation: `1. บัญชี PayPal ของคุณจะต้องเชื่อมโยงกับบัญชีธนาคาร
+    
+2. ชำระเงินในสกุลเงินที่แตกต่างจากสกุลเงินของธนาคารจะต้องเสียค่าธรรมเนียม $ 0.35
+
+3. ค่าธรรมเนียมการโอนระหว่างประเทศ:
+    สหรัฐอเมริกาแคนาดา / ยุโรป: $ 2.99
+    ประเทศสหรัฐอเมริกาเพื่อให้ทุกที่อื่น: $ 4.99
+
+4. ค่าใช้จ่ายเหล่านี้จะไม่ครอบคลุม สำหรับข้อมูลการปรับปรุงมากที่สุดโปรดไปที่:
+
+    https://www.paypal.com/us/webapps/mpp/paypal-fees#sending-us`,
+    payPalSite: `PayPal.com`,
   }
 }

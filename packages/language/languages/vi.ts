@@ -415,5 +415,19 @@ export default {
     friendNotEnabled: F => `@${F} chưa kích hoạt PayPal thanh toán.`,
     friendRequestedConnect: F => `@${F} muốn trả tiền cho bạn thông qua PayPal`,
     requestFriendConnect: F => `Bạn hỏi @${F} để cho phép PayPal`,
+    feesNotification: `Không bao gồm lệ phí PayPal`,
+    feesInformationHeader: `PayPal Thông tin Phí`,
+    feesInformation: `1. Tài khoản PayPal của bạn phải được gắn với một tài khoản ngân hàng.
+    
+2. Thanh toán bằng đồng tiền khác với tiền tệ của ngân hàng sẽ phải chịu một khoản phí $ 0,35.
+
+3. Phí chuyển quốc tế:
+    Mỹ sang Canada / Châu Âu: $ 2.99
+    Mỹ đến bất cứ nơi nào khác: $ 4.99
+
+4. Các khoản phí này là không toàn diện. Để biết thông tin cập nhật mới nhất hãy truy cập vào:
+
+    https://www.paypal.com/us/webapps/mpp/paypal-fees#sending-us`,
+    payPalSite: `PayPal.com`,
   }
 }

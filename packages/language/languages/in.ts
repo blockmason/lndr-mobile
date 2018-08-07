@@ -416,5 +416,19 @@ export default {
     friendNotEnabled: F => `@${F} belum diaktifkan PayPal pembayaran.`,
     friendRequestedConnect: F => `@${F} ingin membayar Anda melalui PayPal`,
     requestFriendConnect: F => `Anda bertanya @${F} untuk mengaktifkan PayPal`,
+    feesNotification: `Tidak termasuk biaya PayPal`,
+    feesInformationHeader: `PayPal Informasi Biaya`,
+    feesInformation: `1. Account PayPal Anda harus terikat ke rekening bank.
+    
+2. Membayar dalam mata uang yang berbeda dari mata uang bank Anda akan dikenakan biaya $ 0,35.
+
+3. Biaya transfer International:
+    USA ke Kanada / Eropa: $ 2,99
+    USA dengan tempat lain: $ 4.99
+
+4. Biaya ini tidak komprehensif. Untuk informasi terbaru silakan kunjungi:
+
+    https://www.paypal.com/us/webapps/mpp/paypal-fees#sending-us`,
+    payPalSite: `PayPal.com`,
   }
 }

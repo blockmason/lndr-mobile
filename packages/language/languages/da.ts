@@ -416,5 +416,19 @@ export default {
     friendNotEnabled: F => `@${F} er ikke aktiveret PayPal betalinger.`,
     friendRequestedConnect: F => `@${F} ønsker at betale dig via PayPal`,
     requestFriendConnect: F => `Du bad @${F} for at aktivere PayPal`,
+    feesNotification: `Omfatter ikke PayPal gebyrer`,
+    feesInformationHeader: `PayPal Gebyrer Information`,
+    feesInformation: `1. Din PayPal-konto skal være bundet til en bankkonto.
+    
+2. Betale i en anden valuta end din banks valuta vil pådrage sig en $ 0,35 gebyr.
+    
+3. Internationale transfersummer:
+    USA til Canada / Europa: $ 2.99
+    USA til andre steder: $ 4.99
+    
+4. Disse gebyrer er ikke udtømmende. For de mest opdaterede oplysninger kan du gå til:
+
+    https://www.paypal.com/us/webapps/mpp/paypal-fees#sending-us`,
+    payPalSite: `PayPal.com`,
   }
 }

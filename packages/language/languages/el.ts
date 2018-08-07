@@ -416,5 +416,19 @@ export default {
     friendNotEnabled: F => `@${F} δεν έχει ενεργοποιηθεί PayPal πληρωμές.`,
     friendRequestedConnect: F => `@${F} θέλει να σας πληρώσει μέσω PayPal`,
     requestFriendConnect: F => `Θα ζητηθεί @${F} για να ενεργοποιήσετε PayPal`,
+    feesNotification: `Δεν περιλαμβάνονται αμοιβές PayPal`,
+    feesInformationHeader: `PayPal Τέλη πληροφορίες`,
+    feesInformation: `1. Ο λογαριασμός σας PayPal πρέπει να συνδέεται με έναν τραπεζικό λογαριασμό.
+    
+2. Πληρωμή σε νόμισμα διαφορετικό από το νόμισμα της τράπεζάς σας θα υποστούν ένα πρόστιμο $ 0,35.
+    
+3. Διεθνής τέλη μεταφοράς:
+    ΗΠΑ στον Καναδά / Ευρώπης: $ 2.99
+    ΗΠΑ για να οπουδήποτε αλλού: $ 4.99
+    
+4. Τα τέλη αυτά δεν είναι ολοκληρωμένη. Για τις πιο πρόσφατες πληροφορίες, παρακαλούμε επισκεφθείτε την ιστοσελίδα:
+
+    https://www.paypal.com/us/webapps/mpp/paypal-fees#sending-us`,
+    payPalSite: `PayPal.com`,
   }
 }

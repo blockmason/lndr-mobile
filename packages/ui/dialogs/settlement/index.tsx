@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import { Text, TextInput, View, Image, ScrollView, KeyboardAvoidingView, Platform } from 'react-native'
+import { Text, TextInput, View, Image, ScrollView, KeyboardAvoidingView, Platform, Linking, Alert } from 'react-native'
 import { getResetAction } from 'reducers/nav'
 
 import { UserData } from 'lndr/user'
@@ -22,8 +22,10 @@ import accountStyle from 'theme/account'
 
 import language from 'language'
 const {
+  back,
   debtManagement,
-  accountManagement
+  accountManagement,
+  payPalLanguage
 } = language
 
 import { getUser, recentTransactions, getEthBalance, getEthExchange, getWeeklyEthTotal,
@@ -68,6 +70,8 @@ interface State {
   txCost: string
   ethCost: string
   pic?: string
+  settlementType?: string
+  friend: Friend
 }
 
 class Settlement extends Component<Props, State> {
@@ -77,7 +81,8 @@ class Settlement extends Component<Props, State> {
       balance: this.getRecentTotal(),
       direction: this.getRecentTotal() > 0 ? 'borrow' : 'lend',
       txCost: '0.00',
-      ethCost: ''
+      ethCost: '',
+      friend: new Friend('', '')
     }
 
     this.blurCurrencyFormat = this.blurCurrencyFormat.bind(this)
@@ -87,15 +92,18 @@ class Settlement extends Component<Props, State> {
     const { primaryCurrency } = this.props
     const txCost = await getEthTxCost(primaryCurrency)
     const friend = this.props.navigation ? this.props.navigation.state.params.friend : {}
+    const settlementType = this.props.navigation ? this.props.navigation.state.params.settlementType : ''
 
     let amount, formInputError, ethCost
 
     if(this.state.balance) {
       amount = formatSettlementAmount(String(Math.abs(this.state.balance)), primaryCurrency)
 
-      const result = this.ethCostAndError(amount, txCost)
-      ethCost = result.ethCost
-      formInputError = result.formInputError
+      if(settlementType === 'eth') {
+        const result = this.ethCostAndError(amount, txCost)
+        ethCost = result.ethCost
+        formInputError = result.formInputError
+      }
     }
 
     unmounting = false
@@ -106,7 +114,7 @@ class Settlement extends Component<Props, State> {
     }
 
     console.log('LOADING AMOUNT ', amount)
-    this.setState({txCost, pic, amount, ethCost, formInputError})
+    this.setState({txCost, pic, amount, ethCost, formInputError, settlementType, friend})
   }
 
   componentWillUnmount() {
@@ -264,6 +272,18 @@ class Settlement extends Component<Props, State> {
     this.setState({ amount: amount === undefined ? amount : amountFormat(amount, primaryCurrency, true) })
   }
 
+  payPalFeesAlert() {
+    Alert.alert(
+      payPalLanguage.feesInformationHeader,
+      payPalLanguage.feesInformation,
+      [
+        {text: back, onPress: () => null},
+        {text: payPalLanguage.payPalSite, onPress: () => Linking.openURL('https://www.paypal.com/us/webapps/mpp/paypal-fees#sending-us')},
+      ],
+      { cancelable: true }
+    )
+  }
+
   renderPaymentButton() {
     const { amount, direction } = this.state
     if (typeof amount !== 'string')
@@ -295,10 +315,8 @@ class Settlement extends Component<Props, State> {
   }
 
   render() {
-    const { amount, balance, txCost, formInputError, pic, ethCost } = this.state
-    const { ethBalance, ethExchange, primaryCurrency } = this.props
-    const ethSettlement = this.props.navigation ? (this.props.navigation.state.params.settlementType == "eth") : false
-    const friend = this.props.navigation ? this.props.navigation.state.params.friend : {}
+    const { amount, balance, formInputError, pic, ethCost, settlementType, friend, txCost } = this.state
+    const { primaryCurrency, ethBalance, ethExchange } = this.props
     const imageSource = pic ? { uri: pic } : require('images/person-outline-dark.png')
     const vertOffset = (Platform.OS === 'android') ? -300 : 20
 
@@ -321,17 +339,17 @@ class Settlement extends Component<Props, State> {
                 <Text style={style.totalAmount}>{this.displayTotal(balance)}</Text>
               </View>
               <View style={general.centeredColumn}>
-                {ethSettlement ? <View style={[accountStyle.balanceRow, {marginTop: 20}]}>
+                { settlementType === 'eth' ? <View style={[accountStyle.balanceRow, {marginTop: 20}]}>
                   <Text style={[accountStyle.balance, {marginLeft: '2%'}]}>{accountManagement.ethBalance.display(formatCommaDecimal(ethBalance))}</Text>
                   <Button alternate blackText narrow arrow small onPress={() => {this.props.navigation.navigate('MyAccount')}}
                     text={formatEthToFiat(ethBalance, ethExchange(primaryCurrency), primaryCurrency)}
                     containerStyle={{marginTop: -6}}
                   />
-                </View> : null}
-                {ethSettlement ? <Text style={[accountStyle.txCost, {marginLeft: '2%'}]}>{accountManagement.sendEth.txCost(formatCommaDecimal(txCost), primaryCurrency)}</Text> : null}
-                {!ethSettlement || balance > 0 ? null : <Text style={[formStyle.smallText, formStyle.spaceTop, formStyle.center]}>{accountManagement.sendEth.warning(this.getLimit(), primaryCurrency)}</Text>}
+                </View> : null }
+                { settlementType === 'eth' ? <Text style={[accountStyle.txCost, {marginLeft: '2%'}]}>{accountManagement.sendEth.txCost(formatCommaDecimal(txCost), this.props.primaryCurrency)}</Text> : null }
+                { settlementType === 'eth' && balance > 0 ? <Text style={[formStyle.smallText, formStyle.spaceTop, formStyle.center]}>{accountManagement.sendEth.warning(this.getLimit(), primaryCurrency)}</Text> : null}
                 <Text style={formStyle.titleLarge}>{debtManagement.fields.settlementAmount}</Text>
-                {ethSettlement ? <TextInput
+                {settlementType === 'eth' ? <TextInput
                   style={[formStyle.jumboInput, formStyle.settleAmount]}
                   placeholder={`${currencySymbols(primaryCurrency)}0`}
                   placeholderTextColor='black'
@@ -344,7 +362,8 @@ class Settlement extends Component<Props, State> {
                 /> : <Text style={formStyle.jumboInput}>{amount}</Text>}
               </View>
             </View>
-            { ethCost !== '' && <Text style={[formStyle.smallText, formStyle.spaceTop, formStyle.center]}>{`${formatCommaDecimal(ethCost.slice(0, 6))} ETH`}</Text>}
+            { settlementType === 'paypal' ? <Button alternate small arrow style={style.submitButton} onPress={this.payPalFeesAlert} text={payPalLanguage.feesNotification} /> : null }
+            { settlementType === 'eth' && ethCost !== '' && <Text style={[formStyle.smallText, formStyle.spaceTop, formStyle.center]}>{`${formatCommaDecimal(ethCost.slice(0, 6))} ETH`}</Text>}
             { formInputError && <Text style={[formStyle.warningText, {alignSelf: 'center', marginHorizontal: 15}]}>{formInputError}</Text>}
             { paymentButton }
           </View>

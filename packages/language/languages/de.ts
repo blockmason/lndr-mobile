@@ -419,5 +419,19 @@ export default {
     friendNotEnabled: F => `@${F} hat PayPal Zahlungen nicht aktiviert`,
     friendRequestedConnect: F => `@${F} möchte Sie über PayPal zahlen`,
     requestFriendConnect: F => `Sie werden gefragt @${F} PayPal zu ermöglichen`,
+    feesNotification: `Darin nicht enthalten sind PayPal-Gebühren`,
+    feesInformationHeader: `PayPal Gebühren Informationen`,
+    feesInformation: `1. Ihr PayPal-Konto muss auf ein Bankkonto gebunden werden.
+    
+2. Bezahlen in einer anderen Währung als Ihrer Bank Währung wird ein $ 0,35 Gebühr anfallen.
+    
+3. Internationale Transfergebühren:
+    USA nach Kanada / Europa: $ 2.99
+    USA anderswo: $ 4.99
+    
+4. Diese Gebühren sind nicht alle Informationen. Die aktuellsten Informationen erhalten Sie unter:
+
+    https://www.paypal.com/us/webapps/mpp/paypal-fees#sending-us`,
+    payPalSite: `PayPal.com`,
   }
 }
