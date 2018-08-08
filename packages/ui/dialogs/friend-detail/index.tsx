@@ -159,7 +159,6 @@ class FriendDetail extends Component<Props, State> {
         <View style={general.centeredColumn}>
           <Image source={imageSource} style={pendingStyle.image}/>
           <Text style={pendingStyle.title}>{`  @${friend.nickname}  `}</Text>
-          <Button round danger onPress={this.confirmRemoveFriend} text={removeFriendText} containerStyle={style.spaceBottom} />
           <Text style={pendingStyle.subTitle}>{`${recentTransactionsLanguage.consolidatedBalance}:`}</Text>
           <View style={pendingStyle.balanceRow}>
             <Text style={pendingStyle.balanceInfo}>{currencySymbols(primaryCurrency)}</Text>
@@ -175,6 +174,7 @@ class FriendDetail extends Component<Props, State> {
             <Text style={accountStyle.transactionHeader}>{recentTransactionsLanguage.title}</Text>
             <RecentView friend={friend} navigation={navigation} />
           </View>
+          <Button round danger onPress={this.confirmRemoveFriend} text={removeFriendText} containerStyle={style.spaceBottom} />
         </View>
       </ScrollView>
     </View>
