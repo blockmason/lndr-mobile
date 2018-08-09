@@ -219,6 +219,7 @@ export default {
     record: `Oversikt`,
     records: `Oversikter`,
     chooseCurrency: `Velg en valuta`,
+    
     createError: {
       amountTooLow: `Beløpet må være større enn $ 0`,
       amountTooHigh: `Beløpet må være mindre enn $ 1.000.000.000`,

@@ -219,6 +219,7 @@ export default {
     record: `Uppgift`,
     records: `Uppgifter`,
     chooseCurrency: `Välj en valuta`,
+    
     createError: {
       amountTooLow: `Beloppet måste vara större än $ 0`,
       amountTooHigh: `Beloppet måste vara mindre än $ 1000000000`,

@@ -219,6 +219,7 @@ export default {
     record: `kayıt`,
     records: `kayıt`,
     chooseCurrency: `Bir para birimi seç`,
+    
     createError: {
       amountTooLow: `Tutar 0$ 'dan büyük olmalıdır`,
       amountTooHigh: `Tutar 1,000,000,000$ ‘dan az olmalıdır`,

@@ -219,6 +219,7 @@ export default {
     record: `记录`,
     records: `记录`,
     chooseCurrency: `选择货币`,
+    
     createError: {
       amountTooLow: `金额必须大于 0`,
       amountTooHigh: `金额必须低于$ 1,000,000,000`,

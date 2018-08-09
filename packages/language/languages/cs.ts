@@ -400,7 +400,7 @@ export default {
 
   privacyPolicy: {
     link: `lndr.io/terms/`,
-    message: `Click the button below to confirm that you have read and agreed to Blockmason's Privacy Policy. Blockmason can send updates about Blockmason and LNDR using your e-mail address. Here is a link to the privacy policy:`
+    message: `Kliknutím na tlačítko níže potvrzujete, že jste si přečetli a souhlasíte se zásadami ochrany osobních údajů Blockmason je. Blockmason může používat e-mailovou adresu pro zaslání aktualizací o Blockmason a LNDR. Zde je odkaz na zásady ochrany osobních údajů:`
   },
 
   payPalLanguage: {

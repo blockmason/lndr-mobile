@@ -219,6 +219,7 @@ export default {
     record: `registro`,
     records: `registros`,
     chooseCurrency: `Escolha uma moeda`,
+    
     createError: {
       amountTooLow: `Montante deve ser superior a US $ 0`,
       amountTooHigh: `Montante deve ser inferior a US $ 1.000.000.000`,
