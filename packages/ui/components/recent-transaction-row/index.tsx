@@ -4,10 +4,10 @@ import { Text, TouchableHighlight, View, Image } from 'react-native'
 import ZIcon from 'react-native-vector-icons/Zocial'
 
 import { currencyFormats } from 'lndr/format'
-import User from 'lndr/user'
+import User, { UserData } from 'lndr/user'
 import RecentTransaction from 'lndr/recent-transaction'
 import profilePic from 'lndr/profile-pic'
-import { currencySymbols, transferLimits  } from 'lndr/currencies'
+import { currencySymbols } from 'lndr/currencies'
 import { getUcacCurrency } from 'reducers/app'
 import { connect } from 'react-redux'
 
@@ -25,6 +25,13 @@ interface Props {
   user: User
   friend?: boolean
   getUcacCurrency: (ucac: string) => string
+}
+
+interface PassedProps extends React.Props<any> {
+  onPress?: () => void
+  recentTransaction: RecentTransaction,
+  user: User
+  friend?: boolean
 }
 
 interface State {
@@ -117,4 +124,4 @@ class RecentTransactionRow extends Component<Props, State> {
   }
 }
 
-export default connect((state) => ({ getUcacCurrency: getUcacCurrency(state) }))(RecentTransactionRow)
+export default connect<any, any, PassedProps>((state) => ({ getUcacCurrency: getUcacCurrency(state) }))(RecentTransactionRow)

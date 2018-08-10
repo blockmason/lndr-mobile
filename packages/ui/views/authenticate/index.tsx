@@ -4,10 +4,10 @@ import { View, ActivityIndicator, ScrollView } from 'react-native'
 
 import FadeInView from 'ui/components/fade-in-view'
 
-import LoginView from './login'
-import CreateAccountView from './create-account'
-import RecoverAccountView from './recover-account'
-import ConfirmAccountView from './confirm-account'
+import LoginView from 'ui/views/authenticate/login'
+import CreateAccountView from 'ui/views/authenticate/create-account'
+import RecoverAccountView from 'ui/views/authenticate/recover-account'
+import ConfirmAccountView from 'ui/views/authenticate/confirm-account'
 
 import general from 'theme/general'
 import style from 'theme/authenticate'

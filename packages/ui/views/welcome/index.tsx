@@ -5,10 +5,10 @@ import { View, Text } from 'react-native'
 import Slideshow from 'ui/components/slideshow'
 import general from 'theme/general'
 
-import WelcomeStepOneView from './welcome-step-one'
-import WelcomeStepTwoView from './welcome-step-two'
-import WelcomeStepThreeView from './welcome-step-three'
-import WelcomeStepFourView from './welcome-step-four'
+import WelcomeStepOneView from 'ui/views/welcome/welcome-step-one'
+import WelcomeStepTwoView from 'ui/views/welcome/welcome-step-two'
+import WelcomeStepThreeView from 'ui/views/welcome/welcome-step-three'
+import WelcomeStepFourView from 'ui/views/welcome/welcome-step-four'
 
 interface Props {
   onComplete: () => void

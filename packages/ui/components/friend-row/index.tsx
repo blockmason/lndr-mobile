@@ -7,6 +7,8 @@ import Friend from 'lndr/friend'
 import { currencyFormats } from 'lndr/format'
 import profilePic from 'lndr/profile-pic'
 import { currencySymbols } from 'lndr/currencies'
+import PendingTransaction from 'lndr/pending-transaction'
+import RecentTransaction from 'lndr/recent-transaction'
 
 import { white } from 'theme/include/colors'
 import style from 'theme/account'
@@ -19,14 +21,24 @@ import language from 'language'
 const { debtManagement } = language
 
 interface Props {
-  onPress?: () => void
   friend: Friend
   friendScreen?: boolean
-  recentTransactions?: any
+  recentTransactions?: RecentTransaction[]
   navigation: any
-  calculateBalance: (friend: Friend) => number
   primaryCurrency: string
+  pendingTransactions?: PendingTransaction[]
+  onPress?: () => void
+  calculateBalance: (friend: Friend) => number
   getPendingFromFriend: (friendNick: string) => any
+}
+
+interface PassedProps extends React.Props<any> {
+  navigation: any
+  friend: Friend
+  recentTransactions?: any
+  pendingTransactions?: PendingTransaction[]
+  friendScreen?: boolean
+  onPress?: () => void
 }
 
 interface State {
@@ -143,5 +155,5 @@ class FriendRow extends Component<Props, State> {
   }
 }
 
-export default connect((state) => ({ calculateBalance: calculateBalance(state), primaryCurrency: getPrimaryCurrency(state),
+export default connect<any, any, PassedProps>((state) => ({ calculateBalance: calculateBalance(state), primaryCurrency: getPrimaryCurrency(state),
   getPendingFromFriend: getPendingFromFriend(state), convertCurrency: convertCurrency(state) }))(FriendRow)

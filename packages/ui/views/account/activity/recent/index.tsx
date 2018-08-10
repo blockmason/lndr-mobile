@@ -11,11 +11,8 @@ import { UserData } from 'lndr/user'
 
 import RecentTransactionDetail from 'ui/dialogs/recent-transaction-detail'
 import RecentTransactionRow from 'ui/components/recent-transaction-row'
-import Friend from 'lndr/friend'
-import { currencySymbols, transferLimits  } from 'lndr/currencies'
 
 import style from 'theme/account'
-import general from 'theme/general'
 
 import language from 'language'
 const { recentTransactionsLanguage } = language
@@ -28,10 +25,15 @@ import { connect } from 'react-redux'
 const loadingRecentTransactions = new LoadingContext()
 
 interface Props {
-  getRecentTransactions: () => any
   isFocused: boolean
   user: UserData
   state: any
+  friend?: any
+  navigation: any
+  getRecentTransactions: () => any
+}
+
+interface PassedProps extends React.Props<any> {
   friend?: any
   navigation: any
 }
@@ -108,5 +110,5 @@ class RecentTransactionsView extends Component<Props, State> {
   }
 }
 
-export default connect((state) => ({ state: getStore(state)(), user: getUser(state)(), isFocused: isFocusingOn(state)('Activity') }),
+export default connect<any, any, PassedProps>((state) => ({ state: getStore(state)(), user: getUser(state)(), isFocused: isFocusingOn(state)('Activity') }),
  { getRecentTransactions })(RecentTransactionsView)

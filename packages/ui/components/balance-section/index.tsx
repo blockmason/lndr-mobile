@@ -19,6 +19,10 @@ interface Props {
   calculateUcacBalances: (friendAddr: string) => object
 }
 
+interface PassedProps extends React.Props<any> {
+  friend: Friend
+}
+
 class BalanceSection extends Component<Props> {
   constructor(props) {
     super(props)
@@ -39,4 +43,4 @@ class BalanceSection extends Component<Props> {
   }
 }
 
-export default connect((state) => ({ calculateUcacBalances: calculateUcacBalances(state)}))(BalanceSection)
+export default connect<any, any, PassedProps>((state) => ({ calculateUcacBalances: calculateUcacBalances(state)}))(BalanceSection)

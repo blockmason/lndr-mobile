@@ -4,7 +4,7 @@ import React from 'react'
 // Note: test renderer must be required after react-native.
 import renderer from 'react-test-renderer'
 
-import AddFriendRow from 'ui/components/add-friend-row/'
+import AddFriendRow from 'ui/components/add-friend-row'
 import Friend from 'lndr/friend'
 
 

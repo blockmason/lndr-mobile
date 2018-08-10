@@ -314,12 +314,11 @@ class Settlement extends Component<Props, State> {
       const cleanAmount = amount.replace(/[^0-9\.]/g, '')
       const memo = debtManagement.settleUpMemo(direction, amount)
       paymentButton = (
-        <PayPalSettlementButton user={this.props.user}
+        <PayPalSettlementButton
           navigation={this.props.navigation}
           displayAmount={cleanAmount}
           memo={memo}
           direction={this.state.direction}
-          primaryCurrency={this.props.primaryCurrency}
           onRequestPayPalPayment={() => this.submit()}
           onPayPalPaymentSuccess={() => this.submit()}
           onRequestPayPalPayee={() => this.handleRequestPayPalPayee()}
@@ -382,7 +381,7 @@ class Settlement extends Component<Props, State> {
                 /> : <Text style={formStyle.jumboInput}>{amount}</Text>}
               </View>
             </View>
-            { settlementType === 'paypal' ? <Button alternate small arrow style={style.submitButton} onPress={this.payPalFeesAlert} text={payPalLanguage.feesNotification} /> : null }
+            { settlementType === 'paypal' ? <Button alternate small arrow style={formStyle.submitButton} onPress={this.payPalFeesAlert} text={payPalLanguage.feesNotification} /> : null }
             { settlementType === 'eth' && ethCost !== '' && <Text style={[formStyle.smallText, formStyle.spaceTop, formStyle.center]}>{`${formatCommaDecimal(ethCost.slice(0, 6))} ETH`}</Text>}
             { formInputError && <Text style={[formStyle.warningText, {alignSelf: 'center', marginHorizontal: 15}]}>{formInputError}</Text>}
             { paymentButton }

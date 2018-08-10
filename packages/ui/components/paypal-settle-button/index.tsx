@@ -34,6 +34,18 @@ interface Props {
   friend?: Friend
 }
 
+
+interface PassedProps extends React.Props<any> {
+  navigation: any
+  displayAmount: string
+  direction: string
+  memo:string
+  friend?: Friend
+  onRequestPayPalPayment: () => any
+  onPayPalPaymentSuccess: () => any
+  onRequestPayPalPayee: () => any
+}
+
 interface State {
   payPalPayee: any // the payee's PayPal id (email)
 }
@@ -177,4 +189,4 @@ class PayPalSettlementButton extends Component<Props, State> {
   }
 }
 
-export default connect((state) => ({ user: getUser(state)(), primaryCurrency: getPrimaryCurrency(state)}))(PayPalSettlementButton)
+export default connect<any, any, PassedProps>((state) => ({ user: getUser(state)(), primaryCurrency: getPrimaryCurrency(state)}))(PayPalSettlementButton)

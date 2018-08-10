@@ -37,6 +37,7 @@
     "paths": {
       "actions":  ["packages/actions"],
       "credit-protocol":  ["packages/credit-protocol"],
+      "credit-protocol/pals-client":  ["packages/credit-protocol/pals-client.ts"],
       "language":         ["packages/language"],
       "navigators":         ["packages/navigators"],
       "lndr/*":           ["packages/lndr/*"],

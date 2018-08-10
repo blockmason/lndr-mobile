@@ -8,11 +8,10 @@ import { currencyFormats } from 'lndr/format'
 import PendingTransaction from 'lndr/pending-transaction'
 import UserData from 'lndr/user'
 import profilePic from 'lndr/profile-pic'
-import { currencySymbols, transferLimits  } from 'lndr/currencies'
+import { currencySymbols } from 'lndr/currencies'
 import { getUcacCurrency } from 'reducers/app'
 
 import { white, darkAqua } from 'theme/include/colors'
-import formStyle from 'theme/form'
 import style from 'theme/account'
 import general from 'theme/general'
 
@@ -27,6 +26,13 @@ interface Props {
   user: UserData
   friend?: boolean
   getUcacCurrency: (ucac: string) => string
+}
+
+interface PassedProps extends React.Props<any> {
+  user: UserData
+  pendingTransaction: PendingTransaction
+  friend?: boolean
+  onPress?: () => void
 }
 
 interface State {
@@ -123,4 +129,4 @@ class PendingTransactionRow extends Component<Props, State> {
   }
 }
 
-export default connect((state) => ({ getUcacCurrency: getUcacCurrency(state) }))(PendingTransactionRow)
+export default connect<any, any, PassedProps>((state) => ({ getUcacCurrency: getUcacCurrency(state) }))(PendingTransactionRow)

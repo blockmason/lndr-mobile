@@ -4,7 +4,7 @@ import React from 'react';
 // Note: test renderer must be required after react-native.
 import renderer from 'react-test-renderer';
 
-import HomeView from '../account/home/index';
+import HomeView from 'ui/views/account/home';
 
 describe('Initialization', () => {
   it('runs a basic test', () => {

@@ -20,6 +20,7 @@ import PayPalSettlementButton from 'ui/components/paypal-settle-button'
 import style from 'theme/pending'
 import general from 'theme/general'
 import accountStyle from 'theme/account'
+import formStyle from 'theme/form'
 
 import language from 'language'
 const {
@@ -171,19 +172,18 @@ class PendingTransactionDetail extends Component<Props, State> {
   }
 
   renderPaymentButton() {
-    const { navigation, user, getUcacCurrency } = this.props
+    const { navigation, user } = this.props
     const pendingTransaction = navigation.state ? navigation.state.params.pendingTransaction : {}
 
     const isCreditor = (user.address === pendingTransaction.creditorAddress)
     if (this.state.isPayPalSettlement && isCreditor) {
       const friend = this.props.getFriendFromAddress(pendingTransaction.debtorAddress)
       return (
-        <PayPalSettlementButton user={user}
+        <PayPalSettlementButton
           navigation={navigation}
           displayAmount={String(pendingTransaction.amount)}
           memo={pendingTransaction.memo}
           direction={'lend'}
-          primaryCurrency={getUcacCurrency(pendingTransaction.ucac)}
           onRequestPayPalPayment={() => console.warn("Can't happen")}
           onPayPalPaymentSuccess={() => this.confirmPendingTransaction(pendingTransaction)}
           onRequestPayPalPayee={() => this.handleRequestPayPalPayee()}
@@ -239,7 +239,7 @@ class PendingTransactionDetail extends Component<Props, State> {
             pendingTransaction.multiTransactions.map(tx => <PendingTransactionRow user={user} key={tx.hash} pendingTransaction={tx} friend={true} onPress={() => null} />)
           }
           </View>
-          { isPayPalSettlement ? <Button alternate small arrow style={style.submitButton} onPress={this.payPalFeesAlert} text={payPalLanguage.feesNotification} /> : null }
+          { isPayPalSettlement ? <Button alternate small arrow style={formStyle.submitButton} onPress={this.payPalFeesAlert} text={payPalLanguage.feesNotification} /> : null }
           {this.renderButtons()}
           <View style={general.spaceBelow}/>
         </View>

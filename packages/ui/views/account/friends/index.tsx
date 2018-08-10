@@ -11,7 +11,7 @@ import Popup, { closePopup } from 'ui/components/popup'
 import Loading, { LoadingContext } from 'ui/components/loading'
 import FriendRow from 'ui/components/friend-row'
 
-import SearchFriend from './search-friend'
+import SearchFriend from 'ui/views/account/friends/search-friend'
 import PendingView from 'ui/views/account/activity/pending'
 
 import style from 'theme/account'
@@ -123,7 +123,7 @@ class FriendsView extends Component<Props, State> {
     const { friendsLoaded, friends, recentTransactions, pendingTransactions, pendingFriends } = this.props.state
     const friendScrollView = this.refs._friendScrollView as any
 
-    let friendListTitle = []
+    let friendListTitle: JSX.Element[] = []
     if (pendingFriends && pendingFriends.length > 0)
       friendListTitle.push(<Text style={style.transactionHeader}>{currentFriends}</Text>)
     if (friendsLoaded && friends.length === 0)
