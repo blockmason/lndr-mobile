@@ -219,6 +219,7 @@ export default {
     record: `ghi chép`,
     records: `ghi chép`,
     chooseCurrency: `Chọn một tệ`,
+    
     createError: {
       amountTooLow: `Số tiền phải lớn hơn $0`,
       amountTooHigh: `Số tiền phải nhỏ hơn $1,000,000,000`,

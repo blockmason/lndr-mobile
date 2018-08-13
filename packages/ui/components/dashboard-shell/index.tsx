@@ -32,6 +32,8 @@ interface Props {
   hideSettings?: boolean
 }
 
+
+
 const HomeScreen = (props) => <HomeView {...props}/>;
 const FriendsScreen = (props) => <FriendsView {...props} />;
 const ActivityScreen = (props) => <ActivityView {...props} />;

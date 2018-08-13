@@ -219,6 +219,7 @@ export default {
     record: `записать`,
     records: `учет`,
     chooseCurrency: `Выберите валюту`,
+    
     createError: {
       amountTooLow: `Сумма должна быть больше, чем $ 0`,
       amountTooHigh: `Сумма должна быть меньше, чем $ 1000000000`,
