@@ -42,8 +42,7 @@ class SpinningPicker extends Component<Props, State> {
             selectedValue={this.state.selectedItem}
             onValueChange={(value, _index) => this.setState({selectedItem: value})}
             prompt={this.props.label}
-            style={this.props.pickerStyle}
-            cancel>
+            style={this.props.pickerStyle}>
             {pickerItems}
           </Picker>
         </View>

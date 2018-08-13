@@ -41,8 +41,15 @@ interface Props {
   bilateralSettlements: [PendingBilateral]
   payPalRequests: [PayPalRequest]
   submitterIsMe: (pendingTransaction: PendingTransaction) => any
-  settlerIsMe: (pendingSettlement: PendingUnilateral) => any
+  settlerIsMe: (pendingSettlement: PendingUnilateral) => boolean
   getPending: () => any
+}
+
+interface PassedProps extends React.Props<any> {
+  navigation: any
+  friend?: any
+  onlyFriends?: boolean
+  homeScreen?: boolean
 }
 
 interface State {
@@ -220,6 +227,6 @@ class PendingView extends Component<Props, State> {
   }
 }
 
-export default connect((state) => ({ state: getStore(state)(), user: getUser(state)(), isFocused: isFocusingOn(state)('Activity'),
+export default connect<any, any, PassedProps>((state) => ({ state: getStore(state)(), user: getUser(state)(), isFocused: isFocusingOn(state)('Activity'),
 pendingSettlements: pendingSettlements(state), bilateralSettlements: bilateralSettlements(state), submitterIsMe: submitterIsMe(state),
 settlerIsMe: settlerIsMe(state), payPalRequests: payPalRequests(state) }), { getPending })(PendingView)

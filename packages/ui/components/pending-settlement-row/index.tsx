@@ -9,13 +9,13 @@ import PendingBilateral from 'lndr/pending-bilateral'
 import UserData from 'lndr/user'
 import profilePic from 'lndr/profile-pic'
 import { currencySymbols } from 'lndr/currencies'
-import { getUcacCurrency } from 'reducers/app'
+import Friend from 'lndr/friend'
 
 import { white } from 'theme/include/colors'
 import style from 'theme/account'
 import general from 'theme/general'
 
-import settlerIsMe from 'reducers/app'
+import { getUcacCurrency } from 'reducers/app'
 
 import language from 'language'
 const { debtManagement } = language
@@ -29,6 +29,14 @@ interface Props {
   friend?: boolean
   settlerIsMe: (pendingSettlement: PendingUnilateral | PendingBilateral) => boolean
   getUcacCurrency: (ucac: string) => string
+}
+
+interface PassedProps extends React.Props<any> {
+  user: UserData
+  pendingSettlement: PendingUnilateral
+  friend?: boolean
+  onPress: () => void
+  settlerIsMe: (pendingSettlement: PendingUnilateral) => boolean
 }
 
 interface State {
@@ -122,4 +130,4 @@ class PendingSettlementRow extends Component<Props, State> {
   }
 }
 
-export default connect((state) => ({ getUcacCurrency: getUcacCurrency(state) }))(PendingSettlementRow)
+export default connect<any, any, PassedProps>((state) => ({ getUcacCurrency: getUcacCurrency(state) }))(PendingSettlementRow)
