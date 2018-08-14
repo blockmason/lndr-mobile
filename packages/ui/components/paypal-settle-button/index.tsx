@@ -98,7 +98,6 @@ class PayPalSettlementButton extends Component<Props, State> {
       if (!hasNoDecimals(this.props.primaryCurrency)) {
         cleanAmount = Math.ceil(cleanAmount) / 100
       }
-      cleanAmount = Math.abs(cleanAmount)
       const confirmationCode = await loadingContext.wrap(NativeModules.PayPalManager.sendPayPalPayment(cleanAmount, this.props.primaryCurrency, this.state.payPalPayee, this.props.memo))
       console.log('PayPal Server Confirmation', confirmationCode)
       if (confirmationCode) {
