@@ -28,6 +28,7 @@ interface Props {
   direction: string
   primaryCurrency: string
   memo:string
+  isPendingTransaction: boolean
   onRequestPayPalPayment: () => any
   onPayPalPaymentSuccess: () => any
   onRequestPayPalPayee: () => any
@@ -41,6 +42,7 @@ interface PassedProps extends React.Props<any> {
   direction: string
   memo:string
   friend?: Friend
+  isPendingTransaction?: boolean
   onRequestPayPalPayment: () => any
   onPayPalPaymentSuccess: () => any
   onRequestPayPalPayee: () => any
@@ -172,7 +174,10 @@ class PayPalSettlementButton extends Component<Props, State> {
       if (this.isPayee()) // we'd like to receive a PayPal payment and we're connected
         button = (<Button zicon="paypal" round wide onPress={() => this.requestPayPalPayment()} text={payPalLanguage.requestPayPalPayment} />)
       else // we're ready to send payment AND friend has PayPal connected
-        button = (<Button zicon="paypal" round wide onPress={() => this.requestPayPalPayee()} text={payPalLanguage.requestPayPalPayee} />)
+        if (this.props.isPendingTransaction)
+          button = (<Button zicon="paypal" round wide onPress={() => this.handlePayPalPayment()} text={payPalLanguage.sendWithPayPal} />)
+        else
+          button = (<Button zicon="paypal" round wide onPress={() => this.requestPayPalPayee()} text={payPalLanguage.requestPayPalPayee} />)
     } else {
       if (this.isPayee()) // user is Payee and needs to connect PayPal
         button = (<Button zicon="paypal" round wide onPress={() => this.handleConnectPayPal()} text={payPalLanguage.enablePayPal} />)
