@@ -1026,3 +1026,9 @@ const settleBilateral = async (user, bilateralSettlements, dispatch, getState) =
     }
   })
 }
+
+export const showPayPalSettlementError = (nickname: string) => {
+  return async (dispatch, _getState) => {
+    dispatch(displayError(settlementManagement.bilateral.error.generic(nickname)))
+  }
+}

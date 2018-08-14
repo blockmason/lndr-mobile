@@ -133,7 +133,6 @@ export const filterMultiTransactions = (address: string, pending: any, state: Ob
     if(pending[0] instanceof PendingTransaction) {
       data.multiTransactions = txs[tx]
       data.settlementCurrency = txs[tx][0].settlementCurrency
-      console.log('something screwy here', data.multiTransactions)
       newList.push(new PendingTransaction(data))
 
     } else if(pending[0] instanceof PendingUnilateral) {

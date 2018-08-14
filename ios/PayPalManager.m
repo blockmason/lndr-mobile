@@ -130,19 +130,27 @@ RCT_REMAP_METHOD(sendPayPalPayment,
                  resolver:(RCTPromiseResolveBlock)resolver
                  rejecter:(RCTPromiseRejectBlock)rejecter) {
   if ([amount doubleValue] <= 0.0) {
+    if (rejecter)
+      rejecter(@"negative_payment", @"Payment amount must be > 0", nil);
     NSLog(@"Payment amount <= 0");
     return;
   }
   if ([currencyCode length] == 0) {
+    if (rejecter)
+      rejecter(@"missing_currency_code", @"Missing currency code", nil);
     NSLog(@"Missing currency code");
     return;
   }
   if ([payeeEmail length] == 0) {
+    if (rejecter)
+      rejecter(@"missing_payee", @"Missing payee", nil);
     NSLog(@"Missing payeeEmail");
     return;
   }
   if ([description length] == 0) {
-    NSLog(@"Missing description");
+    if (rejecter)
+      rejecter(@"missing_description", @"Missing payment description", nil);
+    NSLog(@"Missing payment description");
     return;
   }
 
@@ -175,7 +183,9 @@ RCT_REMAP_METHOD(sendPayPalPayment,
   if (!payment.processable) {
     // If, for example, the amount was negative or the shortDescription was empty, then
     // this payment would not be processable. You would want to handle that here.
-    NSLog(@"PayPal payment not processable");
+    if (rejecter)
+      rejecter(@"paypal_not_processed", @"Unable to process PayPal payment", nil);
+    NSLog(@"Unable to process PayPal payment");
     return;
   }
 

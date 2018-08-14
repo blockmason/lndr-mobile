@@ -13,6 +13,7 @@ import general from 'theme/general'
 import { getUser, getPrimaryCurrency } from 'reducers/app'
 import { connect } from 'react-redux'
 import { ToastActionsCreators } from 'react-native-redux-toast'
+import { showPayPalSettlementError } from 'actions'
 
 import language from 'language'
 const { payPalLanguage } = language
@@ -93,7 +94,7 @@ class PayPalSettlementButton extends Component<Props, State> {
 
   async handlePayPalPayment() {
     try {
-      let cleanAmount = Number(this.props.displayAmount.replace(/[^0-9\.\,]/g, ''))
+      let cleanAmount = Number(this.props.displayAmount.replace(/[^0-9\.,]/g, ''))
       if (!hasNoDecimals(this.props.primaryCurrency)) {
         cleanAmount = Math.ceil(cleanAmount) / 100
       }
@@ -106,7 +107,8 @@ class PayPalSettlementButton extends Component<Props, State> {
       }
     } catch (e) {
       // user cancelled
-      console.log('User cancelled PayPal transaction')
+      console.log('User cancelled PayPal transaction: ', e)
+      showPayPalSettlementError(this.state.payPalPayee)
     }
   }
 

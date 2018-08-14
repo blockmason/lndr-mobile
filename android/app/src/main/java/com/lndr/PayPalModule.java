@@ -18,6 +18,7 @@ import com.facebook.react.bridge.ReactContextBaseJavaModule;
 import com.facebook.react.bridge.ReactMethod;
 
 import com.paypal.android.sdk.payments.PayPalAuthorization;
+import com.paypal.android.sdk.payments.PaymentConfirmation;
 import com.paypal.android.sdk.payments.PayPalConfiguration;
 import com.paypal.android.sdk.payments.PayPalOAuthScopes;
 import com.paypal.android.sdk.payments.PayPalProfileSharingActivity;
@@ -72,10 +73,17 @@ public class PayPalModule extends ReactContextBaseJavaModule implements Lifecycl
     public void onActivityResult (Activity activity, int requestCode, int resultCode, Intent data) {
       if (resultCode == Activity.RESULT_OK) {
         PayPalAuthorization auth = data.getParcelableExtra(PayPalProfileSharingActivity.EXTRA_RESULT_AUTHORIZATION);
+        PaymentConfirmation confirm = data.getParcelableExtra(PaymentActivity.EXTRA_RESULT_CONFIRMATION);
         if (auth != null) {
           try {
             String authorization_code = auth.getAuthorizationCode();
             promise.resolve(authorization_code);
+          } catch (Exception e) {
+            promise.reject("Unknown error", e);
+          }
+        } else if (confirm != null) {
+          try {
+            promise.resolve("Success");
           } catch (Exception e) {
             promise.reject("Unknown error", e);
           }
@@ -146,6 +154,8 @@ public class PayPalModule extends ReactContextBaseJavaModule implements Lifecycl
         description,
         PayPalPayment.PAYMENT_INTENT_SALE
       );
+
+    payment.payeeEmail(payeeEmail);
 
     Intent intent = new Intent(reactContext, PaymentActivity.class);
 
