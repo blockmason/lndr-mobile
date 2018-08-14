@@ -122,7 +122,6 @@ export default {
     },
     ethBalance: {
       display: Y => `ETH-saldosi on ${String (Y) .slice (0,8)}`,
-      inFiat: (Z, B, A) => ` (${CUR(A)}${String(Number(Z) * Number(B)).slice(0, 8)})`,
       getError: `Emme pystyneet hakea Eth-saldoa`,
       manage: `Hallitse ETH:ta`,
     },

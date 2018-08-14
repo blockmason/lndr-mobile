@@ -219,6 +219,7 @@ export default {
     record: `บันทึกรายการ`,
     records: `บันทึกรายการ`,
     chooseCurrency: `เลือกสกุลเงิน`,
+    
     createError: {
       amountTooLow: `จำนวนต้องมากกว่า $0`,
       amountTooHigh: `จำนวนต้องน้อยกว่า $1,000,000,000`,

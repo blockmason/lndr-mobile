@@ -13,6 +13,7 @@ import general from 'theme/general'
 import { getUser, getPrimaryCurrency } from 'reducers/app'
 import { connect } from 'react-redux'
 import { ToastActionsCreators } from 'react-native-redux-toast'
+import { showPayPalSettlementError } from 'actions'
 
 import language from 'language'
 const { payPalLanguage } = language
@@ -28,9 +29,11 @@ interface Props {
   direction: string
   primaryCurrency: string
   memo:string
+  isPendingTransaction: boolean
   onRequestPayPalPayment: () => any
   onPayPalPaymentSuccess: () => any
   onRequestPayPalPayee: () => any
+  showPayPalSettlementError: (email: string) => void
   friend?: Friend
 }
 
@@ -41,6 +44,7 @@ interface PassedProps extends React.Props<any> {
   direction: string
   memo:string
   friend?: Friend
+  isPendingTransaction?: boolean
   onRequestPayPalPayment: () => any
   onPayPalPaymentSuccess: () => any
   onRequestPayPalPayee: () => any
@@ -91,7 +95,7 @@ class PayPalSettlementButton extends Component<Props, State> {
 
   async handlePayPalPayment() {
     try {
-      let cleanAmount = Number(this.props.displayAmount.replace(/[^0-9\.\,]/g, ''))
+      let cleanAmount = Number(this.props.displayAmount.replace(/[^0-9\.,]/g, ''))
       if (!hasNoDecimals(this.props.primaryCurrency)) {
         cleanAmount = Math.ceil(cleanAmount) / 100
       }
@@ -103,7 +107,8 @@ class PayPalSettlementButton extends Component<Props, State> {
       }
     } catch (e) {
       // user cancelled
-      console.log('User cancelled PayPal transaction')
+      console.log('User cancelled PayPal transaction: ', e)
+      this.props.showPayPalSettlementError(this.state.payPalPayee)
     }
   }
 
@@ -172,7 +177,10 @@ class PayPalSettlementButton extends Component<Props, State> {
       if (this.isPayee()) // we'd like to receive a PayPal payment and we're connected
         button = (<Button zicon="paypal" round wide onPress={() => this.requestPayPalPayment()} text={payPalLanguage.requestPayPalPayment} />)
       else // we're ready to send payment AND friend has PayPal connected
-        button = (<Button zicon="paypal" round wide onPress={() => this.requestPayPalPayee()} text={payPalLanguage.requestPayPalPayee} />)
+        if (this.props.isPendingTransaction)
+          button = (<Button zicon="paypal" round wide onPress={() => this.handlePayPalPayment()} text={payPalLanguage.sendWithPayPal} />)
+        else
+          button = (<Button zicon="paypal" round wide onPress={() => this.requestPayPalPayee()} text={payPalLanguage.requestPayPalPayee} />)
     } else {
       if (this.isPayee()) // user is Payee and needs to connect PayPal
         button = (<Button zicon="paypal" round wide onPress={() => this.handleConnectPayPal()} text={payPalLanguage.enablePayPal} />)
@@ -189,4 +197,4 @@ class PayPalSettlementButton extends Component<Props, State> {
   }
 }
 
-export default connect<any, any, PassedProps>((state) => ({ user: getUser(state)(), primaryCurrency: getPrimaryCurrency(state)}))(PayPalSettlementButton)
+export default connect<any, any, PassedProps>((state) => ({ user: getUser(state)(), primaryCurrency: getPrimaryCurrency(state)}), {showPayPalSettlementError})(PayPalSettlementButton)

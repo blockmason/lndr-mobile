@@ -219,6 +219,7 @@ export default {
     record: `Document`,
     records: `Documentatie`,
     chooseCurrency: `Kies een valuta`,
+    
     createError: {
       amountTooLow: `Het bedrag moet groter zijn dan $0`,
       amountTooHigh: `Het bedrag moet kleiner zijn dan $1.000.000.000`,

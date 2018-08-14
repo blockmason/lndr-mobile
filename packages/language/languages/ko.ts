@@ -293,8 +293,8 @@ export default {
 
     notifications: {
     toggleNotifications: `알림 표시 전환`,
-    enable: `TURN ON`,
-    disable: `TURN OFF`,
+    enable: `켜다`,
+    disable: `끄다`,
   },
 
   pendingTransactionsLanguage: {

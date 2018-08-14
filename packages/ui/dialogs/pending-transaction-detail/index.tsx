@@ -106,14 +106,6 @@ class PendingTransactionDetail extends Component<Props, State> {
     }
   }
 
-  async handleRequestPayPalPayee() {
-    const pendingTransaction = this.props.navigation.state ? this.props.navigation.state.params.pendingTransaction : {}
-    const friend = this.props.getFriendFromAddress(pendingTransaction.debtorAddress)
-    const success = await loadingContext.wrap(this.props.requestPayPalSettlement(friend as Friend))
-    if (success)
-      this.closePopup('requestPayPalPayee')
-  }
-
   closePopup(type) {
     const nickname = this.getFriendNickname()
 
@@ -186,8 +178,9 @@ class PendingTransactionDetail extends Component<Props, State> {
           direction={'lend'}
           onRequestPayPalPayment={() => console.warn("Can't happen")}
           onPayPalPaymentSuccess={() => this.confirmPendingTransaction(pendingTransaction)}
-          onRequestPayPalPayee={() => this.handleRequestPayPalPayee()}
+          onRequestPayPalPayee={() => console.warn("Can't happen")}
           friend={friend}
+          isPendingTransaction
         />
       )
     }
