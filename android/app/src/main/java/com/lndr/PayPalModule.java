@@ -83,7 +83,7 @@ public class PayPalModule extends ReactContextBaseJavaModule implements Lifecycl
           }
         } else if (confirm != null) {
           try {
-            String confirmationInfo = confirm.getPayment().toJSONObject().toString(4);
+            String confirmationInfo = confirm.getProofOfPayment().toJSONObject().toString();
             promise.resolve(confirmationInfo);
           } catch (Exception e) {
             promise.reject("Unknown error", e);
