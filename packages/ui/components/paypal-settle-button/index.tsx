@@ -33,6 +33,7 @@ interface Props {
   onRequestPayPalPayment: () => any
   onPayPalPaymentSuccess: () => any
   onRequestPayPalPayee: () => any
+  showPayPalSettlementError: (email: string) => void
   friend?: Friend
 }
 
@@ -107,7 +108,7 @@ class PayPalSettlementButton extends Component<Props, State> {
     } catch (e) {
       // user cancelled
       console.log('User cancelled PayPal transaction: ', e)
-      showPayPalSettlementError(this.state.payPalPayee)
+      this.props.showPayPalSettlementError(this.state.payPalPayee)
     }
   }
 
@@ -196,4 +197,4 @@ class PayPalSettlementButton extends Component<Props, State> {
   }
 }
 
-export default connect<any, any, PassedProps>((state) => ({ user: getUser(state)(), primaryCurrency: getPrimaryCurrency(state)}))(PayPalSettlementButton)
+export default connect<any, any, PassedProps>((state) => ({ user: getUser(state)(), primaryCurrency: getPrimaryCurrency(state)}), {showPayPalSettlementError})(PayPalSettlementButton)

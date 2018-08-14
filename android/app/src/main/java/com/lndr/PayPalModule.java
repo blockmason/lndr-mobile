@@ -83,7 +83,8 @@ public class PayPalModule extends ReactContextBaseJavaModule implements Lifecycl
           }
         } else if (confirm != null) {
           try {
-            promise.resolve("Success");
+            String confirmationInfo = confirm.getPayment().toJSONObject().toString(4);
+            promise.resolve(confirmationInfo);
           } catch (Exception e) {
             promise.reject("Unknown error", e);
           }
@@ -146,6 +147,16 @@ public class PayPalModule extends ReactContextBaseJavaModule implements Lifecycl
   public void sendPayPalPayment(Double amount, String currencyCode, String payeeEmail, String description, Promise promise) {
     // TODO: open PayPal's Android SendPaymentView and capture confirmation, similar to above
     this.promise = promise;
+
+    if (amount <= 0) {
+      promise.reject("Amount Must Be Greater Than 0");
+    } else if(currencyCode.length() < 3) {
+      promise.reject("Currency Code Not Valid");
+    } else if(payeeEmail.length() < 6) {
+      promise.reject("Payee Email Not Valid");
+    } else if(description.length() < 1) {
+      promise.reject("Description Not Valid");
+    }
 
     PayPalPayment payment =
       new PayPalPayment(
