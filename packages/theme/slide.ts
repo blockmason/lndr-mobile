@@ -1,6 +1,6 @@
 import { StyleSheet } from 'react-native'
 
-import { light, white, black, gray } from 'theme/include/colors'
+import { light, white, black, gray, aqua } from 'theme/include/colors'
 import { percent } from 'theme/include/dimensions'
 import { large } from 'theme/include/fonts'
 
@@ -35,7 +35,8 @@ export default StyleSheet.create({
     paddingLeft: 5,
     paddingRight: 5,
     marginTop: 20,
-    fontSize: 22,
+    marginBottom: 20,
+    fontSize: 20,
     fontWeight: '100',
     color: black
   },
@@ -81,12 +82,17 @@ export default StyleSheet.create({
     fontWeight: '100',
     color: black
   },
-  link: {
+/*  link: {
     textAlign: 'center',
     marginTop: 20,
     fontSize: 24,
     fontWeight: '100',
     color: black
+  },
+  */
+  link: {
+    color: aqua,
+    textDecorationLine: 'underline'
   },
   partWidth: {
     paddingHorizontal: 20

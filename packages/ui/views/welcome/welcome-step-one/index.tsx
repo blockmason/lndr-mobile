@@ -1,38 +1,50 @@
 import React, { Component } from 'react'
 
-import { View, Text, ScrollView } from 'react-native'
+import { Image, View, Text, ScrollView } from 'react-native'
 import firebase from 'react-native-firebase'
 
+import firebase from 'react-native-firebase'
+import general from 'theme/general'
 import style from 'theme/slide'
 
+import Button from 'ui/components/button'
 import ThemeImage from 'ui/components/images/theme-image'
 import BMLogo from 'ui/components/images/bm-logo'
 
-import { largeImage } from 'theme/include/dimensions'
+import { mediumImage, largeImage } from 'theme/include/dimensions'
 
 import language from 'language'
-const { welcomeView } = language
+const { walkthrough } = language
 
 export default class WelcomeStepOneView extends Component {
   componentDidMount( ) {
     firebase.analytics().setCurrentScreen('welcome-step-one', 'WelcomeStepOneView');
   }
-
   render() {
     return (
       <ScrollView>
         <View style={style.topView}>
           <ThemeImage size={largeImage} name='logo'/>
-          <Text style={style.text}>{welcomeView.makeItEasy}</Text>
-          {/* <Text style={style.text}>{welcomeView.weHelpFriends}</Text> */}
           <View style={style.horizontial}>
-            <Text style={[style.text, style.bold]}>[ {welcomeView.len}</Text>
+            <Text style={[style.text, style.bold]}>[ {walkthrough.step1.len}</Text>
             <View style={style.dot}></View>
-            <Text style={[style.text, style.bold]}>{welcomeView.der} ]</Text>
+            <Text style={[style.text, style.bold]}>{walkthrough.step1.der} ]</Text>
           </View>
-          <Text style={style.by}>{welcomeView.by}</Text>
-          <BMLogo type='square' size='small'/>
-          <Text style={style.inc}>INC.</Text>
+
+          <Text style={style.caption}>{walkthrough.step1.easyToUse}</Text>
+
+          <View style={[general.flex, {height:50}]}>
+            <Image resizeMode="contain" style={{flex: 1}} source={require('images/walkthrough-step1-graphic.png')} />
+          </View>
+          <Text style={[style.caption, {marginBottom:0}]}>{walkthrough.step1.poweredBy1}</Text>
+          <Text style={[style.caption, {marginBottom:0}, {marginTop:0}, style.bold]}>{walkthrough.step1.poweredBy2}</Text>
+          <Text style={[style.caption, {marginTop:0}]}>{walkthrough.step1.poweredBy3a}
+            <Text style={style.italic}>{walkthrough.step1.agree}</Text>
+            <Text>{walkthrough.step1.poweredBy3b}</Text>
+          </Text>
+
+          <Button small link alternate arrow text={walkthrough.step1.continue} />
+
         </View>
       </ScrollView>
     )

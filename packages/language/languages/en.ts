@@ -198,6 +198,24 @@ export default {
     start: `GET STARTED`,
   },
 
+  walkthrough: {
+    skip: `skip`,
+    step1: {
+      easyToUse: `The easiest way to track and settle simple debts with your friends,
+securely on the Blockchain.`,
+      poweredBy1: `Powered by Blockmason's`,
+      poweredBy2: `Credit Protocol`,
+      poweredBy3a: `Lndr ensures that both you and your friend `,
+      poweredBy3b: ` to all recorded transactions.`,
+      agree: `agree`,
+      len: `Len`,
+      der: `der`,
+      continue: `GET STARTED`
+    },
+    step2: {
+      continue: `CONTINUE`
+    }
+  },
   debtManagement: {
     shell: `New Transaction`,
     add: `Add Debt`,
@@ -419,7 +437,7 @@ export default {
     feesNotification: `Does not include PayPal fees`,
     feesInformationHeader: `PayPal Fees Information`,
     feesInformation: `1. Your PayPal account must be tied to a bank account.
-    
+
 2. Paying in a currency different from your bank's currency will incur a $0.35 fee.
 
 3. International transfer fees:
