@@ -203,6 +203,17 @@ export const convertCommaDecimalToPoint = (amount: string) : string => {
 
 export const formatEthToFiat = (ethBalance: string, ethExchange: string, currency: string) : string => {
   let converted = String( Number(ethBalance) * Number(ethExchange) ).slice(0, 8)
+  if(hasNoDecimals(currency)) {
+    converted = converted.slice(0, converted.indexOf('.'))
+  }
+  let decimal = converted.indexOf('.')
+  if(isCommaDecimal()) {
+    converted = converted.replace('.', ',')
+    decimal = converted.indexOf(',')
+  }
+  if(decimal !== -1) {
+    converted = converted.slice(0, decimal + 2)
+  }
   return ` (${amountFormat(converted, currency, true)})`
 }
 

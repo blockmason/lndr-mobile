@@ -25,6 +25,7 @@ describe('amountFormat', () => {
 describe('formatEthToFiat', () => {
   it('Formats an ETH amount correctly', () => {
     expect(formatEthToFiat('2', '100.10', 'USD')).toBe(` (US$200.20)`)
+    expect(formatEthToFiat('2', '100.10121242', 'USD')).toBe(` (US$200.20)`)
   })
 })
 
