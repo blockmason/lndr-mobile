@@ -7,14 +7,15 @@ import Friend from 'lndr/friend'
 import { UserData } from 'lndr/user'
 import { currencyFormats } from 'lndr/format'
 import profilePic from 'lndr/profile-pic'
+import { currencySymbols } from 'lndr/currencies'
+
 import PendingView from 'ui/views/account/activity/pending'
 import RecentView from 'ui/views/account/activity/recent'
 import DashboardShell from 'ui/components/dashboard-shell'
-import { currencySymbols } from 'lndr/currencies'
-
 import Button from 'ui/components/button'
 import Loading, { LoadingContext } from 'ui/components/loading'
 import BalanceSection from 'ui/components/balance-section'
+import AddDebtButtons from 'ui/components/add-debt-buttons'
 
 import style from 'theme/friend'
 import general from 'theme/general'
@@ -55,6 +56,7 @@ interface Props {
 interface State {
   balanceLoaded: boolean
   balance: Balance
+  friend: Friend
   pic?: string
 }
 
@@ -63,7 +65,8 @@ class FriendDetail extends Component<Props, State> {
     super(props)
     this.state = {
       balanceLoaded: false,
-      balance: new Balance({ relativeToNickname: "", relativeTo: "", amount: 0 })
+      balance: new Balance({ relativeToNickname: "", relativeTo: "", amount: 0 }),
+      friend: new Friend('', '')
     }
 
     this.removeFriend = this.removeFriend.bind(this)
@@ -77,20 +80,22 @@ class FriendDetail extends Component<Props, State> {
 
     if (friend.address !== undefined) {
       const pic = await profilePic.get(friend.address)
-      this.setState({ pic })
+      this.setState({ pic, friend })
+    } else {
+      this.setState({ friend })
     }
   }
 
   async componentDidMount() {
     const { user, getTwoPartyBalance } = this.props
-    const friend = this.props.navigation ? this.props.navigation.state.params.friend : {}
+    const { friend } = this.state
     const balance = await getTwoPartyBalance(user, friend)
     BackHandler.addEventListener("hardwareBackPress", this.onBackPress);
     this.setState({ balance, balanceLoaded: true })
   }
   
   async removeFriend() {
-    const friend = this.props.navigation ? this.props.navigation.state.params.friend : {}
+    const { friend } = this.state
     await loadingContext.wrap(this.props.removeFriend(friend))
 
     this.props.navigation.goBack()
@@ -118,7 +123,7 @@ class FriendDetail extends Component<Props, State> {
     }
 
   getRecentTotal() {
-    const friend = this.props.navigation ? this.props.navigation.state.params.friend : {}
+    const { friend } = this.state
     const { calculateBalance } = this.props
 
     return calculateBalance(friend)
@@ -133,18 +138,29 @@ class FriendDetail extends Component<Props, State> {
   }
 
   goSettleUp() {
-    const friend = this.props.navigation ? this.props.navigation.state.params.friend : {}
-    const { getPendingFromFriend } = this.props
+    const { friend } = this.state
+    const { getPendingFromFriend, navigation } = this.props
     const { route, pendingTransaction, pendingSettlement } = getPendingFromFriend(friend.nickname)
     if(route) {
-      this.props.navigation.navigate(route, { pendingSettlement, pendingTransaction })
+      navigation.navigate(route, { pendingSettlement, pendingTransaction })
     } else {
-      this.props.navigation.navigate('SettleUp', { friend })
+      navigation.navigate('SettleUp', { friend })
+    }
+  }
+
+  addDebt(direction: string) {
+    const { friend } = this.state
+    const { navigation, getPendingFromFriend } = this.props
+    const { route, pendingTransaction, pendingSettlement } = getPendingFromFriend(friend.nickname)
+    if(route) {
+      navigation.navigate(route, { pendingSettlement, pendingTransaction })
+    } else {
+      navigation.navigate('AddDebt', { friend, direction })
     }
   }
 
   render() {
-    const friend = this.props.navigation ? this.props.navigation.state.params.friend : {}
+    const { friend } = this.state
     const { navigation, primaryCurrency } = this.props
     const { pic } = this.state
     const imageSource = pic ? { uri: pic } : require('images/person-outline-dark.png')
@@ -159,6 +175,7 @@ class FriendDetail extends Component<Props, State> {
         <View style={general.centeredColumn}>
           <Image source={imageSource} style={pendingStyle.image}/>
           <Text style={pendingStyle.title}>{`  @${friend.nickname}  `}</Text>
+          <AddDebtButtons fat={false} friend lend={() => this.addDebt('lend')} borrow={() => this.addDebt('borrow')} />
           <Text style={pendingStyle.subTitle}>{`${recentTransactionsLanguage.consolidatedBalance}:`}</Text>
           <View style={pendingStyle.balanceRow}>
             <Text style={pendingStyle.balanceInfo}>{currencySymbols(primaryCurrency)}</Text>
