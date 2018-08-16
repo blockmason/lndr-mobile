@@ -467,8 +467,6 @@ export const getFriendRequests = () => {
     const rawPendingOutboundFriends = await creditProtocol.getOutboundFriendRequests(user.address)
     const pendingOutboundFriends = rawPendingOutboundFriends.map(jsonToPendingFriend)
 
-    console.log('THIS IS IT ', pendingFriends, pendingOutboundFriends)
-  
     dispatch(setState({ pendingFriends, pendingOutboundFriends, pendingFriendsLoaded: true }))
   }
 }
