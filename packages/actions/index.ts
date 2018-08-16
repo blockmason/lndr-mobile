@@ -463,8 +463,13 @@ export const getFriendRequests = () => {
     const user = getUser(getState())()
     const rawPendingFriends = await creditProtocol.getFriendRequests(user.address)
     const pendingFriends = rawPendingFriends.map(jsonToPendingFriend)
+
+    const rawPendingOutboundFriends = await creditProtocol.getOutboundFriendRequests(user.address)
+    const pendingOutboundFriends = rawPendingOutboundFriends.map(jsonToPendingFriend)
+
+    console.log('THIS IS IT ', pendingFriends, pendingOutboundFriends)
   
-    dispatch(setState({ pendingFriends, pendingFriendsLoaded: true }))
+    dispatch(setState({ pendingFriends, pendingOutboundFriends, pendingFriendsLoaded: true }))
   }
 }
 

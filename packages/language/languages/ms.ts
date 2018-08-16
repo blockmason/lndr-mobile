@@ -368,6 +368,10 @@ export default {
       start: `Anda telah menolak permintaan `,
       end: ` untuk menjadi rakan.`,
     },
+    rejectOutboundFriendRequest: {
+      start: `Anda telah membatalkan permintaan rakan untuk `,
+      end: `.`,
+    },
     ethSent: {
       start: `Anda telah berjaya menghantar `,
       end: ` ETH dan cincangan transaksi anda adalah `,
@@ -396,6 +400,7 @@ export default {
     shell: `Permintaan jadi rakan`,
     message: `Permintaan jadi rakan`,
     request: F => `@${F} mahu menjadi rakan anda!`,
+    outbound: F => `Anda menghantar permintaan rakan kepada @${F} `,
   },
 
   privacyPolicy: {

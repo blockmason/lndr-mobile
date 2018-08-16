@@ -368,6 +368,10 @@ export default {
       start: `Vous avez refusé la demande d'ami de `,
       end: `.`,
     },
+    rejectOutboundFriendRequest: {
+      start: `Vous avez annulé la demande d'ami à `,
+      end: `.`,
+    },
     ethSent: {
       start: `Vous avez envoyé avec succès `,
       end: ` ETH et le hachage de votre transaction est `,
@@ -396,6 +400,7 @@ export default {
     shell: `Demande d'ami`,
     message: `Demandes d'ami`,
     request: F => `@${F} veut être ami avec vous !`,
+    outbound: F => `Vous a envoyé une demande d'ami à @${F}`,
   },
 
   privacyPolicy: {

@@ -50,6 +50,7 @@ const initialState = {
   pendingTransactions: [],
   pendingSettlements: [],
   pendingFriends: [],
+  pendingOutboundFriends: [],
   bilateralSettlements: [],
   notificationsEnabled: true,
   ethBalance: '0',

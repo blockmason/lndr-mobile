@@ -368,6 +368,10 @@ export default {
       start: `Bạn đã từ chối yêu cầu kết bạn từ `,
       end: `.`,
     },
+    rejectOutboundFriendRequest: {
+      start: `Bạn đã hủy bỏ yêu cầu kết bạn đến `,
+      end: `.`,
+    },
     ethSent: {
       start: `Bạn đã gửi thành công `,
       end: ` ETH và mã hóa giao dịch của bạn là `,
@@ -396,6 +400,7 @@ export default {
     shell: `Yêu cầu kết bạn`,
     message: `Yêu cầu kết bạn`,
     request: F => `@${F} muốn kết bạn với bạn!`,
+    outbound: F => `Bạn đã gửi yêu cầu kết bạn đến @${F}`,
   },
 
   privacyPolicy: {

@@ -238,6 +238,10 @@ export default class CreditProtocol {
     return this.cacheHttpRequest(`/friend_requests/${user}`, 5000)
   }
 
+  getOutboundFriendRequests(user: string) {
+    return this.cacheHttpRequest(`/outbound_friend_requests/${user}`, 5000)
+  }
+
   getPendingTransactions(user: string) {
     return this.cacheHttpRequest(`/pending/${user}`, 1000)
   }

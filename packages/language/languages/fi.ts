@@ -368,6 +368,10 @@ export default {
       start: `Olet hylännyt `,
       end: ` ystäväpyynnön.`,
     },
+    rejectOutboundFriendRequest: {
+      start: `Olet peruuttanut ystävä pyynnön `,
+      end: `.`,
+    },
     ethSent: {
       start: `Olet onnistuneesti lähettänyt `,
       end: ` ETH:ta ja tapahtumasi tunnusnumero on `,
@@ -396,6 +400,7 @@ export default {
     shell: `Ystäväpyyntö`,
     message: `Ystäväpyynnöt`,
     request: F => `@${F} haluaa olla ystäväsi! `,
+    outbound: F => `Olet lähettänyt ystävä pyynnön @${F}`,
   },
 
   privacyPolicy: {

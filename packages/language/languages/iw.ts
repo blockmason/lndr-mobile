@@ -368,6 +368,10 @@ export default {
       start: `דחית את בקשת החברות מ   `,
       end: `.`,
     },
+    rejectOutboundFriendRequest: {
+      start: `ביטלת את בקשת חברות ל `,
+      end: `.`,
+    },
     ethSent: {
       start: `שלחת ETH `,
       end: ` בהצלחה ומספר העסקה שלך הוא`,
@@ -396,6 +400,7 @@ export default {
     shell: `בקשת חברות`,
     message: `בקשות חברות`,
     request: F => `!רוצה להיות חבר שלך @${F}`,
+    outbound: F => `שלח בקשת חברות ל @${F}`,
   },
 
   privacyPolicy: {

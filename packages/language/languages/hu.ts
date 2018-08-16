@@ -368,6 +368,10 @@ export default {
       start: `Elutasította `,
       end: ` ismerősnek jelölését.`,
     },
+    rejectOutboundFriendRequest: {
+      start: `Megszakította a barátja kérését `,
+      end: `.`,
+    },
     ethSent: {
       start: `Sikeresen elküldött `,
       end: ` ETH-t, és a tranzakciós hash `,
@@ -396,6 +400,7 @@ export default {
     shell: `Ismerősnek Jelölés`,
     message: `Ismerősnek Jelölések`,
     request: F => `@${F} szeretne az ismerőse lenni! `,
+    outbound: F => `A kérelmet küldött a @${F} `,
   },
 
   privacyPolicy: {
