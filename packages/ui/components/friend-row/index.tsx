@@ -18,7 +18,7 @@ import { calculateBalance, convertCurrency, getPrimaryCurrency, getPendingFromFr
 import { connect } from 'react-redux'
 
 import language from 'language'
-const { debtManagement } = language
+const { debtManagement, pendingTransactionsLanguage } = language
 
 interface Props {
   friend: Friend
@@ -27,7 +27,8 @@ interface Props {
   navigation: any
   primaryCurrency: string
   pendingTransactions?: PendingTransaction[]
-  onPress?: () => void
+  hasPending?: boolean
+  onPress: () => void
   calculateBalance: (friend: Friend) => number
   getPendingFromFriend: (friendNick: string) => any
 }
@@ -38,6 +39,7 @@ interface PassedProps extends React.Props<any> {
   recentTransactions?: any
   pendingTransactions?: PendingTransaction[]
   friendScreen?: boolean
+  hasPending?: boolean
   onPress?: () => void
 }
 
@@ -128,8 +130,12 @@ class FriendRow extends Component<Props, State> {
     return this.getAmountTotal().includes('-') ? style.redAmount : style.greenAmount
   }
 
+  showPendingMessage() {
+    return <Button narrow small round danger onPress={this.props.onPress} text={pendingTransactionsLanguage.title} style={{maxWidth: 130, alignSelf:'flex-end'}} />
+  }
+
   render() {
-    const { onPress, friend } = this.props
+    const { onPress, friend, hasPending } = this.props
     const { pic } = this.state
     const imageSource = pic ? { uri: pic } : require('images/person-outline-dark.png')
 
@@ -146,7 +152,7 @@ class FriendRow extends Component<Props, State> {
           <View style={[general.flexRow, general.alignCenter, general.justifyEnd]}>
             <View style={general.column}>
               <Text style={[style.pendingAmount, this.getColor(), {alignSelf: 'flex-end'}]}>{this.getAmountTotal()}</Text>
-              {this.showEthSettlement()}
+              {hasPending ? this.showPendingMessage() : this.showEthSettlement()}
             </View>
           </View>
         </View>

@@ -84,7 +84,7 @@ export const getWeeklyEthTotal = state => {
   return (lastWeekWei + bilateralWei) / Math.pow(10, 18)
 }
 
-export const hasPendingTransaction = state => (friend) => {
+export const hasPendingTransaction = state => (friend: Friend) => {
   function friendMatch(list: any) {
     return list.some( ele => ele.creditorAddress === friend.address || ele.debtorAddress === friend.address )
   }
