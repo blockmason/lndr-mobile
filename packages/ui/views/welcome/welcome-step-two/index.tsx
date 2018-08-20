@@ -1,19 +1,19 @@
 import React, { Component } from 'react'
 
-import { View, Text, ScrollView } from 'react-native'
-import firebase from 'react-native-firebase'
+import { Image, View, Text, ScrollView } from 'react-native'
 
 import Button from 'ui/components/button'
 import TextLogo from 'ui/components/images/text-logo'
 import ThemeImage from 'ui/components/images/theme-image'
 
 import firebase from 'react-native-firebase'
+import general from 'theme/general'
 import style from 'theme/slide'
 
 import { mediumImage } from 'theme/include/dimensions'
 
 import language from 'language'
-const { welcomeView } = language
+const { walkthrough } = language
 
 export default class WelcomeStepTwoView extends Component {
   componentDidMount( ) {
@@ -22,7 +22,13 @@ export default class WelcomeStepTwoView extends Component {
   render() {
     return (
       <ScrollView>
+        <View style={[general.flex, {width:'100%'}]}>
+          <Image resizeMode="contain" style={{flex: 1}} source={require('images/walkthrough2_header.png')} />
+        </View>
+
         <View style={style.topView}>
+
+
           <Text style={style.caption}>Get started on the
             <Text style={style.bold}> Friends </Text>
             <Text>screen and
