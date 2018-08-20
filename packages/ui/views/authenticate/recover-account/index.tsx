@@ -1,6 +1,7 @@
 import React, { Component } from 'react'
 
 import { View } from 'react-native'
+import firebase from 'react-native-firebase'
 
 import { connect } from 'react-redux'
 
@@ -21,6 +22,9 @@ interface Props {
 }
 
 class RecoverAccountView extends Component<Props> {
+  componentDidMount( ) {
+    firebase.analytics().setCurrentScreen('recover-account', 'RecoverAccountView');
+  }
 
   async handleOnSubmitRecoverUser(formData: RecoverAccountData) {
     this.props.setAuthLoading(true)

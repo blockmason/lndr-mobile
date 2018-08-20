@@ -1,5 +1,6 @@
 import React, { Component } from 'react'
 import { Text, TextInput, View, Image, ScrollView, KeyboardAvoidingView, Platform, Linking, Alert } from 'react-native'
+import firebase from 'react-native-firebase'
 import { getResetAction } from 'reducers/nav'
 
 import { UserData } from 'lndr/user'
@@ -121,6 +122,10 @@ class Settlement extends Component<Props, State> {
 
     console.log('LOADING AMOUNT ', amount)
     this.setState({txCost, pic, amount, ethCost, formInputError, settlementType, friend, fromPayPalRequest})
+  }
+
+  componentDidMount( ) {
+    firebase.analytics().setCurrentScreen('settlement', 'Settlement');
   }
 
   componentWillUnmount() {

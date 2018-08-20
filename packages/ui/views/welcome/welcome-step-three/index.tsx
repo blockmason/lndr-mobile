@@ -1,6 +1,7 @@
 import React, { Component } from 'react'
 
 import { View, Text, ScrollView } from 'react-native'
+import firebase from 'react-native-firebase'
 
 import style from 'theme/slide'
 
@@ -13,6 +14,10 @@ import TextLogo from 'ui/components/images/text-logo'
 import ThemeImage from 'ui/components/images/theme-image'
 
 export default class WelcomeStepThreeView extends Component {
+  componentDidMount( ) {
+    firebase.analytics().setCurrentScreen('welcome-step-three', 'WelcomeStepThreeView');
+  }
+
   render() {
     return (
       <ScrollView>

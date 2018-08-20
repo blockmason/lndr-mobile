@@ -1,6 +1,7 @@
 import React, { Component } from 'react'
 
 import { View, ScrollView, Dimensions } from 'react-native'
+import firebase from 'react-native-firebase'
 
 import Button from 'ui/components/button'
 import Loading, { LoadingContext } from 'ui/components/loading'
@@ -23,6 +24,10 @@ interface Props {
 }
 
 export default class SettleUp extends Component<Props> {
+  componentDidMount( ) {
+    firebase.analytics().setCurrentScreen('settle-up', 'SettleUp');
+  }
+
   render() {
     const { navigation } = this.props
     const friend = navigation ? navigation.state.params.friend : {}

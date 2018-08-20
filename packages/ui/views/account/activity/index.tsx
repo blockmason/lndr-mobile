@@ -1,6 +1,8 @@
 import React, { Component } from 'react'
 
 import { View, ScrollView, Text, RefreshControl } from 'react-native'
+import firebase from 'react-native-firebase'
+
 import PendingView from 'ui/views/account/activity/pending'
 import RecentView from 'ui/views/account/activity/recent'
 import Loading, { LoadingContext } from 'ui/components/loading'
@@ -31,13 +33,17 @@ interface Props {
 interface State {
     refreshing: boolean
 }
-  
+
 class ActivityView extends Component<Props, State> {
     constructor(props) {
         super(props)
         this.state = {
             refreshing: false
         }
+    }
+
+    componentDidMount( ) {
+      firebase.analytics().setCurrentScreen('activity', 'ActivityView');
     }
 
     async refresh() {
