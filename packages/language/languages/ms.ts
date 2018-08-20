@@ -154,8 +154,6 @@ export default {
       balance: Y => `Baki semasa BCPT anda ialah ${typeof Y === 'string' ? Y.slice(0,8) : ''} `,
       bcptAddress: `Alamat BCPT`,
     },
-    changeProfilePic: `Sentuh untuk Tukar`,
-    addProfilePic: `Gunakan Gambar dari Telefon`,
     panelHeaders: [
       `Alamat ETH (& BCPT)`,
       `Baki ETH`,

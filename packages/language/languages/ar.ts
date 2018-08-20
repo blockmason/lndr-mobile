@@ -154,8 +154,6 @@ export default {
       balance: Y => `رصيدك الحالي من BCPT هو ${typeof Y === 'string' ? Y.slice(0,8) :''}`,
       bcptAddress: `عنوان BCPT`,
     },
-    changeProfilePic: `انقر للتغيير`,
-    addProfilePic: `استخدام صورة من الهاتف`,
     panelHeaders: [
       `عنوان إثيريوم (& BCPT)`,
       `رصيد الإثيريوم`,

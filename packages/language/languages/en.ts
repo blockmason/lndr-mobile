@@ -151,8 +151,6 @@ export default {
       balance: balance => `Your current BCPT balance is ${typeof balance === 'string' ? balance.slice(0,8) :''}`,
       bcptAddress: `BCPT Address`,
     },
-    changeProfilePic: `Tap to Change`,
-    addProfilePic: `Use Picture from Phone`,
     panelHeaders: [
       `ETH (& BCPT) Address`,
       `ETH Balance`,

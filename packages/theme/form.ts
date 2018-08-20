@@ -273,19 +273,19 @@ export default StyleSheet.create({
     marginTop: 4
   },
   image: {
-    height: 100,
-    width: 100,
-    borderRadius: 50
+    height: 120,
+    width: 120,
+    borderRadius: 60
   },
   cameraImage: {
-    height: 40,
-    width: 40,
+    height: 16,
+    width: 20,
+    borderRadius: 2,
     position: 'absolute',
-    right: 30,
-    top: 30,
+    right: 0,
+    top: 0,
     zIndex: 20,
-    backgroundColor: white,
-    borderRadius: 50,
+    backgroundColor: softGray,
     opacity: 0.5
   },
   centerText: {

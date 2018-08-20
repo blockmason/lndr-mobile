@@ -154,8 +154,6 @@ export default {
       balance: Y => `ยอด BCPT คงเหลือในปัจจุบันของคุณคือ ${typeof Y === 'string' ? Y.slice(0,8) :''}`,
       bcptAddress: `ที่อยู่ BCPT`,
     },
-    changeProfilePic: `แตะเพื่อเปลี่ยน`,
-    addProfilePic: `ใช้ภาพจากโทรศัพท์`,
     panelHeaders: [
       `ที่อยู่ ETH (และ BCPT)`,
       `ยอด ETH คงเหลือ`,

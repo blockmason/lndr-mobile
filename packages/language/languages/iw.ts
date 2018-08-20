@@ -154,8 +154,6 @@ export default {
       balance: Y => ` ${typeof Y === 'string' ? Y.slice(0,8) :''} שלך היא BCPT -יתרת ה`,
       bcptAddress: `כתובת BCPT`,
     },
-    changeProfilePic: `הקש לשינוי`,
-    addProfilePic: `להשתמש בתמונה מהטלפון`,
     panelHeaders: [
       `ETH (& BCPT) כתובת`,
       `יתרת ETH`,

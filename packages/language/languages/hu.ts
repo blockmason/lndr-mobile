@@ -154,8 +154,6 @@ export default {
       balance: Y => `Jelenlegi BCPT egyenlege ${typeof Y === 'string'? Y.slice (0,8): ''} `,
       bcptAddress: `BCPT Cím`,
     },
-    changeProfilePic: `Módosításhoz Érintse Meg`,
-    addProfilePic: `Használjon a Telefonon Található Képet`,
     panelHeaders: [
       `ETH (& BCPT) Cím`,
       `ETH Egyenleg`,

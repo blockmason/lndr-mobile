@@ -151,8 +151,6 @@ export default {
     balance: (balance) => `現在のBCPT残高はこちら ${typeof balance === 'string' ? balance.slice(0,8) : ''}`,
     bcptAddress: `BCPTアドレス`,
   },
-  changeProfilePic: `変更する`,
-  addProfilePic: `端末の写真を使う`,
   panelHeaders: [
     `ETH (& BCPT) アドレス`,
     `EHT残高`,

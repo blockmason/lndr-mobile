@@ -154,8 +154,6 @@ export default {
       balance: Y => `Το τρέχον υπόλοιπο BCPT σας είναι ${typeof Y === 'string' ? Y.slice (0,8): ''} `,
       bcptAddress: `Διεύθυνση BCPT`,
     },
-    changeProfilePic: `Πατήστε για Αλλαγή`,
-    addProfilePic: `Χρησιμοποιήστε Εικόνα από το Τηλέφωνο`,
     panelHeaders: [
       `Διεύθυνση ETH (& BCPT)`,
       `Yπόλοιπο ETH`,

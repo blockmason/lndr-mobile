@@ -154,8 +154,6 @@ export default {
       balance: Y => `Geçerli BCPT bakiyeniz ${typeof Y === 'string' ? Y.slice(0,8) :''}`,
       bcptAddress: `BCPT Adresi`,
     },
-    changeProfilePic: `Değiştirmek için Dokunun`,
-    addProfilePic: `Telefondan bir Resmi Kullanın`,
     panelHeaders: [
       `ETH (ve BCPT) Adresi`,
       `ETH Bakiyesi`,

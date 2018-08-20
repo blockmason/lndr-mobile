@@ -154,8 +154,6 @@ export default {
       balance: Y => `Din aktuelle BCPT saldo er ${typeof Y === 'string'? Y.slice(0,8):''} `,
       bcptAddress: `BCPT Adresse`,
     },
-    changeProfilePic: `Tryk for at ændre`,
-    addProfilePic: `Brug billede fra telefon`,
     panelHeaders: [
       `ETH (& BCPT) Adresse`,
       `ETH Saldo`,

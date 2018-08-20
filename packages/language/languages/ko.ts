@@ -152,8 +152,6 @@ export default {
       balance: (balance) => `당신의 현재 BCPT 잔액은 ${typeof balance === 'string' ? balance.slice(0,8) : ''}`,
       bcptAddress: `BCPT 주소`,
     },
-    changeProfilePic: `변경하려면 터치하세요`,
-    addProfilePic: `폰에서 사진 불러오기`,
     panelHeaders: [
       `이더리움 (& BCPT) 주소`,
       `이더리움 잔액`,

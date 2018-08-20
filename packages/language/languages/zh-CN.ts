@@ -154,8 +154,6 @@ export default {
       balance: Y => `您当前BCPT余额为${typeof Y === 'string'? Y.slice(0,8) : ''}`,
       bcptAddress: `BCPT地址`,
     },
-    changeProfilePic: `更改头像`,
-    addProfilePic: `选择头像`,
     panelHeaders: [
       `ETH（BCPT）地址`,
       `ETH平衡`,
