@@ -587,6 +587,13 @@ export const rejectPendingSettlement = (pendingSettlement: PendingUnilateral) =>
   }
 }
 
+export const setInitialHomeLoad = () => {
+  return async (dispatch, _getState) => {
+    console.log('HERE, SHOULD ONLY FIRE ONCE')
+    dispatch(setState({ initialHomeLoad: false }))
+  }
+}
+
 export const addDebt = (friend: Friend, amount: string, memo: string, direction: string, currency: string, settleTotal?: boolean, denomination?: string) => {
   return async (dispatch, getState) => {
     const { address, privateKeyBuffer } = getUser(getState())()
