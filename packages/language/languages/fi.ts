@@ -211,6 +211,8 @@ export default {
     selectFriend: `Valitse`,
     lend: `Uusi laina`,
     borrow: `Uusi velka`,
+    owesMe: `Minulle velkaa`,
+    iOwe: `Olen velkaa`,
     iLent: `Ystävä on minulle velkaa`,
     iBorrowed: `Olen velkaa ystävälle`,
     settleUpLower: `Sovi velan maksamisesta`,

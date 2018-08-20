@@ -211,6 +211,8 @@ export default {
     selectFriend: `Vybrat`,
     lend: `Nová půjčka`,
     borrow: `Nový dluh`,
+    owesMe: `Mi dluží`,
+    iOwe: `Dlužím`,
     iLent: `Přítel mi dluží`,
     iBorrowed: `Dlužím příteli`,
     settleUpLower: `Vyrovnat`,

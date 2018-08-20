@@ -211,6 +211,8 @@ export default {
     selectFriend: `Επιλέξτε`,
     lend: `Νέο Δάνειο`,
     borrow: `Νέο Χρέος`,
+    owesMe: `μου χρωστάει`,
+    iOwe: `χρωστώ`,
     iLent: `Ένας φίλος μου χρωστάει`,
     iBorrowed: `Χρωστάω σε έναν φίλο`,
     settleUpLower: `Διακανονισμός`,

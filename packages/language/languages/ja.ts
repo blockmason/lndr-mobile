@@ -208,6 +208,8 @@ export default {
   selectFriend: `選択`,
   lend: `新しい貸し`,
   borrow: `新しい借り`,
+  owesMe: `私を負います`,
+  iOwe: `私が借りている`,
   iLent: `友人に貸しがあります`,
   iBorrowed: `友人に借りがあります`,
   settleUpLower: `帳消しにする`,

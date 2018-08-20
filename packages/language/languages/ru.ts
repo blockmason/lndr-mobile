@@ -211,6 +211,8 @@ export default {
     selectFriend: `Выбрать`,
     lend: `Новый кредит`,
     borrow: `Новый долг`,
+    owesMe: `Обязан меня`,
+    iOwe: `Я должен`,
     iLent: `Друг мне должен`,
     iBorrowed: `Я должен другу`,
     settleUpLower: `Рассчитываться`,

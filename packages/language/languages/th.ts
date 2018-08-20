@@ -211,6 +211,8 @@ export default {
     selectFriend: `เลือก`,
     lend: `เงินกู้ใหม่`,
     borrow: `หนี้ใหม่`,
+    owesMe: `เป็นหนี้ฉัน`,
+    iOwe: `ฉันเป็นหนี้`,
     iLent: `เพื่อนติดหนี้ฉัน`,
     iBorrowed: `ฉันติดหนี้เพื่อน`,
     settleUpLower: `ชำระหนี้`,

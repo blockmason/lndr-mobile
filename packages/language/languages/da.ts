@@ -211,6 +211,8 @@ export default {
     selectFriend: `Vælg`,
     lend: `Nyt lån`,
     borrow: `Ny gæld`,
+    owesMe: `Skylder mig`,
+    iOwe: `Jeg skylder`,
     iLent: `En ven skylder mig`,
     iBorrowed: `Jeg skylder en ven`,
     settleUpLower: `Gør regningen op`,

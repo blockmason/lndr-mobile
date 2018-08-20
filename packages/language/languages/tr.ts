@@ -211,6 +211,8 @@ export default {
     selectFriend: `Seç`,
     lend: `Yeni Borç Verme`,
     borrow: `Yeni Borç Alma`,
+    owesMe: `Bana borclu`,
+    iOwe: `Borçluyum`,
     iLent: `Bir arkadaşım bana borçlu`,
     iBorrowed: `Bir arkadaşıma borçluyum`,
     settleUpLower: `Ödeşin`,

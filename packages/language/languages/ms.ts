@@ -211,6 +211,8 @@ export default {
     selectFriend: `Pilih`,
     lend: `Pinjaman Baharu`,
     borrow: `Hutang Baharu`,
+    owesMe: `Berhutang saya`,
+    iOwe: `Saya hutang`,
     iLent: `Seorang rakan berhutang dengan saya`,
     iBorrowed: `Saya berhutang dengan seorang rakan`,
     settleUpLower: `Selesaikan Hutang`,

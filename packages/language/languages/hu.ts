@@ -211,6 +211,8 @@ export default {
     selectFriend: `Kiválasztás`,
     lend: `Új Kölcsön`,
     borrow: `Új Tartozás`,
+    owesMe: `Tartozik nekem`,
+    iOwe: `Tartozom`,
     iLent: `Egy ismerősöm tartozik nekem`,
     iBorrowed: `Tartozom egy ismerősömnek`,
     settleUpLower: `Kiegyenlítés`,

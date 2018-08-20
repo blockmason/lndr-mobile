@@ -211,6 +211,8 @@ export default {
     selectFriend: `اختيار`,
     lend: `إقَراض جديد`,
     borrow: `دين جديد`,
+    owesMe: `تدين لي`,
+    iOwe: `انا مدين`,
     iLent: `صديق مدين لي`,
     iBorrowed: `أنا أدين لصديق`,
     settleUpLower: `دفع الحساب`,

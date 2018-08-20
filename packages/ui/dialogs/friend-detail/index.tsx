@@ -150,20 +150,16 @@ class FriendDetail extends Component<Props, State> {
 
   addDebt(direction: string) {
     const { friend } = this.state
-    const { navigation, getPendingFromFriend } = this.props
-    const { route, pendingTransaction, pendingSettlement } = getPendingFromFriend(friend.nickname)
-    if(route) {
-      navigation.navigate(route, { pendingSettlement, pendingTransaction })
-    } else {
-      navigation.navigate('AddDebt', { friend, direction })
-    }
+    const { navigation } = this.props
+    navigation.navigate('AddDebt', { friend, direction })
   }
 
   render() {
     const { friend } = this.state
-    const { navigation, primaryCurrency } = this.props
+    const { navigation, primaryCurrency, getPendingFromFriend } = this.props
     const { pic } = this.state
     const imageSource = pic ? { uri: pic } : require('images/person-outline-dark.png')
+    const { route } = getPendingFromFriend(friend.nickname)
 
     return <View style={general.whiteFlex}>
       <View style={general.view}>
@@ -175,7 +171,7 @@ class FriendDetail extends Component<Props, State> {
         <View style={general.centeredColumn}>
           <Image source={imageSource} style={pendingStyle.image}/>
           <Text style={pendingStyle.title}>{`  @${friend.nickname}  `}</Text>
-          <AddDebtButtons fat={false} friend lend={() => this.addDebt('lend')} borrow={() => this.addDebt('borrow')} />
+          {route ? null : <AddDebtButtons fat={false} friend lend={() => this.addDebt('lend')} borrow={() => this.addDebt('borrow')} />}
           <Text style={pendingStyle.subTitle}>{`${recentTransactionsLanguage.consolidatedBalance}:`}</Text>
           <View style={pendingStyle.balanceRow}>
             <Text style={pendingStyle.balanceInfo}>{currencySymbols(primaryCurrency)}</Text>

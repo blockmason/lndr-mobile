@@ -302,7 +302,6 @@ export default StyleSheet.create({
   },
   friendRequest: {
     color: aqua,
-    ...bold,
     ...medium,
     maxWidth: width * 2 / 3
   },
@@ -358,6 +357,7 @@ export default StyleSheet.create({
     ...medium,
     backgroundColor: paleGray,
     color: aqua,
+    ...bold,
     paddingLeft: m,
     paddingRight: m,
     paddingVertical: s
@@ -368,7 +368,7 @@ export default StyleSheet.create({
   },
   nickname: {
     fontSize: 24,
-    fontWeight: 'bold',
+    ...bold,
     marginVertical: 10,
     color: aqua
   },
@@ -405,6 +405,11 @@ export default StyleSheet.create({
     marginVertical: 40,
     paddingBottom: 20,
     marginHorizontal: 20
+  },
+  friendAddDebtButtons: {
+    marginHorizontal: 10,
+    marginBottom: 10,
+    minWidth: '40%'
   }
 
 } as any)
