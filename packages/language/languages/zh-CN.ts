@@ -154,8 +154,6 @@ export default {
       balance: Y => `您当前BCPT余额为${typeof Y === 'string'? Y.slice(0,8) : ''}`,
       bcptAddress: `BCPT地址`,
     },
-    changeProfilePic: `更改头像`,
-    addProfilePic: `选择头像`,
     panelHeaders: [
       `ETH（BCPT）地址`,
       `ETH平衡`,
@@ -165,9 +163,7 @@ export default {
       `启用贝宝`,
       `更改主货币`,
       `更改密码`,
-      `更改昵称`,
       `更改电子邮件`,
-      `更改头像`,
       `更改锁定超时`,
       `助记符`,
       `通知`,

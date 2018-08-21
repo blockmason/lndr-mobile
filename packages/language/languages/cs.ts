@@ -154,8 +154,6 @@ export default {
       balance: Y => `Aktuální BCPT zůstatek je ${typeof Y === 'string' ? Y.slice(0,8) :''}`,
       bcptAddress: `BCPT adresa`,
     },
-    changeProfilePic: `Poklepem změníte`,
-    addProfilePic: `Použít obrázek z telefonu`,
     panelHeaders: [
       `ETH (a BCPT) adresa`,
       `Zůstatek ETH`,
@@ -165,9 +163,7 @@ export default {
       `Umožnit PayPal`,
       `Změnit hlavní měně`,
       `Změna PIN`,
-      `Změna přezdívky`,
       `Změnit email`,
-      `Změnit profilovou fotku`,
       `Změna zámku Timeout`,
       `Mnemo`,
       `Poznámka`,

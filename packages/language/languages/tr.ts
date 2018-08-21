@@ -154,8 +154,6 @@ export default {
       balance: Y => `Geçerli BCPT bakiyeniz ${typeof Y === 'string' ? Y.slice(0,8) :''}`,
       bcptAddress: `BCPT Adresi`,
     },
-    changeProfilePic: `Değiştirmek için Dokunun`,
-    addProfilePic: `Telefondan bir Resmi Kullanın`,
     panelHeaders: [
       `ETH (ve BCPT) Adresi`,
       `ETH Bakiyesi`,
@@ -165,9 +163,7 @@ export default {
       `Paypal etkinleştirme`,
       `Birincil Para değiştirme`,
       `Pin'i Değiştir`,
-      `Kullanıcı Adını Değiştir`,
       `E-postanı Değiştir`,
-      `Profil Resmini Değiştir`,
       `Kilitleme Süresini Değiştir`,
       `Anımsatıcı Kod`,
       `Bildirimler`,

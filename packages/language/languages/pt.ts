@@ -154,8 +154,6 @@ export default {
       balance: Y => `Seu saldo BCPT atual é de R ${typeof Y === 'string' ? Y.slice (0,8): ''} `,
       bcptAddress: `Endereço BCPT`,
     },
-    changeProfilePic: `Toque para alterar`,
-    addProfilePic: `Usar Imagem do Telefone`,
     panelHeaders: [
       `ETH (& BCPT) Endereço`,
       `Balanço ETH`,
@@ -165,9 +163,7 @@ export default {
       `Ativar PayPal`,
       `Alterar Moeda principal`,
       `Alterar PIN`,
-      `Alterar Nome de utilizador`,
       `Alterar e-mail`,
-      `Alterar foto do perfil`,
       `Alterar tempo limite de bloqueio`,
       `Mnemonic`,
       `Notificações`,

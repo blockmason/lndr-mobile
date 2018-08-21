@@ -154,8 +154,6 @@ export default {
       balance: Y => `Số dư BCPT hiện tại là ${typeof Y === 'string' ? Y.slice(0,8) :''}`,
       bcptAddress: `Địa chỉ BCPT`,
     },
-    changeProfilePic: `Bấm để Thay đổi`,
-    addProfilePic: `Sử dụng Hình ảnh từ Điện thoại`,
     panelHeaders: [
       `Địa chỉ ETH (& BCPT)`,
       `Số dư ETH`,
@@ -165,9 +163,7 @@ export default {
       `Bật PayPal`,
       `Thay đổi tiền tệ chính`,
       `Thay đổi mã PIN`,
-      `Thay đổi Biệt danh`,
       `Thay đổi Email`,
-      `Thay đổi Hình ảnh Đại diện`,
       `Thay đổi Thời gian Timeout`,
       `Gợi ý`,
       `Thông báo`,
