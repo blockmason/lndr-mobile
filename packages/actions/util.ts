@@ -21,7 +21,7 @@ export const triggerTouchId = (user, notificationsEnabled, sessionStorage) => {
     return { hasStoredUser: true, welcomeComplete: true, privacyPolicyVerified: true, notificationsEnabled, user }
   })
   .catch(_error => {
-    return { hasStoredUser: true, welcomeComplete: true, privacyPolicyVerified: true, notificationsEnabled }
+    return { hasStoredUser: true, welcomeComplete: true, privacyPolicyVerified: true, notificationsEnabled, user: undefined }
   })
 }
 
