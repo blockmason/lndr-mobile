@@ -1,6 +1,8 @@
 import React, { Component } from 'react'
 
 import { View, ScrollView, Text, TextInput, TouchableHighlight, Platform, Modal, Keyboard, KeyboardAvoidingView } from 'react-native'
+import firebase from 'react-native-firebase'
+
 import { getResetAction } from 'reducers/nav'
 
 import Friend from 'lndr/friend'
@@ -76,6 +78,7 @@ class AddDebt extends Component<Props, State> {
   }
 
   async componentDidMount() {
+    firebase.analytics().setCurrentScreen('add-debt', 'AddDebt');
     this.stillRelevant = true
     const friends = await loadingFriends.wrap(this.props.getFriends())
     this.stillRelevant

@@ -5,6 +5,7 @@ import { Text, TextInput, View, Dimensions, ScrollView, Linking, Modal, Switch,
 
 import ImagePicker from 'react-native-image-picker'
 import Icon from 'react-native-vector-icons/Zocial'
+import firebase from 'react-native-firebase'
 
 import Button from 'ui/components/button'
 import Pinpad from 'ui/components/pinpad'
@@ -118,6 +119,10 @@ class MyAccount extends Component<Props, State> {
       const payPalEmail = await palsClient.getPayPalAccount(this.props.user)
       this.setState({payPalEmail: payPalEmail})
     }
+  }
+
+  componentDidMount( ) {
+    firebase.analytics().setCurrentScreen('my-account', 'MyAccount');
   }
 
   componentWillUnmount() {

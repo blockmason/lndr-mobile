@@ -1,4 +1,5 @@
 import React, { Component } from 'react'
+import firebase from 'react-native-firebase'
 
 import LoginAccountForm from 'ui/forms/login-account'
 
@@ -14,6 +15,10 @@ interface Props {
 }
 
 class LoginView extends Component<Props> {
+  componentDidMount( ) {
+    firebase.analytics().setCurrentScreen('login', 'LoginView');
+  }
+
   async handleOnSubmitLoginAccount(formData: LoginAccountData) {
     this.props.setAuthLoading(true)
     const loginSuccess = await this.props.loginAccount(formData)
