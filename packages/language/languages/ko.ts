@@ -357,6 +357,18 @@ export default {
       start: "우리는 ",
       end: " 해당 기록을 당신이 거부한것을 전달했습니다."
     },
+    confirmFriend: {
+      start: `이제 `,
+      end: ` 와 친구!`,
+    },
+    rejectFriend: {
+      start: `당신은`,
+      end: `에서 친구 요청을 거절했다.`,
+    },
+    rejectOutboundFriendRequest: {
+      start: `당신은 `,
+      end: ` 하는 친구 요청을 취소.`,
+    },
     ethSent: {
       start: "성공적으로 보냈습니다 ",
       end: " 이더리움과 당신의 거래는 "
@@ -384,7 +396,8 @@ export default {
   pendingFriendRequestsLanguage: {
     shell: `친구 요청`,
     message: `친구 요청`,
-    request: F => `@${F}이 너와 친구가되고 싶어！`
+    request: F => `@${F}이 너와 친구가되고 싶어！`,
+    outbound: F => `당신은@${F}에 친구 요청을 보내`,
   },
 
   privacyPolicy: {

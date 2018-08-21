@@ -357,6 +357,18 @@ export default {
       start: ``,
       end: ` に通知を送ります.`,
     },
+    confirmFriend: {
+      start: `これで`,
+      end: `と友達です!`,
+    },
+    rejectFriend: {
+      start: `あなたは`,
+      end: `からの友達リクエストを拒否してきました.`,
+    },
+    rejectOutboundFriendRequest: {
+      start: `あなたは `,
+      end: ` に友達リクエストをキャンセルしました.`,
+    },
     ethSent: {
       start: `送信成功 `,
       end: ` あなたのETHとトランザクションハッシュは `,
@@ -384,7 +396,8 @@ export default {
   pendingFriendRequestsLanguage: {
     shell: `友達リクエスト`,
     message: `友達リクエスト`,
-    request: F => `@${F}はあなたと友達になりたい！`
+    request: F => `@${F}はあなたと友達になりたい！`,
+    outbound: F => `あなたは @${F}に友達リクエストを送信し`,
   },
 
   privacyPolicy: {

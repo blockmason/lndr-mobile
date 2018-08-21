@@ -368,6 +368,10 @@ export default {
       start: `Anda menolak permintaan pertemanan dari `,
       end: `.`,
     },
+    rejectOutboundFriendRequest: {
+      start: `Anda telah membatalkan permintaan teman untuk `,
+      end: `.`,
+    },
     ethSent: {
       start: `Anda berhasil mengirimkan `,
       end: ` ETH, dan hash transaksi Anda adalah `,
@@ -396,6 +400,7 @@ export default {
     shell: `Permintaan Pertemanan`,
     message: `Permintaan Pertemanan`,
     request: F => `@${F} ingin berteman dengan Anda!`,
+    outbound: F => `Anda mengirim permintaan teman untuk @${F}`,
   },
 
   privacyPolicy: {

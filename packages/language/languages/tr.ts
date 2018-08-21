@@ -368,6 +368,10 @@ export default {
       start: ``,
       end: `’dan gelen arkadaşlık isteğini reddettiniz.`,
     },
+    rejectOutboundFriendRequest: {
+      start: `Sen `,
+      end: ` Arkadaş isteğini iptal.`,
+    },
     ethSent: {
       start: `Başarıyla `,
       end: ` ETH gönderdiniz ve işlem sağlama kodunuz `,
@@ -396,6 +400,7 @@ export default {
     shell: `Arkadaşlık isteği`,
     message: `Arkadaş istekleri`,
     request: F => `@${F} seninle arkadaş olmak istiyor!`,
+    outbound: F => `Sen @${F} için arkadaşlık isteği gönderdi`,
   },
 
   privacyPolicy: {

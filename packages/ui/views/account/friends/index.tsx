@@ -127,9 +127,9 @@ class FriendsView extends Component<Props, State> {
 
     let friendListTitle: JSX.Element[] = []
     if (pendingFriends && pendingFriends.length > 0)
-      friendListTitle.push(<Text style={style.transactionHeader}>{currentFriends}</Text>)
+      friendListTitle.push(<Text key='pendingFriendsTitle' style={style.transactionHeader}>{currentFriends}</Text>)
     if (friendsLoaded && friends.length === 0)
-      friendListTitle.push(<Text style={style.emptyState}>{noFriends}</Text>)
+      friendListTitle.push(<Text key='noFriendsTitle' style={style.emptyState}>{noFriends}</Text>)
 
     return <ScrollView style={general.view} keyboardShouldPersistTaps='handled' ref='_friendScrollView'
       refreshControl={

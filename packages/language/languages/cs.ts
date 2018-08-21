@@ -368,6 +368,10 @@ export default {
       start: `Odmítli jste žádost o přátelství od `,
       end: `a.`,
     },
+    rejectOutboundFriendRequest: {
+      start: `Zrušili jste žádost o přátelství na `,
+      end: `.`,
+    },
     ethSent: {
       start: `Úspěšně jste odeslal(a) `,
       end: ` ETH a hash vaší transakce je `,
@@ -396,6 +400,7 @@ export default {
     shell: `Žádost o přátelství`,
     message: `Žádosti o přátelství`,
     request: F => `@${F} si vás chce přidat mezi přátele!`,
+    outbound: F => `jste poslal žádost o přátelství na @${F}`,
   },
 
   privacyPolicy: {

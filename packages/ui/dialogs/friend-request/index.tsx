@@ -1,6 +1,6 @@
 import React, { Component } from 'react'
 
-import { Text, TextInput, TouchableHighlight, View, Image, ScrollView } from 'react-native'
+import { Text, View, Image, ScrollView } from 'react-native'
 import firebase from 'react-native-firebase'
 
 import Friend from 'lndr/friend'
@@ -10,17 +10,15 @@ import DashboardShell from 'ui/components/dashboard-shell'
 import Button from 'ui/components/button'
 import Loading, { LoadingContext } from 'ui/components/loading'
 
-import style from 'theme/friend'
 import general from 'theme/general'
 import pendingStyle from 'theme/pending'
-import accountStyle from 'theme/account'
 
 import language from 'language'
 const {
+  cancel,
   pendingTransactionsLanguage,
   pendingFriendRequestsLanguage
 } = language
-const removeFriendText = language.removeFriend
 
 import { confirmFriendRequest, rejectFriendRequest } from 'actions'
 import { getResetAction } from 'reducers/nav'
@@ -35,6 +33,8 @@ interface Props {
 }
 
 interface State {
+  friend?: Friend
+  isOutbound?: boolean
   pic?: string
 }
 
@@ -46,6 +46,7 @@ class FriendRequest extends Component<Props, State> {
 
   async componentWillMount() {
     const friend = this.props.navigation ? this.props.navigation.state.params.friend : {}
+    const isOutbound = this.props.navigation ? this.props.navigation.state.params.isOutbound : {}
     let pic
 
     try {
@@ -54,16 +55,22 @@ class FriendRequest extends Component<Props, State> {
       }
     } catch (e) {}
     if (pic) {
-      this.setState({ pic })
+      this.setState({ pic, friend, isOutbound })
+    } else {
+      this.setState({ friend, isOutbound })
     }
   }
-
+  
   componentDidMount( ) {
     firebase.analytics().setCurrentScreen('friend-request', 'FriendRequest');
   }
 
-  async submit(type: string, friend: Friend) {
+  async submit(type: string) {
     let success
+    const { friend } = this.state
+    if (friend === undefined) {
+      return
+    }
 
     if (type === 'confirmFriend') {
       success = await loadingContext.wrap(
@@ -84,10 +91,11 @@ class FriendRequest extends Component<Props, State> {
   }
 
   render() {
-    const friend = this.props.navigation ? this.props.navigation.state.params.friend : {}
-    const { pic } = this.state
-    const { navigation, confirmFriendRequest, rejectFriendRequest } = this.props
+    const { pic, friend, isOutbound } = this.state
     const imageSource = pic ? { uri: pic } : require('images/person-outline-dark.png')
+    const message = isOutbound ? pendingFriendRequestsLanguage.outbound : pendingFriendRequestsLanguage.request
+    const type = isOutbound ? 'rejectOutboundFriendRequest' : 'rejectFriend'
+    const rejectButtonText = isOutbound ? cancel : pendingTransactionsLanguage.rejectRequest
 
     return <View style={general.whiteFlex}>
       <View style={general.view}>
@@ -98,10 +106,10 @@ class FriendRequest extends Component<Props, State> {
         <ScrollView style={general.view} keyboardShouldPersistTaps="always">
         <View style={general.centeredColumn}>
           <Image source={imageSource} style={pendingStyle.image}/>
-          <Text style={pendingStyle.title}>{pendingFriendRequestsLanguage.request(friend.nickname)}</Text>
+          <Text style={pendingStyle.title}>{message(friend ? friend.nickname : '')}</Text>
           <View style={{marginBottom: 10}}>
-            <Button round large onPress={() => this.submit('confirmFriend', friend)} text={pendingTransactionsLanguage.confirm} />
-            <Button danger round onPress={() => this.submit('rejectFriend', friend)} text={pendingTransactionsLanguage.rejectRequest} />
+            {isOutbound ? null : <Button round large onPress={() => this.submit('confirmFriend')} text={pendingTransactionsLanguage.confirm} />}
+            <Button danger round onPress={() => this.submit(type)} text={rejectButtonText} />
           </View>
         </View>
       </ScrollView>
