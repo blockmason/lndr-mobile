@@ -273,6 +273,11 @@ export default StyleSheet.create({
     marginTop: 4
   },
   image: {
+    height: 100,
+    width: 100,
+    borderRadius: 50
+  },
+  accountImage: {
     height: 120,
     width: 120,
     borderRadius: 60

@@ -465,7 +465,7 @@ class MyAccount extends Component<Props, State> {
               <TouchableHighlight {...underlayColor} onPress={() => this.getPhoto()}>
                 <View style={general.centeredColumn}>
                   <Image source={require('images/camera.png')} style={style.cameraImage} />
-                  {!photos.length ? <Image source={imageSource} style={style.image}/> : null}
+                  {!photos.length ? <Image source={imageSource} style={style.accountImage}/> : null}
                 </View>
               </TouchableHighlight>
               <TouchableHighlight {...underlayColor} onPress={() => this.setState({ showNicknameInput: !showNicknameInput })}>
