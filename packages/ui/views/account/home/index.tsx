@@ -71,7 +71,7 @@ interface Props {
   ethExchange: (currency: string) => string
   getFriendFromNick: (nickname: string) => Friend | undefined
   getFriendRequests: () => void
-  setInitialHomeLoad: () => void
+  setInitialHomeLoad: (value: any) => void
 }
 
 interface State {
@@ -109,8 +109,8 @@ class HomeView extends Component<Props, State> {
   async componentDidUpdate() {
     const { initialHomeLoad, friendsLoaded, friends } = this.props.state
     if(initialHomeLoad && friendsLoaded && !friends.length) {
-      this.props.navigation.navigate('Friends')
-      this.props.setInitialHomeLoad()
+      this.props.navigation.navigate(initialHomeLoad)
+      this.props.setInitialHomeLoad(null)
     }
   }
 

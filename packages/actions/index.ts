@@ -587,9 +587,9 @@ export const rejectPendingSettlement = (pendingSettlement: PendingUnilateral) =>
   }
 }
 
-export const setInitialHomeLoad = () => {
+export const setInitialHomeLoad = (initialHomeLoad: any) => {
   return async (dispatch, _getState) => {
-    dispatch(setState({ initialHomeLoad: false }))
+    dispatch(setState({ initialHomeLoad }))
   }
 }
 
