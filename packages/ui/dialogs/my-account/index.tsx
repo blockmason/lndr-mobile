@@ -2,7 +2,7 @@ import React, { Component } from 'react'
 import { Text, TextInput, View, Dimensions, ScrollView, Linking, Modal, Switch,
   TouchableHighlight, Image, KeyboardAvoidingView, Platform, NativeModules, Alert } from 'react-native'
 import ImagePicker from 'react-native-image-picker'
-import Icon from 'react-native-vector-icons/Zocial'
+import Icon from 'react-native-vector-icons/Ionicons'
 
 import Button from 'ui/components/button'
 import Pinpad from 'ui/components/pinpad'
@@ -464,7 +464,7 @@ class MyAccount extends Component<Props, State> {
               <Loading context={loadingContext} />
               <TouchableHighlight {...underlayColor} onPress={() => this.getPhoto()}>
                 <View style={general.centeredColumn}>
-                  <Image source={require('images/camera.png')} style={style.cameraImage} />
+                  <Icon style={style.cameraImage} name="md-camera" />
                   {!photos.length ? <Image source={imageSource} style={style.accountImage}/> : null}
                 </View>
               </TouchableHighlight>

@@ -283,15 +283,11 @@ export default StyleSheet.create({
     borderRadius: 60
   },
   cameraImage: {
-    height: 16,
-    width: 20,
-    borderRadius: 2,
+    fontSize: 20,
     position: 'absolute',
     right: 0,
     top: 0,
-    zIndex: 20,
-    backgroundColor: softGray,
-    opacity: 0.5
+    zIndex: 20
   },
   centerText: {
     textAlign: 'center'
