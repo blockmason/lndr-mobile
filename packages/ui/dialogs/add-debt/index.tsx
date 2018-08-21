@@ -1,6 +1,8 @@
 import React, { Component } from 'react'
 import { View, ScrollView, Text, TextInput, TouchableHighlight, Platform, Modal, Keyboard, KeyboardAvoidingView } from 'react-native'
 
+import firebase from 'react-native-firebase'
+
 import Friend from 'lndr/friend'
 import { formatMemo, amountFormat } from 'lndr/format'
 import { currencySymbols } from 'lndr/currencies'
@@ -80,6 +82,7 @@ class AddDebt extends Component<Props, State> {
   }
 
   async componentDidMount() {
+    firebase.analytics().setCurrentScreen('add-debt', 'AddDebt');
     this.stillRelevant = true
     await loadingFriends.wrap(this.props.getFriends())
     this.stillRelevant

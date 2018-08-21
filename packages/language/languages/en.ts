@@ -151,8 +151,6 @@ export default {
       balance: balance => `Your current BCPT balance is ${typeof balance === 'string' ? balance.slice(0,8) :''}`,
       bcptAddress: `BCPT Address`,
     },
-    changeProfilePic: `Tap to Change`,
-    addProfilePic: `Use Picture from Phone`,
     panelHeaders: [
       `ETH (& BCPT) Address`,
       `ETH Balance`,
@@ -162,9 +160,7 @@ export default {
       `Receive PayPal Payments`,
       `Change Primary Currency`,
       `Change PIN`,
-      `Change Nickname`,
       `Change Email`,
-      `Change Profile Picture`,
       `Change Lock Timeout`,
       `Mnemonic`,
       `Notifications`,
@@ -367,6 +363,10 @@ export default {
       start: `You have declined the friend request from `,
       end: `.`,
     },
+    rejectOutboundFriendRequest: {
+      start: `You have cancelled the friend request to `,
+      end: `.`,
+    },
     ethSent: {
       start: `You have successfully sent `,
       end: ` ETH and your transaction hash is `,
@@ -395,6 +395,7 @@ export default {
     shell: `Friend Request`,
     message: `Friend Requests`,
     request: friend => `@${friend} wants to be friends with you!`,
+    outbound: friend => `You sent a friend request to @${friend}`,
   },
 
   privacyPolicy: {

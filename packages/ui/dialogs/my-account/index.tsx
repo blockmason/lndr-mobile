@@ -1,16 +1,14 @@
 import React, { Component } from 'react'
-
 import { Text, TextInput, View, Dimensions, ScrollView, Linking, Modal, Switch,
   TouchableHighlight, Image, KeyboardAvoidingView, Platform, NativeModules, Alert } from 'react-native'
-
 import ImagePicker from 'react-native-image-picker'
-import Icon from 'react-native-vector-icons/Zocial'
+import Icon from 'react-native-vector-icons/Ionicons'
+import firebase from 'react-native-firebase'
 
 import Button from 'ui/components/button'
 import Pinpad from 'ui/components/pinpad'
 import DashboardShell from 'ui/components/dashboard-shell'
 import Loading, { LoadingContext } from 'ui/components/loading'
-import BMLogo from 'ui/components/images/bm-logo'
 import InputImage from 'ui/components/images/input-image'
 import SpinningPicker from 'ui/components/spinning-picker'
 
@@ -30,8 +28,8 @@ import { palsClient } from 'credit-protocol/pals-client'
 import style from 'theme/form'
 import general from 'theme/general'
 import { underlayColor } from 'theme/general'
-import slideStyle from 'theme/slide'
 import popupStyle from 'theme/popup'
+import pendingStyle from 'theme/pending'
 
 import language from 'language'
 const { nickname, setNickname, email, setEmail, copy, accountManagement, changePin, enterNewPin, confirmPin, pleaseWait,
@@ -84,6 +82,7 @@ interface State {
   emailTextInputErrorText?: string
   shouldPickCurrency: boolean
   payPalEmail: any // the user's PayPal id (email)
+  showNicknameInput: boolean
 }
 
 class MyAccount extends Component<Props, State> {
@@ -102,8 +101,11 @@ class MyAccount extends Component<Props, State> {
       currency: props.primaryCurrency,
       scrollY: 0,
       shouldPickCurrency: false,
-      payPalEmail: null
+      payPalEmail: null,
+      showNicknameInput: false
     }
+
+    this.submitNickname = this.submitNickname.bind(this)
   }
 
   async componentWillMount() {
@@ -118,6 +120,10 @@ class MyAccount extends Component<Props, State> {
       const payPalEmail = await palsClient.getPayPalAccount(this.props.user)
       this.setState({payPalEmail: payPalEmail})
     }
+  }
+
+  componentDidMount( ) {
+    firebase.analytics().setCurrentScreen('my-account', 'MyAccount');
   }
 
   componentWillUnmount() {
@@ -187,7 +193,7 @@ class MyAccount extends Component<Props, State> {
 
   togglePanel(index: number) {
     const { hiddenPanels, scrollY } = this.state
-    const panelHeights = [150, 140, 140, 60, 60, 60, 60, 60, 190, 190, 190, 180, 60, 120]
+    const panelHeights = [150, 140, 140, 60, 60, 60, 60, 60, 190, 180, 60, 120]
     const y = panelHeights[index]
 
     hiddenPanels[index] = !hiddenPanels[index]
@@ -317,15 +323,14 @@ class MyAccount extends Component<Props, State> {
       </View>)
   }
 
-  renderPanels() {
-    const { user, updateNickname, updateEmail, copyToClipboard } = this.props
-    const { notificationsEnabled, ethBalance, bcptBalance, userPic } = this.props.state
-    const { lockTimeout, hiddenPanels, photos, nickTextInputErrorText, emailTextInputErrorText, authenticated, currency } = this.state
-    const imageSource = userPic ? { uri: userPic } : require('images/person-outline-dark.png')
+  async submitNickname() {
+    await loadingContext.wrap(this.props.updateNickname(this.state))
+  }
 
-    const submitNickname = async () => {
-      await loadingContext.wrap(updateNickname(this.state))
-    }
+  renderPanels() {
+    const { user, updateEmail, copyToClipboard } = this.props
+    const { notificationsEnabled, ethBalance, bcptBalance } = this.props.state
+    const { lockTimeout, hiddenPanels, emailTextInputErrorText, authenticated, currency } = this.state
 
     const submitEmail = async () => {
       await loadingContext.wrap(updateEmail(this.state))
@@ -363,24 +368,6 @@ class MyAccount extends Component<Props, State> {
         <Button round onPress={() => this.setState({ step: 4 })} text={enterCurrentPin} />}
       </View>),
       (<View style={style.spaceHorizontalL}>
-        <Text style={[style.text, style.spaceTopL, style.center]}>{setNickname}</Text>
-        <View style={style.textInputContainer}>
-          <InputImage name='person'/>
-          <TextInput
-            autoCapitalize='none'
-            style={style.textInput}
-            placeholder={nickname}
-            value={this.state.nickname}
-            underlineColorAndroid='transparent'
-            maxLength={20}
-            onChangeText={nickname => this.setState({ nickname: formatNick(nickname) })}
-            onBlur={(): any => this.onNickTextInputBlur(this.state.nickname)}
-          />
-        </View>
-        { !!nickTextInputErrorText && <Text style={style.warningText}>{nickTextInputErrorText}</Text>}
-        <Button round onPress={submitNickname} text={updateAccountText} />
-      </View>),
-      (<View style={style.spaceHorizontalL}>
         <Text style={[style.text, style.spaceTopL, style.center]}>{setEmail}</Text>
         <View style={style.textInputContainer}>
           <InputImage name='email'/>
@@ -397,14 +384,6 @@ class MyAccount extends Component<Props, State> {
         </View>
         { !!emailTextInputErrorText && <Text style={style.warningText}>{emailTextInputErrorText}</Text>}
         <Button round onPress={submitEmail} text={updateAccountText} />
-      </View>),
-      (<View style={style.spaceHorizontalL}>
-        <TouchableHighlight {...underlayColor} onPress={() => this.getPhoto()}>
-          <View style={general.centeredColumn}>
-            <Text style={[style.text, style.spaceTopL, style.center]}>{userPic ? accountManagement.changeProfilePic : accountManagement.addProfilePic}</Text>
-            {!photos.length ? <Image source={imageSource} style={[style.image, style.spaceBottomL]}/> : null}
-          </View>
-        </TouchableHighlight>
       </View>),
       (<View style={style.spaceHorizontalL}>
         <Text style={[style.text, style.spaceTopL, style.center]}>{accountManagement.lockTimeout.top}</Text>
@@ -453,7 +432,9 @@ class MyAccount extends Component<Props, State> {
   }
 
   render() {
-    const { password, confirmPassword, step, shouldPickCurrency, currency } = this.state
+    const { password, confirmPassword, step, nickTextInputErrorText, shouldPickCurrency, currency, showNicknameInput, photos } = this.state
+    const { user, userPic } = this.props.state
+    const imageSource = userPic ? { uri: userPic } : require('images/person-outline-dark.png')
 
     if (step === 5) {
       return <View style={[general.fullHeight, general.view]}>
@@ -486,12 +467,40 @@ class MyAccount extends Component<Props, State> {
           <ScrollView ref='scrollContent' style={general.view} onScroll={event => this.handleScroll(event)} scrollEventThrottle={50} keyboardShouldPersistTaps='handled'>
             <View style={[style.account, {minHeight: height}]}>
               <Loading context={loadingContext} />
-              <BMLogo type='square' size='medium'/>
-              <Text style={slideStyle.inc}>INC.</Text>
-              <Button round danger onPress={() => this.logout()} text={logoutAction} containerStyle={style.spaceVertical} />
+              <TouchableHighlight {...underlayColor} onPress={() => this.getPhoto()}>
+                <View style={general.centeredColumn}>
+                  <Icon style={style.cameraImage} name="md-camera" />
+                  {!photos.length ? <Image source={imageSource} style={style.accountImage}/> : null}
+                </View>
+              </TouchableHighlight>
+              <TouchableHighlight {...underlayColor} onPress={() => this.setState({ showNicknameInput: !showNicknameInput })}>
+                <View style={general.flexRow}>
+                  <Text style={pendingStyle.title}>{`@${user.nickname}`}</Text>
+                  <Image source={require('images/button-arrow.png')} style={[showNicknameInput ? style.panelIconDown : style.panelIconRight, {marginTop: 34, marginLeft: 15, marginRight: 0}]} />
+                </View>
+              </TouchableHighlight>
+              {showNicknameInput ? <View style={style.spaceHorizontalM}>
+                {nickname ? <Text style={[style.text, style.spaceTopM, style.center]}>{setNickname}</Text> : null}
+                <View style={style.textInputContainer}>
+                  <InputImage name='person'/>
+                  <TextInput
+                    autoCapitalize='none'
+                    style={style.textInput}
+                    placeholder={nickname}
+                    value={this.state.nickname}
+                    underlineColorAndroid='transparent'
+                    maxLength={20}
+                    onChangeText={nickname => this.setState({ nickname: formatNick(nickname) })}
+                    onBlur={(): any => this.onNickTextInputBlur(this.state.nickname)}
+                  />
+                </View>
+                { !!nickTextInputErrorText && <Text style={style.warningText}>{nickTextInputErrorText}</Text>}
+                <Button round onPress={this.submitNickname} text={updateAccountText} />
+              </View> : null }
               <View style={general.centeredColumn}>
                 {this.renderPanels()}
               </View>
+              <Button round danger onPress={() => this.logout()} text={logoutAction} containerStyle={style.spaceVertical} />
             </View>
           </ScrollView>
         </KeyboardAvoidingView>

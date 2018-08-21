@@ -154,8 +154,6 @@ export default {
       balance: Y => `Obecne saldo BCPT wynosi ${typeof Y === 'string' ? Y.slice (0,8): ''} `,
       bcptAddress: `Adres BCPT`,
     },
-    changeProfilePic: `Wybierz, aby zmienić`,
-    addProfilePic: `Wczytaj Zdjęcie z Telefonu`,
     panelHeaders: [
       `Adres ETH (& BCPT)`,
       `Bilans ETH`,
@@ -165,9 +163,7 @@ export default {
       `Włącz PayPal`,
       `Zmień walutę podstawowy`,
       `Zmień PIN`,
-      `Zmień Nazwę Użytkownika`,
       `Zmień adres e-mail`,
-      `Zmień zdjęcie profilowe`,
       `Zmiana czasu, po którym nastąpi blokada`,
       `Mnemonik`,
       `Powiadomienia`,
@@ -370,6 +366,10 @@ export default {
       start: `Odrzuciłeś/odrzuciłaś zaproszenie od `,
       end: `.`,
     },
+    rejectOutboundFriendRequest: {
+      start: `Masz odwołał zaproszenie do `,
+      end: `.`,
+    },
     ethSent: {
       start: `Udało się wysłać `,
       end: ` ETH, hash dla tej transakcji to `,
@@ -398,6 +398,7 @@ export default {
     shell: `Prośba o Przyjęcie do grona Znajomych`,
     message: `Prośby o Przyjęcie do grona Znajomych`,
     request: F => `@${F} chce być Twoim znajomym!`,
+    outbound: F => `Ty wysłał zaproszenie do @${F}`,
   },
 
   privacyPolicy: {

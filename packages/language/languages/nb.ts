@@ -154,8 +154,6 @@ export default {
       balance: Y => `Din nåværende BCPT saldo er ${typeof Y === 'string' ? Y.slice(0,8) :''} `,
       bcptAddress: `BCPT Adresse`,
     },
-    changeProfilePic: `Trykk for å endre`,
-    addProfilePic: `Bruk bilde fra telefon`,
     panelHeaders: [
       `ETH (og BCPT) Adresse`,
       `ETH Balance`,
@@ -165,9 +163,7 @@ export default {
       `Aktiver PayPal`,
       `Endre Primær Valuta`,
       `Endre PIN-kode`,
-      `Endre kallenavn`,
       `Endre e-post`,
-      `Bytt profilbilde`,
       `Endre Lock Timeout`,
       `Mnemonic`,
       `Varsler`,
@@ -370,6 +366,10 @@ export default {
       start: `Du har avvist venneforespørselen fra `,
       end: `.`,
     },
+    rejectOutboundFriendRequest: {
+      start: `Du har avbrutt venneforespørsel til `,
+      end: `.`,
+    },
     ethSent: {
       start: `Du har sendt `,
       end: ` ETH og transaksjonens referanse er `,
@@ -398,6 +398,7 @@ export default {
     shell: `Venneforespørsel`,
     message: `Venneforespørsler`,
     request: F => `@${F} ønsker å være venner med deg!`,
+    outbound: F => `Du sendt en forespørsel om å venn @${F}`,
   },
 
   privacyPolicy: {

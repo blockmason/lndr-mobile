@@ -157,8 +157,6 @@ export default {
       balance: Y => `Ihr aktueller BCPT-Kontostand ist ${typeof Y === 'string'? Y.slice (0,8): ''} `,
       bcptAddress: `BCPT-Adresse`,
     },
-    changeProfilePic: `Klicken Sie hier, um Änderungen vorzunehmen`,
-    addProfilePic: `Verwenden Sie ein Foto von Ihrem Telefon`,
     panelHeaders: [
       `ETH (& BCPT) Adresse`,
       `ETH-Kontostand`,
@@ -168,9 +166,7 @@ export default {
       `Aktivieren Sie PayPal`,
       `Hauptwährung ändern`,
       `PIN ändern`,
-      `Nickname ändern`,
       `E-Mail-Adresse ändern`,
-      `Profilbild ändern`,
       `Lock Timeout ändern`,
       `Mnemonic`,
       `Benachrichtigungen`,
@@ -373,6 +369,10 @@ export default {
       start: `Sie haben die Freundschaftsanfrage von `,
       end: ` abgelehnt.`,
     },
+    rejectOutboundFriendRequest: {
+      start: `Sie haben die Freundschaftsanfrag abgesagt `,
+      end: `.`,
+    },
     ethSent: {
       start: `Sie haben erfolgreich `,
       end: ` ETH gesendet und Ihre Transaktion-Hash ist `,
@@ -401,6 +401,7 @@ export default {
     shell: `Freundschaftsanfrage`,
     message: `Freundschaftsanfragen`,
     request: F => `@${F} möchte mit Ihnen befreundet sein!`,
+    outbound: F => `Sie schickte einen Freund Anfrage an @${F}`,
   },
 
   privacyPolicy: {

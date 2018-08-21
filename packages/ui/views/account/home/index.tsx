@@ -2,6 +2,7 @@ import React, { Component } from 'react'
 import { connect } from 'react-redux'
 
 import { Text, View, ScrollView, Platform, Dimensions, Image, TouchableHighlight, RefreshControl } from 'react-native'
+import firebase from 'react-native-firebase'
 
 import { currencyFormats, formatEthToFiat, formatCommaDecimal } from 'lndr/format'
 import Balance from 'lndr/balance'
@@ -86,6 +87,7 @@ class HomeView extends Component<Props, State> {
   }
 
   async componentDidMount() {
+    firebase.analytics().setCurrentScreen('home', 'HomeView');
     this.initializePushNotifications()
     try {
       const accountInformation = await this.props.getAccountInformation()
@@ -137,7 +139,7 @@ class HomeView extends Component<Props, State> {
       try{
         const actions = JSON.parse(incoming.notification.extras['com.urbanairship.actions'])
         const { type, user } = actions
-        
+
         if(type === 'NewPendingCredit') {
           const { route, pendingTransaction, pendingSettlement } = this.props.getPendingFromFriend(user)
           if(pendingTransaction !== undefined || pendingSettlement !== undefined) {
@@ -256,5 +258,5 @@ class HomeView extends Component<Props, State> {
 export default connect((state) => ({ state: getStore(state)(), user: getUser(state)(), isFocused: isFocusingOn(state)('Home'),
   needsReviewCount: getNeedsReviewCount(state), calculateBalance: calculateBalance(state), calculateCounterparties: calculateCounterparties(state),
   primaryCurrency: getPrimaryCurrency(state), friendList: getFriendList(state)(), getPendingFromFriend: getPendingFromFriend(state),
-  ethExchange: getEthExchange(state), getFriendFromNick: getFriendFromNick(state) }), 
+  ethExchange: getEthExchange(state), getFriendFromNick: getFriendFromNick(state) }),
   { getAccountInformation, displayError, getPending, getPayPalRequests, getRecentTransactions, getFriends, registerChannelID, getFriendRequests })(HomeView)

@@ -1,6 +1,7 @@
 import React, { Component } from 'react'
 
 import { Text, View, ScrollView, RefreshControl, Dimensions, Platform, Share } from 'react-native'
+import firebase from 'react-native-firebase'
 
 import Friend from 'lndr/friend'
 import { currencySymbols, transferLimits } from 'lndr/currencies'
@@ -61,6 +62,7 @@ class FriendsView extends Component<Props, State> {
   }
 
   async componentDidMount() {
+    firebase.analytics().setCurrentScreen('friends', 'FriendsView');
     this.stillRelevant = true
     await loadingFriends.wrap(this.props.getFriends())
     await loadingFriendRequests.wrap(this.props.getFriendRequests())
@@ -125,9 +127,9 @@ class FriendsView extends Component<Props, State> {
 
     let friendListTitle: JSX.Element[] = []
     if (pendingFriends && pendingFriends.length > 0)
-      friendListTitle.push(<Text style={style.transactionHeader}>{currentFriends}</Text>)
+      friendListTitle.push(<Text key='pendingFriendsTitle' style={style.transactionHeader}>{currentFriends}</Text>)
     if (friendsLoaded && friends.length === 0)
-      friendListTitle.push(<Text style={style.emptyState}>{noFriends}</Text>)
+      friendListTitle.push(<Text key='noFriendsTitle' style={style.emptyState}>{noFriends}</Text>)
 
     return <ScrollView style={general.view} keyboardShouldPersistTaps='handled' ref='_friendScrollView'
       refreshControl={

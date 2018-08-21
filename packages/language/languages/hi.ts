@@ -154,8 +154,6 @@ export default {
       balance: Y => `आपका वर्तमान BCPT बैलेन्स ${typeof Y === 'string' ? Y.slice(0,8) :''} हैं`,
       bcptAddress: `BCPT पता`,
     },
-    changeProfilePic: `बदलने के लिए टैप करें`,
-    addProfilePic: `फोन से फोटो लें`,
     panelHeaders: [
       `ETH (और BCPT) पता`,
       `ETH बैलेंस`,
@@ -165,9 +163,7 @@ export default {
       `पेपैल सक्षम करें`,
       `प्राथमिक मुद्रा परिवर्तित करें`,
       `पिन बदलिए`,
-      `छोटा नाम बदलें`,
       `ई - मेल बदलें`,
-      `प्रोफ़ाइल फोटो बदलें`,
       `लॉक टाइमआउट बदलें`,
       `स्मरक`,
       `नोटिफिकेशन्स`,
@@ -370,6 +366,10 @@ export default {
       start: `आपने `,
       end: ` की फ्रेंड रिक्वेस्ट अस्वीकार दी है।`,
     },
+    rejectOutboundFriendRequest: {
+      start: `आप `,
+      end: ` को मित्र अनुरोध रद्द कर दिया है.`,
+    },
     ethSent: {
       start: `आपने `,
       end: ` ETH भेज दिये हैं और आपका ट्रैंज़ैक्शन हैश `,
@@ -398,6 +398,7 @@ export default {
     shell: `फ्रेंड रिक्वेस्ट`,
     message: `फ्रेंड रिक्वेस्ट्स`,
     request: F => `@${F} आपका फ्रेंड बनना चाहता/चाहती है!`,
+    outbound: F => `आप @${F} को मित्र अनुरोध भेजा`,
   },
 
   privacyPolicy: {

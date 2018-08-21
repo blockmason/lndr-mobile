@@ -154,8 +154,6 @@ export default {
       balance: Y => `Το τρέχον υπόλοιπο BCPT σας είναι ${typeof Y === 'string' ? Y.slice (0,8): ''} `,
       bcptAddress: `Διεύθυνση BCPT`,
     },
-    changeProfilePic: `Πατήστε για Αλλαγή`,
-    addProfilePic: `Χρησιμοποιήστε Εικόνα από το Τηλέφωνο`,
     panelHeaders: [
       `Διεύθυνση ETH (& BCPT)`,
       `Yπόλοιπο ETH`,
@@ -165,9 +163,7 @@ export default {
       `Ενεργοποίηση PayPal`,
       `Αλλαγή Πρωτοβάθμια νομίσματος`,
       `Αλλαγή PIN`,
-      `Αλλαγή Ψευδώνυμου`,
       `Αλλαγή Email`,
-      `Αλλαγή Φωτογραφίας Προφίλ`,
       `Αλλαγή Λήξης Κλειδώματος`,
       `Μνημονικό`,
       `Ειδοποιήσεις`,
@@ -370,6 +366,10 @@ export default {
       start: `Έχετε απορρίψει το αίτημα φιλίας του `,
       end: `.`,
     },
+    rejectOutboundFriendRequest: {
+      start: `Έχετε ακυρώσει το αίτημα φιλίας σε `,
+      end: `.`,
+    },
     ethSent: {
       start: `Έχετε στείλει με επιτυχία `,
       end: ` ETH και το hash της συναλλαγής σας είναι `,
@@ -398,6 +398,7 @@ export default {
     shell: `Αίτημα Φιλίας`,
     message: `Αιτήματα φιλίας`,
     request: F => `Ο/Η @${F} θέλει να γίνετε φίλοι!`,
+    outbound: F => `Έχετε στείλει ένα αίτημα φιλίας σε @${F}`
   },
 
   privacyPolicy: {

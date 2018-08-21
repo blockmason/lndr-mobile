@@ -154,8 +154,6 @@ export default {
       balance: Y => `Ваш текущий баланс BCPT ${typeof Y === 'string' ? Y.slice (0,8): ''} `,
       bcptAddress: `BCPT Адрес`,
     },
-    changeProfilePic: `Нажмите для изменения`,
-    addProfilePic: `Используйте картинку из телефона`,
     panelHeaders: [
       `ETH (и BCPT) Адрес`,
       `ETH Баланс`,
@@ -165,9 +163,7 @@ export default {
       `Включить PayPal`,
       `Изменение первичной валюты`,
       `Измененить ПИН-код`,
-      `Изменить Прозвище`,
       `Изменить имейл`,
-      `Изменить изображение профиля`,
       `Измененить блокировки Тайм-аут`,
       `Мнемоник`,
       `Уведомления`,
@@ -370,6 +366,10 @@ export default {
       start: `Вы отклонили запрос друга от `,
       end: `а.`,
     },
+    rejectOutboundFriendRequest: {
+      start: `Вы отменили запрос друга в `,
+      end: `.`,
+    },
     ethSent: {
       start: `Вы успешно отправили `,
       end: ` ETH, а хеш транзакции `,
@@ -398,6 +398,7 @@ export default {
     shell: `Запрос в друзья`,
     message: `Запросы в друзья`,
     request: F => `@${F} хочет с вами дружить!`,
+    outbound: F => `Вы послали запрос друга на @${F} `,
   },
 
   privacyPolicy: {

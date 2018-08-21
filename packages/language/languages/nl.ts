@@ -154,8 +154,6 @@ export default {
       balance: Y => `Uw huidige BCPT saldo is ${typeof Y === 'string'? Y.slice (0,8) : ''} `,
       bcptAddress: `BCPT Adres`,
     },
-    changeProfilePic: `Tik om te wijzigen`,
-    addProfilePic: `Gebruik foto van telefoon`,
     panelHeaders: [
       `ETH (& BCPT) Adres`,
       `ETH saldo`,
@@ -165,9 +163,7 @@ export default {
       `Inschakelen PayPal`,
       `Wijzig primaire valuta`,
       `Wijzig pincode`,
-      `Wijzig gebruikersnaam`,
       `Wijzig e-mailadres`,
-      `Wijzig profielfoto`,
       `Wijzig Lock Timeout`,
       `Geheugensteun  `,
       `Notificaties`,
@@ -370,6 +366,10 @@ export default {
       start: `U heeft de vriendschapsaanvraag van `,
       end: ` geweigerd.`,
     },
+    rejectOutboundFriendRequest: {
+      start: `U heeft de aanvraag voor een vriend te `,
+      end: ` geannuleerd.`,
+    },
     ethSent: {
       start: `U heeft succesvol `,
       end: ` ETH verzonden en uw transactiekenmerk is `,
@@ -398,6 +398,7 @@ export default {
     shell: `Vriendschapsverzoek`,
     message: `Vriendschapsverzoeken`,
     request: F => `@${F} wil vrienden met u worden! `,
+    outbound: F => `Je stuurde een vriend verzoek aan @${F} `,
   },
 
   privacyPolicy: {
