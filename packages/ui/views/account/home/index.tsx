@@ -6,15 +6,16 @@ import firebase from 'react-native-firebase'
 
 import { currencyFormats, formatEthToFiat, formatCommaDecimal } from 'lndr/format'
 import Balance from 'lndr/balance'
-
-import Button from 'ui/components/button'
-import Loading, { LoadingContext } from 'ui/components/loading'
-import Section from 'ui/components/section'
-import PendingView from 'ui/views/account/activity/pending'
-
 import { UserData } from 'lndr/user'
 import PendingTransaction from 'lndr/pending-transaction'
 import Friend from 'lndr/friend'
+import { currencySymbols } from 'lndr/currencies'
+
+import Button from 'ui/components/button'
+import { LoadingContext } from 'ui/components/loading'
+import Section from 'ui/components/section'
+import PendingView from 'ui/views/account/activity/pending'
+import AddDebtButtons from 'ui/components/add-debt-buttons'
 
 import { isFocusingOn } from 'reducers/nav'
 import { getStore, getUser, getNeedsReviewCount, calculateBalance, calculateCounterparties,
@@ -22,7 +23,6 @@ import { getStore, getUser, getNeedsReviewCount, calculateBalance, calculateCoun
 import { getAccountInformation, displayError, getPending, getFriends, getFriendRequests,
   getRecentTransactions, registerChannelID, getPayPalRequests } from 'actions'
 import { UrbanAirship } from 'urbanairship-react-native'
-import { currencySymbols } from 'lndr/currencies'
 
 import style from 'theme/account'
 import formStyle from 'theme/form'
@@ -37,8 +37,7 @@ const {
   newTransaction,
   needsReview,
   recentTransactionsLanguage,
-  seeAllActivity,
-  debtManagement
+  seeAllActivity
 } = language
 
 const { width } = Dimensions.get('window')
@@ -243,10 +242,7 @@ class HomeView extends Component<Props, State> {
       </Section>
       <Section>
         <Text style={[formStyle.titleXLarge, formStyle.center, formStyle.spaceBottomS]}>{newTransaction}</Text>
-        <View style={style.newTransactionButtonContainer}>
-          <Button fat round onPress={() => this.addDebt('lend')} text={debtManagement.iLent} style={{minWidth: width / 4 * 3}} />
-          <Button fat round dark onPress={() => this.addDebt('borrow')} text={debtManagement.iBorrowed} style={{minWidth: width / 4 * 3}} />
-        </View>
+        <AddDebtButtons fat={true} lend={() => this.addDebt('lend')} borrow={() => this.addDebt('borrow')} />
       </Section>
       {this.renderNeedsReview()}
       <TouchableHighlight {...underlayColor} onPress={() => this.props.navigation.navigate('Activity')}>

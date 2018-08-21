@@ -207,6 +207,8 @@ export default {
     selectFriend: `选择好友`,
     lend: `借给朋友`,
     borrow: `从朋友借`,
+    owesMe: `欠我`,
+    iOwe: `我欠`,
     iLent: `好友欠了我`,
     iBorrowed: `我欠了好友`,
     settleUpLower: `偿清债务`,

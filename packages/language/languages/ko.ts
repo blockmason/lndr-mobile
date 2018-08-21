@@ -205,6 +205,8 @@ export default {
     selectFriend: `선택`,
     lend: `새로운 대출`,
     borrow: `새로운 부채`,
+    owesMe: `저를 빚`,
+    iOwe: `난 빚`,
     iLent: `친구가 내게 빚지고 있습니다`,
     iBorrowed: `친구에게 빚을 지고 있습니다`,
     settleUpLower: `  청산  `,

@@ -9,7 +9,6 @@ import PendingBilateral from 'lndr/pending-bilateral'
 import UserData from 'lndr/user'
 import profilePic from 'lndr/profile-pic'
 import { currencySymbols } from 'lndr/currencies'
-import Friend from 'lndr/friend'
 
 import { white } from 'theme/include/colors'
 import style from 'theme/account'

@@ -188,7 +188,7 @@ class PayPalSettlementButton extends Component<Props, State> {
         button = (<Button zicon="paypal" round wide onPress={() => this.requestPayPalPayee()} text={payPalLanguage.requestPayPalPayee} />)
     }
     return (
-      <View>
+      <View style={general.centeredColumn}>
         <Loading context={loadingContext} />
         {button}
         {message}

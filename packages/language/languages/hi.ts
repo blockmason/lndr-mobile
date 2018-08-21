@@ -207,6 +207,8 @@ export default {
     selectFriend: `चुनें`,
     lend: `नया लोन`,
     borrow: `नया कर्ज`,
+    owesMe: `मुझे उससे लेना है`,
+    iOwe: `मैं कर्जदार`,
     iLent: `मुझे एक फ्रेंड से लेना है`,
     iBorrowed: `मुझे एक फ्रेंड को देना है`,
     settleUpLower: `निपटान करें`,

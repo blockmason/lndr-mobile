@@ -207,6 +207,8 @@ export default {
     selectFriend: `לבחור`,
     lend: `הלוואה חדשה`,
     borrow: `חוב חדש`,
+    owesMe: `חייב לי`,
+    iOwe: `אני חייב`,
     iLent: `חבר חייב לי`,
     iBorrowed: `אני חייד לחבר`,
     settleUpLower: `להחזיר חוב`,

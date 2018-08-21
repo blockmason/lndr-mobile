@@ -1,13 +1,11 @@
 import React, { Component } from 'react'
-
 import { View, ScrollView, Text, TextInput, TouchableHighlight, Platform, Modal, Keyboard, KeyboardAvoidingView } from 'react-native'
-import firebase from 'react-native-firebase'
 
-import { getResetAction } from 'reducers/nav'
+import firebase from 'react-native-firebase'
 
 import Friend from 'lndr/friend'
 import { formatMemo, amountFormat } from 'lndr/format'
-import { currencySymbols, isCommaDecimal } from 'lndr/currencies'
+import { currencySymbols } from 'lndr/currencies'
 
 import Button from 'ui/components/button'
 import Loading, { LoadingContext } from 'ui/components/loading'
@@ -25,6 +23,7 @@ import popupStyle from 'theme/popup'
 import language from 'language'
 const { debtManagement, noFriends, submit, nickname } = language
 
+import { getResetAction } from 'reducers/nav'
 import { getStore, pendingTransactions, recentTransactions, getAllUcacCurrencies, hasPendingTransaction, getPrimaryCurrency } from 'reducers/app'
 import { addDebt, getFriends, hasPendingMessage } from 'actions'
 import { connect } from 'react-redux'
@@ -77,10 +76,15 @@ class AddDebt extends Component<Props, State> {
     this.blurCurrencyFormat = this.blurCurrencyFormat.bind(this)
   }
 
+  componentWillMount() {
+    const friend = this.props.navigation ? this.props.navigation.state.params.friend : {}
+    this.setState({ friend })
+  }
+
   async componentDidMount() {
     firebase.analytics().setCurrentScreen('add-debt', 'AddDebt');
     this.stillRelevant = true
-    const friends = await loadingFriends.wrap(this.props.getFriends())
+    await loadingFriends.wrap(this.props.getFriends())
     this.stillRelevant
   }
 

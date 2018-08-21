@@ -207,6 +207,8 @@ export default {
     selectFriend: `Kies`,
     lend: `Nieuwe lening`,
     borrow: `Nieuwe schuld`,
+    owesMe: `Is me`,
+    iOwe: `Ik ben verschuldigd`,
     iLent: `Een vriend is me verschuldigd`,
     iBorrowed: `Ik ben verschuldigd aan een vriend`,
     settleUpLower: `Betalen`,

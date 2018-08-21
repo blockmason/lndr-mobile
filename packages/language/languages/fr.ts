@@ -207,6 +207,8 @@ export default {
     selectFriend: `Sélectionner`,
     lend: `Nouveau prêt`,
     borrow: `Nouvelle dette`,
+    owesMe: `Il me doit`,
+    iOwe: `Je dois`,
     iLent: `Un ami me doit de l'argent`,
     iBorrowed: `Je dois de l'argent à un ami`,
     settleUpLower: `Régler`,

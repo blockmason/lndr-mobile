@@ -207,6 +207,8 @@ export default {
     selectFriend: `Chọn`,
     lend: `Khoản vay mới`,
     borrow: `Khoản nợ mới`,
+    owesMe: `Nợ tôi`,
+    iOwe: `Tôi nợ`,
     iLent: `Một người bạn nợ tôi`,
     iBorrowed: `Tôi nợ một người bạn`,
     settleUpLower: `Trả tiền`,
