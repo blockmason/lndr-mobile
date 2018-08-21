@@ -589,7 +589,6 @@ export const rejectPendingSettlement = (pendingSettlement: PendingUnilateral) =>
 
 export const setInitialHomeLoad = () => {
   return async (dispatch, _getState) => {
-    console.log('HERE, SHOULD ONLY FIRE ONCE')
     dispatch(setState({ initialHomeLoad: false }))
   }
 }
