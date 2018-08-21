@@ -1,6 +1,7 @@
 import React, { Component } from 'react'
 
 import { View, Text, ScrollView } from 'react-native'
+import firebase from 'react-native-firebase'
 
 import style from 'theme/slide'
 
@@ -13,6 +14,10 @@ import language from 'language'
 const { welcomeView } = language
 
 export default class WelcomeStepOneView extends Component {
+  componentDidMount( ) {
+    firebase.analytics().setCurrentScreen('welcome-step-one', 'WelcomeStepOneView');
+  }
+
   render() {
     return (
       <ScrollView>

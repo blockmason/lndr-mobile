@@ -1,6 +1,7 @@
 import React, { Component } from 'react'
 
 import { View, Text, ScrollView } from 'react-native'
+import firebase from 'react-native-firebase'
 import { connect } from 'react-redux'
 
 import { getResetAction } from 'reducers/nav'
@@ -40,6 +41,10 @@ class RemoveAccountView extends Component<Props> {
 
     this.removeAccount = this.removeAccount.bind(this)
     this.goBack = this.goBack.bind(this)
+  }
+
+  componentDidMount( ) {
+    firebase.analytics().setCurrentScreen('remove-account', 'RemoveAccountView');
   }
 
   async removeAccount() {

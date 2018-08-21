@@ -1,6 +1,7 @@
 import React, { Component } from 'react'
 
 import { Text, TextInput, TouchableHighlight, View, Image, ScrollView } from 'react-native'
+import firebase from 'react-native-firebase'
 
 import Friend from 'lndr/friend'
 import profilePic from 'lndr/profile-pic'
@@ -55,6 +56,10 @@ class FriendRequest extends Component<Props, State> {
     if (pic) {
       this.setState({ pic })
     }
+  }
+
+  componentDidMount( ) {
+    firebase.analytics().setCurrentScreen('friend-request', 'FriendRequest');
   }
 
   async submit(type: string, friend: Friend) {

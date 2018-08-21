@@ -1,6 +1,7 @@
 import React, { Component } from 'react'
 
 import { Text, View, Image, ScrollView, BackHandler, Alert } from 'react-native'
+import firebase from 'react-native-firebase'
 
 import Balance from 'lndr/balance'
 import Friend from 'lndr/friend'
@@ -33,7 +34,7 @@ const {
 } = language
 const removeFriendText = language.removeFriend
 
-import { getUser, pendingTransactions, recentTransactions, convertCurrency, calculateBalance, 
+import { getUser, pendingTransactions, recentTransactions, convertCurrency, calculateBalance,
   getPrimaryCurrency, getPendingFromFriend } from 'reducers/app'
 import { getTwoPartyBalance, removeFriend } from 'actions'
 import { connect } from 'react-redux'
@@ -82,13 +83,14 @@ class FriendDetail extends Component<Props, State> {
   }
 
   async componentDidMount() {
+    firebase.analytics().setCurrentScreen('friend-detail', 'FriendDetail');
     const { user, getTwoPartyBalance } = this.props
     const friend = this.props.navigation ? this.props.navigation.state.params.friend : {}
     const balance = await getTwoPartyBalance(user, friend)
     BackHandler.addEventListener("hardwareBackPress", this.onBackPress);
     this.setState({ balance, balanceLoaded: true })
   }
-  
+
   async removeFriend() {
     const friend = this.props.navigation ? this.props.navigation.state.params.friend : {}
     await loadingContext.wrap(this.props.removeFriend(friend))
@@ -182,6 +184,6 @@ class FriendDetail extends Component<Props, State> {
 }
 
 export default connect((state) => ({ user: getUser(state)(), pendingTransactions: pendingTransactions(state), getTwoPartyBalance: getTwoPartyBalance(state),
-  recentTransactions: recentTransactions(state), calculateBalance: calculateBalance(state), convertCurrency: convertCurrency(state), 
+  recentTransactions: recentTransactions(state), calculateBalance: calculateBalance(state), convertCurrency: convertCurrency(state),
   primaryCurrency: getPrimaryCurrency(state), getPendingFromFriend: getPendingFromFriend(state) }),
   { removeFriend })(FriendDetail)

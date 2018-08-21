@@ -1,6 +1,8 @@
 import React, { Component } from 'react'
 
 import { Text, TextInput, View, ScrollView, KeyboardAvoidingView, Platform } from 'react-native'
+import firebase from 'react-native-firebase'
+
 import { getResetAction } from 'reducers/nav'
 
 import { UserData } from 'lndr/user'
@@ -53,6 +55,10 @@ class TransferBcpt extends Component<Props, State> {
     const { primaryCurrency } = this.props
     const txCost = await getEthTxCost(primaryCurrency)
     this.setState({ txCost })
+  }
+
+  componentDidMount( ) {
+    firebase.analytics().setCurrentScreen('transfer-bcpt', 'TransferBcpt');
   }
 
   async submit() {
