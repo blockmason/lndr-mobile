@@ -1,6 +1,7 @@
 import React, { Component } from 'react'
 
 import { View, Text, ScrollView } from 'react-native'
+import firebase from 'react-native-firebase'
 
 import style from 'theme/slide'
 
@@ -18,6 +19,10 @@ interface Props {
 }
 
 export default class WelcomeStepFourView extends Component<Props> {
+  componentDidMount( ) {
+    firebase.analytics().setCurrentScreen('welcome-step-four', 'WelcomeStepFourView');
+  }
+
   render() {
     return (
       <ScrollView>

@@ -364,6 +364,10 @@ export default {
       start: `لقد رفضت طلب الصداقة من `,
       end: `.`,
     },
+    rejectOutboundFriendRequest: {
+      start: `لقد ألغت صديق طلب `,
+      end: `.`,
+    },
     ethSent: {
       start: `لقد أرسلت `,
       end: ` إثيريوم بنجاح ورقم الهاش لمعاملتك هو `,
@@ -392,6 +396,7 @@ export default {
     shell: `طلب صداقة`,
     message: `طلبات الصداقة`,
     request: F => `@${F} يريد أن يصبح صديقاً معك!`,
+    outbound: F => `أنت أرسلت طلب صداقة إلى @${F}`,
   },
 
   privacyPolicy: {

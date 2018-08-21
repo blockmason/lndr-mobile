@@ -364,6 +364,10 @@ export default {
       start: `Вы отклонили запрос друга от `,
       end: `а.`,
     },
+    rejectOutboundFriendRequest: {
+      start: `Вы отменили запрос друга в `,
+      end: `.`,
+    },
     ethSent: {
       start: `Вы успешно отправили `,
       end: ` ETH, а хеш транзакции `,
@@ -392,6 +396,7 @@ export default {
     shell: `Запрос в друзья`,
     message: `Запросы в друзья`,
     request: F => `@${F} хочет с вами дружить!`,
+    outbound: F => `Вы послали запрос друга на @${F} `,
   },
 
   privacyPolicy: {

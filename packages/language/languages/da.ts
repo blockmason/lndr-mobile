@@ -364,6 +364,10 @@ export default {
       start: `Du har afvist venneanmodningen fra `,
       end: `.`,
     },
+    rejectOutboundFriendRequest: {
+      start: `Du har annulleret venneanmodning til `,
+      end: `.`,
+    },
     ethSent: {
       start: `Du har nu sendt `,
       end: ` ETH og dit transaktion ID er `,
@@ -392,6 +396,7 @@ export default {
     shell: `Venneanmodning`,
     message: `Venneanmodninger`,
     request: F => `@${F} ønsker at være venner med dig!`,
+    outbound: F => `Du sendt en venneanmodning til @${F}`,
   },
 
   privacyPolicy: {

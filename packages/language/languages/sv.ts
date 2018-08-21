@@ -364,6 +364,10 @@ export default {
       start: `Du har avböjt vänförfrågan från `,
       end: `.`,
     },
+    rejectOutboundFriendRequest: {
+      start: `Du har avbrutit vänförfrågan till `,
+      end: `.`,
+    },
     ethSent: {
       start: `Du har framgångsrikt skickat `,
       end: ` ETH och din transaktionshash är `,
@@ -392,6 +396,7 @@ export default {
     shell: `Vänförfrågan`,
     message: `Vänförfrågningar`,
     request: F => `@${F} vill vara vän med dig!`,
+    outbound: F => `Du skickade en vänförfrågan till @${F} `,
   },
 
   privacyPolicy: {

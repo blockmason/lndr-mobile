@@ -364,6 +364,10 @@ export default {
       start: `Έχετε απορρίψει το αίτημα φιλίας του `,
       end: `.`,
     },
+    rejectOutboundFriendRequest: {
+      start: `Έχετε ακυρώσει το αίτημα φιλίας σε `,
+      end: `.`,
+    },
     ethSent: {
       start: `Έχετε στείλει με επιτυχία `,
       end: ` ETH και το hash της συναλλαγής σας είναι `,
@@ -392,6 +396,7 @@ export default {
     shell: `Αίτημα Φιλίας`,
     message: `Αιτήματα φιλίας`,
     request: F => `Ο/Η @${F} θέλει να γίνετε φίλοι!`,
+    outbound: F => `Έχετε στείλει ένα αίτημα φιλίας σε @${F}`
   },
 
   privacyPolicy: {

@@ -364,6 +364,10 @@ export default {
       start: `Odrzuciłeś/odrzuciłaś zaproszenie od `,
       end: `.`,
     },
+    rejectOutboundFriendRequest: {
+      start: `Masz odwołał zaproszenie do `,
+      end: `.`,
+    },
     ethSent: {
       start: `Udało się wysłać `,
       end: ` ETH, hash dla tej transakcji to `,
@@ -392,6 +396,7 @@ export default {
     shell: `Prośba o Przyjęcie do grona Znajomych`,
     message: `Prośby o Przyjęcie do grona Znajomych`,
     request: F => `@${F} chce być Twoim znajomym!`,
+    outbound: F => `Ty wysłał zaproszenie do @${F}`,
   },
 
   privacyPolicy: {

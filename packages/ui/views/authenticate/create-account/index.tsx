@@ -1,6 +1,7 @@
 import React, { Component } from 'react'
 
 import { View } from 'react-native'
+import firebase from 'react-native-firebase'
 
 import { connect } from 'react-redux'
 
@@ -37,6 +38,10 @@ class CreateAccountView extends Component<Props, AccountViewState> {
       emailDuplicationViolation: false,
       emailFormatViolation: false
     }
+  }
+
+  componentDidMount( ) {
+    firebase.analytics().setCurrentScreen('create-account', 'CreateAccountView');
   }
 
   async handleOnNickTextInputBlur(nickname: string) {

@@ -364,6 +364,10 @@ export default {
       start: `您拒绝好友的要求`,
       end: `。`,
     },
+    rejectOutboundFriendRequest: {
+      start: `您已取消好友请求为 `,
+      end: `.`,
+    },
     ethSent: {
       start: `您发送`,
       end: `ETH和您的交易记录号是：`,
@@ -391,7 +395,8 @@ export default {
   pendingFriendRequestsLanguage: {
     shell: `请求好友`,
     message: `请求好友`,
-    request: F => `@${F}愿意跟你做好友！`
+    request: F => `@${F}愿意跟你做好友！`,
+    outbound: F =>`你发送好友请求，以@${F}`,
   },
 
   privacyPolicy: {

@@ -364,6 +364,10 @@ export default {
       start: `คุณได้ปฏิเสธคำขอเป็นเพื่อนจาก`,
       end: `.`,
     },
+    rejectOutboundFriendRequest: {
+      start: `คุณได้ยกเลิกคำขอเป็นเพื่อนเพื่อ `,
+      end: `.`,
+    },
     ethSent: {
       start: `คุณได้ส่ง `,
       end: ` ETH เรียบร้อยแล้ว และแฮชธุรกรรมของคุณคือ `,
@@ -392,6 +396,7 @@ export default {
     shell: `คำขอเป็นเพื่อน`,
     message: `คำขอเป็นเพื่อน`,
     request: F => `@${F} อยากเป็นเพื่อนกับคุณ!`,
+    outbound: F => `คุณส่งคำขอเป็นเพื่อนเพื่อ @${F}`,
   },
 
   privacyPolicy: {

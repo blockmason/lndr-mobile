@@ -1,6 +1,7 @@
 import React, { Component } from 'react'
 
 import { View, Text, Clipboard } from 'react-native'
+import firebase from 'react-native-firebase'
 
 import Button from 'ui/components/button'
 
@@ -20,6 +21,10 @@ interface Props {
 }
 
 class ConfirmAccountView extends Component<Props, {}> {
+  componentDidMount( ) {
+    firebase.analytics().setCurrentScreen('confirm-account', 'ConfirmAccountView');
+  }
+
   render() {
     return (
       <View style={style.form}>

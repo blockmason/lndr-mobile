@@ -364,6 +364,10 @@ export default {
       start: `आपने `,
       end: ` की फ्रेंड रिक्वेस्ट अस्वीकार दी है।`,
     },
+    rejectOutboundFriendRequest: {
+      start: `आप `,
+      end: ` को मित्र अनुरोध रद्द कर दिया है.`,
+    },
     ethSent: {
       start: `आपने `,
       end: ` ETH भेज दिये हैं और आपका ट्रैंज़ैक्शन हैश `,
@@ -392,6 +396,7 @@ export default {
     shell: `फ्रेंड रिक्वेस्ट`,
     message: `फ्रेंड रिक्वेस्ट्स`,
     request: F => `@${F} आपका फ्रेंड बनना चाहता/चाहती है!`,
+    outbound: F => `आप @${F} को मित्र अनुरोध भेजा`,
   },
 
   privacyPolicy: {

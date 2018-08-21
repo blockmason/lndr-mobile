@@ -364,6 +364,10 @@ export default {
       start: `U heeft de vriendschapsaanvraag van `,
       end: ` geweigerd.`,
     },
+    rejectOutboundFriendRequest: {
+      start: `U heeft de aanvraag voor een vriend te `,
+      end: ` geannuleerd.`,
+    },
     ethSent: {
       start: `U heeft succesvol `,
       end: ` ETH verzonden en uw transactiekenmerk is `,
@@ -392,6 +396,7 @@ export default {
     shell: `Vriendschapsverzoek`,
     message: `Vriendschapsverzoeken`,
     request: F => `@${F} wil vrienden met u worden! `,
+    outbound: F => `Je stuurde een vriend verzoek aan @${F} `,
   },
 
   privacyPolicy: {

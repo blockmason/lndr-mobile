@@ -364,6 +364,10 @@ export default {
       start: `Você recusou o pedido de amizade de `,
       end: `.`,
     },
+    rejectOutboundFriendRequest: {
+      start: `Você cancelou a solicitação de amigo para `,
+      end: `.`,
+    },
     ethSent: {
       start: `Você enviou com sucesso `,
       end: ` ETH e seu hash de transação é `,
@@ -392,6 +396,7 @@ export default {
     shell: `Pedido de amizade`,
     message: `Pedidos de amizade`,
     request: F => `@${F} quer ser seu amigo!`,
+    outbound: F => `Você enviou uma solicitação de amigo para @${F}`,
   },
 
   privacyPolicy: {
