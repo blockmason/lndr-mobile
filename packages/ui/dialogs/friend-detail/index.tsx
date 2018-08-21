@@ -180,7 +180,7 @@ class FriendDetail extends Component<Props, State> {
           <View style={[general.centeredColumn, {marginBottom: 10}]}>
             <BalanceSection friend={friend} />
           </View>
-          {this.getRecentTotal() === 0 ? null : <Button round large fat wide onPress={this.goSettleUp} text={debtManagement.settleUp} containerStyle={style.spaceBottom} />}
+          {this.getRecentTotal() === 0 ? null : <Button round onPress={this.goSettleUp} text={debtManagement.settleUp} containerStyle={style.spaceBottom} />}
           <View style={style.fullWidth}>
             <Text style={accountStyle.transactionHeader}>{pendingTransactionsLanguage.title}</Text>
             <PendingView friend={friend} navigation={navigation} />
