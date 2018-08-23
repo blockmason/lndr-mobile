@@ -62,7 +62,6 @@ export default StyleSheet.create({
   listItem: {
     flexDirection: 'row',
     justifyContent: 'space-between',
-    flexWrap: 'wrap',
     borderColor: softGray,
     borderBottomWidth: 1,
     borderTopWidth: 1,
@@ -70,19 +69,22 @@ export default StyleSheet.create({
     paddingRight: s,
     paddingTop: s,
     paddingBottom: m - xs,
-    width: '90%',
+    width: '100%',
   },
-  balanceItem: {
+  currencyBalance: {
+    flex: 1,
     display: 'flex',
     flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'center',
-    width: '100%',
+    justifyContent: 'flex-end',
     height: 30
+  },
+  currencySymbolBalance: {
+    ...large,
+    color: black,
+    marginRight: 5
   },
   balanceMemo: {
     ...small,
-    width: '90%',
     height: 18
   },
   column: {

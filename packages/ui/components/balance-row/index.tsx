@@ -31,11 +31,13 @@ export default class BalanceRow extends Component<Props> {
 
     return (
       <View style={style.listItem}>
-        <View style={style.balanceItem}>
-          <Text style={style.currencySymbol}>{currencySymbols(currency)}</Text>
+        <View style={[general.flexColumn, {flex: 1}]}>
+          {memos.length ? memos.map( (memo, ind) => <Text key={ind} style={style.balanceMemo}>{memo}</Text> ) : <Text style={style.balanceMemo}></Text>}
+        </View>
+        <View style={style.currencyBalance}>
+          <Text style={style.currencySymbolBalance}>{currencySymbols(currency)}</Text>
           {this.renderAmount()}
         </View>
-        {memos.map( (memo, ind) => <Text key={ind} style={style.balanceMemo}>{memo}</Text> )}
       </View>
     )
   }
