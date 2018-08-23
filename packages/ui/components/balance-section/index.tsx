@@ -34,8 +34,6 @@ class BalanceSection extends Component<Props> {
     const { ucacBalances, memosSinceSettlement } = calculateUcacBalances(friend.address)
     const hasNoBalance = Object.keys(ucacBalances).length === 0
 
-    console.log('MEMOS ', memosSinceSettlement)
-
     return (
       <View style={general.centeredColumn}>
         {hasNoBalance ? null : <Text style={style.balanceSectionTitle}>{debtManagement.balanceByCurrency}</Text> }

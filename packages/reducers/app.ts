@@ -169,10 +169,7 @@ export const calculateUcacBalances = state => (friendAddress: string) : any => {
   const ucacBalances = {}
   let memosSinceSettlement = {}
 
-  let lastSettlementIndex = recents.findIndex( tx => {
-    return (tx.creditorAddress === friendAddress || tx.debtorAddress === friendAddress) && 
-    (tx.memo.indexOf('settle') !== -1 || tx.memo.indexOf('Settling') !== -1)
-  })
+  let lastSettlementIndex = getSettlementIndex(recents, friendAddress)
   // console.log('LAST ', lastSettlementIndex)
   if (lastSettlementIndex === -1) {
     lastSettlementIndex = recents.length
@@ -244,3 +241,40 @@ export const getFriendFromAddress = state => (address: string) : Friend | undefi
 export const hasStoredUser = state => () : boolean => state.store.hasStoredUser
 
 export const getChannelID = (state) : string => state.store.channelID
+
+function getSettlementIndex(recents: any, friendAddress: String) {
+  const settleTerms = [
+    'سداد مبلغ لـ', 'طلب سداد مبلغ لـ',
+    'Vypořádání na', 'Žádost o vypořádání na',
+    'Afregner', 'Anmodning om at afregne med',
+    'Abrechnung für ', 'Anfrage zur Abrechnung für',
+    'Διακανονισμός για', 'Αίτηση διακανονισμού για',
+    `Settling up for`, `Request to settle for`,
+    'Acordando Pago Por', 'Solicitud de Acordar Pago Por',
+    'Maksetaan velkaa', 'Pyydetään velan maksua summasta',
+    'Régler pour', 'Demande de régler pour',
+    'में निपटान करना', 'में निपटान के लिए रिक्वेस्ट करें',
+    'Kiegyenlítés neki', 'Kérés a kiegyenlítéshez neki',
+    'Melunasi', 'Permintaan pelunasan',
+    'Saldare debito per', 'Richiesta di pagamento di',
+    'החזרת חוב עבור', 'בקשת החזרת חוב עבור',
+    `を設定`, `の帳消しをリクエスト`,
+    `청산`, `청산 요청`,
+    'Menyelesaikan hutang untuk', 'Mohon untuk menyelesaikan bagi',
+    'Gjør opp for', 'Forespørsel om å betale for',
+    'Betaling voor', 'Verzoek om te betalen voor',
+    'Rozliczenie za', 'Rozlicz za',
+    'Pagar a', 'Pedido de pagamento de',
+    'Расселение на', 'Запрос довольствоваться',
+    'Betala', 'Begäran om att komma överens om',
+    'ชำระหนี้เป็นจำนวน ', 'ขอชำระหนี้เป็นจำนวน',
+    'Size ödenecek tutar', 'Ödenmesini istediğiniz tutar',
+    'Thanh toán cho ', 'Yêu cầu thanh toán cho',
+    "偿清债务", "请求偿清债务",
+  ]
+
+  return recents.findIndex( tx => {
+    return (tx.creditorAddress === friendAddress || tx.debtorAddress === friendAddress) && 
+    settleTerms.reduce( (acc, cur) => acc || tx.memo.indexOf(cur) !== -1, false)
+  })
+}

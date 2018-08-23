@@ -271,7 +271,7 @@ export default {
     for: M => `für ${M}`,
     settleUp: `Abrechnen`,
     settleTotal: `Gesamtbetrag begleichen`,
-    settleUpMemo: (D, A) => `${D === 'leihen' ? 'Abrechnung für ' : 'Anfrage zur Abrechnung für'} ${A}`,
+    settleUpMemo: (D, A) => `${D === 'lend' ? 'Abrechnung für ' : 'Anfrage zur Abrechnung für'} ${A}`,
     recordSettleUpMemo: `Abrechnung`,
     balanceByCurrency: `Einzelheiten`,
   },

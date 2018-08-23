@@ -268,7 +268,7 @@ export default {
     for: M => `voor ${M}`,
     settleUp: `Betalen`,
     settleTotal: `Betaal totaal`,
-    settleUpMemo: (D, A) => `${D === 'lend'? 'Betaling voor': 'Verzoek om te betalen voor'} ${A} `,
+    settleUpMemo: (D, A) => `${D === 'lend' ? 'Betaling voor': 'Verzoek om te betalen voor'} ${A} `,
     recordSettleUpMemo: `Betalen`,
     balanceByCurrency: `Details`,
   },
