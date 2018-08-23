@@ -159,6 +159,7 @@ export default {
       `ETH Transaction History`,
       `Receive PayPal Payments`,
       `Change Primary Currency`,
+      `Lndr Verified`,
       `Change PIN`,
       `Change Email`,
       `Change Lock Timeout`,

@@ -327,6 +327,19 @@ class MyAccount extends Component<Props, State> {
     await loadingContext.wrap(this.props.updateNickname(this.state))
   }
 
+  renderVerify() {
+    return (
+      <View style={style.spaceHorizontalL}>
+        <Text style={[style.smallText, style.spaceTop]}>Set higher settlement limit and crypto withdrawal amounts
+        by completing Know Your Customer requirements.</Text>
+
+        <Text style={[style.smallText, style.spaceTop]}>Read our <Text onPress={() => Linking.openURL('https://google.com')}>Privacy Policy</Text> for how your personal data will be managed.</Text>
+
+        <Button round onPress={() => {this.props.navigation.navigate('LndrVerify')}} text="Unlock Additional Features" />
+      </View>
+    );
+  }
+
   renderPanels() {
     const { user, updateEmail, copyToClipboard } = this.props
     const { notificationsEnabled, ethBalance, bcptBalance } = this.props.state
@@ -363,6 +376,7 @@ class MyAccount extends Component<Props, State> {
       (<View style={style.spaceHorizontalL}>
         <Button black onPress={() => this.setState({shouldPickCurrency: true})} text={currency} />
       </View>),
+      this.renderVerify(),
       (<View style={style.spaceHorizontalL}>
         {authenticated ? <Button round onPress={() => this.setState({ step: 2 })} text={changePin} /> :
         <Button round onPress={() => this.setState({ step: 4 })} text={enterCurrentPin} />}

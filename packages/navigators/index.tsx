@@ -17,6 +17,7 @@ import TransferBcpt from 'ui/dialogs/transfer-bcpt'
 import FriendRequest from 'ui/dialogs/friend-request'
 import PayPalRequestDetail from 'ui/dialogs/paypal-request-detail'
 import RemoveAccountView from 'ui/dialogs/remove-account'
+import LndrVerifyForm from 'ui/forms/lndr-verify'
 
 import {
   createReactNavigationReduxMiddleware,
@@ -72,7 +73,10 @@ export const AppNavigator = StackNavigator(
     RemoveAccount: {
       screen: RemoveAccountView
     },
-    PayPalRequest: PayPalRequestDetail
+    PayPalRequest: PayPalRequestDetail,
+    LndrVerify: {
+      screen: LndrVerifyForm
+    }
   },
   {
     mode: 'modal',

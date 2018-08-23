@@ -22,6 +22,13 @@ export interface UpdateAccountData {
   confirmPassword: string
 }
 
+export interface LndrVerifiedData {
+  name: string
+  address: string
+  telephone: string
+  citizenship: string
+}
+
 export interface UserData {
   mnemonic: string
   hashedPassword: string
@@ -57,6 +64,13 @@ export const defaultUpdateAccountData = (): UpdateAccountData => ({
   password: '',
   confirmPassword: ''
 })
+
+export const defaultLndrVerifiedData = (): LndrVerifiedData => ({
+  name: '',
+  address: '',
+  citizenship: '',
+  telephone: '',
+});
 
 export default class User {
   mnemonic: string
