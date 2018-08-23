@@ -587,6 +587,12 @@ export const rejectPendingSettlement = (pendingSettlement: PendingUnilateral) =>
   }
 }
 
+export const setInitialHomeLoad = (initialHomeLoad: any) => {
+  return async (dispatch, _getState) => {
+    dispatch(setState({ initialHomeLoad }))
+  }
+}
+
 export const addDebt = (friend: Friend, amount: string, memo: string, direction: string, currency: string, settleTotal?: boolean, denomination?: string) => {
   return async (dispatch, getState) => {
     const { address, privateKeyBuffer } = getUser(getState())()

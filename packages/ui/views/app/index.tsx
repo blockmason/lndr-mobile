@@ -63,7 +63,8 @@ const initialState = {
   primaryCurrency: defaultCurrency,
   payPalRequests: [],
   payPalRequestsLoaded: false,
-  channelID: ''
+  channelID: '',
+  initialHomeLoad: 'Friends',
 }
 
 const store = createStore(initialState)

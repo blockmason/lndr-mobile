@@ -161,7 +161,7 @@ export default {
       `ETH (& BCPT) Adresse`,
       `ETH-Kontostand`,
       `BCPT-Kontostand`,
-      `Konto Entfernen`,
+      `Konto entfernen`,
       `ETH-Transaktionshistorie`,
       `Aktivieren Sie PayPal`,
       `Hauptwährung ändern`,
@@ -410,7 +410,7 @@ export default {
   },
 
   payPalLanguage: {
-    connectPayPal: `Schließen Sie PayPal`,
+    connectPayPal: `Öffnen Sie PayPal`,
     connectSuccess: `PayPal erfolgreich aktiviert.`,
     disconnectPayPal: `Trennen Sie PayPal`,
     disconnected: `PayPal getrennt.`,
