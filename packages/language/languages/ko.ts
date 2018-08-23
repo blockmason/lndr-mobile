@@ -152,8 +152,6 @@ export default {
       balance: (balance) => `당신의 현재 BCPT 잔액은 ${typeof balance === 'string' ? balance.slice(0,8) : ''}`,
       bcptAddress: `BCPT 주소`,
     },
-    changeProfilePic: `변경하려면 터치하세요`,
-    addProfilePic: `폰에서 사진 불러오기`,
     panelHeaders: [
       `이더리움 (& BCPT) 주소`,
       `이더리움 잔액`,
@@ -163,9 +161,7 @@ export default {
       `차 환율 변경`,
       `페이팔 사용`,
       `비밀번호 변경`,
-      `닉네임 변경`,
       `이메일 주소`,
-      `프로필 사진 변경`,
       `잠금 제한 시간 변경`,
       `연상기호`,
       `알림`,
@@ -209,6 +205,8 @@ export default {
     selectFriend: `선택`,
     lend: `새로운 대출`,
     borrow: `새로운 부채`,
+    owesMe: `저를 빚`,
+    iOwe: `난 빚`,
     iLent: `친구가 내게 빚지고 있습니다`,
     iBorrowed: `친구에게 빚을 지고 있습니다`,
     settleUpLower: `  청산  `,
@@ -357,6 +355,18 @@ export default {
       start: "우리는 ",
       end: " 해당 기록을 당신이 거부한것을 전달했습니다."
     },
+    confirmFriend: {
+      start: `이제 `,
+      end: ` 와 친구!`,
+    },
+    rejectFriend: {
+      start: `당신은`,
+      end: `에서 친구 요청을 거절했다.`,
+    },
+    rejectOutboundFriendRequest: {
+      start: `당신은 `,
+      end: ` 하는 친구 요청을 취소.`,
+    },
     ethSent: {
       start: "성공적으로 보냈습니다 ",
       end: " 이더리움과 당신의 거래는 "
@@ -384,7 +394,8 @@ export default {
   pendingFriendRequestsLanguage: {
     shell: `친구 요청`,
     message: `친구 요청`,
-    request: F => `@${F}이 너와 친구가되고 싶어！`
+    request: F => `@${F}이 너와 친구가되고 싶어！`,
+    outbound: F => `당신은@${F}에 친구 요청을 보내`,
   },
 
   privacyPolicy: {

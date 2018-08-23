@@ -1,6 +1,7 @@
 import React, { Component } from 'react'
 
 import { View, ScrollView, Text, Linking } from 'react-native'
+import firebase from 'react-native-firebase'
 
 import ThemeImage from 'ui/components/images/theme-image'
 import Button from 'ui/components/button'
@@ -17,6 +18,10 @@ interface Props {
 }
 
 export default class PrivacyPolicyView extends Component<Props> {
+  componentDidMount( ) {
+    firebase.analytics().setCurrentScreen('privacy-policy', 'PrivacyPolicyView');
+  }
+
   render () {
     const { onVerify } = this.props
 

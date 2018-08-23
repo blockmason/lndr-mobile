@@ -50,6 +50,7 @@ const initialState = {
   pendingTransactions: [],
   pendingSettlements: [],
   pendingFriends: [],
+  pendingOutboundFriends: [],
   bilateralSettlements: [],
   notificationsEnabled: true,
   ethBalance: '0',
@@ -62,7 +63,8 @@ const initialState = {
   primaryCurrency: defaultCurrency,
   payPalRequests: [],
   payPalRequestsLoaded: false,
-  channelID: ''
+  channelID: '',
+  initialHomeLoad: 'Friends',
 }
 
 const store = createStore(initialState)

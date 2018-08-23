@@ -84,7 +84,7 @@ class PendingView extends Component<Props, State> {
   }
 
   showNoneMessage() {
-    const { pendingTransactionsLoaded, pendingTransactions, pendingSettlements, bilateralSettlements, pendingFriends, payPalRequests } = this.props.state
+    const { pendingTransactionsLoaded, pendingTransactions, pendingSettlements, bilateralSettlements, pendingFriends, pendingOutboundFriends, payPalRequests } = this.props.state
     const { friend } = this.props
 
     let showNone = false
@@ -95,6 +95,7 @@ class PendingView extends Component<Props, State> {
       showNone = (pendingTransactions.length
         + pendingSettlements.length
         + pendingFriends.length
+        + pendingOutboundFriends.length
         + payPalRequests.length) === 0
     } else if (friend) {
       showNone = true
@@ -123,7 +124,7 @@ class PendingView extends Component<Props, State> {
   }
 
   render() {
-    const { pendingTransactions, pendingFriends } = this.props.state
+    const { pendingTransactions, pendingFriends, pendingOutboundFriends } = this.props.state
     const { pendingSettlements, settlerIsMe, payPalRequests, bilateralSettlements, user, friend, homeScreen, onlyFriends, navigation } = this.props
 
     if (onlyFriends) {
@@ -212,13 +213,23 @@ class PendingView extends Component<Props, State> {
             />
           })
         }
-        { homeScreen || pendingFriends.length === 0 ? null : <Text style={style.transactionHeader}>{pendingFriendRequestsLanguage.message}</Text>}
+        { homeScreen || !pendingFriends.length ? null : <Text style={style.transactionHeader}>{pendingFriendRequestsLanguage.message}</Text>}
         { pendingFriends.length === 0 ? null :
           pendingFriends.map( friend => {
             return <PendingFriendRow
               key={friend.address}
               friend={friend}
               navigation={this.props.navigation}
+            />
+          })
+        }
+        { homeScreen || !pendingOutboundFriends.length ? null :
+          pendingOutboundFriends.map( friend => {
+            return <PendingFriendRow
+              key={friend.address}
+              friend={friend}
+              navigation={this.props.navigation}
+              isOutbound
             />
           })
         }

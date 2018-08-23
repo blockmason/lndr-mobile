@@ -154,8 +154,6 @@ export default {
       balance: Y => `Baki semasa BCPT anda ialah ${typeof Y === 'string' ? Y.slice(0,8) : ''} `,
       bcptAddress: `Alamat BCPT`,
     },
-    changeProfilePic: `Sentuh untuk Tukar`,
-    addProfilePic: `Gunakan Gambar dari Telefon`,
     panelHeaders: [
       `Alamat ETH (& BCPT)`,
       `Baki ETH`,
@@ -165,9 +163,7 @@ export default {
       `Membolehkan PayPal`,
       `Tukar Mata Wang Utama`,
       `Tukar PIN`,
-      `Tukar Nama Samaran`,
       `Tukar E-mel`,
-      `Tukar Gambar Profil`,
       `Tukar Masa Senggang Kunci`,
       `Mnemonik`,
       `Pemberitahuan`,
@@ -211,6 +207,8 @@ export default {
     selectFriend: `Pilih`,
     lend: `Pinjaman Baharu`,
     borrow: `Hutang Baharu`,
+    owesMe: `Berhutang saya`,
+    iOwe: `Saya hutang`,
     iLent: `Seorang rakan berhutang dengan saya`,
     iBorrowed: `Saya berhutang dengan seorang rakan`,
     settleUpLower: `Selesaikan Hutang`,
@@ -368,6 +366,10 @@ export default {
       start: `Anda telah menolak permintaan `,
       end: ` untuk menjadi rakan.`,
     },
+    rejectOutboundFriendRequest: {
+      start: `Anda telah membatalkan permintaan rakan untuk `,
+      end: `.`,
+    },
     ethSent: {
       start: `Anda telah berjaya menghantar `,
       end: ` ETH dan cincangan transaksi anda adalah `,
@@ -396,6 +398,7 @@ export default {
     shell: `Permintaan jadi rakan`,
     message: `Permintaan jadi rakan`,
     request: F => `@${F} mahu menjadi rakan anda!`,
+    outbound: F => `Anda menghantar permintaan rakan kepada @${F} `,
   },
 
   privacyPolicy: {

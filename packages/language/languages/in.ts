@@ -154,8 +154,6 @@ export default {
       balance: Y => `Saldo BCPT Anda saat ini adalah ${typeof Y === 'string' ? Y.slice(0,8) :''}.`,
       bcptAddress: `Alamat BCPT`,
     },
-    changeProfilePic: `Ketuk untuk Mengubah`,
-    addProfilePic: `Gunakan Gambar dari Ponsel`,
     panelHeaders: [
       `Alamat ETH (& BCPT)`,
       `Saldo ETH`,
@@ -165,9 +163,7 @@ export default {
       `Aktifkan PayPal`,
       `Ubah Mata Uang Primer`,
       `Ubah PIN`,
-      `Ubah Nama Panggilan`,
       `Ubah Email`,
-      `Ubah Foto Profil`,
       `Ubah Waktu Kunci Layar`,
       `Frasa Pemulih Akun`,
       `Pemberitahuan`,
@@ -211,6 +207,8 @@ export default {
     selectFriend: `Pilih`,
     lend: `Pinjaman Baru`,
     borrow: `Utang Baru`,
+    owesMe: `Berutang saya`,
+    iOwe: `Saya berhutang`,
     iLent: `Teman berutang pada saya`,
     iBorrowed: `Saya berutang pada teman`,
     settleUpLower: `Lunasi`,
@@ -368,6 +366,10 @@ export default {
       start: `Anda menolak permintaan pertemanan dari `,
       end: `.`,
     },
+    rejectOutboundFriendRequest: {
+      start: `Anda telah membatalkan permintaan teman untuk `,
+      end: `.`,
+    },
     ethSent: {
       start: `Anda berhasil mengirimkan `,
       end: ` ETH, dan hash transaksi Anda adalah `,
@@ -396,6 +398,7 @@ export default {
     shell: `Permintaan Pertemanan`,
     message: `Permintaan Pertemanan`,
     request: F => `@${F} ingin berteman dengan Anda!`,
+    outbound: F => `Anda mengirim permintaan teman untuk @${F}`,
   },
 
   privacyPolicy: {

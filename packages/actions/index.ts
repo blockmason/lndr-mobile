@@ -463,8 +463,11 @@ export const getFriendRequests = () => {
     const user = getUser(getState())()
     const rawPendingFriends = await creditProtocol.getFriendRequests(user.address)
     const pendingFriends = rawPendingFriends.map(jsonToPendingFriend)
-  
-    dispatch(setState({ pendingFriends, pendingFriendsLoaded: true }))
+
+    const rawPendingOutboundFriends = await creditProtocol.getOutboundFriendRequests(user.address)
+    const pendingOutboundFriends = rawPendingOutboundFriends.map(jsonToPendingFriend)
+
+    dispatch(setState({ pendingFriends, pendingOutboundFriends, pendingFriendsLoaded: true }))
   }
 }
 
@@ -581,6 +584,12 @@ export const rejectPendingSettlement = (pendingSettlement: PendingUnilateral) =>
       dispatch(displayError(debtManagement.rejection.error))
       return false
     }
+  }
+}
+
+export const setInitialHomeLoad = (initialHomeLoad: any) => {
+  return async (dispatch, _getState) => {
+    dispatch(setState({ initialHomeLoad }))
   }
 }
 

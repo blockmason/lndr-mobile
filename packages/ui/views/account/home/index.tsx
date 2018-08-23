@@ -2,26 +2,27 @@ import React, { Component } from 'react'
 import { connect } from 'react-redux'
 
 import { Text, View, ScrollView, Platform, Dimensions, Image, TouchableHighlight, RefreshControl } from 'react-native'
+import firebase from 'react-native-firebase'
 
 import { currencyFormats, formatEthToFiat, formatCommaDecimal } from 'lndr/format'
 import Balance from 'lndr/balance'
-
-import Button from 'ui/components/button'
-import Loading, { LoadingContext } from 'ui/components/loading'
-import Section from 'ui/components/section'
-import PendingView from 'ui/views/account/activity/pending'
-
 import { UserData } from 'lndr/user'
 import PendingTransaction from 'lndr/pending-transaction'
 import Friend from 'lndr/friend'
+import { currencySymbols } from 'lndr/currencies'
+
+import Button from 'ui/components/button'
+import { LoadingContext } from 'ui/components/loading'
+import Section from 'ui/components/section'
+import PendingView from 'ui/views/account/activity/pending'
+import AddDebtButtons from 'ui/components/add-debt-buttons'
 
 import { isFocusingOn } from 'reducers/nav'
 import { getStore, getUser, getNeedsReviewCount, calculateBalance, calculateCounterparties,
   getPrimaryCurrency, getFriendList, getPendingFromFriend, getEthExchange, getFriendFromNick } from 'reducers/app'
 import { getAccountInformation, displayError, getPending, getFriends, getFriendRequests,
-  getRecentTransactions, registerChannelID, getPayPalRequests } from 'actions'
+  getRecentTransactions, registerChannelID, getPayPalRequests, setInitialHomeLoad } from 'actions'
 import { UrbanAirship } from 'urbanairship-react-native'
-import { currencySymbols } from 'lndr/currencies'
 
 import style from 'theme/account'
 import formStyle from 'theme/form'
@@ -29,6 +30,7 @@ import general from 'theme/general'
 import { underlayColor } from 'theme/general'
 
 import language from 'language'
+import friend from 'theme/friend';
 const {
   notice,
   noBalanceWarning,
@@ -36,8 +38,7 @@ const {
   newTransaction,
   needsReview,
   recentTransactionsLanguage,
-  seeAllActivity,
-  debtManagement
+  seeAllActivity
 } = language
 
 const { width } = Dimensions.get('window')
@@ -70,6 +71,7 @@ interface Props {
   ethExchange: (currency: string) => string
   getFriendFromNick: (nickname: string) => Friend | undefined
   getFriendRequests: () => void
+  setInitialHomeLoad: (value: any) => void
 }
 
 interface State {
@@ -87,6 +89,7 @@ class HomeView extends Component<Props, State> {
   }
 
   async componentDidMount() {
+    firebase.analytics().setCurrentScreen('home', 'HomeView');
     this.initializePushNotifications()
     try {
       const accountInformation = await this.props.getAccountInformation()
@@ -101,6 +104,14 @@ class HomeView extends Component<Props, State> {
     await loadingRecentTransactions.wrap(this.props.getRecentTransactions())
     await loadingFriends.wrap(this.props.getFriends())
     await loadingPayPalRequests.wrap(this.props.getPayPalRequests())
+  }
+
+  async componentDidUpdate() {
+    const { initialHomeLoad, friendsLoaded, friends } = this.props.state
+    if(initialHomeLoad && friendsLoaded && !friends.length) {
+      this.props.navigation.navigate(initialHomeLoad)
+      this.props.setInitialHomeLoad(null)
+    }
   }
 
   componentWillReceiveProps(nextProps) {
@@ -138,7 +149,7 @@ class HomeView extends Component<Props, State> {
       try{
         const actions = JSON.parse(incoming.notification.extras['com.urbanairship.actions'])
         const { type, user } = actions
-        
+
         if(type === 'NewPendingCredit') {
           const { route, pendingTransaction, pendingSettlement } = this.props.getPendingFromFriend(user)
           if(pendingTransaction !== undefined || pendingSettlement !== undefined) {
@@ -241,10 +252,7 @@ class HomeView extends Component<Props, State> {
       </Section>
       <Section>
         <Text style={[formStyle.titleXLarge, formStyle.center, formStyle.spaceBottomS]}>{newTransaction}</Text>
-        <View style={style.newTransactionButtonContainer}>
-          <Button fat round onPress={() => this.addDebt('lend')} text={debtManagement.iLent} style={{minWidth: width / 4 * 3}} />
-          <Button fat round dark onPress={() => this.addDebt('borrow')} text={debtManagement.iBorrowed} style={{minWidth: width / 4 * 3}} />
-        </View>
+        <AddDebtButtons fat={true} lend={() => this.addDebt('lend')} borrow={() => this.addDebt('borrow')} />
       </Section>
       {this.renderNeedsReview()}
       <TouchableHighlight {...underlayColor} onPress={() => this.props.navigation.navigate('Activity')}>
@@ -260,5 +268,6 @@ class HomeView extends Component<Props, State> {
 export default connect((state) => ({ state: getStore(state)(), user: getUser(state)(), isFocused: isFocusingOn(state)('Home'),
   needsReviewCount: getNeedsReviewCount(state), calculateBalance: calculateBalance(state), calculateCounterparties: calculateCounterparties(state),
   primaryCurrency: getPrimaryCurrency(state), friendList: getFriendList(state)(), getPendingFromFriend: getPendingFromFriend(state),
-  ethExchange: getEthExchange(state), getFriendFromNick: getFriendFromNick(state) }), 
-  { getAccountInformation, displayError, getPending, getPayPalRequests, getRecentTransactions, getFriends, registerChannelID, getFriendRequests })(HomeView)
+  ethExchange: getEthExchange(state), getFriendFromNick: getFriendFromNick(state) }),
+  { getAccountInformation, displayError, getPending, getPayPalRequests, getRecentTransactions, getFriends, registerChannelID, getFriendRequests,
+    setInitialHomeLoad })(HomeView)

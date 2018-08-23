@@ -154,8 +154,6 @@ export default {
       balance: Y => `رصيدك الحالي من BCPT هو ${typeof Y === 'string' ? Y.slice(0,8) :''}`,
       bcptAddress: `عنوان BCPT`,
     },
-    changeProfilePic: `انقر للتغيير`,
-    addProfilePic: `استخدام صورة من الهاتف`,
     panelHeaders: [
       `عنوان إثيريوم (& BCPT)`,
       `رصيد الإثيريوم`,
@@ -165,9 +163,7 @@ export default {
       `تمكين باي بال`,
       `تغيير العملات الرئيسية`,
       `تغيير رمز PIN‏`,
-      `تغيير الاسم المستعار`,
       `تغيير البريد الإلكتروني`,
-      `تغيير صورة الملف الشخصي`,
       `تغيير مهلة القفل`,
       `استذكار`,
       `إشعارات`,
@@ -211,6 +207,8 @@ export default {
     selectFriend: `اختيار`,
     lend: `إقَراض جديد`,
     borrow: `دين جديد`,
+    owesMe: `تدين لي`,
+    iOwe: `انا مدين`,
     iLent: `صديق مدين لي`,
     iBorrowed: `أنا أدين لصديق`,
     settleUpLower: `دفع الحساب`,
@@ -368,6 +366,10 @@ export default {
       start: `لقد رفضت طلب الصداقة من `,
       end: `.`,
     },
+    rejectOutboundFriendRequest: {
+      start: `لقد ألغت صديق طلب `,
+      end: `.`,
+    },
     ethSent: {
       start: `لقد أرسلت `,
       end: ` إثيريوم بنجاح ورقم الهاش لمعاملتك هو `,
@@ -396,6 +398,7 @@ export default {
     shell: `طلب صداقة`,
     message: `طلبات الصداقة`,
     request: F => `@${F} يريد أن يصبح صديقاً معك!`,
+    outbound: F => `أنت أرسلت طلب صداقة إلى @${F}`,
   },
 
   privacyPolicy: {

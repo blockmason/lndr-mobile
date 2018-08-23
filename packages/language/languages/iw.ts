@@ -154,8 +154,6 @@ export default {
       balance: Y => ` ${typeof Y === 'string' ? Y.slice(0,8) :''} שלך היא BCPT -יתרת ה`,
       bcptAddress: `כתובת BCPT`,
     },
-    changeProfilePic: `הקש לשינוי`,
-    addProfilePic: `להשתמש בתמונה מהטלפון`,
     panelHeaders: [
       `ETH (& BCPT) כתובת`,
       `יתרת ETH`,
@@ -165,9 +163,7 @@ export default {
       `הפוך את PayPal`,
       `שינוי מטבע ראשי`,
       `לשנות PIN`,
-      `לשנות כינוי`,
       `לדנות דוא"ל`,
-      `לשנות תמונת פרופיל`,
       `לשנות פסק זמן נעילה`,
       `רמז`,
       `התראות`,
@@ -211,6 +207,8 @@ export default {
     selectFriend: `לבחור`,
     lend: `הלוואה חדשה`,
     borrow: `חוב חדש`,
+    owesMe: `חייב לי`,
+    iOwe: `אני חייב`,
     iLent: `חבר חייב לי`,
     iBorrowed: `אני חייד לחבר`,
     settleUpLower: `להחזיר חוב`,
@@ -368,6 +366,10 @@ export default {
       start: `דחית את בקשת החברות מ   `,
       end: `.`,
     },
+    rejectOutboundFriendRequest: {
+      start: `ביטלת את בקשת חברות ל `,
+      end: `.`,
+    },
     ethSent: {
       start: `שלחת ETH `,
       end: ` בהצלחה ומספר העסקה שלך הוא`,
@@ -396,6 +398,7 @@ export default {
     shell: `בקשת חברות`,
     message: `בקשות חברות`,
     request: F => `!רוצה להיות חבר שלך @${F}`,
+    outbound: F => `שלח בקשת חברות ל @${F}`,
   },
 
   privacyPolicy: {

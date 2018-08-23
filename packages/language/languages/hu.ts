@@ -154,8 +154,6 @@ export default {
       balance: Y => `Jelenlegi BCPT egyenlege ${typeof Y === 'string'? Y.slice (0,8): ''} `,
       bcptAddress: `BCPT Cím`,
     },
-    changeProfilePic: `Módosításhoz Érintse Meg`,
-    addProfilePic: `Használjon a Telefonon Található Képet`,
     panelHeaders: [
       `ETH (& BCPT) Cím`,
       `ETH Egyenleg`,
@@ -165,9 +163,7 @@ export default {
       `Engedélyezze a PayPalt`,
       `Megváltoztathatja az elsődleges pénzneme`,
       `PiN-kód Módosítása`,
-      `Becenév Módosítása`,
       `Email Módosítása`,
-      `Profilkép Módosítása`,
       `Időtúllépés Zárolás Módosítása`,
       `Emlékeztető`,
       `Értesítések`,
@@ -211,6 +207,8 @@ export default {
     selectFriend: `Kiválasztás`,
     lend: `Új Kölcsön`,
     borrow: `Új Tartozás`,
+    owesMe: `Tartozik nekem`,
+    iOwe: `Tartozom`,
     iLent: `Egy ismerősöm tartozik nekem`,
     iBorrowed: `Tartozom egy ismerősömnek`,
     settleUpLower: `Kiegyenlítés`,
@@ -368,6 +366,10 @@ export default {
       start: `Elutasította `,
       end: ` ismerősnek jelölését.`,
     },
+    rejectOutboundFriendRequest: {
+      start: `Megszakította a barátja kérését `,
+      end: `.`,
+    },
     ethSent: {
       start: `Sikeresen elküldött `,
       end: ` ETH-t, és a tranzakciós hash `,
@@ -396,6 +398,7 @@ export default {
     shell: `Ismerősnek Jelölés`,
     message: `Ismerősnek Jelölések`,
     request: F => `@${F} szeretne az ismerőse lenni! `,
+    outbound: F => `A kérelmet küldött a @${F} `,
   },
 
   privacyPolicy: {

@@ -151,8 +151,6 @@ export default {
     balance: (balance) => `現在のBCPT残高はこちら ${typeof balance === 'string' ? balance.slice(0,8) : ''}`,
     bcptAddress: `BCPTアドレス`,
   },
-  changeProfilePic: `変更する`,
-  addProfilePic: `端末の写真を使う`,
   panelHeaders: [
     `ETH (& BCPT) アドレス`,
     `EHT残高`,
@@ -162,9 +160,7 @@ export default {
     `ペイパルを有効にします`,
     `プライマリ通貨を変更`,
     `暗証番号を変える`,
-    `ニックネームを変える`,
     `メールアドレスを変える`,
-    `プロフィール画像を変える`,
     `タイムアウトする時間を変える`,
     `ニューモニック`,
     `通知`,
@@ -208,6 +204,8 @@ export default {
   selectFriend: `選択`,
   lend: `新しい貸し`,
   borrow: `新しい借り`,
+  owesMe: `私を負います`,
+  iOwe: `私が借りている`,
   iLent: `友人に貸しがあります`,
   iBorrowed: `友人に借りがあります`,
   settleUpLower: `帳消しにする`,
@@ -357,6 +355,18 @@ export default {
       start: ``,
       end: ` に通知を送ります.`,
     },
+    confirmFriend: {
+      start: `これで`,
+      end: `と友達です!`,
+    },
+    rejectFriend: {
+      start: `あなたは`,
+      end: `からの友達リクエストを拒否してきました.`,
+    },
+    rejectOutboundFriendRequest: {
+      start: `あなたは `,
+      end: ` に友達リクエストをキャンセルしました.`,
+    },
     ethSent: {
       start: `送信成功 `,
       end: ` あなたのETHとトランザクションハッシュは `,
@@ -384,7 +394,8 @@ export default {
   pendingFriendRequestsLanguage: {
     shell: `友達リクエスト`,
     message: `友達リクエスト`,
-    request: F => `@${F}はあなたと友達になりたい！`
+    request: F => `@${F}はあなたと友達になりたい！`,
+    outbound: F => `あなたは @${F}に友達リクエストを送信し`,
   },
 
   privacyPolicy: {

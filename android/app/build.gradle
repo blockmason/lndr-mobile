@@ -177,6 +177,7 @@ dependencies {
         force = true;
     }
     compile 'com.paypal.sdk:paypal-android-sdk:2.16.0'
+    compile 'com.google.firebase:firebase-analytics'
 }
 
 // Run this once to be able to run the application with BUCK

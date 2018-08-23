@@ -154,8 +154,6 @@ export default {
       balance: Y => `Nykyinen BCPT-saldosi on ${typeof Y === 'string' ? Y.slice (0,8): ''} `,
       bcptAddress: `BCPT-Osoite`,
     },
-    changeProfilePic: `Napsauta, jos haluat muuttaa`,
-    addProfilePic: `Käytä puhelimessa olevaa kuvaa`,
     panelHeaders: [
       `ETH (& BCPT) Osoite`,
       `ETH-saldo`,
@@ -165,9 +163,7 @@ export default {
       `Ota PayPal`,
       `Muuta päävaluutta`,
       `Muuta PIN-koodisi`,
-      `Muuta käyttäjänimesi`,
       `Muuta sähköpostiosoitteesi`,
-      `Vaihda profiilikuva`,
       `Muuta lukituksen aika-asetukset`,
       `Muistisääntö`,
       `Ilmoitukset`,
@@ -211,6 +207,8 @@ export default {
     selectFriend: `Valitse`,
     lend: `Uusi laina`,
     borrow: `Uusi velka`,
+    owesMe: `Minulle velkaa`,
+    iOwe: `Olen velkaa`,
     iLent: `Ystävä on minulle velkaa`,
     iBorrowed: `Olen velkaa ystävälle`,
     settleUpLower: `Sovi velan maksamisesta`,
@@ -368,6 +366,10 @@ export default {
       start: `Olet hylännyt `,
       end: ` ystäväpyynnön.`,
     },
+    rejectOutboundFriendRequest: {
+      start: `Olet peruuttanut ystävä pyynnön `,
+      end: `.`,
+    },
     ethSent: {
       start: `Olet onnistuneesti lähettänyt `,
       end: ` ETH:ta ja tapahtumasi tunnusnumero on `,
@@ -396,6 +398,7 @@ export default {
     shell: `Ystäväpyyntö`,
     message: `Ystäväpyynnöt`,
     request: F => `@${F} haluaa olla ystäväsi! `,
+    outbound: F => `Olet lähettänyt ystävä pyynnön @${F}`,
   },
 
   privacyPolicy: {

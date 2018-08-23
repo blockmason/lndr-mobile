@@ -1,6 +1,8 @@
 import React, { Component } from 'react'
 
 import { Text, Image, View, ScrollView, TouchableHighlight } from 'react-native'
+import firebase from 'react-native-firebase'
+
 import { getResetAction } from 'reducers/nav'
 
 import Button from 'ui/components/button'
@@ -17,9 +19,13 @@ interface Props {
 }
 
 export default class ConfirmationScreen extends Component<Props> {
+  componentDidMount( ) {
+    firebase.analytics().setCurrentScreen('confirmation-screen', 'ConfirmationScreen');
+  }
+
   getConfirmationImage(type) {
     const acceptList = ['create', 'confirm', 'ethSent', 'bcptSent', 'confirmFriend', 'requestPayPalPayee', 'requestPayPalPayment', 'settledWithPayPal']
-    const rejectList = ['reject', 'rejectFriend']
+    const rejectList = ['reject', 'rejectFriend', 'rejectOutboundFriendRequest']
     if (acceptList.indexOf(type) >= 0) {
       return <Image source={require('images/check-circle.png')} style={style.image} />
     } else if (rejectList.indexOf(type) >= 0) {

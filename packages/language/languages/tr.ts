@@ -154,8 +154,6 @@ export default {
       balance: Y => `Geçerli BCPT bakiyeniz ${typeof Y === 'string' ? Y.slice(0,8) :''}`,
       bcptAddress: `BCPT Adresi`,
     },
-    changeProfilePic: `Değiştirmek için Dokunun`,
-    addProfilePic: `Telefondan bir Resmi Kullanın`,
     panelHeaders: [
       `ETH (ve BCPT) Adresi`,
       `ETH Bakiyesi`,
@@ -165,9 +163,7 @@ export default {
       `Paypal etkinleştirme`,
       `Birincil Para değiştirme`,
       `Pin'i Değiştir`,
-      `Kullanıcı Adını Değiştir`,
       `E-postanı Değiştir`,
-      `Profil Resmini Değiştir`,
       `Kilitleme Süresini Değiştir`,
       `Anımsatıcı Kod`,
       `Bildirimler`,
@@ -211,6 +207,8 @@ export default {
     selectFriend: `Seç`,
     lend: `Yeni Borç Verme`,
     borrow: `Yeni Borç Alma`,
+    owesMe: `Bana borclu`,
+    iOwe: `Borçluyum`,
     iLent: `Bir arkadaşım bana borçlu`,
     iBorrowed: `Bir arkadaşıma borçluyum`,
     settleUpLower: `Ödeşin`,
@@ -368,6 +366,10 @@ export default {
       start: ``,
       end: `’dan gelen arkadaşlık isteğini reddettiniz.`,
     },
+    rejectOutboundFriendRequest: {
+      start: `Sen `,
+      end: ` Arkadaş isteğini iptal.`,
+    },
     ethSent: {
       start: `Başarıyla `,
       end: ` ETH gönderdiniz ve işlem sağlama kodunuz `,
@@ -396,6 +398,7 @@ export default {
     shell: `Arkadaşlık isteği`,
     message: `Arkadaş istekleri`,
     request: F => `@${F} seninle arkadaş olmak istiyor!`,
+    outbound: F => `Sen @${F} için arkadaşlık isteği gönderdi`,
   },
 
   privacyPolicy: {

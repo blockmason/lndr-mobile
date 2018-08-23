@@ -154,8 +154,6 @@ export default {
       balance: Y => `Il tuo saldo corrente è ${typeof Y === 'string' ? Y.slice(0,8) :''}`,
       bcptAddress: `Indirizzo BCPT`,
     },
-    changeProfilePic: `Toccare per cambiare`,
-    addProfilePic: `Utilizzare foto da telefono`,
     panelHeaders: [
       `Indirizzo ETH (& BCPT)`,
       `Saldo ETH`,
@@ -165,9 +163,7 @@ export default {
       `Abilita PayPal`,
       `Cambia primario valuta`,
       `Modifica PIN`,
-      `Cambia soprannome`,
       `Cambia email`,
-      `Cambia immagine del profilo`,
       `Timeout blocco modifiche`,
       `Mnemonico`,
       `notifiche`,
@@ -211,6 +207,8 @@ export default {
     selectFriend: `Selezionare`,
     lend: `Nuovo prestito`,
     borrow: `Nuovo debito`,
+    owesMe: `Mi deve`,
+    iOwe: `Sono in debito`,
     iLent: `Un amico mi deve`,
     iBorrowed: `Devo a un amico`,
     settleUpLower: `Saldare i debiti`,
@@ -368,6 +366,10 @@ export default {
       start: `Hai rifiutato la richiesta di amicizia da `,
       end: `.`,
     },
+    rejectOutboundFriendRequest: {
+      start: `Hai annullato la richiesta di amicizia di `,
+      end: `.`,
+    },
     ethSent: {
       start: `Hai inviato con successo `,
       end: ` ETH e l'hash per la transazione è `,
@@ -396,6 +398,7 @@ export default {
     shell: `Richiesta di amicizia`,
     message: `Richieste di amicizia`,
     request: F => `@${F} vuole essere tuo amico!`,
+    outbound: F => `È inviato una richiesta di amicizia a @${F}`,
   },
 
   privacyPolicy: {
