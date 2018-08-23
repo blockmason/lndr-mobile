@@ -120,7 +120,6 @@ class Settlement extends Component<Props, State> {
       pic = await profilePic.get(friend.address)
     }
 
-    console.log('LOADING AMOUNT ', amount)
     this.setState({txCost, pic, amount, ethCost, formInputError, settlementType, friend, fromPayPalRequest})
   }
 

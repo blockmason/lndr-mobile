@@ -164,21 +164,33 @@ export const calculateCounterparties = state => () : number => {
   return Object.keys(friends).length - 1
 }
 
-export const calculateUcacBalances = state => (friendAddress: string) : Object => {
+export const calculateUcacBalances = state => (friendAddress: string) : any => {
   const recents = recentTransactions(state)
   const ucacBalances = {}
+  let memosSinceSettlement = {}
 
-  recents.map( tx => {
+  let lastSettlementIndex = recents.findIndex( tx => {
+    return (tx.creditorAddress === friendAddress || tx.debtorAddress === friendAddress) && 
+    (tx.memo.indexOf('settle') !== -1 || tx.memo.indexOf('Settling') !== -1)
+  })
+  // console.log('LAST ', lastSettlementIndex)
+  if (lastSettlementIndex === -1) {
+    lastSettlementIndex = recents.length
+  }
+
+  recents.map( (tx, ind) => {
     let multiplier
+    const currency = getUcacCurrency(state)(tx.ucac)
     if (tx.debtorAddress === friendAddress) {
       multiplier = 1
+      memosSinceSettlement = storeMemo(memosSinceSettlement, ind, lastSettlementIndex, tx.memo, currency)
     } else if (tx.creditorAddress === friendAddress) {
+      memosSinceSettlement = storeMemo(memosSinceSettlement, ind, lastSettlementIndex, tx.memo, currency)
       multiplier = -1
     } else {
       return
     }
     const value = multiplier * tx.amount
-    const currency = getUcacCurrency(state)(tx.ucac)
     if (!ucacBalances[currency]) {
       ucacBalances[currency] = value
     } else {
@@ -192,7 +204,18 @@ export const calculateUcacBalances = state => (friendAddress: string) : Object =
     }
   }
 
-  return ucacBalances
+  return { ucacBalances, memosSinceSettlement }
+}
+
+function storeMemo(memos: object, ind: number, lastSettlementIndex: number, memo: string, currency: string) {
+  if (!memos[currency]) {
+    memos[currency] = []
+  }
+  if (ind < lastSettlementIndex) {
+    memos[currency].push(memo)
+  }
+
+  return memos
 }
 
 export const getPrimaryCurrency = (state) : string => state.store.primaryCurrency

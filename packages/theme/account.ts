@@ -60,18 +60,30 @@ export default StyleSheet.create({
     borderBottomColor: softAqua
   },
   listItem: {
-    display: 'flex',
     flexDirection: 'row',
     justifyContent: 'space-between',
-    alignItems: 'center',
-    width: '80%',
+    flexWrap: 'wrap',
     borderColor: softGray,
     borderBottomWidth: 1,
     borderTopWidth: 1,
     paddingLeft: s,
     paddingRight: s,
     paddingTop: s,
-    paddingBottom: m - xs
+    paddingBottom: m - xs,
+    width: '90%',
+  },
+  balanceItem: {
+    display: 'flex',
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    width: '100%',
+    height: 30
+  },
+  balanceMemo: {
+    ...small,
+    width: '90%',
+    height: 18
   },
   column: {
     display: 'flex',

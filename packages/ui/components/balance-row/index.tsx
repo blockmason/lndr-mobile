@@ -1,18 +1,17 @@
 import React, { Component } from 'react'
 
-import { Text, TouchableHighlight, View } from 'react-native'
+import { Text, View } from 'react-native'
 
 import { currencyFormats } from 'lndr/format'
-import { currencySymbols, transferLimits  } from 'lndr/currencies'
-
-import { lightGray } from 'theme/include/colors'
+import { currencySymbols } from 'lndr/currencies'
 
 import style from 'theme/account'
-import { getPrimaryCurrency } from 'reducers/app';
+import general from 'theme/general'
 
 interface Props {
   onPress?: () => void
   amount: number
+  memos: string[]
   currency: string
 }
 
@@ -28,14 +27,15 @@ export default class BalanceRow extends Component<Props> {
   }
 
   render() {
-    const { currency } = this.props
+    const { currency, memos } = this.props
 
     return (
-      <View style={style.pendingTransactionRow}>
-        <View style={style.listItem}>
+      <View style={style.listItem}>
+        <View style={style.balanceItem}>
           <Text style={style.currencySymbol}>{currencySymbols(currency)}</Text>
           {this.renderAmount()}
         </View>
+        {memos.map( (memo, ind) => <Text key={ind} style={style.balanceMemo}>{memo}</Text> )}
       </View>
     )
   }
