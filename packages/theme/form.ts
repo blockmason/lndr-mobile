@@ -300,5 +300,15 @@ export default StyleSheet.create({
     color: gray,
     fontStyle: 'italic',
     marginTop: 30
+  },
+  link: {
+    color: aqua,
+    ...bold
+  },
+  label: {
+    ...medium,
+    ...verticalMarginXXS,
+    color: black,
+    fontWeight: '100'
   }
 } as any)

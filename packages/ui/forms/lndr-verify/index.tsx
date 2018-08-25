@@ -1,14 +1,18 @@
 import React, { Component } from 'react';
-import { View, Text, ScrollView, TextInput, BackHandler, KeyboardAvoidingView, Platform, Switch } from 'react-native';
+import { View, Text, Switch, ScrollView, TextInput, Alert, BackHandler, KeyboardAvoidingView, Platform, TouchableHighlight } from 'react-native';
 
 import Button from 'ui/components/button';
 import DashboardShell from 'ui/components/dashboard-shell';
+import { LoadingContext } from 'ui/components/loading'
+import SpinningPicker from 'ui/components/spinning-picker'
 
 import style from 'theme/form';
 import general from 'theme/general';
 
-import { UserData, LndrVerifiedData, defaultLndrVerifiedData } from 'lndr/user';
+import { UserData } from 'lndr/user';
+import countries from 'lndr/data';
 
+const loadingContext = new LoadingContext();
 
 interface Props {
     navigation: any
@@ -37,6 +41,8 @@ class LndrVerifyForm extends Component <Props, State>{
             telephone: '',
             citizenship: '',
         }
+        this.showGovernmentIssuedInfo = this.showGovernmentIssuedInfo.bind(this);
+        this.showProofOfAddressInfo = this.showProofOfAddressInfo.bind(this);
     }
 
     componentDidMount() {
@@ -49,7 +55,36 @@ class LndrVerifyForm extends Component <Props, State>{
         BackHandler.exitApp()
     }
     submit = () => {
+        const {} = this.props;
+        // if ()
+    }
+    showGovernmentIssuedInfo = () => {
+        Alert.alert(
+            'Examples of ID include:',
+            `
+                -  Passport
+                -  Driver's License
+                -  National identity card
+            `,
+            [
+              {text: 'OK', onPress: () => null},
+            ],
+            { cancelable: false }
+          )
+    }
 
+    showProofOfAddressInfo = () => {
+        Alert.alert(
+            'Examples of proof of address:',
+            `
+                -  Bank statement
+                -  Utility bill
+            `,
+            [
+              {text: 'OK', onPress: () => null},
+            ],
+            { cancelable: false }
+          )
     }
 
     async onNameTextInputBlur(name: string) {
@@ -89,7 +124,7 @@ class LndrVerifyForm extends Component <Props, State>{
         return(
             <View style={general.whiteFlex}>
                 <View style={general.view}>
-                    <DashboardShell text="Lndr Verified" navigation={this.props.navigation} hideSettings />
+                    <DashboardShell text="Lndr Verified" navigation={this.props.navigation} />
                     <Button close onPress={() => this.props.navigation.goBack()} />
                 </View>
                 <ScrollView keyboardShouldPersistTaps="never">
@@ -137,35 +172,23 @@ class LndrVerifyForm extends Component <Props, State>{
                             </View>
                             { !!telephoneTextInputErrorText && <Text style={style.warningText}>{telephoneTextInputErrorText}</Text>}
 
-                            <View style={style.textInputContainer}>
-                            <TextInput
-                                autoCapitalize='sentences'
-                                style={style.textInput}
-                                placeholder="Citizenship"
-                                value={citizenship}
-                                maxLength={20}
-                                underlineColorAndroid='transparent'
-                                onChangeText={citizenship => this.setState({ citizenship })}
-                                onBlur={(): any => this.onCitizenshipTextInputBlur(this.state.citizenship)}
-                            />
-                            </View>
+                            {/* <View> */}
+                              {/* <SpinningPicker label="Citizenship" allItems={countries} selectedItem={citizenship} onPickerDone={(value) => this.setState({citizenship: value})} /> */}
+                            {/* </View> */}
                             { !!citizenshipTextInputErrorText && <Text style={style.warningText}>{citizenshipTextInputErrorText}</Text>}
-                            <View style={style.text}>
-                                <Text>Upload a government issued ID </Text>
-                            </View>
-                            <View style={style.text}>
-                                <Text>Upload a selfie with your government issued ID </Text>
-                            </View>
-                            <View style={style.text}>
-                                <Text>Proof of address (if not ID) </Text>
+                            <View>
+                                <Text style={[style.label, style.spaceTopS]}>Upload a <Text onPress={this.showGovernmentIssuedInfo} style={[style.link]}> government issued ID</Text></Text>
                             </View>
                             <View>
-                                {
-                                    (Platform.OS === 'android') ?
-                                    ("I have read and agree to the Privacy Policy") :
-                                    (<Switch> I have read and agree to the Privacy Policy </Switch>)
-                                }
+                                <Text style={[style.label, style.spaceTopS]}>Upload a selfie with your government issued ID </Text>
                             </View>
+                            <View>
+                                <Text style={[style.label, style.spaceTopS]}>Proof of address <Text onPress={this.showProofOfAddressInfo} style={style.link}>(if not ID)</Text> </Text>
+                            </View>
+                            {/* <View style={[general.flexRow]}>
+                                <Switch />
+                                <Text style={[style.label, style.spaceTopS, {alignSelf: 'flex-end'}]}>I have read and agree to the Privacy Policy</Text>
+                            </View> */}
 
                             <Button round fat onPress={() => this.submit()} style={style.submitButton} text="Submit" />
 
