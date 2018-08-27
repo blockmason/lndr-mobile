@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { View, Text, Switch, ScrollView, TextInput, Alert, BackHandler, KeyboardAvoidingView, Platform, TouchableHighlight } from 'react-native';
+import { View, Text, Switch, ScrollView, TextInput, Alert, BackHandler, KeyboardAvoidingView, Platform, TouchableHighlight, Picker } from 'react-native';
 
 import Button from 'ui/components/button';
 import DashboardShell from 'ui/components/dashboard-shell';
@@ -25,6 +25,7 @@ interface State {
     address: string
     telephone: string
     citizenship: string
+    agreement: boolean
     nameTextInputErrorText?: string
     addressTextInputErrorText?: string
     telephoneTextInputErrorText?: string
@@ -40,9 +41,11 @@ class LndrVerifyForm extends Component <Props, State>{
             address: '',
             telephone: '',
             citizenship: '',
+            agreement: false
         }
         this.showGovernmentIssuedInfo = this.showGovernmentIssuedInfo.bind(this);
         this.showProofOfAddressInfo = this.showProofOfAddressInfo.bind(this);
+        this.toggleSwitch = this.toggleSwitch.bind(this);
     }
 
     componentDidMount() {
@@ -87,6 +90,11 @@ class LndrVerifyForm extends Component <Props, State>{
           )
     }
 
+    toggleSwitch = () => {
+        const { agreement } = this.state;
+        this.setState({ agreement: !agreement})
+    }
+
     async onNameTextInputBlur(name: string) {
         if (typeof name !== 'undefined') {
             this.setState({ nameTextInputErrorText: ''});
@@ -120,7 +128,7 @@ class LndrVerifyForm extends Component <Props, State>{
     }
     render() {
         const vertOffset = (Platform.OS === 'android') ? -300 : 0;
-        const { name, address, telephone, citizenship, nameTextInputErrorText, addressTextInputErrorText, telephoneTextInputErrorText, citizenshipTextInputErrorText } = this.state;
+        const { name, address, telephone, citizenship, agreement, nameTextInputErrorText, addressTextInputErrorText, telephoneTextInputErrorText, citizenshipTextInputErrorText } = this.state;
         return(
             <View style={general.whiteFlex}>
                 <View style={general.view}>
@@ -171,10 +179,24 @@ class LndrVerifyForm extends Component <Props, State>{
                             />
                             </View>
                             { !!telephoneTextInputErrorText && <Text style={style.warningText}>{telephoneTextInputErrorText}</Text>}
-
-                            {/* <View> */}
-                              {/* <SpinningPicker label="Citizenship" allItems={countries} selectedItem={citizenship} onPickerDone={(value) => this.setState({citizenship: value})} /> */}
-                            {/* </View> */}
+                            <View style={style.pickerContainer}>
+                                <Text style={[style.text, style.spaceTopL, style.center]}>
+                                    Citizenship
+                                </Text>
+                                <Picker
+                                    selectedValue={(value) => this.setState({ citizenship: value})}
+                                    onValueChange={(value, _index) => this.setState({citizenship: value.name})}
+                                    prompt="Citizenship">
+                                    {countries.map((value, key) => 
+                                        <Picker.Item
+                                            label={value.name}
+                                            key={key} 
+                                            value={value.name}>
+                                                {value.name}
+                                        </Picker.Item>)
+                                    }
+                                </Picker>
+                            </View>
                             { !!citizenshipTextInputErrorText && <Text style={style.warningText}>{citizenshipTextInputErrorText}</Text>}
                             <View>
                                 <Text style={[style.label, style.spaceTopS]}>Upload a <Text onPress={this.showGovernmentIssuedInfo} style={[style.link]}> government issued ID</Text></Text>
@@ -185,10 +207,10 @@ class LndrVerifyForm extends Component <Props, State>{
                             <View>
                                 <Text style={[style.label, style.spaceTopS]}>Proof of address <Text onPress={this.showProofOfAddressInfo} style={style.link}>(if not ID)</Text> </Text>
                             </View>
-                            {/* <View style={[general.flexRow]}>
-                                <Switch />
+                            <View style={[general.flexRow]}>
+                                <Switch value={agreement} onValueChange={this.toggleSwitch} style={[]}/>
                                 <Text style={[style.label, style.spaceTopS, {alignSelf: 'flex-end'}]}>I have read and agree to the Privacy Policy</Text>
-                            </View> */}
+                            </View>
 
                             <Button round fat onPress={() => this.submit()} style={style.submitButton} text="Submit" />
 

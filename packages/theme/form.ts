@@ -143,6 +143,14 @@ export default StyleSheet.create({
     paddingLeft: 8,
     ...verticalMarginXS
   },
+  pickerContainer: {
+    width: '100%',
+    borderRadius: 30,
+    borderWidth: 1,
+    borderColor: softGray,
+    paddingLeft: 8,
+    ...verticalMarginXS
+  },
   settleAmount: {
     width: '80%',
     borderRadius: 30,
