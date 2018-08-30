@@ -33,7 +33,7 @@ export default class WelcomeStepFourView extends Component<Props> {
               <Image resizeMode="contain" style={{flex: 1}} source={require('images/walkthrough4-settle.png')} />
             </View>
           </View>
-          
+
           <Text style={style.caption}>{walkthrough.step4.payPal}</Text>
           <View style={[general.flex, {height:50}]}>
             <Image resizeMode="contain" style={{flex: 1}} source={require('images/walkthrough4-paypal.png')} />
@@ -46,6 +46,8 @@ export default class WelcomeStepFourView extends Component<Props> {
           <View style={[general.flex, {height:50}]}>
             <Image resizeMode="contain" style={{flex: 1}} source={require('images/walkthrough4-cash.png')} />
           </View>
+
+          <Button small link alternate arrow text={walkthrough.continue} onPress={this.props.onComplete} />
 
         </View>
       </ScrollView>

@@ -14,6 +14,7 @@ import WelcomeStepOneView from 'ui/views/welcome/welcome-step-one'
 import WelcomeStepTwoView from 'ui/views/welcome/welcome-step-two'
 import WelcomeStepThreeView from 'ui/views/welcome/welcome-step-three'
 import WelcomeStepFourView from 'ui/views/welcome/welcome-step-four'
+import WelcomeStepFiveView from 'ui/views/welcome/welcome-step-five'
 
 interface Props {
   onComplete: () => void
@@ -64,7 +65,8 @@ export default class WelcomeView extends Component<Props, State> {
             <WelcomeStepOneView onComplete={ () => { this.gotoPage(2) } } />,
             <WelcomeStepTwoView onComplete={ () => { this.gotoPage(3) } } />,
             <WelcomeStepThreeView onComplete={ () => { this.gotoPage(4) } } />,
-            <WelcomeStepFourView onComplete={ () => { this.onComplete() } } />
+            <WelcomeStepFourView onComplete={ () => { this.gotoPage(5) } } />,
+            <WelcomeStepFiveView onComplete={ () => { this.onComplete() } } />
           ]} />
           <Button alternate small link text={walkthrough.skip} style={[{position: "absolute"}, {bottom:25}, {left:30}]} onPress={() => { this.onSkip() }}/>
 

@@ -1,6 +1,6 @@
 import React, { Component } from 'react'
 
-import { View, Text, ScrollView } from 'react-native'
+import { Image, View, Text, ScrollView } from 'react-native'
 import firebase from 'react-native-firebase'
 
 import general from 'theme/general'
@@ -26,9 +26,13 @@ export default class WelcomeStepFiveView extends Component<Props> {
         <View style={style.topView}>
 
           <Text style={style.title}>{walkthrough.step5.title}</Text>
-
           <Text style={style.caption}>{walkthrough.step5.multiCurrency}</Text>
+          <View style={[general.flex, {height:50}]}>
+            <Image resizeMode="contain" style={{flex: 1}} source={require('images/walkthrough5-sample.png')} />
+          </View>
           <Text style={style.caption}>{walkthrough.step5.exchangeRate}</Text>
+
+          <Button small link alternate arrow text={walkthrough.continue} onPress={this.props.onComplete} />
 
         </View>
       </ScrollView>
