@@ -27,6 +27,9 @@ export default class WelcomeStepFourView extends Component<Props> {
     return (
       <ScrollView>
         <View style={style.topView}>
+
+          When it's time to settle up, you can choose to settle your debts in traditional currencies via PayPal, in cryptocurrencies like Ether, or record a settlement in cash.
+          
           <TextLogo name='black'/>
           <Text style={[style.caption, style.boldCaption, style.topSpacing]}>{welcomeView.runEthereum}</Text>
           <Button large round wide onPress={this.props.onComplete} containerStyle={style.completeButton} text={welcomeView.start} />

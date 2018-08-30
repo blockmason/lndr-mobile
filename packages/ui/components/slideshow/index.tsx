@@ -17,8 +17,11 @@ interface Props {
 }
 
 export default class Slideshow extends Component<Props> {
-
   getBaseScroll = new Animated.Value(0)
+
+  constructor(props) {
+    super(props)
+  }
 
   renderContent () {
     const { views } = this.props
@@ -28,7 +31,7 @@ export default class Slideshow extends Component<Props> {
         <View key={i} style={[{ width }, style.content]}>
           {source}
         </View>
-      );
+      )
     })
   }
 
@@ -41,13 +44,13 @@ export default class Slideshow extends Component<Props> {
         inputRange: [ i - 1, i, i + 1 ],
         outputRange: [ 0.3, 1, 0.3 ],
         extrapolate: 'clamp'
-      });
+      })
       return (
         <Animated.View
           key={i}
           style={[ { opacity }, style.indicator ]}
         />
-      );
+      )
     })
   }
 
@@ -57,12 +60,21 @@ export default class Slideshow extends Component<Props> {
     )
   }
 
+  gotoPage(pageIdx) {
+    // NOTE: pageIdx is 1-based
+    const scrollView = this.refs.scrollView as any
+//  console.log('contentOffset: ' + scrollView.contentOffset)
+    const contentOffsetX = (pageIdx-1)*width
+    scrollView.scrollTo({x: contentOffsetX, y: 0, animated: true})
+  }
+
   render () {
     return (
     <View style={style.slideContent}>
       <AndroidStatusBar hidden/>
       <View style={ [ { width }, style.slideHeight ] }>
-        <ScrollView keyboardShouldPersistTaps="always"
+        <ScrollView ref='scrollView'
+          keyboardShouldPersistTaps="always"
           horizontal={true}
           pagingEnabled={true}
           showsHorizontalScrollIndicator={false}
@@ -76,6 +88,6 @@ export default class Slideshow extends Component<Props> {
         {this.renderIndicator()}
       </View>
     </View>
-    );
+    )
   }
 }

@@ -197,23 +197,25 @@ export default {
     youPlayWithFriends: `You play with friends;\nwe'll keep the tab...`,
     start: `GET STARTED`,
   },
-
   walkthrough: {
     skip: `skip`,
+    continue: `Continue`,
     step1: {
-      easyToUse: `The easiest way to track and settle simple debts with your friends,
-securely on the Blockchain.`,
-      poweredBy1: `Powered by Blockmason's`,
-      poweredBy2: `Credit Protocol`,
-      poweredBy3a: `Lndr ensures that both you and your friend `,
-      poweredBy3b: ` to all recorded transactions.`,
-      agree: `agree`,
+      easyToUse: `Lndr is the easiest way to split bills, share expenses and settle simple debts with friends and family, all done securely on the blockchain.`,
       len: `Len`,
       der: `der`,
-      continue: `GET STARTED`
+      continue: `Let's get started`
     },
     step2: {
-      continue: `CONTINUE`
+      getStarted: `To get started with Lndr, you will need to add a friend.`,
+      friendsScreen: `Visit the Friends screen to search for, add, or invite your friends and family to connect on Lndr.`
+    },
+    step3: {
+      easy: `Splitting a bill or adding a debt with a friend is easy in Lndr!`,
+      selectFriend: `Select your friend, your currency and the amount.`,
+      addMemo: `Add some notes in the memo box and click Submit.`
+    },
+    step4: {
     }
   },
   debtManagement: {

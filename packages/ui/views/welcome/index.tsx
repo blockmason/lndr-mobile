@@ -33,7 +33,7 @@ export default class WelcomeView extends Component<Props, State> {
 
   onSkip() {
     firebase.analytics().logEvent('skip_walkthrough')
-    this.onComplete();
+    this.onComplete()
   }
 
   onComplete() {
@@ -50,14 +50,20 @@ export default class WelcomeView extends Component<Props, State> {
       })
   }
 
+  gotoPage(pageIdx) {
+    // NOTE: pageIdx is 1-based
+    const slideShow = this.refs.slideShow as any
+    slideShow.gotoPage(pageIdx)
+  }
+
   render () {
     return (
       <View style={general.flex}>
-        <Slideshow
+        <Slideshow ref="slideShow"
           views={[
-            <WelcomeStepOneView onComplete={ () => { /* animate to next frame */ } } />,
-            <WelcomeStepTwoView />,
-            <WelcomeStepThreeView />,
+            <WelcomeStepOneView onComplete={ () => { this.gotoPage(2) } } />,
+            <WelcomeStepTwoView onComplete={ () => { this.gotoPage(3) } } />,
+            <WelcomeStepThreeView onComplete={ () => { this.gotoPage(4) } } />,
             <WelcomeStepFourView onComplete={ () => { this.onComplete() } } />
           ]} />
           <Button alternate small link text={walkthrough.skip} style={[{position: "absolute"}, {bottom:25}, {left:30}]} onPress={() => { this.onSkip() }}/>

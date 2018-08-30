@@ -1,6 +1,6 @@
 import { StyleSheet } from 'react-native'
 
-import { light, white, black, gray, aqua } from 'theme/include/colors'
+import { light, white, black, gray, aqua, darkGray } from 'theme/include/colors'
 import { percent } from 'theme/include/dimensions'
 import { large } from 'theme/include/fonts'
 
@@ -37,8 +37,8 @@ export default StyleSheet.create({
     marginTop: 20,
     marginBottom: 20,
     fontSize: 20,
-    fontWeight: '100',
-    color: black
+/*    fontWeight: '100', */
+    color: darkGray
   },
   boldCaption: {
     fontWeight: '500'
@@ -48,6 +48,9 @@ export default StyleSheet.create({
   },
   bold: {
     fontWeight: 'bold'
+  },
+  underline: {
+    textDecorationLine: 'underline'
   },
   completeButton: {
     marginTop: '7%'

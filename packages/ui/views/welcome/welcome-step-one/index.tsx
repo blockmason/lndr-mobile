@@ -16,7 +16,11 @@ import { mediumImage, largeImage } from 'theme/include/dimensions'
 import language from 'language'
 const { walkthrough } = language
 
-export default class WelcomeStepOneView extends Component {
+interface Props {
+  onComplete: () => void
+}
+
+export default class WelcomeStepOneView extends Component<Props> {
   componentDidMount( ) {
     firebase.analytics().setCurrentScreen('welcome-step-one', 'WelcomeStepOneView');
   }
@@ -36,14 +40,8 @@ export default class WelcomeStepOneView extends Component {
           <View style={[general.flex, {height:50}]}>
             <Image resizeMode="contain" style={{flex: 1}} source={require('images/walkthrough-step1-graphic.png')} />
           </View>
-          <Text style={[style.caption, {marginBottom:0}]}>{walkthrough.step1.poweredBy1}</Text>
-          <Text style={[style.caption, {marginBottom:0}, {marginTop:0}, style.bold]}>{walkthrough.step1.poweredBy2}</Text>
-          <Text style={[style.caption, {marginTop:0}]}>{walkthrough.step1.poweredBy3a}
-            <Text style={style.italic}>{walkthrough.step1.agree}</Text>
-            <Text>{walkthrough.step1.poweredBy3b}</Text>
-          </Text>
 
-          <Button small link alternate arrow text={walkthrough.step1.continue} />
+          <Button small link alternate arrow text={walkthrough.step1.continue} onPress={this.props.onComplete} />
 
         </View>
       </ScrollView>
