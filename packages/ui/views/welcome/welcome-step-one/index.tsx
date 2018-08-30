@@ -3,15 +3,13 @@ import React, { Component } from 'react'
 import { Image, View, Text, ScrollView } from 'react-native'
 import firebase from 'react-native-firebase'
 
-import firebase from 'react-native-firebase'
 import general from 'theme/general'
 import style from 'theme/slide'
 
 import Button from 'ui/components/button'
 import ThemeImage from 'ui/components/images/theme-image'
-import BMLogo from 'ui/components/images/bm-logo'
 
-import { mediumImage, largeImage } from 'theme/include/dimensions'
+import { largeImage } from 'theme/include/dimensions'
 
 import language from 'language'
 const { walkthrough } = language

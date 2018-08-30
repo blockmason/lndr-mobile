@@ -1,17 +1,14 @@
 import React, { Component } from 'react'
 
-import { View, Text, ScrollView } from 'react-native'
+import { Image, View, Text, ScrollView } from 'react-native'
 import firebase from 'react-native-firebase'
 
+import general from 'theme/general'
 import style from 'theme/slide'
 
-import { largeImage } from 'theme/include/dimensions'
-
 import language from 'language'
-const { welcomeView } = language
+const { walkthrough } = language
 
-import TextLogo from 'ui/components/images/text-logo'
-import ThemeImage from 'ui/components/images/theme-image'
 import Button from 'ui/components/button'
 
 interface Props {
@@ -28,13 +25,28 @@ export default class WelcomeStepFourView extends Component<Props> {
       <ScrollView>
         <View style={style.topView}>
 
-          When it's time to settle up, you can choose to settle your debts in traditional currencies via PayPal, in cryptocurrencies like Ether, or record a settlement in cash.
+          <Text style={style.title}>{walkthrough.step4.title}</Text>
+
+          <View style={general.flex}>
+            <Text style={style.caption}>{walkthrough.step4.ready}</Text>
+            <View style={[general.flex, {height:50}]}>
+              <Image resizeMode="contain" style={{flex: 1}} source={require('images/walkthrough4-settle.png')} />
+            </View>
+          </View>
           
-          <TextLogo name='black'/>
-          <Text style={[style.caption, style.boldCaption, style.topSpacing]}>{welcomeView.runEthereum}</Text>
-          <Button large round wide onPress={this.props.onComplete} containerStyle={style.completeButton} text={welcomeView.start} />
-          <Text style={[style.text]}>{welcomeView.firstLendingApp}</Text>
-          <ThemeImage size={largeImage} name='blockchain'/>
+          <Text style={style.caption}>{walkthrough.step4.payPal}</Text>
+          <View style={[general.flex, {height:50}]}>
+            <Image resizeMode="contain" style={{flex: 1}} source={require('images/walkthrough4-paypal.png')} />
+          </View>
+          <Text style={style.caption}>{walkthrough.step4.ether}</Text>
+          <View style={[general.flex, {height:50}]}>
+            <Image resizeMode="contain" style={{flex: 1}} source={require('images/walkthrough4-eth.png')} />
+          </View>
+          <Text style={style.caption}>{walkthrough.step4.cash}</Text>
+          <View style={[general.flex, {height:50}]}>
+            <Image resizeMode="contain" style={{flex: 1}} source={require('images/walkthrough4-cash.png')} />
+          </View>
+
         </View>
       </ScrollView>
     )

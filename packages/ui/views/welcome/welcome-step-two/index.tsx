@@ -3,14 +3,10 @@ import React, { Component } from 'react'
 import { Image, View, Text, ScrollView, Dimensions } from 'react-native'
 
 import Button from 'ui/components/button'
-import TextLogo from 'ui/components/images/text-logo'
-import ThemeImage from 'ui/components/images/theme-image'
 
 import firebase from 'react-native-firebase'
 import general from 'theme/general'
 import style from 'theme/slide'
-
-import { mediumImage } from 'theme/include/dimensions'
 
 import language from 'language'
 const { walkthrough } = language

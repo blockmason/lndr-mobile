@@ -211,11 +211,22 @@ export default {
       friendsScreen: `Visit the Friends screen to search for, add, or invite your friends and family to connect on Lndr.`
     },
     step3: {
+      title: `Recording a Transaction`,
       easy: `Splitting a bill or adding a debt with a friend is easy in Lndr!`,
       selectFriend: `Select your friend, your currency and the amount.`,
       addMemo: `Add some notes in the memo box and click Submit.`
     },
     step4: {
+      title: `Settling Up`,
+      ready: `Ready to Settle Up?`,
+      payPal: `When it’s time to settle up with Lndr,\n- you can choose PayPal:`,
+      ether: `- cryptocurrencies like Ether:`,
+      cash: `- or simply record a cash settlement:`
+    },
+    step5: {
+      title: `Multi-Currency`,
+      multiCurrency: `Lndr can keep track of your transactions even if they happen in different currencies.`,
+      exchangeRate: `When you decide to Settle Up with your friend, all transactions will be converted into your primary currency using the most up-to-date exchange rates available.`
     }
   },
   debtManagement: {

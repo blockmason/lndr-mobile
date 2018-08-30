@@ -1,18 +1,15 @@
 import React, { Component } from 'react'
 
-import { View, Text, ScrollView } from 'react-native'
+import { Image, View, Text, ScrollView } from 'react-native'
 import firebase from 'react-native-firebase'
 
+import general from 'theme/general'
 import style from 'theme/slide'
 
-import { mediumImage } from 'theme/include/dimensions'
-
 import language from 'language'
-const { walkthrough, welcomeView } = language
+const { walkthrough } = language
 
 import Button from 'ui/components/button'
-import TextLogo from 'ui/components/images/text-logo'
-import ThemeImage from 'ui/components/images/theme-image'
 
 interface Props {
   onComplete: () => void
@@ -26,7 +23,7 @@ export default class WelcomeStepThreeView extends Component<Props> {
     return (
       <ScrollView>
         <View style={style.topView}>
-
+          <Text style={style.title}>{walkthrough.step3.title}</Text>
           <Text style={style.caption}>{walkthrough.step3.easy}</Text>
           <Button large round text={'A friend owes me'} onPress={() => null} />
           <Button large round text={'I owe a friend'} onPress={() => null} />
