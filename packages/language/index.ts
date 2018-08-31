@@ -58,4 +58,34 @@ if (exportLanguage === undefined) {
   exportLanguage = languages.en
 }
 
+export const settlementTerms = [
+  'سداد مبلغ لـ', 'طلب سداد مبلغ لـ',
+  'Vypořádání na', 'Žádost o vypořádání na',
+  'Afregner', 'Anmodning om at afregne med',
+  'Abrechnung für ', 'Anfrage zur Abrechnung für',
+  'Διακανονισμός για', 'Αίτηση διακανονισμού για',
+  `Settling up for`, `Request to settle for`,
+  'Acordando Pago Por', 'Solicitud de Acordar Pago Por',
+  'Maksetaan velkaa', 'Pyydetään velan maksua summasta',
+  'Régler pour', 'Demande de régler pour',
+  'में निपटान करना', 'में निपटान के लिए रिक्वेस्ट करें',
+  'Kiegyenlítés neki', 'Kérés a kiegyenlítéshez neki',
+  'Melunasi', 'Permintaan pelunasan',
+  'Saldare debito per', 'Richiesta di pagamento di',
+  'החזרת חוב עבור', 'בקשת החזרת חוב עבור',
+  `を設定`, `の帳消しをリクエスト`,
+  `청산`, `청산 요청`,
+  'Menyelesaikan hutang untuk', 'Mohon untuk menyelesaikan bagi',
+  'Gjør opp for', 'Forespørsel om å betale for',
+  'Betaling voor', 'Verzoek om te betalen voor',
+  'Rozliczenie za', 'Rozlicz za',
+  'Pagar a', 'Pedido de pagamento de',
+  'Расселение на', 'Запрос довольствоваться',
+  'Betala', 'Begäran om att komma överens om',
+  'ชำระหนี้เป็นจำนวน ', 'ขอชำระหนี้เป็นจำนวน',
+  'Size ödenecek tutar', 'Ödenmesini istediğiniz tutar',
+  'Thanh toán cho ', 'Yêu cầu thanh toán cho',
+  "偿清债务", "请求偿清债务",
+]
+
 export default exportLanguage

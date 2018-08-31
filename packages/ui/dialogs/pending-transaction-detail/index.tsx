@@ -14,8 +14,8 @@ import Friend from 'lndr/friend'
 import Button from 'ui/components/button'
 import Loading, { LoadingContext } from 'ui/components/loading'
 import DashboardShell from 'ui/components/dashboard-shell'
-import PendingTransactionRow from 'ui/components/pending-transaction-row'
 import PayPalSettlementButton from 'ui/components/paypal-settle-button'
+import BalanceSection from 'ui/components/balance-section'
 
 import style from 'theme/pending'
 import general from 'theme/general'
@@ -26,7 +26,6 @@ import language from 'language'
 const {
   back,
   pendingTransactionsLanguage,
-  debtManagement,
   payPalLanguage
 } = language
 
@@ -211,6 +210,8 @@ class PendingTransactionDetail extends Component<Props, State> {
     const imageSource = userPic ? {uri: userPic} : require('images/person-outline-dark.png')
     const currency = getUcacCurrency(pendingTransaction.ucac)
     const color = this.getColor()
+    const friendAddress = user.address === pendingTransaction.creditorAddress ? pendingTransaction.debtorAddress : pendingTransaction.creditorAddress
+    const friend = this.props.getFriendFromAddress(friendAddress) || new Friend('', '')
 
     return <View style={general.whiteFlex}>
       <View style={general.view}>
@@ -229,7 +230,9 @@ class PendingTransactionDetail extends Component<Props, State> {
           {this.labelRow(pendingTransaction.memo.trim())}
           <View style={{marginVertical: 20, width: '100%'}}>
           {pendingTransaction.multiTransactions === undefined ? null :
-            pendingTransaction.multiTransactions.map(tx => <PendingTransactionRow user={user} key={tx.hash} pendingTransaction={tx} friend={true} onPress={() => null} />)
+            <View style={[general.centeredColumn, {marginBottom: 10, marginHorizontal: 40}]}>
+              <BalanceSection friend={friend} />
+            </View>
           }
           </View>
           { isPayPalSettlement ? <Button alternate small arrow style={formStyle.submitButton} onPress={this.payPalFeesAlert} text={payPalLanguage.feesNotification} /> : null }

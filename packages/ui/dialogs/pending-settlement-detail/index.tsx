@@ -13,7 +13,7 @@ import { currencySymbols, transferLimits, hasNoDecimals } from 'lndr/currencies'
 import Button from 'ui/components/button'
 import Loading, { LoadingContext } from 'ui/components/loading'
 import DashboardShell from 'ui/components/dashboard-shell'
-import PendingSettlementRow from 'ui/components/pending-settlement-row'
+import BalanceSection from 'ui/components/balance-section'
 
 import style from 'theme/pending'
 import formStyle from 'theme/form'
@@ -35,6 +35,10 @@ import { connect } from 'react-redux'
 const loadingContext = new LoadingContext()
 
 interface Props {
+  user: UserData
+  ethSentPastWeek: number
+  navigation: any
+  primaryCurrency: string
   addDebt: (
     friend: Friend,
     amount: string,
@@ -44,15 +48,12 @@ interface Props {
     settleTotal?: boolean,
     denomination?: string
   ) => any
+  getFriendFromAddress: (address: string) => Friend | undefined
   rejectPendingSettlement: (pendingSettlement: PendingUnilateral, settlementCurrency: string) => any
-  user: UserData
   ethExchange: (currency: string) => string
-  ethSentPastWeek: number
   settlerIsMe: (pendingSettlement: PendingUnilateral) => boolean
   calculateBalance: (friend: Friend) => number
   getUcacCurrency: (ucac: string) => string
-  navigation: any
-  primaryCurrency: string
 }
 
 interface State {
@@ -217,8 +218,10 @@ class PendingSettlementDetail extends Component<Props, State> {
 
   render() {
     const { txCost, confirmationError } = this.state
-    const { user, settlerIsMe, primaryCurrency } = this.props
+    const { user, primaryCurrency } = this.props
     const pendingSettlement = this.getPendingSettlement()
+    const friendAddress = user.address === pendingSettlement.creditorAddress ? pendingSettlement.debtorAddress : pendingSettlement.creditorAddress
+    const friend = this.props.getFriendFromAddress(friendAddress) || new Friend('', '')
 
     return <View style={general.whiteFlex}>
       <View style={general.view}>
@@ -239,7 +242,7 @@ class PendingSettlementDetail extends Component<Props, State> {
             <Text style={style.balanceInfo}>{pendingSettlement.settlementCurrency}</Text>
           </View>
           {pendingSettlement.multiSettlements === undefined ? null :
-            pendingSettlement.multiSettlements.map(stmt => <PendingSettlementRow user={user} pendingSettlement={stmt} key={stmt.hash} friend={true} onPress={() => null} settlerIsMe={settlerIsMe}/>)
+          <BalanceSection friend={friend} />
           }
           <View style={{marginBottom: 20}}/>
           {user.address === pendingSettlement.debtorAddress ? null : <Text style={[formStyle.smallText, formStyle.spaceTop, formStyle.center]}>{accountManagement.sendEth.warning(this.getLimit(), primaryCurrency)}</Text>}

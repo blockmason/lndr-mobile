@@ -60,18 +60,33 @@ export default StyleSheet.create({
     borderBottomColor: softAqua
   },
   listItem: {
-    display: 'flex',
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
-    width: '80%',
     borderColor: softGray,
     borderBottomWidth: 1,
     borderTopWidth: 1,
     paddingLeft: s,
     paddingRight: s,
     paddingTop: s,
-    paddingBottom: m - xs
+    paddingBottom: m - xs,
+    width: '100%',
+  },
+  currencyBalance: {
+    flex: 1,
+    display: 'flex',
+    flexDirection: 'row',
+    justifyContent: 'flex-end',
+    height: 30
+  },
+  currencySymbolBalance: {
+    ...large,
+    color: black,
+    marginRight: 5
+  },
+  balanceMemo: {
+    ...small,
+    paddingVertical: 2
   },
   column: {
     display: 'flex',

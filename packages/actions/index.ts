@@ -33,7 +33,7 @@ const { accountManagement, debtManagement, settlementManagement, copiedClipboard
 
 import { ToastActionsCreators } from 'react-native-redux-toast'
 import { defaultCurrency } from 'lndr/currencies'
-import { getUser, getUcacAddr, calculateUcacBalances, convertCurrency, getPrimaryCurrency,
+import { getUser, getUcacAddr, calculateUcacBalances, getPrimaryCurrency,
   getChannelID } from 'reducers/app'
 
 const bcrypt = require('bcryptjs')
@@ -510,7 +510,7 @@ export const confirmPendingTransaction = (pendingTransaction: PendingTransaction
     const friendNickname = address === creditorAddress ? debtorNickname : creditorNickname
 
     if(multiTransactions !== undefined) {
-      const ucacBalances = calculateUcacBalances(getState())(friendAddress)
+      const { ucacBalances } = calculateUcacBalances(getState())(friendAddress)
       const { transactions } = await generateMultiTransaction(address, friendAddress, ucacBalances, memo, getState, privateKeyBuffer, creditProtocol)
 
       try {
@@ -596,7 +596,7 @@ export const setInitialHomeLoad = (initialHomeLoad: any) => {
 export const addDebt = (friend: Friend, amount: string, memo: string, direction: string, currency: string, settleTotal?: boolean, denomination?: string) => {
   return async (dispatch, getState) => {
     const { address, privateKeyBuffer } = getUser(getState())()
-    const ucacBalances = calculateUcacBalances(getState())(friend.address)
+    const { ucacBalances } = calculateUcacBalances(getState())(friend.address)
     const sanitizedAmount = sanitizeAmount(amount, currency)
 
     if(direction !== 'borrow' && direction !== 'lend') {

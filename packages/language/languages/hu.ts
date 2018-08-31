@@ -268,7 +268,7 @@ export default {
     for: M => ` ${M} részére`,
     settleUp: `Kiegyenlítés`,
     settleTotal: `Összes Kiegyenlítése`,
-    settleUpMemo: (D, A) => `${D === 'lend'? 'Kiegyenlítés neki': 'Kérés a kiegyenlítéshez neki'} ${A} `,
+    settleUpMemo: (D, A) => `${D === 'lend' ? 'Kiegyenlítés neki': 'Kérés a kiegyenlítéshez neki'} ${A} `,
     recordSettleUpMemo: `kiegyenlítés alatt`,
     balanceByCurrency: `Részletek`,
   },

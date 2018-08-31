@@ -268,7 +268,7 @@ export default {
     for: M => `a ${M}`,
     settleUp: `Saldare un debito`,
     settleTotal: `Totale debito da saldare`,
-    settleUpMemo: (D, A) => `${D === 'lend'? 'Saldare debito per': 'Richiesta di pagamento di'} ${A} `,
+    settleUpMemo: (D, A) => `${D === 'lend' ? 'Saldare debito per': 'Richiesta di pagamento di'} ${A} `,
     recordSettleUpMemo: `Salda debito`,
     balanceByCurrency: `Dettagli`,
   },

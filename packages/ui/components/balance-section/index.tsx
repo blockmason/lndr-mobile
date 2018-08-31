@@ -16,7 +16,7 @@ const { debtManagement } = language
 
 interface Props {
   friend: Friend
-  calculateUcacBalances: (friendAddr: string) => object
+  calculateUcacBalances: (friendAddr: string) => any
 }
 
 interface PassedProps extends React.Props<any> {
@@ -31,13 +31,13 @@ class BalanceSection extends Component<Props> {
 
   render() {
     const { friend, calculateUcacBalances } = this.props
-    const ucacBalances = calculateUcacBalances(friend.address)
+    const { ucacBalances, memosSinceSettlement } = calculateUcacBalances(friend.address)
     const hasNoBalance = Object.keys(ucacBalances).length === 0
 
     return (
       <View style={general.centeredColumn}>
         {hasNoBalance ? null : <Text style={style.balanceSectionTitle}>{debtManagement.balanceByCurrency}</Text> }
-        {hasNoBalance ? null : Object.keys(ucacBalances).map( ucac => <BalanceRow key={ucac} amount={ucacBalances[ucac]} currency={ucac} /> )}
+        {hasNoBalance ? null : Object.keys(ucacBalances).map( ucac => <BalanceRow key={ucac} amount={ucacBalances[ucac]} currency={ucac} memos={memosSinceSettlement[ucac]} /> )}
       </View>
     )
   }
