@@ -62,6 +62,7 @@ export default StyleSheet.create({
   listItem: {
     flexDirection: 'row',
     justifyContent: 'space-between',
+    alignItems: 'center',
     borderColor: softGray,
     borderBottomWidth: 1,
     borderTopWidth: 1,
@@ -85,7 +86,7 @@ export default StyleSheet.create({
   },
   balanceMemo: {
     ...small,
-    height: 18
+    paddingVertical: 2
   },
   column: {
     display: 'flex',
