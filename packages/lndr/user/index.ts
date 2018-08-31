@@ -23,10 +23,9 @@ export interface UpdateAccountData {
 }
 
 export interface LndrVerifiedData {
-  name: string
-  address: string
-  telephone: string
-  citizenship: string
+  email: string
+  externalUserId: string
+  info: object
 }
 
 export interface UserData {
@@ -66,10 +65,9 @@ export const defaultUpdateAccountData = (): UpdateAccountData => ({
 })
 
 export const defaultLndrVerifiedData = (): LndrVerifiedData => ({
-  name: '',
-  address: '',
-  citizenship: '',
-  telephone: '',
+  email: '',
+  externalUserId: '',
+  info: {}
 });
 
 export default class User {

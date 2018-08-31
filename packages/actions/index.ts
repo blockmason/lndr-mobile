@@ -893,6 +893,30 @@ export const setProfilePic = (imageURI: string, imageData: string) => {
   }
 }
 
+export const setGovernmentPhoto = (imageURI: string, imageData: string) => {
+    return creditProtocol.setKYCPhoto(imageURI, imageData /** privateKeyBuffer **/)
+}
+
+export const setSelfiePhoto = (imageURI: string, imageData: string) => {
+    return creditProtocol.setKYCPhoto(imageURI, imageData /** privateKeyBuffer **/)
+}
+
+export const setAddressPhoto = (imageURI: string, imageData: string) => {
+    return creditProtocol.setKYCPhoto(imageURI, imageData /** privateKeyBuffer **/)
+}
+
+export const submitKYC = (kycData: any) => {
+  return async (dispatch) => {
+    try {
+      await creditProtocol.submitKYC(kycData)
+      dispatch(displaySuccess('KYC has been submitted.'))
+    } catch (error) {
+      dispatch(displayError('An error occured. Please try again'))
+      throw error
+    }
+  }
+}
+
 export const copyToClipboard = (text: string) => {
   return async (dispatch) => {
     Clipboard.setString(text)

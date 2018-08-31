@@ -145,9 +145,6 @@ export default StyleSheet.create({
   },
   pickerContainer: {
     width: '100%',
-    borderRadius: 30,
-    borderWidth: 1,
-    borderColor: softGray,
     paddingLeft: 8,
     ...verticalMarginXS
   },
@@ -317,6 +314,7 @@ export default StyleSheet.create({
     ...medium,
     ...verticalMarginXXS,
     color: black,
+    maxWidth: 400,
     fontWeight: '100'
   }
 } as any)

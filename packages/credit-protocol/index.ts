@@ -477,4 +477,23 @@ export default class CreditProtocol {
 
     return this.client.post('/remove_paypal_request', { friend, requestor, paypalRequestSignature })
   }
+
+  // Verify Lndr
+  async setKYCPhoto (imageURI: string, imageData: string) {
+      const IMAGE_TARGET_SIZE = 240
+      let resizedImageResponse, base64ImageData
+  
+      if (Platform.OS === 'android') {
+        resizedImageResponse = await ImageResizer.createResizedImage(imageURI, IMAGE_TARGET_SIZE, IMAGE_TARGET_SIZE, "JPEG", 100, 0)
+        base64ImageData = await RNFetchBlob.fs.readFile(resizedImageResponse.uri, 'base64')
+      } else {
+        resizedImageResponse = await ImageResizer.createResizedImage(`data:image/jpg;jpeg;base64,${imageData}`, IMAGE_TARGET_SIZE, IMAGE_TARGET_SIZE, "JPEG", 100, 0)
+        base64ImageData = await RNFetchBlob.fs.readFile(resizedImageResponse.path, 'base64')
+      }
+      return `data:image/jpg;jpeg;base64,${base64ImageData}`
+    }
+
+    submitKYC(kyc: Object[]) {
+      return this.client.post('/verify_identity', kyc)
+    }
  }
