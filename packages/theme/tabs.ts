@@ -14,6 +14,8 @@ export default StyleSheet.create({
     marginTop: 25,
     flexDirection: 'row',
     backgroundColor: white,
+    justifyContent: 'space-around',
+    alignItems: 'center',
     flex: 1
   },
   tabContainer: {

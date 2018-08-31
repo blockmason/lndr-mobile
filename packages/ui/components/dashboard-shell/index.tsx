@@ -1,8 +1,7 @@
 import React, { Component } from 'react'
-import { View, Text, Platform, Image, TouchableHighlight, Dimensions } from 'react-native'
+import { View, Text, Image, TouchableHighlight, Dimensions } from 'react-native'
 import { TabNavigator } from 'react-navigation'
 
-import { Tab } from 'ui/components/tabs'
 import AndroidStatusBar from 'ui/components/android-status-bar'
 import HomeView from 'ui/views/account/home'
 import FriendsView from 'ui/views/account/friends'
@@ -22,7 +21,7 @@ const {
 
 import general from 'theme/general'
 import style from 'theme/account'
-import TabStyle from 'theme/tabs'
+import tabStyle from 'theme/tabs'
 
 interface Props {
   logoutAccount: () => any
@@ -31,8 +30,6 @@ interface Props {
   navigation: any
   hideSettings?: boolean
 }
-
-
 
 const HomeScreen = (props) => <HomeView {...props}/>;
 const FriendsScreen = (props) => <FriendsView {...props} />;
@@ -65,7 +62,7 @@ class DashboardShell extends Component<Props> {
         <View style={style.settingsTriangleLeft}/>
         <TouchableHighlight onPress={() => this.props.navigation.navigate('MyAccount')} underlayColor='aqua'>
           <View style={style.settingsBackground}>
-              <Image source={require('images/settings.png')} style={TabStyle.settingsButton} />
+            <Image source={require('images/settings.png')} style={tabStyle.settingsButton} />
           </View>
         </TouchableHighlight>
         <View style={style.settingsTriangleRight}/>
@@ -78,8 +75,8 @@ class DashboardShell extends Component<Props> {
           <View style={logoContainerStyle}>
             <TextLogo name='white' size={logoSize}/>
           </View>
-          <View style={TabStyle.leftTriangle}/>
-          <View style={[TabStyle.tabsContainer, style.dashboardTextContainer]}>
+          <View style={tabStyle.leftTriangle}/>
+          <View style={[tabStyle.tabsContainer, style.dashboardTextContainer]}>
             <Text style={style.dashboardText}>{text}</Text>
           </View>
         </View>

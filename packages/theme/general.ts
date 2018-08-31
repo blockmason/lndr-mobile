@@ -59,6 +59,12 @@ export default StyleSheet.create({
   largeHMargin: {
     marginHorizontal: 30
   },
+  smallTopMargin: {
+    marginTop: 10
+  },
+  smallVMargin: {
+    marginVertical: 10
+  },
   iosTopMargin: {
     marginTop: Platform.OS === 'ios' ? 20 : 0
   },

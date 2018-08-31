@@ -30,7 +30,7 @@ import general from 'theme/general'
 import { underlayColor } from 'theme/general'
 
 import language from 'language'
-import friend from 'theme/friend';
+
 const {
   notice,
   noBalanceWarning,
@@ -40,8 +40,6 @@ const {
   recentTransactionsLanguage,
   seeAllActivity
 } = language
-
-const { width } = Dimensions.get('window')
 
 const loadingRecentTransactions = new LoadingContext()
 const loadingPending = new LoadingContext()

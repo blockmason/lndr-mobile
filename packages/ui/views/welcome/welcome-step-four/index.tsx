@@ -3,13 +3,16 @@ import React, { Component } from 'react'
 import { Image, View, Text, ScrollView } from 'react-native'
 import firebase from 'react-native-firebase'
 
+import { defaultCurrency } from 'lndr/currencies'
+import { amountFormat } from 'lndr/format'
+
+import Button from 'ui/components/button'
+
 import general from 'theme/general'
 import style from 'theme/slide'
 
 import language from 'language'
-const { walkthrough } = language
-
-import Button from 'ui/components/button'
+const { walkthrough, settlementManagement, payPalLanguage, debtManagement } = language
 
 interface Props {
   onComplete: () => void
@@ -29,26 +32,22 @@ export default class WelcomeStepFourView extends Component<Props> {
 
           <View style={general.flex}>
             <Text style={style.caption}>{walkthrough.step4.ready}</Text>
-            <View style={[general.flex, {height:50}]}>
-              <Image resizeMode="contain" style={{flex: 1}} source={require('images/walkthrough4-settle.png')} />
-            </View>
+            <Text style={style.positiveBalance}>{`+${amountFormat(walkthrough.step4.positiveBalance, defaultCurrency, true)}`}</Text>
+            <Button wide round text={debtManagement.settleUp} onPress={() => null} />
           </View>
 
           <Text style={style.caption}>{walkthrough.step4.payPal}</Text>
-          <View style={[general.flex, {height:50}]}>
-            <Image resizeMode="contain" style={{flex: 1}} source={require('images/walkthrough4-paypal.png')} />
-          </View>
+          <Button zicon="paypal" round wide onPress={() => null} text={payPalLanguage.requestPayPalPayment} />
+
           <Text style={style.caption}>{walkthrough.step4.ether}</Text>
-          <View style={[general.flex, {height:50}]}>
-            <Image resizeMode="contain" style={{flex: 1}} source={require('images/walkthrough4-eth.png')} />
-          </View>
+          <Button round wide text={settlementManagement.eth} onPress={() => null} />
+
           <Text style={style.caption}>{walkthrough.step4.cash}</Text>
-          <View style={[general.flex, {height:50}]}>
-            <Image resizeMode="contain" style={{flex: 1}} source={require('images/walkthrough4-cash.png')} />
-          </View>
+          <Text style={style.subTitle}>{debtManagement.fields.settlementAmount}</Text>
+          <Text style={style.balance}>{`+${amountFormat(walkthrough.step4.positiveBalance, defaultCurrency, true)}`}</Text>
+          <Button wide round text={debtManagement.settleUp} onPress={() => null} />
 
-          <Button small link alternate arrow text={walkthrough.continue} onPress={this.props.onComplete} />
-
+          <Button alternate arrow text={walkthrough.continue} onPress={this.props.onComplete} containerStyle={general.smallVMargin} />
         </View>
       </ScrollView>
     )

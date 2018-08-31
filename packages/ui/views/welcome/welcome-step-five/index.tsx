@@ -5,9 +5,10 @@ import firebase from 'react-native-firebase'
 
 import general from 'theme/general'
 import style from 'theme/slide'
+import accountStyle from 'theme/account'
 
 import language from 'language'
-const { walkthrough } = language
+const { walkthrough, debtManagement } = language
 
 import Button from 'ui/components/button'
 
@@ -24,16 +25,12 @@ export default class WelcomeStepFiveView extends Component<Props> {
     return (
       <ScrollView>
         <View style={style.topView}>
-
           <Text style={style.title}>{walkthrough.step5.title}</Text>
           <Text style={style.caption}>{walkthrough.step5.multiCurrency}</Text>
-          <View style={[general.flex, {height:50}]}>
-            <Image resizeMode="contain" style={{flex: 1}} source={require('images/walkthrough5-sample.png')} />
-          </View>
+          <Text style={accountStyle.balanceSectionTitle}>{debtManagement.balanceByCurrency}</Text>
+          <Image style={style.fullWidthImage55} source={require('images/walkthrough5-sample.png')} />
           <Text style={style.caption}>{walkthrough.step5.exchangeRate}</Text>
-
-          <Button small link alternate arrow text={walkthrough.continue} onPress={this.props.onComplete} />
-
+          <Button alternate arrow text={walkthrough.continue} onPress={this.props.onComplete} />
         </View>
       </ScrollView>
     )

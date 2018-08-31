@@ -221,7 +221,8 @@ export default {
       ready: `Ready to Settle Up?`,
       payPal: `When it’s time to settle up with Lndr,\n- you can choose PayPal:`,
       ether: `- cryptocurrencies like Ether:`,
-      cash: `- or simply record a cash settlement:`
+      cash: `- or simply record a cash settlement:`,
+      positiveBalance: `10.46`
     },
     step5: {
       title: `Multi-Currency`,

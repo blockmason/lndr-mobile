@@ -35,12 +35,8 @@ export default class WelcomeStepOneView extends Component<Props> {
 
           <Text style={style.caption}>{walkthrough.step1.easyToUse}</Text>
 
-          <View style={[general.flex, {height:50}]}>
-            <Image resizeMode="contain" style={{flex: 1}} source={require('images/walkthrough-step1-graphic.png')} />
-          </View>
-
-          <Button small link alternate arrow text={walkthrough.step1.continue} onPress={this.props.onComplete} />
-
+          <Image style={style.fullWidthImage23} source={require('images/walkthrough-step1-graphic.png')} />
+          <Button alternate arrow text={walkthrough.step1.continue} onPress={this.props.onComplete} containerStyle={general.smallVMargin} />
         </View>
       </ScrollView>
     )
