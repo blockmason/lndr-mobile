@@ -303,7 +303,7 @@ export default {
     for: M => `${M}宛て`,
     settleUp: `清算する`,
     settleTotal: `清算総額`,
-    settleUpMemo: (D, A) => `${D === 'lend' ? 'に清算する ' :  ' ${A}を決算する申請'}`,
+    settleUpMemo: (D, A) => `${D === 'lend' ? 'に清算する ' :  'を決算する申請'} ${A}`,
     recordSettleUpMemo: `詳細`,
     balanceByCurrency: `ETHで決済`,
   },
