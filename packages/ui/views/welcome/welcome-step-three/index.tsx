@@ -23,7 +23,10 @@ export default class WelcomeStepThreeView extends Component {
     return (
       <ScrollView>
         <View style={style.topView}>
-          <Text style={style.title}>{walkthrough.step3.title}</Text>
+          <View style={style.titleContainer}>
+            <Text style={style.title}>{walkthrough.step3.title}</Text>
+            <View style={style.whiteTriangle} />
+          </View>
           <Text style={style.caption}>{walkthrough.step3.easy}</Text>
           <Button round text={debtManagement.iLent} onPress={() => null} containerStyle={style.addDebtButton} />
           <Button round dark text={debtManagement.iBorrowed} onPress={() => null} containerStyle={style.addDebtButton} />

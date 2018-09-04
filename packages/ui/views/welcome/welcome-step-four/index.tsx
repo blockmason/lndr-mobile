@@ -24,7 +24,10 @@ export default class WelcomeStepFourView extends Component {
       <ScrollView>
         <View style={style.topView}>
 
-          <Text style={style.title}>{walkthrough.step4.title}</Text>
+          <View style={style.titleContainer}>
+            <Text style={style.title}>{walkthrough.step4.title}</Text>
+            <View style={style.whiteTriangle} />
+          </View>
 
           <View style={general.flex}>
             <Text style={style.caption}>{walkthrough.step4.ready}</Text>

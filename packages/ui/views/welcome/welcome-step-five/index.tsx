@@ -23,7 +23,10 @@ export default class WelcomeStepFiveView extends Component<Props> {
     return (
       <ScrollView>
         <View style={style.topView}>
-          <Text style={style.title}>{walkthrough.step5.title}</Text>
+        <View style={style.titleContainer}>
+            <Text style={style.title}>{walkthrough.step5.title}</Text>
+            <View style={style.whiteTriangle} />
+          </View>
           <Text style={style.caption}>{walkthrough.step5.multiCurrency}</Text>
           <Text style={accountStyle.balanceSectionTitle}>{debtManagement.balanceByCurrency}</Text>
           <Image style={style.fullWidthImage55} source={require('images/walkthrough5-sample.png')} />

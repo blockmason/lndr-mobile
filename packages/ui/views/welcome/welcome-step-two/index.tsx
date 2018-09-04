@@ -24,7 +24,7 @@ export default class WelcomeStepTwoView extends Component {
     const logoSize = (width > kSmallScreenThreshold) ? "normal" : "small"
     const logoContainerStyle = (width > kSmallScreenThreshold) ? accountStyle.dashboardLogo : accountStyle.dashboardLogoSmall
 
-    const settingsButton = (<View style={accountStyle.settingsButton}>
+    const settingsButton = (<View style={[accountStyle.settingsButton, {top: 0}]}>
       <View style={accountStyle.settingsTriangleLeft}/>
       <TouchableHighlight onPress={() => null} underlayColor='aqua'>
         <View style={accountStyle.settingsBackground}>
@@ -38,7 +38,7 @@ export default class WelcomeStepTwoView extends Component {
       <ScrollView>
         <View style={general.view}>
           <AndroidStatusBar />
-          <View style={accountStyle.dashboardContainer}>
+          <View style={[accountStyle.dashboardContainer, {marginTop: 0}]}>
             <View style={logoContainerStyle}>
               <TextLogo name='white' size={logoSize}/>
             </View>

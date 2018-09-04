@@ -3,6 +3,7 @@ import { StyleSheet, Dimensions } from 'react-native'
 import { light, white, black, gray, aqua, darkGray, moneyGreen } from 'theme/include/colors'
 import { percent } from 'theme/include/dimensions'
 import { large, medium, small } from 'theme/include/fonts'
+import { center } from 'theme/include/align'
 
 const { height, width } = Dimensions.get('window')
 
@@ -12,7 +13,8 @@ export default StyleSheet.create({
     alignItems: 'center',
     flex: 1,
     backgroundColor: white,
-    padding: 10
+    paddingHorizontal: 10,
+    paddingBottom: 20
   },
   dot: {
     height: 6,
@@ -87,8 +89,28 @@ export default StyleSheet.create({
     fontWeight: '100',
     color: black
   },
+  titleContainer: {
+    backgroundColor: black,
+    width,
+    padding: 10,
+    borderBottomColor: aqua,
+    borderBottomWidth: 3,
+    marginBottom: 10,
+  },
   title: {
-    ...large
+    ...large,
+    color: white,
+    width,
+    textAlign: 'center',
+  },
+  whiteTriangle: {
+    borderBottomWidth: 140,
+    borderLeftWidth: 80,
+    borderBottomColor: 'white',
+    borderLeftColor: 'transparent',
+    position: 'absolute',
+    right: 0,
+    top: 0,
   },
   link: {
     color: aqua,
@@ -96,7 +118,7 @@ export default StyleSheet.create({
     ...large,
     width: '100%',
     textAlign: 'center',
-    marginTop: 10
+    marginTop: 10,
   },
   partWidth: {
     paddingHorizontal: 20
