@@ -59,7 +59,7 @@ export default {
   newAccount: `Buat akaun baru`,
   loginAccount: `Buka kunci akaun anda`,
   recoverExistingAccount: `Pulihkan akaun sedia ada`,
-  recoverMnemonic: `Mnemonik (12 perkataan yang dipaparkan \ napabila anda membuat akaun)`,
+  recoverMnemonic: `Mnemonik (12 perkataan yang dipaparkan \napabila anda membuat akaun)`,
   recoverMnemonicLengthError: `Mnemonik perlu tepat 12 perkataan`,
   successTitle: `Berjaya`,
   errorTitle: `Ralat`,
@@ -197,8 +197,42 @@ export default {
     runEthereum: `Kami berfungsi dengan ETH!`,
     firstLendingApp: `Aplikasi mudah alih pertama untuk meminjam wang menerusi rantaian blok.`,
     greatConcert: `Tonton Konsert Hebat`,
-    youPlayWithFriends: `Bermainlah dengan rakan anda; \ n biar kami uruskan hal ini...`,
+    youPlayWithFriends: `Bermainlah dengan rakan anda; \n biar kami uruskan hal ini...`,
     start: `Bermula`,
+  },
+
+  walkthrough: {
+    skip: `skip`,
+    continue: `terus`,
+    step1: {
+      easyToUse: `Lndr adalah cara yang paling mudah untuk berpecah bil, perbelanjaan saham dan menyelesaikan hutang yang ringkas dengan rakan-rakan dan keluarga, semua dilakukan dengan selamat pada blockchain.`,
+      len: `Len`,
+      der: `der`,
+    },
+    step2: {
+      getStarted: `Untuk bermula dengan Lndr, anda perlu untuk menambah kawan.`,
+      friendsScreen: `Lawati Rakan skrin untuk mencari, menambah, atau menjemput kawan-kawan anda dan keluarga untuk menyambung pada Lndr.`,
+    },
+    step3: {
+      title: `Rakaman Transaksi`,
+      easy: `Membelah rang undang-undang atau menambah hutang dengan rakan adalah mudah dalam Lndr!`,
+      selectFriend: `Pilih rakan anda, mata wang dan jumlah.`,
+      addMemo: `Menambah beberapa nota dalam kotak memo dan klik Serah.`,
+    },
+    step4: {
+      title: `Selesaikan Hutang`,
+      ready: `Bersedia untuk  selesaikan hutang?`,
+      payPal: `Apabila tiba masa untuk menyesuaikan diri dengan Lndr, \n- anda boleh memilih PayPal:`,
+      ether: `- cryptocurrencies seperti Eter:`,
+      cash: `- atau hanya mencatat penyelesaian tunai:`,
+      positiveBalance: `10.46`,
+    },
+    step5: {
+      title: `Pelbagai mata wang`,
+      multiCurrency: `Lndr boleh memantau semua transaksi anda walaupun mereka berlaku dalam mata wang yang berbeza.`,
+      exchangeRate: `Apabila anda membuat keputusan untuk Settle Up dengan rakan anda, semua transaksi akan ditukar kepada mata wang utama anda menggunakan yang paling kadar pertukaran up-to-date didapati.`,
+      start: `Mula menggunakan Lndr!`,
+    }
   },
 
   debtManagement: {

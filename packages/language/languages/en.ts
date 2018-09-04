@@ -199,22 +199,21 @@ export default {
   },
   walkthrough: {
     skip: `skip`,
-    continue: `Continue`,
+    continue: `continue`,
     step1: {
       easyToUse: `Lndr is the easiest way to split bills, share expenses and settle simple debts with friends and family, all done securely on the blockchain.`,
       len: `Len`,
       der: `der`,
-      continue: `Let's get started`
     },
     step2: {
       getStarted: `To get started with Lndr, you will need to add a friend.`,
-      friendsScreen: `Visit the Friends screen to search for, add, or invite your friends and family to connect on Lndr.`
+      friendsScreen: `Visit the Friends screen to search for, add, or invite your friends and family to connect on Lndr.`,
     },
     step3: {
       title: `Recording a Transaction`,
       easy: `Splitting a bill or adding a debt with a friend is easy in Lndr!`,
       selectFriend: `Select your friend, your currency and the amount.`,
-      addMemo: `Add some notes in the memo box and click Submit.`
+      addMemo: `Add some notes in the memo box and click Submit.`,
     },
     step4: {
       title: `Settling Up`,
@@ -222,12 +221,13 @@ export default {
       payPal: `When it’s time to settle up with Lndr,\n- you can choose PayPal:`,
       ether: `- cryptocurrencies like Ether:`,
       cash: `- or simply record a cash settlement:`,
-      positiveBalance: `10.46`
+      positiveBalance: `10.46`,
     },
     step5: {
       title: `Multi-Currency`,
       multiCurrency: `Lndr can keep track of your transactions even if they happen in different currencies.`,
-      exchangeRate: `When you decide to Settle Up with your friend, all transactions will be converted into your primary currency using the most up-to-date exchange rates available.`
+      exchangeRate: `When you decide to Settle Up with your friend, all transactions will be converted into your primary currency using the most up-to-date exchange rates available.`,
+      start: `Start using Lndr!`,
     }
   },
   debtManagement: {

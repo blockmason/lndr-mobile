@@ -1,12 +1,14 @@
-// This file is over 50 lines and needs to be split up
-
 import React, { Component } from 'react';
-import { View, Image, ScrollView, Dimensions, Animated } from 'react-native';
+import { View, ScrollView, Dimensions, Animated } from 'react-native';
 
 import style from 'theme/slideshow'
-import general from 'theme/general'
+import slideStyle from 'theme/slide'
 
 import AndroidStatusBar from 'ui/components/android-status-bar'
+import Button from 'ui/components/button'
+
+import language from 'language'
+const { walkthrough } = language
 
 const { width } = Dimensions.get('window');
 
@@ -14,13 +16,24 @@ const sixtyFpsInMs = 16
 
 interface Props {
   views: any
+  onComplete: () => void
 }
 
-export default class Slideshow extends Component<Props> {
+interface State {
+  screen: number
+}
+
+export default class Slideshow extends Component<Props, State> {
   getBaseScroll = new Animated.Value(0)
 
   constructor(props) {
     super(props)
+    this.state = {
+      screen: 1
+  }
+
+    this.nextPage = this.nextPage.bind(this)
+    this.endScroll = this.endScroll.bind(this)
   }
 
   renderContent () {
@@ -60,12 +73,28 @@ export default class Slideshow extends Component<Props> {
     )
   }
 
+  endScroll (event) {
+    if (event) {
+      const screen = event.nativeEvent.contentOffset.x / width + 1
+      this.setState({ screen })
+    }
+  }
+
   gotoPage(pageIdx) {
     // NOTE: pageIdx is 1-based
     const scrollView = this.refs.scrollView as any
-//  console.log('contentOffset: ' + scrollView.contentOffset)
     const contentOffsetX = (pageIdx-1)*width
     scrollView.scrollTo({x: contentOffsetX, y: 0, animated: true})
+  }
+
+  nextPage () {
+    const screen = this.state.screen + 1
+    if (screen === 6) {
+      this.props.onComplete()
+    } else {
+      this.setState({ screen })
+      this.gotoPage(screen)
+    }
   }
 
   render () {
@@ -79,6 +108,7 @@ export default class Slideshow extends Component<Props> {
           pagingEnabled={true}
           showsHorizontalScrollIndicator={false}
           onScroll={this.animationOnScroll()}
+          onMomentumScrollEnd={this.endScroll}
           scrollEventThrottle={sixtyFpsInMs}
           >
           {this.renderContent()}
@@ -87,6 +117,7 @@ export default class Slideshow extends Component<Props> {
       <View style={style.horizontial}>
         {this.renderIndicator()}
       </View>
+      <Button alternate underline text={walkthrough.continue} onPress={this.nextPage} containerStyle={slideStyle.continueButton} />
     </View>
     )
   }

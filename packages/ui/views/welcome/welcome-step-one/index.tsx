@@ -14,11 +14,7 @@ import { largeImage } from 'theme/include/dimensions'
 import language from 'language'
 const { walkthrough } = language
 
-interface Props {
-  onComplete: () => void
-}
-
-export default class WelcomeStepOneView extends Component<Props> {
+export default class WelcomeStepOneView extends Component {
   componentDidMount( ) {
     firebase.analytics().setCurrentScreen('welcome-step-one', 'WelcomeStepOneView');
   }
@@ -36,7 +32,6 @@ export default class WelcomeStepOneView extends Component<Props> {
           <Text style={style.caption}>{walkthrough.step1.easyToUse}</Text>
 
           <Image style={style.fullWidthImage23} source={require('images/walkthrough-step1-graphic.png')} />
-          <Button alternate arrow text={walkthrough.step1.continue} onPress={this.props.onComplete} containerStyle={general.smallVMargin} />
         </View>
       </ScrollView>
     )

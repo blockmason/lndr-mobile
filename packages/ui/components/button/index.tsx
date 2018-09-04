@@ -25,6 +25,7 @@ interface Props {
   arrow?: boolean
   arrowRed?: boolean
   fat?: boolean
+  underline?: boolean
   onPress: () => void
   text?: string
   icon?: string
@@ -33,7 +34,7 @@ interface Props {
   style?: any
 }
 
-const showText = (text?: string, alternate?: boolean, blackText?: boolean, large?: boolean, small?: boolean, fat?: boolean, link?: boolean) => {
+const showText = (text?: string, alternate?: boolean, blackText?: boolean, large?: boolean, small?: boolean, fat?: boolean, link?: boolean, underline?: boolean) => {
   let styles: any[] = []
 
   if (alternate) {
@@ -60,6 +61,9 @@ const showText = (text?: string, alternate?: boolean, blackText?: boolean, large
 
   if (link)
     styles.push(buttonStyle.link)
+
+  if (underline)
+    styles.push(buttonStyle.underline)
 
   return <Text style={styles}>{text}</Text>
 }
@@ -118,7 +122,7 @@ const getIconStyle = (round?: boolean) => {
   return buttonStyle.icon
 }
 
-export default ({ action, danger, black, blackText, friend, check, close, large, small, round, wide, narrow, arrow, arrowRed, link, fat, dark, alternate, containerStyle, style, icon, zicon, text, onPress }: Props) => {
+export default ({ action, danger, black, blackText, friend, check, close, large, small, round, wide, narrow, arrow, arrowRed, link, underline, fat, dark, alternate, containerStyle, style, icon, zicon, text, onPress }: Props) => {
   if (close) {
     return (<TouchableHighlight
       underlayColor='#fff'
@@ -137,7 +141,7 @@ export default ({ action, danger, black, blackText, friend, check, close, large,
     <View style={getStyle(danger, round, wide, narrow, alternate, action, dark, black, friend, style)}>
       {icon ? <Icon style={getIconStyle(round)} name={icon} /> : null}
       {zicon ? <ZIcon style={getIconStyle(round)} name={zicon} /> : null}
-      {showText(text, alternate, blackText, large, small, fat, link)}
+      {showText(text, alternate, blackText, large, small, fat, link, underline)}
       {arrow ? <Image style={buttonStyle.arrow} source={require('images/button-arrow.png')} /> : null}
       {arrowRed ? <Image style={buttonStyle.arrow} source={require('images/button-arrow-red.png')} /> : null}
       {check ? <Image style={buttonStyle.check} source={require('images/check-white.png')} /> : null}

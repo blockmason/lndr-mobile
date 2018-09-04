@@ -1,6 +1,6 @@
 import React, { Component } from 'react'
 
-import { Image, View, Text, ScrollView, TextInput } from 'react-native'
+import { View, Text, ScrollView, TextInput } from 'react-native'
 import firebase from 'react-native-firebase'
 
 import general from 'theme/general'
@@ -15,11 +15,7 @@ const { walkthrough, debtManagement, submit } = language
 
 import Button from 'ui/components/button'
 
-interface Props {
-  onComplete: () => void
-}
-
-export default class WelcomeStepThreeView extends Component<Props> {
+export default class WelcomeStepThreeView extends Component {
   componentDidMount( ) {
     firebase.analytics().setCurrentScreen('welcome-step-three', 'WelcomeStepThreeView');
   }
@@ -71,9 +67,7 @@ export default class WelcomeStepThreeView extends Component<Props> {
               onChangeText={memo => this.setState({ memo: formatMemo(memo) })}
             />
           </View>
-          <Button large round wide onPress={this.props.onComplete} text={submit} />
-
-          <Button alternate arrow text={walkthrough.continue} onPress={this.props.onComplete} containerStyle={general.smallVMargin} />
+          <Button large round wide onPress={() => null} text={submit} />
         </View>
       </ScrollView>
     )

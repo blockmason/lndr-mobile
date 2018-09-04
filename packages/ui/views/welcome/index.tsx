@@ -1,15 +1,15 @@
 import React, { Component } from 'react'
-
-import { Image, View, Text, Animated, Easing } from 'react-native'
-
-import Button from 'ui/components/button'
-import Slideshow from 'ui/components/slideshow'
-
+import { Image, View, Animated, Easing } from 'react-native'
 import firebase from 'react-native-firebase'
+
 import general from 'theme/general'
+import style from 'theme/slide'
+
 import language from 'language'
 const { walkthrough } = language
 
+import Button from 'ui/components/button'
+import Slideshow from 'ui/components/slideshow'
 import WelcomeStepOneView from 'ui/views/welcome/welcome-step-one'
 import WelcomeStepTwoView from 'ui/views/welcome/welcome-step-two'
 import WelcomeStepThreeView from 'ui/views/welcome/welcome-step-three'
@@ -30,6 +30,9 @@ export default class WelcomeView extends Component<Props, State> {
     this.state = {
       rocketOffsetY: new Animated.Value(0)
     }
+
+    this.onSkip = this.onSkip.bind(this)
+    this.onComplete = this.onComplete.bind(this)
   }
 
   onSkip() {
@@ -51,24 +54,18 @@ export default class WelcomeView extends Component<Props, State> {
       })
   }
 
-  gotoPage(pageIdx) {
-    // NOTE: pageIdx is 1-based
-    const slideShow = this.refs.slideShow as any
-    slideShow.gotoPage(pageIdx)
-  }
-
   render () {
     return (
       <View style={general.flex}>
-        <Slideshow ref="slideShow"
+        <Slideshow ref="slideShow" onComplete={this.onComplete}
           views={[
-            <WelcomeStepOneView onComplete={ () => { this.gotoPage(2) } } />,
-            <WelcomeStepTwoView onComplete={ () => { this.gotoPage(3) } } />,
-            <WelcomeStepThreeView onComplete={ () => { this.gotoPage(4) } } />,
-            <WelcomeStepFourView onComplete={ () => { this.gotoPage(5) } } />,
-            <WelcomeStepFiveView onComplete={ () => { this.onComplete() } } />
+            <WelcomeStepOneView />,
+            <WelcomeStepTwoView />,
+            <WelcomeStepThreeView />,
+            <WelcomeStepFourView />,
+            <WelcomeStepFiveView onComplete={this.onComplete}/>
           ]} />
-          <Button alternate small link text={walkthrough.skip} style={[{position: "absolute"}, {bottom:25}, {left:30}]} onPress={() => { this.onSkip() }}/>
+          <Button alternate underline text={walkthrough.skip} containerStyle={style.skipButton} onPress={this.onSkip}/>
 
           <Animated.View style={[{position:"absolute"}, { transform: [{translateY: this.state.rocketOffsetY}] }, {height: 120}, {width:120}, {bottom:-120}, {left: 80}]}>
             <Image resizeMode="contain" style={{flex: 1}} source={require('images/blockchain.png')} />

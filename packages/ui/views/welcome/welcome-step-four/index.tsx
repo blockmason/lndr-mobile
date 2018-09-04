@@ -14,11 +14,7 @@ import style from 'theme/slide'
 import language from 'language'
 const { walkthrough, settlementManagement, payPalLanguage, debtManagement } = language
 
-interface Props {
-  onComplete: () => void
-}
-
-export default class WelcomeStepFourView extends Component<Props> {
+export default class WelcomeStepFourView extends Component {
   componentDidMount( ) {
     firebase.analytics().setCurrentScreen('welcome-step-four', 'WelcomeStepFourView');
   }
@@ -46,8 +42,6 @@ export default class WelcomeStepFourView extends Component<Props> {
           <Text style={style.subTitle}>{debtManagement.fields.settlementAmount}</Text>
           <Text style={style.balance}>{`+${amountFormat(walkthrough.step4.positiveBalance, defaultCurrency, true)}`}</Text>
           <Button wide round text={debtManagement.settleUp} onPress={() => null} />
-
-          <Button alternate arrow text={walkthrough.continue} onPress={this.props.onComplete} containerStyle={general.smallVMargin} />
         </View>
       </ScrollView>
     )

@@ -201,6 +201,40 @@ export default {
     start: `Kom i gang`,
   },
 
+  walkthrough: {
+    skip: `hoppe`,
+    continue: `fortsette`,
+    step1: {
+      easyToUse: `Lndr er den enkleste måten å splitte regninger, dele utgifter og bosette enkle gjeld med venner og familie, alt gjøres sikkert på blockchain.`,
+      len: `Len`,
+      der: `der`,
+    },
+    step2: {
+      getStarted: `For å komme i gang med Lndr, må du legge til en venn.`,
+      friendsScreen: `Besøk Venner skjermen for å søke etter, legge til eller invitere venner og familie til å koble på Lndr.`,
+    },
+    step3: {
+      title: `Spille inn en transaksjon`,
+      easy: `Splitte en regning eller legge en gjeld med en venn er lett i Lndr!`,
+      selectFriend: `Velg din venn, din valutatype og beløp.`,
+      addMemo: `Legg noen notater i memo boksen og klikk Send.`,
+    },
+    step4: {
+      title: `Gjør opp`,
+      ready: `Klar til å gjør opp?`,
+      payPal: `Når det er på tide å slå seg opp med Lndr, \n- kan du velge PayPal:`,
+      ether: `- cryptocurrencies som Ether:`,
+      cash: `- eller rett og slett ta et kontantoppgjør:`,
+      positiveBalance: `10,46`,
+    },
+    step5: {
+      title: `Multi-valuta`,
+      multiCurrency: `Lndr kan holde oversikt over transaksjonene selv om de skjer i ulike valutaer.`,
+      exchangeRate: `Når du bestemmer deg for å gjøre opp med din venn, vil alle transaksjoner bli konvertert til din primære valutaen ved bruk av mest up-to-date valutakurser tilgjengelig.`,
+      start: `Begynn å bruke Lndr!`,
+    }
+  },
+
   debtManagement: {
     shell: `Ny transaksjon`,
     add: `Legg til gjeld`,

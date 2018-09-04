@@ -201,6 +201,40 @@ export default {
     start: `Commencer`,
   },
 
+  walkthrough: {
+    skip: `sauter`,
+    continue: `continuer`,
+    step1: {
+      easyToUse: `Lndr est la meilleure façon de diviser les factures, les frais d'actions et régler les dettes simples avec des amis et la famille, tout se fait en toute sécurité sur le blockchain.`,
+      len: `Len`,
+      der: `der`,
+    },
+    step2: {
+      getStarted: `Pour commencer à utiliser Lndr, vous devrez ajouter un ami.`,
+      friendsScreen: `Visitez l'écran Amis pour rechercher, ajouter ou inviter vos amis et votre famille de se connecter sur Lndr.`,
+    },
+    step3: {
+      title: `Enregistrement d'une transaction`,
+      easy: `Fractionnement un projet de loi ou l'ajout d'une dette avec un ami est facile à Lndr!`,
+      selectFriend: `Sélectionnez votre ami, votre monnaie et le montant.`,
+      addMemo: `Ajoutez quelques notes dans la zone de mémo et cliquez sur Envoyer.`,
+    },
+    step4: {
+      title: `Régler`,
+      ready: `Prêt à régler?`,
+      payPal: `Quand il est temps de régler avec Lndr, \n vous pouvez choisir PayPal:`,
+      ether: `- cryptocurrencies comme l'éther:`,
+      cash: `- ou simplement enregistrer un règlement en espèces:`,
+      positiveBalance: `10,46`,
+    },
+    step5: {
+      title: `Multi-devise`,
+      multiCurrency: `Lndr peut garder une trace de vos transactions, même si elles se produisent dans des devises différentes.`,
+      exchangeRate: `Lorsque vous décidez de régler avec votre ami, toutes les transactions seront converties en votre monnaie primaire en utilisant le plus les taux de change mis à jour disponibles.`,
+      start: `Commencez à utiliser Lndr!`,
+    }
+  },
+
   debtManagement: {
     shell: `Nouvelle transaction`,
     add: `Ajouter une dette`,

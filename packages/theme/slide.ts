@@ -151,5 +151,15 @@ export default StyleSheet.create({
     width: 86,
     height: 50,
     right: (width - 120) * 0.5 - 43
+  },
+  skipButton: {
+    position: 'absolute',
+    left: 30,
+    bottom: 13
+  },
+  continueButton: {
+    position: 'absolute',
+    right: 10,
+    bottom: 13
   }
 } as any)

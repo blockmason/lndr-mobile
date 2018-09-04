@@ -14,11 +14,7 @@ import accountStyle from 'theme/account'
 import language from 'language'
 const { walkthrough, inviteFriends, tabs } = language
 
-interface Props {
-  onComplete: () => void
-}
-
-export default class WelcomeStepTwoView extends Component<Props> {
+export default class WelcomeStepTwoView extends Component {
   componentDidMount( ) {
     firebase.analytics().setCurrentScreen('welcome-step-two', 'WelcomeStepTwoView');
   }
@@ -72,7 +68,6 @@ export default class WelcomeStepTwoView extends Component<Props> {
             </View>
           </View>
 */}
-          <Button alternate arrow text={walkthrough.continue} onPress={this.props.onComplete} containerStyle={general.smallVMargin} />
         </View>
       </ScrollView>
     )
