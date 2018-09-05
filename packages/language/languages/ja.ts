@@ -33,10 +33,10 @@ export default {
   inviteFriends: `本当にこのユーザーを友達からはずしますか？`,
   tryLndr: `友達をLndrに招待する`,
   removeFriendConfirmationQuestion: `Lndrを試したい方はこちらから：`,
-  friendInfo: `この友人関係の詳細`,
+  friendInfo: `この友達の詳細`,
   noFriends: `まずは友達を何人か追加してみよう！`,
   noMatches: `ユーザーが見つかりませんでした`,
-  noBalances: `記録されているあなたの負債は、現在ありません。`,
+  noBalances: `記録されているあなたの負債（借り）は、現在ありません。`,
   addFriendButton: `友達を追加する`,
   alreadyFriendsButton: `友達`,
   friendShell: `友達`,
@@ -50,20 +50,20 @@ export default {
   needsReview: `承認の保留中`,
   owesMe: `貸しがある`,
   iOwe: `借りがある`,
-  newPassword: `新しいパスワード（８文字以上）`,
+  newPassword: `新しいパスワード（８字以上）`,
   confirmPassword: `パスワードを確定する`,
   newPin: `新しい４字のPINを設定してください`,
-  enterNewPin: `新しい４文字のPINを確認してください`,
-  confirmPin: `PINコードを確認してください`,
+  enterNewPin: `新しい４字のPINを確認してください`,
+  confirmPin: `PINを確認してください`,
   newAccount: `新しいアカウントを作成`,
   loginAccount: `アカウントを解除する`,
   recoverExistingAccount: `既存のアカウントを復元する`,
   recoverMnemonic: `アカウント情報を忘れた時の復元用の単語`,
-  recoverMnemonicLengthError: `復元用の単語は12単語です`,
+  recoverMnemonicLengthError: `復元用の単語は12個です`,
   successTitle: `成功`,
   errorTitle: `エラー`,
   showMnemonic: `12個の復元用の単語を表示`,
-  mnemonicExhortation: `この12の単語はアカウントを復元する時に使用します。大切に保管しておいてください。`,
+  mnemonicExhortation: `この12個の単語はアカウントを復元する時に使用します。大切に保管しておいてください。`,
   addressExhortation: `Lndrで貸し借りの帳消しをするため、あなたのアドレスにEthereumを送る`,
   removeAccountTitle: `本当にアカウントをこのデバイスから削除しますか？`,
   removeAccountExhortation: `アカウント復元に必要な12個の単語が保管されていることを、確認してください。さもないと、デバイスから永久にあなたのデータが消去され復元できません。`,
@@ -75,7 +75,7 @@ export default {
 
   accountManagement: {
     nickname: {
-      lengthViolation: `ニックネームは３文字以上です`,
+      lengthViolation: `ニックネームは３字以上です`,
       compositionViolation: `ニックネームに使用できる文字：数字、小文字`,
       duplicationViolation: `このニックネームは既に使われています`,
     },
@@ -84,11 +84,11 @@ export default {
       duplicationViolation: `このメールアドレスで登録されているアカウントが既に存在します`,
     },
     pin: {
-      lengthViolation: `PINコードは最低4文字です`,
-      matchViolation: `PINコードは合致する必要があります`,
-      failedHashComparison: `PINコードが間違っています。正しいPINを入力してください。`,
-      updateSuccess: `PINコードが更新されました`,
-      updateError: `PINコード更新中にエラーが発生しました`,
+      lengthViolation: `PINは最低4文字です`,
+      matchViolation: `PINは合致する必要があります`,
+      failedHashComparison: `PINが間違っています。正しいPINを入力してください。`,
+      updateSuccess: `PINが更新されました`,
+      updateError: `PIN更新中にエラーが発生しました`,
     },
     mnemonic: {
       lengthViolation: `アカウント復元用の単語は最低12語です`,
@@ -103,7 +103,7 @@ export default {
       error: generalCommunicationError
     },
     lockTimeout: {
-      top: `後でPINコードを入力する必要があります`,
+      top: `後でPINを入力する必要があります`,
       bottom: `セッションが無効になるまでの時間`,
       update: `アップデート`,
       error: `アカウントの更新に失敗しました`,
@@ -127,30 +127,30 @@ export default {
     },
     sendEth: {
       error: {
-        insufficient: `資金不足のため取引に失敗しました`,
-        generic: `取引に失敗しました。しばらくしてからもう一度お試しください`,
+        insufficient: `資金不足のため送付に失敗しました`,
+        generic: `送付に失敗しました。しばらくしてからもう一度お試しください`,
         address: `正しいアドレスを入力してください`,
         amount: `０より大きい値を入力してください`,
         limitExceeded: A => `一週間にLndrから引き出せるのは ${CUR[A]}${TL[A]} までです`,
       },
-      amount: `送金する金額`,
-      address: `送信先アドレス（先頭の '0x'は入力不要）`,
-      transfer: `ETHを取引する`,
-      transferAll: `全てを送信する`,
+      amount: `送付額`,
+      address: `送付先アドレス（先頭の '0x'は入力不要）`,
+      transfer: `ETHをやりとりする`,
+      transferAll: `全てを送付する`,
       balance: Y =>　`あなたの現在のETH残高は${ typeof Y === 'string' ? Y.slice(0,8) :''}です`,
       ethAddress: `イーサリアムアドレス`,
       txCost: (B, A) => `現在の取引手数料は ${CUR[A]}${B}です`,
-      transferLowercase: `ETHを取引する`,
+      transferLowercase: `イーサリアムを送付する`,
       note: A =>　`一週間にLndrから引き出せるのは ${CUR[A]}${TL[A]} までです`,
       warning: (Z, A) => `現在 ${CUR[A]}${TL[A]} のうち ${CUR[A]}${Z}残っています `,
     },
     sendBcpt: {
       error: {
-        insufficient: `BCPTが不足しているため取引ができません`,
-        generic: `取引にエラーがありました。しばらくしてから、もう一度お試しください`,
+        insufficient: `BCPTが不足しているため送付できません`,
+        generic: `エラーがありました。しばらくしてから、もう一度お試しください`,
       },
-      transfer: `BCPTの取引`,
-      address: `送信先アドレス（先頭の '0x'は入力不要）`,
+      transfer: `BCPTのやりとり`,
+      address: `送付先アドレス（先頭の '0x'は入力不要）`,
       balance: Y => `あなたの現在のBCPT残高は${typeof Y === 'string' ? Y.slice(0,8) :''}`,
       bcptAddress: `BCPTアドレス`,
     },
@@ -168,11 +168,11 @@ export default {
       `復元用の単語（ニューモニック）`,
       `通知`,
     ],
-    viewEtherscan: `Etherscanで取引履歴を見る`,
+    viewEtherscan: `Etherscanで履歴を見る`,
     profilePic: {
       change: `プロフィール画像を変更する`,
       setError: `画像のアップロード中にエラーが起きました。しばらくしてからもう一度お試しください。`,
-      getError: `画像の読み込みにエラーが起きました`,
+      getError: `画像の読み込みでエラーが起きました`,
       setSuccess: `プロフィール画像が更新されました`,
     },
     logoutSuccess: `ログアウトに成功しました`,
@@ -186,7 +186,7 @@ export default {
 
   welcomeView: {
     by: `BUILT BY`,
-    makeItEasy: `Lndrは簡単な債務を追跡するのに便利です`,
+    makeItEasy: `Lndrは簡単な債務（借り）を追跡するのに便利です`,
     weHelpFriends: `生活、仕事、娯楽をサポートします`,
     len: `Len`,
     dot: `.`,
@@ -194,7 +194,7 @@ export default {
     shareDinner: `ディナー代をシェア`,
     fillTank: `ガソリンを満タンに`,
     travelTogether: `旅をともに楽しむ`,
-    runEthereum: `Ethereum上で稼働`,
+    runEthereum: `イーサリアム上で稼働`,
     firstLendingApp: `ブロックチェーン上で動く、安全性が保証されているモバイルアプリ`,
     greatConcert: `素晴らしいコンサートを楽しむ`,
     youPlayWithFriends: `あなたは友人の時間を堪能し、会計はアプリにお任せ`,
@@ -203,35 +203,35 @@ export default {
 
   walkthrough: {
     skip: `スキップ`,
-    continue: `持続する`,
+    continue: `続ける`,
     step1: {
-      easyToUse: `Lndrは法案、共有費用を分割し、すべてのblockchainにしっかりと行って、友人や家族と簡単な借金を解決する最も簡単な方法です。`,
+      easyToUse: `Lndrは様々な出費の割り勘、友人や家族間でのちょっとした貸し借りを管理するシンプルな手段です。`,
       len: `Len`,
       der: `der`,
     },
     step2: {
-      getStarted: `Lndrを開始するには、あなたは友人を追加する必要があります。`,
-      friendsScreen: `、の検索、追加、またはLndrに接続するためにお友達やご家族を招待する友人の画面にアクセスしてください。`,
+      getStarted: `友達を追加して、Lndrを使ってみましょう`,
+      friendsScreen: `Lndrを友人や家族に紹介するために、を検索・追加・招待しましょう`,
     },
     step3: {
       title: `トランザクションの記録`,
-      easy: `法案を分割するか、友人との債務を追加するとLndrに簡単です！`,
-      selectFriend: `あなたの友人、あなたの通貨と金額を選択します。`,
-      addMemo: `メモボックスにいくつかのメモを追加し、[送信]をクリックします。`,
+      easy: `支払いを友人と分割や貸し借りの追跡は、Lndrであれば簡単です！`,
+      selectFriend: `友達を選び、利用する通貨と金額を選択します。`,
+      addMemo: `必要に応じてメモを追加し、[送信]をクリックします。`,
     },
     step4: {
-      title: `手形を決済する`,
-      ready: `あなたの請求書を決済する準備ができましたか?`,
-      payPal: `それはLndrにアップ落ち着くための時間だときは、\ N-あなたはペイパルを選択することができます。`,
-      ether: `- エーテルのようなcryptocurrencies：`,
-      cash: `- あるいは単に現金決済を記録します。`,
-      positiveBalance: `1046`,
+      title: `実行する`,
+      ready: `実行してよろしいですか？`,
+      payPal: `Lndrを利用する際、\ N-あなたはペイパルを選択することができます。`,
+      ether: `- Etherのような暗号通貨で`,
+      cash: `- あるいは通常通りに現金で`,
+      positiveBalance: `10.46`,
     },
     step5: {
-      title: `マルチ通貨`,
-      multiCurrency: `Lndrは、彼らが異なる通貨で発生しても、あなたのトランザクションを追跡することができます。`,
-      exchangeRate: `あなたはあなたの友人とアップセトルすることを決定した場合は、すべてのトランザクションは、最新の為替レートが使用可能に使用して、主要通貨に換算されます。`,
-      start: `Lndrを使用してスタート！`,
+      title: `複数通貨`,
+      multiCurrency: `Lndrでは、異なる通貨同士でのやりとりも追跡することができます。`,
+      exchangeRate: `貸し借りを帳消しすることが決定すると、すべてのトランザクションは最新の為替レートに応じて、主要通貨に換算されます。`,
+      start: `Lndrを使ってみましょう！`,
     }
   },
 
@@ -255,8 +255,8 @@ export default {
     createError: {
       amountTooLow: `$0以上の金額を入力してください`,
       amountTooHigh: `$1,000,000,000以下の金額を入力してください`,
-      selfAsFriend: `自分に対する債務を追うことはできません。別の友達を選択してください。`,
-      pending: `他の取引を始める前に、申請中の取引を済ませてください、`,
+      selfAsFriend: `自分自身の債務（借り）は選択できません。別の友達を選択してください。`,
+      pending: `別のやりとりを始める前に、現在の分を済ませてください`,
       insufficientEth: E => `決済するためには少なくとも ${E} ETH 必要です, 自分の残高を確認するには設定をご覧ください`,
     },
     
@@ -284,35 +284,35 @@ export default {
       pendingBorrowSettlementMe: S => ` @${S.creditorNickname}に ${S.settlementCurrency}で決済する申請を出しました`,
     },
     pending: {
-      success: F => `@${F.nickname}に保留中の債務を送信しました`,
+      success: F => `@${F.nickname}に提出した負債（借り）は保留中`,
       error: generalCommunicationError
     },
     pendingParens: `(保留中)`,
     confirmation: {
-      transaction: CP => ` ${CP} との取引が確定しました`,
+      transaction: CP => ` ${CP} とのやりとりが確定しました`,
       settlement: CP => ` ${CP}との決済が確定しました`,
-      error: `現在取引を確定することができません。しばらくして、もう一度お試しください。`,
+      error: `現在やりとりを承認できません。しばらくして、もう一度お試しください。`,
     },
     rejection: {
-      success: `取引が失敗しました`,
-      error: `現在、取引を拒否することができません。再度お試しください`,
+      success: `やりとりが失敗しました`,
+      error: `現在、やりとりを拒否できません。再度お試しください`,
     },
     balances: {
       error: `残高を表示することができません。しばらくして、もう一度お試しください`,
     },
     for: M => `${M}宛て`,
-    settleUp: `清算する`,
-    settleTotal: `清算総額`,
-    settleUpMemo: (D, A) => `${D === 'lend' ? 'に清算する ' :  'を決算する申請'} ${A}`,
-    recordSettleUpMemo: `詳細`,
+    settleUp: `帳消しする`,
+    settleTotal: `帳消し総額`,
+    settleUpMemo: (D, A) => `${A}${D === 'lend' ? 'に清算する ' :  ' を決算する申請'}`,
+    recordSettleUpMemo: `帳消し中`,
     balanceByCurrency: `ETHで決済`,
   },
 
   settlementManagement: {
     bilateral: {
       error: {
-        insufficient: X => `資金不足のため ${X}との決済に失敗しました`,
-        generic: X => ` ${X}との決済の処理中にエラーが起きました`,
+        insufficient: X => `資金不足のため @${X}とのやりとりに失敗しました`,
+        generic: X => `@${X}とのやりとりの処理中にエラーが起きました`,
       }
     },
     eth: `PayPalで決済`,
@@ -338,14 +338,14 @@ export default {
     title: `メモ：`,
     memo: `宛て`,
     for: `申請中の取引はありません`,
-    none: `本当にこの取引を確定しますか`,
-    confirmationQuestion: `この取引は取引相手の確定待ちです`,
-    pendingAnnouncement: `ETHの取引の完了待ちです`,
-    bilateral: `確定する`,
-    confirm: `取引を拒否する`,
-    reject: `拒否する`,
-    rejectRequest: `取引をキャンセルする`,
-    cancel: `申請中の決済`,
+    none: `申請中のやりとりはありません`,
+    confirmationQuestion: `本当にこのやりとりを承認しますか`,
+    pendingAnnouncement: `このやりとりは相手の承認待ちです`,
+    bilateral: `ETHの送付完了待ちです`,
+    confirm: `確定する`,
+    reject: `やりとりを拒否する`,
+    rejectRequest: `拒否する`,
+    cancel: `取引をキャンセルする`,
     direction: {
       lend: (X, Z) => `@${X} はあなたに対して ${Z}の負債（借り）があります`,
       borrow: (X, Z) => `あなたは @${X}に対して ${Z}の負債（借り）があります`,
@@ -353,17 +353,17 @@ export default {
   },
 
   pendingSettlementsLanguage: {
-    shell: `申請中`,
-    title: `申請中の決済はありません`,
-    none: `確定する`,
-    confirm: `決済を拒否する`,
-    reject: `決済をキャンセルする`,
-    cancel: `完了`,
+    shell: `申請中のやりとり`,
+    title: `申請中`,
+    none: `申請中のやりとりはありません`,
+    confirm: `確定する`,
+    reject: `やりとりを拒否する`,
+    cancel: `やりとりをキャンセルする`,
   },
 
   recentTransactionsLanguage: {
-    title: `完了した取引はありません`,
-    none: `残高`,
+    title: `完了`,
+    none: `完了したやりとりはありません`,
     direction: {
       lend: (X, Z) => `あなたは@${X} に対して ${Z}の債権（貸し）があります`,
       borrow: (X, Z) => ` @${X}はあなたに対して ${Z}の債権（貸し）があります`
@@ -403,7 +403,7 @@ export default {
     },
     rejectOutboundFriendRequest: {
       start: `あなたは、`,
-      end: `に友達リクエストをキャンセルしました.`,
+      end: `への友達リクエストをキャンセルしました.`,
     },
     ethSent: {
       start: `を送信するのに成功しました。あなたのトランザクション・ハッシュは`,
@@ -452,19 +452,19 @@ export default {
     requestPayPalPayee: `ペイパルをリクエスト`,
     enablePayPalForFriend: F => `PayPalを利用可能にすることで、@${F}はあなたに支払いができるようになります.`,
     friendNotEnabled: F => `@${F}は、PayPal支払いを有効にしていません`,
-    friendRequestedConnect: F => `@${F}はPayPal経由であなたに支払いたがっています`,
-    requestFriendConnect: F => `PayPalを有効にするようにi、@${F} に要請しました`,
+    friendRequestedConnect: F => `@${F}はPayPal経由であなたに支払いを希望しています`,
+    requestFriendConnect: F => `PayPalを有効にするようにi、@${F} に依頼しました`,
     feesNotification: `PayPalの手数料が含まれていません`,
     feesInformationHeader: `PayPalの手数料情報`,
     feesInformation: `1.あなたのPayPalアカウントを銀行口座に接続する必要があります。
     
 2.あなたの銀行の通貨と異なる通貨で支払う場合$ 0.35の手数料が発生します。
-    
+
 3.国際取引手数料：
     アメリカからカナダ/ヨーロッパへ：$ 2.99
     アメリカから他の国へ：$ 4.99
-    
-4.これらの手数料は、包括的ではありません。最新情報をご確認ください。`,
+
+4.これらの手数料は変更される可能性があります。最新情報をご確認ください。`,
     payPalSite: `PayPal.com`,
   }
 }
