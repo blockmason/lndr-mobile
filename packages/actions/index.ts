@@ -1,4 +1,4 @@
-import { Platform, Clipboard } from 'react-native'
+import { Platform, Clipboard, NetInfo } from 'react-native'
 import { UrbanAirship } from 'urbanairship-react-native'
 import ethUtil from 'ethereumjs-util'
 import moment from 'moment'
@@ -771,6 +771,11 @@ export const cancelRecoverAccount = () => {
 
 export const setWelcomeComplete = (state) => {
   const payload = { welcomeComplete: state }
+  return setState(payload)
+}
+
+export const setConnectionStatus = (state) => {
+  const payload = { isConnected: state }
   return setState(payload)
 }
 
