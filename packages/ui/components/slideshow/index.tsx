@@ -117,7 +117,7 @@ export default class Slideshow extends Component<Props, State> {
       <View style={style.horizontial}>
         {this.renderIndicator()}
       </View>
-      <Button alternate underline text={walkthrough.continue} onPress={this.nextPage} containerStyle={slideStyle.continueButton} />
+      <Button alternate link text={walkthrough.continue} onPress={this.nextPage} containerStyle={slideStyle.continueButton} />
     </View>
     )
   }

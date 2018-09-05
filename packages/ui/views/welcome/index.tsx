@@ -41,17 +41,19 @@ export default class WelcomeView extends Component<Props, State> {
   }
 
   onComplete() {
-    Animated.timing(
-      this.state.rocketOffsetY
-      ,{
-        toValue: -1000
-        ,easing: Easing.in(Easing.ease)
-        ,duration: 1500
-        ,useNativeDriver: true
-      }).start( () => {
-        if (this.props.onComplete)
-          this.props.onComplete()
-      })
+    this.props.onComplete()
+    // ROCKET ANIMATION
+    // Animated.timing(
+    //   this.state.rocketOffsetY
+    //   ,{
+    //     toValue: -1000
+    //     ,easing: Easing.in(Easing.ease)
+    //     ,duration: 1500
+    //     ,useNativeDriver: true
+    //   }).start( () => {
+    //     if (this.props.onComplete)
+    //       this.props.onComplete()
+    //   })
   }
 
   render () {

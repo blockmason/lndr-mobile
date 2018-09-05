@@ -52,7 +52,6 @@ export default class WelcomeStepTwoView extends Component {
           </View>
           {settingsButton}
         </View>
-        {/* <Image style={style.fullWidthImage225} source={require('images/walkthrough2-header.png')} /> */}
 
         <View style={style.topView}>
           <Text style={style.caption}>{walkthrough.step2.getStarted}</Text>
@@ -60,14 +59,6 @@ export default class WelcomeStepTwoView extends Component {
           <Text style={style.caption}>{walkthrough.step2.friendsScreen}</Text>
 
           <Image style={style.fullWidthImage35} source={require('images/walkthrough2-sample.png')} />
-{/*
-          <View style={general.flex}>
-            <Text style={style.caption}>Once your friend confirms their invitation, you’ll be all set to record transactions together on the Blockchain!</Text>
-            <View style={{height:80}}>
-              <Image resizeMode="contain" style={{flex: 1}} source={require('images/walkthrough-checkcircle.png')} />
-            </View>
-          </View>
-*/}
         </View>
       </ScrollView>
     )
