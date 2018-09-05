@@ -4,6 +4,7 @@
   "private": true,
   "scripts": {
     "typescript": "node_modules/.bin/tsc -w --skipLibCheck",
+    "preinstall": "cd ios && Pod install",
     "start": "node node_modules/react-native/local-cli/cli.js start",
     "setup:env": "node scripts/env.js",
     "postinstall": "node_modules/.bin/rn-nodeify --install stream,crypto --hack",

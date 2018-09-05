@@ -70,6 +70,15 @@ export default {
   setEmail: `Set an email to receive information on Lndr updates`,
   nickname: `Nickname (lowercase & numbers)`,
   email: `Email Address`,
+  lndrVerified: {
+    title: `Set higher settlement limit and crypto withdrawal amounts by completing Know Your Customer requirements.`,
+    prefix: `Read our `,
+    linkTitle: `Privacy Policy`,
+    postfix: ` for how your personal data will be managed.`,
+    button: `Unlock Additional Features`,
+    agree: `I have read and agree to the Privacy Policy`,
+    selfie: `Upload a selfie with your government issued ID`
+  },
   accountManagement: {
     nickname: {
       lengthViolation: `Nickname should be at least 3 characters.`,

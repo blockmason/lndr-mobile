@@ -1,7 +1,7 @@
 import React, { Component } from 'react'
 
 // TODO Remove button / go through the entire import dependecy list
-import { View } from 'react-native'
+import { View, NetInfo } from 'react-native'
 
 import firebase from 'react-native-firebase'
 import SplashScreen from 'react-native-splash-screen'
@@ -17,16 +17,18 @@ import AndroidStatusBar from 'ui/components/android-status-bar'
 import { UserData } from 'lndr/user'
 import { defaultCurrency } from 'lndr/currencies'
 import createStore from 'store'
-import { setWelcomeComplete, initializeStorage, verifyPrivacyPolicy } from 'actions'
+import { setWelcomeComplete, initializeStorage, verifyPrivacyPolicy, setConnectionStatus } from 'actions'
 import { getStore, getUser } from 'reducers/app'
 import AppWithNavigationState from 'navigators'
 
 import style from 'theme/general'
+import NetworkNotifierView from 'ui/views/network';
 
 interface AppContentsProps {
   initializeStorage: () => any
   setWelcomeComplete: () => any
   verifyPrivacyPolicy: () => any
+  setConnectionStatus: (state: any) => any
   user: UserData
   state: any
 }
@@ -63,16 +65,27 @@ const initialState = {
   primaryCurrency: defaultCurrency,
   payPalRequests: [],
   payPalRequestsLoaded: false,
-  channelID: ''
+  channelID: '',
+  isConnected: true
 }
 
 const store = createStore(initialState)
 
 // TODO Move this route based code into navigators
 class AppContentsView extends Component<AppContentsProps> {
+  
   componentDidMount() {
     this.props.initializeStorage()
     SplashScreen.hide()
+    NetInfo.isConnected.addEventListener('connectionChange', this.handleConnection)
+  }
+
+  componentWillUnmount() {
+    NetInfo.isConnected.removeEventListener('connectionChange', this.handleConnection)
+  }
+
+  handleConnection = isConnected => {
+    this.props.setConnectionStatus(isConnected)
   }
 
   render() {
@@ -81,19 +94,22 @@ class AppContentsView extends Component<AppContentsProps> {
       welcomeComplete,
       privacyPolicyVerified,
       shouldDisplayMnemonic,
-      displayTouchID
+      displayTouchID,
+      isConnected
     } = this.props.state
 
     if (isInitializing) {
       return <View />
     }
-
     if (!welcomeComplete) {
       return <WelcomeView onComplete={this.props.setWelcomeComplete}/>
     }
 
     if (!privacyPolicyVerified) {
       return <PrivacyPolicyView onVerify={this.props.verifyPrivacyPolicy}/>
+    }
+    if (!isConnected) {
+      return <NetworkNotifierView onConnected={this.props.setConnectionStatus}/>
     }
 
     if (!this.props.user || shouldDisplayMnemonic) {
@@ -107,6 +123,7 @@ class AppContentsView extends Component<AppContentsProps> {
 const mapStateToProps = (state) => ({ state: getStore(state)(), user: getUser(state)() })
 const mapDispatchToProps = (dispatch) => ({
   setWelcomeComplete: () => dispatch(setWelcomeComplete(true)),
+  setConnectionStatus: (connectionInfo) => dispatch(setConnectionStatus(connectionInfo)),
   verifyPrivacyPolicy: () => dispatch(verifyPrivacyPolicy(true)),
   initializeStorage: () => dispatch(initializeStorage())
 })

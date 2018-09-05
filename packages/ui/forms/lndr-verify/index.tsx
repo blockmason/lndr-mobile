@@ -1,30 +1,61 @@
 import React, { Component } from 'react';
-import { View, Text, ScrollView, TextInput, BackHandler, KeyboardAvoidingView, Platform, Switch } from 'react-native';
+import {
+    View,
+    Text,
+    Switch,
+    ScrollView,
+    TextInput,
+    Alert,
+    BackHandler,
+    KeyboardAvoidingView,
+    Platform,
+    Picker,
+    TouchableHighlight
+} from 'react-native';
 
+import ImagePicker from 'react-native-image-picker';
 import Button from 'ui/components/button';
 import DashboardShell from 'ui/components/dashboard-shell';
+import { LoadingContext } from 'ui/components/loading';
+import Icon from 'react-native-vector-icons/Ionicons';
+import { connect } from 'react-redux';
+import { setGovernmentPhoto, setSelfiePhoto, setAddressPhoto, submitKYC } from 'actions';
+import { getUser } from 'reducers/app';
 
 import style from 'theme/form';
 import general from 'theme/general';
 
-import { UserData, LndrVerifiedData, defaultLndrVerifiedData } from 'lndr/user';
+import { UserData, LndrVerifiedData } from 'lndr/user';
+import countries from 'lndr/countries';
 
+const loadingContext = new LoadingContext();
 
 interface Props {
     navigation: any
     user: UserData
     state: any
+    submitKYC: (lndVerifiedData: LndrVerifiedData) => any
+    // setGovernmentPhoto: (imageURI: string, imageData: string) => any
+    // setSelfiePhoto: (imageURI: string, imageData: string) => any
+    // setAddressPhoto: (imageURI: string, imageData: string) => any
 }
 
 interface State {
     name: string
-    address: string
+    street: string
+    town: string
+    state: string
+    postcode: string
     telephone: string
-    citizenship: string
+    country: string
+    agreement: boolean
+    governmentPhoto: string
+    selfiePhoto: string
+    addressPhoto: string
     nameTextInputErrorText?: string
     addressTextInputErrorText?: string
     telephoneTextInputErrorText?: string
-    citizenshipTextInputErrorText?: string
+    countryTextInputErrorText?: string
   }
 
 class LndrVerifyForm extends Component <Props, State>{
@@ -33,23 +64,70 @@ class LndrVerifyForm extends Component <Props, State>{
         super(props);
         this.state = {
             name: '',
-            address: '',
+            street: '',
+            town: '',
+            state: '',
+            postcode: '',
             telephone: '',
-            citizenship: '',
+            country: '',
+            agreement: false,
+            governmentPhoto: '',
+            selfiePhoto: '',
+            addressPhoto: ''
         }
+        this.submitForm = this.submitForm.bind(this);
+        this.showGovernmentIssuedInfo = this.showGovernmentIssuedInfo.bind(this);
+        this.showProofOfAddressInfo = this.showProofOfAddressInfo.bind(this);
+        this.toggleSwitch = this.toggleSwitch.bind(this);
+        this.getGovernmentIssuedID = this.getGovernmentIssuedID.bind(this);
+        this.getSelfie = this.getSelfie.bind(this);
+        this.getProofOfAddressPhoto = this.getProofOfAddressPhoto.bind(this);
     }
 
     componentDidMount() {
         BackHandler.addEventListener("hardwareBackPress", this.onBackPress);
     }
+
     componentWillUnmount() {
         BackHandler.removeEventListener("hardwareBackPress", this.onBackPress);
     }
+
     onBackPress = () => {
         BackHandler.exitApp()
     }
-    submit = () => {
 
+    showGovernmentIssuedInfo = () => {
+        Alert.alert(
+            'Examples of ID include:',
+            `
+                -  Passport
+                -  Driver's License
+                -  National identity card
+            `,
+            [
+              {text: 'OK', onPress: () => null},
+            ],
+            { cancelable: false }
+          )
+    }
+
+    showProofOfAddressInfo = () => {
+        Alert.alert(
+            'Examples of proof of address:',
+            `
+                -  Bank statement
+                -  Utility bill
+            `,
+            [
+              {text: 'OK', onPress: () => null},
+            ],
+            { cancelable: false }
+          )
+    }
+
+    toggleSwitch = () => {
+        const { agreement } = this.state;
+        this.setState({ agreement: !agreement})
     }
 
     async onNameTextInputBlur(name: string) {
@@ -60,11 +138,11 @@ class LndrVerifyForm extends Component <Props, State>{
         }
     }
 
-    async onCitizenshipTextInputBlur(citizenship: string) {
-        if (typeof citizenship !== 'undefined') {
-            this.setState({ citizenshipTextInputErrorText: ''});
+    async oncountryTextInputBlur(country: string) {
+        if (typeof country !== 'undefined') {
+            this.setState({ countryTextInputErrorText: ''});
         } else {
-            this.setState({ citizenshipTextInputErrorText: 'Citizenship is required'});
+            this.setState({ countryTextInputErrorText: 'country is required'});
         }
     }
 
@@ -83,13 +161,139 @@ class LndrVerifyForm extends Component <Props, State>{
             this.setState({ telephoneTextInputErrorText: 'Telephone is required'});
         }
     }
+
+    async getGovernmentIssuedID() {
+        let options = {
+            title: `Choose Government Issued ID Photo`,
+            storageOptions: {
+              skipBackup: true,
+              path: 'images'
+            }
+        };
+        ImagePicker.showImagePicker(options, async (response) => {
+            if (response.didCancel) {
+                console.log('User cancelled image picker');
+            } else if (response.error) {
+                console.log('ImagePicker Error: ', response.error);
+            } else {
+                const { uri, data } =  response
+                const governmentPhoto = loadingContext.wrap(setGovernmentPhoto(uri, data));
+                this.setState({ governmentPhoto });
+            }
+        });
+    }
+    
+    async getSelfie() {
+        let options = {
+            title: `Choose Selfie Government Issued ID Photo`,
+            storageOptions: {
+              skipBackup: true,
+              path: 'images'
+            }
+        };
+        ImagePicker.showImagePicker(options, async (response) => {
+            if (response.didCancel) {
+                console.log('User cancelled image picker');
+            } else if (response.error) {
+                console.log('ImagePicker Error: ', response.error);
+            } else {
+                const { uri, data } =  response
+                const selfiePhoto = await loadingContext.wrap(setSelfiePhoto(uri, data));
+                this.setState({ selfiePhoto });
+            }
+        });
+    }
+
+    async getProofOfAddressPhoto() {
+        let options = {
+            title: `Choose Proof of Address Photo`,
+            storageOptions: {
+              skipBackup: true,
+              path: 'images'
+            }
+        };
+        ImagePicker.showImagePicker(options, async (response) => {
+            if (response.didCancel) {
+                console.log('User cancelled image picker');
+            } else if (response.error) {
+                console.log('ImagePicker Error: ', response.error);
+            } else {
+                const { uri, data } =  response;
+                const addressPhoto = await setAddressPhoto(uri, data);
+                this.setState({ addressPhoto });
+            }
+        });
+    }
+
+    submitForm = async () => {
+        const { name, street, telephone, town, state, postcode, country, governmentPhoto, selfiePhoto, addressPhoto, agreement} = this.state;
+        const { email, address } = this.props.user;
+        let data = {
+            email,
+            externalUserId: address,
+            info: {
+                firstName: name.split(' ')[0],
+                lastName: name.split(' ')[1],
+                phone: telephone,
+                nationality: country,
+                idDocs: [
+                    {
+                        country,
+                        idDocType: "PASSPORT",
+                        idDocSubType: "FRONT_SIDE",
+                        content: governmentPhoto
+                    },
+                    {
+                        country,
+                        idDocType: "PASSPORT",
+                        idDocSubType: "FRONT_SIDE",
+                        content: selfiePhoto
+                    },
+                    {
+                        country,
+                        idDocType: "PASSPORT",
+                        idDocSubType: "FRONT_SIDE",
+                        content: addressPhoto
+                    }
+                ],
+                addresses: {
+                    street,
+                    town,
+                    state,
+                    postcode,
+                    country
+                },
+                requiredIdDocs : {
+                    "country" : `${country}`,
+                    "docSets" : [ {
+                        "idDocSetType" : "IDENTITY",
+                        "types" : [ "PASSPORT", "ID_CARD", "DRIVERS" ],
+                        "subTypes" : [ "FRONT_SIDE", "BACK_SIDE" ]
+                        }, {
+                        "idDocSetType" : "SELFIE",
+                        "types" : [ "SELFIE" ],
+                        "subTypes" : null
+                        }
+                    ]
+                }
+            }
+        };
+        if (name && street && town && state && postcode && telephone && governmentPhoto && selfiePhoto && addressPhoto && agreement ) {
+            const request = await loadingContext.wrap(this.props.submitKYC(data));
+            if (request) {
+                const { navigate } = this.props.navigation;
+                navigate('LndrVerify');
+            }
+        }
+    }
+
     render() {
         const vertOffset = (Platform.OS === 'android') ? -300 : 0;
-        const { name, address, telephone, citizenship, nameTextInputErrorText, addressTextInputErrorText, telephoneTextInputErrorText, citizenshipTextInputErrorText } = this.state;
+        const { name, street, town, state, postcode, telephone, country, agreement } = this.state;
         return(
             <View style={general.whiteFlex}>
                 <View style={general.view}>
-                    <DashboardShell text="Lndr Verified" navigation={this.props.navigation} hideSettings />
+                    <DashboardShell text="Lndr Verified" navigation={this.props.navigation} />
                     <Button close onPress={() => this.props.navigation.goBack()} />
                 </View>
                 <ScrollView keyboardShouldPersistTaps="never">
@@ -104,25 +308,79 @@ class LndrVerifyForm extends Component <Props, State>{
                                 maxLength={20}
                                 underlineColorAndroid='transparent'
                                 onChangeText={name => this.setState({ name })}
-                                onBlur={(): any => this.onNameTextInputBlur(this.state.name)}
+                                onBlur={(): any => this.onNameTextInputBlur(name)}
                             />
                             </View>
-                            { !!nameTextInputErrorText && <Text style={style.warningText}>{nameTextInputErrorText}</Text>}
 
                             <View style={style.textInputContainer}>
                             <TextInput
                                 autoCapitalize='sentences'
                                 style={style.textInput}
-                                placeholder="Full Address including Zipcode"
+                                placeholder="Street Name"
                                 multiline={true}
-                                value={address}
+                                value={street}
                                 maxLength={80}
                                 underlineColorAndroid='transparent'
-                                onChangeText={address => this.setState({ address })}
-                                onBlur={(): any => this.onAddressTextInputBlur(this.state.address)}
+                                onChangeText={street => this.setState({ street })}
+                                onBlur={(): any => this.onAddressTextInputBlur(street)}
                             />
                             </View>
-                            { !!addressTextInputErrorText && <Text style={style.warningText}>{addressTextInputErrorText}</Text>}
+                            <View style={style.textInputContainer}>
+                            <TextInput
+                                autoCapitalize='sentences'
+                                style={style.textInput}
+                                placeholder="Town"
+                                multiline={true}
+                                value={town}
+                                maxLength={80}
+                                underlineColorAndroid='transparent'
+                                onChangeText={town => this.setState({ town })}
+                                onBlur={(): any => this.onAddressTextInputBlur(town)}
+                            />
+                            </View>
+                            <View style={style.textInputContainer}>
+                            <TextInput
+                                autoCapitalize='sentences'
+                                style={style.textInput}
+                                placeholder="State"
+                                multiline={true}
+                                value={state}
+                                maxLength={80}
+                                underlineColorAndroid='transparent'
+                                onChangeText={state => this.setState({ state })}
+                                onBlur={(): any => this.onAddressTextInputBlur(state)}
+                            />
+                            </View>
+                            <View style={style.textInputContainer}>
+                            <TextInput
+                                style={style.textInput}
+                                keyboardType="phone-pad"
+                                placeholder="Postal Code"
+                                value={postcode}
+                                underlineColorAndroid='transparent'
+                                onChangeText={postcode => this.setState({ postcode })} 
+                                onBlur={(): any => this.onAddressTextInputBlur(postcode)}
+                            />
+                            </View>
+
+                            <View style={style.pickerContainer}>
+                                <Text style={[style.label]}>
+                                    Country
+                                </Text>
+                                <Picker
+                                    selectedValue={ country }
+                                    onValueChange={(value, _index) => this.setState({country: value })}
+                                    prompt="Country">
+                                    {countries.map((value, key) => 
+                                        <Picker.Item
+                                            label={value.name}
+                                            key={key} 
+                                            value={value.name}>
+                                                {value.name}
+                                        </Picker.Item>)
+                                    }
+                                </Picker>
+                            </View>
 
                             <View style={style.textInputContainer}>
                             <TextInput
@@ -132,42 +390,27 @@ class LndrVerifyForm extends Component <Props, State>{
                                 keyboardType="phone-pad"
                                 underlineColorAndroid='transparent'
                                 onChangeText={telephone => this.setState({ telephone })}
-                                onBlur={(): any => this.onTelephoneTextInputBlur(this.state.telephone)}
+                                onBlur={(): any => this.onTelephoneTextInputBlur(telephone)}
                             />
                             </View>
-                            { !!telephoneTextInputErrorText && <Text style={style.warningText}>{telephoneTextInputErrorText}</Text>}
-
-                            <View style={style.textInputContainer}>
-                            <TextInput
-                                autoCapitalize='sentences'
-                                style={style.textInput}
-                                placeholder="Citizenship"
-                                value={citizenship}
-                                maxLength={20}
-                                underlineColorAndroid='transparent'
-                                onChangeText={citizenship => this.setState({ citizenship })}
-                                onBlur={(): any => this.onCitizenshipTextInputBlur(this.state.citizenship)}
-                            />
+                            <View style={[general.flexRow]}>
+                                <Text style={[style.label]}>Upload a <Text onPress={this.showGovernmentIssuedInfo} style={[style.link]}> government issued ID</Text></Text>
+                                <Icon onPress={() => this.getGovernmentIssuedID()} style={[style.cameraImage, {alignSelf: 'flex-end'}]} name="md-camera" />
                             </View>
-                            { !!citizenshipTextInputErrorText && <Text style={style.warningText}>{citizenshipTextInputErrorText}</Text>}
-                            <View style={style.text}>
-                                <Text>Upload a government issued ID </Text>
+                            <View style={[general.flexRow, style.spaceTop]}>
+                                <Text style={[style.label]}>Upload a selfie with your government issued ID </Text>
+                                <Icon onPress={() => this.getSelfie()} style={[style.cameraImage, {justifyContent: 'space-between', alignSelf: 'flex-end'}]} name="md-camera" />
                             </View>
-                            <View style={style.text}>
-                                <Text>Upload a selfie with your government issued ID </Text>
+                            <View style={[general.flexRow, style.spaceTop]}>
+                                <Text style={[style.label]}>Proof of address <Text onPress={this.showProofOfAddressInfo} style={style.link}>(if not ID)</Text> </Text>
+                                <Icon onPress={() => this.getProofOfAddressPhoto()} style={[style.cameraImage, {alignSelf: 'flex-end'}]} name="md-camera" />
                             </View>
-                            <View style={style.text}>
-                                <Text>Proof of address (if not ID) </Text>
-                            </View>
-                            <View>
-                                {
-                                    (Platform.OS === 'android') ?
-                                    ("I have read and agree to the Privacy Policy") :
-                                    (<Switch> I have read and agree to the Privacy Policy </Switch>)
-                                }
+                            <View style={[general.flexRow, style.spaceTop]}>
+                                <Switch value={agreement} onValueChange={this.toggleSwitch}/>
+                                <Text style={[style.label, {alignSelf: 'flex-end'}]}>I have read and agree to the Privacy Policy</Text>
                             </View>
 
-                            <Button round fat onPress={() => this.submit()} style={style.submitButton} text="Submit" />
+                            <Button round fat onPress={() => this.submitForm()} style={[style.submitButton, style.spaceTop]} text="Submit" />
 
                         </KeyboardAvoidingView>
                     </View>
@@ -177,4 +420,4 @@ class LndrVerifyForm extends Component <Props, State>{
     }
 }
 
-export default LndrVerifyForm;
+export default connect((state) => ({user: getUser(state)()}), { submitKYC })(LndrVerifyForm)

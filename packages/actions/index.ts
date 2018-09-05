@@ -1,4 +1,4 @@
-import { Platform, Clipboard } from 'react-native'
+import { Platform, Clipboard, NetInfo } from 'react-native'
 import { UrbanAirship } from 'urbanairship-react-native'
 import ethUtil from 'ethereumjs-util'
 import moment from 'moment'
@@ -774,6 +774,11 @@ export const setWelcomeComplete = (state) => {
   return setState(payload)
 }
 
+export const setConnectionStatus = (state) => {
+  const payload = { isConnected: state }
+  return setState(payload)
+}
+
 export const verifyPrivacyPolicy = (state) => {
   const payload = { privacyPolicyVerified: state }
   return setState(payload)
@@ -889,6 +894,30 @@ export const setProfilePic = (imageURI: string, imageData: string) => {
       dispatch(setState({ userPic }))
     } catch (e) {
       dispatch(displayError(accountManagement.profilePic.setError))
+    }
+  }
+}
+
+export const setGovernmentPhoto = (imageURI: string, imageData: string) => {
+    return creditProtocol.setKYCPhoto(imageURI, imageData /** privateKeyBuffer **/)
+}
+
+export const setSelfiePhoto = (imageURI: string, imageData: string) => {
+    return creditProtocol.setKYCPhoto(imageURI, imageData /** privateKeyBuffer **/)
+}
+
+export const setAddressPhoto = (imageURI: string, imageData: string) => {
+    return creditProtocol.setKYCPhoto(imageURI, imageData /** privateKeyBuffer **/)
+}
+
+export const submitKYC = (kycData: any) => {
+  return async (dispatch) => {
+    try {
+      await creditProtocol.submitKYC(kycData)
+      dispatch(displaySuccess('KYC has been submitted.'))
+    } catch (error) {
+      dispatch(displayError('An error occured. Please try again'))
+      throw error
     }
   }
 }

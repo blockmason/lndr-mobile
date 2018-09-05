@@ -143,6 +143,11 @@ export default StyleSheet.create({
     paddingLeft: 8,
     ...verticalMarginXS
   },
+  pickerContainer: {
+    width: '100%',
+    paddingLeft: 8,
+    ...verticalMarginXS
+  },
   settleAmount: {
     width: '80%',
     borderRadius: 30,
@@ -300,5 +305,16 @@ export default StyleSheet.create({
     color: gray,
     fontStyle: 'italic',
     marginTop: 30
+  },
+  link: {
+    color: aqua,
+    ...bold
+  },
+  label: {
+    ...medium,
+    ...verticalMarginXXS,
+    color: black,
+    maxWidth: 400,
+    fontWeight: '100'
   }
 } as any)

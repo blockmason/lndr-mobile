@@ -18,6 +18,7 @@ import FriendRequest from 'ui/dialogs/friend-request'
 import PayPalRequestDetail from 'ui/dialogs/paypal-request-detail'
 import RemoveAccountView from 'ui/dialogs/remove-account'
 import LndrVerifyForm from 'ui/forms/lndr-verify'
+import LndrVerify from 'ui/dialogs/lndr-verify'
 
 import {
   createReactNavigationReduxMiddleware,
@@ -74,8 +75,11 @@ export const AppNavigator = StackNavigator(
       screen: RemoveAccountView
     },
     PayPalRequest: PayPalRequestDetail,
-    LndrVerify: {
+    LndrVerifyForm: {
       screen: LndrVerifyForm
+    },
+    LndrVerify: {
+      screen: LndrVerify
     }
   },
   {

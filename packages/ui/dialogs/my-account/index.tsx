@@ -34,7 +34,7 @@ import pendingStyle from 'theme/pending'
 import language from 'language'
 const { nickname, setNickname, email, setEmail, copy, accountManagement, changePin, enterNewPin, confirmPin, pleaseWait,
   mnemonicExhortation, addressExhortation, logoutAction, notifications, currentBalance, showMnemonic, enterCurrentPin,
-  myAccount, debtManagement, removeAccount, payPalLanguage, cancel, confirmAccount
+  myAccount, debtManagement, removeAccount, payPalLanguage, cancel, confirmAccount, lndrVerified
 } = language
 const updateAccountText = language.updateAccount
 
@@ -330,12 +330,11 @@ class MyAccount extends Component<Props, State> {
   renderVerify() {
     return (
       <View style={style.spaceHorizontalL}>
-        <Text style={[style.smallText, style.spaceTop]}>Set higher settlement limit and crypto withdrawal amounts
-        by completing Know Your Customer requirements.</Text>
+        <Text style={[style.smallText, style.spaceTop]}>{lndrVerified.title}</Text>
 
-        <Text style={[style.smallText, style.spaceTop]}>Read our <Text onPress={() => Linking.openURL('https://google.com')}>Privacy Policy</Text> for how your personal data will be managed.</Text>
+        <Text style={[style.smallText, style.spaceTop]}>{lndrVerified.prefix} <Text style={[style.link]} onPress={() => Linking.openURL('https://lndr.io/terms/')}>{lndrVerified.linkTitle}</Text>{lndrVerified.postfix}</Text>
 
-        <Button round onPress={() => {this.props.navigation.navigate('LndrVerify')}} text="Unlock Additional Features" />
+        <Button round onPress={() => {this.props.navigation.navigate('LndrVerifyForm')}} text={lndrVerified.button} />
       </View>
     );
   }
