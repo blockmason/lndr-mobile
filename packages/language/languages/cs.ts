@@ -201,6 +201,40 @@ export default {
     start: `Začínáme`,
   },
 
+  walkthrough: {
+    skip: `přeskočit`,
+    continue: `pokračovat`,
+    step1: {
+      easyToUse: `Lndr je nejjednodušší způsob, jak rozdělit účty, sdílení nákladů a usadit jednoduché dluhy s přáteli a rodinou, to vše provedeno bezpečně na blockchain.`,
+      len: `Len`,
+      der: `der`,
+    },
+    step2: {
+      getStarted: `Chcete-li začít s Lndr, budete muset přidat přítele.`,
+      friendsScreen: `Navštívit Friends obrazovky hledat, přidat nebo pozvat své přátele a rodinu se připojit k Lndr.`,
+    },
+    step3: {
+      title: `Nahrávání transakce`,
+      easy: `Rozdělením účet nebo přidání dluh s přítelem, je snadné v Lndr!`,
+      selectFriend: `Zvolit svého přítele, měnu a částku.`,
+      addMemo: `Přidat nějaké poznámky do poznámkového pole a klikněte na tlačítko Odeslat.`,
+    },
+    step4: {
+      title: `Vyrovnat`,
+      ready: `Připraven vyrovnat?`,
+      payPal: `Když je čas se usadit s Lndr, \n- můžete zvolit PayPal:`,
+      ether: `- cryptocurrencies jako Ether:`,
+      cash: `- nebo jednoduše nahrát výplatu v hotovosti:`,
+      positiveBalance: `10.46`,
+    },
+    step5: {
+      title: `Více měn`,
+      multiCurrency: `Lndr mohou sledovat své transakce, i když se stalo v různých měnách.`,
+      exchangeRate: `Když jste se rozhodli vyřídit se svým přítelem, budou všechny transakce bude převedena na primární měnu za použití nejvíce směnné kurzy up-to-date k dispozici.`,
+      start: `Začněte používat Lndr!`,
+    }
+  },
+
   debtManagement: {
     shell: `Nová transakce`,
     add: `Přidat dluh`,

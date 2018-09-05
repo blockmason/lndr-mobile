@@ -197,8 +197,42 @@ export default {
     runEthereum: `Działamy na ETH!`,
     firstLendingApp: `Pierwsza aplikacja mobilna do pożyczek zabezpieczona przez blockchain.`,
     greatConcert: `Zobacz Wspaniały Koncert`,
-    youPlayWithFriends: `Ty bawisz się z przyjaciółmi; \ n my zajmiemy się rachunkiem ...`,
+    youPlayWithFriends: `Ty bawisz się z przyjaciółmi; \n my zajmiemy się rachunkiem ...`,
     start: `Zacznij`,
+  },
+
+  walkthrough: {
+    skip: `pominąć`,
+    continue: `dalej`,
+    step1: {
+      easyToUse: `Lndr jest najprostszym sposobem, aby podzielić rachunki, koszty akcji i osiedlić prostych długów z przyjaciółmi i rodziną, wszystko odbywa się bezpiecznie na blockchain.`,
+      len: `Len`,
+      der: `der`,
+    },
+    step2: {
+      getStarted: `Aby rozpocząć korzystanie z Lndr, trzeba będzie dodać znajomego.`,
+      friendsScreen: `Wizyta przyjaciół ekranu, aby sprawdzić, dodać lub zaprosić przyjaciół i rodzinę do łączenia na Lndr.`,
+    },
+    step3: {
+      title: `Nagrywanie Transakcji`,
+      easy: `Dzielenie rachunek lub dodanie dług z przyjacielem jest łatwy w Lndr!`,
+      selectFriend: `Wybierz znajomego, walutę i kwotę.`,
+      addMemo: `Dodać kilka uwag w polu memo i kliknij przycisk Prześlij.`,
+    },
+    step4: {
+      title: `Rozlicz Dług`,
+      ready: `Gotowy do rozlicz dług?`,
+      payPal: `Kiedy nadszedł czas, aby rozliczyć się z Lndr \n- można wybrać PayPal:`,
+      ether: `- cryptocurrencies jak eter:`,
+      cash: `- lub po prostu nagrać rozliczenie pieniężne:`,
+      positiveBalance: `10,46`,
+    },
+    step5: {
+      title: `Wielowalutowy`,
+      multiCurrency: `Lndr mogą śledzić swoje transakcje, nawet jeśli zdarzają się w różnych walutach.`,
+      exchangeRate: `Gdy zdecydujesz się uregulować ze swoim przyjacielem, wszystkie transakcje zostaną przeliczone na walutę podstawową przy użyciu najbardziej kursów walut up-to-date dostępny.`,
+      start: `Zacznij korzystać Lndr!`,
+    }
   },
 
   debtManagement: {

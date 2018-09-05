@@ -11,8 +11,8 @@ import DashboardShell from 'ui/components/dashboard-shell'
 import general from 'theme/general'
 import style from 'theme/confirmation'
 
-import language from 'language'
-const { confirmation } = language
+import languageText, { language } from 'language'
+const { confirmation } = languageText
 
 interface Props {
   navigation: any
@@ -43,7 +43,7 @@ export default class ConfirmationScreen extends Component<Props> {
     this.props.navigation.dispatch( getResetAction({ routeName: 'Dashboard', params: { to: 'activity' } }) )
   }
 
-  render() {
+  displayMessage() {
     const type = this.props.navigation.state.params ? this.props.navigation.state.params.type : 'create'
     let friend = { nickname: 'your friend' }
     let txHash = ''
@@ -57,6 +57,26 @@ export default class ConfirmationScreen extends Component<Props> {
         amount = this.props.navigation.state.params.amount
     }
 
+    if (language === 'ja' && (type === 'ethSent' || type === 'bcptSent')) {
+      return <Text style={style.text}>
+        <Text style={style.nickname}>{type !== 'ethSent' && type !== 'bcptSent' ? `@${friend.nickname}` : amount}</Text>
+        <Text>{confirmation[type].start}</Text>
+        <Text>{confirmation[type].end}</Text>
+        {type === 'ethSent' || type === 'bcptSent' ? <Text style={style.nickname}>{txHash}</Text> : null}
+      </Text>
+    }
+
+    return <Text style={style.text}>
+      <Text>{confirmation[type].start}</Text>
+      <Text style={style.nickname}>{type !== 'ethSent' && type !== 'bcptSent' ? `@${friend.nickname}` : amount}</Text>
+      <Text>{confirmation[type].end}</Text>
+      {type === 'ethSent' || type === 'bcptSent' ? <Text style={style.nickname}>{txHash}</Text> : null}
+    </Text>
+  }
+
+  render() {
+    const type = this.props.navigation.state.params ? this.props.navigation.state.params.type : 'create'
+
     return <View style={general.whiteFlex}>
       <View style={general.view}>
         <DashboardShell text={confirmation.shell} navigation={this.props.navigation} />
@@ -65,12 +85,7 @@ export default class ConfirmationScreen extends Component<Props> {
       <ScrollView style={[general.whiteFlex]} keyboardShouldPersistTaps="always">
         <View style={[general.centeredColumn, general.standardHMargin]}>
           {this.getConfirmationImage(type)}
-          <Text style={style.text}>
-            <Text>{confirmation[type].start}</Text>
-            <Text style={style.nickname}>{type !== 'ethSent' && type !== 'bcptSent' ? `@${friend.nickname}` : amount}</Text>
-            <Text>{confirmation[type].end}</Text>
-            {type === 'ethSent' || type === 'bcptSent' ? <Text style={style.nickname}>{txHash}</Text> : null}
-          </Text>
+          {this.displayMessage()}
           {type === 'ethSent' || type === 'bcptSent' || type === 'confirmFriend' || type === 'rejectFriend' ? <View style={{marginBottom: 20}}/> :
           <TouchableHighlight onPress={() => this.goActivity()}>
             <Text style={[style.text, style.spacing]}>

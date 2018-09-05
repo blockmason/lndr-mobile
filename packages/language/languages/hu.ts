@@ -201,6 +201,40 @@ export default {
     start: `Kezdje El`,
   },
 
+  walkthrough: {
+    skip: `Átugrani`,
+    continue: `Folytatni`,
+    step1: {
+      easyToUse: `Lndr a legegyszerűbb módja, hogy szét számlák, részvény költségek és rendezze egyszerű tartozások barátok és a család, mindezt biztonságosan a blockchain.`,
+      len: `Len`,
+      der: `der`,
+    },
+    step2: {
+      getStarted: `A kezdéshez az Lndr, akkor kell hozzá egy barát.`,
+      friendsScreen: `Látogasson el a barátai képernyőn keresni, hozzáadás vagy meghívás barátok és a család csatlakozni a Lndr.`,
+    },
+    step3: {
+      title: `Felvétel Tranzakciós`,
+      easy: `Felosztása a számlát, vagy hozzáadtuk adósság egy barát könnyű Lndr!`,
+      selectFriend: `Válassza a barátod, a valuta és az összeget.`,
+      addMemo: `Hozzá néhány megjegyzés a feljegyzés mezőbe, és kattintson a Küldés gombra.`,
+    },
+    step4: {
+      title: `Kiegyenlítés`,
+      ready: `Kiegyenlítés kész?`,
+      payPal: `Amikor itt az ideje, hogy rendezze fel Lndr, \n megadhatja PayPal:`,
+      ether: `- cryptocurrencies, mint az éter:`,
+      cash: `- vagy egyszerűen csak rögzíti a pénzbeli elszámolás:`,
+      positiveBalance: `10.46`,
+    },
+    step5: {
+      title: `Többdevizás`,
+      multiCurrency: `Lndr nyomon követheti a tranzakciókat akkor is, ha történetesen különböző pénznemekben.`,
+      exchangeRate: `Ha úgy dönt, hogy rendezze Up a barátod, minden ügylet kerül átalakításra az elsődleges pénznem a leginkább up-to-date árfolyam rendelkezésre áll.`,
+      start: `Kezdje el használni Lndr!`,
+    }
+  },
+
   debtManagement: {
     shell: `Új Tranzakció`,
     add: `Tartozás Hozzáadása`,
