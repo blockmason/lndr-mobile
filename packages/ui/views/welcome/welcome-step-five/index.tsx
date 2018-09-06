@@ -32,7 +32,7 @@ export default class WelcomeStepFiveView extends Component<Props> {
           <Image style={style.fullWidthImage55} source={require('images/walkthrough5-sample.png')} />
           <Text style={style.caption}>{walkthrough.step5.exchangeRate}</Text>
 
-          <Button large alternate arrow onPress={this.props.onComplete} text={walkthrough.step5.start}/>
+          <Button large alternate arrow link onPress={this.props.onComplete} text={walkthrough.step5.start}/>
         </View>
       </ScrollView>
     )

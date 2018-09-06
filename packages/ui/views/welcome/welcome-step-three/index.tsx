@@ -8,7 +8,7 @@ import style from 'theme/slide'
 import formStyle from 'theme/form'
 
 import { defaultCurrency } from 'lndr/currencies'
-import { amountFormat, formatMemo } from 'lndr/format'
+import { amountFormat } from 'lndr/format'
 
 import language from 'language'
 const { walkthrough, debtManagement, submit } = language
@@ -55,6 +55,7 @@ export default class WelcomeStepThreeView extends Component {
                   keyboardType='numeric'
                   onChangeText={() => null}
                   autoCorrect={false}
+                  editable={false}
                 />
               </View>
             </View>
@@ -67,7 +68,8 @@ export default class WelcomeStepThreeView extends Component {
               placeholder={debtManagement.memo.example}
               value={debtManagement.memo.example}
               underlineColorAndroid='transparent'
-              onChangeText={memo => this.setState({ memo: formatMemo(memo) })}
+              onChangeText={() => null}
+              editable={false}
             />
           </View>
           <Button large round wide onPress={() => null} text={submit} />

@@ -21,7 +21,7 @@ export default class WelcomeStepOneView extends Component {
   render() {
     return (
       <ScrollView>
-        <View style={style.topView}>
+        <View style={[style.topView, {marginTop: 15}]}>
           <ThemeImage size={largeImage} name='logo'/>
           <View style={style.horizontial}>
             <Text style={[style.text, style.bold]}>[ {walkthrough.step1.len}</Text>
