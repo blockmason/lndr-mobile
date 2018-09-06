@@ -10,7 +10,7 @@ import Button from 'ui/components/button'
 import language from 'language'
 const { walkthrough } = language
 
-const { width } = Dimensions.get('window');
+const { width } = Dimensions.get('window')
 
 const sixtyFpsInMs = 16
 
@@ -114,10 +114,12 @@ export default class Slideshow extends Component<Props, State> {
           {this.renderContent()}
         </ScrollView>
       </View>
-      <View style={style.horizontial}>
+      <View style={style.horizontal}>
         {this.renderIndicator()}
       </View>
-      <Button alternate link text={walkthrough.continue} onPress={this.nextPage} containerStyle={slideStyle.continueButton} />
+      <View style={slideStyle.continueButton}>
+        <Button alternate link text={walkthrough.continue} onPress={this.nextPage} />
+      </View>
     </View>
     )
   }

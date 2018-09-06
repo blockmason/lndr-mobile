@@ -1,11 +1,11 @@
 import { StyleSheet, Dimensions } from 'react-native'
 
 import { light, white, black, gray, aqua, darkGray, moneyGreen } from 'theme/include/colors'
-import { percent } from 'theme/include/dimensions'
 import { large, medium, small } from 'theme/include/fonts'
-import { center } from 'theme/include/align'
 
 const { height, width } = Dimensions.get('window')
+
+console.log('WIDTH ', width)
 
 export default StyleSheet.create({
   topView: {
@@ -104,8 +104,8 @@ export default StyleSheet.create({
     textAlign: 'center',
   },
   whiteTriangle: {
-    borderBottomWidth: 140,
-    borderLeftWidth: 80,
+    borderBottomWidth: 70,
+    borderLeftWidth: 40,
     borderBottomColor: 'white',
     borderLeftColor: 'transparent',
     position: 'absolute',
@@ -166,22 +166,32 @@ export default StyleSheet.create({
   dashboardText: {
     ...medium,
     color: black,
-    textAlign: 'center'
+    textAlign: 'center',
+    zIndex: 1
   },
   redCircle: {
     position: 'absolute',
     width: 86,
     height: 50,
-    right: (width - 120) * 0.5 - 43
+    right: (width * -0.25) + 167,
+    zIndex: 2
   },
   skipButton: {
     position: 'absolute',
-    left: 30,
-    bottom: 13
+    left: 0,
+    bottom: 13,
+    flexDirection: 'column',
+    alignItems: 'center',
+    justifyContent: 'flex-end',
+    minWidth: 120,
   },
   continueButton: {
     position: 'absolute',
-    right: 10,
-    bottom: 13
+    right: 0,
+    bottom: 13,
+    flexDirection: 'column',
+    alignItems: 'center',
+    justifyContent: 'flex-end',
+    minWidth: 120,
   }
 } as any)

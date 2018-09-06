@@ -37,7 +37,6 @@ export default class WelcomeStepTwoView extends Component {
     return (
       <ScrollView>
         <View style={general.view}>
-          <AndroidStatusBar />
           <View style={[accountStyle.dashboardContainer, {marginTop: 0}]}>
             <View style={logoContainerStyle}>
               <TextLogo name='white' size={logoSize}/>
