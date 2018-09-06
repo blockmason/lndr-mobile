@@ -14,10 +14,47 @@ import accountStyle from 'theme/account'
 import language from 'language'
 const { walkthrough, inviteFriends, tabs } = language
 
-export default class WelcomeStepTwoView extends Component {
-  componentDidMount( ) {
+interface Props {}
+
+interface State {
+  friendsWidth: number
+  friendsXOffset: number
+}
+
+export default class WelcomeStepTwoView extends Component<Props, State> {
+  constructor(props) {
+    super(props)
+    this.state = {
+      friendsWidth: 60,
+      friendsXOffset: 120
+    }
+  }
+
+  componentDidMount() {
     firebase.analytics().setCurrentScreen('welcome-step-two', 'WelcomeStepTwoView');
   }
+
+  getRedCircleStyle():any {
+    const { friendsWidth, friendsXOffset } = this.state
+    const redCircleStyle = {
+      position: 'absolute',
+      top: 5,
+      width: friendsWidth + 20,
+      height: (friendsWidth + 20) * 0.55,
+      right: friendsXOffset + 8,
+      zIndex: 2
+    }
+    
+    return redCircleStyle
+  }
+
+  setFriendsPosition(event) {
+    const { layout } = event.nativeEvent
+    const friendsWidth = Math.round(layout.width)
+    const friendsXOffset = Math.round(layout.x)
+    this.setState({ friendsWidth, friendsXOffset })
+  }
+
   render() {
     const kSmallScreenThreshold = 320 // e.g. iPhone SE
     const { width } = Dimensions.get('window')
@@ -43,9 +80,11 @@ export default class WelcomeStepTwoView extends Component {
             </View>
             <View style={tabStyle.leftTriangle}/>
             <View style={tabStyle.tabsContainer}>
-              <Image style={style.redCircle} source={require('images/drawn-circle-red.png')}/>
+              <Image style={this.getRedCircleStyle()} source={require('images/drawn-circle-red.png')}/>
               <Text style={style.dashboardText}>{tabs.home}</Text>
-              <Text style={[style.dashboardText, tabStyle.underlineActive]}>{tabs.friends}</Text>
+              <View style={tabStyle.underlineActive} onLayout={event => this.setFriendsPosition(event)}>
+                <Text style={style.dashboardText}>{tabs.friends}</Text>
+              </View>
               <Text style={style.dashboardText}>{tabs.activity}</Text>
             </View>
           </View>

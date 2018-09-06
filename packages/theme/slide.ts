@@ -5,8 +5,6 @@ import { large, medium, small } from 'theme/include/fonts'
 
 const { height, width } = Dimensions.get('window')
 
-console.log('WIDTH ', width)
-
 export default StyleSheet.create({
   topView: {
     flexDirection: 'column',
@@ -169,17 +167,10 @@ export default StyleSheet.create({
     textAlign: 'center',
     zIndex: 1
   },
-  redCircle: {
-    position: 'absolute',
-    width: 86,
-    height: 50,
-    right: (width * -0.25) + 167,
-    zIndex: 2
-  },
   skipButton: {
     position: 'absolute',
     left: 0,
-    bottom: 13,
+    bottom: 14,
     flexDirection: 'column',
     alignItems: 'center',
     justifyContent: 'flex-end',
@@ -188,7 +179,7 @@ export default StyleSheet.create({
   continueButton: {
     position: 'absolute',
     right: 0,
-    bottom: 13,
+    bottom: 14,
     flexDirection: 'column',
     alignItems: 'center',
     justifyContent: 'flex-end',

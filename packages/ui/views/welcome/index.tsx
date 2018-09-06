@@ -67,7 +67,7 @@ export default class WelcomeView extends Component<Props, State> {
             <WelcomeStepFourView />,
             <WelcomeStepFiveView onComplete={this.onComplete}/>
           ]} />
-          <Button alternate underline text={walkthrough.skip} containerStyle={style.skipButton} onPress={this.onSkip}/>
+          <Button alternate underline small text={walkthrough.skip} containerStyle={style.skipButton} onPress={this.onSkip}/>
 
           <Animated.View style={[{position:"absolute"}, { transform: [{translateY: this.state.rocketOffsetY}] }, {height: 120}, {width:120}, {bottom:-120}, {left: 80}]}>
             <Image resizeMode="contain" style={{flex: 1}} source={require('images/blockchain.png')} />

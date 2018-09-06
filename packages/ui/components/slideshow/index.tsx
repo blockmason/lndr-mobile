@@ -118,7 +118,7 @@ export default class Slideshow extends Component<Props, State> {
         {this.renderIndicator()}
       </View>
       <View style={slideStyle.continueButton}>
-        <Button alternate link text={walkthrough.continue} onPress={this.nextPage} />
+        <Button alternate link small text={walkthrough.continue} onPress={this.nextPage} />
       </View>
     </View>
     )
