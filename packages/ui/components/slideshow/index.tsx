@@ -89,7 +89,7 @@ export default class Slideshow extends Component<Props, State> {
 
   nextPage () {
     const screen = this.state.screen + 1
-    if (screen === 6) {
+    if (Math.round(screen) === 6) {
       this.props.onComplete()
     } else {
       this.setState({ screen })

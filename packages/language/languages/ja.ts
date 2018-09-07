@@ -305,7 +305,7 @@ export default {
     settleTotal: `帳消し総額`,
     settleUpMemo: (D, A) => `${A}${D === 'lend' ? 'に清算する ' :  ' を決算する申請'}`,
     recordSettleUpMemo: `帳消し中`,
-    balanceByCurrency: `ETHで決済`,
+    balanceByCurrency: `通貨による残高`,
   },
 
   settlementManagement: {
@@ -369,6 +369,7 @@ export default {
       borrow: (X, Z) => ` @${X}はあなたに対して ${Z}の債権（貸し）があります`
     },
     balance: `貸し借り残高`,
+    consolidatedBalance: `貸し借り残高`,
     friends: FS => `(から${FS} ${FS === 1 ? '友達' :'友達'})`,
   },
 

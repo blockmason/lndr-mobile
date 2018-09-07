@@ -20,7 +20,7 @@ export default StyleSheet.create({
     borderBottomWidth: 1,
     borderBottomColor: softGray,
     paddingTop: -5,
-    paddingBottom: 20,
+    paddingBottom: -5,
     paddingLeft: -15,
     paddingRight: -15
   },
@@ -60,33 +60,18 @@ export default StyleSheet.create({
     borderBottomColor: softAqua
   },
   listItem: {
+    display: 'flex',
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
+    width: '80%',
     borderColor: softGray,
     borderBottomWidth: 1,
     borderTopWidth: 1,
     paddingLeft: s,
     paddingRight: s,
     paddingTop: s,
-    paddingBottom: m - xs,
-    width: '100%',
-  },
-  currencyBalance: {
-    flex: 1,
-    display: 'flex',
-    flexDirection: 'row',
-    justifyContent: 'flex-end',
-    height: 30
-  },
-  currencySymbolBalance: {
-    ...large,
-    color: black,
-    marginRight: 5
-  },
-  balanceMemo: {
-    ...small,
-    paddingVertical: 2
+    paddingBottom: m - xs
   },
   column: {
     display: 'flex',
@@ -111,7 +96,8 @@ export default StyleSheet.create({
     minWidth: 54,
     textAlign: 'right',
     textAlignVertical: 'top',
-    height: 68
+    height: 68,
+    flexDirection: 'row',
   },
   address: {
     width: 150,
@@ -282,7 +268,8 @@ export default StyleSheet.create({
     color: black,
     textAlign: 'center',
     ...bold,
-    ...small
+    ...small,
+    flexDirection: 'row',
   },
   txCost: {
     color: black,
