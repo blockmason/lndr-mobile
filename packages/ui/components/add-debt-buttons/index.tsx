@@ -27,7 +27,7 @@ export default class AddDebtButtons extends Component<Props> {
     const borrowText = friend ? debtManagement.iOwe : debtManagement.iBorrowed
     const containerStyle = friend ? style.friendAddDebtButtons : {}
 
-    return <View style={friend ? general.flexRow : style.newTransactionButtonContainer}>
+    return <View style={friend ? general.flexRowWrap : style.newTransactionButtonContainer}>
       <Button fat={fat} round onPress={this.props.lend} text={lendText} style={buttonStyle} containerStyle={containerStyle} />
       <Button fat={fat} round dark onPress={this.props.borrow} text={borrowText} style={buttonStyle} containerStyle={containerStyle} />
     </View>

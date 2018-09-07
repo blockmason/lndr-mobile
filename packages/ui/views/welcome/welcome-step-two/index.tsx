@@ -11,8 +11,8 @@ import style from 'theme/slide'
 import tabStyle from 'theme/tabs'
 import accountStyle from 'theme/account'
 
-import language from 'language'
-const { walkthrough, inviteFriends, tabs } = language
+import languageText, {language} from 'language'
+const { walkthrough, inviteFriends, tabs } = languageText
 
 interface Props {}
 
@@ -31,7 +31,7 @@ export default class WelcomeStepTwoView extends Component<Props, State> {
   }
 
   componentDidMount() {
-    firebase.analytics().setCurrentScreen('welcome-step-two', 'WelcomeStepTwoView');
+    firebase.analytics().setCurrentScreen('welcome-step-two', 'WelcomeStepTwoView')
   }
 
   getRedCircleStyle():any {
@@ -41,10 +41,10 @@ export default class WelcomeStepTwoView extends Component<Props, State> {
       top: 5,
       width: friendsWidth + 20,
       height: (friendsWidth + 20) * 0.55,
-      right: friendsXOffset + 8,
+      right: language === 'ja' ? friendsXOffset + 45 : friendsXOffset + 8,
       zIndex: 2
     }
-    
+
     return redCircleStyle
   }
 

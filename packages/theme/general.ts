@@ -21,7 +21,12 @@ export default StyleSheet.create({
     backgroundColor: white
   },
   flexRow: {
-    flexDirection: 'row'
+    flexDirection: 'row',
+  },
+  flexRowWrap: {
+    flexDirection: 'row',
+    flexWrap: 'wrap',
+    justifyContent: 'center',
   },
   flexColumn: {
     flexDirection: 'column'

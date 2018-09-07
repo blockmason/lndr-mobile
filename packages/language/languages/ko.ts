@@ -365,6 +365,7 @@ export default {
       borrow: (nickname, amount) => `당신은 @${nickname} 에게 ${amount} 을 갚아야합니다`
     },
     balance: `잔액 `,
+    consolidatedBalance: `잔액`,
     friends: (friends) => `(from ${friends} 친구)`
   },
 

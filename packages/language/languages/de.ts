@@ -139,10 +139,7 @@ export default {
       transferAll: `Überweisen Sie alles`,
       balance: Y => `Ihr aktueller ETH-Kontostand ist ${typeof Y === 'string'? Y.slice (0,8): ''} `,
       ethAddress: `Ethereum-Adresse`,
-      txCost: (B, A) => {
-        console.log('AHWTEWT ',  A)
-        return `Die aktuelle Transaktion kostet ${CUR(A)} ${B}`}
-        ,
+      txCost: (B, A) => `Die aktuelle Transaktion kostet ${CUR(A)} ${B}`,
       transferLowercase: `Eth-Überweisung`,
       note: A => `Bitte beachten Sie: Sie können nur ${CUR(A)} ${TL(A)} pro Woche aus Lndr überweisen`,
       warning: (Z, A) => `Sie haben ${CUR(A)} ${Z} übrig von Ihrem ${CUR(A)} ${TL(A)} Limit`,
