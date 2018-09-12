@@ -161,7 +161,7 @@ export default {
       `Usuń Konto`,
       `Historia transakcji ETH`,
       `Włącz PayPal`,
-      `Zmień walutę podstawowy`,
+      `Zmień walutę podstawową`,
       `Zmień PIN`,
       `Zmień adres e-mail`,
       `Zmiana czasu, po którym nastąpi blokada`,
@@ -368,7 +368,7 @@ export default {
     },
     balance: `Saldo`,
     consolidatedBalance: `Saldo`,
-    friends: FS => `(z ${FS} ${FS === 1 ? 'znajomy' :'Znajomi'})`,
+    friends: FS => `(z ${FS} ${FS === 1 ? 'znajomym' :'znajomymi'})`,
   },
 
   tabs: {
