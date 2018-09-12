@@ -50,6 +50,7 @@ Copy, rename, and update the files `android/app/src/main/assets/airshipconfig.pr
 
 Log in to Firebase (https://console.firebase.google.com/u/0/project/lndr-english/settings/general/android:com.lndr) and download the google-services.json and GoogleService-Info.plist files and add them to the android and ios folders.
 
+- Ensure that CocoaPods and Yarn are both installed (`sudo gem install cocoapods` and `brew install yarn`)
 - `yarn` (this installs the packages)
 - Fill in the `.env.example` with the proper information and save as `.env`.
 - `yarn run setup:env`
