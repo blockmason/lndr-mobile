@@ -1,8 +1,8 @@
 import React, { Component } from 'react'
 
-import { RefreshControl, TouchableHighlight, ScrollView, View, Text } from 'react-native'
+import { TouchableHighlight, View, Text } from 'react-native'
 
-import { lightGray, gray, clear } from 'theme/include/colors'
+import { clear } from 'theme/include/colors'
 
 import style from 'theme/tabs'
 

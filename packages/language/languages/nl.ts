@@ -201,6 +201,40 @@ export default {
     start: `Begin`,
   },
 
+  walkthrough: {
+    skip: `overspringen`,
+    continue: `doorgaan met`,
+    step1: {
+      easyToUse: `Lndr is de makkelijkste manier om rekeningen, kosten delen te splitsen en te regelen eenvoudige schulden met vrienden en familie, alles gebeurt stevig op de blockchain.`,
+      len: `Len`,
+      der: `der`,
+    },
+    step2: {
+      getStarted: `Aan de slag met Lndr, moet u een vriend.`,
+      friendsScreen: `Bezoek de Vrienden scherm te zoeken, toevoegen of uitnodigen uw vrienden en familie aan te sluiten op Lndr.`,
+    },
+    step3: {
+      title: `Het opnemen van een Transactie`,
+      easy: `Het splitsen van een rekening of het toevoegen van een schuld met een vriend is gemakkelijk in Lndr!`,
+      selectFriend: `Kies je vriend, je valuta en het bedrag.`,
+      addMemo: `Voeg wat noten in de memo in en klik op Verzenden.`,
+    },
+    step4: {
+      title: `Betalen`,
+      ready: `Klaar om te betalen?`,
+      payPal: `Wanneer het tijd is om af te rekenen met Lndr, \n- U kunt kiezen PayPal:`,
+      ether: `- cryptocurrencies zoals Ether:`,
+      cash: `- of gewoon neem een ​​cash settlement:`,
+      positiveBalance: `10.46`,
+    },
+    step5: {
+      title: `Meerdere valuta`,
+      multiCurrency: `Lndr kunt bijhouden van uw transacties, zelfs als ze toevallig in verschillende valuta's te houden.`,
+      exchangeRate: `Wanneer u besluit om Up Settle met je vriend, zullen alle transacties worden omgezet in uw primaire valuta met behulp van de meest up-to-date wisselkoersen beschikbaar.`,
+      start: `Start met behulp van Lndr!`,
+    }
+  },
+
   debtManagement: {
     shell: `Nieuwe transactie`,
     add: `Schuld toevoegen`,
@@ -268,7 +302,7 @@ export default {
     for: M => `voor ${M}`,
     settleUp: `Betalen`,
     settleTotal: `Betaal totaal`,
-    settleUpMemo: (D, A) => `${D === 'lend'? 'Betaling voor': 'Verzoek om te betalen voor'} ${A} `,
+    settleUpMemo: (D, A) => `${D === 'lend' ? 'Betaling voor': 'Verzoek om te betalen voor'} ${A} `,
     recordSettleUpMemo: `Betalen`,
     balanceByCurrency: `Details`,
   },

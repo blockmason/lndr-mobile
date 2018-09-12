@@ -64,7 +64,7 @@ export default StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
-    width: '80%',
+    width: '90%',
     borderColor: softGray,
     borderBottomWidth: 1,
     borderTopWidth: 1,
@@ -96,7 +96,8 @@ export default StyleSheet.create({
     minWidth: 54,
     textAlign: 'right',
     textAlignVertical: 'top',
-    height: 68
+    height: 68,
+    flexDirection: 'row',
   },
   address: {
     width: 150,
@@ -267,7 +268,8 @@ export default StyleSheet.create({
     color: black,
     textAlign: 'center',
     ...bold,
-    ...small
+    ...small,
+    flexDirection: 'row',
   },
   txCost: {
     color: black,
@@ -377,6 +379,15 @@ export default StyleSheet.create({
   },
   greenAmount: {
     color: moneyGreen
+  },
+  currencyBalance: {
+    flexDirection: 'row'
+  },
+  currencySymbolBalance: {
+    ...large,
+    textAlign: 'left',
+    color: black,
+    marginRight: 5
   },
   currencySymbol: {
     ...large,

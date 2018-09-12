@@ -1,8 +1,9 @@
-import { StyleSheet } from 'react-native'
+import { StyleSheet, Dimensions } from 'react-native'
 
-import { light, white, black, gray } from 'theme/include/colors'
-import { percent } from 'theme/include/dimensions'
-import { large } from 'theme/include/fonts'
+import { light, white, black, gray, aqua, darkGray, moneyGreen } from 'theme/include/colors'
+import { large, medium, small } from 'theme/include/fonts'
+
+const { height, width } = Dimensions.get('window')
 
 export default StyleSheet.create({
   topView: {
@@ -10,7 +11,8 @@ export default StyleSheet.create({
     alignItems: 'center',
     flex: 1,
     backgroundColor: white,
-    padding: 10
+    paddingHorizontal: 10,
+    paddingBottom: 20
   },
   dot: {
     height: 6,
@@ -35,9 +37,10 @@ export default StyleSheet.create({
     paddingLeft: 5,
     paddingRight: 5,
     marginTop: 20,
-    fontSize: 22,
-    fontWeight: '100',
-    color: black
+    marginBottom: 20,
+    fontSize: 20,
+/*    fontWeight: '100', */
+    color: darkGray
   },
   boldCaption: {
     fontWeight: '500'
@@ -47,6 +50,9 @@ export default StyleSheet.create({
   },
   bold: {
     fontWeight: 'bold'
+  },
+  underline: {
+    textDecorationLine: 'underline'
   },
   completeButton: {
     marginTop: '7%'
@@ -81,14 +87,102 @@ export default StyleSheet.create({
     fontWeight: '100',
     color: black
   },
-  link: {
+  titleContainer: {
+    backgroundColor: black,
+    width,
+    padding: 10,
+    borderBottomColor: aqua,
+    borderBottomWidth: 3,
+    marginBottom: 10,
+  },
+  title: {
+    ...large,
+    color: white,
+    width,
     textAlign: 'center',
-    marginTop: 20,
-    fontSize: 24,
-    fontWeight: '100',
-    color: black
+  },
+  whiteTriangle: {
+    borderBottomWidth: 70,
+    borderLeftWidth: 40,
+    borderBottomColor: 'white',
+    borderLeftColor: 'transparent',
+    position: 'absolute',
+    right: 0,
+    top: 0,
+  },
+  link: {
+    color: aqua,
+    textDecorationLine: 'underline',
+    ...large,
+    width: '100%',
+    textAlign: 'center',
+    marginTop: 10,
   },
   partWidth: {
     paddingHorizontal: 20
+  },
+  fullWidthImage225: {
+    width,
+    height: width * 0.225
+  },
+  fullWidthImage60: {
+    width: width - 60,
+    height: (width - 60) * 0.60
+  },
+  fullWidthImage55: {
+    width: width - 60,
+    height: (width - 60) * 0.55
+  },
+  fullWidthImage35: {
+    width: width - 60,
+    height: (width - 60) * 0.35
+  },
+  fullWidthImage23: {
+    width: width - 100,
+    height: (width - 100) * 0.23
+  },
+  addDebtButton: {
+    minWidth: '70%'
+  },
+  positiveBalance: {
+    textAlign: 'center',
+    fontSize: 32,
+    color: moneyGreen
+  },
+  balance: {
+    textAlign: 'center',
+    ...large,
+    fontWeight: 'bold',
+    color: black
+  },
+  subTitle: {
+    textAlign: 'center',
+    ...small,
+    fontWeight: 'bold',
+    color: black
+  },
+  dashboardText: {
+    ...medium,
+    color: black,
+    textAlign: 'center',
+    zIndex: 1
+  },
+  skipButton: {
+    position: 'absolute',
+    left: 0,
+    bottom: 14,
+    flexDirection: 'column',
+    alignItems: 'center',
+    justifyContent: 'flex-end',
+    minWidth: 120,
+  },
+  continueButton: {
+    position: 'absolute',
+    right: 0,
+    bottom: 14,
+    flexDirection: 'column',
+    alignItems: 'center',
+    justifyContent: 'flex-end',
+    minWidth: 120,
   }
 } as any)

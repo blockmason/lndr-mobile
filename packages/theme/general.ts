@@ -21,7 +21,12 @@ export default StyleSheet.create({
     backgroundColor: white
   },
   flexRow: {
-    flexDirection: 'row'
+    flexDirection: 'row',
+  },
+  flexRowWrap: {
+    flexDirection: 'row',
+    flexWrap: 'wrap',
+    justifyContent: 'center',
   },
   flexColumn: {
     flexDirection: 'column'
@@ -58,6 +63,12 @@ export default StyleSheet.create({
   },
   largeHMargin: {
     marginHorizontal: 30
+  },
+  smallTopMargin: {
+    marginTop: 10
+  },
+  smallVMargin: {
+    marginVertical: 10
   },
   iosTopMargin: {
     marginTop: Platform.OS === 'ios' ? 20 : 0

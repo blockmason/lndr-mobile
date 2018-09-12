@@ -201,6 +201,40 @@ export default {
     start: `Mulai`,
   },
 
+  walkthrough: {
+    skip: `melewatkan`,
+    continue: `terus`,
+    step1: {
+      easyToUse: `Lndr adalah cara termudah untuk membagi tagihan, biaya saham dan melunasi hutang sederhana dengan teman-teman dan keluarga, semua dilakukan dengan aman pada blockchain tersebut.`,
+      len: `Len`,
+      der: `der`,
+    },
+    step2: {
+      getStarted: `Untuk memulai Lndr, Anda akan perlu menambahkan teman.`,
+      friendsScreen: `Kunjungi layar Friends untuk mencari, menambah, atau mengundang teman-teman dan keluarga Anda untuk terhubung pada Lndr.`,
+    },
+    step3: {
+      title: `Merekam Transaksi`,
+      easy: `Membelah tagihan atau menambahkan utang dengan teman mudah di Lndr!`,
+      selectFriend: `Pilih teman, mata uang dan jumlahnya.`,
+      addMemo: `Tambahkan beberapa catatan dalam kotak memo dan klik Submit.`,
+    },
+    step4: {
+      title: `Lunasi`,
+      ready: `Siap untuk lunasi?`,
+      payPal: `Ketika saatnya untuk menyelesaikan dengan Lndr, \n Anda dapat memilih PayPal:`,
+      ether: `- cryptocurrencies seperti Eter:`,
+      cash: `- atau hanya merekam pembayaran tunai:`,
+      positiveBalance: `10.46`,
+    },
+    step5: {
+      title: `Multi-Mata Uang`,
+      multiCurrency: `Lndr dapat melacak transaksi Anda, bahkan jika mereka terjadi dalam mata uang yang berbeda.`,
+      exchangeRate: `Ketika Anda memutuskan untuk Settle Up dengan teman Anda, semua transaksi akan dikonversi ke dalam mata uang utama Anda menggunakan paling tukar up-to-date tersedia.`,
+      start: `Mulai menggunakan Lndr!`,
+    }
+  },
+
   debtManagement: {
     shell: `Transaksi Baru`,
     add: `Tambahkan Utang`,
@@ -268,7 +302,7 @@ export default {
     for: M => `untuk ${M}`,
     settleUp: `Lunasi`,
     settleTotal: `Jumlah Pelunasan`,
-    settleUpMemo: (D, A) => `${D === 'lend'? 'Melunasi': 'Permintaan pelunasan'} ${A}.`,
+    settleUpMemo: (D, A) => `${D === 'lend' ? 'Melunasi': 'Permintaan pelunasan'} ${A}.`,
     recordSettleUpMemo: `melunasi`,
     balanceByCurrency: `Rincian`,
   },

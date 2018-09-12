@@ -201,6 +201,40 @@ export default {
     start: `Buradan Başlayın`,
   },
 
+  walkthrough: {
+    skip: `atlamak`,
+    continue: `devam et`,
+    step1: {
+      easyToUse: `Lndr faturaları, paylaşmak giderlerini bölünmüş ve tüm blockchain güvenle yapılabilir, arkadaşlar ve aile ile basit bir borcun ifası en kolay yoludur.`,
+      len: `Len`,
+      der: `der`,
+    },
+    step2: {
+      getStarted: `Lndr kullanmaya başlamak için, bir arkadaş eklemek gerekir.`,
+      friendsScreen: `Için arama ekleyebilir veya Lndr üzerinde bağlanmak için arkadaşlarınızı ve ailenizi davet arkadaşından ekranını ziyaret edin.`,
+    },
+    step3: {
+      title: `Bir İşlem Kaydetme`,
+      easy: `bir fatura Yarma veya bir arkadaşınızla bir borç ekleyerek Lndr kolaydır!`,
+      selectFriend: `Arkadaşınız senin para birimini ve miktarını seçin.`,
+      addMemo: `not kutusunda bazı notlar ekleyin ve Gönder'i tıklayın.`,
+    },
+    step4: {
+      title: `Ödeşin`,
+      ready: `Ödeşin hazır?`,
+      payPal: `o Lndr ile hesaplaşmak zamanı geldiğinde, \n PayPal seçebilirsiniz:`,
+      ether: `- Eter gibi cryptocurrencies:`,
+      cash: `- ya da sadece bir nakit yerleşim kayıt:`,
+      positiveBalance: `10.46`,
+    },
+    step5: {
+      title: `Çoklu parabirim`,
+      multiCurrency: `Lndr, farklı para birimlerinde olsalar bile işlemlerinizin takip edebilirsiniz.`,
+      exchangeRate: `Eğer arkadaşınız ile hesaplaşmak karar verdiğinizde, tüm işlemler büyük yukarı güncel döviz kurları mevcut kullanarak birincil para birimine dönüştürülecektir.`,
+      start: `Lndr kullanmaya başlayın!`,
+    }
+  },
+
   debtManagement: {
     shell: `Yeni İşlem`,
     add: `Borç ekle`,

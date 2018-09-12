@@ -59,7 +59,7 @@ export default {
   newAccount: `Opret en ny konto`,
   loginAccount: `Lås op for din konto`,
   recoverExistingAccount: `Gendan en eksisterende konto`,
-  recoverMnemonic: `Mnemonic (12 ord vist \ nda du oprettede din konto)`,
+  recoverMnemonic: `Mnemonic (12 ord vist \nda du oprettede din konto)`,
   recoverMnemonicLengthError: `Mnemonic skal være på 12 ord`,
   successTitle: `Succes`,
   errorTitle: `Fejl`,
@@ -199,6 +199,40 @@ export default {
     greatConcert: `Se en fantastisk koncert`,
     youPlayWithFriends: `Hyg dig med vennerne;\n vi holder styr på regningen…`,
     start: `Kom igang`,
+  },
+
+  walkthrough: {
+    skip: `springe`,
+    continue: `blive ved`,
+    step1: {
+      easyToUse: `Lndr er den nemmeste måde at opdele regninger, dele udgifter og bosætte simple gæld med venner og familie, alle udført sikkert på blockchain.`,
+      len: `Len`,
+      der: `der`,
+    },
+    step2: {
+      getStarted: `For at komme i gang med Lndr, skal du tilføje en ven.`,
+      friendsScreen: `Besøg Friends skærmen for at søge efter, tilføje eller invitere dine venner og familie til at oprette forbindelse på Lndr.`,
+    },
+    step3: {
+      title: `Optagelse af en transaktion`,
+      easy: `Opdeling en regning eller tilføje en gæld med en ven er nemt i Lndr!`,
+      selectFriend: `Vælg din ven, din valuta og beløb.`,
+      addMemo: `Tilføj nogle noter i notatet boksen og klik på Send.`,
+    },
+    step4: {
+      title: `Gør regningen op`,
+      ready: `Klar til at gør regningen op?`,
+      payPal: `Når det er tid til at slå sig op med Lndr, \n- du kan vælge PayPal:`,
+      ether: `- cryptocurrencies ligesom Ether:`,
+      cash: `- eller blot optage en kontant afregning:`,
+      positiveBalance: `10,46`,
+    },
+    step5: {
+      title: `Multi-valuta`,
+      multiCurrency: `Lndr kan holde styr på dine transaktioner, selv om de sker i forskellige valutaer.`,
+      exchangeRate: `Når du beslutter at bilægge med din ven, vil alle transaktioner blive konverteret til din primære valuta ved hjælp af de mest up-to-date valutakurser til rådighed.`,
+      start: `Begynd at bruge Lndr!`,
+    }
   },
 
   debtManagement: {

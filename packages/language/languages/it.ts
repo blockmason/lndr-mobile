@@ -201,6 +201,40 @@ export default {
     start: `Iniziare`,
   },
 
+  walkthrough: {
+    skip: `salta`,
+    continue: `continua`,
+    step1: {
+      easyToUse: `Lndr è il modo più semplice per dividere le bollette, le spese di condividere e saldare i debiti semplici con gli amici e la famiglia, tutto fatto in modo sicuro sul blockchain.`,
+      len: `Len`,
+      der: `der`,
+    },
+    step2: {
+      getStarted: `Per iniziare con Lndr, è necessario aggiungere un amico.`,
+      friendsScreen: `Visita gli Amici schermo per cercare, aggiungere o invitare i tuoi amici e la famiglia per collegare il Lndr.`,
+    },
+    step3: {
+      title: `Registrazione di una transazione`,
+      easy: `Divisione di un disegno di legge o l'aggiunta di un debito con un amico è facile in Lndr!`,
+      selectFriend: `Seleziona il tuo amico, il tuo valuta e l'importo.`,
+      addMemo: `Aggiungere alcune note nella casella di memo e clicca su Invia.`,
+    },
+    step4: {
+      title: `Saldare i debiti`,
+      ready: `Pronto a saldare i debiti?`,
+      payPal: `Quando è il momento di regolare i conti con Lndr, \n- è possibile scegliere PayPal:`,
+      ether: `- cryptocurrencies come l'etere:`,
+      cash: `- o semplicemente registrare un regolamento in contanti:`,
+      positiveBalance: `10.46`,
+    },
+    step5: {
+      title: `Multi-valuta`,
+      multiCurrency: `Lndr può tenere traccia delle transazioni, anche se capita in valute diverse.`,
+      exchangeRate: `Quando si decide di regolare i conti con il tuo amico, tutte le transazioni saranno convertiti in valuta principale utilizzando i tassi di cambio più up-to-date disponibili.`,
+      start: `Iniziare a utilizzare Lndr!`,
+    }
+  },
+
   debtManagement: {
     shell: `Nuova transazione`,
     add: `Aggiungere debito`,
@@ -268,7 +302,7 @@ export default {
     for: M => `a ${M}`,
     settleUp: `Saldare un debito`,
     settleTotal: `Totale debito da saldare`,
-    settleUpMemo: (D, A) => `${D === 'lend'? 'Saldare debito per': 'Richiesta di pagamento di'} ${A} `,
+    settleUpMemo: (D, A) => `${D === 'lend' ? 'Saldare debito per': 'Richiesta di pagamento di'} ${A} `,
     recordSettleUpMemo: `Salda debito`,
     balanceByCurrency: `Dettagli`,
   },

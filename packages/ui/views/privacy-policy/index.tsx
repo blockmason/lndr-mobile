@@ -6,7 +6,6 @@ import firebase from 'react-native-firebase'
 import ThemeImage from 'ui/components/images/theme-image'
 import Button from 'ui/components/button'
 
-import general from 'theme/general'
 import style from 'theme/slide'
 import { largeImage } from 'theme/include/dimensions'
 

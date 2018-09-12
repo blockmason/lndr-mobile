@@ -179,7 +179,7 @@ class FriendDetail extends Component<Props, State> {
             <Text style={pendingStyle.balanceInfo}>{currencySymbols(primaryCurrency)}</Text>
             <Text style={pendingStyle.amount}>{currencyFormats(primaryCurrency)(this.getRecentTotal())}</Text>
           </View>
-          <View style={[general.centeredColumn, {marginBottom: 10}]}>
+          <View style={[general.centeredColumn, {marginBottom: 10, marginHorizontal: 40}]}>
             <BalanceSection friend={friend} />
           </View>
           {this.getRecentTotal() === 0 ? null : <Button round onPress={this.goSettleUp} text={debtManagement.settleUp} containerStyle={style.spaceBottom} />}

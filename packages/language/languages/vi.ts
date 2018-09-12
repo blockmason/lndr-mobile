@@ -201,6 +201,40 @@ export default {
     start: `Bắt đầu`,
   },
 
+  walkthrough: {
+    skip: `nhảy`,
+    continue: `tiếp tục`,
+    step1: {
+      easyToUse: `Lndr là cách dễ nhất để tách hóa đơn, chi phí chia sẻ và giải quyết nợ đơn giản với bạn bè và gia đình, tất cả được thực hiện một cách an toàn trên blockchain.`,
+      len: `Len`,
+      der: `der`,
+    },
+    step2: {
+      getStarted: `Để bắt đầu với Lndr, bạn sẽ cần phải thêm một người bạn.`,
+      friendsScreen: `Tham quan những bè màn hình để tìm kiếm, thêm, hoặc mời bạn bè và gia đình của bạn để kết nối trên Lndr.`,
+    },
+    step3: {
+      title: `Ghi một giao dịch`,
+      easy: `Tách một hóa đơn hoặc thêm một món nợ với một người bạn rất dễ dàng trong Lndr!`,
+      selectFriend: `Chọn bạn bè của bạn, đơn vị tiền tệ và số lượng.`,
+      addMemo: `Thêm một số lưu ý trong hộp ghi nhớ và bấm Submit.`,
+    },
+    step4: {
+      title: `Trả tiền`,
+      ready: `Sẵn sàng trả tiền?`,
+      payPal: `Khi đó là thời gian để giải quyết với Lndr, \n- bạn có thể chọn PayPal:`,
+      ether: `- cryptocurrencies như Ether:`,
+      cash: `- hoặc đơn giản là ghi lại một khu định cư bằng tiền mặt:`,
+      positiveBalance: `10,46`,
+    },
+    step5: {
+      title: `Đa tiền tệ`,
+      multiCurrency: `Lndr có thể theo dõi các giao dịch của bạn ngay cả khi chúng xảy ra trong tiền tệ khác nhau.`,
+      exchangeRate: `Khi bạn quyết định ngả Up với bạn bè của bạn, tất cả các giao dịch sẽ được chuyển đổi thành tiền tệ chính của bạn sử dụng hầu hết các tỷ giá hối đoái up-to-date sẵn.`,
+      start: `Bắt đầu sử dụng Lndr!`,
+    }
+  },
+
   debtManagement: {
     shell: `Giao dịch mới`,
     add: `Thêm khoản nợ`,

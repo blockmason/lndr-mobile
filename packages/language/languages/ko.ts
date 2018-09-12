@@ -199,6 +199,40 @@ export default {
     start: `시작하기`,
   },
 
+  walkthrough: {
+    skip: `버킷`,
+    continue: `잇다`,
+    step1: {
+      easyToUse: `Lndr 청구서, 공유 비용을 분할하고 모든 blockchain에 안전하게 수행, 친구 및 가족과 간단한 빚을 해결하는 가장 쉬운 방법입니다.`,
+      len: `Len`,
+      der: `der`,
+    },
+    step2: {
+      getStarted: `Lndr를 시작하려면, 당신은 친구를 추가해야합니다.`,
+      friendsScreen: `검색, 추가, 또는 Lndr에 연결하는 친구와 가족을 초대 할 친구에게 화면을 방문하십시오.`,
+    },
+    step3: {
+      title: `트랜잭션 기록`,
+      easy: `법안을 분할 또는 친구와 함께 채무를 추가하는 것은 Lndr에 쉽습니다!`,
+      selectFriend: `친구, 통화 및 금액을 선택합니다.`,
+      addMemo: `메모 상자에 몇 가지 메모를 추가하고 제출을 클릭합니다.`,
+    },
+    step4: {
+      title: `청구서를 청산하다`,
+      ready: `청구서를 처리 할 준비가 되셨습니까?`,
+      payPal: `이 Lndr와 함께 정착 할 시간이되면, \ N- 당신은 페이팔을 선택할 수 있습니다 :`,
+      ether: `- 에테르처럼 cryptocurrencies :`,
+      cash: `- 또는 단순히 현금 결제 기록 :`,
+      positiveBalance: `15046`,
+    },
+    step5: {
+      title: `복수 통화`,
+      multiCurrency: `Lndr은 서로 다른 통화로 발생할 경우에도 트랜잭션을 추적 할 수 있습니다.`,
+      exchangeRate: `당신이 당신의 친구와 위로 정착하기로 결정하면, 모든 트랜잭션은 최신 환율을 사용할 수 사용하여 기본 통화로 변환됩니다.`,
+      start: `Lndr를 사용하여 시작!`,
+    }
+  },
+
   debtManagement: {
     shell: `새로운 거래`,
     add: `부채 추가`,
@@ -331,6 +365,7 @@ export default {
       borrow: (nickname, amount) => `당신은 @${nickname} 에게 ${amount} 을 갚아야합니다`
     },
     balance: `잔액 `,
+    consolidatedBalance: `잔액`,
     friends: (friends) => `(from ${friends} 친구)`
   },
 

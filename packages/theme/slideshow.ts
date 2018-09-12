@@ -1,4 +1,6 @@
-import { StyleSheet } from 'react-native'
+import { StyleSheet, Dimensions } from 'react-native'
+
+const { height, width } = Dimensions.get('window')
 
 import { light, white, gray } from 'theme/include/colors'
 
@@ -33,12 +35,11 @@ export default StyleSheet.create({
     height: 10,
     width: 10,
     backgroundColor: '#595959',
-    margin: 8,
+    margin: 5,
     borderRadius: 5
   },
   slideContent: {
     flex: 1,
-    justifyContent: 'center',
     alignItems: 'center',
     backgroundColor: 'white'
   },
@@ -49,8 +50,11 @@ export default StyleSheet.create({
     alignSelf: 'center',
     color: 'black'
   },
-  horizontial: {
-    flexDirection: 'row'
+  horizontal: {
+    flexDirection: 'row',
+    position: 'absolute',
+    bottom: 20,
+    right: (width / 2) - 50
   },
   textActive: {
     alignSelf: 'center'
