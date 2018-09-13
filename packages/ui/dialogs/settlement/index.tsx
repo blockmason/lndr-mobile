@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import { Text, TextInput, View, Image, ScrollView, KeyboardAvoidingView, Platform, Linking, Alert } from 'react-native'
+import { Text, TextInput, View, Image, ScrollView, KeyboardAvoidingView, Platform, Linking, Alert, Picker } from 'react-native'
 import firebase from 'react-native-firebase'
 import { getResetAction } from 'reducers/nav'
 
@@ -20,6 +20,8 @@ import style from 'theme/friend'
 import formStyle from 'theme/form'
 import general from 'theme/general'
 import accountStyle from 'theme/account'
+
+import settlementTypes from 'lndr/settlements'
 
 import language from 'language'
 const {
@@ -362,6 +364,22 @@ class Settlement extends Component<Props, State> {
                 <Text style={style.totalAmount}>{this.displayTotal(balance)}</Text>
               </View>
               <View style={general.centeredColumn}>
+                <View style={[{marginTop: 20}]}>
+                  <Text style={[accountStyle.balance]}>Settlement Options</Text>
+                  <Picker
+                    selectedValue={ settlementType }
+                    onValueChange={(value, _index) => this.setState({ settlementType: value })}
+                    prompt="Settlement Type">
+                    {settlementTypes.map((value, key) => 
+                        <Picker.Item
+                            label={value.settlementOption}
+                            key={key} 
+                            value={value.settlementType}>
+                                {value.settlementOption}
+                        </Picker.Item>)
+                    }
+                  </Picker>
+                </View>
                 { settlementType === 'eth' ? <View style={[accountStyle.balanceRow, {marginTop: 20}]}>
                   <Text style={[accountStyle.balance, {marginLeft: '2%'}]}>{accountManagement.ethBalance.display(formatCommaDecimal(ethBalance))}</Text>
                   <Button alternate blackText narrow arrow small onPress={() => {this.props.navigation.navigate('MyAccount')}}

@@ -4,7 +4,6 @@
   "private": true,
   "scripts": {
     "typescript": "node_modules/.bin/tsc -w --skipLibCheck",
-    "preinstall": "cd ios && Pod install",
     "start": "node node_modules/react-native/local-cli/cli.js start",
     "setup:env": "node scripts/env.js",
     "postinstall": "node_modules/.bin/rn-nodeify --install stream,crypto --hack",
@@ -25,7 +24,7 @@
     "jsonwebtoken": "8.3.0",
     "metro-bundler": "^0.22.1",
     "react": "^16.0.0",
-    "react-native": "^0.51.0",
+    "react-native": "^0.55.4",
     "react-native-action-button": "^2.8.1",
     "react-native-actionsheet": "^2.3.0",
     "react-native-blur": "^3.2.2",
