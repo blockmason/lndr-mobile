@@ -9,6 +9,8 @@ export default {
 
   applicationName: `Lndr`,
   helloWorld: `Γεια σου Κόσμε`,
+  noConnection: `Χωρίς σύνδεση`,
+  retry: `Ξαναδοκιμάσετε`,
   submit: `YΠΟΒΟΛΗ`,
   next: `Επόμενο`,
   cancel: `Ακύρωση`,

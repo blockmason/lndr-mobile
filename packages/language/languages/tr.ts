@@ -9,6 +9,8 @@ export default {
 
   applicationName: `Lndr`,
   helloWorld: `Merhaba Dünya`,
+  noConnection: `Bağlantı yok`,
+  retry: `Tekrar dene`,
   submit: `GÖNDER`,
   next: `İleri`,
   cancel: `İptal et`,

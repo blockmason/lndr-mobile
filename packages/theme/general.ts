@@ -75,6 +75,9 @@ export default StyleSheet.create({
   },
   spaceBelow: {
     paddingBottom: 40
+  },
+  justifyCenter: {
+    justifyContent: 'center'
   }
 
 } as any)

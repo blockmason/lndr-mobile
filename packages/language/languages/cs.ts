@@ -9,6 +9,8 @@ export default {
 
   applicationName: `Lndr`,
   helloWorld: `Ahoj světe`,
+  noConnection: `Žádné připojení`,
+  retry: `Opakujte`,
   submit: `PŘEDLOŽIT`,
   next: `Další`,
   cancel: `Zrušit`,

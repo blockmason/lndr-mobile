@@ -9,6 +9,8 @@ export default {
 
   applicationName: `Lndr`,
   helloWorld: `Hei maailma`,
+  noConnection: `Ei yhteyttä`,
+  retry: `Yritä uudelleen`,
   submit: `LÄHETÄ`,
   next: `Seuraava`,
   cancel: `Peruuta`,

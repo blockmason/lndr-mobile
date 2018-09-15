@@ -9,6 +9,8 @@ export default {
 
   applicationName: `Lndr`,
   helloWorld: `Hai dunia`,
+  noConnection: `Tiada sambungan`,
+  retry: `Cuba semula`,
   submit: `HANTAR`,
   next: `Seterusnya`,
   cancel: `Batal`,

@@ -9,6 +9,8 @@ export default {
 
   applicationName: `Lndr`,
   helloWorld: `Halo, dunia!`,
+  noConnection: `Tidak ada koneksi`,
+  retry: `Mencoba kembali`,
   submit: `KIRIM`,
   next: `Selanjutnya`,
   cancel: `Batalkan`,
