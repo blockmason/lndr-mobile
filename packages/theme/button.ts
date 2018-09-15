@@ -96,6 +96,13 @@ export default StyleSheet.create({
   smallText: {
     ...small
   },
+  link: {
+    color: aqua,
+    textDecorationLine: 'underline'
+  },
+  underline: {
+    textDecorationLine: 'underline'
+  },
   narrow: {
     paddingRight: 0,
     paddingLeft: 0,

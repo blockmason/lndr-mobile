@@ -201,6 +201,40 @@ export default {
     start: `Aloita`,
   },
 
+  walkthrough: {
+    skip: `hyppiä`,
+    continue: `jatkaa`,
+    step1: {
+      easyToUse: `Lndr on helpoin tapa jakaa laskut, jakaa kulut ja asettua yksinkertainen velat ystävien ja perheen kanssa, kaikki tehty tukevasti blockchain.`,
+      len: `Len`,
+      der: `der`,
+    },
+    step2: {
+      getStarted: `Päästä alkuun Lndr, sinun täytyy lisätä kaverin.`,
+      friendsScreen: `Käy Ystävät näytön etsiä, lisää tai kutsu ystäväsi ja perheesi kytkeä päälle Lndr.`,
+    },
+    step3: {
+      title: `Nauhoittaminen Transaction`,
+      easy: `Halkaisu laskun tai lisäämällä velkaa ystävän kanssa on helppoa Lndr!`,
+      selectFriend: `Valitse ystäväsi, sinun valuuttaa ja määrää.`,
+      addMemo: `Lisää noin muistiinpanoja muistio ruutuun ja valitse Lähetä.`,
+    },
+    step4: {
+      title: `Sovi velan maksamisesta`,
+      ready: `Valmis sovi velan maksamisesta?`,
+      payPal: `Kun on aika asettua kanssa Lndr, \n- Voit valita PayPal:`,
+      ether: `- cryptocurrencies kuten eetteri:`,
+      cash: `- tai yksinkertaisesti tallentaa käteissuorituksen:`,
+      positiveBalance: `10.46`,
+    },
+    step5: {
+      title: `Moni-valuuttainen`,
+      multiCurrency: `Lndr voi pitää kirjaa liiketoimista, vaikka ne tapahtuvat eri valuutoissa.`,
+      exchangeRate: `Kun päätät sopia maksamisesta ystäväsi kanssa, kaikki liiketoimet muunnetaan ensisijaiselta valuutaksi parhaiten ajan tasalla valuuttakursseja.`,
+      start: `Aloita Lndr!`,
+    }
+  },
+
   debtManagement: {
     shell: `Uusi tapahtuma`,
     add: `Lisää velka`,

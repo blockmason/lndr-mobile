@@ -138,6 +138,9 @@ export const formatMemo = memo => {
 
 export const sanitizeAmount = (amount, currency) => {
   if(hasNoDecimals(currency)) {
+    if(isCommaDecimal()) {
+      amount = amount.replace(/\./g, '')
+    }
     return parseInt(
       amount.replace(/[^.\d]/g, '')
     )

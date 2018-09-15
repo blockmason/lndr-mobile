@@ -139,10 +139,7 @@ export default {
       transferAll: `Überweisen Sie alles`,
       balance: Y => `Ihr aktueller ETH-Kontostand ist ${typeof Y === 'string'? Y.slice (0,8): ''} `,
       ethAddress: `Ethereum-Adresse`,
-      txCost: (B, A) => {
-        console.log('AHWTEWT ',  A)
-        return `Die aktuelle Transaktion kostet ${CUR(A)} ${B}`}
-        ,
+      txCost: (B, A) => `Die aktuelle Transaktion kostet ${CUR(A)} ${B}`,
       transferLowercase: `Eth-Überweisung`,
       note: A => `Bitte beachten Sie: Sie können nur ${CUR(A)} ${TL(A)} pro Woche aus Lndr überweisen`,
       warning: (Z, A) => `Sie haben ${CUR(A)} ${Z} übrig von Ihrem ${CUR(A)} ${TL(A)} Limit`,
@@ -161,7 +158,7 @@ export default {
       `ETH (& BCPT) Adresse`,
       `ETH-Kontostand`,
       `BCPT-Kontostand`,
-      `Konto Entfernen`,
+      `Konto entfernen`,
       `ETH-Transaktionshistorie`,
       `Aktivieren Sie PayPal`,
       `Hauptwährung ändern`,
@@ -202,6 +199,40 @@ export default {
     greatConcert: `Sehen Sie ein großes Konzert`,
     youPlayWithFriends: `Sie spielen mit Freunden; und wir haben die Rechnung ...`,
     start: `Legen Sie los`,
+  },
+
+  walkthrough: {
+    skip: `überspringen`,
+    continue: `fortsetzen`,
+    step1: {
+      easyToUse: `Lndr ist der einfachste Weg, Rechnungen, zu teilen Kosten zu teilen und einfach Schulden mit Freunden und Familie zu begleichen, die alle sicher auf dem blockchain getan.`,
+      len: `Len`,
+      der: `der`,
+    },
+    step2: {
+      getStarted: `Um mit Lndr, benötigen Sie einen Freund hinzuzufügen.`,
+      friendsScreen: `Besuchen Sie die Freunde Bildschirm zu suchen, hinzufügen oder laden Sie Ihre Freunde und Familie auf Lndr zu verbinden.`,
+    },
+    step3: {
+      title: `Aufzeichnen einer Transaktion`,
+      easy: `eine Rechnung oder das Hinzufügen einer Schuld mit einem Freund Splitting ist einfach in Lndr!`,
+      selectFriend: `Wählen Sie Ihren Freund, Ihre Währung und den Betrag.`,
+      addMemo: `Fügen Sie einige Hinweise in der Memo-Box und klicken Sie auf Senden.`,
+    },
+    step4: {
+      title: `Abrechnen`,
+      ready: `Bereit zu abrechnen?`,
+      payPal: `Wenn es Zeit ist, mit Lndr abzurechnen, \n- Sie PayPal wählen:`,
+      ether: `- cryptocurrencies wie Ether:`,
+      cash: `- oder einfach eine Barabfindung aufzunehmen:`,
+      positiveBalance: `10,46`,
+    },
+    step5: {
+      title: `Multi-Währung`,
+      multiCurrency: `Lndr kann sogar den Überblick über Ihre Transaktionen halten, wenn sie in verschiedenen Währungen passieren.`,
+      exchangeRate: `Wenn Sie sich entscheiden, mit Ihren Freunden abrechnen, werden alle Transaktionen in Ihre Hauptwährung umgerechnet werden mit den meisten up-to-date verfügbaren Wechselkurse.`,
+      start: `Beginnen Sie mit Lndr!`,
+    }
   },
 
   debtManagement: {
@@ -271,7 +302,7 @@ export default {
     for: M => `für ${M}`,
     settleUp: `Abrechnen`,
     settleTotal: `Gesamtbetrag begleichen`,
-    settleUpMemo: (D, A) => `${D === 'leihen' ? 'Abrechnung für ' : 'Anfrage zur Abrechnung für'} ${A}`,
+    settleUpMemo: (D, A) => `${D === 'lend' ? 'Abrechnung für ' : 'Anfrage zur Abrechnung für'} ${A}`,
     recordSettleUpMemo: `Abrechnung`,
     balanceByCurrency: `Einzelheiten`,
   },
@@ -410,7 +441,7 @@ export default {
   },
 
   payPalLanguage: {
-    connectPayPal: `Schließen Sie PayPal`,
+    connectPayPal: `Öffnen Sie PayPal`,
     connectSuccess: `PayPal erfolgreich aktiviert.`,
     disconnectPayPal: `Trennen Sie PayPal`,
     disconnected: `PayPal getrennt.`,

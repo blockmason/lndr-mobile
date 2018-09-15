@@ -1,24 +1,40 @@
-// This file is over 50 lines and needs to be split up
-
 import React, { Component } from 'react';
-import { View, Image, ScrollView, Dimensions, Animated } from 'react-native';
+import { View, ScrollView, Dimensions, Animated } from 'react-native';
 
 import style from 'theme/slideshow'
-import general from 'theme/general'
+import slideStyle from 'theme/slide'
 
 import AndroidStatusBar from 'ui/components/android-status-bar'
+import Button from 'ui/components/button'
 
-const { width } = Dimensions.get('window');
+import language from 'language'
+const { walkthrough } = language
+
+const { width } = Dimensions.get('window')
 
 const sixtyFpsInMs = 16
 
 interface Props {
   views: any
+  onComplete: () => void
 }
 
-export default class Slideshow extends Component<Props> {
+interface State {
+  screen: number
+}
 
+export default class Slideshow extends Component<Props, State> {
   getBaseScroll = new Animated.Value(0)
+
+  constructor(props) {
+    super(props)
+    this.state = {
+      screen: 1
+  }
+
+    this.nextPage = this.nextPage.bind(this)
+    this.endScroll = this.endScroll.bind(this)
+  }
 
   renderContent () {
     const { views } = this.props
@@ -28,7 +44,7 @@ export default class Slideshow extends Component<Props> {
         <View key={i} style={[{ width }, style.content]}>
           {source}
         </View>
-      );
+      )
     })
   }
 
@@ -41,13 +57,13 @@ export default class Slideshow extends Component<Props> {
         inputRange: [ i - 1, i, i + 1 ],
         outputRange: [ 0.3, 1, 0.3 ],
         extrapolate: 'clamp'
-      });
+      })
       return (
         <Animated.View
           key={i}
           style={[ { opacity }, style.indicator ]}
         />
-      );
+      )
     })
   }
 
@@ -57,25 +73,54 @@ export default class Slideshow extends Component<Props> {
     )
   }
 
+  endScroll (event) {
+    if (event) {
+      const screen = event.nativeEvent.contentOffset.x / width + 1
+      this.setState({ screen })
+    }
+  }
+
+  gotoPage(pageIdx) {
+    // NOTE: pageIdx is 1-based
+    const scrollView = this.refs.scrollView as any
+    const contentOffsetX = (pageIdx-1)*width
+    scrollView.scrollTo({x: contentOffsetX, y: 0, animated: true})
+  }
+
+  nextPage () {
+    const screen = this.state.screen + 1
+    if (Math.round(screen) === 6) {
+      this.props.onComplete()
+    } else {
+      this.setState({ screen })
+      this.gotoPage(screen)
+    }
+  }
+
   render () {
     return (
     <View style={style.slideContent}>
       <AndroidStatusBar hidden/>
       <View style={ [ { width }, style.slideHeight ] }>
-        <ScrollView keyboardShouldPersistTaps="always"
+        <ScrollView ref='scrollView'
+          keyboardShouldPersistTaps="always"
           horizontal={true}
           pagingEnabled={true}
           showsHorizontalScrollIndicator={false}
           onScroll={this.animationOnScroll()}
+          onMomentumScrollEnd={this.endScroll}
           scrollEventThrottle={sixtyFpsInMs}
           >
           {this.renderContent()}
         </ScrollView>
       </View>
-      <View style={style.horizontial}>
+      <View style={style.horizontal}>
         {this.renderIndicator()}
       </View>
+      <View style={slideStyle.continueButton}>
+        <Button alternate link small text={walkthrough.continue} onPress={this.nextPage} />
+      </View>
     </View>
-    );
+    )
   }
 }

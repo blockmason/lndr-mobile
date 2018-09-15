@@ -21,7 +21,7 @@ import { isFocusingOn } from 'reducers/nav'
 import { getStore, getUser, getNeedsReviewCount, calculateBalance, calculateCounterparties,
   getPrimaryCurrency, getFriendList, getPendingFromFriend, getEthExchange, getFriendFromNick } from 'reducers/app'
 import { getAccountInformation, displayError, getPending, getFriends, getFriendRequests,
-  getRecentTransactions, registerChannelID, getPayPalRequests } from 'actions'
+  getRecentTransactions, registerChannelID, getPayPalRequests, setInitialHomeLoad } from 'actions'
 import { UrbanAirship } from 'urbanairship-react-native'
 
 import style from 'theme/account'
@@ -30,6 +30,7 @@ import general from 'theme/general'
 import { underlayColor } from 'theme/general'
 
 import language from 'language'
+
 const {
   notice,
   noBalanceWarning,
@@ -39,8 +40,6 @@ const {
   recentTransactionsLanguage,
   seeAllActivity
 } = language
-
-const { width } = Dimensions.get('window')
 
 const loadingRecentTransactions = new LoadingContext()
 const loadingPending = new LoadingContext()
@@ -70,6 +69,7 @@ interface Props {
   ethExchange: (currency: string) => string
   getFriendFromNick: (nickname: string) => Friend | undefined
   getFriendRequests: () => void
+  setInitialHomeLoad: (value: any) => void
 }
 
 interface State {
@@ -102,6 +102,14 @@ class HomeView extends Component<Props, State> {
     await loadingRecentTransactions.wrap(this.props.getRecentTransactions())
     await loadingFriends.wrap(this.props.getFriends())
     await loadingPayPalRequests.wrap(this.props.getPayPalRequests())
+  }
+
+  async componentDidUpdate() {
+    const { initialHomeLoad, friendsLoaded, friends } = this.props.state
+    if(initialHomeLoad && friendsLoaded && !friends.length) {
+      this.props.navigation.navigate(initialHomeLoad)
+      this.props.setInitialHomeLoad(null)
+    }
   }
 
   componentWillReceiveProps(nextProps) {
@@ -259,4 +267,5 @@ export default connect((state) => ({ state: getStore(state)(), user: getUser(sta
   needsReviewCount: getNeedsReviewCount(state), calculateBalance: calculateBalance(state), calculateCounterparties: calculateCounterparties(state),
   primaryCurrency: getPrimaryCurrency(state), friendList: getFriendList(state)(), getPendingFromFriend: getPendingFromFriend(state),
   ethExchange: getEthExchange(state), getFriendFromNick: getFriendFromNick(state) }),
-  { getAccountInformation, displayError, getPending, getPayPalRequests, getRecentTransactions, getFriends, registerChannelID, getFriendRequests })(HomeView)
+  { getAccountInformation, displayError, getPending, getPayPalRequests, getRecentTransactions, getFriends, registerChannelID, getFriendRequests,
+    setInitialHomeLoad })(HomeView)

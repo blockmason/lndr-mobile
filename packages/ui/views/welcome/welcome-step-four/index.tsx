@@ -1,24 +1,20 @@
 import React, { Component } from 'react'
 
-import { View, Text, ScrollView } from 'react-native'
+import { Image, View, Text, ScrollView } from 'react-native'
 import firebase from 'react-native-firebase'
 
-import style from 'theme/slide'
+import { defaultCurrency } from 'lndr/currencies'
+import { amountFormat } from 'lndr/format'
 
-import { largeImage } from 'theme/include/dimensions'
-
-import language from 'language'
-const { welcomeView } = language
-
-import TextLogo from 'ui/components/images/text-logo'
-import ThemeImage from 'ui/components/images/theme-image'
 import Button from 'ui/components/button'
 
-interface Props {
-  onComplete: () => void
-}
+import general from 'theme/general'
+import style from 'theme/slide'
 
-export default class WelcomeStepFourView extends Component<Props> {
+import language from 'language'
+const { walkthrough, settlementManagement, payPalLanguage, debtManagement } = language
+
+export default class WelcomeStepFourView extends Component {
   componentDidMount( ) {
     firebase.analytics().setCurrentScreen('welcome-step-four', 'WelcomeStepFourView');
   }
@@ -27,11 +23,28 @@ export default class WelcomeStepFourView extends Component<Props> {
     return (
       <ScrollView>
         <View style={style.topView}>
-          <TextLogo name='black'/>
-          <Text style={[style.caption, style.boldCaption, style.topSpacing]}>{welcomeView.runEthereum}</Text>
-          <Button large round wide onPress={this.props.onComplete} containerStyle={style.completeButton} text={welcomeView.start} />
-          <Text style={[style.text]}>{welcomeView.firstLendingApp}</Text>
-          <ThemeImage size={largeImage} name='blockchain'/>
+
+          <View style={style.titleContainer}>
+            <Text style={style.title}>{walkthrough.step4.title}</Text>
+            <View style={style.whiteTriangle} />
+          </View>
+
+          <View style={general.flex}>
+            <Text style={style.caption}>{walkthrough.step4.ready}</Text>
+            <Text style={style.positiveBalance}>{`+${amountFormat(walkthrough.step4.positiveBalance, defaultCurrency, true)}`}</Text>
+            <Button wide round text={debtManagement.settleUp} onPress={() => null} />
+          </View>
+
+          <Text style={style.caption}>{walkthrough.step4.payPal}</Text>
+          <Button zicon="paypal" round wide onPress={() => null} text={payPalLanguage.requestPayPalPayment} />
+
+          <Text style={style.caption}>{walkthrough.step4.ether}</Text>
+          <Button round wide text={settlementManagement.eth} onPress={() => null} />
+
+          <Text style={style.caption}>{walkthrough.step4.cash}</Text>
+          <Text style={style.subTitle}>{debtManagement.fields.settlementAmount}</Text>
+          <Text style={style.balance}>{`+${amountFormat(walkthrough.step4.positiveBalance, defaultCurrency, true)}`}</Text>
+          <Button wide round text={debtManagement.settleUp} onPress={() => null} />
         </View>
       </ScrollView>
     )

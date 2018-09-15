@@ -66,6 +66,7 @@ const initialState = {
   payPalRequests: [],
   payPalRequestsLoaded: false,
   channelID: '',
+  initialHomeLoad: 'Friends',
   isConnected: true
 }
 

@@ -201,6 +201,40 @@ export default {
     start: `入门`,
   },
 
+  walkthrough: {
+    skip: `跳跃`,
+    continue: `继续`,
+    step1: {
+      easyToUse: `Lndr是分裂的法案，分摊房租和解决简单的债务与朋友和家人，所有关于blockchain安全做了最简单的方法。`,
+      len: `Len`,
+      der: `der`,
+    },
+    step2: {
+      getStarted: `要开始使用Lndr，你将需要添加好友。`,
+      friendsScreen: `访问好友的屏幕来搜索，添加或邀请您的朋友和家人对Lndr连接。`,
+    },
+    step3: {
+      title: `录制交易`,
+      easy: `分裂的法案或将债务与朋友很容易在Lndr！`,
+      selectFriend: `选择你的朋友，你的货币和金额。`,
+      addMemo: `添加一些注意事项在备忘录中框，然后点击提交。`,
+    },
+    step4: {
+      title: `量私了`,
+      ready: `准备好量私了?`,
+      payPal: `当它的时间与Lndr结清，\正可以选择贝宝：`,
+      ether: `-  cryptocurrencies像醚：`,
+      cash: `- 或简单地记录一个现金结算：`,
+      positiveBalance: `10.46`,
+    },
+    step5: {
+      title: `多币种`,
+      multiCurrency: `Lndr可以跟踪您的交易，即使他们在不同的货币发生。`,
+      exchangeRate: `当你决定结清与您的朋友，所有的交易将使用最先进的最新汇率可被转换成您的主要货币。`,
+      start: `开始使用Lndr！`,
+    }
+  },
+
   debtManagement: {
     shell: `新交易`,
     add: `新债务`,

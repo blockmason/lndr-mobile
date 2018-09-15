@@ -23,8 +23,9 @@ import popupStyle from 'theme/popup'
 import language from 'language'
 const { debtManagement, noFriends, submit, nickname } = language
 
+import { getStore, pendingTransactions, recentTransactions, getAllUcacCurrencies, hasPendingTransaction, getPrimaryCurrency,
+  getPendingFromFriend } from 'reducers/app'
 import { getResetAction } from 'reducers/nav'
-import { getStore, pendingTransactions, recentTransactions, getAllUcacCurrencies, hasPendingTransaction, getPrimaryCurrency } from 'reducers/app'
 import { addDebt, getFriends, hasPendingMessage } from 'actions'
 import { connect } from 'react-redux'
 
@@ -32,6 +33,12 @@ const loadingFriends = new LoadingContext()
 const submittingTransaction = new LoadingContext()
 
 interface Props {
+  state: any
+  pendingTransactions: any
+  recentTransactions: any
+  navigation: any
+  allCurrencies: any
+  primaryCurrency: string
   getFriends: () => any
   addDebt: (
     friend: Friend,
@@ -42,12 +49,7 @@ interface Props {
   ) => any
   hasPendingMessage: () => any
   hasPendingTransaction: (friend: Friend) => boolean
-  state: any
-  pendingTransactions: any
-  recentTransactions: any
-  navigation: any
-  allCurrencies: any
-  primaryCurrency: string
+  getPendingFromFriend: (friendNick: string) => any
 }
 
 interface State {
@@ -126,6 +128,17 @@ class AddDebt extends Component<Props, State> {
     }
   }
 
+  setFriend(friend: Friend) {
+    const { hasPendingMessage, getPendingFromFriend } = this.props
+    const { route, pendingTransaction, pendingSettlement } = getPendingFromFriend(friend.nickname)
+    if(route) {
+      this.props.navigation.navigate(route, { pendingSettlement, pendingTransaction })
+      hasPendingMessage()
+    } else {
+      this.setState({ shouldSelectFriend: false, friend })
+    }
+  }
+
   renderSelectedFriend() {
     const { friend } = this.state
     const { navigation } = this.props
@@ -154,6 +167,7 @@ class AddDebt extends Component<Props, State> {
   renderSelectFriend() {
     const { friendsLoaded, friends, recentTransactions } = this.props.state
     const { searchText } = this.state
+    const { hasPendingTransaction } = this.props
 
     return <ScrollView style={[general.view, {paddingTop: 30}]} keyboardShouldPersistTaps='handled'>
       <Button close onPress={() => this.setState({ shouldSelectFriend: false })} />
@@ -183,6 +197,7 @@ class AddDebt extends Component<Props, State> {
               friend={friend}
               recentTransactions={recentTransactions}
               navigation={this.props.navigation}
+              hasPending={hasPendingTransaction(friend)}
             />
           )
         )}
@@ -208,15 +223,6 @@ class AddDebt extends Component<Props, State> {
   handlePickerDone(value) {
     this.textInput.clear()
     this.setState({currency: value, shouldPickCurrency: false})
-  }
-
-  setFriend(friend) {
-    const { hasPendingMessage, hasPendingTransaction } = this.props
-    if (hasPendingTransaction(friend)) {
-      hasPendingMessage()
-    } else {
-      this.setState({ shouldSelectFriend: false, friend })
-    }
   }
 
   renderSubmit() {
@@ -316,4 +322,5 @@ class AddDebt extends Component<Props, State> {
 
 export default connect((state) => ({ state: getStore(state)(), pendingTransactions: pendingTransactions(state),
   recentTransactions: recentTransactions(state), allCurrencies: getAllUcacCurrencies(state), primaryCurrency: getPrimaryCurrency(state),
-   hasPendingTransaction: hasPendingTransaction(state) }), { addDebt, getFriends, hasPendingMessage })(AddDebt)
+   hasPendingTransaction: hasPendingTransaction(state), 
+   getPendingFromFriend: getPendingFromFriend(state) }), { addDebt, getFriends, hasPendingMessage })(AddDebt)

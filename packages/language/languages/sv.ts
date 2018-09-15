@@ -201,6 +201,40 @@ export default {
     start: `Komma igång`,
   },
 
+  walkthrough: {
+    skip: `hoppa`,
+    continue: `fortsätta`,
+    step1: {
+      easyToUse: `Lndr är det enklaste sättet att dela räkningar, dela kostnader och reglera enkla skulder med vänner och familj, allt gjort säkert på blockchain.`,
+      len: `Len`,
+      der: `der`,
+    },
+    step2: {
+      getStarted: `För att komma igång med Lndr, måste du lägga till en vän.`,
+      friendsScreen: `Besök Friends skärmen för att söka efter, lägga till eller bjuda in dina vänner och familj för att ansluta på Lndr.`,
+    },
+    step3: {
+      title: `Spela in ett transaktions`,
+      easy: `Dela en faktura eller lägga en skuld med en vän är lätt i Lndr!`,
+      selectFriend: `Välj din vän, din valuta och summa.`,
+      addMemo: `Lägg till några anteckningar i Memo rutan och klicka på Skicka.`,
+    },
+    step4: {
+      title: `Betala skuld`,
+      ready: `Redo att betala skuld?`,
+      payPal: `När det är dags att lösa upp med Lndr \n- kan du välja PayPal:`,
+      ether: `- cryptocurrencies som eter:`,
+      cash: `- eller helt enkelt spela in en kontantavräkning:`,
+      positiveBalance: `10,46`,
+    },
+    step5: {
+      title: `Flera valutor`,
+      multiCurrency: `Lndr kan hålla koll på dina transaktioner, även om de råkar i olika valutor.`,
+      exchangeRate: `När du väljer att Settle med din vän, kommer alla transaktioner omvandlas till din primära valuta med hjälp av de mest up-to-date växelkurser tillgängliga.`,
+      start: `Börja använda Lndr!`,
+    }
+  },
+
   debtManagement: {
     shell: `Ny transaktion`,
     add: `Lägg till skuld`,
@@ -268,7 +302,7 @@ export default {
     for: M => `för ${M} `,
     settleUp: `Betala skuld`,
     settleTotal: `Betala allt`,
-    settleUpMemo: (D, A) => `${D === 'lend'? 'Betala': 'Begäran om att komma överens om'} ${A} `,
+    settleUpMemo: (D, A) => `${D === 'lend' ? 'Betala': 'Begäran om att komma överens om'} ${A} `,
     recordSettleUpMemo: `Betala`,
     balanceByCurrency: `Detaljer`,
   },

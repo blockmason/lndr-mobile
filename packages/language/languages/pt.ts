@@ -197,8 +197,42 @@ export default {
     runEthereum: `Corremos na ETH!`,
     firstLendingApp: `O primeiro aplicativo de empréstimo móvel garantido na blockchain.`,
     greatConcert: `Ver um Grande Concerto`,
-    youPlayWithFriends: `Você joga com os amigos; \ n vamos continuar a guia ...`,
+    youPlayWithFriends: `Você joga com os amigos; \n vamos continuar a guia ...`,
     start: `Iniciar`,
+  },
+
+  walkthrough: {
+    skip: `pular`,
+    continue: `continuar`,
+    step1: {
+      easyToUse: `Lndr é a maneira mais fácil de dividir as contas, compartilhar despesas e liquidar dívidas simples com amigos e familiares, tudo feito com segurança no blockchain.`,
+      len: `Len`,
+      der: `der`,
+    },
+    step2: {
+      getStarted: `Para começar com o Lndr, você vai precisar adicionar um amigo.`,
+      friendsScreen: `Visite os amigos ecrã para procurar, adicionar ou convidar seus amigos e familiares para se conectar em Lndr.`,
+    },
+    step3: {
+      title: `Gravando uma transação`,
+      easy: `Dividir um projeto de lei ou a adição de uma dívida com um amigo é fácil na Lndr!`,
+      selectFriend: `Selecione seu amigo, seu moeda eo montante.`,
+      addMemo: `Adicionar algumas notas na caixa de memorando e clique em Enviar.`,
+    },
+    step4: {
+      title: `Contentar-se`,
+      ready: `Pronto para contentar-se?`,
+      payPal: `Quando é hora de se contentar com Lndr, \n- você pode escolher PayPal:`,
+      ether: `- cryptocurrencies como éter:`,
+      cash: `- ou simplesmente gravar uma liquidação em dinheiro:`,
+      positiveBalance: `10,46`,
+    },
+    step5: {
+      title: `Multi Moeda`,
+      multiCurrency: `Lndr pode manter o controle de suas transações, mesmo que eles acontecem em diferentes moedas.`,
+      exchangeRate: `Quando você decidir resolver com o seu amigo, todas as transações serão convertidos em sua moeda principal usando as taxas de câmbio mais up-to-date disponíveis.`,
+      start: `Comece a usar Lndr!`,
+    }
   },
 
   debtManagement: {
@@ -268,7 +302,7 @@ export default {
     for: M => `para ${M}`,
     settleUp: `Pagar`,
     settleTotal: `Pagamento Total`,
-    settleUpMemo: (D, A) => `${D === 'lend'? 'Pagar a': 'Pedido de pagamento de'} ${A} `,
+    settleUpMemo: (D, A) => `${D === 'lend' ? 'Pagar a': 'Pedido de pagamento de'} ${A} `,
     recordSettleUpMemo: `Pagando`,
     balanceByCurrency: `Detalhes`,
   },

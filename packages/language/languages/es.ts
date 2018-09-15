@@ -201,6 +201,40 @@ export default {
     start: `Comenzar`,
   },
 
+  walkthrough: {
+    skip: `omitir`,
+    continue: `continuar`,
+    step1: {
+      easyToUse: `Lndr es la forma más fácil de dividir las facturas, los gastos de las acciones y pagar las deudas simples con amigos y familiares, todo hecho de forma segura en la blockchain.`,
+      len: `Len`,
+      der: `der`,
+    },
+    step2: {
+      getStarted: `Para comenzar con Lndr, tendrá que añadir un amigo.`,
+      friendsScreen: `Visita los Amigos pantalla para buscar, agregar o invitar a sus amigos y familiares para conectar el Lndr.`,
+    },
+    step3: {
+      title: `Registrar una transacción`,
+      easy: `Dividir una cuenta o la adición de una deuda con un amigo es fácil en Lndr!`,
+      selectFriend: `Seleccione su amigo, su moneda y el monto.`,
+      addMemo: `Añadir algunas notas en el cuadro de la nota y haga clic en Enviar.`,
+    },
+    step4: {
+      title: `Pagar Deudas`,
+      ready: `Listo para pagar deudas?`,
+      payPal: `Cuando es el momento de ajustar cuentas con Lndr, \n se puede elegir PayPal:`,
+      ether: `- cryptocurrencies como éter:`,
+      cash: `- o simplemente grabar un pago en efectivo:`,
+      positiveBalance: `10,46`,
+    },
+    step5: {
+      title: `Multi moneda`,
+      multiCurrency: `Lndr puede mantener un registro de sus transacciones, incluso si suceden en diferentes monedas.`,
+      exchangeRate: `Cuando usted decide ajustar cuentas con su amigo, todas las transacciones se convertirán en su divisa principal utilizando los tipos de cambio más arriba-hasta la fecha disponible.`,
+      start: `Empezar a utilizar Lndr!`,
+    }
+  },
+
   debtManagement: {
     shell: `Nueva transacción`,
     add: `Agregar Deuda`,
@@ -268,7 +302,7 @@ export default {
     for: M => `para ${M}`,
     settleUp: `Pagar Deudas`,
     settleTotal: `Total Acordado`,
-    settleUpMemo: (D, A) => `${D === 'lend'? 'Acordando Pago Por': 'Solicitud de Acordar Pago Por'} ${A} `,
+    settleUpMemo: (D, A) => `${D === 'lend' ? 'Acordando Pago Por': 'Solicitud de Acordar Pago Por'} ${A} `,
     recordSettleUpMemo: `Pagar Deudas`,
     balanceByCurrency: `Detalles`,
   },
