@@ -99,20 +99,18 @@ class AppContentsView extends Component<AppContentsProps> {
       isConnected
     } = this.props.state
 
+    if (!isConnected) {
+      return <NetworkNotifierView onConnected={this.props.setConnectionStatus}/>
+    }
     if (isInitializing) {
       return <View />
     }
     if (!welcomeComplete) {
       return <WelcomeView onComplete={this.props.setWelcomeComplete}/>
     }
-
     if (!privacyPolicyVerified) {
       return <PrivacyPolicyView onVerify={this.props.verifyPrivacyPolicy}/>
     }
-    if (!isConnected) {
-      return <NetworkNotifierView onConnected={this.props.setConnectionStatus}/>
-    }
-
     if (!this.props.user || shouldDisplayMnemonic) {
       return <AuthenticateView />
     }
