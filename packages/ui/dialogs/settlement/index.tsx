@@ -1,6 +1,8 @@
 import React, { Component } from 'react'
-import { Text, TextInput, View, Image, ScrollView, KeyboardAvoidingView, Platform, Linking, Alert } from 'react-native'
+import { Text, TextInput, View, Image, ScrollView, KeyboardAvoidingView, Platform, Linking, Alert, Picker } from 'react-native'
 import firebase from 'react-native-firebase'
+import FontAwesome from 'react-native-vector-icons/FontAwesome'
+
 import { getResetAction } from 'reducers/nav'
 
 import { UserData } from 'lndr/user'
@@ -27,7 +29,8 @@ const {
   debtManagement,
   accountManagement,
   payPalLanguage,
-  pendingTransactionsLanguage
+  pendingTransactionsLanguage,
+  settlementManagement
 } = language
 
 import { getUser, recentTransactions, getEthBalance, getEthExchange, getWeeklyEthTotal,
@@ -39,6 +42,13 @@ const submittingTransaction = new LoadingContext()
 const loadingContext = new LoadingContext()
 
 let unmounting = false
+
+const settlementChoices = [
+  { settlementType: undefined, name: settlementManagement.select },
+  { settlementType: 'settlement', name: settlementManagement.nonPayment },
+  { settlementType: 'eth', name: settlementManagement.eth },
+  { settlementType: 'paypal', name: settlementManagement.paypal }
+]
 
 interface Props {
   user: UserData
@@ -77,6 +87,7 @@ interface State {
   settlementType?: string
   friend: Friend
   fromPayPalRequest?: boolean
+  pickerSelection: any
 }
 
 class Settlement extends Component<Props, State> {
@@ -87,26 +98,28 @@ class Settlement extends Component<Props, State> {
       direction: this.getRecentTotal() > 0 ? 'borrow' : 'lend',
       txCost: '0.00',
       ethCost: '',
-      friend: new Friend('', '')
+      friend: new Friend('', ''),
+      pickerSelection: { settlementType: undefined, name: settlementManagement.select }
     }
 
     this.blurCurrencyFormat = this.blurCurrencyFormat.bind(this)
     this.rejectPayPalRequest = this.rejectPayPalRequest.bind(this)
+    this.changeSettlementType = this.changeSettlementType.bind(this)
   }
 
   async componentWillMount() {
     const { primaryCurrency } = this.props
-    const txCost = await getEthTxCost(primaryCurrency)
     const friend = this.props.navigation ? this.props.navigation.state.params.friend : {}
     const settlementType = this.props.navigation ? this.props.navigation.state.params.settlementType : ''
     const fromPayPalRequest = this.props.navigation ? this.props.navigation.state.params.fromPayPalRequest : false
-
-    let amount, formInputError, ethCost
-
+    
+    let amount, formInputError, ethCost, txCost
+    
     if(this.state.balance) {
       amount = formatSettlementAmount(String(Math.abs(this.state.balance)), primaryCurrency)
-
+      
       if(settlementType === 'eth') {
+        txCost = await getEthTxCost(primaryCurrency)
         const result = this.ethCostAndError(amount, txCost)
         ethCost = result.ethCost
         formInputError = result.formInputError
@@ -209,11 +222,11 @@ class Settlement extends Component<Props, State> {
   }
 
   isPayPalSettlement() {
-    return ( (this.props.navigation) && (this.props.navigation.state.params.settlementType == 'paypal') )
+    return this.state.settlementType === 'paypal'
   }
 
   isEthSettlement() {
-    return ( (this.props.navigation) && (this.props.navigation.state.params.settlementType == 'eth') )
+    return this.state.settlementType === 'eth'
   }
 
   getRecentTotal() {
@@ -250,7 +263,6 @@ class Settlement extends Component<Props, State> {
     let formInputError
 
     const cleanAmount = cleanFiatAmount(amount)
-    console.log('clean ', cleanAmount)
     const totalEthCost = ( Number(txCost) + cleanAmount ) / Number(ethExchange(primaryCurrency))
     const ethCost = String(totalEthCost)
 
@@ -308,6 +320,23 @@ class Settlement extends Component<Props, State> {
     }
   }
 
+  async changeSettlementType(pickerSelection: any) {
+    const { settlementType } = pickerSelection
+    const { amount } = this.state
+
+    if(settlementType === 'eth') {
+      const txCost = await getEthTxCost(this.props.primaryCurrency)
+      const result = this.ethCostAndError(amount === undefined ? '0' : amount, txCost)
+      const ethCost = result.ethCost
+      const formInputError = result.formInputError
+
+      this.setState({ settlementType, pickerSelection, formInputError, ethCost, txCost })
+    } else {
+      this.setState({ settlementType, pickerSelection })
+    }
+
+  }
+
   renderPaymentButton() {
     const { amount, direction } = this.state
     if (typeof amount !== 'string')
@@ -338,7 +367,7 @@ class Settlement extends Component<Props, State> {
   }
 
   render() {
-    const { amount, balance, formInputError, pic, ethCost, settlementType, friend, txCost, fromPayPalRequest } = this.state
+    const { amount, balance, formInputError, pic, ethCost, settlementType, friend, txCost, fromPayPalRequest, pickerSelection } = this.state
     const { primaryCurrency, ethBalance, ethExchange } = this.props
     const imageSource = pic ? { uri: pic } : require('images/person-outline-dark.png')
     const vertOffset = (Platform.OS === 'android') ? -300 : 20
@@ -361,6 +390,19 @@ class Settlement extends Component<Props, State> {
                 <Text style={style.total}>{debtManagement.total}</Text>
                 <Text style={style.totalAmount}>{this.displayTotal(balance)}</Text>
               </View>
+
+              <View style={general.centeredColumn}>
+                <View style={formStyle.settlementPickerBackground}>
+                  <Picker
+                    selectedValue={pickerSelection} style={formStyle.settlementPicker}
+                    onValueChange={this.changeSettlementType}>
+                    {settlementChoices.map((value, key) => 
+                      <Picker.Item label={value.name} key={key} value={value}>{pickerSelection.name}</Picker.Item>)}
+                  </Picker>
+                  <FontAwesome style={formStyle.whiteCaretDown} name={'caret-down'} />
+                </View>
+              </View>
+
               <View style={general.centeredColumn}>
                 { settlementType === 'eth' ? <View style={[accountStyle.balanceRow, {marginTop: 20}]}>
                   <Text style={[accountStyle.balance, {marginLeft: '2%'}]}>{accountManagement.ethBalance.display(formatCommaDecimal(ethBalance))}</Text>
@@ -385,7 +427,9 @@ class Settlement extends Component<Props, State> {
                 /> : <Text style={formStyle.jumboInput}>{amount}</Text>}
               </View>
             </View>
-            { settlementType === 'paypal' ? <Button alternate small arrow style={formStyle.submitButton} onPress={this.payPalFeesAlert} text={payPalLanguage.feesNotification} /> : null }
+            { settlementType === 'paypal' ? <View style={general.centeredColumn}>
+              <Button alternate small arrow onPress={this.payPalFeesAlert} text={payPalLanguage.feesNotification} />
+            </View> : null }
             { settlementType === 'eth' && ethCost !== '' && <Text style={[formStyle.smallText, formStyle.spaceTop, formStyle.center]}>{`${formatCommaDecimal(ethCost.slice(0, 6))} ETH`}</Text>}
             { formInputError && <Text style={[formStyle.warningText, {alignSelf: 'center', marginHorizontal: 15}]}>{formInputError}</Text>}
             { paymentButton }

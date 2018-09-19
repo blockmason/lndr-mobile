@@ -9,7 +9,6 @@ import AddDebt from 'ui/dialogs/add-debt'
 import ConfirmationScreen from 'ui/dialogs/confirmation-screen'
 import PendingTransactionDetail from 'ui/dialogs/pending-transaction-detail'
 import PendingSettlementDetail from 'ui/dialogs/pending-settlement-detail'
-import SettleUp from 'ui/dialogs/settle-up'
 import Settlement from 'ui/dialogs/settlement'
 import FriendDetail from 'ui/dialogs/friend-detail'
 import TransferEth from 'ui/dialogs/transfer-eth'
@@ -29,7 +28,7 @@ const middleware = createReactNavigationReduxMiddleware(
   (state: any) => state.nav,
 );
 
-const addListener = createReduxBoundAddListener("root");
+const addListener = createReduxBoundAddListener("root")
 
 export const AppNavigator = StackNavigator(
   {
@@ -41,9 +40,6 @@ export const AppNavigator = StackNavigator(
     },
     PendingTransaction: {
       screen: PendingTransactionDetail
-    },
-    SettleUp: {
-      screen: SettleUp
     },
     Settlement: {
       screen: Settlement

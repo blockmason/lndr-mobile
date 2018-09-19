@@ -243,6 +243,25 @@ export default StyleSheet.create({
     ...large,
     paddingHorizontal: m
   },
+  settlementPickerBackground: {
+    backgroundColor: black,
+    borderRadius: 30,
+    width: 260,
+    marginTop: m,
+    marginBottom: s
+  },
+  settlementPicker: {
+    color: white,
+    marginHorizontal: m,
+    height: 40
+  },
+  whiteCaretDown: {
+    color: white,
+    ...large,
+    position: 'absolute',
+    right: 22,
+    top: 11
+  },
   panelHeader: {
     flexDirection: 'row',
     alignItems: 'center',

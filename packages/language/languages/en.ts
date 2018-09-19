@@ -311,6 +311,7 @@ export default {
     eth: `Settle With ETH`,
     paypal: `Settle With PayPal`,
     nonPayment: `Record a Settlement`,
+    select: `Select Settlement Type`,
   },
 
   accountViewLanguage: {

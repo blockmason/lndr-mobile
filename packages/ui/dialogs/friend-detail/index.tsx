@@ -146,7 +146,7 @@ class FriendDetail extends Component<Props, State> {
     if(route) {
       navigation.navigate(route, { pendingSettlement, pendingTransaction })
     } else {
-      navigation.navigate('SettleUp', { friend })
+      navigation.navigate('Settlement', { friend })
     }
   }
 

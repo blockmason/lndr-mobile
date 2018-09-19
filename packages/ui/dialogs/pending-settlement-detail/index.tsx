@@ -28,7 +28,8 @@ const {
   accountManagement
 } = language
 
-import { getUser, settlerIsMe, getEthExchange, getWeeklyEthTotal, calculateBalance, getUcacCurrency, getPrimaryCurrency } from 'reducers/app'
+import { getUser, settlerIsMe, getEthExchange, getWeeklyEthTotal, calculateBalance, getUcacCurrency, getPrimaryCurrency,
+  getFriendFromAddress } from 'reducers/app'
 import { addDebt, rejectPendingSettlement, getEthTxCost } from 'actions'
 import { connect } from 'react-redux'
 
@@ -258,4 +259,4 @@ class PendingSettlementDetail extends Component<Props, State> {
 
 export default connect((state) => ({ user: getUser(state)(), settlerIsMe: settlerIsMe(state), ethExchange: getEthExchange(state),
   ethSentPastWeek: getWeeklyEthTotal(state), calculateBalance: calculateBalance(state), getUcacCurrency: getUcacCurrency(state),
-  primaryCurrency: getPrimaryCurrency(state) }), { addDebt, rejectPendingSettlement })(PendingSettlementDetail)
+  primaryCurrency: getPrimaryCurrency(state), getFriendFromAddress: getFriendFromAddress(state) }), { addDebt, rejectPendingSettlement })(PendingSettlementDetail)

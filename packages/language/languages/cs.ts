@@ -316,6 +316,7 @@ export default {
     eth: `Vyrovnat prostřednictvím ETH`,
     paypal: `Vyrovnat prostřednictvím PayPal`,
     nonPayment: `Nahrát vyrovnání`,
+    select: `Vyberte typ vypořádání`,
   },
 
   accountViewLanguage: {

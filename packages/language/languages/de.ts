@@ -316,6 +316,7 @@ export default {
     eth: `Mit ETH begleichen`,
     paypal: `Mit PayPal begleichen`,
     nonPayment: `Eine Abrechnung erfassen`,
+    select: `Wählen Sie Abrechnungsart`,
   },
 
   accountViewLanguage: {

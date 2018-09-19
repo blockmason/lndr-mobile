@@ -316,6 +316,7 @@ export default {
     eth: `ETH से निपटाएँ`,
     paypal: `PayPal से निपटाएँ`,
     nonPayment: `कोई निपटान रिकॉर्ड करें`,
+    select: `चुनें निपटान प्रकार`,
   },
 
   accountViewLanguage: {

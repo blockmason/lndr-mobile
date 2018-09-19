@@ -316,6 +316,7 @@ export default {
     eth: `Lunasi dengan ETH`,
     paypal: `Lunasi dengan PayPal`,
     nonPayment: `Catat Pelunasan`,
+    select: `Pilih Settlement Jenis`,
   },
 
   accountViewLanguage: {

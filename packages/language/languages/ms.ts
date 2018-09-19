@@ -316,6 +316,7 @@ export default {
     eth: `Selesaikan dengan ETH`,
     paypal: `Selesaikan dengan PayPal`,
     nonPayment: `Rekodkan Penyelesaian`,
+    select: `Pilih Jenis Penyelesaian`,
   },
 
   accountViewLanguage: {

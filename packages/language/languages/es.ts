@@ -316,6 +316,7 @@ export default {
     eth: `Pagar con ETH (Ethereum)`,
     paypal: `Pagar con PayPal`,
     nonPayment: `Archivar un Pago`,
+    select: `Seleccionar el tipo de pago`,
   },
 
   accountViewLanguage: {
