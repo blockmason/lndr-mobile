@@ -105,6 +105,7 @@ class Settlement extends Component<Props, State> {
     this.blurCurrencyFormat = this.blurCurrencyFormat.bind(this)
     this.rejectPayPalRequest = this.rejectPayPalRequest.bind(this)
     this.changeSettlementType = this.changeSettlementType.bind(this)
+    this.updateAmount = this.updateAmount.bind(this)
   }
 
   async componentWillMount() {
@@ -320,21 +321,22 @@ class Settlement extends Component<Props, State> {
     }
   }
 
-  async changeSettlementType(pickerSelection: any) {
-    const { settlementType } = pickerSelection
-    const { amount } = this.state
+  changeSettlementType(pickerSelection: any) {
+    setTimeout( async() => {
+      const { settlementType } = pickerSelection
+      const { amount } = this.state
 
-    if(settlementType === 'eth') {
-      const txCost = await getEthTxCost(this.props.primaryCurrency)
-      const result = this.ethCostAndError(amount === undefined ? '0' : amount, txCost)
-      const ethCost = result.ethCost
-      const formInputError = result.formInputError
+      if(settlementType === 'eth') {
+        const txCost = await getEthTxCost(this.props.primaryCurrency)
+        const result = this.ethCostAndError(amount === undefined ? '0' : amount, txCost)
+        const ethCost = result.ethCost
+        const formInputError = result.formInputError
 
-      this.setState({ settlementType, pickerSelection, formInputError, ethCost, txCost })
-    } else {
-      this.setState({ settlementType, pickerSelection })
-    }
-
+        this.setState({ settlementType, pickerSelection, formInputError, ethCost, txCost })
+      } else {
+        this.setState({ settlementType, pickerSelection, formInputError: undefined })
+      }
+    }, 1)
   }
 
   renderPaymentButton() {
@@ -373,6 +375,8 @@ class Settlement extends Component<Props, State> {
     const vertOffset = (Platform.OS === 'android') ? -300 : 20
 
     const paymentButton = this.renderPaymentButton()
+
+    console.log('RENDER', settlementType)
 
     return <View style={general.whiteFlex}>
       <View style={general.view}>
@@ -422,7 +426,7 @@ class Settlement extends Component<Props, State> {
                   maxLength={11}
                   underlineColorAndroid='transparent'
                   keyboardType='numeric'
-                  onChangeText={amount => this.updateAmount(amount)}
+                  onChangeText={this.updateAmount}
                   onBlur={this.blurCurrencyFormat}
                 /> : <Text style={formStyle.jumboInput}>{amount}</Text>}
               </View>
@@ -431,9 +435,9 @@ class Settlement extends Component<Props, State> {
               <Button alternate small arrow onPress={this.payPalFeesAlert} text={payPalLanguage.feesNotification} />
             </View> : null }
             { settlementType === 'eth' && ethCost !== '' && <Text style={[formStyle.smallText, formStyle.spaceTop, formStyle.center]}>{`${formatCommaDecimal(ethCost.slice(0, 6))} ETH`}</Text>}
-            { formInputError && <Text style={[formStyle.warningText, {alignSelf: 'center', marginHorizontal: 15}]}>{formInputError}</Text>}
+            { !!formInputError && <Text style={[formStyle.warningText, {alignSelf: 'center', marginHorizontal: 15}]}>{formInputError}</Text>}
             { paymentButton }
-            { fromPayPalRequest ? <Button danger round containerStyle={{width: '80%'}} onPress={this.rejectPayPalRequest} text={pendingTransactionsLanguage.rejectRequest} /> : null }
+            { !!fromPayPalRequest ? <Button danger round containerStyle={{width: '80%'}} onPress={this.rejectPayPalRequest} text={pendingTransactionsLanguage.rejectRequest} /> : null }
           </View>
         </ScrollView>
       </KeyboardAvoidingView>
