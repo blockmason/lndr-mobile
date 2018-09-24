@@ -74,6 +74,10 @@ const store = createStore(initialState)
 
 // TODO Move this route based code into navigators
 class AppContentsView extends Component<AppContentsProps> {
+  constructor (props) {
+    super(props)
+    this.handleConnection = this.handleConnection.bind(this)
+}
   
   componentDidMount() {
     this.props.initializeStorage()
@@ -95,18 +99,17 @@ class AppContentsView extends Component<AppContentsProps> {
       welcomeComplete,
       privacyPolicyVerified,
       shouldDisplayMnemonic,
-      displayTouchID,
       isConnected
     } = this.props.state
 
-    if (!isConnected) {
-      return <NetworkNotifierView onConnected={this.props.setConnectionStatus}/>
-    }
     if (isInitializing) {
       return <View />
     }
     if (!welcomeComplete) {
       return <WelcomeView onComplete={this.props.setWelcomeComplete}/>
+    }
+    if (!isConnected) {
+      return <NetworkNotifierView onConnected={this.props.setConnectionStatus}/>
     }
     if (!privacyPolicyVerified) {
       return <PrivacyPolicyView onVerify={this.props.verifyPrivacyPolicy}/>

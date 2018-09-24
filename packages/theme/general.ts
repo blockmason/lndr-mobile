@@ -67,6 +67,12 @@ export default StyleSheet.create({
   smallTopMargin: {
     marginTop: 10
   },
+  mediumTopMargin: {
+    marginTop: 20
+  },
+  largeTopMargin: {
+    marginTop: 30
+  },
   smallVMargin: {
     marginVertical: 10
   },

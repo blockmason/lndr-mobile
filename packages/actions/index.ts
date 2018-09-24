@@ -760,34 +760,28 @@ export const toggleNotifications = () => {
   }
 }
 
-export const setAuthLoading = (state) => {
-  const payload = { isAuthLoading: state }
-  return setState(payload)
+export const setAuthLoading = (isAuthLoading) => {
+  return setState({ isAuthLoading })
 }
 
 export const goToRecoverAccount = () => {
-  const payload = { shouldRecoverAccount: true }
-  return setState(payload)
+  return setState({ shouldRecoverAccount: true })
 }
 
 export const cancelRecoverAccount = () => {
-  const payload = { shouldRecoverAccount: false }
-  return setState(payload)
+  return setState({ shouldRecoverAccount: false })
 }
 
-export const setWelcomeComplete = (state) => {
-  const payload = { welcomeComplete: state }
-  return setState(payload)
+export const setWelcomeComplete = (welcomeComplete) => {
+  return setState({ welcomeComplete })
 }
 
-export const setConnectionStatus = (state) => {
-  const payload = { isConnected: state }
-  return setState(payload)
+export const setConnectionStatus = (isConnected) => {
+  return setState({ isConnected })
 }
 
-export const verifyPrivacyPolicy = (state) => {
-  const payload = { privacyPolicyVerified: state }
-  return setState(payload)
+export const verifyPrivacyPolicy = (privacyPolicyVerified) => {
+  return setState({ privacyPolicyVerified })
 }
 
 export const setEthBalance = () => {

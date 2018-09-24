@@ -21,37 +21,26 @@ interface State {
 
 export default class NetworkNotifierView extends Component <Props, State> {
     constructor (props) {
-        super(props);
+        super(props)
         this.state = {
             isConnected: true
         }
     }
 
-    componentDidMount() {
-        NetInfo.addEventListener('connectionChange', this.handleConnectionChange);
-    }
-
-    componentWillUnmount() {
-        NetInfo.removeEventListener('connectionChange', this.handleConnectionChange);
-    }
-
     checkConnection() {
-        const { onConnected } = this.props;
-        NetInfo.isConnected.fetch().then(isConnected => onConnected(isConnected))
-    }
-
-    handleConnectionChange = isConnected => {
-        this.setState({ isConnected });
+        NetInfo.isConnected.fetch().then(isConnected => {
+            this.props.onConnected(isConnected)
+        })
     }
 
     render() {
         return (
             <View style={[general.flex, general.centeredColumn, general.alignCenter, general.justifyCenter]}>
                 <ThemeImage size={largeImage} name='logo'/>
-                <Image source={require('images/disconnected.png')} />
+                <Image source={require('images/disconnected.png')} style={general.largeTopMargin} />
                 <Text style={[style.title]}>{noConnection}</Text>
                 <Button onPress={this.checkConnection.bind(this)} text={retry}/>
             </View>
-        );
+        )
     }
 }
