@@ -16,7 +16,7 @@ export default StyleSheet.create({
   },
   modalOverlay: {
     backgroundColor:'#222',
-    opacity:0.8,
+    opacity: 1,
     width: '100%',
     height: '100%'
   },

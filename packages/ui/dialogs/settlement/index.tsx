@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import { Text, TextInput, View, Image, ScrollView, KeyboardAvoidingView, Platform, Linking, Alert, Picker } from 'react-native'
+import { Text, TextInput, View, Image, ScrollView, KeyboardAvoidingView, Platform, Linking, Alert, Picker, Modal } from 'react-native'
 import firebase from 'react-native-firebase'
 import FontAwesome from 'react-native-vector-icons/FontAwesome'
 
@@ -17,11 +17,13 @@ import Loading, { LoadingContext } from 'ui/components/loading'
 import DashboardShell from 'ui/components/dashboard-shell'
 import BalanceSection from 'ui/components/balance-section'
 import PayPalSettlementButton from 'ui/components/paypal-settle-button'
+import SpinningPicker from 'ui/components/spinning-picker'
 
 import style from 'theme/friend'
 import formStyle from 'theme/form'
 import general from 'theme/general'
 import accountStyle from 'theme/account'
+import popupStyle from 'theme/popup'
 
 import language from 'language'
 const {
@@ -88,6 +90,7 @@ interface State {
   friend: Friend
   fromPayPalRequest?: boolean
   pickerSelection: any
+  showPicker: boolean
 }
 
 class Settlement extends Component<Props, State> {
@@ -99,13 +102,16 @@ class Settlement extends Component<Props, State> {
       txCost: '0.00',
       ethCost: '',
       friend: new Friend('', ''),
-      pickerSelection: { settlementType: undefined, name: settlementManagement.select }
+      pickerSelection: { settlementType: undefined, name: settlementManagement.select },
+      showPicker: false
     }
 
     this.blurCurrencyFormat = this.blurCurrencyFormat.bind(this)
     this.rejectPayPalRequest = this.rejectPayPalRequest.bind(this)
     this.changeSettlementType = this.changeSettlementType.bind(this)
     this.updateAmount = this.updateAmount.bind(this)
+    this.showIosPicker = this.showIosPicker.bind(this)
+    this.hideIosPicker = this.hideIosPicker.bind(this)
   }
 
   async componentWillMount() {
@@ -322,6 +328,10 @@ class Settlement extends Component<Props, State> {
   }
 
   changeSettlementType(pickerSelection: any) {
+    if(Platform.OS === 'ios') {
+      pickerSelection = settlementChoices.find(choice => choice.name === pickerSelection)
+    }
+
     setTimeout( async() => {
       const { settlementType } = pickerSelection
       const { amount } = this.state
@@ -332,11 +342,19 @@ class Settlement extends Component<Props, State> {
         const ethCost = result.ethCost
         const formInputError = result.formInputError
 
-        this.setState({ settlementType, pickerSelection, formInputError, ethCost, txCost })
+        this.setState({ settlementType, pickerSelection, formInputError, ethCost, txCost, showPicker: false })
       } else {
-        this.setState({ settlementType, pickerSelection, formInputError: undefined })
+        this.setState({ settlementType, pickerSelection, formInputError: undefined, showPicker: false })
       }
     }, 1)
+  }
+
+  showIosPicker() {
+    this.setState({ showPicker: true })
+  }
+
+  hideIosPicker() {
+    this.setState({ showPicker: false })
   }
 
   renderPaymentButton() {
@@ -368,6 +386,20 @@ class Settlement extends Component<Props, State> {
     )
   }
 
+  renderPicker(pickerSelection: any) {
+    if(Platform.OS === 'android') {
+      return <Picker
+        selectedValue={pickerSelection} style={formStyle.settlementPicker}
+        onValueChange={this.changeSettlementType}>
+        {settlementChoices.map((value, key) => 
+          <Picker.Item label={value.name} key={key} value={value}>{pickerSelection.name}</Picker.Item>)}
+      </Picker>
+    } else {
+      const text = this.state.pickerSelection ? this.state.pickerSelection.name : settlementManagement.select
+      return <Text style={[formStyle.settlementPicker, {paddingTop: 12}]} onPress={this.showIosPicker}>{text}</Text>
+    }
+  }
+
   render() {
     const { amount, balance, formInputError, pic, ethCost, settlementType, friend, txCost, fromPayPalRequest, pickerSelection } = this.state
     const { primaryCurrency, ethBalance, ethExchange } = this.props
@@ -375,8 +407,6 @@ class Settlement extends Component<Props, State> {
     const vertOffset = (Platform.OS === 'android') ? -300 : 20
 
     const paymentButton = this.renderPaymentButton()
-
-    console.log('RENDER', settlementType)
 
     return <View style={general.whiteFlex}>
       <View style={general.view}>
@@ -397,12 +427,7 @@ class Settlement extends Component<Props, State> {
 
               <View style={general.centeredColumn}>
                 <View style={formStyle.settlementPickerBackground}>
-                  <Picker
-                    selectedValue={pickerSelection} style={formStyle.settlementPicker}
-                    onValueChange={this.changeSettlementType}>
-                    {settlementChoices.map((value, key) => 
-                      <Picker.Item label={value.name} key={key} value={value}>{pickerSelection.name}</Picker.Item>)}
-                  </Picker>
+                  {this.renderPicker(pickerSelection)}
                   <FontAwesome style={formStyle.whiteCaretDown} name={'caret-down'} />
                 </View>
               </View>
@@ -439,6 +464,17 @@ class Settlement extends Component<Props, State> {
             { paymentButton }
             { !!fromPayPalRequest ? <Button danger round containerStyle={{width: '80%'}} onPress={this.rejectPayPalRequest} text={pendingTransactionsLanguage.rejectRequest} /> : null }
           </View>
+          <Modal
+            animationType="slide"
+            transparent={true}
+            visible={this.state.showPicker}
+            onRequestClose={this.hideIosPicker}>
+            <View style={[popupStyle.modalOverlay, general.flexColumn, general.justifyEnd]}>
+              <View style={{backgroundColor:'white', paddingTop:4}}>
+                <SpinningPicker label={debtManagement.chooseCurrency} allItems={settlementChoices.slice(1).map(choice => choice.name)} selectedItem={pickerSelection.name} onPickerDone={this.changeSettlementType} />
+              </View>
+            </View>
+          </Modal>
         </ScrollView>
       </KeyboardAvoidingView>
     </View>
