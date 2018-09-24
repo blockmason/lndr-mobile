@@ -163,12 +163,17 @@ class Settlement extends Component<Props, State> {
   }
 
   async submit() {
-    const { amount, direction, formInputError } = this.state
+    const { amount, direction, formInputError, settlementType } = this.state
     const { primaryCurrency } = this.props
     const friend = this.props.navigation ? this.props.navigation.state.params.friend : {}
     const denomination = this.getDenomination()
 
     if ( formInputError || sanitizeAmount(amount, primaryCurrency) === 0 ) {
+      return
+    }
+
+    if(!settlementType) {
+      this.setState({ formInputError: settlementManagement.select })
       return
     }
 
@@ -471,7 +476,7 @@ class Settlement extends Component<Props, State> {
             onRequestClose={this.hideIosPicker}>
             <View style={[popupStyle.modalOverlay, general.flexColumn, general.justifyEnd]}>
               <View style={{backgroundColor:'white', paddingTop:4}}>
-                <SpinningPicker label={debtManagement.chooseCurrency} allItems={settlementChoices.slice(1).map(choice => choice.name)} selectedItem={pickerSelection.name} onPickerDone={this.changeSettlementType} />
+                <SpinningPicker label={settlementManagement.select} allItems={settlementChoices.slice(1).map(choice => choice.name)} selectedItem={pickerSelection.name} onPickerDone={this.changeSettlementType} />
               </View>
             </View>
           </Modal>
