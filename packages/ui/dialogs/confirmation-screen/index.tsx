@@ -24,7 +24,7 @@ export default class ConfirmationScreen extends Component<Props> {
   }
 
   getConfirmationImage(type) {
-    const acceptList = ['create', 'confirm', 'ethSent', 'bcptSent', 'confirmFriend', 'requestPayPalPayee', 'requestPayPalPayment', 'settledWithPayPal']
+    const acceptList = ['create', 'confirm', 'ethSent', 'bcptSent', 'confirmFriend', 'requestPayPalPayee', 'requestPayPalPayment', 'settledWithPayPal', 'kycSuccess']
     const rejectList = ['reject', 'rejectFriend', 'rejectOutboundFriendRequest']
     if (acceptList.indexOf(type) >= 0) {
       return <Image source={require('images/check-circle.png')} style={style.image} />
@@ -66,6 +66,13 @@ export default class ConfirmationScreen extends Component<Props> {
       </Text>
     }
 
+    if (type === 'kycSuccess') {
+      return <Text style={style.text}>
+        <Text>{confirmation[type].start}</Text>
+        <Text>{confirmation[type].end}</Text>
+      </Text>
+    }
+
     return <Text style={style.text}>
       <Text>{confirmation[type].start}</Text>
       <Text style={style.nickname}>{type !== 'ethSent' && type !== 'bcptSent' ? `@${friend.nickname}` : amount}</Text>
@@ -86,7 +93,7 @@ export default class ConfirmationScreen extends Component<Props> {
         <View style={[general.centeredColumn, general.standardHMargin]}>
           {this.getConfirmationImage(type)}
           {this.displayMessage()}
-          {type === 'ethSent' || type === 'bcptSent' || type === 'confirmFriend' || type === 'rejectFriend' ? <View style={{marginBottom: 20}}/> :
+          {type === 'ethSent' || type === 'bcptSent' || type === 'confirmFriend' || type === 'rejectFriend' || type === 'kycSuccess' ? <View style={{marginBottom: 20}}/> :
           <TouchableHighlight onPress={() => this.goActivity()}>
             <Text style={[style.text, style.spacing]}>
               <Text>{confirmation.status}</Text>

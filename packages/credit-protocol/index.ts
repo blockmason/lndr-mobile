@@ -13,10 +13,12 @@ import Client from './lib/client'
 import CreditRecord from './lib/credit-record'
 export { default as CreditRecord } from './lib/credit-record'
 
+import { hasNoDecimals } from 'lndr/currencies'
+import KYC from 'lndr/kyc'
+
 import EthTransaction from 'lndr/eth-transaction'
 import Tx from 'ethereumjs-tx'
 import Web3 from 'web3'
-import { hasNoDecimals } from 'lndr/currencies';
 
 export const web3 = new Web3(new Web3.providers.HttpProvider('https://mainnet.infura.io/EoLr1OVfUMDqq3N2KaKA'))
 // export const web3 = Platform.OS === 'ios' ? new Web3(new Web3.providers.HttpProvider('http://localhost:7545')) : new Web3(new Web3.providers.HttpProvider('http://10.0.2.2:7545'))
@@ -378,7 +380,7 @@ export default class CreditProtocol {
 
     if (Platform.OS === 'android') {
       resizedImageResponse = await ImageResizer.createResizedImage(imageURI, IMAGE_TARGET_SIZE, IMAGE_TARGET_SIZE, "JPEG", 100, 0)
-      base64ImageData = await RNFetchBlob.fs.readFile(resizedImageResponse.uri, 'base64')
+      base64ImageData = await RNFetchBlob.fs.readFile(resizedImageResponse.path, 'base64')
     } else {
       resizedImageResponse = await ImageResizer.createResizedImage(`data:image/jpg;jpeg;base64,${imageData}`, IMAGE_TARGET_SIZE, IMAGE_TARGET_SIZE, "JPEG", 100, 0)
       base64ImageData = await RNFetchBlob.fs.readFile(resizedImageResponse.path, 'base64')
@@ -476,5 +478,27 @@ export default class CreditProtocol {
     const paypalRequestSignature = this.serverSign(hash, privateKeyBuffer)
 
     return this.client.post('/remove_paypal_request', { friend, requestor, paypalRequestSignature })
+  }
+
+  // Verify Lndr
+  submitKYC(kyc: KYC, privateKeyBuffer: any) {
+    const { externalUserId } = kyc
+    const hashBuffer = Buffer.concat([
+      hexToBuffer(externalUserId)
+    ])
+    const hash = bufferToHex(ethUtil.sha3(hashBuffer))
+    const identitySignature = this.serverSign(hash, privateKeyBuffer)
+    kyc.identitySignature = identitySignature
+    console.log('ABOUT TO SEND ', kyc.info.idDocs[0].file)
+    return this.client.post('/verify_identity', kyc)
+  }
+
+  getKYCStatus(user: string, privateKeyBuffer: any) {
+    const hashBuffer = Buffer.concat([
+      hexToBuffer(user)
+    ])
+    const hash = bufferToHex(ethUtil.sha3(hashBuffer))
+    const verificationStatusSignature = this.serverSign(hash, privateKeyBuffer)
+    return this.client.post('/check_verification_status', { user, verificationStatusSignature })
   }
  }

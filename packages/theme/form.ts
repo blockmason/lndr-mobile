@@ -2,7 +2,7 @@ import { StyleSheet, Platform, Dimensions } from 'react-native'
 
 import { l, m, s, largePad, smallPad, mediumPad, verticalMargin, verticalMarginXS, verticalMarginXXS } from 'theme/include/spacing'
 import { xlarge, large, medium, small, xsmall, bold } from 'theme/include/fonts'
-import { gray, softGray, warning, warningDark, black, white, aqua, lightGray } from 'theme/include/colors'
+import { gray, softGray, warning, warningDark, black, white, aqua, lightGray, danger } from 'theme/include/colors'
 import { attention, radius, thinSoftBorder } from 'theme/include/borders'
 import { center } from 'theme/include/align'
 
@@ -142,6 +142,20 @@ export default StyleSheet.create({
     ...center,
     paddingLeft: 8,
     ...verticalMarginXS
+  },
+  pickerContainer: {
+    width: '100%',
+    paddingLeft: 8,
+    ...verticalMarginXS,
+    borderRadius: 30,
+    borderWidth: 1,
+    borderColor: softGray
+  },
+  picker: {
+    height: 40
+  },
+  photoPickerContainer: {
+    width: 300
   },
   settleAmount: {
     width: '80%',
@@ -319,5 +333,35 @@ export default StyleSheet.create({
     color: gray,
     fontStyle: 'italic',
     marginTop: 30
+  },
+  link: {
+    color: aqua,
+    ...bold
+  },
+  label: {
+    ...medium,
+    ...verticalMarginXXS,
+    color: black,
+    maxWidth: 400,
+    fontWeight: '100'
+  },
+  kycImage: {
+    marginVertical: 20,
+    width: 120,
+    height: 120
+  },
+  formErrorText: {
+    fontSize: 10,
+    color: danger,
+    marginLeft: 19,
+  },
+  kycImageIcon: {
+    position: 'absolute',
+    top: 20,
+    right: 0,
+  },
+  photoTitle: {
+    marginTop: 10,
+    fontWeight: 'bold'
   }
 } as any)

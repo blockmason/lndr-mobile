@@ -84,6 +84,8 @@ export default StyleSheet.create({
   },
   justifyCenter: {
     justifyContent: 'center'
+  },
+  spaceBelowM: {
+    paddingBottom: 20
   }
-
 } as any)
