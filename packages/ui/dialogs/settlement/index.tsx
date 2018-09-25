@@ -112,6 +112,7 @@ class Settlement extends Component<Props, State> {
     this.updateAmount = this.updateAmount.bind(this)
     this.showIosPicker = this.showIosPicker.bind(this)
     this.hideIosPicker = this.hideIosPicker.bind(this)
+    this.submit = this.submit.bind(this)
   }
 
   async componentWillMount() {
@@ -163,17 +164,12 @@ class Settlement extends Component<Props, State> {
   }
 
   async submit() {
-    const { amount, direction, formInputError, settlementType } = this.state
+    const { amount, direction, formInputError } = this.state
     const { primaryCurrency } = this.props
     const friend = this.props.navigation ? this.props.navigation.state.params.friend : {}
     const denomination = this.getDenomination()
 
     if ( formInputError || sanitizeAmount(amount, primaryCurrency) === 0 ) {
-      return
-    }
-
-    if(!settlementType) {
-      this.setState({ formInputError: settlementManagement.select })
       return
     }
 
@@ -363,11 +359,11 @@ class Settlement extends Component<Props, State> {
   }
 
   renderPaymentButton() {
-    const { amount, direction } = this.state
+    const { amount, direction, pickerSelection } = this.state
     if (typeof amount !== 'string')
       return null
 
-    let paymentButton = <Button large round wide onPress={() => this.submit()} text={debtManagement.settleUp} />
+    let paymentButton = <Button large round wide onPress={this.submit} text={debtManagement.settleUp} disabled={pickerSelection.settlementType === undefined}/>
     if (this.isPayPalSettlement()) {
       const cleanAmount = amount.replace(/[^0-9\.]/g, '')
       const memo = debtManagement.settleUpMemo(direction, amount)
