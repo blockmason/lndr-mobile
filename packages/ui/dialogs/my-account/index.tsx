@@ -335,13 +335,23 @@ class MyAccount extends Component<Props, State> {
   renderVerify() {
     const { identityVerificationStatus } = this.props.state
 
+    const getStatus = (status: string) : string => {
+      if (status === 'GREEN') {
+        return 'APPROVED'
+      } else if (status === 'RED') {
+        return 'REJECTED'
+      } else {
+        return 'PENDING'
+      }
+    }
+
     return (
       <View style={[general.centeredColumn, style.spaceHorizontalL]}>
         <Text style={[style.smallText, style.spaceTop]}>{identityVerificationStatus.status ? lndrVerified.statusTitle : lndrVerified.title}</Text>
-        {!!identityVerificationStatus.status && <Text style={[style.title, identityVerificationStatus.status === 'VERIFIED' ? style.greenAmount : style.redAmount]}>{identityVerificationStatus.status}</Text>}
-        {identityVerificationStatus.status === 'REJECTED' && <Text style={[style.smallText, style.spaceTop]}>{lndrVerified.tryAgain}</Text>}
+        {!!identityVerificationStatus.status && <Text style={[style.title, identityVerificationStatus.status === 'GREEN' ? style.greenAmount : style.redAmount]}>{getStatus(identityVerificationStatus.status)}</Text>}
+        {identityVerificationStatus.status === 'RED' && <Text style={[style.smallText, style.spaceTop]}>{lndrVerified.tryAgain}</Text>}
         <Text style={[style.smallText, style.spaceTop]}>{lndrVerified.prefix} <Text style={[style.link]} onPress={() => Linking.openURL('https://lndr.io/terms/')}>{lndrVerified.linkTitle}</Text>{lndrVerified.postfix}</Text>
-        {identityVerificationStatus.status !== 'VERIFIED' && <Button round onPress={() => {this.props.navigation.navigate('VerifyIdentityForm')}} text={lndrVerified.button} containerStyle={general.spaceBelowM} />}
+        {identityVerificationStatus.status !== 'GREEN' && <Button round onPress={() => {this.props.navigation.navigate('VerifyIdentityForm')}} text={lndrVerified.button} containerStyle={general.spaceBelowM} />}
       </View>
     )
   }

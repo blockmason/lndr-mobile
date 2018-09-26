@@ -154,6 +154,10 @@ export default StyleSheet.create({
   picker: {
     height: 40
   },
+  pickerLabel: {
+    marginVertical: 7,
+    marginLeft: 10
+  },
   photoPickerContainer: {
     width: 300
   },
@@ -344,6 +348,12 @@ export default StyleSheet.create({
     color: black,
     maxWidth: 400,
     fontWeight: '100'
+  },
+  blackCaretDown: {
+    fontSize: 16,
+    position: 'absolute',
+    right: 20,
+    top: 8
   },
   kycImage: {
     marginVertical: 20,
