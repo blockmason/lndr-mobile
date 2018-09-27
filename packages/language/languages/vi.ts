@@ -318,6 +318,7 @@ export default {
     eth: `Thanh toán bằng ​​ETH`,
     paypal: `Thanh toán bằng ​​PayPal`,
     nonPayment: `Ghi chép Thanh toán`,
+    select: `Chọn Loại Settlement`,
   },
 
   accountViewLanguage: {

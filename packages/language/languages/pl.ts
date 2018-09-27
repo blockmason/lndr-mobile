@@ -318,6 +318,7 @@ export default {
     eth: `Rozliczenia z ETH`,
     paypal: `Rozliczenia z PayPal`,
     nonPayment: `Zapisz Rozliczenie`,
+    select: `Wybierz typ Rozliczenie`,
   },
 
   accountViewLanguage: {

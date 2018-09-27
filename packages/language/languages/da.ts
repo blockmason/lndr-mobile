@@ -318,6 +318,7 @@ export default {
     eth: `Gør op med ETH`,
     paypal: `Gør op med PayPal`,
     nonPayment: `Gem afregningen`,
+    select: `Vælg Afregning type`,
   },
 
   accountViewLanguage: {

@@ -318,6 +318,7 @@ export default {
     eth: `Betala genom ETH`,
     paypal: `Betala genom PayPal`,
     nonPayment: `Registrera betalning`,
+    select: `Välj Settlement Typ`,
   },
 
   accountViewLanguage: {

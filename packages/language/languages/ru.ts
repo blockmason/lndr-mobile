@@ -318,6 +318,7 @@ export default {
     eth: `Рассчитываться с помощью ETH`,
     paypal: `Рассчитываться с помощью PayPal`,
     nonPayment: `Записать расчет`,
+    select: `Выбор типа расчетов`,
   },
 
   accountViewLanguage: {

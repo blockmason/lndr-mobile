@@ -318,6 +318,7 @@ export default {
     eth: `Régler avec de l'ETH`,
     paypal: `Régler avec de PayPal`,
     nonPayment: `Enregistrement un règlement`,
+    select: `Sélectionner le type de règlement`,
   },
 
   accountViewLanguage: {

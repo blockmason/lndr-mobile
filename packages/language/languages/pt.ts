@@ -318,6 +318,7 @@ export default {
     eth: `Pagar com ETH`,
     paypal: `Pagar com PayPal`,
     nonPayment: `Gravar um Pagamento`,
+    select: `Escolha um tipo de liquidação`,
   },
 
   accountViewLanguage: {

@@ -318,6 +318,7 @@ export default {
     eth: `سدد الحساب بالإثيريوم`,
     paypal: `دفع الفاتورة مع باي بال`,
     nonPayment: `سجّل مبلغ سداد`,
+    select: `حدد نوع التسوية`,
   },
 
   accountViewLanguage: {

@@ -318,6 +318,7 @@ export default {
     eth: `Maksa velkasi ETH:lla`,
     paypal: `Maksa velkasi PAYPAL:lla`,
     nonPayment: `Kirjaa maksu`,
+    select: `Valitse maksujen tyyppi`,
   },
 
   accountViewLanguage: {

@@ -122,7 +122,7 @@ class FriendRow extends Component<Props, State> {
     if(route) {
       this.props.navigation.navigate(route, { pendingSettlement, pendingTransaction })
     } else {
-      this.props.navigation.navigate('SettleUp', { friend })
+      this.props.navigation.navigate('Settlement', { friend })
     }
   }
 

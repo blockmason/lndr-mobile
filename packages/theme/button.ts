@@ -134,5 +134,8 @@ export default StyleSheet.create({
   },
   friend: {
     width: 140
+  },
+  disabled: {
+    opacity: 0.4
   }
 } as any)
