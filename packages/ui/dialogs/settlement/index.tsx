@@ -1,5 +1,6 @@
 import React, { Component } from 'react'
-import { Text, TextInput, View, Image, ScrollView, KeyboardAvoidingView, Platform, Linking, Alert, Picker, Modal } from 'react-native'
+import { Text, TextInput, View, Image, ScrollView, KeyboardAvoidingView, Platform, Linking, Alert, Picker, Modal, 
+  ActionSheetIOS } from 'react-native'
 import firebase from 'react-native-firebase'
 import FontAwesome from 'react-native-vector-icons/FontAwesome'
 
@@ -110,8 +111,7 @@ class Settlement extends Component<Props, State> {
     this.rejectPayPalRequest = this.rejectPayPalRequest.bind(this)
     this.changeSettlementType = this.changeSettlementType.bind(this)
     this.updateAmount = this.updateAmount.bind(this)
-    this.showIosPicker = this.showIosPicker.bind(this)
-    this.hideIosPicker = this.hideIosPicker.bind(this)
+    this.showActionSheet = this.showActionSheet.bind(this)
     this.submit = this.submit.bind(this)
   }
 
@@ -329,10 +329,6 @@ class Settlement extends Component<Props, State> {
   }
 
   changeSettlementType(pickerSelection: any) {
-    if(Platform.OS === 'ios') {
-      pickerSelection = settlementChoices.find(choice => choice.name === pickerSelection)
-    }
-
     setTimeout( async() => {
       const { settlementType } = pickerSelection
       const { amount } = this.state
@@ -350,12 +346,14 @@ class Settlement extends Component<Props, State> {
     }, 1)
   }
 
-  showIosPicker() {
-    this.setState({ showPicker: true })
-  }
-
-  hideIosPicker() {
-    this.setState({ showPicker: false })
+  showActionSheet() {
+    ActionSheetIOS.showActionSheetWithOptions({
+      options: settlementChoices.slice(1).map(choice => choice.name),
+      title: settlementManagement.select
+    },
+    (index) => {
+      this.changeSettlementType(settlementChoices.slice(1)[index])
+    })
   }
 
   renderPaymentButton() {
@@ -397,7 +395,7 @@ class Settlement extends Component<Props, State> {
       </Picker>
     } else {
       const text = this.state.pickerSelection ? this.state.pickerSelection.name : settlementManagement.select
-      return <Text style={[formStyle.settlementPicker, {paddingTop: 12}]} onPress={this.showIosPicker}>{text}</Text>
+      return <Text style={[formStyle.settlementPicker, {paddingTop: 12}]} onPress={this.showActionSheet}>{text}</Text>
     }
   }
 
@@ -465,17 +463,6 @@ class Settlement extends Component<Props, State> {
             { paymentButton }
             { !!fromPayPalRequest ? <Button danger round containerStyle={{width: '80%'}} onPress={this.rejectPayPalRequest} text={pendingTransactionsLanguage.rejectRequest} /> : null }
           </View>
-          <Modal
-            animationType="slide"
-            transparent={true}
-            visible={this.state.showPicker}
-            onRequestClose={this.hideIosPicker}>
-            <View style={[popupStyle.modalOverlay, general.flexColumn, general.justifyEnd]}>
-              <View style={{backgroundColor:'white', paddingTop:4}}>
-                <SpinningPicker label={settlementManagement.select} allItems={settlementChoices.slice(1).map(choice => choice.name)} selectedItem={pickerSelection.name} onPickerDone={this.changeSettlementType} />
-              </View>
-            </View>
-          </Modal>
         </ScrollView>
       </KeyboardAvoidingView>
     </View>
