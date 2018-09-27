@@ -1,6 +1,6 @@
 import React, { Component } from 'react'
 import { View, Text, Switch, ScrollView, TextInput, Alert, BackHandler, KeyboardAvoidingView, Platform, Picker, Image, TouchableHighlight,
-    Linking, Modal } from 'react-native'
+    Linking, Modal, ActionSheetIOS } from 'react-native'
 import ImagePicker from 'react-native-image-picker'
 import Icon from 'react-native-vector-icons/Ionicons'
 import FontAwesome from 'react-native-vector-icons/FontAwesome'
@@ -71,9 +71,6 @@ interface State {
     phoneError?: string
     dobError?: string
     generalFormError?: string
-    countryPickerVisible: boolean
-    governmentPhotoPickerVisible: boolean
-    addressPhotoPickerVisible: boolean
   }
 
 class VerifyIdentityForm extends Component <Props, State>{
@@ -96,9 +93,6 @@ class VerifyIdentityForm extends Component <Props, State>{
             addressPhoto: '',
             governmentPhotoType: {name: '', value: ''},
             addressPhotoType: {name: '', value: ''},
-            countryPickerVisible: false,
-            governmentPhotoPickerVisible: false,
-            addressPhotoPickerVisible: false,
         }
         this.submitForm = this.submitForm.bind(this)
         this.showGovernmentIssuedInfo = this.showGovernmentIssuedInfo.bind(this)
@@ -112,14 +106,8 @@ class VerifyIdentityForm extends Component <Props, State>{
         this.onPostCodeChange = this.onPostCodeChange.bind(this)
         this.onPhoneChange = this.onPhoneChange.bind(this)
         this.onDateOfBirthChange = this.onDateOfBirthChange.bind(this)
-        this.showCountryPicker = this.showCountryPicker.bind(this)
-        this.hideCountryPicker = this.hideCountryPicker.bind(this)
         this.chooseCountry = this.chooseCountry.bind(this)
-        this.showGovernmentPhotoTypePicker = this.showGovernmentPhotoTypePicker.bind(this)
-        this.hideGovernmentPhotoTypePicker = this.hideGovernmentPhotoTypePicker.bind(this)
         this.chooseGovernmentPhotoType = this.chooseGovernmentPhotoType.bind(this)
-        this.showAddressPhotoTypePicker = this.showAddressPhotoTypePicker.bind(this)
-        this.hideAddressPhotoTypePicker = this.hideAddressPhotoTypePicker.bind(this)
         this.chooseAddressPhotoType = this.chooseAddressPhotoType.bind(this)
     }
 
@@ -234,36 +222,12 @@ class VerifyIdentityForm extends Component <Props, State>{
         }
     }
 
-    showCountryPicker() {
-        this.setState({ countryPickerVisible: true })
-    }
-
-    hideCountryPicker() {
-        this.setState({ countryPickerVisible: false })
-    }
-
     chooseCountry(country) {
         this.setState({ country, generalFormError: undefined })
     }
 
-    showGovernmentPhotoTypePicker() {
-        this.setState({ governmentPhotoPickerVisible: true })
-    }
-
-    hideGovernmentPhotoTypePicker() {
-        this.setState({ governmentPhotoPickerVisible: false })
-    }
-
     chooseGovernmentPhotoType(governmentPhotoType) {
         this.setState({ governmentPhotoType, generalFormError: undefined })
-    }
-
-    showAddressPhotoTypePicker() {
-        this.setState({ addressPhotoPickerVisible: true })
-    }
-
-    hideAddressPhotoTypePicker() {
-        this.setState({ addressPhotoPickerVisible: false })
     }
 
     chooseAddressPhotoType(addressPhotoType) {
@@ -329,29 +293,29 @@ class VerifyIdentityForm extends Component <Props, State>{
         }
     }
 
-    renderPicker(choices, label: string, shouldShowPicker: boolean, selection: any, showPicker: () => void, hidePicker: () => void, changeValue: (newValue: any) => void) {
-        if (Platform.OS === 'ios') {
-            const setValue = (newValueName) => {
-                if(!newValueName) {
-                    changeValue(choices[0])
-                } else {
-                    const select = choices.find(value => value.name === newValueName)
-                    changeValue(select)
-                }
-                hidePicker()
-            }
+    showActionSheet(title, choices, onSelect) {
+        ActionSheetIOS.showActionSheetWithOptions({
+            options: choices.map(choice => choice.name),
+            title
+        },
+        (index) => {
+            onSelect(choices[index])
+        })
+    }
 
+    renderPicker(choices, label: string, selection: any, changeValue: (newValue: any) => void) {
+        if (Platform.OS === 'ios') {
             return <View>
-                <Text style={style.pickerLabel} onPress={showPicker}>{selection && selection.name ? selection.name : label}</Text>
-                <FontAwesome style={style.blackCaretDown} name={'caret-down'} onPress={showPicker}/>
-                <Modal
+                <Text style={style.pickerLabel} onPress={() => this.showActionSheet(label, choices, changeValue)}>{selection && selection.name ? selection.name : label}</Text>
+                <FontAwesome style={style.blackCaretDown} name={'caret-down'} onPress={() => this.showActionSheet(label, choices, changeValue)}/>
+                {/* <Modal
                     animationType="slide" transparent={true} visible={shouldShowPicker} onRequestClose={hidePicker}>
                     <View style={[popupStyle.modalOverlay, general.flexColumn, general.justifyEnd]}>
                     <View style={{backgroundColor:'white', paddingTop:4}}>
-                        <SpinningPicker label={label} allItems={choices.map(choice => choice.name)} selectedItem={selection.name} onPickerDone={setValue} />
+                        <SpinningPicker label={label} allItems={choices} selectedItem={selection.name} onPickerDone={setValue} />
                     </View>
                     </View>
-                </Modal>
+                </Modal> */}
             </View>
         } else {
             return <Picker
@@ -369,7 +333,7 @@ class VerifyIdentityForm extends Component <Props, State>{
         const vertOffset = (Platform.OS === 'android') ? -300 : 0
         const { firstName, lastName, street, city, state, postCode, phone, dob, country, agreement, governmentPhoto, selfiePhoto, addressPhoto,
             firstNameError, lastNameError, streetError, cityError, stateError, postCodeError, phoneError, dobError, generalFormError,
-            governmentPhotoType, addressPhotoType, governmentPhotoPickerVisible, addressPhotoPickerVisible, countryPickerVisible } = this.state
+            governmentPhotoType, addressPhotoType } = this.state
 
         const govPhoto = governmentPhoto ? { uri: governmentPhoto} : require('images/upload-cloud-outline.png')
         const selfPhoto = selfiePhoto ? { uri: selfiePhoto} : require('images/upload-cloud-outline.png')
@@ -438,8 +402,7 @@ class VerifyIdentityForm extends Component <Props, State>{
                                     />
                             </View>
                             <View style={style.pickerContainer}>
-                                {this.renderPicker(countries, lndrVerified.formFields.country, countryPickerVisible, country,
-                                    this.showCountryPicker, this.hideCountryPicker, this.chooseCountry)}
+                                {this.renderPicker(countries, lndrVerified.formFields.country, country, this.chooseCountry)}
                             </View>
                             {!!phoneError && <Text style={style.formErrorText}>{phoneError}</Text>}
                             <View style={style.textInputContainer}>
@@ -462,8 +425,7 @@ class VerifyIdentityForm extends Component <Props, State>{
                                     </Text>
                                 </View>
                                 <View style={style.photoPickerContainer}>
-                                    {this.renderPicker(governmentPhotoTypes, lndrVerified.chooseGovernmentPhoto, governmentPhotoPickerVisible, governmentPhotoType,
-                                        this.showGovernmentPhotoTypePicker, this.hideGovernmentPhotoTypePicker, this.chooseGovernmentPhotoType)}
+                                    {this.renderPicker(governmentPhotoTypes, lndrVerified.chooseGovernmentPhoto, governmentPhotoType, this.chooseGovernmentPhotoType)}
                                 </View>
                                 <TouchableHighlight onPress={() => this.getPhoto('governmentPhoto')}>
                                     <View>
@@ -490,8 +452,7 @@ class VerifyIdentityForm extends Component <Props, State>{
                                     </Text>
                                 </View>
                                 <View style={style.photoPickerContainer}>
-                                    {this.renderPicker(addressPhotoTypes, lndrVerified.chooseAddressPhoto, addressPhotoPickerVisible, addressPhotoType,
-                                    this.showAddressPhotoTypePicker, this.hideAddressPhotoTypePicker, this.chooseAddressPhotoType)}
+                                    {this.renderPicker(addressPhotoTypes, lndrVerified.chooseAddressPhoto, addressPhotoType, this.chooseAddressPhotoType)}
                                 </View>
                                 <TouchableHighlight onPress={() => this.getPhoto('addressPhoto')}>
                                     <View>
