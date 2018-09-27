@@ -9,6 +9,8 @@ export default {
 
   applicationName: `Lndr`,
   helloWorld: `Hallo wereld`,
+  noConnection: `Geen connectie`,
+  retry: `Opnieuw proberen`,
   submit: `INSTUREN`,
   next: `Volgende`,
   cancel: `Annuleer`,

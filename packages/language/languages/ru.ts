@@ -9,6 +9,8 @@ export default {
 
   applicationName: `Lndr`,
   helloWorld: `Привет мир`,
+  noConnection: `Нет соединения`,
+  retry: `снова пробовать`,
   submit: `ОТПРАВИТЬ`,
   next: `следующий`,
   cancel: `Отмена`,

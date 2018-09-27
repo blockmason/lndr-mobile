@@ -9,6 +9,8 @@ export default {
 
   applicationName: `Lndr`,
   helloWorld: `你好，世界`,
+  noConnection: `无连接`,
+  retry: `重试`,
   submit: `提交`,
   next: `下一个`,
   cancel: `取消`,

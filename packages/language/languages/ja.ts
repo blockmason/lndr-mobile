@@ -8,6 +8,8 @@ const TL = transferLimits
 export default {
   applicationName: `Lndr`,
   helloWorld: `Hello world`,
+  noConnection: `接続なし`,
+  retry: `リトライ`,
   submit: `送信`,
   next: `次`,
   cancel: `キャンセル`,

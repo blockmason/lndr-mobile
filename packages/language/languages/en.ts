@@ -3,9 +3,10 @@ import { currencySymbols, transferLimits } from 'lndr/currencies'
 const generalCommunicationError = 'There was a problem communicating with the server, please try again later.'
 
 export default {
-
   applicationName: `Lndr`,
   helloWorld: `Hello world`,
+  noConnection: `No connection`,
+  retry: `Retry`,
   submit: `SUBMIT`,
   next: `Next`,
   cancel: `Cancel`,

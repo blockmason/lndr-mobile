@@ -7,6 +7,8 @@ const generalCommunicationError = `서버에 오류가 발생하였습니다. �
 export default {
   applicationName: `Lndr`,
   helloWorld: `헬로 월드`,
+  noConnection: `연결 없음`,
+  retry: `다시 해 보다`,
   submit: `제출`,
   next: `다음`,
   cancel: `취소`,

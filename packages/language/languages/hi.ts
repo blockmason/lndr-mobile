@@ -9,6 +9,8 @@ export default {
 
   applicationName: `Lndr`,
   helloWorld: `हैलो दोस्तों`,
+  noConnection: `कोई कनेक्शन नहीं`,
+  retry: `पुन: प्रयास करें`,
   submit: `सब्मिट करें`,
   next: `अगला`,
   cancel: `रद्द करें`,

@@ -9,6 +9,8 @@ export default {
 
   applicationName: `Lndr`,
   helloWorld: `Helló Világ`,
+  noConnection: `Nincs kapcsolat`,
+  retry: `Próbálja újra`,
   submit: `BEKÜLDÉS`,
   next: `Következő`,
   cancel: `Törlés`,

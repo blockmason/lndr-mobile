@@ -9,6 +9,8 @@ export default {
 
   applicationName: `Lndr`,
   helloWorld: `Chào thế giới`,
+  noConnection: `Không có kết nối`,
+  retry: `Thử lại`,
   submit: `GỬI`,
   next: `Kế tiếp`,
   cancel: `Hủy bỏ`,

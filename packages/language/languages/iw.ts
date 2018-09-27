@@ -9,6 +9,8 @@ export default {
 
   applicationName: `Lndr`,
   helloWorld: `שלום עולם`,
+  noConnection: `אין חיבור`,
+  retry: `נסה שוב`,
   submit: `לשלוח`,
   next: `הבא`,
   cancel: `לבטל`,

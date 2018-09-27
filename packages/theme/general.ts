@@ -67,6 +67,12 @@ export default StyleSheet.create({
   smallTopMargin: {
     marginTop: 10
   },
+  mediumTopMargin: {
+    marginTop: 20
+  },
+  largeTopMargin: {
+    marginTop: 30
+  },
   smallVMargin: {
     marginVertical: 10
   },
@@ -75,6 +81,9 @@ export default StyleSheet.create({
   },
   spaceBelow: {
     paddingBottom: 40
+  },
+  justifyCenter: {
+    justifyContent: 'center'
   }
 
 } as any)
