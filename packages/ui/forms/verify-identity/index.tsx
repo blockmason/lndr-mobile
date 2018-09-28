@@ -355,8 +355,8 @@ ${lndrVerified.utility}
                     <DashboardShell text="Verify Identity" navigation={this.props.navigation} />
                     <Button close onPress={() => this.props.navigation.goBack()} />
                 </View>
-                <KeyboardAvoidingView behavior={'padding'} keyboardVerticalOffset={vertOffset} >
-                    <ScrollView keyboardShouldPersistTaps="handled">
+                <KeyboardAvoidingView style={general.whiteFlex} behavior={'padding'} keyboardVerticalOffset={vertOffset} >
+                    <ScrollView style={general.view} keyboardShouldPersistTaps="handled">
                         <View style={style.form}>
                             <View style={general.centeredColumn}>
                                 <Text style={[style.title, general.spaceBelowM, {margin: 0}]}>{lndrVerified.formMessage}</Text>

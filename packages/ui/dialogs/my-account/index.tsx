@@ -349,7 +349,7 @@ class MyAccount extends Component<Props, State> {
       <View style={[general.centeredColumn, style.spaceHorizontalL]}>
         <Text style={[style.smallText, style.spaceTop]}>{identityVerificationStatus.status ? lndrVerified.statusTitle : lndrVerified.title}</Text>
         {!!identityVerificationStatus.status && <Text style={[style.title, identityVerificationStatus.status === 'GREEN' ? style.greenAmount : style.redAmount]}>{getStatus(identityVerificationStatus.status)}</Text>}
-        {identityVerificationStatus.status !== 'GREEN' && <Button round onPress={() => {this.props.navigation.navigate('VerifyIdentityForm')}} text={lndrVerified.button} containerStyle={style.spaceTop} />}
+        {<Button round onPress={() => {this.props.navigation.navigate('VerifyIdentityForm')}} text={lndrVerified.button} containerStyle={style.spaceTop} />}
         {identityVerificationStatus.status === 'RED' && <Text style={[style.smallText, style.spaceTop]}>{lndrVerified.tryAgain}</Text>}
         <Text style={[style.smallText, style.spaceTop]}>{lndrVerified.prefix} <Text style={[style.link]} onPress={() => Linking.openURL('https://lndr.io/terms/')}>{lndrVerified.linkTitle}</Text>{lndrVerified.postfix}</Text>
       </View>
