@@ -143,10 +143,18 @@ export default StyleSheet.create({
     paddingLeft: 8,
     ...verticalMarginXS
   },
+  photoUploadContainer: {
+    borderRadius: 30,
+    borderWidth: 1,
+    borderColor: softGray,
+    ...verticalMarginXS,
+    alignItems: 'center',
+    flexDirection: 'column'
+  },
   pickerContainer: {
     width: '100%',
     paddingLeft: 8,
-    ...verticalMarginXS,
+    ...verticalMargin,
     borderRadius: 30,
     borderWidth: 1,
     borderColor: softGray

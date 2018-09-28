@@ -5,6 +5,7 @@ import ImagePicker from 'react-native-image-picker'
 import Icon from 'react-native-vector-icons/Ionicons'
 import FontAwesome from 'react-native-vector-icons/FontAwesome'
 import { connect } from 'react-redux'
+import firebase from 'react-native-firebase'
 
 import Button from 'ui/components/button'
 import DashboardShell from 'ui/components/dashboard-shell'
@@ -112,6 +113,7 @@ class VerifyIdentityForm extends Component <Props, State>{
 
     componentDidMount() {
         BackHandler.addEventListener("hardwareBackPress", this.onBackPress)
+        firebase.analytics().setCurrentScreen('verify-identity', 'VerifyIdentity')
     }
 
     componentWillUnmount() {
@@ -123,13 +125,19 @@ class VerifyIdentityForm extends Component <Props, State>{
     }
 
     showGovernmentIssuedInfo = () => {
+        const message = Platform.OS === 'ios' ? `
+${lndrVerified.passport}
+${lndrVerified.drivers}
+${lndrVerified.national}
+        ` : `
+        • ${lndrVerified.passport}
+        • ${lndrVerified.drivers}
+        • ${lndrVerified.national}
+            `
+
         Alert.alert(
             lndrVerified.idInfoHeader,
-            `
-            - ${lndrVerified.passport}
-            - ${lndrVerified.drivers}
-            - ${lndrVerified.national}
-            `,
+            message,
             [
               {text: lndrVerified.ok, onPress: () => null},
             ],
@@ -138,12 +146,17 @@ class VerifyIdentityForm extends Component <Props, State>{
     }
 
     showProofOfAddressInfo = () => {
+        const message = Platform.OS === 'ios' ? `
+${lndrVerified.bank}
+${lndrVerified.utility}
+        ` : `
+        • ${lndrVerified.bank}
+        • ${lndrVerified.utility}
+            `
+
         Alert.alert(
             lndrVerified.addressInfoHeader,
-            `
-            - ${lndrVerified.bank}
-            - ${lndrVerified.utility}
-            `,
+            message,
             [
               {text: lndrVerified.ok, onPress: () => null},
             ],
@@ -342,12 +355,12 @@ class VerifyIdentityForm extends Component <Props, State>{
                     <DashboardShell text="Verify Identity" navigation={this.props.navigation} />
                     <Button close onPress={() => this.props.navigation.goBack()} />
                 </View>
-                <ScrollView keyboardShouldPersistTaps="handled">
-                    <View style={style.form}>
-                        <View style={general.centeredColumn}>
-                            <Text style={[style.title, general.spaceBelowM, {margin: 0}]}>{lndrVerified.formMessage}</Text>
-                        </View>
-                        <KeyboardAvoidingView behavior={'padding'} keyboardVerticalOffset={vertOffset} >
+                <KeyboardAvoidingView behavior={'padding'} keyboardVerticalOffset={vertOffset} >
+                    <ScrollView keyboardShouldPersistTaps="handled">
+                        <View style={style.form}>
+                            <View style={general.centeredColumn}>
+                                <Text style={[style.title, general.spaceBelowM, {margin: 0}]}>{lndrVerified.formMessage}</Text>
+                            </View>
                             {!!firstNameError && <Text style={style.formErrorText}>{firstNameError}</Text>}
                             <View style={style.textInputContainer}>
                                 <TextInput autoCapitalize='words' style={style.textInput}
@@ -413,7 +426,7 @@ class VerifyIdentityForm extends Component <Props, State>{
                                     onChangeText={this.onDateOfBirthChange}
                                     />
                             </View>
-                            <View style={general.centeredColumn}>
+                            <View style={[general.centeredColumn, style.photoUploadContainer]}>
                                 <View style={[general.flexRow]}>
                                     <Text style={[style.label, style.photoTitle]}>{lndrVerified.upload}
                                         <Text onPress={this.showGovernmentIssuedInfo} style={[style.link]}>{lndrVerified.governmentId}</Text>
@@ -429,8 +442,8 @@ class VerifyIdentityForm extends Component <Props, State>{
                                     </View>
                                 </TouchableHighlight>
                             </View>
-                            <View style={general.centeredColumn}>
-                                <View style={[general.flexRow, style.spaceTop]}>
+                            <View style={[general.centeredColumn, style.photoUploadContainer]}>
+                                <View style={[general.flexRow]}>
                                     <Text style={[style.label, style.photoTitle]}>{lndrVerified.selfie}</Text>
                                 </View>
                                 <TouchableHighlight underlayColor={paleGray} onPress={() => this.getPhoto('selfiePhoto')}>
@@ -440,8 +453,8 @@ class VerifyIdentityForm extends Component <Props, State>{
                                     </View>
                                 </TouchableHighlight>
                             </View>
-                            <View style={general.centeredColumn}>
-                                <View style={[general.flexRow, style.spaceTop]}>
+                            <View style={[general.centeredColumn, style.photoUploadContainer]}>
+                                <View style={[general.flexRow]}>
                                     <Text style={[style.label, style.photoTitle]}>{lndrVerified.proofOfAddress}
                                         <Text onPress={this.showProofOfAddressInfo} style={style.link}>{lndrVerified.ifNotId}</Text>
                                     </Text>
@@ -457,19 +470,18 @@ class VerifyIdentityForm extends Component <Props, State>{
                                 </TouchableHighlight>
                             </View>
 
-                            <View style={[general.flexRow, style.spaceTop, {flexWrap: 'wrap'}]}>
+                            <View style={[general.flexRow, {flexWrap: 'wrap', justifyContent: 'center'}]}>
                                 <Switch value={agreement} onValueChange={this.toggleSwitch}/>
-                                <Text style={[style.label, {alignSelf: 'flex-end'}]}>{lndrVerified.agree}</Text>
+                                <Text style={[style.label, {alignSelf: 'flex-end', paddingLeft: 6}]}>{lndrVerified.agree}</Text>
                                 <Text style={[style.label, style.link, {alignSelf: 'flex-end', paddingTop: 2}]} onPress={() => Linking.openURL('https://lndr.io/terms/#privacy-policy')}>{lndrVerified.agreeLink}</Text>
                             </View>
 
                             {!!generalFormError && <Text style={style.warningText}>{generalFormError}</Text>}
 
                             <Button round fat onPress={() => this.submitForm()} style={[style.submitButton, style.spaceTop]} text={submit} disabled={disabled} />
-
-                        </KeyboardAvoidingView>
-                    </View>
-                </ScrollView>
+                        </View>
+                    </ScrollView>
+                </KeyboardAvoidingView>
             </View>
         )
     }
