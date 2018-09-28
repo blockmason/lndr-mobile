@@ -1,6 +1,6 @@
 import React, { Component } from 'react'
 import { View, Text, Switch, ScrollView, TextInput, Alert, BackHandler, KeyboardAvoidingView, Platform, Picker, Image, TouchableHighlight,
-    Linking, Modal, ActionSheetIOS } from 'react-native'
+    Linking, ActionSheetIOS } from 'react-native'
 import ImagePicker from 'react-native-image-picker'
 import Icon from 'react-native-vector-icons/Ionicons'
 import FontAwesome from 'react-native-vector-icons/FontAwesome'
@@ -9,7 +9,6 @@ import { connect } from 'react-redux'
 import Button from 'ui/components/button'
 import DashboardShell from 'ui/components/dashboard-shell'
 import { LoadingContext } from 'ui/components/loading'
-import SpinningPicker from 'ui/components/spinning-picker'
 
 import { setKYCImage, submitKYC, kycToastMessage } from 'actions'
 import { getUser } from 'reducers/app'
@@ -17,14 +16,14 @@ import { getResetAction } from 'reducers/nav'
 
 import style from 'theme/form'
 import general from 'theme/general'
-import popupStyle from 'theme/popup'
+import { paleGray } from 'theme/include/colors'
 
 import { UserData, IdentityVerificationData } from 'lndr/user'
 import KYC from 'lndr/kyc'
 import { dobFormat } from 'lndr/format'
 
 import language from 'language'
-const { submit, lndrVerified, countries } = language
+const { submit, lndrVerified, countries, cancel } = language
 
 const loadingContext = new LoadingContext()
 
@@ -295,10 +294,14 @@ class VerifyIdentityForm extends Component <Props, State>{
 
     showActionSheet(title, choices, onSelect) {
         ActionSheetIOS.showActionSheetWithOptions({
-            options: choices.map(choice => choice.name),
-            title
+            options: choices.map(choice => choice.name).concat(cancel),
+            title,
+            cancelButtonIndex: choices.length
         },
         (index) => {
+            if (index === choices.length) {
+                return
+            }
             onSelect(choices[index])
         })
     }
@@ -308,14 +311,6 @@ class VerifyIdentityForm extends Component <Props, State>{
             return <View>
                 <Text style={style.pickerLabel} onPress={() => this.showActionSheet(label, choices, changeValue)}>{selection && selection.name ? selection.name : label}</Text>
                 <FontAwesome style={style.blackCaretDown} name={'caret-down'} onPress={() => this.showActionSheet(label, choices, changeValue)}/>
-                {/* <Modal
-                    animationType="slide" transparent={true} visible={shouldShowPicker} onRequestClose={hidePicker}>
-                    <View style={[popupStyle.modalOverlay, general.flexColumn, general.justifyEnd]}>
-                    <View style={{backgroundColor:'white', paddingTop:4}}>
-                        <SpinningPicker label={label} allItems={choices} selectedItem={selection.name} onPickerDone={setValue} />
-                    </View>
-                    </View>
-                </Modal> */}
             </View>
         } else {
             return <Picker
@@ -330,7 +325,7 @@ class VerifyIdentityForm extends Component <Props, State>{
     }
 
     render() {
-        const vertOffset = (Platform.OS === 'android') ? -300 : 0
+        const vertOffset = Platform.OS === 'android' ? -900 : -600
         const { firstName, lastName, street, city, state, postCode, phone, dob, country, agreement, governmentPhoto, selfiePhoto, addressPhoto,
             firstNameError, lastNameError, streetError, cityError, stateError, postCodeError, phoneError, dobError, generalFormError,
             governmentPhotoType, addressPhotoType } = this.state
@@ -352,7 +347,7 @@ class VerifyIdentityForm extends Component <Props, State>{
                         <View style={general.centeredColumn}>
                             <Text style={[style.title, general.spaceBelowM, {margin: 0}]}>{lndrVerified.formMessage}</Text>
                         </View>
-                        <KeyboardAvoidingView behavior={Platform.OS === 'ios' ? 'position' : 'padding'} keyboardVerticalOffset={vertOffset} >
+                        <KeyboardAvoidingView behavior={'padding'} keyboardVerticalOffset={vertOffset} >
                             {!!firstNameError && <Text style={style.formErrorText}>{firstNameError}</Text>}
                             <View style={style.textInputContainer}>
                                 <TextInput autoCapitalize='words' style={style.textInput}
@@ -427,7 +422,7 @@ class VerifyIdentityForm extends Component <Props, State>{
                                 <View style={style.photoPickerContainer}>
                                     {this.renderPicker(governmentPhotoTypes, lndrVerified.chooseGovernmentPhoto, governmentPhotoType, this.chooseGovernmentPhotoType)}
                                 </View>
-                                <TouchableHighlight onPress={() => this.getPhoto('governmentPhoto')}>
+                                <TouchableHighlight underlayColor={paleGray} onPress={() => this.getPhoto('governmentPhoto')}>
                                     <View>
                                         <Icon style={[style.cameraImage, style.kycImageIcon]} name="md-camera" />
                                         <Image source={govPhoto} style={style.kycImage}/>
@@ -438,7 +433,7 @@ class VerifyIdentityForm extends Component <Props, State>{
                                 <View style={[general.flexRow, style.spaceTop]}>
                                     <Text style={[style.label, style.photoTitle]}>{lndrVerified.selfie}</Text>
                                 </View>
-                                <TouchableHighlight onPress={() => this.getPhoto('selfiePhoto')}>
+                                <TouchableHighlight underlayColor={paleGray} onPress={() => this.getPhoto('selfiePhoto')}>
                                     <View>
                                         <Icon style={[style.cameraImage, style.kycImageIcon]} name="md-camera" />
                                         <Image source={selfPhoto} style={style.kycImage}/>
@@ -454,7 +449,7 @@ class VerifyIdentityForm extends Component <Props, State>{
                                 <View style={style.photoPickerContainer}>
                                     {this.renderPicker(addressPhotoTypes, lndrVerified.chooseAddressPhoto, addressPhotoType, this.chooseAddressPhotoType)}
                                 </View>
-                                <TouchableHighlight onPress={() => this.getPhoto('addressPhoto')}>
+                                <TouchableHighlight underlayColor={paleGray} onPress={() => this.getPhoto('addressPhoto')}>
                                     <View>
                                         <Icon style={[style.cameraImage, style.kycImageIcon]} name="md-camera" />
                                         <Image source={addrPhoto} style={style.kycImage}/>
