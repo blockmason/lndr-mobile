@@ -338,7 +338,7 @@ ${lndrVerified.utility}
     }
 
     render() {
-        const vertOffset = Platform.OS === 'android' ? -600 : -300
+        const vertOffset = Platform.OS === 'android' ? -300 : 0
         const { firstName, lastName, street, city, state, postCode, phone, dob, country, agreement, governmentPhoto, selfiePhoto, addressPhoto,
             firstNameError, lastNameError, streetError, cityError, stateError, postCodeError, phoneError, dobError, generalFormError,
             governmentPhotoType, addressPhotoType } = this.state
