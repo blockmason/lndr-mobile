@@ -380,6 +380,7 @@ export default StyleSheet.create({
   },
   photoTitle: {
     marginTop: 10,
-    fontWeight: 'bold'
+    fontWeight: 'bold',
+    textAlign: 'center'
   }
 } as any)
