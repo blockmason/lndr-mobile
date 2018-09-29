@@ -373,7 +373,7 @@ export default {
     eth: `Eth kullanarak ödeşin`,
     paypal: `PayPal kullanarak ödeşin`,
     nonPayment: `Bir ödeme kaydı oluşturun`,
-    select: `Seç Uzlaşma Tipi`,
+    select: `Uzlaşma tipi seç`,
   },
 
   accountViewLanguage: {
