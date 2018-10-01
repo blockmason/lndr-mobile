@@ -103,6 +103,7 @@ export default {
     chooseGovernmentPhoto: `政府IDの写真を選択してください`,
     chooseSelfiePhoto: `自分撮り写真を選択します。`,
     chooseAddressPhoto: `アドレス・写真の証明を選択してください`,
+    emailRequired: `あなたは、あなたの身元を確認するために電子メールを必要とする、"メールアドレスを変える" をクリックしてください`,
     error: generalCommunicationError,
     formFields: {
       firstName: `ファーストネーム`,
@@ -218,8 +219,8 @@ export default {
       `ペイパルを接続します`,
       `主要通貨を変更`,
       `追加機能のロックを解除`,
-      `PINを変える`,
       `メールアドレスを変える`,
+      `PINを変える`,
       `タイムアウトする時間を変える`,
       `復元用の単語（ニューモニック）`,
       `通知`,

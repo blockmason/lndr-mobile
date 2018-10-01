@@ -104,6 +104,7 @@ export default {
     chooseGovernmentPhoto: `Válassza kormány ID Photo`,
     chooseSelfiePhoto: `Válasszon szelfi Photo`,
     chooseAddressPhoto: `Válasszon igazolása Cím Photo`,
+    emailRequired: `Szükség van egy e-mailt, hogy igazolja személyazonosságát, küldjön "Email Módosítása"`,
     error: generalCommunicationError,
     formFields: {
       firstName: `Keresztnév`,
@@ -219,8 +220,8 @@ export default {
       `Engedélyezze a PayPalt`,
       `Megváltoztathatja az elsődleges pénzneme`,
       `Kinyit További jellemzők`,
-      `PIN-kód Módosítása`,
       `Email Módosítása`,
+      `PIN-kód Módosítása`,
       `Időtúllépés Zárolás Módosítása`,
       `Emlékeztető`,
       `Értesítések`,

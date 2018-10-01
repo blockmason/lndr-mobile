@@ -104,6 +104,7 @@ export default {
     chooseGovernmentPhoto: `Välj Government ID-foto`,
     chooseSelfiePhoto: `Välj selfie Foto`,
     chooseAddressPhoto: `Välj bevis på adress foto`,
+    emailRequired: `Du behöver en e-post för att verifiera din identitet, klicka på "Ändra e-mail"`,
     error: generalCommunicationError,
     formFields: {
       firstName: `Förnamn`,
@@ -219,8 +220,8 @@ export default {
       `Aktivera PayPal`,
       `Ändra primära valuta`,
       `Lås Ytterligare funktioner`,
-      `Ändra PIN-kod`,
       `Ändra e-mail`,
+      `Ändra PIN-kod`,
       `Ändra Automatisk Utloggning`,
       `Minneskod`,
       `Aviseringar`,

@@ -104,6 +104,7 @@ export default {
     chooseGovernmentPhoto: `Velg Regjeringen ID Photo`,
     chooseSelfiePhoto: `Velg selfie Photo`,
     chooseAddressPhoto: `Velg bevis på adresse Photo`,
+    emailRequired: `Du trenger en e-post for å bekrefte identiteten, klikker du på "Endre e-post"`,
     error: generalCommunicationError,
     formFields: {
       firstName: `Fornavn`,
@@ -219,8 +220,8 @@ export default {
       `Aktiver PayPal`,
       `Endre Primær Valuta`,
       `Lås opp Tilleggsfunksjoner`,
-      `Endre PIN-kode`,
       `Endre e-post`,
+      `Endre PIN-kode`,
       `Endre Lock Timeout`,
       `Mnemonic`,
       `Varsler`,

@@ -104,6 +104,7 @@ export default {
     chooseGovernmentPhoto: `Chọn Chính phủ ID Ảnh`,
     chooseSelfiePhoto: `Chọn chụp ảnh tự sướng Ảnh`,
     chooseAddressPhoto: `Chọn Bằng chứng về Địa chỉ Ảnh`,
+    emailRequired: `Bạn cần một email để xác minh danh tính của bạn, hãy nhấp vào "Thay đổi Email"`,
     error: generalCommunicationError,
     formFields: {
       firstName: `Tên đầu tiên`,
@@ -219,8 +220,8 @@ export default {
       `Bật PayPal`,
       `Thay đổi tiền tệ chính`,
       `Mở khóa tính năng bổ sung`,
-      `Thay đổi mã PIN`,
       `Thay đổi Email`,
+      `Thay đổi mã PIN`,
       `Thay đổi Thời gian Timeout`,
       `Gợi ý`,
       `Thông báo`,

@@ -26,7 +26,7 @@
     "react": "^16.0.0",
     "react-native": "^0.55.4",
     "react-native-action-button": "^2.8.1",
-    "react-native-actionsheet": "^2.3.0",
+    "react-native-actionsheet": "^2.4.2",
     "react-native-blur": "^3.2.2",
     "react-native-crypto": "^2.1.1",
     "react-native-dropdownalert": "^3.1.2",

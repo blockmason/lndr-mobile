@@ -104,6 +104,7 @@ export default {
     chooseGovernmentPhoto: `Pilih ID Kerajaan Photo`,
     chooseSelfiePhoto: `Pilih Selfie Photo`,
     chooseAddressPhoto: `Pilih Bukti Alamat Photo`,
+    emailRequired: `Anda perlu e-mel untuk mengesahkan identiti anda, sila klik pada "Tukar E-mel"`,
     error: generalCommunicationError,
     formFields: {
       firstName: `Nama pertama`,
@@ -219,8 +220,8 @@ export default {
       `Membolehkan PayPal`,
       `Tukar Mata Wang Utama`,
       `Membuka kunci ciri Tambahan`,
-      `Tukar PIN`,
       `Tukar E-mel`,
+      `Tukar PIN`,
       `Tukar Masa Senggang Kunci`,
       `Mnemonik`,
       `Pemberitahuan`,

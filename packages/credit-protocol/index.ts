@@ -489,7 +489,7 @@ export default class CreditProtocol {
     const hash = bufferToHex(ethUtil.sha3(hashBuffer))
     const identitySignature = this.serverSign(hash, privateKeyBuffer)
     kyc.identitySignature = identitySignature
-    console.log('ABOUT TO SEND ', kyc.info.idDocs[0].file)
+    console.log('ABOUT TO SEND ', kyc)
     return this.client.post('/verify_identity', kyc)
   }
 

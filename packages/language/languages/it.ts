@@ -104,6 +104,7 @@ export default {
     chooseGovernmentPhoto: `Scegli ID Governo Foto`,
     chooseSelfiePhoto: `Scegli selfie Foto`,
     chooseAddressPhoto: `Scegli Prova di indirizzo Photo`,
+    emailRequired: `Hai bisogno di una e-mail per verificare la vostra identità, cliccate su "Cambia email"`,
     error: generalCommunicationError,
     formFields: {
       firstName: `Nome di battesimo`,
@@ -219,8 +220,8 @@ export default {
       `Abilita PayPal`,
       `Cambia primario valuta`,
       `Sblocca Caratteristiche aggiuntive`,
-      `Modifica PIN`,
       `Cambia email`,
+      `Modifica PIN`,
       `Timeout blocco modifiche`,
       `Mnemonico`,
       `notifiche`,

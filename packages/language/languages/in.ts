@@ -104,6 +104,7 @@ export default {
     chooseGovernmentPhoto: `Pilih Foto Pemerintah ID`,
     chooseSelfiePhoto: `Pilih Selfie Foto`,
     chooseAddressPhoto: `Pilih Bukti Alamat Photo`,
+    emailRequired: `Anda memerlukan email untuk memverifikasi identitas Anda, silakan klik "Ubah Email"`,
     error: generalCommunicationError,
     formFields: {
       firstName: `Nama depan`,
@@ -219,8 +220,8 @@ export default {
       `Aktifkan PayPal`,
       `Ubah Mata Uang Primer`,
       `Aktifkan Fitur Tambahan`,
-      `Ubah PIN`,
       `Ubah Email`,
+      `Ubah PIN`,
       `Ubah Waktu Kunci Layar`,
       `Frasa Pemulih Akun`,
       `Pemberitahuan`,

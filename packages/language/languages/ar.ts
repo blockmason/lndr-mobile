@@ -104,6 +104,7 @@ export default {
     chooseGovernmentPhoto: `اختيار الحكومة ID صور`,
     chooseSelfiePhoto: `اختيار صورة شخصية صور`,
     chooseAddressPhoto: `اختيار إثبات عنوان صور`,
+    emailRequired: `تحتاج إلى البريد الإلكتروني للتحقق من هويتك، يرجى الضغط على  "تغيير البريد الإلكتروني `,
     error: generalCommunicationError,
     formFields: {
       firstName: `الاسم الاول`,
@@ -219,8 +220,8 @@ export default {
       `تمكين باي بال`,
       `تغيير العملات الرئيسية`,
       `فتح ميزات إضافية`,
-      `تغيير رمز PIN‏`,
       `تغيير البريد الإلكتروني`,
+      `تغيير رمز PIN‏`,
       `تغيير مهلة القفل`,
       `استذكار`,
       `إشعارات`,

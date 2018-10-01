@@ -100,6 +100,7 @@ export default {
     chooseGovernmentPhoto: `Choose Government ID Photo`,
     chooseSelfiePhoto: `Choose Selfie Photo`,
     chooseAddressPhoto: `Choose Proof of Address Photo`,
+    emailRequired: `You need an email to verify your identity, please click on "Change Email" below.`,
     error: generalCommunicationError,
     formFields: {
       firstName: `First Name`,
@@ -215,8 +216,8 @@ export default {
       `Receive PayPal Payments`,
       `Change Primary Currency`,
       `Unlock Additional Features`,
-      `Change PIN`,
       `Change Email`,
+      `Change PIN`,
       `Change Lock Timeout`,
       `Mnemonic`,
       `Notifications`,

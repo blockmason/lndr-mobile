@@ -104,6 +104,7 @@ export default {
     chooseGovernmentPhoto: `Vyberte si číslo občanského průkazu, fotografie`,
     chooseSelfiePhoto: `Zvolit selfie Photo`,
     chooseAddressPhoto: `Vyberte si doklad o bydlišti fotka`,
+    emailRequired: `Potřebujete e-mail za účelem ověření vaší identity, klikněte na "Změnit email"`,
     error: generalCommunicationError,
     formFields: {
       firstName: `Jméno`,
@@ -219,8 +220,8 @@ export default {
       `Umožnit PayPal`,
       `Změnit hlavní měně`,
       `Odemknout další funkce`,
-      `Změna PIN`,
       `Změnit email`,
+      `Změna PIN`,
       `Změna zámku Timeout`,
       `Mnemo`,
       `Poznámka`,

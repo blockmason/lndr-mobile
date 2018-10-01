@@ -104,6 +104,7 @@ export default {
     chooseGovernmentPhoto: `选择政府证件照片`,
     chooseSelfiePhoto: `选择自拍照片`,
     chooseAddressPhoto: `选择地址的照片证明`,
+    emailRequired: `你需要一个电子邮件，以确认您的身份，请点击 "更改电子邮件"`,
     error: generalCommunicationError,
     formFields: {
       firstName: `名字`,
@@ -219,8 +220,8 @@ export default {
       `启用PayPal`,
       `更改默认主要货币`,
       `解锁附加功能`,
-      `更改密码`,
       `更改电子邮件`,
+      `更改密码`,
       `更改超时锁定时间设置`,
       `助记符`,
       `通知`,

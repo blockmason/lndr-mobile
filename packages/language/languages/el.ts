@@ -104,6 +104,7 @@ export default {
     chooseGovernmentPhoto: `Επιλέξτε κυβέρνηση ID φωτογραφίας`,
     chooseSelfiePhoto: `Επιλέξτε selfie Φωτογραφία`,
     chooseAddressPhoto: `Επιλέξτε Απόδειξη Διεύθυνση Φωτογραφίας`,
+    emailRequired: `Χρειάζεται ένα e-mail για να επιβεβαιώσετε την ταυτότητά σας, κάντε κλικ στο "Αλλαγή Email"`,
     error: generalCommunicationError,
     formFields: {
       firstName: `Ονομα`,
@@ -219,8 +220,8 @@ export default {
       `Ενεργοποίηση PayPal`,
       `Αλλαγή Πρωτοβάθμια νομίσματος`,
       `Ξεκλείδωμα επιπλέον λειτουργίες`,
-      `Αλλαγή PIN`,
       `Αλλαγή Email`,
+      `Αλλαγή PIN`,
       `Αλλαγή Λήξης Κλειδώματος`,
       `Μνημονικό`,
       `Ειδοποιήσεις`,

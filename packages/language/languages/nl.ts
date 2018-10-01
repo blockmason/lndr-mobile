@@ -104,6 +104,7 @@ export default {
     chooseGovernmentPhoto: `Kies regering ID Photo`,
     chooseSelfiePhoto: `Kies selfie Photo`,
     chooseAddressPhoto: `Kies Bewijs van Adres Photo`,
+    emailRequired: `Je hebt een e-mail om uw identiteit te verifiëren, klikt u op "Wijzig e-mailadres"`,
     error: generalCommunicationError,
     formFields: {
       firstName: `Voornaam`,
@@ -219,8 +220,8 @@ export default {
       `Inschakelen PayPal`,
       `Wijzig primaire valuta`,
       `Unlock Extra functies`,
-      `Wijzig pincode`,
       `Wijzig e-mailadres`,
+      `Wijzig pincode`,
       `Wijzig Lock Timeout`,
       `Geheugensteun  `,
       `Notificaties`,

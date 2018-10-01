@@ -1,6 +1,7 @@
 import React, { Component } from 'react'
 import { View, Text, Switch, ScrollView, TextInput, Alert, BackHandler, KeyboardAvoidingView, Platform, Picker, Image, TouchableHighlight,
     Linking, ActionSheetIOS } from 'react-native'
+import ActionSheet from 'react-native-actionsheet'
 import ImagePicker from 'react-native-image-picker'
 import Icon from 'react-native-vector-icons/Ionicons'
 import FontAwesome from 'react-native-vector-icons/FontAwesome'
@@ -9,7 +10,7 @@ import firebase from 'react-native-firebase'
 
 import Button from 'ui/components/button'
 import DashboardShell from 'ui/components/dashboard-shell'
-import { LoadingContext } from 'ui/components/loading'
+import Loading, { LoadingContext } from 'ui/components/loading'
 
 import { setKYCImage, submitKYC, kycToastMessage } from 'actions'
 import { getUser } from 'reducers/app'
@@ -71,9 +72,12 @@ interface State {
     phoneError?: string
     dobError?: string
     generalFormError?: string
+    submitted: boolean
   }
 
 class VerifyIdentityForm extends Component <Props, State>{
+    addressPhotoTypeActionSheet: any
+    governmentPhotoTypeActionSheet: any
 
     constructor(props) {
         super(props)
@@ -93,6 +97,7 @@ class VerifyIdentityForm extends Component <Props, State>{
             addressPhoto: '',
             governmentPhotoType: {name: '', value: ''},
             addressPhotoType: {name: '', value: ''},
+            submitted: false,
         }
         this.submitForm = this.submitForm.bind(this)
         this.showGovernmentIssuedInfo = this.showGovernmentIssuedInfo.bind(this)
@@ -240,19 +245,27 @@ ${lndrVerified.utility}
 
     chooseGovernmentPhotoType(governmentPhotoType) {
         this.setState({ governmentPhotoType, generalFormError: undefined })
+        this.getPhoto('governmentPhoto')
     }
 
     chooseAddressPhotoType(addressPhotoType) {
         this.setState({ addressPhotoType, generalFormError: undefined })
+        this.getPhoto('addressPhoto')
     }
 
     async getPhoto(type: string) {
         let title
         if (type === 'governmentPhoto') {
+            if (!this.state.governmentPhotoType.name) {
+                return this.governmentPhotoTypeActionSheet.show()
+            }
             title = lndrVerified.chooseGovernmentPhoto
         } else if (type === 'selfiePhoto') {
             title = lndrVerified.chooseSelfiePhoto
         } else {
+            if (!this.state.addressPhotoType.name) {
+                return this.addressPhotoTypeActionSheet.show()
+            }
             title = lndrVerified.chooseAddressPhoto
         }
         let options = {
@@ -262,8 +275,18 @@ ${lndrVerified.utility}
         ImagePicker.showImagePicker(options, async (response) => {
             if (response.didCancel) {
                 console.log('User cancelled image picker')
+                if (type === 'governmentPhoto') {
+                    this.setState({ governmentPhotoType: '' })
+                } else if (type === 'addressPhoto') {
+                    this.setState({ addressPhotoType: '' })
+                }
             } else if (response.error) {
                 console.log('ImagePicker Error: ', response.error)
+                if (type === 'governmentPhoto') {
+                    this.setState({ governmentPhotoType: '' })
+                } else if (type === 'addressPhoto') {
+                    this.setState({ addressPhotoType: '' })
+                }
             } else {
                 const { uri, data } = response
                 const photo = await setKYCImage(uri, data)
@@ -293,12 +316,15 @@ ${lndrVerified.utility}
                 governmentPhotoType: governmentPhotoType.code, addressPhotoType: addressPhotoType.code, email, address })
             
             try {
+                this.setState({ submitted: true })
+
                 await loadingContext.wrap(this.props.submitKYC(data))
                 const resetAction = getResetAction( { routeName:'Confirmation', params: { type: 'kycSuccess' } } )
                 this.props.navigation.dispatch(resetAction)
             } catch(e) {
                 console.log('KYC FAILED: ', e)
                 this.props.kycToastMessage(false)
+                this.setState({ submitted: false })
             }
         } else {
             this.setState({ generalFormError: lndrVerified.formErrors.general })
@@ -337,17 +363,31 @@ ${lndrVerified.utility}
         }
     }
 
+    renderActionSheet(choices, label: string, type: string, changeValue: (newValue: any) => void) {
+        return <ActionSheet
+            ref={o => this[type] = o}
+            title={label}
+            options={choices.map(choice => choice.name).concat(cancel)}
+            cancelButtonIndex={choices.length}
+            onPress={(index) => {
+            if (index === choices.length) {
+                return
+            }
+                changeValue(choices[index])
+            }} />
+    }
+
     render() {
         const vertOffset = Platform.OS === 'android' ? -300 : 0
         const { firstName, lastName, street, city, state, postCode, phone, dob, country, agreement, governmentPhoto, selfiePhoto, addressPhoto,
             firstNameError, lastNameError, streetError, cityError, stateError, postCodeError, phoneError, dobError, generalFormError,
-            governmentPhotoType, addressPhotoType } = this.state
+            governmentPhotoType, addressPhotoType, submitted } = this.state
 
         const govPhoto = governmentPhoto ? { uri: governmentPhoto} : require('images/upload-cloud-outline.png')
         const selfPhoto = selfiePhoto ? { uri: selfiePhoto} : require('images/upload-cloud-outline.png')
         const addrPhoto = addressPhoto ? { uri: addressPhoto} : require('images/upload-cloud-outline.png')
 
-        const disabled = !(firstName && lastName && street && city && state && postCode && phone && governmentPhoto && selfiePhoto && addressPhoto && agreement && governmentPhotoType.code && addressPhotoType.code)
+        const disabled = submitted || !(firstName && lastName && street && city && state && postCode && phone && governmentPhoto && selfiePhoto && addressPhoto && agreement && governmentPhotoType.code && addressPhotoType.code)
 
         return(
             <View style={general.whiteFlex}>
@@ -433,7 +473,7 @@ ${lndrVerified.utility}
                                     </Text>
                                 </View>
                                 <View style={style.photoPickerContainer}>
-                                    {this.renderPicker(governmentPhotoTypes, lndrVerified.chooseGovernmentPhoto, governmentPhotoType, this.chooseGovernmentPhotoType)}
+                                    {this.renderActionSheet(governmentPhotoTypes, lndrVerified.chooseGovernmentPhoto, 'governmentPhotoTypeActionSheet', this.chooseGovernmentPhotoType)}
                                 </View>
                                 <TouchableHighlight underlayColor={paleGray} onPress={() => this.getPhoto('governmentPhoto')}>
                                     <View>
@@ -460,7 +500,7 @@ ${lndrVerified.utility}
                                     </Text>
                                 </View>
                                 <View style={style.photoPickerContainer}>
-                                    {this.renderPicker(addressPhotoTypes, lndrVerified.chooseAddressPhoto, addressPhotoType, this.chooseAddressPhotoType)}
+                                    {this.renderActionSheet(addressPhotoTypes, lndrVerified.chooseAddressPhoto, 'addressPhotoTypeActionSheet', this.chooseAddressPhotoType)}
                                 </View>
                                 <TouchableHighlight underlayColor={paleGray} onPress={() => this.getPhoto('addressPhoto')}>
                                     <View>
@@ -478,7 +518,10 @@ ${lndrVerified.utility}
 
                             {!!generalFormError && <Text style={style.warningText}>{generalFormError}</Text>}
 
+                            <View>
+                                <Loading context={loadingContext} />
                             <Button round fat onPress={() => this.submitForm()} style={[style.submitButton, style.spaceTop]} text={submit} disabled={disabled} />
+                        </View>
                         </View>
                     </ScrollView>
                 </KeyboardAvoidingView>

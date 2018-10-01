@@ -905,7 +905,7 @@ export const setKYCImage = async (imageURI: string, imageData: string) => {
 export const submitKYC = (kycData: any) => {
   return async (_dispatch, getState) => {
     const { privateKeyBuffer } = getUser(getState())()
-    return creditProtocol.submitKYC(kycData, privateKeyBuffer)
+    await creditProtocol.submitKYC(kycData, privateKeyBuffer)
   }
 }
 

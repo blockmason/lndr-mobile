@@ -104,6 +104,7 @@ export default {
     chooseGovernmentPhoto: `בחר תמונה מזהה הממשלה`,
     chooseSelfiePhoto: `בחר תמונה הסלפי`,
     chooseAddressPhoto: `בחר הוכחת תמונת כתובת`,
+    emailRequired: `אתה צריך אימייל כדי לאמת את זהותך, אנא לחץ על  "לדנות דוא"ל"`,
     error: generalCommunicationError,
     formFields: {
       firstName: `שם פרטי`,
@@ -219,8 +220,8 @@ export default {
       `הפוך את PayPal`,
       `שינוי מטבע ראשי`,
       `נעילת תכונות נוספות`,
-      `לשנות PIN`,
       `לדנות דוא"ל`,
+      `לשנות PIN`,
       `לשנות פסק זמן נעילה`,
       `רמז`,
       `התראות`,

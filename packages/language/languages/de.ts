@@ -104,6 +104,7 @@ export default {
     chooseGovernmentPhoto: `Wählen Sie Government ID Foto`,
     chooseSelfiePhoto: `Wählen Sie Selfie Foto`,
     chooseAddressPhoto: `Wählen Sie einen Adressnachweis Foto`,
+    emailRequired: `Sie müssen eine E-Mail Ihre Identität zu überprüfen, klicken Sie bitte auf "E-Mail-Adresse ändern"`,
     error: generalCommunicationError,
     formFields: {
       firstName: `Vorname`,
@@ -219,8 +220,8 @@ export default {
       `Aktivieren Sie PayPal`,
       `Hauptwährung ändern`,
       `Schalte Zusätzliche Funktionen`,
-      `PIN ändern`,
       `E-Mail-Adresse ändern`,
+      `PIN ändern`,
       `Lock Timeout ändern`,
       `Mnemonic`,
       `Benachrichtigungen`,

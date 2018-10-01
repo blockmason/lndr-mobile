@@ -104,6 +104,7 @@ export default {
     chooseGovernmentPhoto: `Valitse hallitus ID-kuva`,
     chooseSelfiePhoto: `Valitse Selfie Photo`,
     chooseAddressPhoto: `Valitse todiste osoitteesta Photo`,
+    emailRequired: `Tarvitset sähköpostia henkilöllisyytesi vahvistamiseksi, klikkaa "Muuta sähköpostiosoitteesi"`,
     error: generalCommunicationError,
     formFields: {
       firstName: `Etunimi`,
@@ -219,8 +220,8 @@ export default {
       `Ota PayPal`,
       `Muuta päävaluutta`,
       `Lukituksen Lisäominaisuudet`,
-      `Muuta PIN-koodisi`,
       `Muuta sähköpostiosoitteesi`,
+      `Muuta PIN-koodisi`,
       `Muuta lukituksen aika-asetukset`,
       `Muistisääntö`,
       `Ilmoitukset`,

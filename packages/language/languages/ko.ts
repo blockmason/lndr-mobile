@@ -102,6 +102,7 @@ export default {
     chooseGovernmentPhoto: `정부 ID 사진을 선택`,
     chooseSelfiePhoto: `셀카 사진을 선택`,
     chooseAddressPhoto: `주소 사진의 증거를 선택`,
+    emailRequired: `당신은 "이메일 주소"를 클릭하십시오, 사용자의 신원을 확인하기 위해 이메일을 필요 `,
     error: generalCommunicationError,
     formFields: {
       firstName: `이름`,
@@ -217,8 +218,8 @@ export default {
       `차 환율 변경`,
       `페이팔 사용`,
       `추가 기능을 잠금 해제`,
-      `비밀번호 변경`,
       `이메일 주소`,
+      `비밀번호 변경`,
       `잠금 제한 시간 변경`,
       `연상기호`,
       `알림`,

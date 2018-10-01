@@ -104,6 +104,7 @@ export default {
     chooseGovernmentPhoto: `Elegir la identificación del Gobierno de fotos`,
     chooseSelfiePhoto: `Elija selfie fotos`,
     chooseAddressPhoto: `Elija Prueba de Dirección de fotos`,
+    emailRequired: `Es necesario un correo electrónico para verificar su identidad, por favor haga clic en "Cambiar Correo Electrónico"`,
     error: generalCommunicationError,
     formFields: {
       firstName: `Nombre de pila`,
@@ -219,8 +220,8 @@ export default {
       `Activar PayPal`,
       `Cambiar divisa principal`,
       `Características adicionales desbloquear`,
-      `Cambiar PIN`,
       `Cambiar Correo Electrónico`,
+      `Cambiar PIN`,
       `Cambiar Tiempo de espera para bloqueo`,
       `Recordatorio de Cuenta`,
       `Notificaciones`,

@@ -104,6 +104,7 @@ export default {
     chooseGovernmentPhoto: `Vælg Regeringen ID Foto`,
     chooseSelfiePhoto: `Vælg selfie Foto`,
     chooseAddressPhoto: `Vælg Bevis for Adresse Foto`,
+    emailRequired: `Du har brug for en e-mail for at bekræfte din identitet, skal du klikke på "Skift e-mail"`,
     error: generalCommunicationError,
     formFields: {
       firstName: `Fornavn`,
@@ -219,8 +220,8 @@ export default {
       `Aktiver PayPal`,
       `Skift primære valuta`,
       `Lås Ekstra funktioner`,
-      `Skift PIN`,
       `Skift e-mail`,
+      `Skift PIN`,
       `Skift låst timeout`,
       `Mnemonic`,
       `Underretninger`,

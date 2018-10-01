@@ -104,6 +104,7 @@ export default {
     chooseGovernmentPhoto: `Resmi Kimlik Fotoğrafı Seç`,
     chooseSelfiePhoto: `Selfie'nin Fotoğrafı Seç`,
     chooseAddressPhoto: `Adres Fotoğraf Belgesi seç`,
+    emailRequired: `Sen "E-postanı Değiştir", lütfen kimliğinizi doğrulamak için bir e-posta gereken`,
     error: generalCommunicationError,
     formFields: {
       firstName: `İsim`,
@@ -219,8 +220,8 @@ export default {
       `Paypal etkinleştirme`,
       `Birincil Para değiştirme`,
       `Ek Özellikleri kilidini`,
-      `Pin'i Değiştir`,
       `E-postanı Değiştir`,
+      `Pin'i Değiştir`,
       `Kilitleme Süresini Değiştir`,
       `Anımsatıcı Kod`,
       `Bildirimler`,

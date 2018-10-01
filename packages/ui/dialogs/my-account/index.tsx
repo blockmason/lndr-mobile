@@ -345,11 +345,15 @@ class MyAccount extends Component<Props, State> {
       }
     }
 
+    const centerMessage = this.props.user.email ?
+      <Button round onPress={() => {this.props.navigation.navigate('VerifyIdentityForm')}} text={lndrVerified.button} containerStyle={style.spaceTop} /> :
+      <Text style={[style.smallText, style.spaceTop]}>{lndrVerified.emailRequired}</Text>
+
     return (
       <View style={[general.centeredColumn, style.spaceHorizontalL]}>
         <Text style={[style.smallText, style.spaceTop]}>{identityVerificationStatus.status ? lndrVerified.statusTitle : lndrVerified.title}</Text>
         {!!identityVerificationStatus.status && <Text style={[style.title, identityVerificationStatus.status === 'GREEN' ? style.greenAmount : style.redAmount]}>{getStatus(identityVerificationStatus.status)}</Text>}
-        {<Button round onPress={() => {this.props.navigation.navigate('VerifyIdentityForm')}} text={lndrVerified.button} containerStyle={style.spaceTop} />}
+        {identityVerificationStatus.status !== 'GREEN' && centerMessage}
         {identityVerificationStatus.status === 'RED' && <Text style={[style.smallText, style.spaceTop]}>{lndrVerified.tryAgain}</Text>}
         <Text style={[style.smallText, style.spaceTop]}>{lndrVerified.prefix} <Text style={[style.link]} onPress={() => Linking.openURL('https://lndr.io/terms/')}>{lndrVerified.linkTitle}</Text>{lndrVerified.postfix}</Text>
       </View>
@@ -394,10 +398,6 @@ class MyAccount extends Component<Props, State> {
       </View>),
       this.renderVerify(),
       (<View style={style.spaceHorizontalL}>
-        {authenticated ? <Button round onPress={() => this.setState({ step: 2 })} text={changePin} /> :
-        <Button round onPress={() => this.setState({ step: 4 })} text={enterCurrentPin} />}
-      </View>),
-      (<View style={style.spaceHorizontalL}>
         <Text style={[style.text, style.spaceTopL, style.center]}>{setEmail}</Text>
         <View style={style.textInputContainer}>
           <InputImage name='email'/>
@@ -409,6 +409,10 @@ class MyAccount extends Component<Props, State> {
         </View>
         { !!emailTextInputErrorText && <Text style={style.warningText}>{emailTextInputErrorText}</Text>}
         <Button round onPress={submitEmail} text={updateAccountText} />
+      </View>),
+      (<View style={style.spaceHorizontalL}>
+        {authenticated ? <Button round onPress={() => this.setState({ step: 2 })} text={changePin} /> :
+        <Button round onPress={() => this.setState({ step: 4 })} text={enterCurrentPin} />}
       </View>),
       (<View style={style.spaceHorizontalL}>
         <Text style={[style.text, style.spaceTopL, style.center]}>{accountManagement.lockTimeout.top}</Text>
