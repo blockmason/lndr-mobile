@@ -250,3 +250,26 @@ export const cleanFiatAmount = (amount: string) : number => {
   }
   return Number(cleanAmount)
 }
+
+export const dobFormat = (dob: string) : string => {
+  const cleanDob = dob.replace(/[^0-9\-]/, '').replace(/\-\-/, '-')
+
+  const correctFormat = cleanDob.match(/^\d{4}\-(0[1-9]|1[012])\-(0[1-9]|[12][0-9]|3[01])$/) ||
+    cleanDob.match(/^\d{4}\-(0[1-9]|1[012])\-(0[1-9]|[12])$/) ||
+    cleanDob.match(/^\d{4}\-(0[1-9]|1[012])\-$/) ||
+    cleanDob.match(/^\d{4}\-(0[1-9]|1[012])$/) ||
+    cleanDob.match(/^\d{4}\-(0[1-9]|1)$/) ||
+    cleanDob.match(/^\d{4}\-$/) ||
+    cleanDob.match(/^\d{0,3}$/) ||
+    cleanDob.match(/^\d{4}$/)
+
+  if (cleanDob.match(/^\d{4}[0-1]$/)) {
+    return `${cleanDob.slice(0,4)}-${cleanDob.slice(-1)}`
+  } else if (cleanDob.match(/^\d{4}\-(0[1-9]|1[012])[0-3]$/)) {
+    return `${cleanDob.slice(0,7)}-${cleanDob.slice(-1)}`
+  } else if (correctFormat) {
+    return cleanDob
+  } else {
+    return cleanDob.slice(0, -1)
+  }
+}

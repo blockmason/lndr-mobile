@@ -96,6 +96,7 @@ def enableProguardInReleaseBuilds = false
 android {
 
     compileSdkVersion 27
+    buildToolsVersion   = "27.0.3"
 
     defaultConfig {
         applicationId "com.lndr"
@@ -170,6 +171,7 @@ dependencies {
     }
     compile fileTree(dir: "libs", include: ["*.jar"])
     compile "com.android.support:appcompat-v7:27.0.2"
+    // compile ("com.facebook.react:react-native:0.55.4") { force = true }
     compile "com.facebook.react:react-native:+"  // From node_modules
     compile("com.google.android.gms:play-services-base:11.8.0") {
         force = true;

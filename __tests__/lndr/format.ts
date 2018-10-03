@@ -3,7 +3,7 @@ import 'react-native'
 // Note: test renderer must be required after react-native.
 
 import { commas, amountFormat, formatEthToFiat, formatCommaDecimal, formatSettlementAmount, formatMemo, formatEthRemaining,
-  cleanFiatAmount } from 'lndr/format'
+  cleanFiatAmount, dobFormat } from 'lndr/format'
 import { getEthExchange } from 'reducers/app';
 
 describe('commas', () => {
@@ -59,5 +59,24 @@ describe('cleanFiatAmount', () => {
   it('should return an amount in number format', () => {
     expect(cleanFiatAmount('CA$1.21')).toBe(1.21)
     expect(cleanFiatAmount('CA$.')).toBe(0)
+  })
+})
+
+describe('dobFormat', () => {
+  it('should return the correctly formatted date', () => {
+    expect(dobFormat('2000-10-10')).toBe('2000-10-10')
+    expect(dobFormat('2000-10-1')).toBe('2000-10-1')
+    expect(dobFormat('2000-10--')).toBe('2000-10-')
+    expect(dobFormat('2000-10-')).toBe('2000-10-')
+    expect(dobFormat('2000-10-')).toBe('2000-10-')
+    expect(dobFormat('2000-10')).toBe('2000-10')
+    expect(dobFormat('2000-101')).toBe('2000-10-1')
+    expect(dobFormat('2000-1')).toBe('2000-1')
+    expect(dobFormat('2000-')).toBe('2000-')
+    expect(dobFormat('20001')).toBe('2000-1')
+    expect(dobFormat('2000')).toBe('2000')
+    expect(dobFormat('200')).toBe('200')
+    expect(dobFormat('20')).toBe('20')
+    expect(dobFormat('2')).toBe('2')
   })
 })

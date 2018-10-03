@@ -32,7 +32,9 @@ ios/LNDR.xcworkspace
 ios/Pods
 ios/AirshipConfig.plist
 ios/PayPalConfig.plist
+ios/Index
 
+.flowconfig
 # Android/IntelliJ
 #
 build/

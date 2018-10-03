@@ -24,17 +24,16 @@ import { sanitizeAmount } from 'lndr/format'
 import { jsonToPendingFriend, jsonToPendingTransaction, jsonToRecentTransaction, jsonToPendingUnilateral,
   jsonToPendingBilateral, jsonToPayPalRequest } from 'lndr/json-mapping'
 
-import { triggerTouchId, getEthInfo, generateMultiTransaction, filterMultiTransactions } from './util'
+import { triggerTouchId, getEthInfo, generateMultiTransaction, filterMultiTransactions, resizeKYCImage } from './util'
 
 import CreditProtocol from 'credit-protocol'
 
 import language from 'language'
-const { accountManagement, debtManagement, settlementManagement, copiedClipboard } = language
+const { accountManagement, debtManagement, settlementManagement, copiedClipboard, lndrVerified } = language
 
 import { ToastActionsCreators } from 'react-native-redux-toast'
 import { defaultCurrency } from 'lndr/currencies'
-import { getUser, getUcacAddr, calculateUcacBalances, getPrimaryCurrency,
-  getChannelID } from 'reducers/app'
+import { getUser, getUcacAddr, calculateUcacBalances, getPrimaryCurrency, getChannelID } from 'reducers/app'
 
 const bcrypt = require('bcryptjs')
 
@@ -898,6 +897,28 @@ export const setProfilePic = (imageURI: string, imageData: string) => {
   }
 }
 
+export const setKYCImage = async (imageURI: string, imageData: string) => {
+  const resizedImage = await resizeKYCImage(imageURI, imageData)
+  return resizedImage
+}
+
+export const submitKYC = (kycData: any) => {
+  return async (_dispatch, getState) => {
+    const { privateKeyBuffer } = getUser(getState())()
+    await creditProtocol.submitKYC(kycData, privateKeyBuffer)
+  }
+}
+
+export const kycToastMessage = (success: boolean) => {
+  return async (dispatch) => {
+    if (success) {
+      dispatch(displaySuccess(lndrVerified.success))
+    } else {
+      dispatch(displayError(lndrVerified.error))
+    }
+  }
+}
+
 export const copyToClipboard = (text: string) => {
   return async (dispatch) => {
     Clipboard.setString(text)
@@ -925,7 +946,7 @@ export const confirmFriendRequest = (friend: string) => {
   return async (_dispatch, getState) => {
     const { address } = getUser(getState())()
     try {
-      const userPic = await creditProtocol.addFriend(address, friend)
+      await creditProtocol.addFriend(address, friend)
       return true
     } catch (e) {
       return false
@@ -937,7 +958,7 @@ export const rejectFriendRequest = (friend: string) => {
   return async (_dispatch, getState) => {
     const { address } = getUser(getState())()
     try {
-      const userPic = await creditProtocol.removeFriend(address, friend)
+      await creditProtocol.removeFriend(address, friend)
       return true
     } catch (e) {
       return false
@@ -1040,3 +1061,26 @@ export const showPayPalSettlementError = (nickname: string) => {
     dispatch(displayError(settlementManagement.bilateral.error.generic(nickname)))
   }
 }
+
+export const getVerificationStatus = () => {
+  return async (dispatch, getState) => {
+    console.log('START')
+    try {
+      const { address, privateKeyBuffer } = getUser(getState())()
+      const identityVerificationStatus = await creditProtocol.getKYCStatus(address, privateKeyBuffer)
+      identityVerificationStatus.status = identityVerificationStatus.status.trim()
+      identityVerificationStatus.sumsubId = identityVerificationStatus.sumsubId.trim()
+      console.log('SUCCESS', identityVerificationStatus)
+      dispatch(setState({ identityVerificationStatus }))
+    } catch(e) {
+      console.log('ERROR GETTING KYC VERIFICATION: ', e)
+    }
+  }
+}
+
+
+// data VerificationStatusEntry = VerificationStatusEntry { user :: Address
+//   , sumsubId :: Text
+//   , status :: Text
+//   } deriving Show
+// $(deriveJSON defaultOptions ''VerificationStatusEntry)

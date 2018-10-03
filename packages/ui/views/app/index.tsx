@@ -67,7 +67,8 @@ const initialState = {
   payPalRequestsLoaded: false,
   channelID: '',
   initialHomeLoad: 'Friends',
-  isConnected: true
+  isConnected: true,
+  identityVerificationStatus: {status: null}
 }
 
 const store = createStore(initialState)

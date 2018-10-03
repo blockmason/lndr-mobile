@@ -1,4 +1,8 @@
 // Helper functions for actions
+import { Platform } from 'react-native'
+import RNFetchBlob from 'react-native-fetch-blob'
+import ImageResizer from 'react-native-image-resizer'
+
 import PendingTransaction from 'lndr/pending-transaction'
 import PendingUnilateral from 'lndr/pending-unilateral'
 
@@ -157,4 +161,18 @@ export const filterMultiTransactions = (address: string, pending: any, state: Ob
   }
 
   return newList
+}
+
+export const resizeKYCImage = async (imageURI: string, imageData: string) => {
+  const IMAGE_TARGET_SIZE = 1024
+  let resizedImageResponse, base64ImageData
+
+  if (Platform.OS === 'android') {
+    resizedImageResponse = await ImageResizer.createResizedImage(imageURI, IMAGE_TARGET_SIZE, IMAGE_TARGET_SIZE, "JPEG", 100, 0)
+    base64ImageData = await RNFetchBlob.fs.readFile(resizedImageResponse.path, 'base64')
+  } else {
+    resizedImageResponse = await ImageResizer.createResizedImage(`data:image/jpg;jpeg;base64,${imageData}`, IMAGE_TARGET_SIZE, IMAGE_TARGET_SIZE, "JPEG", 100, 0)
+    base64ImageData = await RNFetchBlob.fs.readFile(resizedImageResponse.path, 'base64')
+  }
+  return `data:image/jpg;jpeg;base64,${base64ImageData}`
 }

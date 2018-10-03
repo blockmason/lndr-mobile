@@ -17,7 +17,7 @@ import { UpdateAccountData, UserData } from 'lndr/user'
 
 import { updateNickname, updateEmail, logoutAccount, toggleNotifications, getAccountInformation,
   setEthBalance, updateLockTimeout, updatePin, getProfilePic, setProfilePic, takenNick, takenEmail,
-  copyToClipboard, validatePin, setPrimaryCurrency, failedValidatePin } from 'actions'
+  copyToClipboard, validatePin, setPrimaryCurrency, failedValidatePin, getVerificationStatus } from 'actions'
 import { getUser, getStore, getAllUcacCurrencies, getPrimaryCurrency } from 'reducers/app'
 import { getResetAction } from 'reducers/nav'
 import { connect } from 'react-redux'
@@ -34,7 +34,7 @@ import pendingStyle from 'theme/pending'
 import language from 'language'
 const { nickname, setNickname, email, setEmail, copy, accountManagement, changePin, enterNewPin, confirmPin, pleaseWait,
   mnemonicExhortation, addressExhortation, logoutAction, notifications, currentBalance, showMnemonic, enterCurrentPin,
-  myAccount, debtManagement, removeAccount, payPalLanguage, cancel, confirmAccount
+  myAccount, debtManagement, removeAccount, payPalLanguage, cancel, confirmAccount, lndrVerified
 } = language
 const updateAccountText = language.updateAccount
 
@@ -64,6 +64,7 @@ interface Props {
   copyToClipboard: (text: string) => any
   setPrimaryCurrency: (value: string) => any
   failedValidatePin: () => void
+  getVerificationStatus: () => void
 }
 
 interface State {
@@ -113,6 +114,7 @@ class MyAccount extends Component<Props, State> {
     this.props.setEthBalance()
     this.props.getProfilePic(address)
     this.props.getAccountInformation()
+    this.props.getVerificationStatus()
 
     // init PayPal and check if user is connected
     await NativeModules.PayPalManager.initPayPal()
@@ -193,7 +195,7 @@ class MyAccount extends Component<Props, State> {
 
   togglePanel(index: number) {
     const { hiddenPanels, scrollY } = this.state
-    const panelHeights = [150, 140, 140, 60, 60, 60, 60, 60, 190, 180, 60, 120]
+    const panelHeights = [150, 140, 140, 60, 60, 60, 60, 140, 60, 190, 180, 60, 120]
     const y = panelHeights[index]
 
     hiddenPanels[index] = !hiddenPanels[index]
@@ -209,25 +211,28 @@ class MyAccount extends Component<Props, State> {
         skipBackup: true,
         path: 'images'
       }
-    };
+    }
 
-    ImagePicker.showImagePicker(options, (response) => {
-      if (response.didCancel) {
-        console.log('User cancelled image picker');
-      }
-      else if (response.error) {
-        console.log('ImagePicker Error: ', response.error);
-      }
-      else {
-        const { uri, data } =  response
-        this.setNewProfilePic(uri, data)
-      }
-    });
+    try {
+      ImagePicker.showImagePicker(options, (response) => {
+        if (response.didCancel) {
+          console.log('User cancelled image picker')
+        }
+        else if (response.error) {
+          console.log('ImagePicker Error: ', response.error)
+        }
+        else {
+          const { uri, data } =  response
+          this.setNewProfilePic(uri, data)
+        }
+      })
+    } catch (e) {
+      console.log(e)
+    }
   }
 
   async setNewProfilePic(imageURI: string, imageData: string) {
-    const image = await loadingContext.wrap( this.props.setProfilePic(imageURI, imageData) )
-    this.setState({ photos: [] })
+    loadingContext.wrap( this.props.setProfilePic(imageURI, imageData) )
   }
 
   async onNickTextInputBlur(nickname: string) {
@@ -327,6 +332,39 @@ class MyAccount extends Component<Props, State> {
     await loadingContext.wrap(this.props.updateNickname(this.state))
   }
 
+  renderVerify() {
+    const { identityVerificationStatus } = this.props.state
+
+    const getStatus = (verificationStatus: any) : string => {
+      if (verificationStatus.status === 'GREEN') {
+        return lndrVerified.approved
+      } else if (verificationStatus.status === 'RED') {
+        return lndrVerified.rejected
+      } else if (!verificationStatus.status && verificationStatus.sumsubId) {
+        return lndrVerified.pending
+      } else {
+        return ''
+      }
+    }
+
+    const showButtonOrEmail = identityVerificationStatus.status === 'RED' || (!identityVerificationStatus.status && !identityVerificationStatus.sumsubId)
+
+    const centerMessage = this.props.user.email ?
+      <Button round onPress={() => {this.props.navigation.navigate('VerifyIdentityForm')}} text={lndrVerified.button} containerStyle={style.spaceTop} /> :
+      <Text style={[style.smallText, style.spaceTop]}>{lndrVerified.emailRequired}</Text>
+
+    return (
+      //TODO: add pending logic
+      <View style={[general.centeredColumn, style.spaceHorizontalL]}>
+        <Text style={[style.smallText, style.spaceTop]}>{identityVerificationStatus.sumsubId ? lndrVerified.statusTitle : lndrVerified.title}</Text>
+        <Text style={[style.title, identityVerificationStatus.status === 'RED' ? style.redAmount : style.greenAmount]}>{getStatus(identityVerificationStatus)}</Text>
+        {showButtonOrEmail && centerMessage}
+        {identityVerificationStatus.status === 'RED' && <Text style={[style.smallText, style.spaceTop]}>{lndrVerified.tryAgain}</Text>}
+        <Text style={[style.smallText, style.spaceTop, general.spaceBelowM]}>{lndrVerified.prefix} <Text style={[style.link]} onPress={() => Linking.openURL('https://lndr.io/terms/')}>{lndrVerified.linkTitle}</Text>{lndrVerified.postfix}</Text>
+      </View>
+    )
+  }
+
   renderPanels() {
     const { user, updateEmail, copyToClipboard } = this.props
     const { notificationsEnabled, ethBalance, bcptBalance } = this.props.state
@@ -363,21 +401,13 @@ class MyAccount extends Component<Props, State> {
       (<View style={style.spaceHorizontalL}>
         <Button black onPress={() => this.setState({shouldPickCurrency: true})} text={currency} />
       </View>),
-      (<View style={style.spaceHorizontalL}>
-        {authenticated ? <Button round onPress={() => this.setState({ step: 2 })} text={changePin} /> :
-        <Button round onPress={() => this.setState({ step: 4 })} text={enterCurrentPin} />}
-      </View>),
+      this.renderVerify(),
       (<View style={style.spaceHorizontalL}>
         <Text style={[style.text, style.spaceTopL, style.center]}>{setEmail}</Text>
         <View style={style.textInputContainer}>
           <InputImage name='email'/>
-          <TextInput
-            autoCapitalize='none'
-            style={style.textInput}
-            placeholder={email}
-            value={this.state.email}
-            underlineColorAndroid='transparent'
-            keyboardType='email-address'
+          <TextInput autoCapitalize='none' style={style.textInput} placeholder={email}
+            value={this.state.email} underlineColorAndroid='transparent' keyboardType='email-address'
             onChangeText={email => this.setState({ email: formatEmail(email) })}
             onBlur={(): any => this.onEmailTextInputBlur(this.state.email)}
           />
@@ -386,16 +416,14 @@ class MyAccount extends Component<Props, State> {
         <Button round onPress={submitEmail} text={updateAccountText} />
       </View>),
       (<View style={style.spaceHorizontalL}>
+        {authenticated ? <Button round onPress={() => this.setState({ step: 2 })} text={changePin} /> :
+        <Button round onPress={() => this.setState({ step: 4 })} text={enterCurrentPin} />}
+      </View>),
+      (<View style={style.spaceHorizontalL}>
         <Text style={[style.text, style.spaceTopL, style.center]}>{accountManagement.lockTimeout.top}</Text>
         <View style={style.textInputContainerMinor}>
-          <TextInput
-            autoCapitalize='none'
-            style={style.textInputMinor}
-            placeholder={`${user.lockTimeout}`}
-            value={lockTimeout}
-            underlineColorAndroid='transparent'
-            maxLength={6}
-            keyboardType='numeric'
+          <TextInput autoCapitalize='none' style={style.textInputMinor} placeholder={`${user.lockTimeout}`} 
+            value={lockTimeout} underlineColorAndroid='transparent' maxLength={6} keyboardType='numeric'
             onChangeText={ timeout => this.setState({ lockTimeout: formatLockTimeout(timeout) })}
           />
         </View>
@@ -483,13 +511,8 @@ class MyAccount extends Component<Props, State> {
                 {nickname ? <Text style={[style.text, style.spaceTopM, style.center]}>{setNickname}</Text> : null}
                 <View style={style.textInputContainer}>
                   <InputImage name='person'/>
-                  <TextInput
-                    autoCapitalize='none'
-                    style={style.textInput}
-                    placeholder={nickname}
-                    value={this.state.nickname}
-                    underlineColorAndroid='transparent'
-                    maxLength={20}
+                  <TextInput autoCapitalize='none' style={style.textInput} placeholder={nickname}
+                    value={this.state.nickname} underlineColorAndroid='transparent' maxLength={20}
                     onChangeText={nickname => this.setState({ nickname: formatNick(nickname) })}
                     onBlur={(): any => this.onNickTextInputBlur(this.state.nickname)}
                   />
@@ -523,4 +546,4 @@ class MyAccount extends Component<Props, State> {
 export default connect((state) => ({ user: getUser(state)(), state: getStore(state)(), allCurrencies: getAllUcacCurrencies(state),
   primaryCurrency: getPrimaryCurrency(state)}), { updateEmail, updateNickname,
   getAccountInformation, logoutAccount, toggleNotifications, setEthBalance, updateLockTimeout, updatePin,
-  getProfilePic, setProfilePic, copyToClipboard, setPrimaryCurrency, failedValidatePin })(MyAccount)
+  getProfilePic, setProfilePic, copyToClipboard, setPrimaryCurrency, failedValidatePin, getVerificationStatus })(MyAccount)
