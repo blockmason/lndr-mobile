@@ -105,6 +105,9 @@ export default {
     chooseSelfiePhoto: `Chọn chụp ảnh tự sướng Ảnh`,
     chooseAddressPhoto: `Chọn Bằng chứng về Địa chỉ Ảnh`,
     emailRequired: `Bạn cần một email để xác minh danh tính của bạn, hãy nhấp vào "Thay đổi Email"`,
+    approved: `TÁN THÀNH`,
+    rejected: `TỪ CHỐI`,
+    pending: `Đang chờ`,
     error: generalCommunicationError,
     formFields: {
       firstName: `Tên đầu tiên`,
@@ -502,7 +505,7 @@ export default {
 
   privacyPolicy: {
     link: `lndr.io/terms/`,
-    message: `Bằng cách nhấp bên dưới, bạn xác nhận rằng bạn đã đọc và đồng ý với chính sách bảo mật của Blockmason. Blockmason có thể sử dụng địa chỉ email của bạn để gửi thông tin cập nhật về Blockmason và LNDR. Dưới đây là một liên kết đến chính sách bảo mật:`
+    message: `Bằng cách nhấp bên dưới, bạn xác nhận rằng bạn đã đọc và đồng ý với chính sách bảo mật của Blockmason. Blockmason có thể sử dụng địa chỉ email của bạn để gửi thông tin cập nhật về Blockmason và LNDR. Dưới đây là một liên kết đến chính sách bảo mật:`,
   },
 
   payPalLanguage: {
@@ -538,7 +541,6 @@ export default {
     { name: `Afghanistan`, code: 'AFG' },
     { name: `Albania`, code: 'ALB' },
     { name: `Algeria`, code: 'DZA' },
-    { name: `American Samoa`, code: 'ASM' },
     { name: `Andorra`, code: 'AND' },
     { name: `Angola`, code: 'AGO' },
     { name: `Anguilla`, code: 'AIA' },

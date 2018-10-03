@@ -105,6 +105,9 @@ export default {
     chooseSelfiePhoto: `Selfie'nin Fotoğrafı Seç`,
     chooseAddressPhoto: `Adres Fotoğraf Belgesi seç`,
     emailRequired: `Sen "E-postanı Değiştir", lütfen kimliğinizi doğrulamak için bir e-posta gereken`,
+    approved: `ONAYLANDI`,
+    rejected: `REDDEDİLDİ`,
+    pending: `Beklemede`,
     error: generalCommunicationError,
     formFields: {
       firstName: `İsim`,
@@ -502,7 +505,7 @@ export default {
 
   privacyPolicy: {
     link: `lndr.io/terms/`,
-    message: `Altınızda tıklayarak okuyup Blockmason gizlilik politikasına kabul ettiğinizi onaylayın. Blockmason Blockmason ve LNDR hakkında güncellemeleri göndermek için e-posta adresinizi kullanabiliriz. İşte gizlilik politikasına bir link:`
+    message: `Altınızda tıklayarak okuyup Blockmason gizlilik politikasına kabul ettiğinizi onaylayın. Blockmason Blockmason ve LNDR hakkında güncellemeleri göndermek için e-posta adresinizi kullanabiliriz. İşte gizlilik politikasına bir link:`,
   },
 
   payPalLanguage: {
@@ -538,7 +541,6 @@ export default {
     { name: `Afganistan`, code: 'AFG' },
     { name: `Arnavutluk`, code: 'ALB' },
     { name: `Cezayir`, code: 'DZA' },
-    { name: `Amerikan Samoası`, code: 'ASM' },
     { name: `Andorra`, code: 'AND' },
     { name: `Angora`, code: 'AGO' },
     { name: `Anguilla`, code: 'AIA' },

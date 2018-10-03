@@ -105,6 +105,9 @@ export default {
     chooseSelfiePhoto: `选择自拍照片`,
     chooseAddressPhoto: `选择地址的照片证明`,
     emailRequired: `你需要一个电子邮件，以确认您的身份，请点击 "更改电子邮件"`,
+    approved: `批准了`,
+    rejected: `拒绝了`,
+    pending: `待定`,
     error: generalCommunicationError,
     formFields: {
       firstName: `名字`,
@@ -404,8 +407,8 @@ export default {
     rejectRequest: `拒绝`,
     cancel: `取消交易`,
     direction: {
-      // lend: (X, Z) => `@${X}欠了您${Z}`,
-      // borrow: (X，Z) => `您欠了@${X}${Z}`,
+      lend: (X, Z) => `@${X}欠了您${Z}`,
+      borrow: (X, Z) => `您欠了@${X}${Z}`,
     }
   },
 
@@ -538,7 +541,6 @@ export default {
     { name: `阿富汗`, code: 'AFG' },
     { name: `阿尔巴尼亚`, code: 'ALB' },
     { name: `阿尔及利亚`, code: 'DZA' },
-    { name: `美属萨摩亚`, code: 'ASM' },
     { name: `安道尔`, code: 'AND' },
     { name: `安哥拉`, code: 'AGO' },
     { name: `安圭拉`, code: 'AIA' },

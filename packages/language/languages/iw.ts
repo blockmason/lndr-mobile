@@ -105,6 +105,9 @@ export default {
     chooseSelfiePhoto: `בחר תמונה הסלפי`,
     chooseAddressPhoto: `בחר הוכחת תמונת כתובת`,
     emailRequired: `אתה צריך אימייל כדי לאמת את זהותך, אנא לחץ על  "לדנות דוא"ל"`,
+    approved: `אושר`,
+    rejected: `נִדחֶה`,
+    pending: `בהמתנה`,
     error: generalCommunicationError,
     formFields: {
       firstName: `שם פרטי`,
@@ -502,7 +505,7 @@ export default {
 
   privacyPolicy: {
     link: `lndr.io/terms/`,
-    message: `על ידי לחיצה בהמשך שתאשר כי קראת מסכים למדיניות הפרטיות של Blockmason. Blockmason עשויים להשתמש בכתובת הדוא"ל שלך כדי לשלוח עדכונים על Blockmason ו LNDR. הנה קישור למדיניות הפרטיות`
+    message: `על ידי לחיצה בהמשך שתאשר כי קראת מסכים למדיניות הפרטיות של Blockmason. Blockmason עשויים להשתמש בכתובת הדוא"ל שלך כדי לשלוח עדכונים על Blockmason ו LNDR. הנה קישור למדיניות הפרטיות`,
   },
 
   payPalLanguage: {
@@ -538,7 +541,6 @@ export default {
     { name: `אפגניסטן`, code: 'AFG' },
     { name: `אלבניה`, code: 'ALB' },
     { name: `אלג'יריה`, code: 'DZA' },
-    { name: `סמואה האמריקנית`, code: 'ASM' },
     { name: `אנדורה`, code: 'AND' },
     { name: `אנגולה`, code: 'AGO' },
     { name: `אנגווילה`, code: 'AIA' },

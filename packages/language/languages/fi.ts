@@ -105,6 +105,9 @@ export default {
     chooseSelfiePhoto: `Valitse Selfie Photo`,
     chooseAddressPhoto: `Valitse todiste osoitteesta Photo`,
     emailRequired: `Tarvitset sähköpostia henkilöllisyytesi vahvistamiseksi, klikkaa "Muuta sähköpostiosoitteesi"`,
+    approved: `HYVÄKSYTTY`,
+    rejected: `HYLÄTTY`,
+    pending: `Odotustilassa`,
     error: generalCommunicationError,
     formFields: {
       firstName: `Etunimi`,
@@ -502,7 +505,7 @@ export default {
 
   privacyPolicy: {
     link: `lndr.io/terms/`,
-    message: `Klikkaamalla alla olevaa linkkiä vahvistaa, että olet lukenut ja hyväksynyt Blockmason-tietosuojakäytännön. Blockmason voi käyttää sähköpostiosoitteesi lähettää päivityksiä Blockmason ja LNDR. Tässä on linkki tietosuojakäytäntöön:`
+    message: `Klikkaamalla alla olevaa linkkiä vahvistaa, että olet lukenut ja hyväksynyt Blockmason-tietosuojakäytännön. Blockmason voi käyttää sähköpostiosoitteesi lähettää päivityksiä Blockmason ja LNDR. Tässä on linkki tietosuojakäytäntöön:`,
   },
 
   payPalLanguage: {
@@ -538,7 +541,6 @@ export default {
     { name: `Afganistan`, code: 'AFG' },
     { name: `Albania`, code: 'ALB' },
     { name: `Algeria`, code: 'DZA' },
-    { name: `Amerikan Samoa`, code: 'ASM' },
     { name: `Andorra`, code: 'AND' },
     { name: `Angola`, code: 'AGO' },
     { name: `Anguilla`, code: 'AIA' },

@@ -105,6 +105,9 @@ export default {
     chooseSelfiePhoto: `Choisissez selfie photo`,
     chooseAddressPhoto: `Choisissez Preuve d'adresse photo`,
     emailRequired: `Vous avez besoin d'un e-mail pour vérifier votre identité, s'il vous plaît cliquer sur "Changer l'adresse e-mail"`,
+    approved: `APPROUVÉ`,
+    rejected: `REJETÉ`,
+    pending: `En attente`,
     error: generalCommunicationError,
     formFields: {
       firstName: `Prénom`,
@@ -502,7 +505,7 @@ export default {
 
   privacyPolicy: {
     link: `lndr.io/terms/`,
-    message: `En cliquant ci-dessous vous confirmez que vous avez lu et accepté la politique de confidentialité de Blockmason. Blockmason peut utiliser votre adresse e-mail pour envoyer des mises à jour sur les Blockmason et LNDR. Voici un lien vers la politique de confidentialité:`
+    message: `En cliquant ci-dessous vous confirmez que vous avez lu et accepté la politique de confidentialité de Blockmason. Blockmason peut utiliser votre adresse e-mail pour envoyer des mises à jour sur les Blockmason et LNDR. Voici un lien vers la politique de confidentialité:`,
   },
 
   payPalLanguage: {
@@ -538,7 +541,6 @@ export default {
     { name: `Afghanistan`, code: 'AFG' },
     { name: `Albanie`, code: 'ALB' },
     { name: `Algérie`, code: 'DZA' },
-    { name: `Samoa américaines`, code: 'ASM' },
     { name: `Andorre`, code: 'AND' },
     { name: `Angola`, code: 'AGO' },
     { name: `Anguilla`, code: 'AIA' },

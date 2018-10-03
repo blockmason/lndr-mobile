@@ -4,10 +4,9 @@ import { View, ScrollView, Text, TextInput, BackHandler, KeyboardAvoidingView, P
 
 import Button from 'ui/components/button'
 import ThemeImage from 'ui/components/images/theme-image'
-import TextLogo from 'ui/components/images/text-logo'
 import { CreateAccountData, defaultCreateAccountData } from 'lndr/user'
 
-import { formatNick, formatEmail, formatPin, emailFormatIncorrect, nickLengthIncorrect } from 'lndr/format'
+import { formatNick, formatEmail, emailFormatIncorrect, nickLengthIncorrect } from 'lndr/format'
 import Pinpad from 'ui/components/pinpad'
 import InputImage from 'ui/components/images/input-image'
 import { LoadingContext } from 'ui/components/loading'

@@ -105,6 +105,9 @@ export default {
     chooseSelfiePhoto: `Kies selfie Photo`,
     chooseAddressPhoto: `Kies Bewijs van Adres Photo`,
     emailRequired: `Je hebt een e-mail om uw identiteit te verifiëren, klikt u op "Wijzig e-mailadres"`,
+    approved: `GOEDGEKEURD`,
+    rejected: `VERWORPEN`,
+    pending: `In behandeling`,
     error: generalCommunicationError,
     formFields: {
       firstName: `Voornaam`,
@@ -502,7 +505,7 @@ export default {
 
   privacyPolicy: {
     link: `lndr.io/terms/`,
-    message: `Door te klikken, bevestigt u dat u het privacybeleid van Blockmason hebt gelezen en hiermee akkoord gaat. Blockmason kan uw e-mailadres gebruiken om updates over Blockmason en LNDR te verzenden. Hier is een link naar het privacybeleid:`
+    message: `Door te klikken, bevestigt u dat u het privacybeleid van Blockmason hebt gelezen en hiermee akkoord gaat. Blockmason kan uw e-mailadres gebruiken om updates over Blockmason en LNDR te verzenden. Hier is een link naar het privacybeleid:`,
   },
 
   payPalLanguage: {
@@ -538,7 +541,6 @@ export default {
     { name: `Afghanistan`, code: 'AFG' },
     { name: `Albanië`, code: 'ALB' },
     { name: `Algerije`, code: 'DZA' },
-    { name: `Amerikaans Samoa`, code: 'ASM' },
     { name: `Andorra`, code: 'AND' },
     { name: `Angola`, code: 'AGO' },
     { name: `Anguilla`, code: 'AIA' },

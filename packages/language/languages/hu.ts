@@ -105,6 +105,9 @@ export default {
     chooseSelfiePhoto: `Válasszon szelfi Photo`,
     chooseAddressPhoto: `Válasszon igazolása Cím Photo`,
     emailRequired: `Szükség van egy e-mailt, hogy igazolja személyazonosságát, küldjön "Email Módosítása"`,
+    approved: `JÓVÁHAGYOTT`,
+    rejected: `ELUTASÍTOTT`,
+    pending: `Függőben levő`,
     error: generalCommunicationError,
     formFields: {
       firstName: `Keresztnév`,
@@ -502,7 +505,7 @@ export default {
 
   privacyPolicy: {
     link: `lndr.io/terms/`,
-    message: `Az alábbi linkre kattintva Ön megerősíti, hogy elolvasta és elfogadja a Blockmason adatvédelmi irányelveit. Blockmason használhatja az e-mail címét, hogy küldjön frissítéseket Blockmason és LNDR. Itt van egy link, hogy az adatvédelmi politika:`
+    message: `Az alábbi linkre kattintva Ön megerősíti, hogy elolvasta és elfogadja a Blockmason adatvédelmi irányelveit. Blockmason használhatja az e-mail címét, hogy küldjön frissítéseket Blockmason és LNDR. Itt van egy link, hogy az adatvédelmi politika:`,
   },
 
   payPalLanguage: {
@@ -538,7 +541,6 @@ export default {
     { name: `Afganisztán`, code: 'AFG' },
     { name: `Albánia`, code: 'ALB' },
     { name: `Algéria`, code: 'DZA' },
-    { name: `Amerikai Szamoa`, code: 'ASM' },
     { name: `Andorra`, code: 'AND' },
     { name: `Angola`, code: 'AGO' },
     { name: `Anguilla`, code: 'AIA' },

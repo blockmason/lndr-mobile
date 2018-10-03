@@ -105,6 +105,9 @@ export default {
     chooseSelfiePhoto: `Vælg selfie Foto`,
     chooseAddressPhoto: `Vælg Bevis for Adresse Foto`,
     emailRequired: `Du har brug for en e-mail for at bekræfte din identitet, skal du klikke på "Skift e-mail"`,
+    approved: `GODKENDT`,
+    rejected: `AFVIST`,
+    pending: `Afventende`,
     error: generalCommunicationError,
     formFields: {
       firstName: `Fornavn`,
@@ -502,7 +505,7 @@ export default {
 
   privacyPolicy: {
     link: `lndr.io/terms/`,
-    message: `Ved at klikke herunder bekræfter du at du har læst og accepteret Blockmasons privatlivspolitik. Blockmason kan bruge din email-adresse til at sende opdateringer om Blockmason og LNDR. Her er et link til privatlivspolitikken:`
+    message: `Ved at klikke herunder bekræfter du at du har læst og accepteret Blockmasons privatlivspolitik. Blockmason kan bruge din email-adresse til at sende opdateringer om Blockmason og LNDR. Her er et link til privatlivspolitikken:`,
   },
 
   payPalLanguage: {
@@ -538,7 +541,6 @@ export default {
     { name: `Afghanistan`, code: 'AFG' },
     { name: `Albanien`, code: 'ALB' },
     { name: `Algeriet`, code: 'DZA' },
-    { name: `Amerikansk Samoa`, code: 'ASM' },
     { name: `Andorra`, code: 'AND' },
     { name: `Angola`, code: 'AGO' },
     { name: `Anguilla`, code: 'AIA' },

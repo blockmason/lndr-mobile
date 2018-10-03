@@ -335,27 +335,32 @@ class MyAccount extends Component<Props, State> {
   renderVerify() {
     const { identityVerificationStatus } = this.props.state
 
-    const getStatus = (status: string) : string => {
-      if (status === 'GREEN') {
-        return 'APPROVED'
-      } else if (status === 'RED') {
-        return 'REJECTED'
+    const getStatus = (verificationStatus: any) : string => {
+      if (verificationStatus.status === 'GREEN') {
+        return lndrVerified.approved
+      } else if (verificationStatus.status === 'RED') {
+        return lndrVerified.rejected
+      } else if (!verificationStatus.status && verificationStatus.sumsubId) {
+        return lndrVerified.pending
       } else {
-        return 'PENDING'
+        return ''
       }
     }
+
+    const showButtonOrEmail = identityVerificationStatus.status === 'RED' || (!identityVerificationStatus.status && !identityVerificationStatus.sumsubId)
 
     const centerMessage = this.props.user.email ?
       <Button round onPress={() => {this.props.navigation.navigate('VerifyIdentityForm')}} text={lndrVerified.button} containerStyle={style.spaceTop} /> :
       <Text style={[style.smallText, style.spaceTop]}>{lndrVerified.emailRequired}</Text>
 
     return (
+      //TODO: add pending logic
       <View style={[general.centeredColumn, style.spaceHorizontalL]}>
-        <Text style={[style.smallText, style.spaceTop]}>{identityVerificationStatus.status ? lndrVerified.statusTitle : lndrVerified.title}</Text>
-        {!!identityVerificationStatus.status && <Text style={[style.title, identityVerificationStatus.status === 'GREEN' ? style.greenAmount : style.redAmount]}>{getStatus(identityVerificationStatus.status)}</Text>}
-        {identityVerificationStatus.status !== 'GREEN' && centerMessage}
+        <Text style={[style.smallText, style.spaceTop]}>{identityVerificationStatus.sumsubId ? lndrVerified.statusTitle : lndrVerified.title}</Text>
+        <Text style={[style.title, identityVerificationStatus.status === 'RED' ? style.redAmount : style.greenAmount]}>{getStatus(identityVerificationStatus)}</Text>
+        {showButtonOrEmail && centerMessage}
         {identityVerificationStatus.status === 'RED' && <Text style={[style.smallText, style.spaceTop]}>{lndrVerified.tryAgain}</Text>}
-        <Text style={[style.smallText, style.spaceTop]}>{lndrVerified.prefix} <Text style={[style.link]} onPress={() => Linking.openURL('https://lndr.io/terms/')}>{lndrVerified.linkTitle}</Text>{lndrVerified.postfix}</Text>
+        <Text style={[style.smallText, style.spaceTop, general.spaceBelowM]}>{lndrVerified.prefix} <Text style={[style.link]} onPress={() => Linking.openURL('https://lndr.io/terms/')}>{lndrVerified.linkTitle}</Text>{lndrVerified.postfix}</Text>
       </View>
     )
   }

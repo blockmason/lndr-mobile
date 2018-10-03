@@ -103,6 +103,9 @@ export default {
     chooseSelfiePhoto: `셀카 사진을 선택`,
     chooseAddressPhoto: `주소 사진의 증거를 선택`,
     emailRequired: `당신은 "이메일 주소"를 클릭하십시오, 사용자의 신원을 확인하기 위해 이메일을 필요 `,
+    approved: `승인`,
+    rejected: `거부 됨`,
+    pending: `미결`,
     error: generalCommunicationError,
     formFields: {
       firstName: `이름`,
@@ -500,7 +503,7 @@ export default {
 
   privacyPolicy: {
     link: `lndr.io/terms/`,
-    message: `Blockmason의 개인 정보 보호 정책을 읽고 동의하려면 아래를 클릭하여 확인하십시오. Blockmason은 이메일 주소를 사용하여 Blockmason 및 LNDR에 대한 업데이트를 보낼 수 있습니다. 개인 정보 취급 방침에 대한 링크는 다음과 같습니다:`
+    message: `Blockmason의 개인 정보 보호 정책을 읽고 동의하려면 아래를 클릭하여 확인하십시오. Blockmason은 이메일 주소를 사용하여 Blockmason 및 LNDR에 대한 업데이트를 보낼 수 있습니다. 개인 정보 취급 방침에 대한 링크는 다음과 같습니다:`,
   },
 
   payPalLanguage: {
@@ -536,7 +539,6 @@ export default {
     { name: `아프가니스탄`, code: 'AFG' },
     { name: `알바니아`, code: 'ALB' },
     { name: `알제리`, code: 'DZA' },
-    { name: `아메리칸 사모아`, code: 'ASM' },
     { name: `안도라`, code: 'AND' },
     { name: `앙골라`, code: 'AGO' },
     { name: `앵 귈라`, code: 'AIA' },

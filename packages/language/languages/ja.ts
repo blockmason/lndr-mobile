@@ -104,6 +104,9 @@ export default {
     chooseSelfiePhoto: `自分撮り写真を選択します。`,
     chooseAddressPhoto: `アドレス・写真の証明を選択してください`,
     emailRequired: `あなたは、あなたの身元を確認するために電子メールを必要とする、"メールアドレスを変える" をクリックしてください`,
+    approved: `承認`,
+    rejected: `拒否された`,
+    pending: `承認待ち`,
     error: generalCommunicationError,
     formFields: {
       firstName: `ファーストネーム`,
@@ -537,7 +540,6 @@ export default {
     { name: `アフガニスタン`, code: 'AFG' },
     { name: `アルバニア`, code: 'ALB' },
     { name: `アルジェリア`, code: 'DZA' },
-    { name: `米領サモア`, code: 'ASM' },
     { name: `アンドラ`, code: 'AND' },
     { name: `アンゴラ`, code: 'AGO' },
     { name: `アンギラ`, code: 'AIA' },

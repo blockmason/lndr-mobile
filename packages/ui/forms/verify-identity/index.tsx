@@ -245,25 +245,26 @@ ${lndrVerified.utility}
 
     chooseGovernmentPhotoType(governmentPhotoType) {
         this.setState({ governmentPhotoType, generalFormError: undefined })
-        this.getPhoto('governmentPhoto')
+        setTimeout(() => this.getPhoto('governmentPhoto', false), 100)
     }
 
     chooseAddressPhotoType(addressPhotoType) {
         this.setState({ addressPhotoType, generalFormError: undefined })
-        this.getPhoto('addressPhoto')
+        setTimeout(() => this.getPhoto('addressPhoto', false), 100)
     }
 
-    async getPhoto(type: string) {
+    async getPhoto(type: string, getType = true) {
+        console.log(this.state.governmentPhotoType.name, this.state.addressPhotoType.name)
         let title
         if (type === 'governmentPhoto') {
-            if (!this.state.governmentPhotoType.name) {
+            if (getType) {
                 return this.governmentPhotoTypeActionSheet.show()
             }
             title = lndrVerified.chooseGovernmentPhoto
         } else if (type === 'selfiePhoto') {
             title = lndrVerified.chooseSelfiePhoto
         } else {
-            if (!this.state.addressPhotoType.name) {
+            if (getType) {
                 return this.addressPhotoTypeActionSheet.show()
             }
             title = lndrVerified.chooseAddressPhoto
@@ -275,18 +276,8 @@ ${lndrVerified.utility}
         ImagePicker.showImagePicker(options, async (response) => {
             if (response.didCancel) {
                 console.log('User cancelled image picker')
-                if (type === 'governmentPhoto') {
-                    this.setState({ governmentPhotoType: '' })
-                } else if (type === 'addressPhoto') {
-                    this.setState({ addressPhotoType: '' })
-                }
             } else if (response.error) {
                 console.log('ImagePicker Error: ', response.error)
-                if (type === 'governmentPhoto') {
-                    this.setState({ governmentPhotoType: '' })
-                } else if (type === 'addressPhoto') {
-                    this.setState({ addressPhotoType: '' })
-                }
             } else {
                 const { uri, data } = response
                 const photo = await setKYCImage(uri, data)
@@ -312,12 +303,12 @@ ${lndrVerified.utility}
         const { email, address } = this.props.user
 
         if (firstName && lastName && street && city && state && postCode && phone && governmentPhoto && selfiePhoto && addressPhoto && agreement && governmentPhotoType.code && addressPhotoType.code) {
+            this.setState({ submitted: true })
+            
             const data = new KYC({ firstName, lastName, dob, street, phone, city, state, postCode, country: country.code, governmentPhoto, selfiePhoto, addressPhoto, 
                 governmentPhotoType: governmentPhotoType.code, addressPhotoType: addressPhotoType.code, email, address })
             
             try {
-                this.setState({ submitted: true })
-
                 await loadingContext.wrap(this.props.submitKYC(data))
                 const resetAction = getResetAction( { routeName:'Confirmation', params: { type: 'kycSuccess' } } )
                 this.props.navigation.dispatch(resetAction)

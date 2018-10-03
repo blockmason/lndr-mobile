@@ -105,6 +105,9 @@ export default {
     chooseSelfiePhoto: `Wählen Sie Selfie Foto`,
     chooseAddressPhoto: `Wählen Sie einen Adressnachweis Foto`,
     emailRequired: `Sie müssen eine E-Mail Ihre Identität zu überprüfen, klicken Sie bitte auf "E-Mail-Adresse ändern"`,
+    approved: `GENEHMIGT`,
+    rejected: `ABGELEHNT`,
+    pending: `Ausstehend`,
     error: generalCommunicationError,
     formFields: {
       firstName: `Vorname`,
@@ -392,7 +395,7 @@ export default {
 
   pendingTransactionsLanguage: {
     shell: `Ausstehende Transaktion`,
-    title: `ausstehend`,
+    title: `Ausstehend`,
     memo: `Memo:`,
     for: `Zum`,
     none: `Sie haben keine ausstehenden Transaktionen`,
@@ -501,8 +504,8 @@ export default {
   },
 
   privacyPolicy: {
-    link: `Mit dem Klicken des unten stehenden Feldes bestätigen Sie, dass Sie Blockmason Datenschutzerklärung gelesen haben und damit einverstanden sind. Blockmason kann Ihre E-Mail-Adresse verwenden, um Updates über Blockmason und LNDR zu senden. Hier ist ein Link zu den Datenschutzbestimmungen:`,
-    message: `lndr.io/terms/`
+    link: `lndr.io/terms/`,
+    message: `Mit dem Klicken des unten stehenden Feldes bestätigen Sie, dass Sie Blockmason Datenschutzerklärung gelesen haben und damit einverstanden sind. Blockmason kann Ihre E-Mail-Adresse verwenden, um Updates über Blockmason und LNDR zu senden. Hier ist ein Link zu den Datenschutzbestimmungen:`,
   },
 
   payPalLanguage: {
@@ -538,7 +541,6 @@ export default {
     { name: `Afghanistan`, code: 'AFG' },
     { name: `Albanien`, code: 'ALB' },
     { name: `Algerien`, code: 'DZA' },
-    { name: `Amerikanischen Samoa-Inseln`, code: 'ASM' },
     { name: `Andorra`, code: 'AND' },
     { name: `Angola`, code: 'AGO' },
     { name: `Anguilla`, code: 'AIA' },

@@ -105,6 +105,9 @@ export default {
     chooseSelfiePhoto: `Выберите селфи фото`,
     chooseAddressPhoto: `Выберите Подтверждение адреса Фотографии`,
     emailRequired: `Вам необходимо по электронной почте, чтобы подтвердить свою личность, пожалуйста, нажмите на "Изменить имейл"`,
+    approved: `УТВЕРЖДЕН`,
+    rejected: `Отклонено`,
+    pending: `В ожидании`,
     error: generalCommunicationError,
     formFields: {
       firstName: `Имя`,
@@ -502,7 +505,7 @@ export default {
 
   privacyPolicy: {
     link: `lndr.io/terms/`,
-    message: `Нажав ниже вы подтверждаете, что вы прочитали и согласны с политикой конфиденциальности Blockmason в. Blockmason может использовать ваш адрес электронной почты для отправки обновлений о Blockmason и LNDR. Вот ссылка на политику конфиденциальности:`
+    message: `Нажав ниже вы подтверждаете, что вы прочитали и согласны с политикой конфиденциальности Blockmason в. Blockmason может использовать ваш адрес электронной почты для отправки обновлений о Blockmason и LNDR. Вот ссылка на политику конфиденциальности:`,
   },
 
   payPalLanguage: {
@@ -538,7 +541,6 @@ export default {
     { name: `Афганистан`, code: 'AFG' },
     { name: `Албания`, code: 'ALB' },
     { name: `Алжир`, code: 'DZA' },
-    { name: `американское Самоа`, code: 'ASM' },
     { name: `андорра`, code: 'AND' },
     { name: `Ангола`, code: 'AGO' },
     { name: `Ангилья`, code: 'AIA' },

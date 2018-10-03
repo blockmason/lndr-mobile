@@ -105,6 +105,9 @@ export default {
     chooseSelfiePhoto: `Pilih Selfie Foto`,
     chooseAddressPhoto: `Pilih Bukti Alamat Photo`,
     emailRequired: `Anda memerlukan email untuk memverifikasi identitas Anda, silakan klik "Ubah Email"`,
+    approved: `DISETUJUI`,
+    rejected: `DITOLAK`,
+    pending: `Tertunda`,
     error: generalCommunicationError,
     formFields: {
       firstName: `Nama depan`,
@@ -502,7 +505,7 @@ export default {
 
   privacyPolicy: {
     link: `lndr.io/terms/`,
-    message: `Dengan mengklik di bawah Anda mengkonfirmasi bahwa Anda telah membaca dan setuju dengan kebijakan privasi Blockmason ini. Blockmason dapat menggunakan alamat email Anda untuk mengirim pembaruan tentang Blockmason dan LNDR. Berikut ini adalah link ke kebijakan privasi:`
+    message: `Dengan mengklik di bawah Anda mengkonfirmasi bahwa Anda telah membaca dan setuju dengan kebijakan privasi Blockmason ini. Blockmason dapat menggunakan alamat email Anda untuk mengirim pembaruan tentang Blockmason dan LNDR. Berikut ini adalah link ke kebijakan privasi:`,
   },
 
   payPalLanguage: {
@@ -538,7 +541,6 @@ export default {
     { name: `Afganistan`, code: 'AFG' },
     { name: `Albania`, code: 'ALB' },
     { name: `Aljazair`, code: 'DZA' },
-    { name: `Samoa Amerika`, code: 'ASM' },
     { name: `Andorra`, code: 'AND' },
     { name: `Angola`, code: 'AGO' },
     { name: `anguilla`, code: 'AIA' },

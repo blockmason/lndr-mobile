@@ -105,6 +105,9 @@ export default {
     chooseSelfiePhoto: `Zvolit selfie Photo`,
     chooseAddressPhoto: `Vyberte si doklad o bydlišti fotka`,
     emailRequired: `Potřebujete e-mail za účelem ověření vaší identity, klikněte na "Změnit email"`,
+    approved: `SCHVÁLENÝ`,
+    rejected: `REJECTED`,
+    pending: `Čekající`,
     error: generalCommunicationError,
     formFields: {
       firstName: `Jméno`,
@@ -502,7 +505,7 @@ export default {
 
   privacyPolicy: {
     link: `lndr.io/terms/`,
-    message: `Kliknutím na tlačítko níže potvrzujete, že jste si přečetli a souhlasíte se zásadami ochrany osobních údajů Blockmason je. Blockmason může používat e-mailovou adresu pro zaslání aktualizací o Blockmason a LNDR. Zde je odkaz na zásady ochrany osobních údajů:`
+    message: `Kliknutím na tlačítko níže potvrzujete, že jste si přečetli a souhlasíte se zásadami ochrany osobních údajů Blockmason je. Blockmason může používat e-mailovou adresu pro zaslání aktualizací o Blockmason a LNDR. Zde je odkaz na zásady ochrany osobních údajů:`,
   },
 
   payPalLanguage: {
@@ -538,7 +541,6 @@ export default {
     { name: `Afghánistán`, code: 'AFG' },
     { name: `Albánie`, code: 'ALB' },
     { name: `Alžírsko`, code: 'DZA' },
-    { name: `Americká Samoa`, code: 'ASM' },
     { name: `Andorra`, code: 'AND' },
     { name: `Angola`, code: 'AGO' },
     { name: `Anguilla`, code: 'AIA' },

@@ -105,6 +105,9 @@ export default {
     chooseSelfiePhoto: `เลือกเซลฟีรูปภาพ`,
     chooseAddressPhoto: `เลือกหลักฐานการอยู่รูปภาพ`,
     emailRequired: `คุณต้องอีเมลเพื่อยืนยันตัวตนของคุณโปรดคลิกที่ "เปลี่ยนอีเมล์"`,
+    approved: `ได้รับการอนุมัติ`,
+    rejected: `ปฏิเสธ`,
+    pending: `รอดำเนินการ`,
     error: generalCommunicationError,
     formFields: {
       firstName: `ชื่อจริง`,
@@ -502,7 +505,7 @@ export default {
 
   privacyPolicy: {
     link: `lndr.io/terms/`,
-    message: `โดยการคลิกที่ด้านล่างคุณยืนยันว่าคุณได้อ่านและยอมรับนโยบายความเป็นส่วนตัวของ Blockmason Blockmason อาจใช้ที่อยู่อีเมลของคุณที่จะส่งการปรับปรุงเกี่ยวกับ Blockmason และ LNDR นี่คือการเชื่อมโยงกับนโยบายความเป็นส่วนตัว:`
+    message: `โดยการคลิกที่ด้านล่างคุณยืนยันว่าคุณได้อ่านและยอมรับนโยบายความเป็นส่วนตัวของ Blockmason Blockmason อาจใช้ที่อยู่อีเมลของคุณที่จะส่งการปรับปรุงเกี่ยวกับ Blockmason และ LNDR นี่คือการเชื่อมโยงกับนโยบายความเป็นส่วนตัว:`,
   },
 
   payPalLanguage: {
@@ -538,7 +541,6 @@ export default {
     { name: `อัฟกานิสถาน`, code: 'AFG' },
     { name: `แอลเบเนีย`, code: 'ALB' },
     { name: `แอลจีเรีย`, code: 'DZA' },
-    { name: `อเมริกันซามัว`, code: 'ASM' },
     { name: `อันดอร์รา`, code: 'AND' },
     { name: `แองโกลา`, code: 'AGO' },
     { name: `แองกวิลลา`, code: 'AIA' },
