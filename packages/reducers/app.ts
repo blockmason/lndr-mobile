@@ -252,16 +252,16 @@ function getSettlementIndex(recents: any, friendAddress: String) {
 
 export const getIdentityVerificationStatus = state => state.store.identityVerificationStatus
 
-export const getTransferLimitMultiplier = state => () : number => {
-  let multiplier = 1
+export const getTransferLimitLevel = state => () : string => {
+  let level = 'standard'
 
   if (Number(state.store.bcptBalance) >= 25) {
-    multiplier = 3.75
+    level = 'bcpt'
   }
 
   if (state.store && state.store.identityVerificationStatus && state.store.identityVerificationStatus.status === 'GREEN') {
-    multiplier = 10
+    level = 'kyc'
   }
 
-  return multiplier
+  return level
 }

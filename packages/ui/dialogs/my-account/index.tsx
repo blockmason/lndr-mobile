@@ -18,7 +18,7 @@ import { UpdateAccountData, UserData } from 'lndr/user'
 import { updateNickname, updateEmail, logoutAccount, toggleNotifications, getAccountInformation,
   setEthBalance, updateLockTimeout, updatePin, getProfilePic, setProfilePic, takenNick, takenEmail,
   copyToClipboard, validatePin, setPrimaryCurrency, failedValidatePin, getVerificationStatus } from 'actions'
-import { getUser, getStore, getAllUcacCurrencies, getPrimaryCurrency, getTransferLimitMultiplier } from 'reducers/app'
+import { getUser, getStore, getAllUcacCurrencies, getPrimaryCurrency, getTransferLimitLevel } from 'reducers/app'
 import { getResetAction } from 'reducers/nav'
 import { connect } from 'react-redux'
 import { ToastActionsCreators } from 'react-native-redux-toast'
@@ -65,7 +65,7 @@ interface Props {
   setPrimaryCurrency: (value: string) => any
   failedValidatePin: () => void
   getVerificationStatus: () => void
-  transferLimitMultiplier: () => number
+  transferLimitLevel: () => number
 }
 
 interface State {
@@ -367,7 +367,7 @@ class MyAccount extends Component<Props, State> {
   }
 
   renderPanels() {
-    const { user, updateEmail, copyToClipboard, transferLimitMultiplier } = this.props
+    const { user, updateEmail, copyToClipboard, transferLimitLevel } = this.props
     const { notificationsEnabled, ethBalance, bcptBalance } = this.props.state
     const { lockTimeout, hiddenPanels, emailTextInputErrorText, authenticated, currency } = this.state
 
@@ -378,7 +378,7 @@ class MyAccount extends Component<Props, State> {
     const panelContent = [
       (<View style={style.spaceHorizontalL}>
         <Text style={[style.text, style.spaceTopL, style.center]}>{addressExhortation}</Text>
-        <Text style={[style.smallText, style.spaceTop, style.center]}>{accountManagement.sendEth.note(currency, transferLimitMultiplier())}</Text>
+        <Text style={[style.smallText, style.spaceTop, style.center]}>{accountManagement.sendEth.note(currency, transferLimitLevel())}</Text>
         <Text selectable style={style.displayText}>{`0x${user.address}`}</Text>
         <Button round onPress={() => copyToClipboard(user.address)} text={copy} />
       </View>),
@@ -545,6 +545,6 @@ class MyAccount extends Component<Props, State> {
 }
 
 export default connect((state) => ({ user: getUser(state)(), state: getStore(state)(), allCurrencies: getAllUcacCurrencies(state),
-  primaryCurrency: getPrimaryCurrency(state), transferLimitMultiplier: getTransferLimitMultiplier(state)}), { updateEmail, updateNickname,
+  primaryCurrency: getPrimaryCurrency(state), transferLimitLevel: getTransferLimitLevel(state)}), { updateEmail, updateNickname,
   getAccountInformation, logoutAccount, toggleNotifications, setEthBalance, updateLockTimeout, updatePin,
   getProfilePic, setProfilePic, copyToClipboard, setPrimaryCurrency, failedValidatePin, getVerificationStatus })(MyAccount)
