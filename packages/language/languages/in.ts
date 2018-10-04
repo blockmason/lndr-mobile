@@ -191,7 +191,7 @@ export default {
         generic: `Terjadi kesalahan saat transfer. Silakan coba lagi nanti.`,
         address: `Masukkan alamat yang valid`,
         amount: `Masukkan jumlah yang lebih besar dari 0`,
-        limitExceeded: A => `Anda hanya dapat mengirimkan ${CUR(A)}${TL(A)} per minggu. Silakan pilih jumlah yang lebih kecil.`
+        limitExceeded: (A, M) => `Anda hanya dapat mengirimkan ${CUR(A)} ${TL(A, M)} per minggu. Silakan pilih jumlah yang lebih kecil.`
       },
       amount: `Jumlah yang Dikirim`,
       address: `Alamat Tujuan (tanpa awalan '0x')`,
@@ -201,8 +201,8 @@ export default {
       ethAddress: `Alamat Ethereum`,
       txCost: (B, A) => `Biaya transaksi saat ini adalah ${CUR(A)}${B}.`,
       transferLowercase: `Transfer ETH`,
-      note: A => `Perhatian: Anda hanya dapat mentransfer ${CUR(A)}${TL(A)} per minggu dari Lndr.`,
-      warning: (Z, A) => `Anda memiliki ${CUR(A)}${Z} tersisa dari batas ${CUR(A)}${TL(A)} Anda.`,
+      note: (A, M) => `Perhatian: Anda hanya dapat mentransfer ${CUR(A)} ${TL(A, M)} per minggu dari Lndr.`,
+      warning: (Z, A, M) => `Anda memiliki ${CUR(A)}${Z} tersisa dari batas ${CUR(A)} ${TL(A, M)} Anda.`,
     },
     sendBcpt: {
       error: {
@@ -504,7 +504,7 @@ export default {
   },
 
   privacyPolicy: {
-    link: `lndr.io/terms/`,
+    link: `https://blockmason.io/lndr/terms/#privacypolicy`,
     message: `Dengan mengklik di bawah Anda mengkonfirmasi bahwa Anda telah membaca dan setuju dengan kebijakan privasi Blockmason ini. Blockmason dapat menggunakan alamat email Anda untuk mengirim pembaruan tentang Blockmason dan LNDR. Berikut ini adalah link ke kebijakan privasi:`,
   },
 

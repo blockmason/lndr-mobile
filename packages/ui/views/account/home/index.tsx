@@ -21,7 +21,7 @@ import { isFocusingOn } from 'reducers/nav'
 import { getStore, getUser, getNeedsReviewCount, calculateBalance, calculateCounterparties,
   getPrimaryCurrency, getFriendList, getPendingFromFriend, getEthExchange, getFriendFromNick } from 'reducers/app'
 import { getAccountInformation, displayError, getPending, getFriends, getFriendRequests,
-  getRecentTransactions, registerChannelID, getPayPalRequests, setInitialHomeLoad } from 'actions'
+  getRecentTransactions, registerChannelID, getPayPalRequests, setInitialHomeLoad, getVerificationStatus } from 'actions'
 import { UrbanAirship } from 'urbanairship-react-native'
 
 import style from 'theme/account'
@@ -70,6 +70,7 @@ interface Props {
   getFriendFromNick: (nickname: string) => Friend | undefined
   getFriendRequests: () => void
   setInitialHomeLoad: (value: any) => void
+  getVerificationStatus: () => void
 }
 
 interface State {
@@ -97,6 +98,7 @@ class HomeView extends Component<Props, State> {
       this.props.displayError(accountManagement.loadInformation.error)
     }
 
+    this.props.getVerificationStatus()
     await loadingPending.wrap(this.props.getPending())
     await loadingFriendRequests.wrap(this.props.getFriendRequests())
     await loadingRecentTransactions.wrap(this.props.getRecentTransactions())
@@ -268,4 +270,4 @@ export default connect((state) => ({ state: getStore(state)(), user: getUser(sta
   primaryCurrency: getPrimaryCurrency(state), friendList: getFriendList(state)(), getPendingFromFriend: getPendingFromFriend(state),
   ethExchange: getEthExchange(state), getFriendFromNick: getFriendFromNick(state) }),
   { getAccountInformation, displayError, getPending, getPayPalRequests, getRecentTransactions, getFriends, registerChannelID, getFriendRequests,
-    setInitialHomeLoad })(HomeView)
+    setInitialHomeLoad, getVerificationStatus })(HomeView)

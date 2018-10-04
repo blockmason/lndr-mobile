@@ -191,7 +191,7 @@ export default {
         generic: `C'è stato un errore con il trasferimento, si prega di riprovare più tardi`,
         address: `Per favore, inserisci un indirizzo valido`,
         amount: `Si prega di inserire un importo maggiore di 0`,
-        limitExceeded: A => `È possibile inviare solo ${CUR(A)}${TL(A)} a settimana, si prega di selezionare un importo minore`,
+        limitExceeded: (A, M) => `È possibile inviare solo ${CUR(A)} ${TL(A, M)} a settimana, si prega di selezionare un importo minore`,
       },
       amount: `Importo da inviare`,
       address: `Indirizzo di destinazione (senza il prefisso '0x')`,
@@ -201,8 +201,8 @@ export default {
       ethAddress: `Indirizzo Ethereum`,
       txCost: (B, A) => `Il costo della transazione corrente è di ${CUR(A)} ${B}`,
       transferLowercase: `Trasferimento Eth`,
-      note: A => `Si prega di notare: è possibile trasferire solo ${CUR(A)}${TL(A)} a settimana fuori Lndr`,
-      warning: (Z, A) => `Ti sono rimasti ${CUR(A)}${Z} del tuo limite ${CUR(A)}${TL(A)}`,
+      note: (A, M) => `Si prega di notare: è possibile trasferire solo ${CUR(A)} ${TL(A, M)} a settimana fuori Lndr`,
+      warning: (Z, A, M) => `Ti sono rimasti ${CUR(A)}${Z} del tuo limite ${CUR(A)} ${TL(A, M)}`,
     },
     sendBcpt: {
       error: {
@@ -504,7 +504,7 @@ export default {
   },
 
   privacyPolicy: {
-    link: `lndr.io/terms/`,
+    link: `https://blockmason.io/lndr/terms/#privacypolicy`,
     message: `Cliccando sotto confermi di aver letto e accettato l'informativa sulla privacy di Blockmason. Blockmason può usare il tuo indirizzo e-mail per inviare aggiornamenti su Blockmason e LNDR. Ecco un link all'informativa sulla privacy:`,
   },
 

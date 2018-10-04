@@ -1,4 +1,4 @@
-import { Platform, Clipboard, NetInfo } from 'react-native'
+import { Platform, Clipboard } from 'react-native'
 import { UrbanAirship } from 'urbanairship-react-native'
 import ethUtil from 'ethereumjs-util'
 import moment from 'moment'

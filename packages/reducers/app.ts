@@ -249,3 +249,19 @@ function getSettlementIndex(recents: any, friendAddress: String) {
     settlementTerms.reduce( (acc, cur) => acc || tx.memo.indexOf(cur) !== -1, false)
   })
 }
+
+export const getIdentityVerificationStatus = state => state.store.identityVerificationStatus
+
+export const getTransferLimitMultiplier = state => () : number => {
+  let multiplier = 1
+
+  if (Number(state.store.bcptBalance) >= 25) {
+    multiplier = 3.75
+  }
+
+  if (state.store && state.store.identityVerificationStatus && state.store.identityVerificationStatus.status === 'GREEN') {
+    multiplier = 10
+  }
+
+  return multiplier
+}

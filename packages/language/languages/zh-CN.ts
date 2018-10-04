@@ -191,7 +191,7 @@ export default {
         generic: `转账发生错误，请稍后再试`,
         address: `请输入一个有效的地址`,
         amount: `请输入大于0的金额`,
-        limitExceeded: A => `您每周只能转账${CUR[A]}${TL[A]}，请选择一个更小的金额`,
+        limitExceeded: (A, M) => `您每周只能转账${CUR(A)} ${TL(A, M)}，请选择一个更小的金额`,
       },
       amount: `转账金额`,
       address: `目标地址(无“0x”前缀)`,
@@ -199,10 +199,10 @@ export default {
       transferAll: `全部转移`,
       balance: Y => `您当前的以太坊余额为 ${typeof Y === 'string' ? Y.slice(0,8) :''}`,
       ethAddress: `以太坊地址`,
-      txCost: (B, A) => `当前交易成本为${CUR[A]}${B}`,
+      txCost: (B, A) => `当前交易成本为${CUR(A)}${B}`,
       transferLowercase: `转账以太坊`,
-      note: A => `请注意：您每周只能从Lndr转出${CUR[A]}${TL [A]}`,
-      warning: (Z, A) => `您在每周限额${CUR[A]}${TL[A]}中还剩余${CUR[A]}${Z}`,
+      note: (A, M) => `请注意：您每周只能从Lndr转出${CUR(A)} ${TL(A, M)}`,
+      warning: (Z, A, M) => `您在每周限额${CUR(A)} ${TL(A, M)}中还剩余${CUR(A)}${Z}`,
     },
     sendBcpt: {
       error: {
@@ -505,7 +505,7 @@ export default {
 
   privacyPolicy: {
     message: `通过点击下方按钮确认您已阅读并同意Blockmason的隐私政策。 Blockmason可以使用您的电子邮件地址发送有关Blockmason和LNDR的更新。这里是隐私条例的链接：`,
-    link: `lndr.io/terms/`,
+    link: `https://blockmason.io/lndr/terms/#privacypolicy`,
   },
 
   payPalLanguage: {

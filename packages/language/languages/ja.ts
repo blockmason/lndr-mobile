@@ -190,7 +190,7 @@ export default {
         generic: `エラーが発生しました。しばらく経ってから再度お試しください。`,
         address: `正しいアドレスを入力してください`,
         amount: `０より大きい値を入力してください`,
-        limitExceeded: A => `一週間にLndrから引き出せるのは ${CUR[A]}${TL[A]} までです`,
+        limitExceeded: (A, M) => `一週間にLndrから引き出せるのは ${CUR(A)} ${TL(A, M)} までです`,
       },
       amount: `送金額`,
       address: `送金先アドレス`,
@@ -198,10 +198,10 @@ export default {
       transferAll: `全てを送金する`,
       balance: Y => `あなたの現在のETH残高は${typeof Y === 'string' ? Y.slice(0,8) :''}です`,
       ethAddress: `イーサリアムアドレス`,
-      txCost: (B, A) => `現在の取引手数料は ${CUR[A]}${B}です`,
+      txCost: (B, A) => `現在の取引手数料は ${CUR(A)}${B}です`,
       transferLowercase: `ETHを送金する`,
-      note: A => `一週間にLndrから引き出せるのは ${CUR[A]}${TL[A]} までです`,
-      warning: (Z, A) => `現在 ${CUR[A]}${TL[A]} のうち ${CUR[A]}${Z}残っています `,
+      note: (A, M) => `一週間にLndrから引き出せるのは ${CUR(A)} ${TL(A, M)} までです`,
+      warning: (Z, A, M) => `現在 ${CUR(A)} ${TL(A, M)} のうち ${CUR(A)}${Z}残っています `,
     },
     sendBcpt: {
       error: {
@@ -505,7 +505,7 @@ export default {
   },
 
   privacyPolicy: {
-    link: `lndr.io/terms/`,
+    link: `https://blockmason.io/lndr/terms/#privacypolicy`,
     message: `以下をクリックすることでBlockmasonのプライバシー・ポリシーに同意します。あなたのメールアドレスにBlockmasonやLndrに関する最新情報が送信される可能性があります。プライバシー・ポリシーへのリンクはこちら：`,
   },
 

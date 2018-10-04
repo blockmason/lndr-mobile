@@ -191,7 +191,7 @@ export default {
         generic: `Aktarımda bir sorun oluştu, lütfen daha sonra tekrar deneyin`,
         address: `Lütfen geçerli bir adres girin`,
         amount: `Lütfen 0’dan yüksek bir tutar girin`,
-        limitExceeded: A => `Haftada sadece ${CUR(A)}${TL(A)} gönderebilirsiniz, daha düşük bir miktar seçiniz`
+        limitExceeded: (A, M) => `Haftada sadece ${CUR(A)} ${TL(A, M)} gönderebilirsiniz, daha düşük bir miktar seçiniz`
       },
       amount: `Gönderilecek Tutar`,
       address: `Hedef Adres ('0x' ön eki olmadan)`,
@@ -201,8 +201,8 @@ export default {
       ethAddress: `Ethereum Adresi`,
       txCost: (B, A) => `Mevcut işlem maliyeti ${CUR(A)}${B} 'dir` ,
       transferLowercase: `ETH Aktar`,
-      note: A => `Lütfen dikkat: Lndr dışına haftada sadece ${CUR(A)}${TL(A)} aktarabilirsiniz`,
-      warning: (Z, A) => `${CUR(A)}${TL(A)} limitinizin ${CUR(A)}${Z} kısmı kalmış bulunmaktadır`
+      note: (A, M) => `Lütfen dikkat: Lndr dışına haftada sadece ${CUR(A)} ${TL(A, M)} aktarabilirsiniz`,
+      warning: (Z, A, M) => `${CUR(A)} ${TL(A, M)} limitinizin ${CUR(A)}${Z} kısmı kalmış bulunmaktadır`
     },
     sendBcpt: {
       error: {
@@ -504,7 +504,7 @@ export default {
   },
 
   privacyPolicy: {
-    link: `lndr.io/terms/`,
+    link: `https://blockmason.io/lndr/terms/#privacypolicy`,
     message: `Altınızda tıklayarak okuyup Blockmason gizlilik politikasına kabul ettiğinizi onaylayın. Blockmason Blockmason ve LNDR hakkında güncellemeleri göndermek için e-posta adresinizi kullanabiliriz. İşte gizlilik politikasına bir link:`,
   },
 

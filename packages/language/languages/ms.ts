@@ -191,7 +191,7 @@ export default {
         generic: `Terdapat ralat semasa pemindahan, sila cuba lagi kemudian`,
         address: `Sila masukkan alamat e-mel yang sah`,
         amount: `Sila masukkan jumlah yang lebih besar daripada 0`,
-        limitExceeded: A => `Anda hanya boleh menghantar ${CUR[A]}${TL[A]} setiap minggu, sila pilih amaun yang lebih kecil`
+        limitExceeded: (A, M) => `Anda hanya boleh menghantar ${CUR(A)} ${TL(A, M)} setiap minggu, sila pilih amaun yang lebih kecil`
       },
       amount: `Jumlah untuk Dihantar`,
       address: `Alamat Destinasi (tanpa awalan '0x')`,
@@ -199,10 +199,10 @@ export default {
       transferAll: `Pindahkan semua`,
       balance: Y => `Baki semasa ETH anda ialah ${typeof Y === 'string' ? Y.slice (0,8): ''} `,
       ethAddress: `Alamat Ethereum`,
-      txCost: (B, A) => `Kos transaksi semasa adalah ${CUR[A]}${B}`,
+      txCost: (B, A) => `Kos transaksi semasa adalah ${CUR(A)}${B}`,
       transferLowercase: `Pindahkan ETH`,
-      note: A => `Sila ambil perhatian: anda hanya boleh memindahkan ${CUR[A]}${TL[A]} setiap minggu daripada Lndr`,
-      warning: (Z, A) => `Anda mempunyai ${CUR[A]}${Z} baki daripada ${CUR[A]}${TL[A]} had anda`,
+      note: (A, M) => `Sila ambil perhatian: anda hanya boleh memindahkan ${CUR(A)} ${TL(A, M)} setiap minggu daripada Lndr`,
+      warning: (Z, A, M) => `Anda mempunyai ${CUR(A)}${Z} baki daripada ${CUR(A)} ${TL(A, M)} had anda`,
     },
     sendBcpt: {
       error: {
@@ -504,7 +504,7 @@ export default {
   },
 
   privacyPolicy: {
-    link: `lndr.io/terms/`,
+    link: `https://blockmason.io/lndr/terms/#privacypolicy`,
     message: `Dengan mengklik di bawah anda mengesahkan yang anda telah membaca dan bersetuju dengan dasar privasi Blockmason ini. Blockmason boleh menggunakan alamat e-mel anda untuk menghantar kemas kini mengenai Blockmason dan LNDR. Berikut adalah pautan kepada dasar privasi:`,
   },
 

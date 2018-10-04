@@ -191,7 +191,7 @@ export default {
         generic: `Došlo k chybě při převodu, zkuste to prosím později`,
         address: `Zadejte prosím platnou adresu`,
         amount: `Zadejte částku větší než 0`,
-        limitExceeded: A => `Můžete poslat pouze ${CUR(A)}${TL(A)} týdně, zvolte menší částku`
+        limitExceeded: (A, M) => `Můžete poslat pouze ${CUR(A)} ${TL(A, M)} týdně, zvolte menší částku`
       },
       amount: `Částka k odeslání`,
       address: `Cílová adresa (bez předpon '0x')`,
@@ -201,8 +201,8 @@ export default {
       ethAddress: `Ethereum adresa`,
       txCost: (B, A) => `Aktuální cena transakce je ${CUR(A)}${B}`,
       transferLowercase: `Převést Eth`,
-      note: A => `Poznámka: můžete převést max. ${CUR(A)}${TL(A)} týdně z Lndr`,
-      warning: (Z, A) => `Zbývá vám ${CUR(A)}${Z} z vašeho limitu ${CUR(A)}${TL(A)}`,
+      note: (A, M) => `Poznámka: můžete převést max. ${CUR(A)} ${TL(A, M)} týdně z Lndr`,
+      warning: (Z, A, M) => `Zbývá vám ${CUR(A)}${Z} z vašeho limitu ${CUR(A)} ${TL(A, M)}`,
     },
     sendBcpt: {
       error: {
@@ -504,7 +504,7 @@ export default {
   },
 
   privacyPolicy: {
-    link: `lndr.io/terms/`,
+    link: `https://blockmason.io/lndr/terms/#privacypolicy`,
     message: `Kliknutím na tlačítko níže potvrzujete, že jste si přečetli a souhlasíte se zásadami ochrany osobních údajů Blockmason je. Blockmason může používat e-mailovou adresu pro zaslání aktualizací o Blockmason a LNDR. Zde je odkaz na zásady ochrany osobních údajů:`,
   },
 

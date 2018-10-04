@@ -43,7 +43,7 @@ export const currencySymbols = (currency) => {
   return symbols[currency] === undefined ? '$' : symbols[currency]
 }
 
-export const transferLimits = (currency) => {
+export const transferLimits = (currency: string, multiplier = 1) => {
   const limits = {
     AUD: '250',
     CAD: '200',
@@ -71,7 +71,7 @@ export const transferLimits = (currency) => {
     VND: '4500000'
   }
 
-  return limits[currency] === undefined ? '250' : limits[currency]
+  return limits[currency] === undefined ? String(250 * multiplier) : String(Number(limits[currency]) * multiplier)
 }
 
 const getCurrency = (country: string) => {

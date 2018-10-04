@@ -18,7 +18,7 @@ import { UpdateAccountData, UserData } from 'lndr/user'
 import { updateNickname, updateEmail, logoutAccount, toggleNotifications, getAccountInformation,
   setEthBalance, updateLockTimeout, updatePin, getProfilePic, setProfilePic, takenNick, takenEmail,
   copyToClipboard, validatePin, setPrimaryCurrency, failedValidatePin, getVerificationStatus } from 'actions'
-import { getUser, getStore, getAllUcacCurrencies, getPrimaryCurrency } from 'reducers/app'
+import { getUser, getStore, getAllUcacCurrencies, getPrimaryCurrency, getTransferLimitMultiplier } from 'reducers/app'
 import { getResetAction } from 'reducers/nav'
 import { connect } from 'react-redux'
 import { ToastActionsCreators } from 'react-native-redux-toast'
@@ -65,6 +65,7 @@ interface Props {
   setPrimaryCurrency: (value: string) => any
   failedValidatePin: () => void
   getVerificationStatus: () => void
+  transferLimitMultiplier: () => number
 }
 
 interface State {
@@ -360,13 +361,13 @@ class MyAccount extends Component<Props, State> {
         <Text style={[style.title, identityVerificationStatus.status === 'RED' ? style.redAmount : style.greenAmount]}>{getStatus(identityVerificationStatus)}</Text>
         {showButtonOrEmail && centerMessage}
         {identityVerificationStatus.status === 'RED' && <Text style={[style.smallText, style.spaceTop]}>{lndrVerified.tryAgain}</Text>}
-        <Text style={[style.smallText, style.spaceTop, general.spaceBelowM]}>{lndrVerified.prefix} <Text style={[style.link]} onPress={() => Linking.openURL('https://lndr.io/terms/')}>{lndrVerified.linkTitle}</Text>{lndrVerified.postfix}</Text>
+        <Text style={[style.smallText, style.spaceTop, general.spaceBelowM]}>{lndrVerified.prefix} <Text style={[style.link]} onPress={() => Linking.openURL('https://https://blockmason.io/lndr/terms/#privacypolicy')}>{lndrVerified.linkTitle}</Text>{lndrVerified.postfix}</Text>
       </View>
     )
   }
 
   renderPanels() {
-    const { user, updateEmail, copyToClipboard } = this.props
+    const { user, updateEmail, copyToClipboard, transferLimitMultiplier } = this.props
     const { notificationsEnabled, ethBalance, bcptBalance } = this.props.state
     const { lockTimeout, hiddenPanels, emailTextInputErrorText, authenticated, currency } = this.state
 
@@ -377,7 +378,7 @@ class MyAccount extends Component<Props, State> {
     const panelContent = [
       (<View style={style.spaceHorizontalL}>
         <Text style={[style.text, style.spaceTopL, style.center]}>{addressExhortation}</Text>
-        <Text style={[style.smallText, style.spaceTop, style.center]}>{accountManagement.sendEth.note(currency)}</Text>
+        <Text style={[style.smallText, style.spaceTop, style.center]}>{accountManagement.sendEth.note(currency, transferLimitMultiplier())}</Text>
         <Text selectable style={style.displayText}>{`0x${user.address}`}</Text>
         <Button round onPress={() => copyToClipboard(user.address)} text={copy} />
       </View>),
@@ -544,6 +545,6 @@ class MyAccount extends Component<Props, State> {
 }
 
 export default connect((state) => ({ user: getUser(state)(), state: getStore(state)(), allCurrencies: getAllUcacCurrencies(state),
-  primaryCurrency: getPrimaryCurrency(state)}), { updateEmail, updateNickname,
+  primaryCurrency: getPrimaryCurrency(state), transferLimitMultiplier: getTransferLimitMultiplier(state)}), { updateEmail, updateNickname,
   getAccountInformation, logoutAccount, toggleNotifications, setEthBalance, updateLockTimeout, updatePin,
   getProfilePic, setProfilePic, copyToClipboard, setPrimaryCurrency, failedValidatePin, getVerificationStatus })(MyAccount)

@@ -22,7 +22,7 @@ const {
   accountManagement
 } = language
 
-import { getUser, getEthBalance, getEthExchange, getWeeklyEthTotal, getPrimaryCurrency } from 'reducers/app'
+import { getUser, getEthBalance, getEthExchange, getWeeklyEthTotal, getPrimaryCurrency, getTransferLimitMultiplier } from 'reducers/app'
 import { sendEth, getEthTxCost } from 'actions'
 import { connect } from 'react-redux'
 
@@ -36,6 +36,7 @@ interface Props {
   primaryCurrency: string
   ethExchange: (currency: string) => string
   sendEth: (address: string, amount: string) => any
+  transferLimitMultiplier: () => number
 }
 
 interface State {
@@ -67,7 +68,7 @@ class TransferEth extends Component<Props, State> {
 
   async submit() {
     const { amount, address } = this.state
-    const { ethExchange, ethSentPastWeek, primaryCurrency } = this.props
+    const { ethExchange, ethSentPastWeek, primaryCurrency, transferLimitMultiplier } = this.props
 
     if (!this.validAddress()) {
       this.setState({ formInputError: accountManagement.sendEth.error.address })
@@ -77,8 +78,8 @@ class TransferEth extends Component<Props, State> {
       return
     }
 
-    if (( ethSentPastWeek + Number(amount) ) * Number(ethExchange(primaryCurrency)) > Number(transferLimits(primaryCurrency)) ) {
-      this.setState({ formInputError: accountManagement.sendEth.error.limitExceeded(primaryCurrency) })
+    if (( ethSentPastWeek + Number(amount) ) * Number(ethExchange(primaryCurrency)) > Number(transferLimits(primaryCurrency, transferLimitMultiplier())) ) {
+      this.setState({ formInputError: accountManagement.sendEth.error.limitExceeded(primaryCurrency, transferLimitMultiplier()) })
       return
     }
 
@@ -122,8 +123,8 @@ class TransferEth extends Component<Props, State> {
   }
 
   getLimit() {
-    const { ethExchange, ethSentPastWeek, primaryCurrency } = this.props
-    return formatEthRemaining(ethExchange, ethSentPastWeek, primaryCurrency)
+    const { ethExchange, ethSentPastWeek, primaryCurrency, transferLimitMultiplier } = this.props
+    return formatEthRemaining(ethExchange, ethSentPastWeek, primaryCurrency, transferLimitMultiplier())
   }
 
   toFiat(amount: string | undefined, exchange: string) {
@@ -149,7 +150,7 @@ class TransferEth extends Component<Props, State> {
 
   render() {
     const { amount, address, txCost, formInputError } = this.state
-    const { ethBalance, ethExchange, primaryCurrency } = this.props
+    const { ethBalance, ethExchange, primaryCurrency, transferLimitMultiplier } = this.props
 
     return <ScrollView style={general.whiteFlex}>
       <View style={general.view}>
@@ -174,7 +175,7 @@ class TransferEth extends Component<Props, State> {
                     onChangeText={address => this.setState({ address: this.setAddress(address), formInputError: undefined })}
                   />
                 </View>
-                <Text style={[formStyle.smallText, formStyle.spaceTop, formStyle.center]}>{accountManagement.sendEth.warning(this.getLimit(), primaryCurrency)}</Text>
+                <Text style={[formStyle.smallText, formStyle.spaceTop, formStyle.center]}>{accountManagement.sendEth.warning(this.getLimit(), primaryCurrency, transferLimitMultiplier())}</Text>
                 <Text style={formStyle.title}>{accountManagement.sendEth.amount}</Text>
                 <View style={formStyle.textInputContainer}>
                   <TextInput
@@ -203,4 +204,7 @@ class TransferEth extends Component<Props, State> {
 }
 
 export default connect((state) => ({ user: getUser(state)(), ethBalance: getEthBalance(state), ethExchange: getEthExchange(state),
-  ethSentPastWeek: getWeeklyEthTotal(state), primaryCurrency: getPrimaryCurrency(state) }), { sendEth })(TransferEth)
+  ethSentPastWeek: getWeeklyEthTotal(state), primaryCurrency: getPrimaryCurrency(state), transferLimitMultiplier: getTransferLimitMultiplier(state) })
+  , { sendEth })(TransferEth)
+
+  

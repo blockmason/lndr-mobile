@@ -29,7 +29,7 @@ const {
 } = language
 
 import { getUser, settlerIsMe, getEthExchange, getWeeklyEthTotal, calculateBalance, getUcacCurrency, getPrimaryCurrency,
-  getFriendFromAddress } from 'reducers/app'
+  getFriendFromAddress, getTransferLimitMultiplier } from 'reducers/app'
 import { addDebt, rejectPendingSettlement, getEthTxCost } from 'actions'
 import { connect } from 'react-redux'
 
@@ -55,6 +55,7 @@ interface Props {
   settlerIsMe: (pendingSettlement: PendingUnilateral) => boolean
   calculateBalance: (friend: Friend) => number
   getUcacCurrency: (ucac: string) => string
+  transferLimitMultiplier: () => number
 }
 
 interface State {
@@ -92,15 +93,15 @@ class PendingSettlementDetail extends Component<Props, State> {
   }
 
   async addDebt(pendingSettlement: PendingUnilateral) {
-    const { ethExchange, ethSentPastWeek, user, calculateBalance, primaryCurrency } = this.props
+    const { ethExchange, ethSentPastWeek, user, calculateBalance, primaryCurrency, transferLimitMultiplier } = this.props
     const { memo, amount, ucac, settlementCurrency, debtorAddress, debtorNickname, creditorAddress, creditorNickname, multiSettlements } = pendingSettlement
     const friend = user.address === debtorAddress ? new Friend(creditorAddress, creditorNickname) : new Friend(debtorAddress, debtorNickname)
     const direction = user.address === debtorAddress ? 'borrow' : 'lend'
     const settleTotal = multiSettlements !== undefined
     const formattedAmount = hasNoDecimals(this.props.getUcacCurrency(ucac)) ? amount : amount / 100
 
-    if ( creditorAddress === user.address && ( ethSentPastWeek * Number(ethExchange(primaryCurrency)) + formattedAmount > Number(transferLimits(primaryCurrency)) ) ) {
-      this.setState({ confirmationError: accountManagement.sendEth.error.limitExceeded(primaryCurrency) })
+    if ( creditorAddress === user.address && ( ethSentPastWeek * Number(ethExchange(primaryCurrency)) + formattedAmount > Number(transferLimits(primaryCurrency, transferLimitMultiplier())) ) ) {
+      this.setState({ confirmationError: accountManagement.sendEth.error.limitExceeded(primaryCurrency, transferLimitMultiplier()) })
       return
     }
 
@@ -213,13 +214,13 @@ class PendingSettlementDetail extends Component<Props, State> {
   }
 
   getLimit() {
-    const { ethExchange, ethSentPastWeek, primaryCurrency } = this.props
-    return formatEthRemaining(ethExchange, ethSentPastWeek, primaryCurrency)
+    const { ethExchange, ethSentPastWeek, primaryCurrency, transferLimitMultiplier } = this.props
+    return formatEthRemaining(ethExchange, ethSentPastWeek, primaryCurrency, transferLimitMultiplier())
   }
 
   render() {
     const { txCost, confirmationError } = this.state
-    const { user, primaryCurrency } = this.props
+    const { user, primaryCurrency, transferLimitMultiplier } = this.props
     const pendingSettlement = this.getPendingSettlement()
     const friendAddress = user.address === pendingSettlement.creditorAddress ? pendingSettlement.debtorAddress : pendingSettlement.creditorAddress
     const friend = this.props.getFriendFromAddress(friendAddress) || new Friend('', '')
@@ -246,7 +247,7 @@ class PendingSettlementDetail extends Component<Props, State> {
           <BalanceSection friend={friend} />
           }
           <View style={{marginBottom: 20}}/>
-          {user.address === pendingSettlement.debtorAddress ? null : <Text style={[formStyle.smallText, formStyle.spaceTop, formStyle.center]}>{accountManagement.sendEth.warning(this.getLimit(), primaryCurrency)}</Text>}
+          {user.address === pendingSettlement.debtorAddress ? null : <Text style={[formStyle.smallText, formStyle.spaceTop, formStyle.center]}>{accountManagement.sendEth.warning(this.getLimit(), primaryCurrency, transferLimitMultiplier())}</Text>}
           <Text style={[accountStyle.txCost, formStyle.spaceBottom, {marginLeft: '2%'}]}>{accountManagement.sendEth.txCost(formatCommaDecimal(txCost), primaryCurrency)}</Text>
           { confirmationError && <Text style={[formStyle.warningText, {alignSelf: 'center'}]}>{confirmationError}</Text>}
           {this.showButtons()}
@@ -259,4 +260,5 @@ class PendingSettlementDetail extends Component<Props, State> {
 
 export default connect((state) => ({ user: getUser(state)(), settlerIsMe: settlerIsMe(state), ethExchange: getEthExchange(state),
   ethSentPastWeek: getWeeklyEthTotal(state), calculateBalance: calculateBalance(state), getUcacCurrency: getUcacCurrency(state),
-  primaryCurrency: getPrimaryCurrency(state), getFriendFromAddress: getFriendFromAddress(state) }), { addDebt, rejectPendingSettlement })(PendingSettlementDetail)
+  primaryCurrency: getPrimaryCurrency(state), getFriendFromAddress: getFriendFromAddress(state),
+  transferLimitMultiplier: getTransferLimitMultiplier(state) }), { addDebt, rejectPendingSettlement })(PendingSettlementDetail)
