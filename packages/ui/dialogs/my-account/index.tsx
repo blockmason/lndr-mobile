@@ -335,6 +335,7 @@ class MyAccount extends Component<Props, State> {
 
   renderVerify() {
     const { identityVerificationStatus } = this.props.state
+    const hasStatus = !identityVerificationStatus.status && identityVerificationStatus.sumsubId
 
     let statusText = ''
     let imageSource = require('images/hourglass.png')
@@ -344,13 +345,13 @@ class MyAccount extends Component<Props, State> {
     } else if (identityVerificationStatus.status === 'RED') {
       statusText = lndrVerified.rejected
       imageSource = require('images/thumbs-down.png')
-    } else if (!identityVerificationStatus.status && identityVerificationStatus.sumsubId) {
+    } else if (hasStatus) {
       statusText = lndrVerified.pending
     }
 
     const statusSection = (<View style={general.centeredColumn}>
       <Text style={[style.title, identityVerificationStatus.status === 'RED' ? style.redAmount : style.greenAmount]}>{statusText}</Text>
-      {identityVerificationStatus.status !== null && <Image source={imageSource} style={[{height: 50, width: 50}, general.smallTopMargin]} />}
+      {hasStatus && <Image source={imageSource} style={[{height: 50, width: 50}, general.smallTopMargin]} />}
     </View>)
 
     const showButtonOrEmail = identityVerificationStatus.status === 'RED' || (!identityVerificationStatus.status && !identityVerificationStatus.sumsubId)
@@ -395,7 +396,7 @@ class MyAccount extends Component<Props, State> {
       (<View style={style.spaceHorizontalL}>
         <Text style={[style.text, style.spaceTopL, style.center]}>{currentBalance.bcpt}</Text>
         <Text selectable style={style.displayText}>{bcptBalance}</Text>
-        <Button disabled={Number(ethBalance) <= 0} round onPress={() => this.props.navigation.navigate('TransferBcpt')} text={accountManagement.sendBcpt.transfer} />
+        <Button disabled={Number(bcptBalance) <= 0} round onPress={() => this.props.navigation.navigate('TransferBcpt')} text={accountManagement.sendBcpt.transfer} />
       </View>),
       (<View style={style.spaceHorizontalL}>
         <Button round onPress={() => this.props.navigation.navigate('RemoveAccount')} text={removeAccount} />
