@@ -4,11 +4,9 @@ import { Text, View, ScrollView, RefreshControl, Dimensions, Platform, Share } f
 import firebase from 'react-native-firebase'
 
 import Friend from 'lndr/friend'
-import { currencySymbols, transferLimits } from 'lndr/currencies'
 
 import Button from 'ui/components/button'
 import Section from 'ui/components/section'
-import Popup, { closePopup } from 'ui/components/popup'
 import Loading, { LoadingContext } from 'ui/components/loading'
 import FriendRow from 'ui/components/friend-row'
 
@@ -87,7 +85,6 @@ class FriendsView extends Component<Props, State> {
   }
 
   closePopupAndRefresh() {
-    closePopup()
     this.refresh()
   }
 

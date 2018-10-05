@@ -191,7 +191,7 @@ export default {
         generic: `Az átutalás során hiba történt, kérjük, később próbálja újra`,
         address: `Kérjük, érvényes címet adjon meg`,
         amount: `Kérjük, egy 0-nál nagyobb összeget adjon meg`,
-        limitExceeded: A => `Hetente csak ${CUR(A)} ${TL(A)} összeget küldhet, kérjük, adjon meg egy kisebb összeget`
+        limitExceeded: (A, M) => `Hetente csak ${CUR(A)} ${TL(A, M)} összeget küldhet, kérjük, adjon meg egy kisebb összeget`
       },
       amount: `Küldésre Szánt Összeg`,
       address: `Rendeltetési Cím ('0x' előtag nélkül)`,
@@ -201,8 +201,8 @@ export default {
       ethAddress: `Ethereum Cím`,
       txCost: (B, A) => `Jelenlegi tranzakciós költsége ${CUR(A)} ${B}`,
       transferLowercase: `Eth Átutalása`,
-      note: A => `Kérjük, vegye figyelembe: a Lndr rendszerén kívül hetente csak ${CUR(A)} ${TL(A)} összeget utalhat át`,
-      warning: (Z, A) => `${CUR(A)} ${Z} a fennmaradó összeg a ${CUR(A)} ${TL(A)} limitjéből:`,
+      note: (A, M) => `Kérjük, vegye figyelembe: a Lndr rendszerén kívül hetente csak ${CUR(A)} ${TL(A, M)} összeget utalhat át`,
+      warning: (Z, A, M) => `${CUR(A)} ${Z} a fennmaradó összeg a ${CUR(A)} ${TL(A, M)} limitjéből:`,
     },
     sendBcpt: {
       error: {
@@ -504,7 +504,7 @@ export default {
   },
 
   privacyPolicy: {
-    link: `lndr.io/terms/`,
+    link: `blockmason.io/lndr/terms/`,
     message: `Az alábbi linkre kattintva Ön megerősíti, hogy elolvasta és elfogadja a Blockmason adatvédelmi irányelveit. Blockmason használhatja az e-mail címét, hogy küldjön frissítéseket Blockmason és LNDR. Itt van egy link, hogy az adatvédelmi politika:`,
   },
 

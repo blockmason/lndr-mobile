@@ -191,7 +191,7 @@ export default {
         generic: `Det oppstod en feil med overføringen, vennligst prøv igjen senere`,
         address: `Vennligst oppgi en gyldig adresse`,
         amount: `Venligst fyll inn et beløp større enn 0`,
-        limitExceeded: A => `Du kan bare sende ${CUR(A)}${TL(A)} per uke, vennligst velg et mindre beløp`,
+        limitExceeded: (A, M) => `Du kan bare sende ${CUR(A)} ${TL(A, M)} per uke, vennligst velg et mindre beløp`,
       },
       amount: `Beløpet som skal sendes`,
       address: `Bestemmelsesadresse (uten '0x' prefiks)`,
@@ -201,8 +201,8 @@ export default {
       ethAddress: `Ethereum adresse`,
       txCost: (B, A) => `De aktuelle transaksjonskostnader er ${CUR(A)}${B}`,
       transferLowercase: `Overfør Eth`,
-      note: A => `Merk: Du kan bare overføre ${CUR(A)}${TL(A)} per uke ut av Lndr`,
-      warning: (Z, A) => `Du har ${CUR(A)}${Z} igjen av ditt ${CUR(A)}${TL(A)} maksbeløpet`,
+      note: (A, M) => `Merk: Du kan bare overføre ${CUR(A)} ${TL(A, M)} per uke ut av Lndr`,
+      warning: (Z, A, M) => `Du har ${CUR(A)}${Z} igjen av ditt ${CUR(A)} ${TL(A, M)} maksbeløpet`,
     },
     sendBcpt: {
       error: {
@@ -504,7 +504,7 @@ export default {
   },
 
   privacyPolicy: {
-    link: `lndr.io/terms/`,
+    link: `blockmason.io/lndr/terms/`,
     message: `Ved å klikke nedenfor bekrefter du at du har lest og aksepterer Blockmasons personvernreglene. Blockmason kan bruke e-postadressen din til å sende oppdateringer om Blockmason og LNDR. Her er en lenke til personvernreglene:`,
   },
 

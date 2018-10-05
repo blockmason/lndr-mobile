@@ -1,6 +1,6 @@
 import React, { Component } from 'react'
 import { View, Text, Switch, ScrollView, TextInput, Alert, BackHandler, KeyboardAvoidingView, Platform, Picker, Image, TouchableHighlight,
-    Linking, ActionSheetIOS } from 'react-native'
+    Linking, ActionSheetIOS, Keyboard, Modal } from 'react-native'
 import ActionSheet from 'react-native-actionsheet'
 import ImagePicker from 'react-native-image-picker'
 import Icon from 'react-native-vector-icons/Ionicons'
@@ -11,6 +11,7 @@ import firebase from 'react-native-firebase'
 import Button from 'ui/components/button'
 import DashboardShell from 'ui/components/dashboard-shell'
 import Loading, { LoadingContext } from 'ui/components/loading'
+import SpinningPicker from 'ui/components/spinning-picker'
 
 import { setKYCImage, submitKYC, kycToastMessage } from 'actions'
 import { getUser } from 'reducers/app'
@@ -19,6 +20,7 @@ import { getResetAction } from 'reducers/nav'
 import style from 'theme/form'
 import general from 'theme/general'
 import { paleGray } from 'theme/include/colors'
+import popupStyle from 'theme/popup'
 
 import { UserData, IdentityVerificationData } from 'lndr/user'
 import KYC from 'lndr/kyc'
@@ -26,6 +28,7 @@ import { dobFormat } from 'lndr/format'
 
 import language from 'language'
 const { submit, lndrVerified, countries, cancel } = language
+const countryNames = countries.map(country => country.name)
 
 const loadingContext = new LoadingContext()
 
@@ -35,8 +38,7 @@ const governmentPhotoTypes = [
     { name: lndrVerified.national, code: 'ID_CARD' }
 ]
 const addressPhotoTypes = [
-    { name: lndrVerified.utility, code: 'UTILITY_BILL' },
-    { name: lndrVerified.other, code: 'OTHER' }
+    { name: lndrVerified.utility, code: 'UTILITY_BILL' }
 ]
 
 interface Props {
@@ -73,11 +75,20 @@ interface State {
     dobError?: string
     generalFormError?: string
     submitted: boolean
+    shouldPickCountry: boolean
   }
 
 class VerifyIdentityForm extends Component <Props, State>{
     addressPhotoTypeActionSheet: any
     governmentPhotoTypeActionSheet: any
+    textInput2: any
+    textInput3: any
+    textInput4: any
+    textInput5: any
+    textInput6: any
+    textInput7: any
+    textInput8: any
+    textInput9: any
 
     constructor(props) {
         super(props)
@@ -98,6 +109,7 @@ class VerifyIdentityForm extends Component <Props, State>{
             governmentPhotoType: {name: '', value: ''},
             addressPhotoType: {name: '', value: ''},
             submitted: false,
+            shouldPickCountry: false,
         }
         this.submitForm = this.submitForm.bind(this)
         this.showGovernmentIssuedInfo = this.showGovernmentIssuedInfo.bind(this)
@@ -155,7 +167,6 @@ ${lndrVerified.national}
 ${lndrVerified.bank}
 ${lndrVerified.utility}
         ` : `
-        • ${lndrVerified.bank}
         • ${lndrVerified.utility}
             `
 
@@ -239,8 +250,10 @@ ${lndrVerified.utility}
         }
     }
 
-    chooseCountry(country) {
-        this.setState({ country, generalFormError: undefined })
+    chooseCountry(selection: string) {
+        const country = countries.find(option => option.name === selection)
+        console.log('selection', selection, country)
+        this.setState({ country, generalFormError: undefined, shouldPickCountry: false })
     }
 
     chooseGovernmentPhotoType(governmentPhotoType) {
@@ -254,7 +267,6 @@ ${lndrVerified.utility}
     }
 
     async getPhoto(type: string, getType = true) {
-        console.log(this.state.governmentPhotoType.name, this.state.addressPhotoType.name)
         let title
         if (type === 'governmentPhoto') {
             if (getType) {
@@ -298,6 +310,7 @@ ${lndrVerified.utility}
     }
     
     submitForm = async () => {
+        Keyboard.dismiss()
         const { firstName, lastName, dob, street, phone, city, state, postCode, country, governmentPhoto, selfiePhoto, addressPhoto, agreement, 
             governmentPhotoType, addressPhotoType } = this.state
         const { email, address } = this.props.user
@@ -322,33 +335,36 @@ ${lndrVerified.utility}
         }
     }
 
-    showActionSheet(title, choices, onSelect) {
-        ActionSheetIOS.showActionSheetWithOptions({
-            options: choices.map(choice => choice.name).concat(cancel),
-            title,
-            cancelButtonIndex: choices.length
-        },
-        (index) => {
-            if (index === choices.length) {
-                return
-            }
-            onSelect(choices[index])
-        })
-    }
-
     renderPicker(choices, label: string, selection: any, changeValue: (newValue: any) => void) {
+        console.log('CHOICES', choices, countries)
+        const { shouldPickCountry } = this.state
+
         if (Platform.OS === 'ios') {
             return <View>
-                <Text style={style.pickerLabel} onPress={() => this.showActionSheet(label, choices, changeValue)}>{selection && selection.name ? selection.name : label}</Text>
-                <FontAwesome style={style.blackCaretDown} name={'caret-down'} onPress={() => this.showActionSheet(label, choices, changeValue)}/>
+                <TouchableHighlight underlayColor={paleGray} onPress={() => this.setState({ shouldPickCountry: true })}>
+                    <View>
+                        <Text style={style.pickerLabel} >{selection && selection.name ? selection.name : label}</Text>
+                        <FontAwesome style={style.blackCaretDown} name={'caret-down'} />
+                    </View>
+                </TouchableHighlight>
+                <Modal
+                    animationType="slide"
+                    transparent={true}
+                    visible={shouldPickCountry}
+                    onRequestClose={() => this.setState({shouldPickCountry: false})}>
+                    <View style={[popupStyle.modalOverlay, general.flexColumn, general.justifyEnd]}>
+                        <View style={{backgroundColor:'white', paddingTop:4}}>
+                            <SpinningPicker label={label} allItems={choices} selectedItem={selection.name} onPickerDone={(value) => changeValue(value)} />
+                        </View>
+                    </View>
+                </Modal>
             </View>
         } else {
             return <Picker
-                selectedValue={selection} style={style.picker}
+                selectedValue={selection.name} style={style.picker}
                 onValueChange={changeValue}>
                 {[<Picker.Item label={label} value='0' key={-1} />]
-                    .concat(choices.map((value, key) => 
-                        <Picker.Item label={value.name} key={key} value={value}>{selection.name}</Picker.Item>)
+                    .concat(choices.map((value, key) => <Picker.Item label={value} key={key} value={value}>{selection.name}</Picker.Item>)
                 )}
             </Picker>
         }
@@ -398,6 +414,9 @@ ${lndrVerified.utility}
                                     placeholder={lndrVerified.formFields.firstName} value={firstName}
                                     maxLength={20} underlineColorAndroid='transparent'
                                     onChangeText={this.onFirstNameChange}
+                                    returnKeyType = { "next" }
+                                    onSubmitEditing={() => { this.textInput2.focus() }}
+                                    blurOnSubmit={false}
                                     />
                             </View>
                             {!!lastNameError && <Text style={style.formErrorText}>{lastNameError}</Text>}
@@ -406,6 +425,10 @@ ${lndrVerified.utility}
                                     placeholder={lndrVerified.formFields.lastName} value={lastName}
                                     maxLength={20} underlineColorAndroid='transparent'
                                     onChangeText={this.onLastNameChange}
+                                    ref={(input) => { this.textInput2 = input }}
+                                    returnKeyType = { "next" }
+                                    onSubmitEditing={() => { this.textInput3.focus() }}
+                                    blurOnSubmit={false}
                                     />
                             </View>
                             {!!streetError && <Text style={style.formErrorText}>{streetError}</Text>}
@@ -415,6 +438,10 @@ ${lndrVerified.utility}
                                     multiline={true} value={street}
                                     maxLength={80} underlineColorAndroid='transparent'
                                     onChangeText={this.onStreetChange}
+                                    ref={(input) => { this.textInput3 = input }}
+                                    returnKeyType = { "next" }
+                                    onSubmitEditing={() => { this.textInput4.focus() }}
+                                    blurOnSubmit={false}
                                     />
                             </View>
                             {!!cityError && <Text style={style.formErrorText}>{cityError}</Text>}
@@ -423,6 +450,10 @@ ${lndrVerified.utility}
                                     placeholder={lndrVerified.formFields.city} value={city}
                                     maxLength={80} underlineColorAndroid='transparent'
                                     onChangeText={this.onCityChange}
+                                    ref={(input) => { this.textInput4 = input }}
+                                    returnKeyType = { "next" }
+                                    onSubmitEditing={() => { this.textInput5.focus() }}
+                                    blurOnSubmit={false}
                                     />
                             </View>
                             {!!stateError && <Text style={style.formErrorText}>{stateError}</Text>}
@@ -431,35 +462,48 @@ ${lndrVerified.utility}
                                     placeholder={lndrVerified.formFields.state} value={state}
                                     maxLength={80} underlineColorAndroid='transparent'
                                     onChangeText={this.onStateChange}
+                                    ref={(input) => { this.textInput5 = input }}
+                                    returnKeyType = { "next" }
+                                    onSubmitEditing={() => { this.textInput6.focus() }}
+                                    blurOnSubmit={false}
                                     />
                             </View>
                             {!!postCodeError && <Text style={style.formErrorText}>{postCodeError}</Text>}
                             <View style={style.textInputContainer}>
                                 <TextInput style={style.textInput} placeholder={lndrVerified.formFields.postalCode}
                                     value={postCode} underlineColorAndroid='transparent'
-                                    onChangeText={this.onPostCodeChange} 
+                                    onChangeText={this.onPostCodeChange}
+                                    ref={(input) => { this.textInput6 = input }}
+                                    returnKeyType = { "next" }
+                                    onSubmitEditing={() => { this.textInput7.focus() }}
+                                    blurOnSubmit={false}
                                     />
                             </View>
                             <View style={style.pickerContainer}>
-                                {this.renderPicker(countries, lndrVerified.formFields.country, country, this.chooseCountry)}
+                                {this.renderPicker(countryNames, lndrVerified.formFields.country, country, this.chooseCountry)}
                             </View>
                             {!!phoneError && <Text style={style.formErrorText}>{phoneError}</Text>}
                             <View style={style.textInputContainer}>
                                 <TextInput style={style.textInput} placeholder={lndrVerified.formFields.phone}
                                     value={phone} keyboardType="phone-pad" underlineColorAndroid='transparent'
                                     onChangeText={this.onPhoneChange}
+                                    ref={(input) => { this.textInput7 = input }}
+                                    returnKeyType = { "next" }
+                                    onSubmitEditing={() => { this.textInput8.focus() }}
+                                    blurOnSubmit={false}
                                     />
                             </View>
                             {!!dobError && <Text style={style.formErrorText}>{dobError}</Text>}
                             <View style={style.textInputContainer}>
                                 <TextInput style={style.textInput} placeholder={lndrVerified.formFields.dob}
-                                    value={dob} keyboardType="numeric" underlineColorAndroid='transparent'
+                                    value={dob} keyboardType="number-pad" underlineColorAndroid='transparent'
                                     onChangeText={this.onDateOfBirthChange}
+                                    ref={(input) => { this.textInput8 = input }}
                                     />
                             </View>
                             <View style={[general.centeredColumn, style.photoUploadContainer]}>
                                 <View style={[general.flexRow]}>
-                                    <Text style={[style.label, style.photoTitle]}>{lndrVerified.upload}
+                                    <Text style={[style.label, style.photoTitle, general.standardHMargin]}>{lndrVerified.upload}
                                         <Text onPress={this.showGovernmentIssuedInfo} style={[style.link]}>{lndrVerified.governmentId}</Text>
                                     </Text>
                                 </View>
@@ -475,7 +519,7 @@ ${lndrVerified.utility}
                             </View>
                             <View style={[general.centeredColumn, style.photoUploadContainer]}>
                                 <View style={[general.flexRow]}>
-                                    <Text style={[style.label, style.photoTitle]}>{lndrVerified.selfie}</Text>
+                                    <Text style={[style.label, style.photoTitle, general.standardHMargin]}>{lndrVerified.selfie}</Text>
                                 </View>
                                 <TouchableHighlight underlayColor={paleGray} onPress={() => this.getPhoto('selfiePhoto')}>
                                     <View>
@@ -486,7 +530,7 @@ ${lndrVerified.utility}
                             </View>
                             <View style={[general.centeredColumn, style.photoUploadContainer]}>
                                 <View style={[general.flexRow]}>
-                                    <Text style={[style.label, style.photoTitle]}>{lndrVerified.proofOfAddress}
+                                    <Text style={[style.label, style.photoTitle, general.standardHMargin]}>{lndrVerified.proofOfAddress}
                                         <Text onPress={this.showProofOfAddressInfo} style={style.link}>{lndrVerified.ifNotId}</Text>
                                     </Text>
                                 </View>
@@ -504,15 +548,15 @@ ${lndrVerified.utility}
                             <View style={[general.flexRow, {flexWrap: 'wrap', justifyContent: 'center'}]}>
                                 <Switch value={agreement} onValueChange={this.toggleSwitch}/>
                                 <Text style={[style.label, {alignSelf: 'flex-end', paddingLeft: 6}]}>{lndrVerified.agree}</Text>
-                                <Text style={[style.label, style.link, {alignSelf: 'flex-end', paddingTop: 2}]} onPress={() => Linking.openURL('https://lndr.io/terms/#privacy-policy')}>{lndrVerified.agreeLink}</Text>
+                                <Text style={[style.label, style.link, {alignSelf: 'flex-end', paddingTop: 2}]} onPress={() => Linking.openURL('https://blockmason.io/lndr/terms/#privacy-policy')}>{lndrVerified.agreeLink}</Text>
                             </View>
 
                             {!!generalFormError && <Text style={style.warningText}>{generalFormError}</Text>}
 
                             <View>
                                 <Loading context={loadingContext} />
-                            <Button round fat onPress={() => this.submitForm()} style={[style.submitButton, style.spaceTop]} text={submit} disabled={disabled} />
-                        </View>
+                                <Button round fat onPress={() => this.submitForm()} style={[style.submitButton, style.spaceTop]} text={submit} disabled={disabled} />
+                            </View>
                         </View>
                     </ScrollView>
                 </KeyboardAvoidingView>

@@ -2,6 +2,9 @@ import { amountFormat } from 'lndr/format'
 
 import { currencySymbols, transferLimits } from 'lndr/currencies'
 
+const CUR = currencySymbols
+const TL = transferLimits
+
 const generalCommunicationError = `서버에 오류가 발생하였습니다. 나중에 다시 시도해주세요`
 
 export default {
@@ -97,7 +100,7 @@ export default {
     national: `주민등록증`,
     addressInfoHeader: `주소 증명의 예 :`,
     bank: `은행 예금 잔고`,
-    utility: `유틸리티 빌`,
+    utility: `전기 요금`,
     other: `기타 문서`,
     chooseGovernmentPhoto: `정부 ID 사진을 선택`,
     chooseSelfiePhoto: `셀카 사진을 선택`,
@@ -189,7 +192,7 @@ export default {
         generic: `거래 도중 에러가 발생하였습니다, 나중에 다시 시도해주세요`,
         address: `정확한 주소를 입력해주세요`,
         amount: `0보다 높은 금액을 입력해주세요`,
-        limitExceeded: currency => `한 주당 ${currencySymbols(currency)}${transferLimits(currency)} 만 보낼 수 있습니다, 이보다 더 적은 금액을 선택하세요`
+        limitExceeded: (A, M) => `한 주당 ${CUR(A)} ${TL(A, M)} 만 보낼 수 있습니다, 이보다 더 적은 금액을 선택하세요`
       },
       amount: `보내는 금액`,
       address: `수신지 주소(0x 제외)`,
@@ -197,10 +200,10 @@ export default {
       transferAll: `전액 송금`,
       balance: (balance) => `당신의 현재 이더리움 잔액은 ${typeof balance === 'string' ? balance.slice(0,8) : ''}`,
       ethAddress: `이더리움 주소`,
-      txCost: (cost, currency) => `현재 이더리움 거래에 드는 비용은 한 거래당 ${currencySymbols(currency)}${cost} 달러입니다`,
+      txCost: (cost, A) => `현재 이더리움 거래에 드는 비용은 한 거래당 ${CUR(A)}${cost} 달러입니다`,
       transferLowercase: `이더리움 송금`,
-      note: currency => `참고 : Lndr에서는 일주일에 ${currencySymbols(currency)}${transferLimits(currency)} 만 송금할 수 있습니다.`,
-      warning: (amount, currency) => `귀하의 거래 한도 ${currencySymbols(currency)}${amount} 중 ${currencySymbols(currency)}${transferLimits(currency)} 이 남아있습니다`
+      note: (A, M) => `참고 : Lndr에서는 일주일에 ${CUR(A)} ${TL(A, M)} 만 송금할 수 있습니다.`,
+      warning: (Z, A, M) => `귀하의 거래 한도 ${CUR(A)}${Z} 중 ${CUR(A)} ${TL(A, M)} 이 남아있습니다`
     },
     sendBcpt: {
       error: {
@@ -502,7 +505,7 @@ export default {
   },
 
   privacyPolicy: {
-    link: `lndr.io/terms/`,
+    link: `blockmason.io/lndr/terms/`,
     message: `Blockmason의 개인 정보 보호 정책을 읽고 동의하려면 아래를 클릭하여 확인하십시오. Blockmason은 이메일 주소를 사용하여 Blockmason 및 LNDR에 대한 업데이트를 보낼 수 있습니다. 개인 정보 취급 방침에 대한 링크는 다음과 같습니다:`,
   },
 

@@ -10,7 +10,7 @@ export default {
   applicationName: `Lndr`,
   helloWorld: `Witaj`,
   noConnection: `Brak połączenia`,
-  retry: `Spróbować ponownie`,
+  retry: `Spróbuj ponownie`,
   submit: `PRZEŚLIJ`,
   next: `Dalej`,
   cancel: `Anuluj`,
@@ -18,7 +18,7 @@ export default {
   copy: `Skopiuj do schowka`,
   confirmAccount: `Potwierdź`,
   createAccount: `Utwórz konto`,
-  recoverAccount: `Przywrócić konto`,
+  recoverAccount: `Przywróć konto`,
   removeAccount: `Usuń Konto`,
   updateAccount: `Zaktualizuj konto`,
   loginAction: `Odblokuj`,
@@ -42,8 +42,8 @@ export default {
   noBalances: `Nie masz żadnych zapisanych długów`,
   addFriendButton: `Dodaj znajomego`,
   alreadyFriendsButton: `Znajomi`,
-  friendShell: `Znajomy:`,
-  tip: `Tip:`,
+  friendShell: `Znajomy`,
+  tip: `Wskazówka:`,
   notice: `Uwaga:`,
   welcome: `Witamy w LNDR`,
   noBalanceWarning: `Nie udało nam się załadować Twojego stanu konta, spróbuj później.`,
@@ -71,40 +71,40 @@ export default {
   removeAccountTitle: `Czy na pewno chcesz usunąć swoje konto z tego urządzenia?`,
   removeAccountExhortation: `Nastąpi całkowite usunięcie informacji o Twoim koncie z tego urządzenia, upewnij się, że masz dostęp do swoich mnemoników koniecznych do przywrócenia konta.`,
   myAccount: `Moje konto`,
-  setNickname: `Ustaw nazwę użytkownika, by Twoi znajomi mogli Cię znaleźć`,
-  setEmail: `Ustaw e-mail, aby otrzymywać informacje o aktualizacjach Lndr`,
+  setNickname: `Dodaj nazwę użytkownika, by Twoi znajomi mogli Cię znaleźć`,
+  setEmail: `Dodaj e-mail, aby otrzymywać informacje o aktualizacjach Lndr`,
   nickname: `Nazwa użytkownika (małe litery i cyfry)`,
   email: `Adres e-mail`,
   lndrVerified: {
     ok: `ok`,
-    title: `Ustawić wyższy limit rozliczenia i odstawienia krypto ilości wypełniając znać swoje wymagania klienta.`,
-    statusTitle: `Aktualny stan Twojego weryfikacji jest:`,
-    tryAgain: `Nie byliśmy w stanie zweryfikować swoją tożsamość. Proszę ponownie przesłać informacje i upewnić się, że zdjęcia są czytelne.`,
-    formMessage: `Proszę wypełnić wszystkie poniższe pola`,
-    button: `Zweryfikować Twoją tożsamość`,
-    prefix: `Przeczytaj naszą na temat przetwarzania danych osobowych będzie zarządzany.`,
+    title: `Wypełnij formularz KYC aby podwyższyć limity rozliczeń oraz transferów w kryptowalutach.`,
+    statusTitle: `Aktualny status Twojej weryfikacji:`,
+    tryAgain: `Nie byliśmy w stanie zweryfikować Twojej tożsamości. Proszę ponownie przesłać informacje i upewnić się, że zdjęcia są czytelne.`,
+    formMessage: `Proszę wypełnić poniższe pola`,
+    button: `Odblokuj dodatkowe funkcje`,
+    prefix: `Przeczytaj naszą`,
     linkTitle: `politykę prywatności`,
-    postfix: `na temat przetwarzania danych osobowych będzie zarządzany.`,
-    upload: `Prześlij oficjalnego `,
-    governmentId: `dokumentu tożsamości`,
-    selfie: `Prześlij selfie z oficjalnego dokumentu tożsamości`,
+    postfix: `na temat przetwarzania danych osobowych.`,
+    upload: `Prześlij oficjalny`,
+    governmentId: `dokument tożsamości`,
+    selfie: `Prześlij selfie wraz z oficjalnym dokumentem tożsamości`,
     proofOfAddress: `Potwierdzenie adresu`,
     ifNotId: `(Jeśli nie ID)`,
     agree: `Przeczytałem i zgadzam się z `,
     agreeLink: `Polityką Prywatności`,
-    success: `KYC został złożony.`,
-    idInfoHeader: `Przykłady obejmują ID:`,
+    success: `formularz KYC został złożony.`,
+    idInfoHeader: `Przykłady dokumentów tożsamości obejmują:`,
     passport: `Paszport`,
     drivers: `Prawo jazdy`,
     national: `Dowód osobisty`,
-    addressInfoHeader: `Przykłady potwierdzenie adresu:`,
+    addressInfoHeader: `Przykłady dokumentów potwierdzających adres:`,
     bank: `Wyciąg bankowy`,
-    utility: `narzędzie Bill`,
+    utility: `rachunek za prąd / gaz`,
     other: `Inny dokument`,
-    chooseGovernmentPhoto: `Wybierz Government Paszportowe`,
+    chooseGovernmentPhoto: `Wybierz zdjęcie z dokumentem tożsamości`,
     chooseSelfiePhoto: `Wybierz selfie zdjęcie`,
-    chooseAddressPhoto: `Wybierz potwierdzenie adresu Photo`,
-    emailRequired: `Potrzebują Państwo e-mail, aby zweryfikować swoją tożsamość, kliknij na "Zmień adres e-mail"`,
+    chooseAddressPhoto: `Wybierz zdjęcie z dokumentem potwierdzającym adres`,
+    emailRequired: `Potrzebują Państwo e-mail, aby zweryfikować swoją tożsamość, kliknij na X`,
     approved: `ZATWIERDZONY`,
     rejected: `ODRZUCONE`,
     pending: `Oczekujące`,
@@ -114,7 +114,7 @@ export default {
       lastName: `Nazwisko`,
       street: `Adres ulicy`,
       city: `Miasto`,
-      state: `Stan / Prowincja`,
+      state: `Województwo`,
       postalCode: `kod pocztowy`,
       country: `Wybierz kraj`,
       phone: `Numer telefonu`,
@@ -125,17 +125,17 @@ export default {
       lastName: `Nazwisko jest wymagane`,
       street: `Ulica jest wymagane`,
       city: `Miasto jest wymagane`,
-      state: `Stan / Prowincja jest wymagane`,
+      state: `Województwo jest wymagane`,
       postalCode: `wymagany jest kod pocztowy`,
       country: `wymagana jest kraj`,
       phone: `Numer telefonu jest wymagany`,
       dob: `Wymagana jest data urodzenia`,
-      general: `Upewnij się, że wypełniłeś wszystkie pola i dołączone odpowiednie zdjęcia`,
+      general: `Upewnij się, że wszystkie pola zostały wypełnione oraz załączone są odpowiednie zdjęcia`,
     }
   },
   accountManagement: {
     nickname: {
-      lengthViolation: `Nazwa użytkownika powinna liczyć co najmniej 3 znaki.`,
+      lengthViolation: `Nazwa użytkownika powinna mieć co najmniej 3 znaki.`,
       compositionViolation: `Nazwa użytkownika może zawierać tylko cyfry i małe litery.`,
       duplicationViolation: `Nazwa użytkownika jest już zajęta`,
     },
@@ -189,9 +189,9 @@ export default {
       error: {
         insufficient: `Nie masz wystarczająco dużo ETH dla tej transakcji`,
         generic: `Wystąpił błąd z transferem, spróbuj ponownie później`,
-        address: `Wprowadzić poprawny adres`,
+        address: `Wprowadź poprawny adres`,
         amount: `Proszę wprowadzić kwotę większą niż 0`,
-        limitExceeded: A => `można wysłać tylko ${CUR(A)} ${TL(A)} tygodniowo, wybierz mniejszą sumę`,
+        limitExceeded: (A, M) => `można wysłać tylko ${CUR(A)} ${TL(A, M)} tygodniowo, wybierz mniejszą sumę`,
       },
       amount: `Kwota do Wysłania`,
       address: `Adres docelowy (bez prefiksu „0x”)`,
@@ -201,8 +201,8 @@ export default {
       ethAddress: `Adres Ethereum`,
       txCost: (B, A) => `Obecny koszt transakcji to ${CUR(A)} ${B}`,
       transferLowercase: `Przelew ETH`,
-      note: A => `Uwaga: można wysłać tylko ${CUR(A)} ${TL(A)} tygodniowo z Lndr`,
-      warning: (Z, A) => `masz ${CUR(A)} ${Z} z Twojego limitu równego ${CUR(A)} ${TL(A)}`,
+      note: (A, M) => `Uwaga: można wysłać tylko ${CUR(A)} ${TL(A, M)} tygodniowo z Lndr`,
+      warning: (Z, A, M) => `masz ${CUR(A)} ${Z} z Twojego limitu równego ${CUR(A)} ${TL(A, M)}`,
     },
     sendBcpt: {
       error: {
@@ -220,9 +220,9 @@ export default {
       `Bilans BCPT`,
       `Usuń Konto`,
       `Historia transakcji ETH`,
-      `Włącz PayPal`,
+      `Podłącz PayPal`,
       `Zmień walutę podstawową`,
-      `Odblokować dodatkowe funkcje`,
+      `Zweryfikuj Twoją tożsamość`,
       `Zmień adres e-mail`,
       `Zmień PIN`,
       `Zmiana czasu, po którym nastąpi blokada`,
@@ -263,35 +263,35 @@ export default {
   },
 
   walkthrough: {
-    skip: `pominąć`,
+    skip: `pomiń`,
     continue: `dalej`,
     step1: {
-      easyToUse: `Lndr jest najprostszym sposobem, aby podzielić rachunki, koszty akcji i osiedlić prostych długów z przyjaciółmi i rodziną, wszystko odbywa się bezpiecznie na blockchain.`,
+      easyToUse: `Lndr jest najprostszym sposobem, aby podzielić rachunki, wydatki oraz rozliczyć dług z przyjaciółmi i rodziną, wszystko odbywa się bezpiecznie na blockchain.`,
       len: `Len`,
       der: `der`,
     },
     step2: {
-      getStarted: `Aby rozpocząć korzystanie z Lndr, trzeba będzie dodać znajomego.`,
-      friendsScreen: `Wizyta przyjaciół ekranu, aby sprawdzić, dodać lub zaprosić przyjaciół i rodzinę do łączenia na Lndr.`,
+      getStarted: `Aby rozpocząć korzystanie z Lndr, należy dodać znajomego.`,
+      friendsScreen: `Wejdź na zakładkę "Znajomi", aby znaleźć, dodać lub zaprosić przyjaciół i rodzinę do Lndr.`,
     },
     step3: {
-      title: `Nagrywanie Transakcji`,
-      easy: `Dzielenie rachunek lub dodanie dług z przyjacielem jest łatwy w Lndr!`,
+      title: `Rejestrowanie Transakcji`,
+      easy: `Dzielenie rachunku lub dodanie długu z przyjacielem jest łatwe w Lndr!`,
       selectFriend: `Wybierz znajomego, walutę i kwotę.`,
-      addMemo: `Dodać kilka uwag w polu memo i kliknij przycisk Prześlij.`,
+      addMemo: `Dodaj kilka uwag w polu memo i kliknij przycisk Prześlij.`,
     },
     step4: {
       title: `Rozlicz Dług`,
-      ready: `Gotowy do rozlicz dług?`,
-      payPal: `Kiedy nadszedł czas, aby rozliczyć się z Lndr \n- można wybrać PayPal:`,
-      ether: `- cryptocurrencies jak eter:`,
-      cash: `- lub po prostu nagrać rozliczenie pieniężne:`,
+      ready: `Gotowy do rozliczenia długu?`,
+      payPal: `Kiedy nadszedł czas, aby rozliczyć się z Lndr \ n- można wybrać PayPal:`,
+      ether: `- kryptowaluty takie jak Ether:`,
+      cash: `- lub po prostu zapisać rozliczenie gotówkowe:`,
       positiveBalance: `10,46`,
     },
     step5: {
       title: `Wielowalutowy`,
-      multiCurrency: `Lndr mogą śledzić swoje transakcje, nawet jeśli zdarzają się w różnych walutach.`,
-      exchangeRate: `Gdy zdecydujesz się uregulować ze swoim przyjacielem, wszystkie transakcje zostaną przeliczone na walutę podstawową przy użyciu najbardziej kursów walut up-to-date dostępny.`,
+      multiCurrency: `Lndr może śledzić swoje transakcje, nawet jeśli występują w różnych walutach.`,
+      exchangeRate: `Gdy zdecydujesz się uregulować dług ze swoim przyjacielem, wszystkie transakcje zostaną przeliczone na wybraną przez Ciebie walutę podstawową po aktualnym kursie wymiany.`,
       start: `Zacznij korzystać Lndr!`,
     }
   },
@@ -302,12 +302,12 @@ export default {
     selectFriend: `Wybierz`,
     lend: `Nowa Pożyczka`,
     borrow: `Nowy Dług`,
-    owesMe: `Zawdzięcza mnie`,
-    iOwe: `Jestem winien`,
+    owesMe: `jest mi dłużny/dłużna`,
+    iOwe: `jestem winien`,
     iLent: `Znajomy jest mi dłużny`,
     iBorrowed: `Jestem dłużny/dłużna znajomemu`,
     settleUpLower: `Rozlicz Dług`,
-    amountToSettle: `Kwoty do zapłaty`,
+    amountToSettle: `Kwota do zapłaty`,
     total: `Całość`,
     record: `dokument`,
     records: `dokumentacja`,
@@ -365,7 +365,7 @@ export default {
     settleTotal: `Rozlicz Całość`,
     settleUpMemo: (D, A) => `${D === 'lend' ? 'Rozliczenie za': 'Rozlicz za'} ${A} `,
     recordSettleUpMemo: `rozliczenia`,
-    balanceByCurrency: `Detale`,
+    balanceByCurrency: `Szczegóły`,
   },
   settlementManagement: {
     bilateral: {
@@ -374,10 +374,10 @@ export default {
         generic: X => `Wystąpił błąd podczas przetwarzania rozliczenie z ${X}`,
       }
     },
-    eth: `Rozliczenia z ETH`,
-    paypal: `Rozliczenia z PayPal`,
+    eth: `Rozlicz w ETH`,
+    paypal: `Rozlicz przez PayPal`,
     nonPayment: `Zapisz Rozliczenie`,
-    select: `Wybierz typ Rozliczenie`,
+    select: `Wybierz Typ Rozliczenia`,
   },
 
   accountViewLanguage: {
@@ -443,16 +443,16 @@ export default {
     shell: `Potwierdzenie`,
     done: `Gotowe`,
     create: {
-      start: `Wysłaliśmy dokument do `,
+      start: `Wysłaliśmy informację do `,
       end: `, aby dokonał potwierdzenia.`,
     },
     confirm: {
-      start: `Zatwierdziłeś/zatwierdziłaś dokument od `,
-      end: `.`,
+      start: `Zatwierdziłeś/zatwierdziłaś informację o zobowiązaniu od `,
+      end: ` .`,
     },
     reject: {
-      start: `Poinformujemy `,
-      end: `, że odrzuciłeś/odrzuciłaś ten dokument.`,
+      start: `Poinformowaliśmy `,
+      end: `, o odrzuceniu zobowiązania.`,
     },
     confirmFriend: {
       start: `Jesteś znajomym `,
@@ -463,37 +463,37 @@ export default {
       end: `.`,
     },
     rejectOutboundFriendRequest: {
-      start: `Masz odwołał zaproszenie do `,
+      start: `Odrzuciłeś/odrzuciłaś zaproszenie do `,
       end: `.`,
     },
     ethSent: {
-      start: `Udało się wysłać `,
+      start: `Udało Ci się wysłać `,
       end: ` ETH, hash dla tej transakcji to `,
     },
     bcptSent: {
-      start: `Udało się wysłać `,
+      start: `Udało Ci się wysłać `,
       end: ` BCPT, hash dla tej transakcji to `,
     },
     requestPayPalPayee: {
-      start: `Mamy `,
-      end: ` niech wiedzą, że chcesz się rozliczyć z PayPal.`,
+      start: `Powiadomiliśmy `,
+      end: `, że chcesz się rozliczyć z PayPal.`,
     },
     requestPayPalPayment: {
-      start: `Mamy `,
-      end: ` niech wiedzą, że chcesz być wypłacane w systemie PayPal.`,
+      start: `Powiadomiliśmy `,
+      end: `, że chcesz otrzymać rozliczenie przez PayPal.`,
     },
     settledWithPayPal: {
-      start: `Mamy `,
-      end: ` niech wiedzą, że już rozliczane w systemie PayPal.`,
+      start: `Powiadomiliśmy `,
+      end: `, że już rozliczyłeś się w systemie PayPal.`,
     },
     kycSuccess: {
-      start: `Dziękuję Ci! Twoje konto jest zweryfikowane.  
+      start: `Dziękujmy! Twoje konto jest w trakcie weryfikacji.  
       
       `,
-      end: `Zostaniesz powiadomiony, gdy dodatkowe funkcje są odblokowane.` 
+      end: `Zostaniesz powiadomiony, gdy dodatkowe funkcje zostaną odblokowane.` 
     },
-    status: `Można sprawdzić status transakcji w `,
-    activity: `zakładce aktywności.`,
+    status: `Można sprawdzić status transakcji w zakładce aktywności`,
+    activity: `,`,
   },
 
   pendingFriendRequestsLanguage: {
@@ -504,17 +504,17 @@ export default {
   },
 
   privacyPolicy: {
-    link: `lndr.io/terms/`,
-    message: `Klikając poniżej, potwierdzasz, że przeczytałeś i zgadzasz się z polityką prywatności Blockmason użytkownika. Blockmason może wykorzystywać Twój adres e-mail do wysyłania aktualizacji o Blockmason i LNDR. Oto link do polityki prywatności:`,
+    link: `blockmason.io/lndr/terms/`,
+    message: `Klikając poniżej, potwierdzasz, że przeczytałeś i zgadzasz się z polityką prywatności Blockmason. Blockmason może wykorzystywać Twój adres e-mail do wysyłania aktualizacji o Blockmason i LNDR. Oto link do polityki prywatności:`,
   },
 
   payPalLanguage: {
-    connectPayPal: `Podłączyć PayPal`,
-    connectSuccess: `PayPal włączona pomyślnie.`,
-    disconnectPayPal: `Odłączyć PayPal`,
+    connectPayPal: `podłącz PayPal`,
+    connectSuccess: `PayPal włączony pomyślnie.`,
+    disconnectPayPal: `Odłącz PayPal`,
     disconnected: `PayPal odłączony.`,
-    requestPayPalPayment: `Żądanie płatności PayPal`,
-    sendWithPayPal: `Wyślij Z PayPal`,
+    requestPayPalPayment: `Zażądaj płatności przez PayPal`,
+    sendWithPayPal: `Wyślij przez PayPal`,
     enablePayPal: `Włącz PayPal`,
     requestPayPalPayee: `Prośba PayPal`,
     enablePayPalForFriend: F => `Włączanie PayPal umożliwia @${F} zapłacić you.`,
@@ -522,16 +522,16 @@ export default {
     friendRequestedConnect: F => `@${F} chce zapłacić za PayPal`,
     requestFriendConnect: F => `Pytałeś @${F}, aby umożliwić PayPal`,
     feesNotification: `Nie obejmuje opłat PayPal`,
-    feesInformationHeader: `PayPal Opłaty Informacje`,
-    feesInformation: `1. Twoje konto PayPal musi być przywiązany do konta bankowego.
+    feesInformationHeader: `PayPal Informacje o opłatach`,
+    feesInformation: `1. Twoje konto PayPal musi być przywiązane do konta bankowego.
     
-2. Dodatkowo płatne w walucie innej niż waluta Twojego banku będzie ponieść opłatę $ 0,35.
+2. Płacąc w walucie innej niż waluta Twojego banku będziesz obciążony opłatą $ 0,35.
 
 3. Międzynarodowe opłaty transferowe:
     USA do Kanada / Europa: $ +2,99
     USA gdziekolwiek indziej: $ 4.99
 
-4. Opłaty te nie są wyczerpujące. Do najbardziej aktualnych informacji prosimy odwiedzić:
+4.Pełna lista aktualnych opłat na stronie:
 
     https://www.paypal.com/us/webapps/mpp/paypal-fees#sending-us`,
     payPalSite: `PayPal.com`,

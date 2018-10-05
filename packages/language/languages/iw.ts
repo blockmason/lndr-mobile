@@ -191,7 +191,7 @@ export default {
         generic: `ארעה שגיאה בזמן העסקה, אנא נסה שוב מאוחר יותר`,
         address: `אנא הזן כתובת חוקית`,
         amount: `אנא הזן סכום גדול מ-0`,
-        limitExceeded: A => `בלבד, יש לבחור כמות קטנה יותר  ${CUR(A)}${TL(A)} אתה יכול לשלוח בשבוע`,
+        limitExceeded: (A, M) => `בלבד, יש לבחור כמות קטנה יותר  ${CUR(A)} ${TL(A, M)} אתה יכול לשלוח בשבוע`,
       },
       amount: `כמות לשליחה`,
       address: `כתובת יעד (ללא קידומת "0x")`,
@@ -201,8 +201,8 @@ export default {
       ethAddress: `כתובת Ethereum`,
       txCost: (B, A) => `${CUR(A)}${B} מחיר ההעברה הנוכחי הוא`,
       transferLowercase: `להעביר Eth`,
-      note: A => `Lndr-בלבד מחוץ ל ${CUR(A)}${TL(A)} שים לב: אתה יכול להעביר בשבוע`,
-      warning: (Z, A) => `שלך ${CUR(A)}${TL(A)} -מהמגבלת ה ${CUR(A)}${Z} נותרו לך`,
+      note: (A, M) => `Lndr-בלבד מחוץ ל ${CUR(A)} ${TL(A, M)} שים לב: אתה יכול להעביר בשבוע`,
+      warning: (Z, A, M) => `שלך ${CUR(A)} ${TL(A, M)} -מהמגבלת ה ${CUR(A)}${Z} נותרו לך`,
     },
     sendBcpt: {
       error: {
@@ -504,7 +504,7 @@ export default {
   },
 
   privacyPolicy: {
-    link: `lndr.io/terms/`,
+    link: `blockmason.io/lndr/terms/`,
     message: `על ידי לחיצה בהמשך שתאשר כי קראת מסכים למדיניות הפרטיות של Blockmason. Blockmason עשויים להשתמש בכתובת הדוא"ל שלך כדי לשלוח עדכונים על Blockmason ו LNDR. הנה קישור למדיניות הפרטיות`,
   },
 

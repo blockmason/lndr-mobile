@@ -191,7 +191,7 @@ export default {
         generic: `Det uppstod ett fel med överföringen, vänligen försök igen senare`,
         address: `Ange en giltig Etherum-adress`,
         amount: `Ange ett belopp större än 0`,
-        limitExceeded: A => `Du kan endast skicka ${CUR(A)} ${TL(A)} per vecka, välj en mindre summa`,
+        limitExceeded: (A, M) => `Du kan endast skicka ${CUR(A)} ${TL(A, M)} per vecka, välj en mindre summa`,
       },
       amount: `Belopp att skicka`,
       address: `Mottagaradress (utan '0x' prefixet)`,
@@ -201,8 +201,8 @@ export default {
       ethAddress: `Ethereum Adress`,
       txCost: (B, A) => `Den aktuella transaktionskostnaden är ${CUR(A)} ${B}`,
       transferLowercase: `Överför Eth`,
-      note: A => `Observera: Du kan endast överföra ${CUR(A)} ${TL(A)} per vecka från Lndr`,
-      warning: (Z, A) => `Du har ${CUR(A)} ${Z} återstående av din ${CUR(A)} ${TL(A)} gräns`,
+      note: (A, M) => `Observera: Du kan endast överföra ${CUR(A)} ${TL(A, M)} per vecka från Lndr`,
+      warning: (Z, A, M) => `Du har ${CUR(A)} ${Z} återstående av din ${CUR(A)} ${TL(A, M)} gräns`,
     },
     sendBcpt: {
       error: {
@@ -504,7 +504,7 @@ export default {
   },
 
   privacyPolicy: {
-    link: `lndr.io/terms/`,
+    link: `blockmason.io/lndr/terms/`,
     message: `Genom att klicka nedan bekräftar du att du har läst och godkänt Blockmason sekretesspolicy. Blockmason kan använda din e-postadress för att skicka uppdateringar om Blockmason och LNDR. Här är en länk till sekretesspolicy:`,
   },
 

@@ -191,7 +191,7 @@ export default {
         generic: `حدث خطأ في عملية التحويل، الرجاء إعادة المحاولة لاحقاً`,
         address: `الرجاء إدخال عنوان صحيح`,
         amount: `الرجاء إدخال كمية أكبر من 0`,
-        limitExceeded: A => `يمكنك فقط إرسال ${CUR(A)}${TL(A)} في الأسبوع, الرجاء تحديد كمية أصغر`
+        limitExceeded: (A, M) => `يمكنك فقط إرسال ${CUR(A)} ${TL(A, M)} في الأسبوع, الرجاء تحديد كمية أصغر`
       },
       amount: `المبلغ المراد إرساله`,
       address: `عنوان الوجهة (بدون اللاحقة '0x')`,
@@ -201,8 +201,8 @@ export default {
       ethAddress: `عنوان إثيريوم`,
       txCost: (B, A) => `تكلفة المعاملة الحالية هو ${CUR(A)}${B}`,
       transferLowercase: `تحويل إثيريوم`,
-      note: A => `يرجى الانتباه: يمكنك فقط تحويل ${CUR(A)}${TL(A)} في الأسبوع من Lndr`,
-      warning: (Z, A) => `لديك ${CUR(A)}${Z} متبقي من حدك ${CUR(A)}${TL(A)}`,
+      note: (A, M) => `يرجى الانتباه: يمكنك فقط تحويل ${CUR(A)} ${TL(A, M)} في الأسبوع من Lndr`,
+      warning: (Z, A, M) => `لديك ${CUR(A)}${Z} متبقي من حدك ${CUR(A)} ${TL(A, M)}`,
     },
     sendBcpt: {
       error: {
@@ -504,7 +504,7 @@ export default {
   },
 
   privacyPolicy: {
-    link: `lndr.io/terms/`,
+    link: `blockmason.io/lndr/terms/`,
     message: `بالنقر أدناه فأنت تؤكد أنك قرأت وتوافق على سياسة الخصوصية Blockmason ل. Blockmason قد تستخدم عنوان البريد الإلكتروني لإرسال تحديثات حول Blockmason وLNDR. هنا هو وجود صلة لسياسة الخصوصية:`,
   },
 

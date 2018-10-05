@@ -53,7 +53,7 @@ export default {
   needsReview: `待批准`,
   owesMe: `我是债主`,
   iOwe: `我有欠账`,
-  newPassword: `新密码(最少8个字符)`,
+  newPassword: `新密码（最少8个字符）`,
   confirmPassword: `确认密码`,
   newPin: `新的4位数密码`,
   enterNewPin: `请设置一个新的4位数密码`,
@@ -61,7 +61,7 @@ export default {
   newAccount: `创建一个新账户`,
   loginAccount: `解锁您的帐户`,
   recoverExistingAccount: `恢复现有帐户`,
-  recoverMnemonic: `助记符(当您创建帐户时显示的12个单词)`,
+  recoverMnemonic: `助记符（当您创建帐户时显示的12个单词）`,
   recoverMnemonicLengthError: `助记符应该正好12个单词`,
   successTitle: `成功`,
   errorTitle: `错误`,
@@ -73,7 +73,7 @@ export default {
   myAccount: `我的帐户`,
   setNickname: `设置一个昵称，这样您的朋友可以通过昵称搜索到您`,
   setEmail: `设置电子邮件以接收Lndr的更新信息`,
-  nickname: `昵称(小写＆数字)`,
+  nickname: `昵称（小写＆数字）`,
   email: `电子邮件地址`,
   lndrVerified: {
     ok: `好`,
@@ -81,7 +81,7 @@ export default {
     statusTitle: `您的验证的当前状态是：`,
     tryAgain: `我们无法验证您的身份。请重新提交您的信息，并确保您的照片都清晰可辨。`,
     formMessage: `请填写以下所有字段`,
-    button: `验证您的身份`,
+    button: `解锁附加功能`,
     prefix: `请阅读我们为您的`,
     linkTitle: `个人数据`,
     postfix: `如何管理隐私权政策。`,
@@ -104,7 +104,7 @@ export default {
     chooseGovernmentPhoto: `选择政府证件照片`,
     chooseSelfiePhoto: `选择自拍照片`,
     chooseAddressPhoto: `选择地址的照片证明`,
-    emailRequired: `你需要一个电子邮件，以确认您的身份，请点击 "更改电子邮件"`,
+    emailRequired: `你需要一个电子邮件，以确认您的身份，请点击X`,
     approved: `批准了`,
     rejected: `拒绝了`,
     pending: `待定`,
@@ -191,18 +191,18 @@ export default {
         generic: `转账发生错误，请稍后再试`,
         address: `请输入一个有效的地址`,
         amount: `请输入大于0的金额`,
-        limitExceeded: A => `您每周只能转账${CUR[A]}${TL[A]}，请选择一个更小的金额`,
+        limitExceeded: (A, M) => `您每周只能转账${CUR(A)} ${TL(A, M)}，请选择一个更小的金额`,
       },
       amount: `转账金额`,
-      address: `目标地址(无“0x”前缀)`,
+      address: `目标地址（无“0x”前缀）`,
       transfer: `转账以太坊`,
       transferAll: `全部转移`,
       balance: Y => `您当前的以太坊余额为 ${typeof Y === 'string' ? Y.slice(0,8) :''}`,
       ethAddress: `以太坊地址`,
-      txCost: (B, A) => `当前交易成本为${CUR[A]}${B}`,
+      txCost: (B, A) => `当前交易成本为${CUR(A)}${B}`,
       transferLowercase: `转账以太坊`,
-      note: A => `请注意：您每周只能从Lndr转出${CUR[A]}${TL [A]}`,
-      warning: (Z, A) => `您在每周限额${CUR[A]}${TL[A]}中还剩余${CUR[A]}${Z}`,
+      note: (A, M) => `请注意：您每周只能从Lndr转出${CUR(A)} ${TL(A, M)}`,
+      warning: (Z, A, M) => `您在每周限额${CUR(A)} ${TL(A, M)}中还剩余${CUR(A)}${Z}`,
     },
     sendBcpt: {
       error: {
@@ -210,7 +210,7 @@ export default {
         generic: `转账发生错误，请稍后再试`,
       },
       transfer: `转账BCPT`,
-      address: `目标地址(无“0x”前缀)`,
+      address: `目标地址（无“0x”前缀）`,
       balance: Y => `您当前的BCPT余额为${typeof Y === 'string' ? Y.slice(0,8) :''}`,
       bcptAddress: `BCPT地址`,
     },
@@ -229,7 +229,7 @@ export default {
       `助记符`,
       `通知`,
     ],
-    viewEtherscan: `查看Etherscan(以太坊区块浏览器)历史`,
+    viewEtherscan: `查看Etherscan（以太坊区块浏览器）历史`,
     profilePic: {
       change: `更改头像`,
       setError: `上传您的头像时发生错误，请稍后再试`,
@@ -284,8 +284,8 @@ export default {
       title: `结账清算`,
       ready: `准备好结账清算了?`,
       payPal: `当您需要使用Lndr进行结账清算时，您可以选择使用PayPal：`,
-      ether: `— 加密货币像以太坊：`,
-      cash: `— 或只是简单地记录一个现金结算：`,
+      ether: `使用加密货币像以太坊进行结算：`,
+      cash: `或只是简单地记录一个现金结算：`,
       positiveBalance: `10.46`,
     },
     step5: {
@@ -298,14 +298,14 @@ export default {
 
   debtManagement: {
     shell: `新的转账交易`,
-    add: `选择`,
-    selectFriend: `新贷款`,
+    add: `新贷款`,
+    selectFriend: `选择好友`,
     lend: `新增贷款`,
     borrow: `新增债务`,
     owesMe: `欠我`,
     iOwe: `我欠`,
-    iLent: `一个好友欠我`,
-    iBorrowed: `我欠了一个好友`,
+    iLent: `好友欠了我`,
+    iBorrowed: `我欠了好友`,
     settleUpLower: `结账清算`,
     amountToSettle: `清算金额`,
     total: `总共`,
@@ -323,9 +323,9 @@ export default {
     fields: {
       currency: `货币`,
       amount: `金额`,
-      settlementAmount: `朋友`,
-      selectFriend: `备忘录`,
-      memo: `选择正确的语句`,
+      settlementAmount: `结算金额`,
+      selectFriend: `好友`,
+      memo: `备忘录`,
       direction: `选择正确的描述`,
     },
     memo: {
@@ -347,7 +347,7 @@ export default {
       success: F => `已提交至@${F.nickname}的待定债务`,
       error: generalCommunicationError
     },
-    pendingParens: `(待定)`,
+    pendingParens: `（待定）`,
     confirmation: {
       transaction: CP => `与${CP} 的交易已经成功确认`,
       settlement: CP => `与${CP} 的结算已经成功确认`,
@@ -374,9 +374,9 @@ export default {
         generic: X => `处理您与${X}的结算时出现错误`,
       }
     },
-    eth: `用ETH偿清债务`,
-    paypal: `用PAYPAL偿清债务`,
-    nonPayment: `偿清债务`,
+    eth: `使用以太坊结算`,
+    paypal: `使用PayPal结算`,
+    nonPayment: `记录一笔结账清算`,
     select: `选择结算类型`,
   },
 
@@ -430,7 +430,7 @@ export default {
     },
     balance: `余额`,
     consolidatedBalance: `合并余额`,
-    friends: FS => `(由${FS}${FS === 1 ? '朋友' : '朋友'})`,
+    friends: FS => `(由${FS}${FS === 1 ? '好友' : '好友'})`,
   },
 
   tabs: {
@@ -505,7 +505,7 @@ export default {
 
   privacyPolicy: {
     message: `通过点击下方按钮确认您已阅读并同意Blockmason的隐私政策。 Blockmason可以使用您的电子邮件地址发送有关Blockmason和LNDR的更新。这里是隐私条例的链接：`,
-    link: `lndr.io/terms/`,
+    link: `blockmason.io/lndr/terms/`,
   },
 
   payPalLanguage: {
@@ -513,7 +513,7 @@ export default {
     connectSuccess: `PayPal成功启用。`,
     disconnectPayPal: `解绑PayPal`,
     disconnected: `PayPal已解绑。`,
-    requestPayPalPayment: `要求使用PayPal付款`,
+    requestPayPalPayment: `使用PayPal结算`,
     sendWithPayPal: `使用PayPal转账`,
     enablePayPal: `启用PayPal`,
     requestPayPalPayee: `要求PayPal`,

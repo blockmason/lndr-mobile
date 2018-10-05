@@ -2,6 +2,8 @@ import { currencySymbols, transferLimits } from 'lndr/currencies'
 
 const generalCommunicationError = 'There was a problem communicating with the server, please try again later.'
 
+const TL = transferLimits
+
 export default {
   applicationName: `Lndr`,
   helloWorld: `Hello world`,
@@ -187,7 +189,7 @@ export default {
         generic: `There was an error with the transfer, please try again later`,
         address: `Please enter a valid address`,
         amount: `Please enter an amount greater than 0`,
-        limitExceeded: currency => `You can only send ${currencySymbols(currency)}${transferLimits(currency)} per week, please select a smaller amount`
+        limitExceeded: (currency, multiplier) => `You can only send ${currencySymbols(currency)}${TL(currency, multiplier)} per week, please select a smaller amount`
       },
       amount: `AMOUNT TO SEND`,
       address: `Destination Address (without '0x' prefix)`,
@@ -197,8 +199,8 @@ export default {
       ethAddress: `Ethereum Address`,
       txCost: (cost, currency) => `The current transaction cost is ${currencySymbols(currency)}${cost}`,
       transferLowercase: `Transfer Eth`,
-      note: currency => `Please note: you can only transfer ${currencySymbols(currency)}${transferLimits(currency)} per week out of Lndr`,
-      warning: (amount, currency) => `You have ${currencySymbols(currency)}${amount} remaining of your ${currencySymbols(currency)}${transferLimits(currency)} limit`,
+      note: (currency, multiplier) => `Please note: you can only transfer ${currencySymbols(currency)}${TL(currency, multiplier)} per week out of Lndr`,
+      warning: (amount, currency, multiplier) => `You have ${currencySymbols(currency)}${amount} remaining of your ${currencySymbols(currency)}${TL(currency, multiplier)} limit`,
     },
     sendBcpt: {
       error: {
@@ -498,7 +500,7 @@ export default {
   },
 
   privacyPolicy: {
-    link: `lndr.io/terms/`,
+    link: `blockmason.io/lndr/terms/`,
     message: `By clicking below you confirm that you have read and agree to Blockmason's privacy policy. Blockmason may use your email address to send updates about Blockmason and LNDR. Here is a link to the privacy policy:`,
   },
 

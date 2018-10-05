@@ -18,7 +18,7 @@ import { UpdateAccountData, UserData } from 'lndr/user'
 import { updateNickname, updateEmail, logoutAccount, toggleNotifications, getAccountInformation,
   setEthBalance, updateLockTimeout, updatePin, getProfilePic, setProfilePic, takenNick, takenEmail,
   copyToClipboard, validatePin, setPrimaryCurrency, failedValidatePin, getVerificationStatus } from 'actions'
-import { getUser, getStore, getAllUcacCurrencies, getPrimaryCurrency } from 'reducers/app'
+import { getUser, getStore, getAllUcacCurrencies, getPrimaryCurrency, getTransferLimitLevel } from 'reducers/app'
 import { getResetAction } from 'reducers/nav'
 import { connect } from 'react-redux'
 import { ToastActionsCreators } from 'react-native-redux-toast'
@@ -65,6 +65,7 @@ interface Props {
   setPrimaryCurrency: (value: string) => any
   failedValidatePin: () => void
   getVerificationStatus: () => void
+  transferLimitLevel: () => string
 }
 
 interface State {
@@ -334,18 +335,24 @@ class MyAccount extends Component<Props, State> {
 
   renderVerify() {
     const { identityVerificationStatus } = this.props.state
+    const hasStatus = !identityVerificationStatus.status && identityVerificationStatus.sumsubId
 
-    const getStatus = (verificationStatus: any) : string => {
-      if (verificationStatus.status === 'GREEN') {
-        return lndrVerified.approved
-      } else if (verificationStatus.status === 'RED') {
-        return lndrVerified.rejected
-      } else if (!verificationStatus.status && verificationStatus.sumsubId) {
-        return lndrVerified.pending
-      } else {
-        return ''
-      }
+    let statusText = ''
+    let imageSource = require('images/hourglass.png')
+    if (identityVerificationStatus.status === 'GREEN') {
+      statusText = lndrVerified.approved
+      imageSource = require('images/check-circle.png')
+    } else if (identityVerificationStatus.status === 'RED') {
+      statusText = lndrVerified.rejected
+      imageSource = require('images/thumbs-down.png')
+    } else if (hasStatus) {
+      statusText = lndrVerified.pending
     }
+
+    const statusSection = (<View style={general.centeredColumn}>
+      <Text style={[style.title, identityVerificationStatus.status === 'RED' ? style.redAmount : style.greenAmount]}>{statusText}</Text>
+      {hasStatus && <Image source={imageSource} style={[{height: 50, width: 50}, general.smallTopMargin]} />}
+    </View>)
 
     const showButtonOrEmail = identityVerificationStatus.status === 'RED' || (!identityVerificationStatus.status && !identityVerificationStatus.sumsubId)
 
@@ -357,16 +364,16 @@ class MyAccount extends Component<Props, State> {
       //TODO: add pending logic
       <View style={[general.centeredColumn, style.spaceHorizontalL]}>
         <Text style={[style.smallText, style.spaceTop]}>{identityVerificationStatus.sumsubId ? lndrVerified.statusTitle : lndrVerified.title}</Text>
-        <Text style={[style.title, identityVerificationStatus.status === 'RED' ? style.redAmount : style.greenAmount]}>{getStatus(identityVerificationStatus)}</Text>
+        {statusSection}
         {showButtonOrEmail && centerMessage}
         {identityVerificationStatus.status === 'RED' && <Text style={[style.smallText, style.spaceTop]}>{lndrVerified.tryAgain}</Text>}
-        <Text style={[style.smallText, style.spaceTop, general.spaceBelowM]}>{lndrVerified.prefix} <Text style={[style.link]} onPress={() => Linking.openURL('https://lndr.io/terms/')}>{lndrVerified.linkTitle}</Text>{lndrVerified.postfix}</Text>
+        <Text style={[style.smallText, style.spaceTop, general.spaceBelowM]}>{lndrVerified.prefix} <Text style={[style.link]} onPress={() => Linking.openURL('https://blockmason.io/lndr/terms/')}>{lndrVerified.linkTitle}</Text>{lndrVerified.postfix}</Text>
       </View>
     )
   }
 
   renderPanels() {
-    const { user, updateEmail, copyToClipboard } = this.props
+    const { user, updateEmail, copyToClipboard, transferLimitLevel } = this.props
     const { notificationsEnabled, ethBalance, bcptBalance } = this.props.state
     const { lockTimeout, hiddenPanels, emailTextInputErrorText, authenticated, currency } = this.state
 
@@ -377,19 +384,19 @@ class MyAccount extends Component<Props, State> {
     const panelContent = [
       (<View style={style.spaceHorizontalL}>
         <Text style={[style.text, style.spaceTopL, style.center]}>{addressExhortation}</Text>
-        <Text style={[style.smallText, style.spaceTop, style.center]}>{accountManagement.sendEth.note(currency)}</Text>
+        <Text style={[style.smallText, style.spaceTop, style.center]}>{accountManagement.sendEth.note(currency, transferLimitLevel())}</Text>
         <Text selectable style={style.displayText}>{`0x${user.address}`}</Text>
         <Button round onPress={() => copyToClipboard(user.address)} text={copy} />
       </View>),
       (<View style={style.spaceHorizontalL}>
         <Text style={[style.text, style.spaceTopL, style.center]}>{currentBalance.eth}</Text>
         <Text selectable style={style.displayText}>{formatCommaDecimal(ethBalance)}</Text>
-        <Button round onPress={() => this.props.navigation.navigate('TransferEth')} text={accountManagement.sendEth.transfer} />
+        <Button disabled={Number(ethBalance) <= 0} round onPress={() => this.props.navigation.navigate('TransferEth')} text={accountManagement.sendEth.transfer} />
       </View>),
       (<View style={style.spaceHorizontalL}>
         <Text style={[style.text, style.spaceTopL, style.center]}>{currentBalance.bcpt}</Text>
         <Text selectable style={style.displayText}>{bcptBalance}</Text>
-        <Button round onPress={() => this.props.navigation.navigate('TransferBcpt')} text={accountManagement.sendBcpt.transfer} />
+        <Button disabled={Number(bcptBalance) <= 0} round onPress={() => this.props.navigation.navigate('TransferBcpt')} text={accountManagement.sendBcpt.transfer} />
       </View>),
       (<View style={style.spaceHorizontalL}>
         <Button round onPress={() => this.props.navigation.navigate('RemoveAccount')} text={removeAccount} />
@@ -544,6 +551,6 @@ class MyAccount extends Component<Props, State> {
 }
 
 export default connect((state) => ({ user: getUser(state)(), state: getStore(state)(), allCurrencies: getAllUcacCurrencies(state),
-  primaryCurrency: getPrimaryCurrency(state)}), { updateEmail, updateNickname,
+  primaryCurrency: getPrimaryCurrency(state), transferLimitLevel: getTransferLimitLevel(state)}), { updateEmail, updateNickname,
   getAccountInformation, logoutAccount, toggleNotifications, setEthBalance, updateLockTimeout, updatePin,
   getProfilePic, setProfilePic, copyToClipboard, setPrimaryCurrency, failedValidatePin, getVerificationStatus })(MyAccount)

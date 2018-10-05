@@ -99,7 +99,7 @@ export default {
     national: `Carte d'identité`,
     addressInfoHeader: `Des exemples de preuve d'adresse:`,
     bank: `Relevé bancaire`,
-    utility: `utilitaire Bill`,
+    utility: `Facture d'électricité`,
     other: `autres documents`,
     chooseGovernmentPhoto: `Choisissez gouvernement d'identité avec photo`,
     chooseSelfiePhoto: `Choisissez selfie photo`,
@@ -191,7 +191,7 @@ export default {
         generic: `Il y a eu une erreur lors du transfert, merci de réessayer plus tard.`,
         address: `Merci d'entrer une adresse valide`,
         amount: `Merci d'entrer un montant supérieur à 0`,
-        limitExceeded: A => `Vous ne pouvez envoyer que ${CUR(A)} ${TL(A)} par semaine, merci de sélectionner un montant inférieur`,
+        limitExceeded: (A, M) => `Vous ne pouvez envoyer que ${CUR(A)} ${TL(A, M)} par semaine, merci de sélectionner un montant inférieur`,
       },
       amount: `Montant à envoyer`,
       address: `Adresse de destination (sans préfixe '0x')`,
@@ -201,8 +201,8 @@ export default {
       ethAddress: `Adresse Ethereum`,
       txCost: (B, A) => `Le coût actuel de la transaction est de ${CUR(A)} ${B}`,
       transferLowercase: `Transférer de l'ETH`,
-      note: A => `Merci de noter que vous ne pouvez transférer que ${CUR(A)} ${TL(A)} par semaine sur Lndr`,
-      warning: (Z, A) => `Vous avez ${CUR(A)} ${Z} restants sur votre limite de ${CUR(A)} ${TL(A)} `,
+      note: (A, M) => `Merci de noter que vous ne pouvez transférer que ${CUR(A)} ${TL(A, M)} par semaine sur Lndr`,
+      warning: (Z, A, M) => `Vous avez ${CUR(A)} ${Z} restants sur votre limite de ${CUR(A)} ${TL(A, M)} `,
     },
     sendBcpt: {
       error: {
@@ -504,7 +504,7 @@ export default {
   },
 
   privacyPolicy: {
-    link: `lndr.io/terms/`,
+    link: `blockmason.io/lndr/terms/`,
     message: `En cliquant ci-dessous vous confirmez que vous avez lu et accepté la politique de confidentialité de Blockmason. Blockmason peut utiliser votre adresse e-mail pour envoyer des mises à jour sur les Blockmason et LNDR. Voici un lien vers la politique de confidentialité:`,
   },
 

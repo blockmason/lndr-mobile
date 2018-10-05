@@ -99,7 +99,7 @@ export default {
     national: `Chứng minh nhân dân`,
     addressInfoHeader: `Ví dụ về các bằng chứng về địa chỉ:`,
     bank: `Bản Tuyên Bố Ngân hàng`,
-    utility: `Utility Bill`,
+    utility: `Hóa đơn tiện ích`,
     other: `Tài liệu khác`,
     chooseGovernmentPhoto: `Chọn Chính phủ ID Ảnh`,
     chooseSelfiePhoto: `Chọn chụp ảnh tự sướng Ảnh`,
@@ -191,7 +191,7 @@ export default {
         generic: `Có lỗi xảy ra khi chuyển tiền, vui lòng thử lại sau`,
         address: `Vui lòng nhập địa chỉ hợp lệ`,
         amount: `Vui lòng nhập số tiền lớn hơn 0`,
-        limitExceeded: A => `Bạn chỉ có thể gởi ${CUR(A)}${TL(A)} mỗi tuần, vui lòng chọn lựa số nhỏ hơn`
+        limitExceeded: (A, M) => `Bạn chỉ có thể gởi ${CUR(A)} ${TL(A, M)} mỗi tuần, vui lòng chọn lựa số nhỏ hơn`
       },
       amount: `Số tiền gửi`,
       address: `Địa chỉ Gửi đến (không gắn tiền tố '0x')`,
@@ -201,8 +201,8 @@ export default {
       ethAddress: `Địa chỉ Ethereum`,
       txCost: (B, A) => `Chi phí giao dịch hiện tại là ${CUR(A)}${B}`,
       transferLowercase: `Chuyển tiền Eth`,
-      note: A => `Lưu ý: bạn chỉ có thể chuyển ${CUR(A)}${TL(A)} mỗi tuần trên Lndr`,
-      warning: (Z, A) => `Bạn còn lại ${CUR(A)}${Z} trong hạn mức ${CUR(A)}${TL(A)}`,
+      note: (A, M) => `Lưu ý: bạn chỉ có thể chuyển ${CUR(A)} ${TL(A, M)} mỗi tuần trên Lndr`,
+      warning: (Z, A, M) => `Bạn còn lại ${CUR(A)}${Z} trong hạn mức ${CUR(A)} ${TL(A, M)}`,
     },
     sendBcpt: {
       error: {
@@ -504,7 +504,7 @@ export default {
   },
 
   privacyPolicy: {
-    link: `lndr.io/terms/`,
+    link: `blockmason.io/lndr/terms/`,
     message: `Bằng cách nhấp bên dưới, bạn xác nhận rằng bạn đã đọc và đồng ý với chính sách bảo mật của Blockmason. Blockmason có thể sử dụng địa chỉ email của bạn để gửi thông tin cập nhật về Blockmason và LNDR. Dưới đây là một liên kết đến chính sách bảo mật:`,
   },
 

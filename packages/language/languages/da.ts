@@ -99,8 +99,8 @@ export default {
     national: `National Identity Card`,
     addressInfoHeader: `Eksempler på bevis på adressen:`,
     bank: `Kontoudtog`,
-    utility: `Utility Bill`,
-    other: `andet dokument`,
+    utility: `Regning`,
+    other: `Andet Dokument`,
     chooseGovernmentPhoto: `Vælg Regeringen ID Foto`,
     chooseSelfiePhoto: `Vælg selfie Foto`,
     chooseAddressPhoto: `Vælg Bevis for Adresse Foto`,
@@ -191,7 +191,7 @@ export default {
         generic: `Der opstod en fejl med overførslen, prøv igen senere`,
         address: `Indtast en gyldig adresse`,
         amount: `Indtast et beløb, der er større end 0`,
-        limitExceeded: A => `Du kan kun sende ${CUR(A)}${TL(A)} om ugen, vælg et mindre beløb`,
+        limitExceeded: (A, M) => `Du kan kun sende ${CUR(A)} ${TL(A, M)} om ugen, vælg et mindre beløb`,
       },
       amount: `Beløb der skal sendes`,
       address: `Destinationsadresse (uden '0x' præfiks)`,
@@ -201,8 +201,8 @@ export default {
       ethAddress: `Ethereum Adresse`,
       txCost: (B, A) => `Den nuværende transaktionspris er ${CUR(A)}${B}`,
       transferLowercase: `Overfør Eth`,
-      note: A => `Bemærk: du kan kun overføre ${CUR(A)}${TL(A)} om ugen på Lndr`,
-      warning: (Z, A) => `Du har ${CUR(A)}${Z} resterende af din ${CUR(A)}${TL(A)} grænse`,
+      note: (A, M) => `Bemærk: du kan kun overføre ${CUR(A)} ${TL(A, M)} om ugen på Lndr`,
+      warning: (Z, A, M) => `Du har ${CUR(A)}${Z} resterende af din ${CUR(A)} ${TL(A, M)} grænse`,
     },
     sendBcpt: {
       error: {
@@ -504,7 +504,7 @@ export default {
   },
 
   privacyPolicy: {
-    link: `lndr.io/terms/`,
+    link: `blockmason.io/lndr/terms/`,
     message: `Ved at klikke herunder bekræfter du at du har læst og accepteret Blockmasons privatlivspolitik. Blockmason kan bruge din email-adresse til at sende opdateringer om Blockmason og LNDR. Her er et link til privatlivspolitikken:`,
   },
 

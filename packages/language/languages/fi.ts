@@ -191,7 +191,7 @@ export default {
         generic: `Siirron yhteydessä on tapahtunut virhe, yritä myöhemmin uudelleen`,
         address: `Syötä kelvollinen osoite`,
         amount: `Anna summa, joka on suurempi kuin 0`,
-        limitExceeded: A => `Voit lähettää vain ${CUR(A)} ${TL(A)} viikossa, valitse pienempi summa`
+        limitExceeded: (A, M) => `Voit lähettää vain ${CUR(A)} ${TL(A, M)} viikossa, valitse pienempi summa`
       },
       amount: `Lähetettävä summa`,
       address: `Kohdeosoite (ilman '0x' -etuliitettä)`,
@@ -201,8 +201,8 @@ export default {
       ethAddress: `Ethereum-osoite`,
       txCost: (B, A) => `Nykyinen tapahtuma maksaa ${CUR(A)} ${B}`,
       transferLowercase: `Siirrä Eth`,
-      note: A => `Huom.: Voit siirtää Lndr-sovelluksesta vain ${CUR(A)} ${TL(A)} viikossa`,
-      warning: (Z, A) => `Sinulla on jäljellä ${CUR(A)} ${Z}, ennen kuin saavutat ${CUR(A)} ${TL(A)} ylärajasi`,
+      note: (A, M) => `Huom.: Voit siirtää Lndr-sovelluksesta vain ${CUR(A)} ${TL(A, M)} viikossa`,
+      warning: (Z, A, M) => `Sinulla on jäljellä ${CUR(A)} ${Z}, ennen kuin saavutat ${CUR(A)} ${TL(A, M)} ylärajasi`,
     },
     sendBcpt: {
       error: {
@@ -504,7 +504,7 @@ export default {
   },
 
   privacyPolicy: {
-    link: `lndr.io/terms/`,
+    link: `blockmason.io/lndr/terms/`,
     message: `Klikkaamalla alla olevaa linkkiä vahvistaa, että olet lukenut ja hyväksynyt Blockmason-tietosuojakäytännön. Blockmason voi käyttää sähköpostiosoitteesi lähettää päivityksiä Blockmason ja LNDR. Tässä on linkki tietosuojakäytäntöön:`,
   },
 

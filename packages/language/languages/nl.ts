@@ -99,7 +99,7 @@ export default {
     national: `Nationale identiteitskaart`,
     addressInfoHeader: `Voorbeelden van bewijs van adres:`,
     bank: `Bankafschrift`,
-    utility: `Utility Bill`,
+    utility: `Elektriciteitsrekening`,
     other: `andere Document`,
     chooseGovernmentPhoto: `Kies regering ID Photo`,
     chooseSelfiePhoto: `Kies selfie Photo`,
@@ -191,7 +191,7 @@ export default {
         generic: `Er is een fout opgetreden bij de overboeking, probeer het later opnieuw`,
         address: `Vul alstublieft een geldig adres in`,
         amount: `Vul alstublieft een bedrag in dat groter is dan 0`,
-        limitExceeded: A => `U kunt maar ${CUR(A)}${TL(A)} per week versturen, kies een kleiner bedrag`
+        limitExceeded: (A, M) => `U kunt maar ${CUR(A)} ${TL(A, M)} per week versturen, kies een kleiner bedrag`
       },
       amount: `Hoeveelheid te versturen`,
       address: `Ontvangstadres (zonder voorvoegsel '0x')`,
@@ -201,8 +201,8 @@ export default {
       ethAddress: `Ethereum Adres`,
       txCost: (B, A) => `De huidige transactie kost ${CUR(A)}${B}`,
       transferLowercase: `Boek ETH over`,
-      note: A => `Let op: u kunt maar ${CUR(A)}${TL(A)} per week overboeken uit Lndr`,
-      warning: (Z, A) => `U heeft ${CUR(A)}${Z} over van uw ${CUR(A)}${TL(A)} limiet`,
+      note: (A, M) => `Let op: u kunt maar ${CUR(A)} ${TL(A, M)} per week overboeken uit Lndr`,
+      warning: (Z, A, M) => `U heeft ${CUR(A)}${Z} over van uw ${CUR(A)} ${TL(A, M)} limiet`,
     },
     sendBcpt: {
       error: {
@@ -504,7 +504,7 @@ export default {
   },
 
   privacyPolicy: {
-    link: `lndr.io/terms/`,
+    link: `blockmason.io/lndr/terms/`,
     message: `Door te klikken, bevestigt u dat u het privacybeleid van Blockmason hebt gelezen en hiermee akkoord gaat. Blockmason kan uw e-mailadres gebruiken om updates over Blockmason en LNDR te verzenden. Hier is een link naar het privacybeleid:`,
   },
 
