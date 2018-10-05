@@ -336,17 +336,22 @@ class MyAccount extends Component<Props, State> {
   renderVerify() {
     const { identityVerificationStatus } = this.props.state
 
-    const getStatus = (verificationStatus: any) : string => {
-      if (verificationStatus.status === 'GREEN') {
-        return lndrVerified.approved
-      } else if (verificationStatus.status === 'RED') {
-        return lndrVerified.rejected
-      } else if (!verificationStatus.status && verificationStatus.sumsubId) {
-        return lndrVerified.pending
-      } else {
-        return ''
-      }
+    let statusText = ''
+    let imageSource = require('images/hourglass.png')
+    if (identityVerificationStatus.status === 'GREEN') {
+      statusText = lndrVerified.approved
+      imageSource = require('images/check-circle.png')
+    } else if (identityVerificationStatus.status === 'RED') {
+      statusText = lndrVerified.rejected
+      imageSource = require('images/thumbs-down.png')
+    } else if (!identityVerificationStatus.status && identityVerificationStatus.sumsubId) {
+      statusText = lndrVerified.pending
     }
+
+    const statusSection = (<View style={general.centeredColumn}>
+      <Text style={[style.title, identityVerificationStatus.status === 'RED' ? style.redAmount : style.greenAmount]}>{statusText}</Text>
+      {identityVerificationStatus.status !== null && <Image source={imageSource} style={[{height: 50, width: 50}, general.smallTopMargin]} />}
+    </View>)
 
     const showButtonOrEmail = identityVerificationStatus.status === 'RED' || (!identityVerificationStatus.status && !identityVerificationStatus.sumsubId)
 
@@ -358,7 +363,7 @@ class MyAccount extends Component<Props, State> {
       //TODO: add pending logic
       <View style={[general.centeredColumn, style.spaceHorizontalL]}>
         <Text style={[style.smallText, style.spaceTop]}>{identityVerificationStatus.sumsubId ? lndrVerified.statusTitle : lndrVerified.title}</Text>
-        <Text style={[style.title, identityVerificationStatus.status === 'RED' ? style.redAmount : style.greenAmount]}>{getStatus(identityVerificationStatus)}</Text>
+        {statusSection}
         {showButtonOrEmail && centerMessage}
         {identityVerificationStatus.status === 'RED' && <Text style={[style.smallText, style.spaceTop]}>{lndrVerified.tryAgain}</Text>}
         <Text style={[style.smallText, style.spaceTop, general.spaceBelowM]}>{lndrVerified.prefix} <Text style={[style.link]} onPress={() => Linking.openURL('https://blockmason.io/lndr/terms/')}>{lndrVerified.linkTitle}</Text>{lndrVerified.postfix}</Text>
@@ -385,12 +390,12 @@ class MyAccount extends Component<Props, State> {
       (<View style={style.spaceHorizontalL}>
         <Text style={[style.text, style.spaceTopL, style.center]}>{currentBalance.eth}</Text>
         <Text selectable style={style.displayText}>{formatCommaDecimal(ethBalance)}</Text>
-        <Button round onPress={() => this.props.navigation.navigate('TransferEth')} text={accountManagement.sendEth.transfer} />
+        <Button disabled={Number(ethBalance) <= 0} round onPress={() => this.props.navigation.navigate('TransferEth')} text={accountManagement.sendEth.transfer} />
       </View>),
       (<View style={style.spaceHorizontalL}>
         <Text style={[style.text, style.spaceTopL, style.center]}>{currentBalance.bcpt}</Text>
         <Text selectable style={style.displayText}>{bcptBalance}</Text>
-        <Button round onPress={() => this.props.navigation.navigate('TransferBcpt')} text={accountManagement.sendBcpt.transfer} />
+        <Button disabled={Number(ethBalance) <= 0} round onPress={() => this.props.navigation.navigate('TransferBcpt')} text={accountManagement.sendBcpt.transfer} />
       </View>),
       (<View style={style.spaceHorizontalL}>
         <Button round onPress={() => this.props.navigation.navigate('RemoveAccount')} text={removeAccount} />
