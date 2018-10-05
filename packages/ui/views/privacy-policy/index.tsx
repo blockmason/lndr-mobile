@@ -28,7 +28,7 @@ export default class PrivacyPolicyView extends Component<Props> {
       <ScrollView keyboardShouldPersistTaps="always">
         <ThemeImage size={largeImage} name='logo'/>
         <Text style={[style.smallText, style.topSpacing]}>{privacyPolicy.message}</Text>
-        <Text style={style.link} onPress={() => Linking.openURL('https://https://blockmason.io/lndr/terms/#privacypolicy')}>
+        <Text style={style.link} onPress={() => Linking.openURL('https://blockmason.io/lndr/terms/')}>
           {privacyPolicy.link}
         </Text>
         <View style={style.partWidth}>

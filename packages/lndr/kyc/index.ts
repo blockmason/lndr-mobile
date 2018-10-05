@@ -17,9 +17,9 @@ export default class KYC {
       country, firstName, middleName: "", lastName, phone, dob, nationality: country,
       idDocs: [
         // { country, idDocType: governmentPhotoType, idDocSubType: "FRONT_SIDE", content: governmentPhoto },
-        { country, idDocType: governmentPhotoType, idDocSubType: "FRONT_SIDE", file: governmentPhoto.slice(27) },
-        { country, idDocType: "SELFIE", idDocSubType: "FRONT_SIDE", file: selfiePhoto.slice(27) },
-        { country, idDocType: addressPhotoType, idDocSubType: "FRONT_SIDE", file: addressPhoto.slice(27) },
+        { country, idDocType: governmentPhotoType, file: governmentPhoto.slice(27) },
+        { country, idDocType: "SELFIE", file: selfiePhoto.slice(27) },
+        { country, idDocType: addressPhotoType, file: addressPhoto.slice(27) },
       ],
       addresses: [
         { street, flatNumber: '', town: city, state, postCode, country }	
@@ -32,11 +32,16 @@ export default class KYC {
         {
           idDocSetType: "IDENTITY",
           types: [ "PASSPORT", "ID_CARD", "DRIVERS" ],
-          subTypes: [ "FRONT_SIDE" ]
+          subTypes: []
         }, {
           idDocSetType: "SELFIE",
           types: [ "SELFIE" ],
-          subTypes: ["FRONT_SIDE"]
+          subTypes: []
+        },
+        {
+          idDocSetType: "PROOF_OF_RESIDENCE",
+          types: ["UTILITY_BILL"],
+          subTypes: []
         }
       ]
     }

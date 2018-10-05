@@ -99,7 +99,7 @@ export default {
     national: `Εθνική ταυτότητα`,
     addressInfoHeader: `Παραδείγματα της απόδειξης της διεύθυνσης:`,
     bank: `Τράπεζα Δήλωση`,
-    utility: `Bill Utility`,
+    utility: `λογαριασμός κοινής ωφελείας`,
     other: `Άλλο έγγραφο`,
     chooseGovernmentPhoto: `Επιλέξτε κυβέρνηση ID φωτογραφίας`,
     chooseSelfiePhoto: `Επιλέξτε selfie Φωτογραφία`,
@@ -504,7 +504,7 @@ export default {
   },
 
   privacyPolicy: {
-    link: `https://blockmason.io/lndr/terms/#privacypolicy`,
+    link: `blockmason.io/lndr/terms/`,
     message: `Κάνοντας κλικ παρακάτω, επιβεβαιώνετε ότι έχετε διαβάσει και συμφωνήσετε με την πολιτική απορρήτου της Blockmason. Το Blockmason μπορεί να χρησιμοποιήσει τη διεύθυνση ηλεκτρονικού ταχυδρομείου σας για να στείλει ενημερώσεις σχετικά με το Blockmason και το LNDR. Ακολουθεί ένας σύνδεσμος προς την πολιτική απορρήτου μας:`,
   },
 

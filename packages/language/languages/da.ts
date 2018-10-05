@@ -99,8 +99,8 @@ export default {
     national: `National Identity Card`,
     addressInfoHeader: `Eksempler på bevis på adressen:`,
     bank: `Kontoudtog`,
-    utility: `Utility Bill`,
-    other: `andet dokument`,
+    utility: `Regning`,
+    other: `Andet Dokument`,
     chooseGovernmentPhoto: `Vælg Regeringen ID Foto`,
     chooseSelfiePhoto: `Vælg selfie Foto`,
     chooseAddressPhoto: `Vælg Bevis for Adresse Foto`,
@@ -504,7 +504,7 @@ export default {
   },
 
   privacyPolicy: {
-    link: `https://blockmason.io/lndr/terms/#privacypolicy`,
+    link: `blockmason.io/lndr/terms/`,
     message: `Ved at klikke herunder bekræfter du at du har læst og accepteret Blockmasons privatlivspolitik. Blockmason kan bruge din email-adresse til at sende opdateringer om Blockmason og LNDR. Her er et link til privatlivspolitikken:`,
   },
 

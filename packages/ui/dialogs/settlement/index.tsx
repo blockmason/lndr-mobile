@@ -77,7 +77,7 @@ interface Props {
   getUcacCurrency: (ucac: string) => string
   cancelPayPalRequestFail: () => void
   getVerificationStatus: () => void
-  transferLimitLevel: () => number
+  transferLimitLevel: () => string
 }
 
 interface State {

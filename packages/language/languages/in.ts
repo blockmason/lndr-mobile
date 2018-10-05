@@ -99,7 +99,7 @@ export default {
     national: `Kartu identitas nasional`,
     addressInfoHeader: `Contoh bukti alamat:`,
     bank: `Pernyataan Bank`,
-    utility: `utilitas Bill`,
+    utility: `Tagihan utilitas`,
     other: `Dokumen lainnya`,
     chooseGovernmentPhoto: `Pilih Foto Pemerintah ID`,
     chooseSelfiePhoto: `Pilih Selfie Foto`,
@@ -504,7 +504,7 @@ export default {
   },
 
   privacyPolicy: {
-    link: `https://blockmason.io/lndr/terms/#privacypolicy`,
+    link: `blockmason.io/lndr/terms/`,
     message: `Dengan mengklik di bawah Anda mengkonfirmasi bahwa Anda telah membaca dan setuju dengan kebijakan privasi Blockmason ini. Blockmason dapat menggunakan alamat email Anda untuk mengirim pembaruan tentang Blockmason dan LNDR. Berikut ini adalah link ke kebijakan privasi:`,
   },
 

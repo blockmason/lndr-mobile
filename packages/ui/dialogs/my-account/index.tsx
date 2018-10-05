@@ -65,7 +65,7 @@ interface Props {
   setPrimaryCurrency: (value: string) => any
   failedValidatePin: () => void
   getVerificationStatus: () => void
-  transferLimitLevel: () => number
+  transferLimitLevel: () => string
 }
 
 interface State {
@@ -361,7 +361,7 @@ class MyAccount extends Component<Props, State> {
         <Text style={[style.title, identityVerificationStatus.status === 'RED' ? style.redAmount : style.greenAmount]}>{getStatus(identityVerificationStatus)}</Text>
         {showButtonOrEmail && centerMessage}
         {identityVerificationStatus.status === 'RED' && <Text style={[style.smallText, style.spaceTop]}>{lndrVerified.tryAgain}</Text>}
-        <Text style={[style.smallText, style.spaceTop, general.spaceBelowM]}>{lndrVerified.prefix} <Text style={[style.link]} onPress={() => Linking.openURL('https://https://blockmason.io/lndr/terms/#privacypolicy')}>{lndrVerified.linkTitle}</Text>{lndrVerified.postfix}</Text>
+        <Text style={[style.smallText, style.spaceTop, general.spaceBelowM]}>{lndrVerified.prefix} <Text style={[style.link]} onPress={() => Linking.openURL('https://blockmason.io/lndr/terms/')}>{lndrVerified.linkTitle}</Text>{lndrVerified.postfix}</Text>
       </View>
     )
   }

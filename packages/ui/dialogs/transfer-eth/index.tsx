@@ -36,7 +36,7 @@ interface Props {
   primaryCurrency: string
   ethExchange: (currency: string) => string
   sendEth: (address: string, amount: string) => any
-  transferLimitLevel: () => number
+  transferLimitLevel: () => string
 }
 
 interface State {

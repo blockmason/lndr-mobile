@@ -99,7 +99,7 @@ export default {
     national: `Občanský průkaz`,
     addressInfoHeader: `Příklady doklad o bydlišti:`,
     bank: `Výpis z bankovního účtu`,
-    utility: `Utility Bill`,
+    utility: `účet za služby`,
     other: `Ostatní Document`,
     chooseGovernmentPhoto: `Vyberte si číslo občanského průkazu, fotografie`,
     chooseSelfiePhoto: `Zvolit selfie Photo`,
@@ -504,7 +504,7 @@ export default {
   },
 
   privacyPolicy: {
-    link: `https://blockmason.io/lndr/terms/#privacypolicy`,
+    link: `blockmason.io/lndr/terms/`,
     message: `Kliknutím na tlačítko níže potvrzujete, že jste si přečetli a souhlasíte se zásadami ochrany osobních údajů Blockmason je. Blockmason může používat e-mailovou adresu pro zaslání aktualizací o Blockmason a LNDR. Zde je odkaz na zásady ochrany osobních údajů:`,
   },
 

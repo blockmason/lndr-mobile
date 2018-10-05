@@ -99,7 +99,7 @@ export default {
     national: `Chứng minh nhân dân`,
     addressInfoHeader: `Ví dụ về các bằng chứng về địa chỉ:`,
     bank: `Bản Tuyên Bố Ngân hàng`,
-    utility: `Utility Bill`,
+    utility: `Hóa đơn tiện ích`,
     other: `Tài liệu khác`,
     chooseGovernmentPhoto: `Chọn Chính phủ ID Ảnh`,
     chooseSelfiePhoto: `Chọn chụp ảnh tự sướng Ảnh`,
@@ -504,7 +504,7 @@ export default {
   },
 
   privacyPolicy: {
-    link: `https://blockmason.io/lndr/terms/#privacypolicy`,
+    link: `blockmason.io/lndr/terms/`,
     message: `Bằng cách nhấp bên dưới, bạn xác nhận rằng bạn đã đọc và đồng ý với chính sách bảo mật của Blockmason. Blockmason có thể sử dụng địa chỉ email của bạn để gửi thông tin cập nhật về Blockmason và LNDR. Dưới đây là một liên kết đến chính sách bảo mật:`,
   },
 

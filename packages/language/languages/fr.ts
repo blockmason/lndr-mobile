@@ -99,7 +99,7 @@ export default {
     national: `Carte d'identité`,
     addressInfoHeader: `Des exemples de preuve d'adresse:`,
     bank: `Relevé bancaire`,
-    utility: `utilitaire Bill`,
+    utility: `Facture d'électricité`,
     other: `autres documents`,
     chooseGovernmentPhoto: `Choisissez gouvernement d'identité avec photo`,
     chooseSelfiePhoto: `Choisissez selfie photo`,
@@ -504,7 +504,7 @@ export default {
   },
 
   privacyPolicy: {
-    link: `https://blockmason.io/lndr/terms/#privacypolicy`,
+    link: `blockmason.io/lndr/terms/`,
     message: `En cliquant ci-dessous vous confirmez que vous avez lu et accepté la politique de confidentialité de Blockmason. Blockmason peut utiliser votre adresse e-mail pour envoyer des mises à jour sur les Blockmason et LNDR. Voici un lien vers la politique de confidentialité:`,
   },
 

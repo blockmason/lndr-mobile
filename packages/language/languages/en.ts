@@ -500,7 +500,7 @@ export default {
   },
 
   privacyPolicy: {
-    link: `https://blockmason.io/lndr/terms/#privacypolicy`,
+    link: `blockmason.io/lndr/terms/`,
     message: `By clicking below you confirm that you have read and agree to Blockmason's privacy policy. Blockmason may use your email address to send updates about Blockmason and LNDR. Here is a link to the privacy policy:`,
   },
 

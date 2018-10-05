@@ -100,7 +100,7 @@ export default {
     national: `주민등록증`,
     addressInfoHeader: `주소 증명의 예 :`,
     bank: `은행 예금 잔고`,
-    utility: `유틸리티 빌`,
+    utility: `전기 요금`,
     other: `기타 문서`,
     chooseGovernmentPhoto: `정부 ID 사진을 선택`,
     chooseSelfiePhoto: `셀카 사진을 선택`,
@@ -505,7 +505,7 @@ export default {
   },
 
   privacyPolicy: {
-    link: `https://blockmason.io/lndr/terms/#privacypolicy`,
+    link: `blockmason.io/lndr/terms/`,
     message: `Blockmason의 개인 정보 보호 정책을 읽고 동의하려면 아래를 클릭하여 확인하십시오. Blockmason은 이메일 주소를 사용하여 Blockmason 및 LNDR에 대한 업데이트를 보낼 수 있습니다. 개인 정보 취급 방침에 대한 링크는 다음과 같습니다:`,
   },
 

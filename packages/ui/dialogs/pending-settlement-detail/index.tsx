@@ -55,7 +55,7 @@ interface Props {
   settlerIsMe: (pendingSettlement: PendingUnilateral) => boolean
   calculateBalance: (friend: Friend) => number
   getUcacCurrency: (ucac: string) => string
-  transferLimitLevel: () => number
+  transferLimitLevel: () => string
 }
 
 interface State {

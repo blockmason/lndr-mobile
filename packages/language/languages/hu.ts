@@ -504,7 +504,7 @@ export default {
   },
 
   privacyPolicy: {
-    link: `https://blockmason.io/lndr/terms/#privacypolicy`,
+    link: `blockmason.io/lndr/terms/`,
     message: `Az alábbi linkre kattintva Ön megerősíti, hogy elolvasta és elfogadja a Blockmason adatvédelmi irányelveit. Blockmason használhatja az e-mail címét, hogy küldjön frissítéseket Blockmason és LNDR. Itt van egy link, hogy az adatvédelmi politika:`,
   },
 

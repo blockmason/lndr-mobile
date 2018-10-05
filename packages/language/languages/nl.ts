@@ -99,7 +99,7 @@ export default {
     national: `Nationale identiteitskaart`,
     addressInfoHeader: `Voorbeelden van bewijs van adres:`,
     bank: `Bankafschrift`,
-    utility: `Utility Bill`,
+    utility: `Elektriciteitsrekening`,
     other: `andere Document`,
     chooseGovernmentPhoto: `Kies regering ID Photo`,
     chooseSelfiePhoto: `Kies selfie Photo`,
@@ -504,7 +504,7 @@ export default {
   },
 
   privacyPolicy: {
-    link: `https://blockmason.io/lndr/terms/#privacypolicy`,
+    link: `blockmason.io/lndr/terms/`,
     message: `Door te klikken, bevestigt u dat u het privacybeleid van Blockmason hebt gelezen en hiermee akkoord gaat. Blockmason kan uw e-mailadres gebruiken om updates over Blockmason en LNDR te verzenden. Hier is een link naar het privacybeleid:`,
   },
 

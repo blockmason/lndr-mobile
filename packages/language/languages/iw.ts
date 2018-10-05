@@ -504,7 +504,7 @@ export default {
   },
 
   privacyPolicy: {
-    link: `https://blockmason.io/lndr/terms/#privacypolicy`,
+    link: `blockmason.io/lndr/terms/`,
     message: `על ידי לחיצה בהמשך שתאשר כי קראת מסכים למדיניות הפרטיות של Blockmason. Blockmason עשויים להשתמש בכתובת הדוא"ל שלך כדי לשלוח עדכונים על Blockmason ו LNDR. הנה קישור למדיניות הפרטיות`,
   },
 

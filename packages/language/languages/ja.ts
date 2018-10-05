@@ -505,7 +505,7 @@ export default {
   },
 
   privacyPolicy: {
-    link: `https://blockmason.io/lndr/terms/#privacypolicy`,
+    link: `blockmason.io/lndr/terms/`,
     message: `以下をクリックすることでBlockmasonのプライバシー・ポリシーに同意します。あなたのメールアドレスにBlockmasonやLndrに関する最新情報が送信される可能性があります。プライバシー・ポリシーへのリンクはこちら：`,
   },
 

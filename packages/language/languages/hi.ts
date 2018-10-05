@@ -504,7 +504,7 @@ export default {
   },
 
   privacyPolicy: {
-    link: `https://blockmason.io/lndr/terms/#privacypolicy`,
+    link: `blockmason.io/lndr/terms/`,
     message: `नीचे क्लिक करके आप पुष्टि करते हैं कि आपने ब्लॉकमसन गोपनीयता नीति को पढ़ और सहमति दी है। ब्लॉकमेसन ब्लॉकमसन और एलएनडीआर के बारे में अपडेट भेजने के लिए आपके ईमेल पते का उपयोग कर सकता है। गोपनीयता नीति का एक लिंक यहां दिया गया है:`,
   },
 

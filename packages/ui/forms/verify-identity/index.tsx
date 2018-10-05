@@ -38,8 +38,7 @@ const governmentPhotoTypes = [
     { name: lndrVerified.national, code: 'ID_CARD' }
 ]
 const addressPhotoTypes = [
-    { name: lndrVerified.utility, code: 'UTILITY_BILL' },
-    { name: lndrVerified.other, code: 'OTHER' }
+    { name: lndrVerified.utility, code: 'UTILITY_BILL' }
 ]
 
 interface Props {
@@ -168,7 +167,6 @@ ${lndrVerified.national}
 ${lndrVerified.bank}
 ${lndrVerified.utility}
         ` : `
-        • ${lndrVerified.bank}
         • ${lndrVerified.utility}
             `
 
@@ -254,6 +252,7 @@ ${lndrVerified.utility}
 
     chooseCountry(selection: string) {
         const country = countries.find(option => option.name === selection)
+        console.log('selection', selection, country)
         this.setState({ country, generalFormError: undefined, shouldPickCountry: false })
     }
 
@@ -337,6 +336,7 @@ ${lndrVerified.utility}
     }
 
     renderPicker(choices, label: string, selection: any, changeValue: (newValue: any) => void) {
+        console.log('CHOICES', choices, countries)
         const { shouldPickCountry } = this.state
 
         if (Platform.OS === 'ios') {
@@ -548,15 +548,15 @@ ${lndrVerified.utility}
                             <View style={[general.flexRow, {flexWrap: 'wrap', justifyContent: 'center'}]}>
                                 <Switch value={agreement} onValueChange={this.toggleSwitch}/>
                                 <Text style={[style.label, {alignSelf: 'flex-end', paddingLeft: 6}]}>{lndrVerified.agree}</Text>
-                                <Text style={[style.label, style.link, {alignSelf: 'flex-end', paddingTop: 2}]} onPress={() => Linking.openURL('https://https://blockmason.io/lndr/terms/#privacypolicy#privacy-policy')}>{lndrVerified.agreeLink}</Text>
+                                <Text style={[style.label, style.link, {alignSelf: 'flex-end', paddingTop: 2}]} onPress={() => Linking.openURL('https://blockmason.io/lndr/terms/#privacy-policy')}>{lndrVerified.agreeLink}</Text>
                             </View>
 
                             {!!generalFormError && <Text style={style.warningText}>{generalFormError}</Text>}
 
                             <View>
                                 <Loading context={loadingContext} />
-                            <Button round fat onPress={() => this.submitForm()} style={[style.submitButton, style.spaceTop]} text={submit} disabled={disabled} />
-                        </View>
+                                <Button round fat onPress={() => this.submitForm()} style={[style.submitButton, style.spaceTop]} text={submit} disabled={disabled} />
+                            </View>
                         </View>
                     </ScrollView>
                 </KeyboardAvoidingView>
