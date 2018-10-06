@@ -11,14 +11,13 @@ import PendingTransaction from 'lndr/pending-transaction'
 import RecentTransaction from 'lndr/recent-transaction'
 import PendingUnilateral from 'lndr/pending-unilateral'
 
-import EthTransaction from 'lndr/eth-transaction'
-import BcptTransaction from 'lndr/bcpt-transaction'
+import ERC20Transaction from 'lndr/erc20-transaction'
 import Storage from 'lndr/storage'
 import { getEthBalance, web3 } from 'lndr/settlement'
 import { isTouchIdSupported } from 'lndr/touch-id'
 
 import profilePic from 'lndr/profile-pic'
-import { transferBcpt } from 'lndr/bcpt-utils'
+import { transferERC20, ERC20_BCPT, WEI_PER_ETH } from 'lndr/erc20-utils'
 import { getEtherscanTransactions } from 'lndr/etherscan'
 import { sanitizeAmount } from 'lndr/format'
 import { jsonToPendingFriend, jsonToPendingTransaction, jsonToRecentTransaction, jsonToPendingUnilateral,
@@ -52,6 +51,9 @@ const creditProtocol = new CreditProtocol('https://api.lndr.blockmason.io')
 // } else {
 //   creditProtocol = new CreditProtocol('http://10.0.2.2:7402')
 // }
+
+const GAS_TO_SEND_BCPT = 65000
+const GAS_TO_SETTLE_WITH_ETH = 21000
 
 // TODO REMOVE setState FUNCTION as the sole purpose was to transition from using
 // the custom engine design to redux storage
@@ -449,7 +451,7 @@ export const getPending = () => {
     const pendingSettlements = filterMultiTransactions(user.address, rawPendingSettlements.unilateralSettlements.map(jsonToPendingUnilateral), getState())
     const bilateralSettlements = filterMultiTransactions(user.address, rawPendingSettlements.bilateralSettlements.map(jsonToPendingBilateral), getState())
     settleBilateral(user, bilateralSettlements, dispatch, getState)
-    
+
     await ensureTransactionNicknames(pendingSettlements)
     await ensureTransactionNicknames(bilateralSettlements)
     await ensureTransactionNicknames(pendingTransactions)
@@ -478,7 +480,7 @@ export const getPayPalRequests = () => {
     const payPalRequests = rawPayPalRequests.map( request => {
       const { requestor } = request
       const target = request.friend
-      
+
       const requestorIsMe = requestor.addr.indexOf(user.address) >= 0
       const friend = requestorIsMe ? target : requestor
 
@@ -798,11 +800,11 @@ export const sendEth = (destAddr: string, amount: string) => {
       const { privateKeyBuffer, address } = getState().store.user
       //Safe Low is in 10^8 Wei (deciGigaWei)
       const gasPrice = await creditProtocol.getGasPrice()
-      const ethTransaction = new EthTransaction(address, destAddr, Number(web3.toWei(Number(amount), 'ether')), gasPrice)
+      const ethTransaction = new ERC20Transaction(address, destAddr, Number(web3.toWei(Number(amount), 'ether')), 1.0, gasPrice, GAS_TO_SETTLE_WITH_ETH)
       const txHash = await creditProtocol.settleWithEth(ethTransaction, privateKeyBuffer)
       console.log('SENDING ETH, TXHASH:', txHash)
       storeEthTransaction(dispatch, {
-        amount: ethTransaction.value,
+        amount: ethTransaction.amount,
         user: ethTransaction.from,
         time: Date.now()
       })
@@ -827,10 +829,9 @@ export const sendBcpt = (destAddr: string, amount: string) => {
 
     try {
       const { privateKeyBuffer, address } = getState().store.user
-      //Safe Low is in 10^8 Wei (deciGigaWei)
       const gasPrice = await creditProtocol.getGasPrice()
-      const bcptTransaction = new BcptTransaction(address, destAddr, Number(amount), gasPrice)
-      const txHash = await transferBcpt(bcptTransaction, privateKeyBuffer)
+      const bcptTransaction = new ERC20Transaction(address, destAddr, Number(amount), WEI_PER_ETH, gasPrice, GAS_TO_SEND_BCPT)
+      const txHash = await transferERC20(ERC20_BCPT, bcptTransaction, privateKeyBuffer)
       console.log('SENDING BCPT, TXHASH:', txHash)
       return txHash
     } catch (e) {
@@ -1028,7 +1029,7 @@ const settleBilateral = async (user, bilateralSettlements, dispatch, getState) =
       return dispatch(displayError(settlementManagement.bilateral.error.insufficient(debtorNickname)))
     }
 
-    const ethTransaction = new EthTransaction(settlement.creditorAddress, settlement.debtorAddress, settlement.settlementAmount, gasPrice)
+    const ethTransaction = new ERC20Transaction(settlement.creditorAddress, settlement.debtorAddress, settlement.settlementAmount, 1.0, gasPrice, GAS_TO_SETTLE_WITH_ETH)
     try {
       const txHash = await creditProtocol.settleWithEth(ethTransaction, user.privateKeyBuffer)
       if(settlement.multiSettlements !== undefined) {
@@ -1038,7 +1039,7 @@ const settleBilateral = async (user, bilateralSettlements, dispatch, getState) =
       }
 
       storeEthTransaction(dispatch, {
-        amount: ethTransaction.value,
+        amount: ethTransaction.amount,
         user: ethTransaction.from,
         time: Date.now()
       })

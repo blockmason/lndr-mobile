@@ -372,6 +372,23 @@ class MyAccount extends Component<Props, State> {
     )
   }
 
+  renderCryptoBalancesSubpanel() {
+    const { ethBalance, bcptBalance } = this.props.state
+    return (
+      <View>
+        <View style={style.spaceHorizontalL}>
+          <Text style={[style.text, style.spaceTopL, style.center]}>{currentBalance.eth}</Text>
+          <Text selectable style={style.displayText}>{formatCommaDecimal(ethBalance)}</Text>
+          <Button disabled={Number(ethBalance) <= 0} round onPress={() => this.props.navigation.navigate('TransferEth')} text={accountManagement.sendEth.transfer} />
+        </View>
+        <View style={style.spaceHorizontalL}>
+          <Text style={[style.text, style.spaceTopL, style.center]}>{currentBalance.bcpt}</Text>
+          <Text selectable style={style.displayText}>{bcptBalance}</Text>
+          <Button disabled={Number(bcptBalance) <= 0} round onPress={() => this.props.navigation.navigate('TransferBcpt')} text={accountManagement.sendBcpt.transfer} />
+        </View>,
+      </View>
+    )
+  }
   renderPanels() {
     const { user, updateEmail, copyToClipboard, transferLimitLevel } = this.props
     const { notificationsEnabled, ethBalance, bcptBalance } = this.props.state
@@ -382,22 +399,24 @@ class MyAccount extends Component<Props, State> {
     }
 
     const panelContent = [
+      // wallet address
       (<View style={style.spaceHorizontalL}>
         <Text style={[style.text, style.spaceTopL, style.center]}>{addressExhortation}</Text>
         <Text style={[style.smallText, style.spaceTop, style.center]}>{accountManagement.sendEth.note(currency, transferLimitLevel())}</Text>
         <Text selectable style={style.displayText}>{`0x${user.address}`}</Text>
         <Button round onPress={() => copyToClipboard(user.address)} text={copy} />
       </View>),
-      (<View style={style.spaceHorizontalL}>
-        <Text style={[style.text, style.spaceTopL, style.center]}>{currentBalance.eth}</Text>
-        <Text selectable style={style.displayText}>{formatCommaDecimal(ethBalance)}</Text>
-        <Button disabled={Number(ethBalance) <= 0} round onPress={() => this.props.navigation.navigate('TransferEth')} text={accountManagement.sendEth.transfer} />
+      // crypto balances
+      (<View>
+        {this.renderCryptoBalancesSubpanel()}
       </View>),
+/*
       (<View style={style.spaceHorizontalL}>
         <Text style={[style.text, style.spaceTopL, style.center]}>{currentBalance.bcpt}</Text>
         <Text selectable style={style.displayText}>{bcptBalance}</Text>
         <Button disabled={Number(bcptBalance) <= 0} round onPress={() => this.props.navigation.navigate('TransferBcpt')} text={accountManagement.sendBcpt.transfer} />
       </View>),
+*/
       (<View style={style.spaceHorizontalL}>
         <Button round onPress={() => this.props.navigation.navigate('RemoveAccount')} text={removeAccount} />
       </View>),
@@ -429,7 +448,7 @@ class MyAccount extends Component<Props, State> {
       (<View style={style.spaceHorizontalL}>
         <Text style={[style.text, style.spaceTopL, style.center]}>{accountManagement.lockTimeout.top}</Text>
         <View style={style.textInputContainerMinor}>
-          <TextInput autoCapitalize='none' style={style.textInputMinor} placeholder={`${user.lockTimeout}`} 
+          <TextInput autoCapitalize='none' style={style.textInputMinor} placeholder={`${user.lockTimeout}`}
             value={lockTimeout} underlineColorAndroid='transparent' maxLength={6} keyboardType='numeric'
             onChangeText={ timeout => this.setState({ lockTimeout: formatLockTimeout(timeout) })}
           />

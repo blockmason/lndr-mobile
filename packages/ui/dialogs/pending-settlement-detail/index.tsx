@@ -9,6 +9,7 @@ import PendingUnilateral from 'lndr/pending-unilateral'
 import profilePic from 'lndr/profile-pic'
 import Friend from 'lndr/friend'
 import { currencySymbols, transferLimits, hasNoDecimals } from 'lndr/currencies'
+import { WEI_PER_ETH } from 'lndr/erc20-utils'
 
 import Button from 'ui/components/button'
 import Loading, { LoadingContext } from 'ui/components/loading'
@@ -197,7 +198,7 @@ class PendingSettlementDetail extends Component<Props, State> {
     }
 
     //this is specific to ETH
-    return `${pendingSettlement.settlementAmount / Math.pow(10, 18)}`.slice(0, 9)
+    return `${pendingSettlement.settlementAmount / WEI_PER_ETH}`.slice(0, 9)
   }
 
   showButtons() {
