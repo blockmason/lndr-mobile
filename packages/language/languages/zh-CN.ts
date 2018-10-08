@@ -428,9 +428,9 @@ export default {
       lend: (X, Z) => `@${X}欠了您${Z}`,
       borrow: (X, Z) => `您签了@${X}${Z}`,
     },
-    balance: `余额`,
+    balance: `您的余额`,
     consolidatedBalance: `合并余额`,
-    friends: FS => `(由${FS}${FS === 1 ? '好友' : '好友'})`,
+    friends: FS => `(由${FS}${FS === 1 ? '位好友' : '位好友'})`,
   },
 
   tabs: {
