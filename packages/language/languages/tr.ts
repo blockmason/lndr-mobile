@@ -505,7 +505,7 @@ export default {
 
   privacyPolicy: {
     link: `blockmason.io/lndr/terms/`,
-    message: `Altınızda tıklayarak okuyup Blockmason gizlilik politikasına kabul ettiğinizi onaylayın. Blockmason Blockmason ve LNDR hakkında güncellemeleri göndermek için e-posta adresinizi kullanabiliriz. İşte gizlilik politikasına bir link:`,
+    message: `Aşağıda tıklayarak Blockmason gizlilik politikasını okuyup kabul ettiğinizi onaylayın . Blockmason e-posta adresinizi Blockmason ve LNDR hakkında güncellemeleri göndermek için kullanabilir . Gizlilik politikasına şu linkten ulaşabilirsiniz: `,
   },
 
   payPalLanguage: {
