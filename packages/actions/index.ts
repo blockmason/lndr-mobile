@@ -824,7 +824,7 @@ export const sendBcpt = (destAddr: string, amount: string) => {
   return async (dispatch, getState) => {
     const { bcptBalance } = getState().store
     if (Number(bcptBalance) < Number(amount)) {
-      return dispatch(displayError(accountManagement.sendBcpt.error.insufficient))
+      return dispatch(displayError(accountManagement.sendERC20.error.insufficient))
     }
 
     try {
@@ -837,9 +837,9 @@ export const sendBcpt = (destAddr: string, amount: string) => {
     } catch (e) {
       console.log('ERROR SENDING BCPT', e)
       if (typeof e === 'string' && e.indexOf('insufficient') !== -1) {
-        return dispatch(displayError(accountManagement.sendBcpt.error.insufficient))
+        return dispatch(displayError(accountManagement.sendERC20.error.insufficient))
       } else {
-        return dispatch(displayError(accountManagement.sendBcpt.error.generic))
+        return dispatch(displayError(accountManagement.sendERC20.error.generic))
       }
     }
   }

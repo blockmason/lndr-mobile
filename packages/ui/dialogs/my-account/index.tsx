@@ -12,6 +12,7 @@ import Loading, { LoadingContext } from 'ui/components/loading'
 import InputImage from 'ui/components/images/input-image'
 import SpinningPicker from 'ui/components/spinning-picker'
 
+import { ERC20_Tokens } from 'lndr/erc20-utils'
 import { formatNick, formatLockTimeout, formatEmail, emailFormatIncorrect, formatCommaDecimal } from 'lndr/format'
 import { UpdateAccountData, UserData } from 'lndr/user'
 
@@ -374,18 +375,25 @@ class MyAccount extends Component<Props, State> {
 
   renderCryptoBalancesSubpanel() {
     const { ethBalance, bcptBalance } = this.props.state
+
+    const cryptoSubpanels = ERC20_Tokens.map( (token) => {
+      return (
+        <View style={style.spaceHorizontalL}>
+          <Text style={[style.text, style.spaceTopL, style.center]}>{currentBalance(token.name)}</Text>
+          <Text selectable style={style.displayText}>{bcptBalance}</Text>
+          <Button disabled={Number(bcptBalance) <= 0} round onPress={() => this.props.navigation.navigate('TransferBcpt')} text={accountManagement.sendERC20.transfer(token.name)} />
+        </View>
+      )
+    })
+
     return (
       <View>
         <View style={style.spaceHorizontalL}>
-          <Text style={[style.text, style.spaceTopL, style.center]}>{currentBalance.eth}</Text>
+          <Text style={[style.text, style.spaceTopL, style.center]}>{currentBalance('Eth')}</Text>
           <Text selectable style={style.displayText}>{formatCommaDecimal(ethBalance)}</Text>
           <Button disabled={Number(ethBalance) <= 0} round onPress={() => this.props.navigation.navigate('TransferEth')} text={accountManagement.sendEth.transfer} />
         </View>
-        <View style={style.spaceHorizontalL}>
-          <Text style={[style.text, style.spaceTopL, style.center]}>{currentBalance.bcpt}</Text>
-          <Text selectable style={style.displayText}>{bcptBalance}</Text>
-          <Button disabled={Number(bcptBalance) <= 0} round onPress={() => this.props.navigation.navigate('TransferBcpt')} text={accountManagement.sendBcpt.transfer} />
-        </View>,
+        {cryptoSubpanels}
       </View>
     )
   }
@@ -399,24 +407,15 @@ class MyAccount extends Component<Props, State> {
     }
 
     const panelContent = [
-      // wallet address
       (<View style={style.spaceHorizontalL}>
         <Text style={[style.text, style.spaceTopL, style.center]}>{addressExhortation}</Text>
         <Text style={[style.smallText, style.spaceTop, style.center]}>{accountManagement.sendEth.note(currency, transferLimitLevel())}</Text>
         <Text selectable style={style.displayText}>{`0x${user.address}`}</Text>
         <Button round onPress={() => copyToClipboard(user.address)} text={copy} />
       </View>),
-      // crypto balances
       (<View>
         {this.renderCryptoBalancesSubpanel()}
       </View>),
-/*
-      (<View style={style.spaceHorizontalL}>
-        <Text style={[style.text, style.spaceTopL, style.center]}>{currentBalance.bcpt}</Text>
-        <Text selectable style={style.displayText}>{bcptBalance}</Text>
-        <Button disabled={Number(bcptBalance) <= 0} round onPress={() => this.props.navigation.navigate('TransferBcpt')} text={accountManagement.sendBcpt.transfer} />
-      </View>),
-*/
       (<View style={style.spaceHorizontalL}>
         <Button round onPress={() => this.props.navigation.navigate('RemoveAccount')} text={removeAccount} />
       </View>),

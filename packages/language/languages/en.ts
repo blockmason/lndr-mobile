@@ -202,15 +202,15 @@ export default {
       note: (currency, multiplier) => `Please note: you can only transfer ${currencySymbols(currency)}${TL(currency, multiplier)} per week out of Lndr`,
       warning: (amount, currency, multiplier) => `You have ${currencySymbols(currency)}${amount} remaining of your ${currencySymbols(currency)}${TL(currency, multiplier)} limit`,
     },
-    sendBcpt: {
+    sendERC20: {
       error: {
-        insufficient: `You do not have enough BCPT for this transaction`,
+        insufficient: (name) => `You do not have enough ${name} for this transaction`,
         generic: `There was an error with the transfer, please try again later`,
       },
-      transfer: `TRANSFER BCPT`,
+      transfer: (name) => `TRANSFER ${name}`,
       address: `Destination Address (without '0x' prefix)`,
-      balance: balance => `Your current BCPT balance is ${typeof balance === 'string' ? balance.slice(0,8) :''}`,
-      bcptAddress: `BCPT Address`,
+      balance: (name, balance) => `Your current ${name} balance is ${typeof balance === 'string' ? balance.slice(0,8) :''}`,
+      tokenAddress: (name) => `${name} Address`,
     },
     panelHeaders: [
       `Wallet Address`,
@@ -237,10 +237,7 @@ export default {
     logoutError: generalCommunicationError,
   },
 
-  currentBalance: {
-    eth: `Current Eth balance:`,
-    bcpt: `Current BCPT balance:`,
-  },
+  currentBalance: name => `Current ${name} balance`,
 
   welcomeView: {
     by: `BUILT BY`,
