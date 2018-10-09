@@ -6,14 +6,14 @@ PODS:
   - FirebaseAnalytics (4.1.0):
     - FirebaseCore (~> 4.0)
     - FirebaseInstanceID (~> 2.0)
-    - GoogleToolboxForMac/NSData+zlib (~> 2.1)
+    - "GoogleToolboxForMac/NSData+zlib (~> 2.1)"
     - nanopb (~> 0.3)
   - FirebaseCore (4.0.17):
-    - GoogleToolboxForMac/NSData+zlib (~> 2.1)
+    - "GoogleToolboxForMac/NSData+zlib (~> 2.1)"
   - FirebaseInstanceID (2.0.9):
     - FirebaseCore (~> 4.0)
   - GoogleToolboxForMac/Defines (2.1.3)
-  - GoogleToolboxForMac/NSData+zlib (2.1.3):
+  - "GoogleToolboxForMac/NSData+zlib (2.1.3)":
     - GoogleToolboxForMac/Defines (= 2.1.3)
   - nanopb (0.3.8):
     - nanopb/decode (= 0.3.8)
@@ -33,6 +33,18 @@ DEPENDENCIES:
   - PayPal-iOS-SDK
   - UrbanAirship-iOS-SDK (~> 9.0)
 
+SPEC REPOS:
+  https://github.com/cocoapods/specs.git:
+    - CardIO
+    - Firebase
+    - FirebaseAnalytics
+    - FirebaseCore
+    - FirebaseInstanceID
+    - GoogleToolboxForMac
+    - nanopb
+    - PayPal-iOS-SDK
+    - UrbanAirship-iOS-SDK
+
 SPEC CHECKSUMS:
   CardIO: 56983b39b62f495fc6dae9ad7cf875143df06443
   Firebase: 92c6ba593e32db0defde464a9adc981d5cb49f97
@@ -46,4 +58,4 @@ SPEC CHECKSUMS:
 
 PODFILE CHECKSUM: 491ed2f70b9ae0d9fe1726d45b9c1a24e5453049
 
-COCOAPODS: 1.3.1
+COCOAPODS: 1.5.3

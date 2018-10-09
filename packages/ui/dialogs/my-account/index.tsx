@@ -266,7 +266,6 @@ class MyAccount extends Component<Props, State> {
         // send response to server
         await loadingPayPal.wrap(palsClient.createPayPalAccount(this.props.user, authToken))
         const payPalEmail = await loadingPayPal.wrap(palsClient.getPayPalAccount(this.props.user))
-        // console.log(payPalEmail)
         this.setState({payPalEmail: payPalEmail})
         if (payPalEmail)
           this.props.navigation.dispatch(ToastActionsCreators.displayInfo(payPalLanguage.connectSuccess));

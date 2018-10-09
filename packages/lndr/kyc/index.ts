@@ -4,6 +4,7 @@ export default class KYC {
   identitySignature: string
   info: any
   requiredIdDocs: any
+  idDocs: any
 
   constructor(data) {
     const { firstName, lastName, dob, street, phone, city, state, postCode, country, governmentPhoto, selfiePhoto, addressPhoto, 
@@ -15,12 +16,6 @@ export default class KYC {
 
     this.info = {
       country, firstName, middleName: "", lastName, phone, dob, nationality: country,
-      idDocs: [
-        // { country, idDocType: governmentPhotoType, idDocSubType: "FRONT_SIDE", content: governmentPhoto },
-        { country, idDocType: governmentPhotoType, file: governmentPhoto.slice(27) },
-        { country, idDocType: "SELFIE", file: selfiePhoto.slice(27) },
-        { country, idDocType: addressPhotoType, file: addressPhoto.slice(27) },
-      ],
       addresses: [
         { street, flatNumber: '', town: city, state, postCode, country }	
       ]
@@ -44,7 +39,13 @@ export default class KYC {
           subTypes: []
         }
       ]
-    }
+    },
+
+    this.idDocs = [
+      { country, idDocType: governmentPhotoType, file: governmentPhoto.slice(27) },
+      { country, idDocType: "SELFIE", file: selfiePhoto.slice(27) },
+      { country, idDocType: addressPhotoType, file: addressPhoto.slice(27) },
+    ]
   }
 
   setIdentitySignature(signature) {

@@ -252,7 +252,6 @@ ${lndrVerified.utility}
 
     chooseCountry(selection: string) {
         const country = countries.find(option => option.name === selection)
-        console.log('selection', selection, country)
         this.setState({ country, generalFormError: undefined, shouldPickCountry: false })
     }
 
@@ -336,7 +335,6 @@ ${lndrVerified.utility}
     }
 
     renderPicker(choices, label: string, selection: any, changeValue: (newValue: any) => void) {
-        console.log('CHOICES', choices, countries)
         const { shouldPickCountry } = this.state
 
         if (Platform.OS === 'ios') {
