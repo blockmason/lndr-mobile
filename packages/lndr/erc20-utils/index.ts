@@ -23,9 +23,11 @@ export const WEI_PER_ETH = Math.pow(10, 18)
 
 // supported tokens
 export const ERC20_BCPT = 'BCPT'
+export const ERC20_DAI_STABLECOIN = 'DAI'
 
 export const ERC20_Tokens = [
-  {name: ERC20_BCPT, contractAddress: '1c4481750daa5ff521a2a7490d9981ed46465dbd'}
+  {name: ERC20_BCPT, contractAddress: '1c4481750daa5ff521a2a7490d9981ed46465dbd'},
+  {name: ERC20_DAI_STABLECOIN, contractAddress: '89d24a6b4ccb1b6faa2625fe562bdd9a23260359'}
 ]
 
 class ERC20_Model {
@@ -36,7 +38,7 @@ class ERC20_Model {
   }
 }
 
-export const web3 = new Web3(new Web3.providers.HttpProvider('https://mainnet.infura.io/EoLr1OVfUMDqq3N2KaKA'))
+const web3 = new Web3(new Web3.providers.HttpProvider('https://mainnet.infura.io/EoLr1OVfUMDqq3N2KaKA'))
 // export const web3 = Platform.OS === 'ios' ? new Web3(new Web3.providers.HttpProvider('http://localhost:7545')) : new Web3(new Web3.providers.HttpProvider('http://10.0.2.2:7545'))
 const ERC20Contract = web3.eth.contract(ERC20_ABI)
 
