@@ -197,7 +197,7 @@ class MyAccount extends Component<Props, State> {
 
   togglePanel(index: number) {
     const { hiddenPanels, scrollY } = this.state
-    const panelHeights = [150, 140, 140, 60, 60, 60, 60, 140, 60, 190, 180, 60, 120]
+    const panelHeights = [150, 250, 60, 60, 60, 60, 140, 60, 190, 180, 60, 120]
     const y = panelHeights[index]
 
     hiddenPanels[index] = !hiddenPanels[index]
@@ -376,9 +376,9 @@ class MyAccount extends Component<Props, State> {
   renderCryptoBalancesSubpanel() {
     const { ethBalance, bcptBalance } = this.props.state
 
-    const cryptoSubpanels = ERC20_Tokens.map( (token) => {
+    const cryptoSubpanels = ERC20_Tokens.map( (token, index) => {
       return (
-        <View style={style.spaceHorizontalL}>
+        <View style={style.spaceHorizontalL} key={`cryptosub-${index}`}>
           <Text style={[style.text, style.spaceTopL, style.center]}>{currentBalance(token.name)}</Text>
           <Text selectable style={style.displayText}>{bcptBalance}</Text>
           <Button disabled={Number(bcptBalance) <= 0} round onPress={() => this.props.navigation.navigate('TransferBcpt')} text={accountManagement.sendERC20.transfer(token.name)} />

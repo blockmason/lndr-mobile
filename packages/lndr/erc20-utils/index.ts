@@ -24,7 +24,7 @@ export const WEI_PER_ETH = Math.pow(10, 18)
 // supported tokens
 export const ERC20_BCPT = 'BCPT'
 
-const ERC20_Tokens = [
+export const ERC20_Tokens = [
   {name: ERC20_BCPT, contractAddress: '1c4481750daa5ff521a2a7490d9981ed46465dbd'}
 ]
 
