@@ -65,7 +65,7 @@ export default {
   errorTitle: `Error`,
   showMnemonic: `Show 12-Word Mnemonic`,
   mnemonicExhortation: `This 12-word phrase is required to restore your account, please keep it somewhere safe and secret`,
-  addressExhortation: `Send Ethereum to your address so you can settle debts on Lndr`,
+  addressExhortation: `You can send ETH or any supported ERC-20 token to your wallet address.`,
   removeAccountTitle: `Are you sure you would like to remove your account from this device?`,
   removeAccountExhortation: `Be sure that you have access to your mnemonic to restore your account later, as this is a permanent removal of your account information from this device.`,
   myAccount: `My Account`,
@@ -202,20 +202,19 @@ export default {
       note: (currency, multiplier) => `Please note: you can only transfer ${currencySymbols(currency)}${TL(currency, multiplier)} per week out of Lndr`,
       warning: (amount, currency, multiplier) => `You have ${currencySymbols(currency)}${amount} remaining of your ${currencySymbols(currency)}${TL(currency, multiplier)} limit`,
     },
-    sendBcpt: {
+    sendERC20: {
       error: {
-        insufficient: `You do not have enough BCPT for this transaction`,
+        insufficient: (name) => `You do not have enough ${name} for this transaction`,
         generic: `There was an error with the transfer, please try again later`,
       },
-      transfer: `TRANSFER BCPT`,
+      transfer: (name) => `TRANSFER ${name}`,
       address: `Destination Address (without '0x' prefix)`,
-      balance: balance => `Your current BCPT balance is ${typeof balance === 'string' ? balance.slice(0,8) :''}`,
-      bcptAddress: `BCPT Address`,
+      balance: (name, balance) => `Your current ${name} balance is ${typeof balance === 'string' ? balance.slice(0,8) :''}`,
+      tokenAddress: (name) => `${name} Address`,
     },
     panelHeaders: [
-      `ETH (& BCPT) Address`,
-      `ETH Balance`,
-      `BCPT Balance`,
+      `Wallet Address`,
+      `Crypto Balances`,
       `Remove Account`,
       `ETH Transaction History`,
       `Receive PayPal Payments`,
@@ -238,10 +237,7 @@ export default {
     logoutError: generalCommunicationError,
   },
 
-  currentBalance: {
-    eth: `Your current Eth balance is:`,
-    bcpt: `Your current BCPT balance is:`,
-  },
+  currentBalance: name => `Current ${name} balance`,
 
   welcomeView: {
     by: `BUILT BY`,
@@ -483,10 +479,10 @@ export default {
       end: ` know that you've settled with PayPal.`,
     },
     kycSuccess: {
-      start: `Thank you! Your account is being verified.  
-      
+      start: `Thank you! Your account is being verified.
+
       `,
-      end: `You will be notified when your additional features are unlocked.` 
+      end: `You will be notified when your additional features are unlocked.`
     },
     status: `You can see the status of this transaction in the `,
     activity: `activity tab.`,

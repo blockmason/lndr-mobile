@@ -16,7 +16,8 @@ export { default as CreditRecord } from './lib/credit-record'
 import { hasNoDecimals } from 'lndr/currencies'
 import KYC from 'lndr/kyc'
 
-import EthTransaction from 'lndr/eth-transaction'
+import { WEI_PER_ETH } from 'lndr/erc20-utils'
+import ERC20Transaction from 'lndr/erc20-transaction'
 import Tx from 'ethereumjs-tx'
 import Web3 from 'web3'
 
@@ -312,7 +313,7 @@ export default class CreditProtocol {
     return new Mnemonic(mnemonic)
   }
 
-  async settleWithEth(transaction: EthTransaction, privateKeyBuffer: any) {
+  async settleWithEth(transaction: ERC20Transaction, privateKeyBuffer: any) {
     if (transaction.from === transaction.to) {
       throw new Error('selfError')
     }
@@ -329,15 +330,15 @@ export default class CreditProtocol {
       gasPrice: web3.toHex(transaction.gasPrice),
       gasLimit: web3.toHex(transaction.gas),
       to: '0x' + transaction.to,
-      value: web3.toHex(transaction.value),
+      value: web3.toHex(transaction.amount),
       from: '0x' + transaction.from
     }
     const tx = new Tx(rawTx)
     tx.sign(privateKeyBuffer)
     const serializedTx = tx.serialize()
 
-    console.log('TOTAL ETH TO BE SENT: ', Number(transaction.value), ', ', Number(transaction.value) + Number(transaction.gas * transaction.gasPrice) )
-    
+    console.log('TOTAL ETH TO BE SENT: ', Number(transaction.amount), ', ', Number(transaction.amount) + Number(transaction.gas * transaction.gasPrice) )
+
     return new Promise((resolve, reject) => {
       web3.eth.sendRawTransaction(('0x' + serializedTx.toString('hex')), (e, data) => {
         if (e) {
@@ -406,7 +407,7 @@ export default class CreditProtocol {
   async getSettlementCost(amount: number, currency: string) {
     const settlementAmount = await this.fiatToEth(amount, currency)
     const transactionCost = await this.getGasPrice()
-    return settlementAmount + ( Number(transactionCost) / Math.pow(10, 18) )
+    return settlementAmount + ( Number(transactionCost) / WEI_PER_ETH )
   }
 
   async getGasPrice() {
@@ -419,7 +420,7 @@ export default class CreditProtocol {
       const gasPrice = await this.getGasPrice()
       const rate = await this.getEthExchange(currency)
 
-      return `${Math.max( 0.01, gasPrice * Number(rate) * 21000 / Math.pow(10, 18) )}`.slice(0,6)
+      return `${Math.max( 0.01, gasPrice * Number(rate) * 21000 / WEI_PER_ETH )}`.slice(0,6)
     } catch (e) {}
 
     return '0.00'

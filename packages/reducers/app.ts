@@ -4,6 +4,7 @@ import moment from 'moment'
 import { UserData } from 'lndr/user'
 import Friend from 'lndr/friend'
 import { hasNoDecimals } from 'lndr/currencies'
+import { WEI_PER_ETH } from 'lndr/erc20-utils'
 import PayPalRequest from 'lndr/paypal-request'
 import { settlementTerms } from 'language'
 
@@ -82,7 +83,7 @@ export const getWeeklyEthTotal = state => {
   const lastWeekWei = ethTransactions.reduce( (acc, cur) => moment(cur.time).add(7, 'day') > moment() ? acc + Number(cur.amount) : acc, 0)
   const bilateralWei = bilateralSettlements.reduce( (acc, cur) => cur.creditorAddress === user.address ? acc + Number(cur.settlementAmount) : acc, 0)
 
-  return (lastWeekWei + bilateralWei) / Math.pow(10, 18)
+  return (lastWeekWei + bilateralWei) / WEI_PER_ETH
 }
 
 export const hasPendingTransaction = state => (friend: Friend) => {
@@ -245,7 +246,7 @@ export const getChannelID = (state) : string => state.store.channelID
 
 function getSettlementIndex(recents: any, friendAddress: String) {
   return recents.findIndex( tx => {
-    return (tx.creditorAddress === friendAddress || tx.debtorAddress === friendAddress) && 
+    return (tx.creditorAddress === friendAddress || tx.debtorAddress === friendAddress) &&
     settlementTerms.reduce( (acc, cur) => acc || tx.memo.indexOf(cur) !== -1, false)
   })
 }

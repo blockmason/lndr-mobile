@@ -9,7 +9,7 @@ import PendingUnilateral from 'lndr/pending-unilateral'
 import { CreditRecord } from 'credit-protocol'
 import TouchID from 'react-native-touch-id'
 import PendingBilateral from 'lndr/pending-bilateral'
-import { getBcptBalance } from 'lndr/bcpt-utils'
+import { getERC20Balance, ERC20_BCPT, WEI_PER_ETH } from 'lndr/erc20-utils'
 import { bufferToHex } from '../credit-protocol/lib/buffer-utils'
 import moment from 'moment'
 import { getEthBalance } from 'lndr/settlement'
@@ -36,8 +36,8 @@ export const getEthInfo = async (user, creditProtocol) => {
   } catch (e) {}
   try {
     ethBalance = await getEthBalance(user.address)
-    const attoBcpts = await getBcptBalance(user.address)
-    bcptBalance = String ( Number(attoBcpts) / Math.pow(10, 18) )
+    const attoBcpts = await getERC20Balance(ERC20_BCPT, user.address)
+    bcptBalance = String ( Number(attoBcpts) / WEI_PER_ETH )
   } catch (e) {}
   return { ethBalance, ethPrices, bcptBalance }
 }

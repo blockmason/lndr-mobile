@@ -7,6 +7,7 @@ import { getResetAction } from 'reducers/nav'
 
 import { UserData } from 'lndr/user'
 import { bcptAmount, ethAddress, formatCommaDecimal } from 'lndr/format'
+import { ERC20_BCPT } from 'lndr/erc20-utils'
 
 import Button from 'ui/components/button'
 import Loading, { LoadingContext } from 'ui/components/loading'
@@ -65,10 +66,10 @@ class TransferBcpt extends Component<Props, State> {
     const { amount, address } = this.state
 
     if (!this.validAddress()) {
-      this.setState({ formInputError: accountManagement.sendBcpt.error.address })
+      this.setState({ formInputError: accountManagement.sendERC20.error.address })
       return
     } else if (!amount || amount === '0') {
-      this.setState({ formInputError: accountManagement.sendBcpt.error.amount })
+      this.setState({ formInputError: accountManagement.sendERC20.error.amount })
       return
     }
 
@@ -119,7 +120,7 @@ class TransferBcpt extends Component<Props, State> {
     return <View style={general.whiteFlex}>
       <View style={general.view}>
         <Loading context={sendingBcptLoader} />
-        <DashboardShell text={accountManagement.sendBcpt.transfer} navigation={this.props.navigation} />
+        <DashboardShell text={accountManagement.sendERC20.transfer(ERC20_BCPT)} navigation={this.props.navigation} />
         <Button close onPress={() => this.props.navigation.goBack()} />
       </View>
       <KeyboardAvoidingView style={general.whiteFlex} behavior={'padding'} keyboardVerticalOffset={vertOffset} >
@@ -127,11 +128,11 @@ class TransferBcpt extends Component<Props, State> {
           <View style={general.largeHMargin} >
             <View style={[general.centeredColumn, {marginBottom: 20}]}>
               <View style={general.centeredColumn} >
-                <Text style={[formStyle.header, {textAlign: 'center'}]}>{accountManagement.sendBcpt.balance(bcptBalance)}</Text>
+                <Text style={[formStyle.header, {textAlign: 'center'}]}>{accountManagement.sendERC20.balance(ERC20_BCPT, bcptBalance)}</Text>
                 <View style={formStyle.textInputContainer}>
                   <TextInput
                     style={[formStyle.textInput,  {paddingVertical: 3}]}
-                    placeholder={accountManagement.sendBcpt.address}
+                    placeholder={accountManagement.sendERC20.address}
                     placeholderTextColor='black'
                     value={address}
                     maxLength={40}
@@ -156,7 +157,7 @@ class TransferBcpt extends Component<Props, State> {
               </View>
             </View>
             { !!formInputError && <Text style={formStyle.warningText}>{formInputError}</Text>}
-            <Button large round wide onPress={() => this.submit()} text={accountManagement.sendBcpt.transfer} />
+            <Button large round wide onPress={() => this.submit()} text={accountManagement.sendERC20.transfer(ERC20_BCPT)} />
           </View>
         </ScrollView>
       </KeyboardAvoidingView>
