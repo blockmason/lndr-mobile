@@ -114,7 +114,9 @@ export const getEthExchange = state => (currency: string) : string => {
 
 export const getEthPrices = (state) : object => state.store.ethPrices
 
-export const getBcptBalance = (state) : string => state.store.bcptBalance
+// export const getERC20Balance = (state) => (tokenName: string) : string => {
+//   return state.store.erc20Balance[tokenName] === undefined ? '0' : state.store.erc20Balance[tokenName]
+// }
 
 export const convertCurrency = state => (fromUcac: string, amount: number) : number => {
   const primaryCurrency = getPrimaryCurrency(state)
@@ -256,10 +258,11 @@ export const getIdentityVerificationStatus = state => state.store.identityVerifi
 export const getTransferLimitLevel = state => () : string => {
   let level = 'standard'
 
+/* FIXME: need to update this for multi-ERC20 token support
   if (Number(state.store.bcptBalance) >= 25) {
     level = 'bcpt'
   }
-
+*/
   if (state.store && state.store.identityVerificationStatus && state.store.identityVerificationStatus.status === 'GREEN') {
     level = 'kyc'
   }

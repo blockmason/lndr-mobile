@@ -12,7 +12,7 @@ import PendingSettlementDetail from 'ui/dialogs/pending-settlement-detail'
 import Settlement from 'ui/dialogs/settlement'
 import FriendDetail from 'ui/dialogs/friend-detail'
 import TransferEth from 'ui/dialogs/transfer-eth'
-import TransferBcpt from 'ui/dialogs/transfer-bcpt'
+import TransferERC20 from 'ui/dialogs/transfer-erc20'
 import FriendRequest from 'ui/dialogs/friend-request'
 import PayPalRequestDetail from 'ui/dialogs/paypal-request-detail'
 import RemoveAccountView from 'ui/dialogs/remove-account'
@@ -54,8 +54,8 @@ export const AppNavigator = StackNavigator(
     TransferEth: {
       screen: TransferEth
     },
-    TransferBcpt: {
-      screen: TransferBcpt
+    TransferERC20: {
+      screen: TransferERC20
     },
     AddDebt: {
       screen: AddDebt
@@ -94,7 +94,7 @@ class AppWithNavigationState extends React.Component<Props> {
 
   constructor(props) {
     super(props);
-  
+
     this._addListener = createReduxBoundAddListener("root");
   }
 

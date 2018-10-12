@@ -17,7 +17,7 @@ import { getEthBalance, web3 } from 'lndr/settlement'
 import { isTouchIdSupported } from 'lndr/touch-id'
 
 import profilePic from 'lndr/profile-pic'
-import { transferERC20, ERC20_BCPT, WEI_PER_ETH } from 'lndr/erc20-utils'
+import { ERC20_Token } from 'lndr/erc20-utils'
 import { getEtherscanTransactions } from 'lndr/etherscan'
 import { sanitizeAmount } from 'lndr/format'
 import { jsonToPendingFriend, jsonToPendingTransaction, jsonToRecentTransaction, jsonToPendingUnilateral,
@@ -52,7 +52,7 @@ const creditProtocol = new CreditProtocol('https://api.lndr.blockmason.io')
 //   creditProtocol = new CreditProtocol('http://10.0.2.2:7402')
 // }
 
-const GAS_TO_SEND_BCPT = 65000
+const GAS_TO_SEND_ERC20 = 65000
 const GAS_TO_SETTLE_WITH_ETH = 21000
 
 // TODO REMOVE setState FUNCTION as the sole purpose was to transition from using
@@ -80,21 +80,20 @@ export const initializeStorage = () => {
 
     if (storedUser && moment(storedSession).add(storedUser.lockTimeout, 'minute') > moment()) {
       await sessionStorage.set(moment())
-      let { ethBalance, ethPrices, bcptBalance } = await getEthInfo(storedUser, creditProtocol)
+      let { ethBalance, ethPrices } = await getEthInfo(storedUser, creditProtocol)
       let ucacAddresses = await creditProtocol.getUcacAddresses()
       let ethTransactions = await ethTransactionsStorage.get()
       const payload = { hasStoredUser: true, welcomeComplete: true, privacyPolicyVerified: true, user: storedUser, notificationsEnabled, ethBalance,
-        ethPrices, bcptBalance, ucacAddresses, ethTransactions, primaryCurrency }
+        ethPrices, ucacAddresses, ethTransactions, primaryCurrency }
       dispatch(setState(payload))
 
     } else if (touchIdSupported && storedMnemonic && storedUser) {
-      let { ethBalance, ethPrices, bcptBalance } = await getEthInfo(storedUser, creditProtocol)
+      let { ethBalance, ethPrices } = await getEthInfo(storedUser, creditProtocol)
       let ucacAddresses = await creditProtocol.getUcacAddresses()
       let ethTransactions = await ethTransactionsStorage.get()
       const payload = await triggerTouchId(storedUser, notificationsEnabled, sessionStorage)
       payload.ethBalance = ethBalance
       payload.ethPrices = ethPrices
-      payload.bcptBalance = bcptBalance
       payload.ucacAddresses = ucacAddresses
       payload.ethTransactions = ethTransactions
       payload.primaryCurrency = primaryCurrency
@@ -253,10 +252,10 @@ export const confirmAccount = async (recovery: boolean, shouldDisplayMnemonic: b
     const hashedPassword = bcrypt.hashSync(password)
     const user = await createUserFromCredentials(mnemonic, hashedPassword, 15)
     await storeUserSession(user)
-    let { ethBalance, ethPrices, bcptBalance } = await getEthInfo(user, creditProtocol)
+    let { ethBalance, ethPrices } = await getEthInfo(user, creditProtocol)
     let ucacAddresses = await creditProtocol.getUcacAddresses()
     let ethTransactions = await getEthTransactions(user.address, recovery)
-    const payload = { user, hasStoredUser: true, ethBalance, ethPrices, bcptBalance, ucacAddresses, ethTransactions, shouldDisplayMnemonic, password, mnemonic }
+    const payload = { user, hasStoredUser: true, ethBalance, ethPrices, ucacAddresses, ethTransactions, shouldDisplayMnemonic, password, mnemonic }
     return payload
 }
 
@@ -682,11 +681,11 @@ export const loginAccount = (loginData: LoginAccountData) => {
     const user = await createUserFromCredentials(mnemonic, hashedPassword, lockTimeout)
 
     await storeUserSession(user)
-    let { ethBalance, ethPrices, bcptBalance } = await getEthInfo(user, creditProtocol)
+    let { ethBalance, ethPrices } = await getEthInfo(user, creditProtocol)
     let ucacAddresses = await creditProtocol.getUcacAddresses()
     let ethTransactions = await ethTransactionsStorage.get()
 
-    const payload = { user, hasStoredUser: true, ethBalance, ethPrices, bcptBalance, ucacAddresses, ethTransactions }
+    const payload = { user, hasStoredUser: true, ethBalance, ethPrices, ucacAddresses, ethTransactions }
     dispatch(setState(payload))
     refreshTransactions()
     return true
@@ -800,7 +799,8 @@ export const sendEth = (destAddr: string, amount: string) => {
       const { privateKeyBuffer, address } = getState().store.user
       //Safe Low is in 10^8 Wei (deciGigaWei)
       const gasPrice = await creditProtocol.getGasPrice()
-      const ethTransaction = new ERC20Transaction(address, destAddr, Number(web3.toWei(Number(amount), 'ether')), 1.0, gasPrice, GAS_TO_SETTLE_WITH_ETH)
+      const amountWei = Number(web3.toWei(Number(amount), 'ether'))
+      const ethTransaction = new ERC20Transaction(address, destAddr, amountWei, gasPrice, GAS_TO_SETTLE_WITH_ETH)
       const txHash = await creditProtocol.settleWithEth(ethTransaction, privateKeyBuffer)
       console.log('SENDING ETH, TXHASH:', txHash)
       storeEthTransaction(dispatch, {
@@ -820,18 +820,21 @@ export const sendEth = (destAddr: string, amount: string) => {
   }
 }
 
-export const sendBcpt = (destAddr: string, amount: string) => {
+export const sendERC20 = (token: ERC20_Token, destinationAddress: string, amount: string) => {
   return async (dispatch, getState) => {
-    const { bcptBalance } = getState().store
-    if (Number(bcptBalance) < Number(amount)) {
-      return dispatch(displayError(accountManagement.sendERC20.error.insufficient))
-    }
-
     try {
       const { privateKeyBuffer, address } = getState().store.user
+
+      const tokenBalance = await token.getBalance(address)
+      if (Number(tokenBalance) < Number(amount)) {
+        return dispatch(displayError(accountManagement.sendERC20.error.insufficient))
+      }
+
       const gasPrice = await creditProtocol.getGasPrice()
-      const bcptTransaction = new ERC20Transaction(address, destAddr, Number(amount), WEI_PER_ETH, gasPrice, GAS_TO_SEND_BCPT)
-      const txHash = await transferERC20(ERC20_BCPT, bcptTransaction, privateKeyBuffer)
+      const amountWei = Number(web3.toWei(Number(amount), token.tokenUnits))
+      const erc20Transaction = new ERC20Transaction(address, destinationAddress, amountWei, gasPrice, GAS_TO_SEND_ERC20)
+
+      const txHash = await token.transfer(erc20Transaction, privateKeyBuffer)
       console.log('SENDING BCPT, TXHASH:', txHash)
       return txHash
     } catch (e) {
@@ -1029,7 +1032,7 @@ const settleBilateral = async (user, bilateralSettlements, dispatch, getState) =
       return dispatch(displayError(settlementManagement.bilateral.error.insufficient(debtorNickname)))
     }
 
-    const ethTransaction = new ERC20Transaction(settlement.creditorAddress, settlement.debtorAddress, settlement.settlementAmount, 1.0, gasPrice, GAS_TO_SETTLE_WITH_ETH)
+    const ethTransaction = new ERC20Transaction(settlement.creditorAddress, settlement.debtorAddress, settlement.settlementAmount, gasPrice, GAS_TO_SETTLE_WITH_ETH)
     try {
       const txHash = await creditProtocol.settleWithEth(ethTransaction, user.privateKeyBuffer)
       if(settlement.multiSettlements !== undefined) {

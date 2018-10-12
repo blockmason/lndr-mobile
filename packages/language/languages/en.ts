@@ -462,9 +462,9 @@ export default {
       start: `You have successfully sent `,
       end: ` ETH and your transaction hash is `,
     },
-    bcptSent: {
+    erc20Sent: {
       start: `You have successfully sent `,
-      end: ` BCPT and your transaction hash is `,
+      end: ` and your transaction hash is `,
     },
     requestPayPalPayee: {
       start: `We've let `,

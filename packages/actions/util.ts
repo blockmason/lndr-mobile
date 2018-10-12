@@ -9,7 +9,6 @@ import PendingUnilateral from 'lndr/pending-unilateral'
 import { CreditRecord } from 'credit-protocol'
 import TouchID from 'react-native-touch-id'
 import PendingBilateral from 'lndr/pending-bilateral'
-import { getERC20Balance, ERC20_BCPT, WEI_PER_ETH } from 'lndr/erc20-utils'
 import { bufferToHex } from '../credit-protocol/lib/buffer-utils'
 import moment from 'moment'
 import { getEthBalance } from 'lndr/settlement'
@@ -30,16 +29,14 @@ export const triggerTouchId = (user, notificationsEnabled, sessionStorage) => {
 }
 
 export const getEthInfo = async (user, creditProtocol) => {
-  let ethBalance = '0' as any, ethPrices = {}, bcptBalance = '0'
+  let ethBalance = '0' as any, ethPrices = {}
   try {
     ethPrices = await creditProtocol.getEthPrices()
   } catch (e) {}
   try {
     ethBalance = await getEthBalance(user.address)
-    const attoBcpts = await getERC20Balance(ERC20_BCPT, user.address)
-    bcptBalance = String ( Number(attoBcpts) / WEI_PER_ETH )
   } catch (e) {}
-  return { ethBalance, ethPrices, bcptBalance }
+  return { ethBalance, ethPrices }
 }
 
 export const generateMultiTransaction = async (address: string, friendAddress: string, ucacBalances: Object, memo: string, getState: Function, privateKeyBuffer: any, creditProtocol: any, settlementCurrency?: string) => {

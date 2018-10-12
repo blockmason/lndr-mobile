@@ -7,7 +7,7 @@ import { getResetAction } from 'reducers/nav'
 
 import { UserData } from 'lndr/user'
 import { bcptAmount, ethAddress, formatCommaDecimal } from 'lndr/format'
-import { ERC20_BCPT } from 'lndr/erc20-utils'
+import { ERC20_Token } from 'lndr/erc20-utils'
 
 import Button from 'ui/components/button'
 import Loading, { LoadingContext } from 'ui/components/loading'
@@ -22,47 +22,56 @@ const {
   accountManagement
 } = language
 
-import { getUser, getBcptBalance, getPrimaryCurrency } from 'reducers/app'
-import { sendBcpt, getEthTxCost } from 'actions'
+import { getUser, getPrimaryCurrency } from 'reducers/app'
+import { getEthTxCost, sendERC20 } from 'actions'
 import { connect } from 'react-redux'
 
-const sendingBcptLoader = new LoadingContext()
+const loadingContext = new LoadingContext()
 
 interface Props {
+  token: ERC20_Token
   primaryCurrency: string
   user: UserData
-  bcptBalance: string
   navigation: any
-  sendBcpt: (address: string, amount: string) => any
+  sendERC20: (token: ERC20_Token, destinationAddress: string, amount: string) => any
 }
 
 interface State {
   amount?: string
   address?: string
-  formInputError?: string
   error?: string
+  formInputError?: string
+  tokenBalance: string
   txCost: string
 }
 
-class TransferBcpt extends Component<Props, State> {
+class TransferERC20 extends Component<Props, State> {
   constructor(props) {
     super(props)
     this.state = {
+      tokenBalance: '0.00',
       txCost: '0.00'
     }
   }
 
   async componentWillMount() {
-    const { primaryCurrency } = this.props
+    const { primaryCurrency, token } = this.props
     const txCost = await getEthTxCost(primaryCurrency)
     this.setState({ txCost })
+
+    if (token) {
+      const tokenBalance = await token.getBalance(this.state.address as string)
+      this.setState({ tokenBalance} )
+    }
   }
 
   componentDidMount( ) {
-    firebase.analytics().setCurrentScreen('transfer-bcpt', 'TransferBcpt');
+    const { token } = this.props
+    firebase.analytics().setCurrentScreen(`transfer-${token.tokenName.toLowerCase()}`, `Transfer${token.tokenName}`);
   }
 
   async submit() {
+    const { token } = this.props
     const { amount, address } = this.state
 
     if (!this.validAddress()) {
@@ -73,8 +82,9 @@ class TransferBcpt extends Component<Props, State> {
       return
     }
 
-    const success = await sendingBcptLoader.wrap(
-      this.props.sendBcpt(
+    const success = await loadingContext.wrap(
+      this.props.sendERC20(
+        token,
         address as string,
         amount as string
       )
@@ -85,7 +95,7 @@ class TransferBcpt extends Component<Props, State> {
     if (success && typeof success !== 'string' && success.type === '@@TOAST/DISPLAY_ERROR') {
       this.props.navigation.goBack()
     } else {
-      const resetAction = getResetAction({ routeName:'Confirmation', params: { type: 'bcptSent', txHash: success, amount: amount } })
+      const resetAction = getResetAction({ routeName:'Confirmation', params: { type: 'erc20Sent', txHash: success, amount: amount, token: token } })
       this.props.navigation.dispatch(resetAction)
     }
   }
@@ -113,14 +123,14 @@ class TransferBcpt extends Component<Props, State> {
   }
 
   render() {
-    const { amount, address, formInputError, txCost } = this.state
-    const { bcptBalance, primaryCurrency } = this.props
+    const { amount, address, formInputError, tokenBalance, txCost } = this.state
+    const { token, primaryCurrency } = this.props
     const vertOffset = (Platform.OS === 'android') ? -300 : 0;
 
     return <View style={general.whiteFlex}>
       <View style={general.view}>
-        <Loading context={sendingBcptLoader} />
-        <DashboardShell text={accountManagement.sendERC20.transfer(ERC20_BCPT)} navigation={this.props.navigation} />
+        <Loading context={loadingContext} />
+        <DashboardShell text={accountManagement.sendERC20.transfer(token.tokenName)} navigation={this.props.navigation} />
         <Button close onPress={() => this.props.navigation.goBack()} />
       </View>
       <KeyboardAvoidingView style={general.whiteFlex} behavior={'padding'} keyboardVerticalOffset={vertOffset} >
@@ -128,7 +138,7 @@ class TransferBcpt extends Component<Props, State> {
           <View style={general.largeHMargin} >
             <View style={[general.centeredColumn, {marginBottom: 20}]}>
               <View style={general.centeredColumn} >
-                <Text style={[formStyle.header, {textAlign: 'center'}]}>{accountManagement.sendERC20.balance(ERC20_BCPT, bcptBalance)}</Text>
+                <Text style={[formStyle.header, {textAlign: 'center'}]}>{accountManagement.sendERC20.balance(token.tokenName, tokenBalance)}</Text>
                 <View style={formStyle.textInputContainer}>
                   <TextInput
                     style={[formStyle.textInput,  {paddingVertical: 3}]}
@@ -157,7 +167,7 @@ class TransferBcpt extends Component<Props, State> {
               </View>
             </View>
             { !!formInputError && <Text style={formStyle.warningText}>{formInputError}</Text>}
-            <Button large round wide onPress={() => this.submit()} text={accountManagement.sendERC20.transfer(ERC20_BCPT)} />
+            <Button large round wide onPress={() => this.submit()} text={accountManagement.sendERC20.transfer(token.tokenName)} />
           </View>
         </ScrollView>
       </KeyboardAvoidingView>
@@ -165,5 +175,5 @@ class TransferBcpt extends Component<Props, State> {
   }
 }
 
-export default connect((state) => ({ user: getUser(state)(), bcptBalance: getBcptBalance(state), primaryCurrency: getPrimaryCurrency(state) }),
-{ sendBcpt })(TransferBcpt)
+export default connect((state) => ({ user: getUser(state)(), primaryCurrency: getPrimaryCurrency(state) }),
+{ sendERC20 })(TransferERC20)

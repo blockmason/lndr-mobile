@@ -21,15 +21,6 @@ import Web3 from 'web3'
 
 export const WEI_PER_ETH = Math.pow(10, 18)
 
-// supported tokens
-export const ERC20_BCPT = 'BCPT'
-export const ERC20_DAI_STABLECOIN = 'DAI'
-
-export const ERC20_Tokens = [
-  {name: ERC20_BCPT, contractAddress: '1c4481750daa5ff521a2a7490d9981ed46465dbd'},
-  {name: ERC20_DAI_STABLECOIN, contractAddress: '89d24a6b4ccb1b6faa2625fe562bdd9a23260359'}
-]
-
 class ERC20_Model {
   // we're only supporting required functions
   balanceOf: (address: string, callback: Function) => any
@@ -42,58 +33,91 @@ const web3 = new Web3(new Web3.providers.HttpProvider('https://mainnet.infura.io
 // export const web3 = Platform.OS === 'ios' ? new Web3(new Web3.providers.HttpProvider('http://localhost:7545')) : new Web3(new Web3.providers.HttpProvider('http://10.0.2.2:7545'))
 const ERC20Contract = web3.eth.contract(ERC20_ABI)
 
-export const getERC20Balance = async (tokenName: string, walletAddress: string) => {
-  const token = ERC20_Tokens.find(token => token.name === tokenName)
+export const getERC20_token = (tokenName : string) => {
+  const token = ERC20_Tokens.find(token => token.tokenName === tokenName)
   if (!token)
     throw new Error('invalidToken')
-
-  const resolvedContract = await new Promise((resolve, reject) => {
-    ERC20Contract.at(`0x${token.contractAddress}`, (e, data) => e ? reject(e) : resolve(data))
-  }) as ERC20_Model
-
-  const balance = await new Promise((resolve, reject) => {
-    resolvedContract.balanceOf(`0x${walletAddress}`, (e, data) => e ? reject(e) : resolve(data))
-  })
-
-  return balance.toString()
+  return token;
 }
 
-export const transferERC20 = async (tokenName: string, transaction: ERC20Transaction, privateKeyBuffer: any) => {
-  if (transaction.from === transaction.to) {
-    throw new Error('selfError')
+export class ERC20_Token {
+  tokenName : string
+  contractAddress: string
+  tokenUnits: string
+  /* possible tokenUnits:
+    kwei/ada
+    mwei/babbage
+    gwei/shannon
+    szabo
+    finney
+    ether
+    kether/grand/einstein
+    mether
+    gether
+    tether
+  */
+  constructor(tokenName: string, contractAddress: string, tokenUnits: string) {
+    this.tokenName = tokenName
+    this.contractAddress = contractAddress
+    this.tokenUnits = tokenUnits
   }
-  const token = ERC20_Tokens.find(token => token.name === tokenName)
-  if (!token)
-    throw new Error('invalidToken')
 
-  if (privateKeyBuffer.type === 'Buffer') {
-    privateKeyBuffer = Buffer.from(privateKeyBuffer.data)
+  async getBalance(walletAddress: string) {
+    const resolvedContract = await new Promise((resolve, reject) => {
+      ERC20Contract.at(`0x${this.contractAddress}`, (e, data) => e ? reject(e) : resolve(data))
+    }) as ERC20_Model
+
+    const balance = await new Promise((resolve, reject) => {
+      resolvedContract.balanceOf(`0x${walletAddress}`, (e, data) => e ? reject(e) : resolve(data))
+    })
+
+    const ethBalance = web3.fromWei(Number(balance), this.tokenUnits)
+    //const ethBalance = Number(balance) / this.unitsPerEth
+    return String(ethBalance)
   }
 
-  const nonce = await new Promise((resolve, reject) => {
-    web3.eth.getTransactionCount(`0x${transaction.from}`, (e, data) => e ? reject(e) : resolve(data))
-  })
+  async transfer(transaction: ERC20Transaction, privateKeyBuffer: any) {
+    if (transaction.from === transaction.to) {
+      throw new Error('selfError')
+    }
+    if (privateKeyBuffer.type === 'Buffer') {
+      privateKeyBuffer = Buffer.from(privateKeyBuffer.data)
+    }
 
-  const resolvedContract = await new Promise((resolve, reject) => {
-    ERC20Contract.at(`0x${token.contractAddress}`, (e, data) => e ? reject(e) : resolve(data))
-  }) as ERC20_Model
+    const nonce = await new Promise((resolve, reject) => {
+      web3.eth.getTransactionCount(`0x${transaction.from}`, (e, data) => e ? reject(e) : resolve(data))
+    })
 
-  // is this synchronous?
-  const data = resolvedContract.transfer.getData(`0x${transaction.to}`, transaction.amount)
+    const resolvedContract = await new Promise((resolve, reject) => {
+      ERC20Contract.at(`0x${this.contractAddress}`, (e, data) => e ? reject(e) : resolve(data))
+    }) as ERC20_Model
 
-  const rawTx = {
-    nonce: web3.toHex(nonce),
-    gasPrice: web3.toHex(transaction.gasPrice),
-    gasLimit: web3.toHex(transaction.gas),
-    to: '0x' + transaction.to,
-    from: '0x' + transaction.from,
-    data
+    // is this synchronous?
+    const data = resolvedContract.transfer.getData(`0x${transaction.to}`, transaction.amount)
+
+    const rawTx = {
+      nonce: web3.toHex(nonce),
+      gasPrice: web3.toHex(transaction.gasPrice),
+      gasLimit: web3.toHex(transaction.gas),
+      to: '0x' + transaction.to,
+      from: '0x' + transaction.from,
+      data
+    }
+    const tx = new Tx(rawTx)
+    tx.sign(privateKeyBuffer)
+    const serializedTx = tx.serialize()
+
+    return new Promise((resolve, reject) => {
+      web3.eth.sendRawTransaction(('0x' + serializedTx.toString('hex')), (e, data) => e ? reject(e) : resolve(data))
+    })
   }
-  const tx = new Tx(rawTx)
-  tx.sign(privateKeyBuffer)
-  const serializedTx = tx.serialize()
-
-  return new Promise((resolve, reject) => {
-    web3.eth.sendRawTransaction(('0x' + serializedTx.toString('hex')), (e, data) => e ? reject(e) : resolve(data))
-  })
 }
+
+// supported tokens
+export const ERC20_BCPT = 'BCPT'
+export const ERC20_DAI_STABLECOIN = 'DAI'
+
+export const ERC20_Tokens = [
+  new ERC20_Token(ERC20_BCPT, '1c4481750daa5ff521a2a7490d9981ed46465dbd', 'wei'),
+  new ERC20_Token(ERC20_DAI_STABLECOIN, '89d24a6b4ccb1b6faa2625fe562bdd9a23260359', 'wei'),
+]
