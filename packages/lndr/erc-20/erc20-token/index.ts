@@ -1,3 +1,8 @@
+import { Platform } from 'react-native'
+import ERC20_Transaction from '../erc20-transaction'
+import Tx from 'ethereumjs-tx'
+import Web3 from 'web3'
+
 declare const Buffer
 
 const ERC20_ABI = [
@@ -14,13 +19,6 @@ const ERC20_ABI = [
   // {"inputs":[],"payable":false,"type":"constructor"},
 ]
 
-import { Platform } from 'react-native'
-import ERC20_Transaction from 'lndr/erc20-transaction'
-import Tx from 'ethereumjs-tx'
-import Web3 from 'web3'
-
-export const WEI_PER_ETH = Math.pow(10, 18)
-
 class ERC20_Model {
   // we're only supporting required functions
   balanceOf: (address: string, callback: Function) => any
@@ -30,17 +28,9 @@ class ERC20_Model {
 }
 
 const web3 = new Web3(new Web3.providers.HttpProvider('https://mainnet.infura.io/EoLr1OVfUMDqq3N2KaKA'))
-// export const web3 = Platform.OS === 'ios' ? new Web3(new Web3.providers.HttpProvider('http://localhost:7545')) : new Web3(new Web3.providers.HttpProvider('http://10.0.2.2:7545'))
 const ERC20Contract = web3.eth.contract(ERC20_ABI)
 
-export const getERC20_token = (tokenName : string) => {
-  const token = ERC20_Tokens.find(token => token.tokenName === tokenName)
-  if (!token)
-    throw new Error('invalidToken')
-  return token;
-}
-
-export class ERC20_Token {
+export default class ERC20_Token {
   tokenName : string
   contractAddress: string
   tokenUnits: string
@@ -112,12 +102,3 @@ export class ERC20_Token {
     })
   }
 }
-
-// supported tokens
-export const ERC20_BCPT = 'BCPT'
-export const ERC20_DAI_STABLECOIN = 'DAI'
-
-export const ERC20_Tokens = [
-  new ERC20_Token(ERC20_BCPT, '1c4481750daa5ff521a2a7490d9981ed46465dbd', 'wei'),
-  new ERC20_Token(ERC20_DAI_STABLECOIN, '89d24a6b4ccb1b6faa2625fe562bdd9a23260359', 'wei'),
-]

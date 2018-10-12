@@ -16,8 +16,7 @@ export { default as CreditRecord } from './lib/credit-record'
 import { hasNoDecimals } from 'lndr/currencies'
 import KYC from 'lndr/kyc'
 
-import { WEI_PER_ETH } from 'lndr/erc20-utils'
-import ERC20Transaction from 'lndr/erc20-transaction'
+import { ERC20_Transaction, WEI_PER_ETH } from 'lndr/erc-20'
 import Tx from 'ethereumjs-tx'
 import Web3 from 'web3'
 
@@ -313,7 +312,7 @@ export default class CreditProtocol {
     return new Mnemonic(mnemonic)
   }
 
-  async settleWithEth(transaction: ERC20Transaction, privateKeyBuffer: any) {
+  async settleWithEth(transaction: ERC20_Transaction, privateKeyBuffer: any) {
     if (transaction.from === transaction.to) {
       throw new Error('selfError')
     }

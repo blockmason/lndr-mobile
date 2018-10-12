@@ -4,7 +4,7 @@ import moment from 'moment'
 import { UserData } from 'lndr/user'
 import Friend from 'lndr/friend'
 import { hasNoDecimals } from 'lndr/currencies'
-import { WEI_PER_ETH } from 'lndr/erc20-utils'
+import { WEI_PER_ETH } from 'lndr/erc-20'
 import PayPalRequest from 'lndr/paypal-request'
 import { settlementTerms } from 'language'
 

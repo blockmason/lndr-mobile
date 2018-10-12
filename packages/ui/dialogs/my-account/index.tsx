@@ -12,7 +12,7 @@ import Loading, { LoadingContext } from 'ui/components/loading'
 import InputImage from 'ui/components/images/input-image'
 import SpinningPicker from 'ui/components/spinning-picker'
 
-import { ERC20_Tokens } from 'lndr/erc20-utils'
+import { ERC20_Tokens } from 'lndr/erc-20'
 import { formatNick, formatLockTimeout, formatEmail, emailFormatIncorrect, formatCommaDecimal } from 'lndr/format'
 import { UpdateAccountData, UserData } from 'lndr/user'
 

@@ -7,7 +7,7 @@ import { getResetAction } from 'reducers/nav'
 
 import { UserData } from 'lndr/user'
 import { bcptAmount, ethAddress, formatCommaDecimal } from 'lndr/format'
-import { ERC20_Token } from 'lndr/erc20-utils'
+import { ERC20_Token } from 'lndr/erc-20'
 
 import Button from 'ui/components/button'
 import Loading, { LoadingContext } from 'ui/components/loading'

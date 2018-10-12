@@ -9,7 +9,7 @@ import PendingUnilateral from 'lndr/pending-unilateral'
 import profilePic from 'lndr/profile-pic'
 import Friend from 'lndr/friend'
 import { currencySymbols, transferLimits, hasNoDecimals } from 'lndr/currencies'
-import { WEI_PER_ETH } from 'lndr/erc20-utils'
+import { WEI_PER_ETH } from 'lndr/erc-20'
 
 import Button from 'ui/components/button'
 import Loading, { LoadingContext } from 'ui/components/loading'
