@@ -350,7 +350,7 @@ class MyAccount extends Component<Props, State> {
 
     const statusSection = (<View style={general.centeredColumn}>
       <Text style={[style.title, identityVerificationStatus.status === 'RED' ? style.redAmount : style.greenAmount]}>{statusText}</Text>
-      {hasStatus && <Image source={imageSource} style={[{height: 50, width: 50}, general.smallTopMargin]} />}
+      {!!hasStatus && <Image source={imageSource} style={[{height: 50, width: 50}, general.smallTopMargin]} />}
     </View>)
 
     const showButtonOrEmail = identityVerificationStatus.status === 'RED' || (!identityVerificationStatus.status && !identityVerificationStatus.sumsubId)
@@ -364,7 +364,7 @@ class MyAccount extends Component<Props, State> {
       <View style={[general.centeredColumn, style.spaceHorizontalL]}>
         <Text style={[style.smallText, style.spaceTop]}>{identityVerificationStatus.sumsubId ? lndrVerified.statusTitle : lndrVerified.title}</Text>
         {statusSection}
-        {showButtonOrEmail && centerMessage}
+        {!!showButtonOrEmail && centerMessage}
         {identityVerificationStatus.status === 'RED' && <Text style={[style.smallText, style.spaceTop]}>{lndrVerified.tryAgain}</Text>}
         <Text style={[style.smallText, style.spaceTop, general.spaceBelowM]}>{lndrVerified.prefix} <Text style={[style.link]} onPress={() => Linking.openURL('https://blockmason.io/lndr/terms/')}>{lndrVerified.linkTitle}</Text>{lndrVerified.postfix}</Text>
       </View>
