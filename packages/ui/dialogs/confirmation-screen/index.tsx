@@ -64,7 +64,7 @@ export default class ConfirmationScreen extends Component<Props> {
       return <Text style={style.text}>
         <Text style={style.nickname}>{type !== 'ethSent' && type !== 'erc20Sent' ? `@${friend.nickname}` : amount}</Text>
         <Text>{confirmation[type].start}</Text>
-        {type === 'erc20Sent' ? <Text>{tokenName}</Text> : null}
+        {type === 'erc20Sent' ? <Text> {tokenName}</Text> : null}
         <Text>{confirmation[type].end}</Text>
         {type === 'ethSent' || type === 'erc20Sent' ? <Text style={style.nickname}>{txHash}</Text> : null}
       </Text>
@@ -80,7 +80,7 @@ export default class ConfirmationScreen extends Component<Props> {
     return <Text style={style.text}>
       <Text>{confirmation[type].start}</Text>
       <Text style={style.nickname}>{type !== 'ethSent' && type !== 'erc20Sent' ? `@${friend.nickname}` : amount}</Text>
-      {type === 'erc20Sent' ? <Text>{tokenName}</Text> : null}
+      {type === 'erc20Sent' ? <Text> {tokenName}</Text> : null}
       <Text>{confirmation[type].end}</Text>
       {type === 'ethSent' || type === 'erc20Sent' ? <Text style={style.nickname}>{txHash}</Text> : null}
     </Text>

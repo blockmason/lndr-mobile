@@ -29,7 +29,6 @@ import { connect } from 'react-redux'
 const loadingContext = new LoadingContext()
 
 interface Props {
-  token: ERC20_Token
   primaryCurrency: string
   user: UserData
   navigation: any
@@ -38,9 +37,10 @@ interface Props {
 
 interface State {
   amount?: string
-  address?: string
+  destinationAddress?: string
   error?: string
   formInputError?: string
+  token?: ERC20_Token
   tokenBalance: string
   txCost: string
 }
@@ -49,35 +49,38 @@ class TransferERC20 extends Component<Props, State> {
   constructor(props) {
     super(props)
     this.state = {
+      token: undefined,
       tokenBalance: '0.00',
       txCost: '0.00'
     }
   }
 
   async componentWillMount() {
-    const { primaryCurrency, token } = this.props
-    const txCost = await getTransactionCost(token.tokenName, primaryCurrency)
-    this.setState({ txCost })
-
+    const { primaryCurrency, user } = this.props
+    const token = this.props.navigation ? this.props.navigation.state.params.token : undefined
     if (token) {
-      const tokenBalance = await token.getBalance(this.state.address as string)
-      this.setState({ tokenBalance} )
+      const txCost = await getTransactionCost(token.tokenName, primaryCurrency)
+      const tokenBalance = await token.getBalance(user.address as string)
+      this.setState({ token, txCost, tokenBalance })
     }
   }
 
   componentDidMount( ) {
-    const { token } = this.props
-    firebase.analytics().setCurrentScreen(`transfer-${token.tokenName.toLowerCase()}`, `Transfer${token.tokenName}`);
+    const { token } = this.state
+    const tokenName = (token) ? token.tokenName : 'erc20'
+    firebase.analytics().setCurrentScreen(`transfer-${tokenName.toLowerCase()}`, `Transfer${tokenName}`);
   }
 
   async submit() {
-    const { token } = this.props
-    const { amount, address } = this.state
+    const { amount, destinationAddress, token } = this.state
 
-    if (!this.validAddress()) {
+    if (!token)
+      return
+    if (!this.validDestinationAddress()) {
       this.setState({ formInputError: accountManagement.sendERC20.error.address })
       return
-    } else if (!amount || amount === '0') {
+    }
+    if (!amount || amount === '0') {
       this.setState({ formInputError: accountManagement.sendERC20.error.amount })
       return
     }
@@ -85,7 +88,7 @@ class TransferERC20 extends Component<Props, State> {
     const success = await loadingContext.wrap(
       this.props.sendERC20(
         token,
-        address as string,
+        destinationAddress as string,
         amount as string
       )
     )
@@ -101,7 +104,7 @@ class TransferERC20 extends Component<Props, State> {
   }
 
   clear() {
-    this.setState( { amount: undefined, address: undefined } )
+    this.setState( { amount: undefined, destinationAddress: undefined } )
   }
 
   cancel() {
@@ -113,24 +116,26 @@ class TransferERC20 extends Component<Props, State> {
     return `${bcptAmount(amount)}`
   }
 
-  setAddress(address) {
-    return `${ethAddress(address)}`
+  setDestinationAddress(destinationAddress) {
+    return `${ethAddress(destinationAddress)}`
   }
 
-  validAddress() {
-    const { address } = this.state
-    return address && address.length === 40
+  validDestinationAddress() {
+    const { destinationAddress } = this.state
+    return destinationAddress && destinationAddress.length === 40
   }
 
   render() {
-    const { amount, address, formInputError, tokenBalance, txCost } = this.state
-    const { token, primaryCurrency } = this.props
+    const { amount, destinationAddress, formInputError, token, tokenBalance, txCost } = this.state
+    const { primaryCurrency } = this.props
+
+    const tokenName = (token) ? token.tokenName : ''
     const vertOffset = (Platform.OS === 'android') ? -300 : 0;
 
     return <View style={general.whiteFlex}>
       <View style={general.view}>
         <Loading context={loadingContext} />
-        <DashboardShell text={accountManagement.sendERC20.transfer(token.tokenName)} navigation={this.props.navigation} />
+        <DashboardShell text={accountManagement.sendERC20.transfer(tokenName)} navigation={this.props.navigation} />
         <Button close onPress={() => this.props.navigation.goBack()} />
       </View>
       <KeyboardAvoidingView style={general.whiteFlex} behavior={'padding'} keyboardVerticalOffset={vertOffset} >
@@ -138,16 +143,16 @@ class TransferERC20 extends Component<Props, State> {
           <View style={general.largeHMargin} >
             <View style={[general.centeredColumn, {marginBottom: 20}]}>
               <View style={general.centeredColumn} >
-                <Text style={[formStyle.header, {textAlign: 'center'}]}>{accountManagement.sendERC20.balance(token.tokenName, tokenBalance)}</Text>
+                <Text style={[formStyle.header, {textAlign: 'center'}]}>{accountManagement.sendERC20.balance(tokenName, tokenBalance)}</Text>
                 <View style={formStyle.textInputContainer}>
                   <TextInput
                     style={[formStyle.textInput,  {paddingVertical: 3}]}
                     placeholder={accountManagement.sendERC20.address}
                     placeholderTextColor='black'
-                    value={address}
+                    value={destinationAddress}
                     maxLength={40}
                     underlineColorAndroid='transparent'
-                    onChangeText={address => this.setState({ address: this.setAddress(address) })}
+                    onChangeText={destinationAddress => this.setState({ destinationAddress: this.setDestinationAddress(destinationAddress) })}
                   />
                 </View>
                 <Text style={formStyle.title}>{accountManagement.sendEth.amount}</Text>
@@ -167,7 +172,7 @@ class TransferERC20 extends Component<Props, State> {
               </View>
             </View>
             { !!formInputError && <Text style={formStyle.warningText}>{formInputError}</Text>}
-            <Button large round wide onPress={() => this.submit()} text={accountManagement.sendERC20.transfer(token.tokenName)} />
+            <Button large round wide onPress={() => this.submit()} text={accountManagement.sendERC20.transfer(tokenName)} />
           </View>
         </ScrollView>
       </KeyboardAvoidingView>

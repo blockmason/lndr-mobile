@@ -393,7 +393,7 @@ class MyAccount extends Component<Props, State> {
         <View style={style.spaceHorizontalL} key={`cryptosub-${index}`}>
           <Text style={[style.text, style.spaceTopL, style.center]}>{currentBalance(token.tokenName)}</Text>
           <Text selectable style={style.displayText}>{cryptoBalance}</Text>
-          <Button disabled={Number(cryptoBalance) <= 0} round onPress={() => this.props.navigation.navigate('TransferERC20')} text={accountManagement.sendERC20.transfer(token.tokenName)} />
+          <Button disabled={Number(cryptoBalance) <= 0} round onPress={() => this.props.navigation.navigate('TransferERC20', { token })} text={accountManagement.sendERC20.transfer(token.tokenName)} />
         </View>
       )
     })
