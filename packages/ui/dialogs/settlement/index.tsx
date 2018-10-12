@@ -113,37 +113,17 @@ class Settlement extends Component<Props, State> {
   }
 
   async componentWillMount() {
-    const { primaryCurrency } = this.props
-    const { address } = this.props.user
     const friend = this.props.navigation ? this.props.navigation.state.params.friend : {}
     const settlementType = this.props.navigation ? this.props.navigation.state.params.settlementType : ''
     const fromPayPalRequest = this.props.navigation ? this.props.navigation.state.params.fromPayPalRequest : false
+    const pic = (friend.address !== undefined) ? await profilePic.get(friend.address) : undefined
 
-    let amount, formInputError, ethCost, txCost, cryptoBalance
+    const { primaryCurrency } = this.props
+    const amount = (this.state.balance) ? formatSettlementAmount(String(Math.abs(this.state.balance)), primaryCurrency) : undefined
+    this.updateTransactionCosts(settlementType, amount)
 
-    if(this.state.balance) {
-      amount = formatSettlementAmount(String(Math.abs(this.state.balance)), primaryCurrency)
-      if (!this.isSettlementFree(settlementType)) {
-        txCost = await getTransactionCost(settlementType, primaryCurrency)
-        const result = this.ethCostAndError(amount, txCost)
-        ethCost = result.ethCost
-        formInputError = result.formInputError
-
-        if (settlementType !== 'eth') {
-          const token = getERC20_token(settlementType)
-          cryptoBalance = token.getBalance(address)
-        }
-      }
-    }
-
+    this.setState({settlementType, friend, amount, pic, fromPayPalRequest})
     unmounting = false
-    let pic
-
-    if (friend.address !== undefined) {
-      pic = await profilePic.get(friend.address)
-    }
-
-    this.setState({txCost, pic, amount, ethCost, cryptoBalance, formInputError, settlementType, friend, fromPayPalRequest})
   }
 
   componentDidMount( ) {
@@ -171,6 +151,28 @@ class Settlement extends Component<Props, State> {
       { settlementType: 'paypal', name: settlementManagement.paypal }
     ]
   }
+
+  async updateTransactionCosts(settlementType: string, amount) {
+    if (this.isSettlementFree(settlementType)) {
+      this.setState({ formInputError: undefined, ethCost: '', txCost: '0', cryptoBalance: '', showPicker: false })
+      return
+    }
+
+    const txCost = await getTransactionCost(settlementType, this.props.primaryCurrency)
+    const result = this.ethCostAndError(amount === undefined ? '0' : amount, txCost)
+    const ethCost = result.ethCost
+    const formInputError = result.formInputError
+
+    let cryptoBalance
+    if (settlementType !== 'eth') {
+      const token = getERC20_token(settlementType)
+      cryptoBalance = await token.getBalance(this.props.user.address)
+    } else
+      cryptoBalance = this.props.ethBalance
+
+    this.setState({ formInputError, ethCost, txCost, cryptoBalance, showPicker: false })
+  }
+
   getDenomination() {
     if(this.props.navigation) {
       if(this.isEthSettlement()) {
@@ -360,18 +362,8 @@ class Settlement extends Component<Props, State> {
   changeSettlementType(pickerSelection: any) {
     setTimeout( async() => {
       const { settlementType } = pickerSelection
-      const { amount } = this.state
-
-      if (!this.isSettlementFree(settlementType)) {
-        const txCost = await getTransactionCost(settlementType, this.props.primaryCurrency)
-        const result = this.ethCostAndError(amount === undefined ? '0' : amount, txCost)
-        const ethCost = result.ethCost
-        const formInputError = result.formInputError
-
-        this.setState({ settlementType, pickerSelection, formInputError, ethCost, txCost, showPicker: false })
-      } else {
-        this.setState({ settlementType, pickerSelection, formInputError: undefined, ethCost: '', txCost: '0', showPicker: false })
-      }
+      this.setState({ settlementType, pickerSelection })
+      this.updateTransactionCosts(settlementType, this.state.amount)
     }, 1)
   }
 
