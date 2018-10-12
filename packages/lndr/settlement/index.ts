@@ -1,7 +1,7 @@
 declare const Buffer
 
 import { Platform } from 'react-native'
-import ERC20_Transaction from 'lndr/erc20-transaction'
+import { ERC20_Transaction } from 'lndr/erc-20'
 import Tx from 'ethereumjs-tx'
 import Web3 from 'web3'
 
