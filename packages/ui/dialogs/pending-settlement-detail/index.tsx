@@ -31,7 +31,7 @@ const {
 
 import { getUser, settlerIsMe, getEthExchange, getWeeklyEthTotal, calculateBalance, getUcacCurrency, getPrimaryCurrency,
   getFriendFromAddress, getTransferLimitLevel } from 'reducers/app'
-import { addDebt, rejectPendingSettlement, getEthTxCost } from 'actions'
+import { addDebt, rejectPendingSettlement, getTransactionCost } from 'actions'
 import { connect } from 'react-redux'
 
 const loadingContext = new LoadingContext()
@@ -76,7 +76,7 @@ class PendingSettlementDetail extends Component<Props, State> {
 
   async componentWillMount() {
     const { user, primaryCurrency } = this.props
-    const txCost = await getEthTxCost(primaryCurrency)
+    const txCost = await getTransactionCost('eth', primaryCurrency)
     const pendingSettlement = this.getPendingSettlement()
     let pic
 

@@ -114,10 +114,6 @@ export const getEthExchange = state => (currency: string) : string => {
 
 export const getEthPrices = (state) : object => state.store.ethPrices
 
-// export const getERC20Balance = (state) => (tokenName: string) : string => {
-//   return state.store.erc20Balance[tokenName] === undefined ? '0' : state.store.erc20Balance[tokenName]
-// }
-
 export const convertCurrency = state => (fromUcac: string, amount: number) : number => {
   const primaryCurrency = getPrimaryCurrency(state)
   let fromExchange = Number(getEthExchange(state)(getUcacCurrency(state)(fromUcac)))

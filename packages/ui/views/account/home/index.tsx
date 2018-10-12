@@ -216,7 +216,7 @@ class HomeView extends Component<Props, State> {
         />
       </View>
       <View style={[style.balanceRow, {marginTop: 10}]}>
-        <Text style={[style.balance, {marginLeft: '2%'}]}>{accountManagement.ethBalance.display(formatCommaDecimal(ethBalance))}</Text>
+        <Text style={[style.balance, {marginLeft: '2%'}]}>{accountManagement.cryptoBalance.display('ETH', formatCommaDecimal(ethBalance))}</Text>
         <Button alternate blackText narrow arrow small onPress={() => {this.props.navigation.navigate('MyAccount')}}
           text={formatEthToFiat(ethBalance, ethExchange(primaryCurrency), primaryCurrency)}
           containerStyle={{marginTop: -6}}

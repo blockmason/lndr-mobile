@@ -33,23 +33,14 @@ const ERC20Contract = web3.eth.contract(ERC20_ABI)
 export default class ERC20_Token {
   tokenName : string
   contractAddress: string
-  tokenUnits: string
-  /* possible tokenUnits:
-    kwei/ada
-    mwei/babbage
-    gwei/shannon
-    szabo
-    finney
-    ether
-    kether/grand/einstein
-    mether
-    gether
-    tether
-  */
-  constructor(tokenName: string, contractAddress: string, tokenUnits: string) {
+  decimals: number
+  canUseToSettle: boolean
+
+  constructor(tokenName: string, contractAddress: string, decimals: number, canUseToSettle: boolean) {
     this.tokenName = tokenName
     this.contractAddress = contractAddress
-    this.tokenUnits = tokenUnits
+    this.decimals = decimals
+    this.canUseToSettle = canUseToSettle
   }
 
   async getBalance(walletAddress: string) {
@@ -57,13 +48,12 @@ export default class ERC20_Token {
       ERC20Contract.at(`0x${this.contractAddress}`, (e, data) => e ? reject(e) : resolve(data))
     }) as ERC20_Model
 
-    const balance = await new Promise((resolve, reject) => {
+    const contractBalance = await new Promise((resolve, reject) => {
       resolvedContract.balanceOf(`0x${walletAddress}`, (e, data) => e ? reject(e) : resolve(data))
     })
 
-    const ethBalance = web3.fromWei(Number(balance), this.tokenUnits)
-    //const ethBalance = Number(balance) / this.unitsPerEth
-    return String(ethBalance)
+    const tokenBalance = Number(contractBalance) / Math.pow(10, this.decimals)
+    return String(tokenBalance)
   }
 
   async transfer(transaction: ERC20_Transaction, privateKeyBuffer: any) {

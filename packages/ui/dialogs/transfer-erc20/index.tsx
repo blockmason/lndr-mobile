@@ -23,7 +23,7 @@ const {
 } = language
 
 import { getUser, getPrimaryCurrency } from 'reducers/app'
-import { getEthTxCost, sendERC20 } from 'actions'
+import { getTransactionCost, sendERC20 } from 'actions'
 import { connect } from 'react-redux'
 
 const loadingContext = new LoadingContext()
@@ -56,7 +56,7 @@ class TransferERC20 extends Component<Props, State> {
 
   async componentWillMount() {
     const { primaryCurrency, token } = this.props
-    const txCost = await getEthTxCost(primaryCurrency)
+    const txCost = await getTransactionCost(token.tokenName, primaryCurrency)
     this.setState({ txCost })
 
     if (token) {

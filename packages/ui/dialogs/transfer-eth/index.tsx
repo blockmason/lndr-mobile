@@ -23,7 +23,7 @@ const {
 } = language
 
 import { getUser, getEthBalance, getEthExchange, getWeeklyEthTotal, getPrimaryCurrency, getTransferLimitLevel } from 'reducers/app'
-import { sendEth, getEthTxCost } from 'actions'
+import { sendEth, getTransactionCost } from 'actions'
 import { connect } from 'react-redux'
 
 const sendingEthLoader = new LoadingContext()
@@ -58,7 +58,7 @@ class TransferEth extends Component<Props, State> {
 
   async componentWillMount() {
     const { primaryCurrency } = this.props
-    const txCost = await getEthTxCost(primaryCurrency)
+    const txCost = await getTransactionCost('eth', primaryCurrency)
     this.setState({ txCost })
   }
 
@@ -206,5 +206,3 @@ class TransferEth extends Component<Props, State> {
 export default connect((state) => ({ user: getUser(state)(), ethBalance: getEthBalance(state), ethExchange: getEthExchange(state),
   ethSentPastWeek: getWeeklyEthTotal(state), primaryCurrency: getPrimaryCurrency(state), transferLimitLevel: getTransferLimitLevel(state) })
   , { sendEth })(TransferEth)
-
-  

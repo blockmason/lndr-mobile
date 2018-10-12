@@ -829,9 +829,9 @@ export const sendERC20 = (token: ERC20_Token, destinationAddress: string, amount
         return dispatch(displayError(accountManagement.sendERC20.error.insufficient))
       }
 
+      const transferBalance = Number(amount) * Math.pow(10, token.decimals)
       const gasPrice = await creditProtocol.getGasPrice()
-      const amountWei = Number(web3.toWei(Number(amount), token.tokenUnits))
-      const erc20Transaction = new ERC20_Transaction(address, destinationAddress, amountWei, gasPrice, GAS_TO_SEND_ERC20)
+      const erc20Transaction = new ERC20_Transaction(address, destinationAddress, transferBalance, gasPrice, GAS_TO_SEND_ERC20)
 
       const txHash = await token.transfer(erc20Transaction, privateKeyBuffer)
       console.log('SENDING BCPT, TXHASH:', txHash)
@@ -941,8 +941,9 @@ export const storeEthTransaction = async (dispatch, ethTx: object) => {
   }
 }
 
-export const getEthTxCost = async (currency: string) => {
-  return creditProtocol.getTxCost(currency)
+export const getTransactionCost = async (settlementType: string, currency: string) => {
+  const gasNeeded = (settlementType == 'eth') ? GAS_TO_SETTLE_WITH_ETH : GAS_TO_SEND_ERC20
+  return creditProtocol.getTxCost(currency, gasNeeded)
 }
 
 export const confirmFriendRequest = (friend: string) => {
