@@ -34,13 +34,13 @@ export default class ERC20_Token {
   tokenName : string
   contractAddress: string
   decimals: number
-  canUseToSettle: boolean
+  exchangePerUSD?: number
 
-  constructor(tokenName: string, contractAddress: string, decimals: number, canUseToSettle: boolean) {
+  constructor(tokenName: string, contractAddress: string, decimals: number, exchangePerUSD?: number) {
     this.tokenName = tokenName
     this.contractAddress = contractAddress
     this.decimals = decimals
-    this.canUseToSettle = canUseToSettle
+    this.exchangePerUSD = exchangePerUSD
   }
 
   async getBalance(walletAddress: string) {

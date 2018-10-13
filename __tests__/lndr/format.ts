@@ -2,7 +2,7 @@ import 'react-native'
 
 // Note: test renderer must be required after react-native.
 
-import { commas, amountFormat, formatEthToFiat, formatCommaDecimal, formatSettlementAmount, formatMemo, formatEthRemaining,
+import { commas, amountFormat, formatExchangeCurrency, formatCommaDecimal, formatSettlementAmount, formatMemo, formatEthRemaining,
   cleanFiatAmount, dobFormat } from 'lndr/format'
 import { getEthExchange } from 'reducers/app';
 
@@ -22,10 +22,10 @@ describe('amountFormat', () => {
   })
 })
 
-describe('formatEthToFiat', () => {
+describe('formatExchangeCurrency', () => {
   it('Formats an ETH amount correctly', () => {
-    expect(formatEthToFiat('2', '100.10', 'USD')).toBe(` (US$200.20)`)
-    expect(formatEthToFiat('2', '100.10121242', 'USD')).toBe(` (US$200.20)`)
+    expect(formatExchangeCurrency('2', '100.10', 'USD')).toBe(` (US$200.20)`)
+    expect(formatExchangeCurrency('2', '100.10121242', 'USD')).toBe(` (US$200.20)`)
   })
 })
 

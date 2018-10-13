@@ -796,7 +796,7 @@ export const sendEth = (destAddr: string, amount: string) => {
   return async (dispatch, getState) => {
     try {
       const { privateKeyBuffer, address } = getState().store.user
-      //Safe Low is in 10^8 Wei (deciGigaWei)
+
       const gasPrice = await creditProtocol.getGasPrice()
       const amountWei = Number(web3.toWei(Number(amount), 'ether'))
       const ethTransaction = new ERC20_Transaction(address, destAddr, amountWei, gasPrice, GAS_TO_SETTLE_WITH_ETH)
@@ -819,6 +819,7 @@ export const sendEth = (destAddr: string, amount: string) => {
   }
 }
 
+// Note: amount is in token units (e.g. "1" BCPT), amount will get multipled by 10^token.decimals inside this function
 export const sendERC20 = (token: ERC20_Token, destinationAddress: string, amount: string) => {
   return async (dispatch, getState) => {
     try {

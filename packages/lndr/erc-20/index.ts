@@ -8,9 +8,10 @@ export const WEI_PER_ETH = Math.pow(10, 18)
 export const ERC20_BCPT = 'BCPT'
 export const ERC20_DAI_STABLECOIN = 'DAI'
 
+// Note: for ERC20_Tokens, specifing the exchangePerUSD = undefined indicates the token may not be used for settling up
 export const ERC20_Tokens = [
-  new ERC20_Token(ERC20_BCPT, '1c4481750daa5ff521a2a7490d9981ed46465dbd', 18, false),
-  new ERC20_Token(ERC20_DAI_STABLECOIN, '89d24a6b4ccb1b6faa2625fe562bdd9a23260359', 18, true),
+  new ERC20_Token(ERC20_BCPT, '1c4481750daa5ff521a2a7490d9981ed46465dbd', 18, undefined),
+  new ERC20_Token(ERC20_DAI_STABLECOIN, '89d24a6b4ccb1b6faa2625fe562bdd9a23260359', 18, 1.0),
 ]
 
 export const getERC20_token = (tokenName : string) => {
