@@ -73,16 +73,17 @@ export default class ERC20_Token {
     }) as ERC20_Model
 
     // is this synchronous?
-    const data = resolvedContract.transfer.getData(`0x${transaction.to}`, transaction.amount)
+    const txData = resolvedContract.transfer.getData(`0x${transaction.to}`, transaction.amount)
 
     const rawTx = {
       nonce: web3.toHex(nonce),
       gasPrice: web3.toHex(transaction.gasPrice),
       gasLimit: web3.toHex(transaction.gas),
-      to: '0x' + transaction.to,
+      to: `0x${this.contractAddress}`,
       from: '0x' + transaction.from,
-      data
+      data: txData
     }
+
     const tx = new Tx(rawTx)
     tx.sign(privateKeyBuffer)
     const serializedTx = tx.serialize()

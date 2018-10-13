@@ -831,6 +831,7 @@ export const sendERC20 = (token: ERC20_Token, destinationAddress: string, amount
 
       const transferBalance = Number(amount) * Math.pow(10, token.decimals)
       const gasPrice = await creditProtocol.getGasPrice()
+
       const erc20Transaction = new ERC20_Transaction(address, destinationAddress, transferBalance, gasPrice, GAS_TO_SEND_ERC20)
 
       const txHash = await token.transfer(erc20Transaction, privateKeyBuffer)
