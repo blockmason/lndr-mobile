@@ -22,11 +22,11 @@ export const getBcptBalance = async (addr: string) => {
   const Bcpt = await new Promise((resolve, reject) => {
     BcptContract.at('0x1c4481750daa5ff521a2a7490d9981ed46465dbd', (e, data) => e ? reject(e) : resolve(data))
   }) as Bcpt
-  
+
   const bcptBalance = await new Promise((resolve, reject) => {
     Bcpt.balanceOf(`0x${addr}`, (e, data) => e ? reject(e) : resolve(data))
   })
-  
+
   return bcptBalance.toString()
 }
 
@@ -53,7 +53,7 @@ export const transferBcpt = async (transaction: BcptTransaction, privateKeyBuffe
     nonce: web3.toHex(nonce),
     gasPrice: web3.toHex(transaction.gasPrice),
     gasLimit: web3.toHex(transaction.gas),
-    to: '0x' + transaction.to,
+    to: '0x1c4481750daa5ff521a2a7490d9981ed46465dbd',
     from: '0x' + transaction.from,
     data
   }
