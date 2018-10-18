@@ -12,7 +12,7 @@ import Loading, { LoadingContext } from 'ui/components/loading'
 import InputImage from 'ui/components/images/input-image'
 import SpinningPicker from 'ui/components/spinning-picker'
 
-import { ERC20_Tokens } from 'lndr/erc20-utils'
+import { ERC20_Tokens } from 'lndr/erc-20'
 import { formatNick, formatLockTimeout, formatEmail, emailFormatIncorrect, formatCommaDecimal } from 'lndr/format'
 import { UpdateAccountData, UserData } from 'lndr/user'
 
@@ -86,6 +86,7 @@ interface State {
   shouldPickCurrency: boolean
   payPalEmail: any // the user's PayPal id (email)
   showNicknameInput: boolean
+  cryptoBalances: any
 }
 
 class MyAccount extends Component<Props, State> {
@@ -105,7 +106,8 @@ class MyAccount extends Component<Props, State> {
       scrollY: 0,
       shouldPickCurrency: false,
       payPalEmail: null,
-      showNicknameInput: false
+      showNicknameInput: false,
+      cryptoBalances: {}
     }
 
     this.submitNickname = this.submitNickname.bind(this)
@@ -124,6 +126,15 @@ class MyAccount extends Component<Props, State> {
       const payPalEmail = await palsClient.getPayPalAccount(this.props.user)
       this.setState({payPalEmail: payPalEmail})
     }
+
+    // note: we're relying on the Http cache for caching here
+    const cryptoBalances = {}
+    ERC20_Tokens.forEach( (token) => {
+      token.getBalance(address).then( (balance) => {
+        cryptoBalances[token.tokenName] = balance
+      })
+    })
+    this.setState({cryptoBalances: cryptoBalances})
   }
 
   componentDidMount( ) {
@@ -373,14 +384,16 @@ class MyAccount extends Component<Props, State> {
   }
 
   renderCryptoBalancesSubpanel() {
-    const { ethBalance, bcptBalance } = this.props.state
+    const { ethBalance } = this.props.state
+    const { cryptoBalances } = this.state
 
     const cryptoSubpanels = ERC20_Tokens.map( (token, index) => {
+      const cryptoBalance = cryptoBalances[token.tokenName] === undefined ? "0.0" : cryptoBalances[token.tokenName]
       return (
         <View style={style.spaceHorizontalL} key={`cryptosub-${index}`}>
-          <Text style={[style.text, style.spaceTopL, style.center]}>{currentBalance(token.name)}</Text>
-          <Text selectable style={style.displayText}>{bcptBalance}</Text>
-          <Button disabled={Number(bcptBalance) <= 0} round onPress={() => this.props.navigation.navigate('TransferBcpt')} text={accountManagement.sendERC20.transfer(token.name)} />
+          <Text style={[style.text, style.spaceTopL, style.center]}>{currentBalance(token.tokenName)}</Text>
+          <Text selectable style={style.displayText}>{cryptoBalance}</Text>
+          <Button disabled={Number(cryptoBalance) <= 0} round onPress={() => this.props.navigation.navigate('TransferERC20', { token })} text={accountManagement.sendERC20.transfer(token.tokenName)} />
         </View>
       )
     })
@@ -398,7 +411,7 @@ class MyAccount extends Component<Props, State> {
   }
   renderPanels() {
     const { user, updateEmail, copyToClipboard, transferLimitLevel } = this.props
-    const { notificationsEnabled, ethBalance, bcptBalance } = this.props.state
+    const { notificationsEnabled, ethBalance } = this.props.state
     const { lockTimeout, hiddenPanels, emailTextInputErrorText, authenticated, currency } = this.state
 
     const submitEmail = async () => {

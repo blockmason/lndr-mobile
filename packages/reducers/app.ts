@@ -4,7 +4,7 @@ import moment from 'moment'
 import { UserData } from 'lndr/user'
 import Friend from 'lndr/friend'
 import { hasNoDecimals } from 'lndr/currencies'
-import { WEI_PER_ETH } from 'lndr/erc20-utils'
+import { WEI_PER_ETH } from 'lndr/erc-20'
 import PayPalRequest from 'lndr/paypal-request'
 import { settlementTerms } from 'language'
 
@@ -113,8 +113,6 @@ export const getEthExchange = state => (currency: string) : string => {
 }
 
 export const getEthPrices = (state) : object => state.store.ethPrices
-
-export const getBcptBalance = (state) : string => state.store.bcptBalance
 
 export const convertCurrency = state => (fromUcac: string, amount: number) : number => {
   const primaryCurrency = getPrimaryCurrency(state)
@@ -256,10 +254,11 @@ export const getIdentityVerificationStatus = state => state.store.identityVerifi
 export const getTransferLimitLevel = state => () : string => {
   let level = 'standard'
 
+/* FIXME: need to update this for multi-ERC20 token support
   if (Number(state.store.bcptBalance) >= 25) {
     level = 'bcpt'
   }
-
+*/
   if (state.store && state.store.identityVerificationStatus && state.store.identityVerificationStatus.status === 'GREEN') {
     level = 'kyc'
   }

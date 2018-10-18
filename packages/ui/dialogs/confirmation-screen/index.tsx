@@ -24,7 +24,7 @@ export default class ConfirmationScreen extends Component<Props> {
   }
 
   getConfirmationImage(type) {
-    const acceptList = ['create', 'confirm', 'ethSent', 'bcptSent', 'confirmFriend', 'requestPayPalPayee', 'requestPayPalPayment', 'settledWithPayPal', 'kycSuccess']
+    const acceptList = ['create', 'confirm', 'ethSent', 'erc20Sent', 'confirmFriend', 'requestPayPalPayee', 'requestPayPalPayment', 'settledWithPayPal', 'kycSuccess']
     const rejectList = ['reject', 'rejectFriend', 'rejectOutboundFriendRequest']
     if (acceptList.indexOf(type) >= 0) {
       return <Image source={require('images/check-circle.png')} style={style.image} />
@@ -48,6 +48,7 @@ export default class ConfirmationScreen extends Component<Props> {
     let friend = { nickname: 'your friend' }
     let txHash = ''
     let amount = ''
+    let tokenName = ''
     if (this.props.navigation.state.params) {
       if (this.props.navigation.state.params.friend)
         friend = this.props.navigation.state.params.friend
@@ -55,14 +56,17 @@ export default class ConfirmationScreen extends Component<Props> {
         txHash = this.props.navigation.state.params.txHash
       if (this.props.navigation.state.params.amount)
         amount = this.props.navigation.state.params.amount
+      if (this.props.navigation.state.params.token)
+        tokenName = this.props.navigation.state.params.token.tokenName
     }
 
-    if (language === 'ja' && (type === 'ethSent' || type === 'bcptSent')) {
+    if (language === 'ja' && (type === 'ethSent' || type === 'erc20Sent')) {
       return <Text style={style.text}>
-        <Text style={style.nickname}>{type !== 'ethSent' && type !== 'bcptSent' ? `@${friend.nickname}` : amount}</Text>
+        <Text style={style.nickname}>{type !== 'ethSent' && type !== 'erc20Sent' ? `@${friend.nickname}` : amount}</Text>
         <Text>{confirmation[type].start}</Text>
+        {type === 'erc20Sent' ? <Text> {tokenName}</Text> : null}
         <Text>{confirmation[type].end}</Text>
-        {type === 'ethSent' || type === 'bcptSent' ? <Text style={style.nickname}>{txHash}</Text> : null}
+        {type === 'ethSent' || type === 'erc20Sent' ? <Text style={style.nickname}>{txHash}</Text> : null}
       </Text>
     }
 
@@ -75,9 +79,10 @@ export default class ConfirmationScreen extends Component<Props> {
 
     return <Text style={style.text}>
       <Text>{confirmation[type].start}</Text>
-      <Text style={style.nickname}>{type !== 'ethSent' && type !== 'bcptSent' ? `@${friend.nickname}` : amount}</Text>
+      <Text style={style.nickname}>{type !== 'ethSent' && type !== 'erc20Sent' ? `@${friend.nickname}` : amount}</Text>
+      {type === 'erc20Sent' ? <Text> {tokenName}</Text> : null}
       <Text>{confirmation[type].end}</Text>
-      {type === 'ethSent' || type === 'bcptSent' ? <Text style={style.nickname}>{txHash}</Text> : null}
+      {type === 'ethSent' || type === 'erc20Sent' ? <Text style={style.nickname}>{txHash}</Text> : null}
     </Text>
   }
 
@@ -93,7 +98,7 @@ export default class ConfirmationScreen extends Component<Props> {
         <View style={[general.centeredColumn, general.standardHMargin]}>
           {this.getConfirmationImage(type)}
           {this.displayMessage()}
-          {type === 'ethSent' || type === 'bcptSent' || type === 'confirmFriend' || type === 'rejectFriend' || type === 'kycSuccess' ? <View style={{marginBottom: 20}}/> :
+          {type === 'ethSent' || type === 'erc20Sent' || type === 'confirmFriend' || type === 'rejectFriend' || type === 'kycSuccess' ? <View style={{marginBottom: 20}}/> :
           <TouchableHighlight onPress={() => this.goActivity()}>
             <Text style={[style.text, style.spacing]}>
               <Text>{confirmation.status}</Text>

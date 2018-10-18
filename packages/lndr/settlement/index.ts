@@ -1,7 +1,7 @@
 declare const Buffer
 
 import { Platform } from 'react-native'
-import ERC20Transaction from 'lndr/erc20-transaction'
+import { ERC20_Transaction } from 'lndr/erc-20'
 import Tx from 'ethereumjs-tx'
 import Web3 from 'web3'
 
@@ -9,7 +9,7 @@ export const web3 = new Web3(new Web3.providers.HttpProvider('https://mainnet.in
 // export const web3 = Platform.OS === 'ios' ? new Web3(new Web3.providers.HttpProvider('http://localhost:7545')) : new Web3(new Web3.providers.HttpProvider('http://10.0.2.2:7545'))
 
 //post to infura using web3js
-export const settleWithEth = async (transaction: ERC20Transaction, privateKey: any) => {
+export const settleWithEth = async (transaction: ERC20_Transaction, privateKey: any) => {
 
   const privateKeyBuffer = new Buffer(privateKey.privateKey, 'hex')
   const nonce = await web3AsyncWrapper(web3.eth.getTransactionCount(`0x${transaction.to}`))

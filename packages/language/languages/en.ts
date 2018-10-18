@@ -178,8 +178,8 @@ export default {
     loadInformation: {
       error: generalCommunicationError
     },
-    ethBalance: {
-      display: balance => `Your ETH balance is ${String(balance).slice(0,8)}`,
+    cryptoBalance: {
+      display: (name, balance) => `Your ${name} balance is ${String(balance).slice(0,8)}`,
       getError: `Unable to retrieve Eth balance`,
       manage: `Manage ETH`,
     },
@@ -367,6 +367,7 @@ export default {
       }
     },
     eth: `Settle With ETH`,
+    erc20: name => `Settle with ${name}`,
     paypal: `Settle With PayPal`,
     nonPayment: `Record a Settlement`,
     select: `Select Settlement Type`,
@@ -462,9 +463,9 @@ export default {
       start: `You have successfully sent `,
       end: ` ETH and your transaction hash is `,
     },
-    bcptSent: {
+    erc20Sent: {
       start: `You have successfully sent `,
-      end: ` BCPT and your transaction hash is `,
+      end: ` and your transaction hash is `,
     },
     requestPayPalPayee: {
       start: `We've let `,

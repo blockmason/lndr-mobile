@@ -9,7 +9,7 @@ import PendingUnilateral from 'lndr/pending-unilateral'
 import profilePic from 'lndr/profile-pic'
 import Friend from 'lndr/friend'
 import { currencySymbols, transferLimits, hasNoDecimals } from 'lndr/currencies'
-import { WEI_PER_ETH } from 'lndr/erc20-utils'
+import { WEI_PER_ETH } from 'lndr/erc-20'
 
 import Button from 'ui/components/button'
 import Loading, { LoadingContext } from 'ui/components/loading'
@@ -31,7 +31,7 @@ const {
 
 import { getUser, settlerIsMe, getEthExchange, getWeeklyEthTotal, calculateBalance, getUcacCurrency, getPrimaryCurrency,
   getFriendFromAddress, getTransferLimitLevel } from 'reducers/app'
-import { addDebt, rejectPendingSettlement, getEthTxCost } from 'actions'
+import { addDebt, rejectPendingSettlement, getTransactionCost } from 'actions'
 import { connect } from 'react-redux'
 
 const loadingContext = new LoadingContext()
@@ -76,7 +76,7 @@ class PendingSettlementDetail extends Component<Props, State> {
 
   async componentWillMount() {
     const { user, primaryCurrency } = this.props
-    const txCost = await getEthTxCost(primaryCurrency)
+    const txCost = await getTransactionCost('eth', primaryCurrency)
     const pendingSettlement = this.getPendingSettlement()
     let pic
 

@@ -100,9 +100,9 @@ export const amountFormat = (amount: string, currency: string, notTextInput: boo
       .replace('DOT', '.')
       .replace(/^0\d/, x => x[1])
       .replace(/\.\d{3,}/, x => `.${x.substr(-2)}`)
-  
+
     const hasDecimal = amount.indexOf('.') !== -1
-  
+
     if (hasDecimal) {
       let [ left, right ] = raw.split('.')
       while (right.length > 2) {
@@ -122,7 +122,7 @@ export const amountFormat = (amount: string, currency: string, notTextInput: boo
       result += '0'
     }
   }
-  
+
   return result
 }
 
@@ -204,8 +204,8 @@ export const convertCommaDecimalToPoint = (amount: string) : string => {
   return amount
 }
 
-export const formatEthToFiat = (ethBalance: string, ethExchange: string, currency: string) : string => {
-  let converted = String( Number(ethBalance) * Number(ethExchange) ).slice(0, 8)
+export const formatExchangeCurrency = (amount: string, exchangeRate: string, currency: string) : string => {
+  let converted = String( Number(amount) * Number(exchangeRate) ).slice(0, 8)
   if(hasNoDecimals(currency)) {
     converted = converted.slice(0, converted.indexOf('.'))
   }
@@ -228,7 +228,7 @@ export const formatSettlementAmount = (amount: string, primaryCurrency: string) 
   const commaAdjusted = isCommaDecimal() ? String(adjustedBalance).replace('.', ',') : String(adjustedBalance)
 
   let formattedAmount = amountFormat(commaAdjusted, primaryCurrency, true)
-  
+
   return formattedAmount
 }
 

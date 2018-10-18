@@ -57,8 +57,6 @@ const initialState = {
   notificationsEnabled: true,
   ethBalance: '0',
   ethPrices: {},
-  bcptBalance: '0',
-  bcptExchange: '0.5',
   userPic: '',
   ucacAddresses: {},
   ethTransactions: [],
@@ -79,7 +77,7 @@ class AppContentsView extends Component<AppContentsProps> {
     super(props)
     this.handleConnection = this.handleConnection.bind(this)
 }
-  
+
   componentDidMount() {
     this.props.initializeStorage()
     SplashScreen.hide()
