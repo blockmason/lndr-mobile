@@ -3,22 +3,33 @@ import React, { Component } from 'react'
 import { Text, Image, View, ScrollView, TouchableHighlight } from 'react-native'
 import firebase from 'react-native-firebase'
 
+import { copyToClipboard } from 'actions'
 import { getResetAction } from 'reducers/nav'
+import { connect } from 'react-redux'
 
 import Button from 'ui/components/button'
 import DashboardShell from 'ui/components/dashboard-shell'
 
 import general from 'theme/general'
 import style from 'theme/confirmation'
+import formStyle from 'theme/form'
 
 import languageText, { language } from 'language'
-const { confirmation } = languageText
+const { confirmation, copy } = languageText
 
 interface Props {
   navigation: any
+  copyToClipboard: (text: string) => any
 }
 
-export default class ConfirmationScreen extends Component<Props> {
+interface State {
+}
+
+class ConfirmationScreen extends Component<Props, State> {
+  constructor(props) {
+    super(props)
+  }
+
   componentDidMount( ) {
     firebase.analytics().setCurrentScreen('confirmation-screen', 'ConfirmationScreen');
   }
@@ -44,6 +55,7 @@ export default class ConfirmationScreen extends Component<Props> {
   }
 
   displayMessage() {
+    const { copyToClipboard } = this.props
     const type = this.props.navigation.state.params ? this.props.navigation.state.params.type : 'create'
     let friend = { nickname: 'your friend' }
     let txHash = ''
@@ -77,12 +89,25 @@ export default class ConfirmationScreen extends Component<Props> {
       </Text>
     }
 
+    if (type === 'ethSent' || type === 'erc20Sent') {
+      return <Text style={style.text}>
+        <Text>{confirmation[type].start}</Text>
+        <Text style={style.nickname}>{amount}</Text>
+        {type === 'erc20Sent' ? <Text> {tokenName}</Text> : null}
+        <Text>{confirmation[type].end}</Text>
+        <View style={formStyle.spaceHorizontalL}>
+          <Text selectable style={formStyle.displayText}>{txHash}</Text>
+          <View style={formStyle.horizontalView}>
+            <Button round onPress={() => copyToClipboard(txHash)} text={copy} />
+          </View>
+        </View>
+      </Text>
+    }
+
     return <Text style={style.text}>
       <Text>{confirmation[type].start}</Text>
-      <Text style={style.nickname}>{type !== 'ethSent' && type !== 'erc20Sent' ? `@${friend.nickname}` : amount}</Text>
-      {type === 'erc20Sent' ? <Text> {tokenName}</Text> : null}
+      <Text style={style.nickname}>{`@${friend.nickname}`}</Text>
       <Text>{confirmation[type].end}</Text>
-      {type === 'ethSent' || type === 'erc20Sent' ? <Text style={style.nickname}>{txHash}</Text> : null}
     </Text>
   }
 
@@ -111,3 +136,5 @@ export default class ConfirmationScreen extends Component<Props> {
     </View>
   }
 }
+
+export default connect( null, { copyToClipboard } )(ConfirmationScreen)
