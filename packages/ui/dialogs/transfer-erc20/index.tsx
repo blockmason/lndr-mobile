@@ -6,7 +6,7 @@ import firebase from 'react-native-firebase'
 import { getResetAction } from 'reducers/nav'
 
 import { UserData } from 'lndr/user'
-import { bcptAmount, ethAddress, formatCommaDecimal } from 'lndr/format'
+import { bcptAmount, formatCommaDecimal, isEthAddress } from 'lndr/format'
 import { ERC20_Token } from 'lndr/erc-20'
 
 import Button from 'ui/components/button'
@@ -76,7 +76,7 @@ class TransferERC20 extends Component<Props, State> {
 
     if (!token)
       return
-    if (!this.validDestinationAddress()) {
+    if (!destinationAddress || !this.validDestinationAddress()) {
       this.setState({ formInputError: accountManagement.sendERC20.error.address })
       return
     }
@@ -85,10 +85,11 @@ class TransferERC20 extends Component<Props, State> {
       return
     }
 
+    const trimmedAddress = destinationAddress.toLowerCase().startsWith('0x') ? destinationAddress.substring(2) : destinationAddress
     const success = await loadingContext.wrap(
       this.props.sendERC20(
         token,
-        destinationAddress as string,
+        trimmedAddress as string,
         amount as string
       )
     )
@@ -117,12 +118,12 @@ class TransferERC20 extends Component<Props, State> {
   }
 
   setDestinationAddress(destinationAddress) {
-    return `${ethAddress(destinationAddress)}`
+    return destinationAddress
   }
 
   validDestinationAddress() {
     const { destinationAddress } = this.state
-    return destinationAddress && destinationAddress.length === 40
+    return `${isEthAddress(destinationAddress)}`
   }
 
   render() {
@@ -150,7 +151,7 @@ class TransferERC20 extends Component<Props, State> {
                     placeholder={accountManagement.sendERC20.address}
                     placeholderTextColor='black'
                     value={destinationAddress}
-                    maxLength={40}
+                    maxLength={42}
                     underlineColorAndroid='transparent'
                     onChangeText={destinationAddress => this.setState({ destinationAddress: this.setDestinationAddress(destinationAddress) })}
                   />

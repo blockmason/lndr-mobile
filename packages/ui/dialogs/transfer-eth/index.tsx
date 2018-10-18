@@ -6,7 +6,7 @@ import firebase from 'react-native-firebase'
 import { getResetAction } from 'reducers/nav'
 
 import { UserData } from 'lndr/user'
-import { ethAmount, ethAddress, formatCommaDecimal, formatEthRemaining } from 'lndr/format'
+import { ethAmount, isEthAddress, formatCommaDecimal, formatEthRemaining } from 'lndr/format'
 import { currencySymbols, transferLimits, isCommaDecimal } from 'lndr/currencies'
 
 import Button from 'ui/components/button'
@@ -114,12 +114,12 @@ class TransferEth extends Component<Props, State> {
   }
 
   setAddress(address: string) {
-    return `${ethAddress(address)}`
+    return address
   }
 
   validAddress() {
     const { address } = this.state
-    return address && address.length === 40
+    return `${isEthAddress(address)}`
   }
 
   getLimit() {
