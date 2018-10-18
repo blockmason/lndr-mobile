@@ -70,7 +70,7 @@ class TransferEth extends Component<Props, State> {
     const { amount, address } = this.state
     const { ethExchange, ethSentPastWeek, primaryCurrency, transferLimitLevel } = this.props
 
-    if (!this.validAddress()) {
+    if (!address || !this.validAddress()) {
       this.setState({ formInputError: accountManagement.sendEth.error.address })
       return
     } else if (!amount || amount === '0') {
@@ -83,9 +83,10 @@ class TransferEth extends Component<Props, State> {
       return
     }
 
+    const trimmedAddress = address.toLowerCase().startsWith('0x') ? address.substring(2) : address
     const success = await sendingEthLoader.wrap(
       this.props.sendEth(
-        address as string,
+        trimmedAddress as string,
         amount as string
       )
     )
@@ -170,7 +171,7 @@ class TransferEth extends Component<Props, State> {
                     placeholder={accountManagement.sendEth.address}
                     placeholderTextColor='black'
                     value={address}
-                    maxLength={40}
+                    maxLength={42}
                     underlineColorAndroid='transparent'
                     onChangeText={address => this.setState({ address: this.setAddress(address), formInputError: undefined })}
                   />
