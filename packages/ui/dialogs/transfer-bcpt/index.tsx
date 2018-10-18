@@ -6,7 +6,7 @@ import firebase from 'react-native-firebase'
 import { getResetAction } from 'reducers/nav'
 
 import { UserData } from 'lndr/user'
-import { bcptAmount, ethAddress, formatCommaDecimal } from 'lndr/format'
+import { bcptAmount, formatCommaDecimal, isEthAddress } from 'lndr/format'
 
 import Button from 'ui/components/button'
 import Loading, { LoadingContext } from 'ui/components/loading'
@@ -64,7 +64,7 @@ class TransferBcpt extends Component<Props, State> {
   async submit() {
     const { amount, address } = this.state
 
-    if (!this.validAddress()) {
+    if (!address || !this.validAddress()) {
       this.setState({ formInputError: accountManagement.sendBcpt.error.address })
       return
     } else if (!amount || amount === '0') {
@@ -72,9 +72,10 @@ class TransferBcpt extends Component<Props, State> {
       return
     }
 
+    const trimmedAddress = address.toLowerCase().startsWith('0x') ? address.substring(2) : address
     const success = await sendingBcptLoader.wrap(
       this.props.sendBcpt(
-        address as string,
+        trimmedAddress as string,
         amount as string
       )
     )
@@ -103,12 +104,12 @@ class TransferBcpt extends Component<Props, State> {
   }
 
   setAddress(address) {
-    return `${ethAddress(address)}`
+    return address
   }
 
   validAddress() {
     const { address } = this.state
-    return address && address.length === 40
+    return `${isEthAddress(address)}`
   }
 
   render() {
@@ -134,7 +135,7 @@ class TransferBcpt extends Component<Props, State> {
                     placeholder={accountManagement.sendBcpt.address}
                     placeholderTextColor='black'
                     value={address}
-                    maxLength={40}
+                    maxLength={42}
                     underlineColorAndroid='transparent'
                     onChangeText={address => this.setState({ address: this.setAddress(address) })}
                   />

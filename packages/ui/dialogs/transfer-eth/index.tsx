@@ -6,7 +6,7 @@ import firebase from 'react-native-firebase'
 import { getResetAction } from 'reducers/nav'
 
 import { UserData } from 'lndr/user'
-import { ethAmount, ethAddress, formatCommaDecimal, formatEthRemaining } from 'lndr/format'
+import { ethAmount, isEthAddress, formatCommaDecimal, formatEthRemaining } from 'lndr/format'
 import { currencySymbols, transferLimits, isCommaDecimal } from 'lndr/currencies'
 
 import Button from 'ui/components/button'
@@ -70,7 +70,7 @@ class TransferEth extends Component<Props, State> {
     const { amount, address } = this.state
     const { ethExchange, ethSentPastWeek, primaryCurrency, transferLimitLevel } = this.props
 
-    if (!this.validAddress()) {
+    if (!address || !this.validAddress()) {
       this.setState({ formInputError: accountManagement.sendEth.error.address })
       return
     } else if (!amount || amount === '0') {
@@ -83,9 +83,10 @@ class TransferEth extends Component<Props, State> {
       return
     }
 
+    const trimmedAddress = address.toLowerCase().startsWith('0x') ? address.substring(2) : address
     const success = await sendingEthLoader.wrap(
       this.props.sendEth(
-        address as string,
+        trimmedAddress as string,
         amount as string
       )
     )
@@ -114,12 +115,12 @@ class TransferEth extends Component<Props, State> {
   }
 
   setAddress(address: string) {
-    return `${ethAddress(address)}`
+    return address
   }
 
   validAddress() {
     const { address } = this.state
-    return address && address.length === 40
+    return `${isEthAddress(address)}`
   }
 
   getLimit() {
@@ -170,7 +171,7 @@ class TransferEth extends Component<Props, State> {
                     placeholder={accountManagement.sendEth.address}
                     placeholderTextColor='black'
                     value={address}
-                    maxLength={40}
+                    maxLength={42}
                     underlineColorAndroid='transparent'
                     onChangeText={address => this.setState({ address: this.setAddress(address), formInputError: undefined })}
                   />
@@ -206,5 +207,3 @@ class TransferEth extends Component<Props, State> {
 export default connect((state) => ({ user: getUser(state)(), ethBalance: getEthBalance(state), ethExchange: getEthExchange(state),
   ethSentPastWeek: getWeeklyEthTotal(state), primaryCurrency: getPrimaryCurrency(state), transferLimitLevel: getTransferLimitLevel(state) })
   , { sendEth })(TransferEth)
-
-  
