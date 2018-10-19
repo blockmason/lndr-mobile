@@ -43,9 +43,13 @@ export const currencySymbols = (currency) => {
   return symbols[currency] === undefined ? '$' : symbols[currency]
 }
 
-export const transferLimits = (currency: string, level = 'standard') => {
+export const TRANSFER_LIMIT_STANDARD = 'standard'
+export const TRANSFER_LIMIT_BCPT = 'bcpt'
+export const TRANSFER_LIMIT_KYC = 'kyc'
+
+export const transferLimits = (currency: string, level = TRANSFER_LIMIT_STANDARD) => {
   const limits = {
-    standard: {
+    TRANSFER_LIMIT_STANDARD: {
       AUD: '250',
       CAD: '200',
       CNY: '1600',
@@ -71,7 +75,7 @@ export const transferLimits = (currency: string, level = 'standard') => {
       USD: '200',
       VND: '4500000',
     },
-    bcpt: {
+    TRANSFER_LIMIT_BCPT: {
       AUD: '900',
       CAD: '750',
       CNY: '6000',
@@ -97,7 +101,7 @@ export const transferLimits = (currency: string, level = 'standard') => {
       USD: '750',
       VND: '15000000',
     },
-    kyc: {
+    TRANSFER_LIMIT_KYC: {
       AUD: '2500',
       CAD: '2000',
       CNY: '16000',

@@ -7,7 +7,7 @@ import { getResetAction } from 'reducers/nav'
 
 import { UserData } from 'lndr/user'
 import { ethAmount, isEthAddress, formatCommaDecimal, formatEthRemaining } from 'lndr/format'
-import { currencySymbols, transferLimits, isCommaDecimal } from 'lndr/currencies'
+import { currencySymbols, isCommaDecimal, transferLimits, TRANSFER_LIMIT_STANDARD } from 'lndr/currencies'
 
 import Button from 'ui/components/button'
 import Loading, { LoadingContext } from 'ui/components/loading'
@@ -22,8 +22,8 @@ const {
   accountManagement
 } = language
 
-import { getUser, getEthBalance, getEthExchange, getWeeklyEthTotal, getPrimaryCurrency, getTransferLimitLevel } from 'reducers/app'
-import { sendEth, getTransactionCost } from 'actions'
+import { getUser, getEthBalance, getEthExchange, getWeeklyEthTotal, getPrimaryCurrency } from 'reducers/app'
+import { sendEth, getTransactionCost, getTransferLimitLevel, exceedsTransferLimit } from 'actions'
 import { connect } from 'react-redux'
 
 const sendingEthLoader = new LoadingContext()
@@ -36,7 +36,6 @@ interface Props {
   primaryCurrency: string
   ethExchange: (currency: string) => string
   sendEth: (address: string, amount: string) => any
-  transferLimitLevel: () => string
 }
 
 interface State {
@@ -44,13 +43,15 @@ interface State {
   formInputError?: string
   address?: string
   txCost: string
+  transferLimitLevel: string
 }
 
 class TransferEth extends Component<Props, State> {
   constructor(props) {
     super(props)
     this.state = {
-      txCost: '0.00'
+      txCost: '0.00',
+      transferLimitLevel: TRANSFER_LIMIT_STANDARD
     }
 
     this.blurAmountFormat = this.blurAmountFormat.bind(this)
@@ -59,7 +60,9 @@ class TransferEth extends Component<Props, State> {
   async componentWillMount() {
     const { primaryCurrency } = this.props
     const txCost = await getTransactionCost('eth', primaryCurrency)
-    this.setState({ txCost })
+    const transferLimitLevel = await getTransferLimitLevel(this.state)
+
+    this.setState({ txCost, transferLimitLevel })
   }
 
   componentDidMount( ) {
@@ -67,8 +70,8 @@ class TransferEth extends Component<Props, State> {
   }
 
   async submit() {
-    const { amount, address } = this.state
-    const { ethExchange, ethSentPastWeek, primaryCurrency, transferLimitLevel } = this.props
+    const { amount, address, transferLimitLevel } = this.state
+    const { primaryCurrency } = this.props
 
     if (!address || !this.validAddress()) {
       this.setState({ formInputError: accountManagement.sendEth.error.address })
@@ -78,8 +81,8 @@ class TransferEth extends Component<Props, State> {
       return
     }
 
-    if (( ethSentPastWeek + Number(amount) ) * Number(ethExchange(primaryCurrency)) > Number(transferLimits(primaryCurrency, transferLimitLevel())) ) {
-      this.setState({ formInputError: accountManagement.sendEth.error.limitExceeded(primaryCurrency, transferLimitLevel()) })
+    if (exceedsTransferLimit(Number(amount), transferLimitLevel, this.state)) {
+      this.setState({ formInputError: accountManagement.sendEth.error.limitExceeded(primaryCurrency, transferLimitLevel) })
       return
     }
 
@@ -124,8 +127,8 @@ class TransferEth extends Component<Props, State> {
   }
 
   getLimit() {
-    const { ethExchange, ethSentPastWeek, primaryCurrency, transferLimitLevel } = this.props
-    return formatEthRemaining(ethExchange, ethSentPastWeek, primaryCurrency, transferLimitLevel())
+    const { ethExchange, ethSentPastWeek, primaryCurrency } = this.props
+    return formatEthRemaining(ethExchange, ethSentPastWeek, primaryCurrency, this.state.transferLimitLevel)
   }
 
   toFiat(amount: string | undefined, exchange: string) {
@@ -150,8 +153,8 @@ class TransferEth extends Component<Props, State> {
   }
 
   render() {
-    const { amount, address, txCost, formInputError } = this.state
-    const { ethBalance, ethExchange, primaryCurrency, transferLimitLevel } = this.props
+    const { amount, address, txCost, formInputError, transferLimitLevel } = this.state
+    const { ethBalance, ethExchange, primaryCurrency } = this.props
 
     return <ScrollView style={general.whiteFlex}>
       <View style={general.view}>
@@ -176,7 +179,7 @@ class TransferEth extends Component<Props, State> {
                     onChangeText={address => this.setState({ address: this.setAddress(address), formInputError: undefined })}
                   />
                 </View>
-                <Text style={[formStyle.smallText, formStyle.spaceTop, formStyle.center]}>{accountManagement.sendEth.warning(this.getLimit(), primaryCurrency, transferLimitLevel())}</Text>
+                <Text style={[formStyle.smallText, formStyle.spaceTop, formStyle.center]}>{accountManagement.sendEth.warning(this.getLimit(), primaryCurrency, transferLimitLevel)}</Text>
                 <Text style={formStyle.title}>{accountManagement.sendEth.amount}</Text>
                 <View style={formStyle.textInputContainer}>
                   <TextInput
@@ -205,5 +208,5 @@ class TransferEth extends Component<Props, State> {
 }
 
 export default connect((state) => ({ user: getUser(state)(), ethBalance: getEthBalance(state), ethExchange: getEthExchange(state),
-  ethSentPastWeek: getWeeklyEthTotal(state), primaryCurrency: getPrimaryCurrency(state), transferLimitLevel: getTransferLimitLevel(state) })
+  ethSentPastWeek: getWeeklyEthTotal(state), primaryCurrency: getPrimaryCurrency(state) })
   , { sendEth })(TransferEth)

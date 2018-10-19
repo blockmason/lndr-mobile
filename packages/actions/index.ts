@@ -16,7 +16,7 @@ import { getEthBalance, web3 } from 'lndr/settlement'
 import { isTouchIdSupported } from 'lndr/touch-id'
 
 import profilePic from 'lndr/profile-pic'
-import { ERC20_Token, ERC20_Transaction } from 'lndr/erc-20'
+import { getERC20_token, ERC20_Token, ERC20_Transaction } from 'lndr/erc-20'
 import { getEtherscanTransactions } from 'lndr/etherscan'
 import { sanitizeAmount } from 'lndr/format'
 import { jsonToPendingFriend, jsonToPendingTransaction, jsonToRecentTransaction, jsonToPendingUnilateral,
@@ -30,8 +30,8 @@ import language from 'language'
 const { accountManagement, debtManagement, settlementManagement, copiedClipboard, lndrVerified } = language
 
 import { ToastActionsCreators } from 'react-native-redux-toast'
-import { defaultCurrency } from 'lndr/currencies'
-import { getUser, getUcacAddr, calculateUcacBalances, getPrimaryCurrency, getChannelID } from 'reducers/app'
+import { defaultCurrency, transferLimits, TRANSFER_LIMIT_STANDARD, TRANSFER_LIMIT_BCPT, TRANSFER_LIMIT_KYC } from 'lndr/currencies'
+import { getUser, getUcacAddr, calculateUcacBalances, getPrimaryCurrency, getChannelID, getEthExchange, getWeeklyEthTotal } from 'reducers/app'
 
 const bcrypt = require('bcryptjs')
 
@@ -1084,9 +1084,23 @@ export const getVerificationStatus = () => {
   }
 }
 
+export const getTransferLimitLevel = async (state) => {
+  const { user, store } = state
+  let level = TRANSFER_LIMIT_STANDARD
+  const bcptToken = getERC20_token('BCPT')
+  if (bcptToken) {
+    const bcptBalance = await bcptToken.getBalance(user.address)
+    if (Number(bcptBalance) >= 25) {
+      level = TRANSFER_LIMIT_BCPT
+    }
+  }
+  if (store && store.identityVerificationStatus && store.identityVerificationStatus.status === 'GREEN') {
+    level = TRANSFER_LIMIT_KYC
+  }
+  return level
+}
 
-// data VerificationStatusEntry = VerificationStatusEntry { user :: Address
-//   , sumsubId :: Text
-//   , status :: Text
-//   } deriving Show
-// $(deriveJSON defaultOptions ''VerificationStatusEntry)
+export const exceedsTransferLimit = (amount: number, transferLimitLevel: string, state) => {
+  const primaryCurrency = getPrimaryCurrency(state)
+  return (getWeeklyEthTotal(state) * Number(getEthExchange(state)(primaryCurrency)) + amount) > Number(transferLimits(primaryCurrency, transferLimitLevel))
+}

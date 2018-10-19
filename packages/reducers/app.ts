@@ -3,7 +3,7 @@ import PendingTransaction from 'lndr/pending-transaction'
 import moment from 'moment'
 import { UserData } from 'lndr/user'
 import Friend from 'lndr/friend'
-import { hasNoDecimals } from 'lndr/currencies'
+import { hasNoDecimals, TRANSFER_LIMIT_STANDARD, TRANSFER_LIMIT_KYC } from 'lndr/currencies'
 import { WEI_PER_ETH } from 'lndr/erc-20'
 import PayPalRequest from 'lndr/paypal-request'
 import { settlementTerms } from 'language'
@@ -250,18 +250,3 @@ function getSettlementIndex(recents: any, friendAddress: String) {
 }
 
 export const getIdentityVerificationStatus = state => state.store.identityVerificationStatus
-
-export const getTransferLimitLevel = state => () : string => {
-  let level = 'standard'
-
-/* FIXME: need to update this for multi-ERC20 token support
-  if (Number(state.store.bcptBalance) >= 25) {
-    level = 'bcpt'
-  }
-*/
-  if (state.store && state.store.identityVerificationStatus && state.store.identityVerificationStatus.status === 'GREEN') {
-    level = 'kyc'
-  }
-
-  return level
-}
