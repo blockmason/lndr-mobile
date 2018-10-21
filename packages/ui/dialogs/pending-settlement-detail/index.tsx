@@ -1,6 +1,8 @@
 import React, { Component } from 'react'
 
 import { Text, View, Image, ScrollView } from 'react-native'
+
+import { getStore } from 'reducers/app'
 import { getResetAction } from 'reducers/nav'
 
 import { UserData } from 'lndr/user'
@@ -78,7 +80,7 @@ class PendingSettlementDetail extends Component<Props, State> {
   async componentWillMount() {
     const { user, primaryCurrency } = this.props
 
-    const transferLimitLevel = await getTransferLimitLevel(this.state)
+    const transferLimitLevel = await getTransferLimitLevel(this.props.user.address, getStore(this.state))
     this.setState({transferLimitLevel})
 
     const txCost = await getTransactionCost('eth', primaryCurrency)
@@ -268,5 +270,5 @@ class PendingSettlementDetail extends Component<Props, State> {
 
 export default connect((state) => ({ user: getUser(state)(), settlerIsMe: settlerIsMe(state), ethExchange: getEthExchange(state),
   ethSentPastWeek: getWeeklyEthTotal(state), calculateBalance: calculateBalance(state), getUcacCurrency: getUcacCurrency(state),
-  primaryCurrency: getPrimaryCurrency(state), getFriendFromAddress: getFriendFromAddress(state),
-  transferLimitLevel: getTransferLimitLevel(state) }), { addDebt, rejectPendingSettlement })(PendingSettlementDetail)
+  primaryCurrency: getPrimaryCurrency(state), getFriendFromAddress: getFriendFromAddress(state) }),
+  { addDebt, rejectPendingSettlement })(PendingSettlementDetail)

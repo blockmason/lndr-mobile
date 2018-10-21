@@ -4,6 +4,7 @@ import { Text, TextInput, View, Image, ScrollView, KeyboardAvoidingView, Platfor
 import firebase from 'react-native-firebase'
 import FontAwesome from 'react-native-vector-icons/FontAwesome'
 
+import { getStore } from 'reducers/app'
 import { getResetAction } from 'reducers/nav'
 
 import { UserData } from 'lndr/user'
@@ -120,11 +121,11 @@ class Settlement extends Component<Props, State> {
     const fromPayPalRequest = this.props.navigation ? this.props.navigation.state.params.fromPayPalRequest : false
     const pic = (friend.address !== undefined) ? await profilePic.get(friend.address) : undefined
 
-    const { primaryCurrency } = this.props
+    const { primaryCurrency, user } = this.props
     const amount = (this.state.balance) ? formatSettlementAmount(String(Math.abs(this.state.balance)), primaryCurrency) : undefined
     this.updateTransactionCosts(settlementType, amount)
 
-    const transferLimitLevel = await getTransferLimitLevel(this.state)
+    const transferLimitLevel = await getTransferLimitLevel(user.address, getStore(this.state))
 
     this.setState({settlementType, friend, amount, pic, fromPayPalRequest, transferLimitLevel})
     unmounting = false

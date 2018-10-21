@@ -3,6 +3,7 @@ import React, { Component } from 'react'
 import { Text, TextInput, View, ScrollView, KeyboardAvoidingView, Platform } from 'react-native'
 import firebase from 'react-native-firebase'
 
+import { getStore } from 'reducers/app'
 import { getResetAction } from 'reducers/nav'
 
 import { UserData } from 'lndr/user'
@@ -58,9 +59,9 @@ class TransferEth extends Component<Props, State> {
   }
 
   async componentWillMount() {
-    const { primaryCurrency } = this.props
+    const { primaryCurrency, user } = this.props
     const txCost = await getTransactionCost('eth', primaryCurrency)
-    const transferLimitLevel = await getTransferLimitLevel(this.state)
+    const transferLimitLevel = await getTransferLimitLevel(user.address, getStore(this.state))
 
     this.setState({ txCost, transferLimitLevel })
   }

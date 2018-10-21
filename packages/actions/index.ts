@@ -1084,12 +1084,11 @@ export const getVerificationStatus = () => {
   }
 }
 
-export const getTransferLimitLevel = async (state) => {
-  const { user, store } = state
+export const getTransferLimitLevel = async (userAddress, store) => {
   let level = TRANSFER_LIMIT_STANDARD
   const bcptToken = getERC20_token('BCPT')
   if (bcptToken) {
-    const bcptBalance = await bcptToken.getBalance(user.address)
+    const bcptBalance = await bcptToken.getBalance(userAddress)
     if (Number(bcptBalance) >= 25) {
       level = TRANSFER_LIMIT_BCPT
     }

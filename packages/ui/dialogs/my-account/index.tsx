@@ -137,7 +137,7 @@ class MyAccount extends Component<Props, State> {
       })
     })
 
-    const transferLimitLevel = await getTransferLimitLevel(this.state)
+    const transferLimitLevel = await getTransferLimitLevel(this.props.user.address, getStore(this.state))
 
     this.setState({cryptoBalances: cryptoBalances,
       transferLimitLevel: transferLimitLevel})
