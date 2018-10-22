@@ -4,6 +4,7 @@ import { Text, TextInput, View, Image, ScrollView, KeyboardAvoidingView, Platfor
 import firebase from 'react-native-firebase'
 import FontAwesome from 'react-native-vector-icons/FontAwesome'
 
+import { getStore } from 'reducers/app'
 import { getResetAction } from 'reducers/nav'
 
 import { UserData } from 'lndr/user'
@@ -11,7 +12,7 @@ import { ERC20_Tokens, getERC20_token } from 'lndr/erc-20'
 import { currencyFormats, sanitizeAmount, formatSettlementAmount, formatExchangeCurrency, formatCommaDecimal, formatMemo,
   formatEthRemaining, amountFormat, cleanFiatAmount } from 'lndr/format'
 import Friend from 'lndr/friend'
-import { currencySymbols, transferLimits } from 'lndr/currencies'
+import { currencySymbols, transferLimits, TRANSFER_LIMIT_STANDARD } from 'lndr/currencies'
 import profilePic from 'lndr/profile-pic'
 
 import Button from 'ui/components/button'
@@ -36,8 +37,8 @@ const {
 } = language
 
 import { getUser, recentTransactions, getEthBalance, getEthExchange, getWeeklyEthTotal, hasPendingTransaction,
-  calculateBalance, convertCurrency, getUcacCurrency, getPrimaryCurrency, getTransferLimitLevel } from 'reducers/app'
-import { addDebt, getTransactionCost, requestPayPalSettlement, cancelPayPalRequest, cancelPayPalRequestFail } from 'actions'
+  calculateBalance, convertCurrency, getUcacCurrency, getPrimaryCurrency } from 'reducers/app'
+import { addDebt, getTransactionCost, getTransferLimitLevel, exceedsTransferLimit, requestPayPalSettlement, cancelPayPalRequest, cancelPayPalRequestFail } from 'actions'
 import { connect } from 'react-redux'
 
 const submittingTransaction = new LoadingContext()
@@ -72,7 +73,6 @@ interface Props {
   getUcacCurrency: (ucac: string) => string
   cancelPayPalRequestFail: () => void
   getVerificationStatus: () => void
-  transferLimitLevel: () => string
 }
 
 interface State {
@@ -89,6 +89,7 @@ interface State {
   fromPayPalRequest?: boolean
   pickerSelection: any
   showPicker: boolean
+  transferLimitLevel: string
 }
 
 class Settlement extends Component<Props, State> {
@@ -102,7 +103,8 @@ class Settlement extends Component<Props, State> {
       cryptoBalance: '',
       friend: new Friend('', ''),
       pickerSelection: { settlementType: undefined, name: settlementManagement.select },
-      showPicker: false
+      showPicker: false,
+      transferLimitLevel: TRANSFER_LIMIT_STANDARD
     }
 
     this.blurCurrencyFormat = this.blurCurrencyFormat.bind(this)
@@ -119,11 +121,13 @@ class Settlement extends Component<Props, State> {
     const fromPayPalRequest = this.props.navigation ? this.props.navigation.state.params.fromPayPalRequest : false
     const pic = (friend.address !== undefined) ? await profilePic.get(friend.address) : undefined
 
-    const { primaryCurrency } = this.props
+    const { primaryCurrency, user } = this.props
     const amount = (this.state.balance) ? formatSettlementAmount(String(Math.abs(this.state.balance)), primaryCurrency) : undefined
     this.updateTransactionCosts(settlementType, amount)
 
-    this.setState({settlementType, friend, amount, pic, fromPayPalRequest})
+    const transferLimitLevel = await getTransferLimitLevel(user.address, getStore(this.state))
+
+    this.setState({settlementType, friend, amount, pic, fromPayPalRequest, transferLimitLevel})
     unmounting = false
   }
 
@@ -316,7 +320,7 @@ class Settlement extends Component<Props, State> {
   }
 
   cryptoCostAndError(amount: string, txCost: string) {
-    const { ethExchange, ethSentPastWeek, hasPendingTransaction, ethBalance, primaryCurrency, transferLimitLevel } = this.props
+    const { ethExchange, ethSentPastWeek, hasPendingTransaction, ethBalance, primaryCurrency } = this.props
     const friend = this.props.navigation ? this.props.navigation.state.params.friend : {}
 
     let formInputError
@@ -326,11 +330,13 @@ class Settlement extends Component<Props, State> {
     const totalCryptoCost = ( Number(txCost) + cleanAmount ) / exchangeRate
     const cryptoCost = String(totalCryptoCost)
 
-    if ( (!this.isPayee()) && totalCryptoCost > Number(ethBalance) ) {
-      formInputError = accountManagement.sendEth.error.insufficient
-    } else if ( (!this.isPayee()) && ethSentPastWeek * Number(ethExchange(primaryCurrency)) + Number(cleanAmount) > Number(transferLimits(primaryCurrency, transferLimitLevel())) ) {
-      formInputError = accountManagement.sendEth.error.limitExceeded(primaryCurrency, transferLimitLevel())
-    } else if (hasPendingTransaction(friend)) {
+    if (!this.isPayee()) {
+      if (totalCryptoCost > Number(ethBalance))
+        formInputError = accountManagement.sendEth.error.insufficient
+      else if (exceedsTransferLimit(Number(cleanAmount), this.state.transferLimitLevel, this.state))
+          formInputError = accountManagement.sendEth.error.limitExceeded(primaryCurrency, this.state.transferLimitLevel)
+    }
+    if (!formInputError && hasPendingTransaction(friend) ) {
       formInputError = debtManagement.createError.pending
     }
 
@@ -338,8 +344,8 @@ class Settlement extends Component<Props, State> {
   }
 
   getLimit() {
-    const { ethExchange, ethSentPastWeek, primaryCurrency, transferLimitLevel } = this.props
-    return formatEthRemaining(ethExchange, ethSentPastWeek, primaryCurrency, transferLimitLevel())
+    const { ethExchange, ethSentPastWeek, primaryCurrency } = this.props
+    return formatEthRemaining(ethExchange, ethSentPastWeek, primaryCurrency, this.state.transferLimitLevel)
   }
 
   updateAmount(amount: string) {
@@ -444,7 +450,7 @@ class Settlement extends Component<Props, State> {
 
   render() {
     const { amount, balance, formInputError, pic, cryptoCost, friend, txCost, fromPayPalRequest, pickerSelection, settlementType } = this.state
-    const { convertCurrency, primaryCurrency, ethExchange, transferLimitLevel } = this.props
+    const { convertCurrency, primaryCurrency, ethExchange } = this.props
     const imageSource = pic ? { uri: pic } : require('images/person-outline-dark.png')
     const vertOffset = (Platform.OS === 'android') ? -300 : 20
 
@@ -486,7 +492,7 @@ class Settlement extends Component<Props, State> {
                   />
                 </View> : null }
                 { (this.isEthSettlement() || this.isCryptoSettlement()) ? <Text style={[accountStyle.txCost, {marginLeft: '2%'}]}>{accountManagement.sendEth.txCost(formatCommaDecimal(txCost), this.props.primaryCurrency)}</Text> : null }
-                { ((this.isEthSettlement() || this.isCryptoSettlement()) && balance > 0) ? <Text style={[formStyle.smallText, formStyle.spaceTop, formStyle.center]}>{accountManagement.sendEth.warning(this.getLimit(), primaryCurrency, transferLimitLevel())}</Text> : null}
+                { ((this.isEthSettlement() || this.isCryptoSettlement()) && balance > 0) ? <Text style={[formStyle.smallText, formStyle.spaceTop, formStyle.center]}>{accountManagement.sendEth.warning(this.getLimit(), primaryCurrency, this.state.transferLimitLevel)}</Text> : null}
                 <Text style={formStyle.titleLarge}>{debtManagement.fields.settlementAmount}</Text>
                 { (this.isEthSettlement() || this.isCryptoSettlement()) ? <TextInput
                   style={[formStyle.jumboInput, formStyle.settleAmount]}
@@ -517,5 +523,5 @@ class Settlement extends Component<Props, State> {
 
 export default connect((state) => ({ user: getUser(state)(), ethBalance: getEthBalance(state), ethExchange: getEthExchange(state),
   recentTransactions: recentTransactions(state), ethSentPastWeek: getWeeklyEthTotal(state), hasPendingTransaction: hasPendingTransaction(state),
-  calculateBalance: calculateBalance(state), convertCurrency: convertCurrency(state), getUcacCurrency: getUcacCurrency(state), primaryCurrency: getPrimaryCurrency(state),
-  transferLimitLevel: getTransferLimitLevel(state)}), { addDebt, requestPayPalSettlement, cancelPayPalRequestFail })(Settlement)
+  calculateBalance: calculateBalance(state), convertCurrency: convertCurrency(state), getUcacCurrency: getUcacCurrency(state), primaryCurrency: getPrimaryCurrency(state)}),
+  { addDebt, requestPayPalSettlement, cancelPayPalRequestFail })(Settlement)

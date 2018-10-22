@@ -15,11 +15,12 @@ import SpinningPicker from 'ui/components/spinning-picker'
 import { ERC20_Tokens } from 'lndr/erc-20'
 import { formatNick, formatLockTimeout, formatEmail, emailFormatIncorrect, formatCommaDecimal } from 'lndr/format'
 import { UpdateAccountData, UserData } from 'lndr/user'
+import { TRANSFER_LIMIT_STANDARD } from 'lndr/currencies'
 
 import { updateNickname, updateEmail, logoutAccount, toggleNotifications, getAccountInformation,
   setEthBalance, updateLockTimeout, updatePin, getProfilePic, setProfilePic, takenNick, takenEmail,
-  copyToClipboard, validatePin, setPrimaryCurrency, failedValidatePin, getVerificationStatus } from 'actions'
-import { getUser, getStore, getAllUcacCurrencies, getPrimaryCurrency, getTransferLimitLevel } from 'reducers/app'
+  copyToClipboard, validatePin, setPrimaryCurrency, failedValidatePin, getTransferLimitLevel, getVerificationStatus } from 'actions'
+import { getUser, getStore, getAllUcacCurrencies, getPrimaryCurrency } from 'reducers/app'
 import { getResetAction } from 'reducers/nav'
 import { connect } from 'react-redux'
 import { ToastActionsCreators } from 'react-native-redux-toast'
@@ -66,7 +67,6 @@ interface Props {
   setPrimaryCurrency: (value: string) => any
   failedValidatePin: () => void
   getVerificationStatus: () => void
-  transferLimitLevel: () => string
 }
 
 interface State {
@@ -87,6 +87,7 @@ interface State {
   payPalEmail: any // the user's PayPal id (email)
   showNicknameInput: boolean
   cryptoBalances: any
+  transferLimitLevel: string
 }
 
 class MyAccount extends Component<Props, State> {
@@ -107,7 +108,8 @@ class MyAccount extends Component<Props, State> {
       shouldPickCurrency: false,
       payPalEmail: null,
       showNicknameInput: false,
-      cryptoBalances: {}
+      cryptoBalances: {},
+      transferLimitLevel: TRANSFER_LIMIT_STANDARD
     }
 
     this.submitNickname = this.submitNickname.bind(this)
@@ -134,7 +136,11 @@ class MyAccount extends Component<Props, State> {
         cryptoBalances[token.tokenName] = balance
       })
     })
-    this.setState({cryptoBalances: cryptoBalances})
+
+    const transferLimitLevel = await getTransferLimitLevel(this.props.user.address, getStore(this.state))
+
+    this.setState({cryptoBalances: cryptoBalances,
+      transferLimitLevel: transferLimitLevel})
   }
 
   componentDidMount( ) {
@@ -410,9 +416,9 @@ class MyAccount extends Component<Props, State> {
     )
   }
   renderPanels() {
-    const { user, updateEmail, copyToClipboard, transferLimitLevel } = this.props
+    const { user, updateEmail, copyToClipboard } = this.props
     const { notificationsEnabled, ethBalance } = this.props.state
-    const { lockTimeout, hiddenPanels, emailTextInputErrorText, authenticated, currency } = this.state
+    const { lockTimeout, hiddenPanels, emailTextInputErrorText, authenticated, currency, transferLimitLevel } = this.state
 
     const submitEmail = async () => {
       await loadingContext.wrap(updateEmail(this.state))
@@ -422,7 +428,7 @@ class MyAccount extends Component<Props, State> {
     const panelContent = [
       (<View style={style.spaceHorizontalL}>
         <Text style={[style.text, style.spaceTopL, style.center]}>{addressExhortation}</Text>
-        <Text style={[style.smallText, style.spaceTop, style.center]}>{accountManagement.sendEth.note(currency, transferLimitLevel())}</Text>
+        <Text style={[style.smallText, style.spaceTop, style.center]}>{accountManagement.sendEth.note(currency, transferLimitLevel)}</Text>
         <Text selectable style={style.displayText}>{hexAddress}</Text>
         <Button round onPress={() => copyToClipboard(hexAddress)} text={copy} />
       </View>),
@@ -582,6 +588,6 @@ class MyAccount extends Component<Props, State> {
 }
 
 export default connect((state) => ({ user: getUser(state)(), state: getStore(state)(), allCurrencies: getAllUcacCurrencies(state),
-  primaryCurrency: getPrimaryCurrency(state), transferLimitLevel: getTransferLimitLevel(state)}), { updateEmail, updateNickname,
+  primaryCurrency: getPrimaryCurrency(state)}), { updateEmail, updateNickname,
   getAccountInformation, logoutAccount, toggleNotifications, setEthBalance, updateLockTimeout, updatePin,
   getProfilePic, setProfilePic, copyToClipboard, setPrimaryCurrency, failedValidatePin, getVerificationStatus })(MyAccount)
