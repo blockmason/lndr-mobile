@@ -418,12 +418,13 @@ class MyAccount extends Component<Props, State> {
       await loadingContext.wrap(updateEmail(this.state))
     }
 
+    const hexAddress = `0x${user.address}`
     const panelContent = [
       (<View style={style.spaceHorizontalL}>
         <Text style={[style.text, style.spaceTopL, style.center]}>{addressExhortation}</Text>
         <Text style={[style.smallText, style.spaceTop, style.center]}>{accountManagement.sendEth.note(currency, transferLimitLevel())}</Text>
-        <Text selectable style={style.displayText}>{`0x${user.address}`}</Text>
-        <Button round onPress={() => copyToClipboard(user.address)} text={copy} />
+        <Text selectable style={style.displayText}>{hexAddress}</Text>
+        <Button round onPress={() => copyToClipboard(hexAddress)} text={copy} />
       </View>),
       (<View>
         {this.renderCryptoBalancesSubpanel()}
