@@ -194,7 +194,7 @@ export default {
         limitExceeded: (A, M) => `Você só pode enviar ${CUR(A)} ${TL(A, M)} por semana, por favor selecione uma quantidade menor`,
       },
       amount: `Quantidade a enviar`,
-      address: `Endereço de destino (sem prefixo '0x')`,
+      address: `Endereço de destino`,
       transfer: `Transferir ETH`,
       transferAll: `Transferir tudo`,
       balance: Y => `Seu saldo ETH atual é de R ${typeof Y === 'string'? Y.slice (0,8): ''} `,
@@ -204,20 +204,19 @@ export default {
       note: (A, M) => `Por favor, note: você só pode transferir ${CUR(A)} ${TL(A, M)} por semana no Lndr`,
       warning: (Z, A, M) => `Você tem ${CUR(A)} ${Z} remanescente do seu ${CUR(A)} ${TL(A, M)} limite`,
     },
-    sendBcpt: {
+    sendERC20: {
       error: {
-        insufficient: `Você não tem BCPT o suficiente para esta transação`,
+        transfer: (name) => `Você não tem ${name} o suficiente para esta transação`,
         generic: `Houve um erro com a transferência, por favor tente novamente mais tarde`,
       },
-      transfer: `Transferir BCPT`,
-      address: `Endereço de destino (sem prefixo '0x')`,
-      balance: Y => `Seu saldo BCPT atual é de R ${typeof Y === 'string' ? Y.slice (0,8): ''} `,
-      bcptAddress: `Endereço BCPT`,
+      transfer: (name) => `Transferir ${name}`,
+      address: `Endereço de destino`,
+      balance: (name, balance) => `Seu saldo ${name} atual é de R ${typeof balance === 'string' ? balance.slice (0,8): ''} `,
+      tokenAddress: (name) => `Endereço ${name}`,
     },
     panelHeaders: [
-      `ETH (& BCPT) Endereço`,
-      `Balanço ETH`,
-      `Balanço BCPT`,
+      `Wallet Address`, // <-- translate me
+      `Crypto Balances`, // <-- translate me
       `Remover conta`,
       `Histórico de Transações ETH`,
       `Ativar PayPal`,
@@ -312,7 +311,7 @@ export default {
     record: `registro`,
     records: `registros`,
     chooseCurrency: `Escolha uma moeda`,
-    
+
     createError: {
       amountTooLow: `Montante deve ser superior a US $ 0`,
       amountTooHigh: `Montante deve ser inferior a US $ 1.000.000.000`,
@@ -487,10 +486,10 @@ export default {
       end: ` saber que você tenha resolvido com PayPal.`,
     },
     kycSuccess: {
-      start: `Obrigado! A sua conta está sendo verificada.  
-      
+      start: `Obrigado! A sua conta está sendo verificada.
+
       `,
-      end: `Você será notificado quando suas características adicionais são desbloqueadas.` 
+      end: `Você será notificado quando suas características adicionais são desbloqueadas.`
     },
     status: `Você pode ver o status da operação na aba atividade.`,
     activity: `.`,

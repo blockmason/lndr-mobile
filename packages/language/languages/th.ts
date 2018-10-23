@@ -194,7 +194,7 @@ export default {
         limitExceeded: (A, M) => `คุณสามารถส่งได้ ${CUR(A)} ${TL(A, M)} ต่อสัปดาห์เท่านั้น กรุณาเลือกจำนวนที่น้อยลง`
       },
       amount: `จำนวนที่จะส่ง`,
-      address: `ที่อยู่ปลายทาง (ไม่มีคำนำหน้า '0x')`,
+      address: `ที่อยู่ปลายทาง`,
       transfer: `โอน ETH`,
       transferAll: `โอนทุกอย่าง`,
       balance: Y => `ยอด ETH คงเหลือในปัจจุบันของคุณคือ ${typeof Y === 'string' ? Y.slice(0,8) :''}`,
@@ -204,20 +204,19 @@ export default {
       note: (A, M) => `โปรดทราบ: คุณสามารถโอนจาก Lndr ได้ ${CUR(A)} ${TL(A, M)} ต่อสัปดาห์เท่านั้น`,
       warning: (Z, A, M) => `คุณเหลือ ${CUR(A)}${Z} จากขีดจำกัด ${CUR(A)} ${TL(A, M)} ของคุณ`,
     },
-    sendBcpt: {
+    sendERC20: {
       error: {
-        insufficient: `คุณมี BCPT ไม่เพียงพอสำหรับการทำธุรกรรมนี้`,
+        insufficient: (name) => `คุณมี ${name} ไม่เพียงพอสำหรับการทำธุรกรรมนี้`,
         generic: `เกิดข้อผิดพลาดในการโอน กรุณาลองใหม่ในภายหลัง`,
       },
-      transfer: `โอน BCPT`,
-      address: `ที่อยู่ปลายทาง (ไม่มีคำนำหน้า '0x')`,
-      balance: Y => `ยอด BCPT คงเหลือในปัจจุบันของคุณคือ ${typeof Y === 'string' ? Y.slice(0,8) :''}`,
-      bcptAddress: `ที่อยู่ BCPT`,
+      transfer: (name) => `โอน ${name}`,
+      address: `ที่อยู่ปลายทาง`,
+      balance: (name, balance) => `ยอด ${name} คงเหลือในปัจจุบันของคุณคือ ${typeof balance === 'string' ? balance.slice(0,8) :''}`,
+      tokenAddress: (name) => `ที่อยู่ ${name}`,
     },
     panelHeaders: [
-      `ที่อยู่ ETH (และ BCPT)`,
-      `ยอด ETH คงเหลือ`,
-      `ยอด BCPT คงเหลือ`,
+      `Wallet Address`, // <-- translate me
+      `Crypto Balances`, // <-- translate me
       `ปิดบัญชี`,
       `ประวัติการทำธุรกรรม ETH`,
       `เปิดใช้งาน PayPal`,
@@ -312,7 +311,7 @@ export default {
     record: `บันทึกรายการ`,
     records: `บันทึกรายการ`,
     chooseCurrency: `เลือกสกุลเงิน`,
-    
+
     createError: {
       amountTooLow: `จำนวนต้องมากกว่า $0`,
       amountTooHigh: `จำนวนต้องน้อยกว่า $1,000,000,000`,
@@ -487,10 +486,10 @@ export default {
       end: ` ทราบว่าคุณได้ตกลงกับ PayPal`,
     },
     kycSuccess: {
-      start: `ขอขอบคุณ! บัญชีของคุณจะถูกตรวจสอบ  
-      
+      start: `ขอขอบคุณ! บัญชีของคุณจะถูกตรวจสอบ
+
       `,
-      end: `คุณจะได้รับการแจ้งเตือนเมื่อมีคุณสมบัติเพิ่มเติมของคุณจะปลดล็อค` 
+      end: `คุณจะได้รับการแจ้งเตือนเมื่อมีคุณสมบัติเพิ่มเติมของคุณจะปลดล็อค`
     },
     status: `คุณสามารถดูสถานะของธุรกร`,
     activity: `รมนี้ได้ในแท็บกิจกรรม.`,

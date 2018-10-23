@@ -194,7 +194,7 @@ export default {
         limitExceeded: (A, M) => `Anda hanya boleh menghantar ${CUR(A)} ${TL(A, M)} setiap minggu, sila pilih amaun yang lebih kecil`
       },
       amount: `Jumlah untuk Dihantar`,
-      address: `Alamat Destinasi (tanpa awalan '0x')`,
+      address: `Alamat Destinasi`,
       transfer: `Pindahkan ETH`,
       transferAll: `Pindahkan semua`,
       balance: Y => `Baki semasa ETH anda ialah ${typeof Y === 'string' ? Y.slice (0,8): ''} `,
@@ -204,20 +204,19 @@ export default {
       note: (A, M) => `Sila ambil perhatian: anda hanya boleh memindahkan ${CUR(A)} ${TL(A, M)} setiap minggu daripada Lndr`,
       warning: (Z, A, M) => `Anda mempunyai ${CUR(A)}${Z} baki daripada ${CUR(A)} ${TL(A, M)} had anda`,
     },
-    sendBcpt: {
+    sendERC20: {
       error: {
-        insufficient: `Anda tidak mempunyai BCPT cukup untuk transaksi ini`,
+        insufficient: (name) => `Anda tidak mempunyai ${name} cukup untuk transaksi ini`,
         generic: `Terdapat ralat semasa pemindahan, sila cuba lagi kemudian`,
       },
-      transfer: `Pindahkan BCPT`,
-      address: `Alamat Destinasi (tanpa awalan '0x')`,
-      balance: Y => `Baki semasa BCPT anda ialah ${typeof Y === 'string' ? Y.slice(0,8) : ''} `,
-      bcptAddress: `Alamat BCPT`,
+      transfer: (name) => `Pindahkan ${name}`,
+      address: `Alamat Destinasi`,
+      balance: (name, balance) => `Baki semasa ${name} anda ialah ${typeof balance === 'string' ? balance.slice(0,8) : ''} `,
+      tokenAddress: (name) => `Alamat ${name}`,
     },
     panelHeaders: [
-      `Alamat ETH (& BCPT)`,
-      `Baki ETH`,
-      `Baki BCPT`,
+      `Wallet Address`, // <-- translate me
+      `Crypto Balances`, // <-- translate me
       `Hapus Akaun`,
       `Sejarah Transaksi ETH`,
       `Membolehkan PayPal`,
@@ -487,10 +486,10 @@ export default {
       end: ` tahu yang anda telah diselesaikan dengan PayPal.`,
     },
     kycSuccess: {
-      start: `Terima kasih! Akaun anda sedang disahkan.  
-      
+      start: `Terima kasih! Akaun anda sedang disahkan.
+
       `,
-      end: `Anda akan diberitahu apabila ciri-ciri tambahan anda tidak dikunci.` 
+      end: `Anda akan diberitahu apabila ciri-ciri tambahan anda tidak dikunci.`
     },
     status: `Anda boleh melihat status transaksi ini dalam tab `,
     activity: `aktiviti tersebut.`,

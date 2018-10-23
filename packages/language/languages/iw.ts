@@ -194,7 +194,7 @@ export default {
         limitExceeded: (A, M) => `בלבד, יש לבחור כמות קטנה יותר  ${CUR(A)} ${TL(A, M)} אתה יכול לשלוח בשבוע`,
       },
       amount: `כמות לשליחה`,
-      address: `כתובת יעד (ללא קידומת "0x")`,
+      address: `כתובת יעד`,
       transfer: `ETH להעביר`,
       transferAll: `להעביר הכל`,
       balance: Y => `${typeof Y === 'string' ? Y.slice(0,8) :''} הנוכחית שלך היא ETH- יתרת ה`,
@@ -204,20 +204,19 @@ export default {
       note: (A, M) => `Lndr-בלבד מחוץ ל ${CUR(A)} ${TL(A, M)} שים לב: אתה יכול להעביר בשבוע`,
       warning: (Z, A, M) => `שלך ${CUR(A)} ${TL(A, M)} -מהמגבלת ה ${CUR(A)}${Z} נותרו לך`,
     },
-    sendBcpt: {
+    sendERC20: {
       error: {
-        insufficient: `אין ברשותך מספיק BCPT עבור עסקה זו`,
+        insufficient: (name) => `אין ברשותך מספיק ${name} עבור עסקה זו`,
         generic: `ארעה שגיאה בעת ההעברה, אנא נסה שוב מאוחר יותר`,
       },
-      transfer: `להעביר BCPT`,
-      address: `כתובת יעד (ללא קידומת "0x")`,
-      balance: Y => ` ${typeof Y === 'string' ? Y.slice(0,8) :''} שלך היא BCPT -יתרת ה`,
-      bcptAddress: `כתובת BCPT`,
+      transfer: (name) => `להעביר ${name}`,
+      address: `כתובת יעד`,
+      balance: (name, balance) => ` ${typeof balance === 'string' ? balance.slice(0,8) :''} שלך היא ${name} -יתרת ה`,
+      tokenAddress: (name) => `כתובת ${name}`,
     },
     panelHeaders: [
-      `ETH (& BCPT) כתובת`,
-      `יתרת ETH`,
-      `יתרת BCPT`,
+      `Wallet Address`, // <-- translate me
+      `Crypto Balances`, // <-- translate me
       `להסיר חשבון`,
       `היסטוריית עסקאות ETH`,
       `הפוך את PayPal`,
@@ -487,10 +486,10 @@ export default {
       end: `אנחנו ספרנו `,
     },
     kycSuccess: {
-      start: `תודה! החשבון שלך נבדק.  
-      
+      start: `תודה! החשבון שלך נבדק.
+
       `,
-      end: `תקבל הודעה כאשר התכונות הנוספות שלך אינן נעולות.` 
+      end: `תקבל הודעה כאשר התכונות הנוספות שלך אינן נעולות.`
     },
     status: `אתה יכול לראות את סטטוס העסקה הזאת `,
     activity: `.בלשונית הפעילות`,

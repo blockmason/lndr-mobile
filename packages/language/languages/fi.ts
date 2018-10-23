@@ -194,7 +194,7 @@ export default {
         limitExceeded: (A, M) => `Voit lähettää vain ${CUR(A)} ${TL(A, M)} viikossa, valitse pienempi summa`
       },
       amount: `Lähetettävä summa`,
-      address: `Kohdeosoite (ilman '0x' -etuliitettä)`,
+      address: `Kohdeosoite`,
       transfer: `Siirrä ETH`,
       transferAll: `Siirrä kaikki`,
       balance: Y => `Nykyinen ETH-saldosi on ${typeof Y === 'string' ? Y.slice (0,8): ''} `,
@@ -204,20 +204,19 @@ export default {
       note: (A, M) => `Huom.: Voit siirtää Lndr-sovelluksesta vain ${CUR(A)} ${TL(A, M)} viikossa`,
       warning: (Z, A, M) => `Sinulla on jäljellä ${CUR(A)} ${Z}, ennen kuin saavutat ${CUR(A)} ${TL(A, M)} ylärajasi`,
     },
-    sendBcpt: {
+    sendERC20: {
       error: {
-        insufficient: `Sinulla ei ole tarpeeksi BCPT:tä tämän tapahtuman toteuttamiseksi`,
+        insufficient: (name) => `Sinulla ei ole tarpeeksi ${name}:tä tämän tapahtuman toteuttamiseksi`,
         generic: `Siirron yhteydessä on tapahtunut virhe, yritä myöhemmin uudelleen`,
       },
-      transfer: `Siirrä BCPT`,
-      address: `Kohdeosoite (ilman '0x' -etuliitettä)`,
-      balance: Y => `Nykyinen BCPT-saldosi on ${typeof Y === 'string' ? Y.slice (0,8): ''} `,
-      bcptAddress: `BCPT-Osoite`,
+      transfer: (name) => `Siirrä ${name}`,
+      address: `Kohdeosoite`,
+      balance: (name, balance) => `Nykyinen ${name}-saldosi on ${typeof balance === 'string' ? balance.slice (0,8): ''} `,
+      tokenAddress: (name) => `${name}-Osoite`,
     },
     panelHeaders: [
-      `ETH (& BCPT) Osoite`,
-      `ETH-saldo`,
-      `BCPT-saldo`,
+      `Wallet Address`, // <-- translate me
+      `Crypto Balances`, // <-- translate me
       `Poista tili`,
       `ETH-tapahtumahistoria`,
       `Ota PayPal`,
@@ -487,10 +486,10 @@ export default {
       end: ` tietää, että olet ratkaistaan ​​PayPal.`,
     },
     kycSuccess: {
-      start: `Kiitos! Tilisi on todennettavissa.  
-      
+      start: `Kiitos! Tilisi on todennettavissa.
+
       `,
-      end: `Saat ilmoituksen, kun lisäominaisuuksia ovat lukitsematta.` 
+      end: `Saat ilmoituksen, kun lisäominaisuuksia ovat lukitsematta.`
     },
     status: `Tämän tapahtuman tila `,
     activity: `näkyy tapahtumavalikossa.`,
@@ -526,11 +525,11 @@ export default {
     feesInformation: `1. PayPal-tili on sidottava pankkitilille.
     
 2. Ottaen valuutassa eri pankista valuutta aiheutuu $ 0.35 maksu.
-    
+
 3. Kansainvälinen siirtomaksut:
     Yhdysvalloista Kanadaan / Eurooppa: $ 2.99
     USA missään muualla: $ 4.99
-    
+
 4. Nämä maksut eivät ole kattavia. Saat päivitetyt tiedot osoitteessa:
 
     https://www.paypal.com/us/webapps/mpp/paypal-fees#sending-us`,

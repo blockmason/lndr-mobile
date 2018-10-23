@@ -194,7 +194,7 @@ export default {
         limitExceeded: (A, M) => `Du kan kun sende ${CUR(A)} ${TL(A, M)} om ugen, vælg et mindre beløb`,
       },
       amount: `Beløb der skal sendes`,
-      address: `Destinationsadresse (uden '0x' præfiks)`,
+      address: `Destinationsadresse`,
       transfer: `Overfør ETH`,
       transferAll: `Overfør alt`,
       balance: Y => `Din aktuelle ETH saldo er ${typeof Y === 'string'? Y.slice (0,8): ''} `,
@@ -204,20 +204,19 @@ export default {
       note: (A, M) => `Bemærk: du kan kun overføre ${CUR(A)} ${TL(A, M)} om ugen på Lndr`,
       warning: (Z, A, M) => `Du har ${CUR(A)}${Z} resterende af din ${CUR(A)} ${TL(A, M)} grænse`,
     },
-    sendBcpt: {
+    sendERC20: {
       error: {
-        insufficient: `Du har ikke tilstrækkeligt BCPT til at udføre denne transaktion`,
+        insufficient: (name) => `Du har ikke tilstrækkeligt ${name} til at udføre denne transaktion`,
         generic: `Der opstod en fejl med overførslen, prøv igen senere`,
       },
-      transfer: `Overfør BCPT`,
-      address: `Destinationsadresse (uden '0x' præfiks)`,
-      balance: Y => `Din aktuelle BCPT saldo er ${typeof Y === 'string'? Y.slice(0,8):''} `,
-      bcptAddress: `BCPT Adresse`,
+      transfer: (name) => `Overfør ${name}`,
+      address: `Destinationsadresse`,
+      balance: (name, balance) => `Din aktuelle ${name} saldo er ${typeof balance === 'string'? balance.slice(0,8):''} `,
+      tokenAddress: (name) => `${name} Adresse`,
     },
     panelHeaders: [
-      `ETH (& BCPT) Adresse`,
-      `ETH Saldo`,
-      `BCPT Saldo`,
+      `Wallet Address`, // <-- translate me
+      `Crypto Balances`, // <-- translate me
       `Fjern konto`,
       `ETH Transaktionshistorik`,
       `Aktiver PayPal`,
@@ -487,10 +486,10 @@ export default {
       end: ` vide, at du har afgjort med PayPal.`,
     },
     kycSuccess: {
-      start: `Tak skal du have! Din konto bliver verificeret.  
-      
+      start: `Tak skal du have! Din konto bliver verificeret.
+
       `,
-      end: `Du vil få besked, når dine ekstra funktioner er låst op.` 
+      end: `Du vil få besked, når dine ekstra funktioner er låst op.`
     },
     status: `Du kan se statussen for denne transaktion `,
     activity: `i aktivitetsfanen.`,
@@ -526,11 +525,11 @@ export default {
     feesInformation: `1. Din PayPal-konto skal være bundet til en bankkonto.
     
 2. Betale i en anden valuta end din banks valuta vil pådrage sig en $ 0,35 gebyr.
-    
+
 3. Internationale transfersummer:
     USA til Canada / Europa: $ 2.99
     USA til andre steder: $ 4.99
-    
+
 4. Disse gebyrer er ikke udtømmende. For de mest opdaterede oplysninger kan du gå til:
 
     https://www.paypal.com/us/webapps/mpp/paypal-fees#sending-us`,

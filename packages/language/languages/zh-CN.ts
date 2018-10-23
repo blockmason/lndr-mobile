@@ -194,7 +194,7 @@ export default {
         limitExceeded: (A, M) => `您每周只能转账${CUR(A)} ${TL(A, M)}，请选择一个更小的金额`,
       },
       amount: `转账金额`,
-      address: `目标地址（无“0x”前缀）`,
+      address: `目标地址`,
       transfer: `转账以太坊`,
       transferAll: `全部转移`,
       balance: Y => `您当前的以太坊余额为 ${typeof Y === 'string' ? Y.slice(0,8) :''}`,
@@ -204,20 +204,19 @@ export default {
       note: (A, M) => `请注意：您每周只能从Lndr转出${CUR(A)} ${TL(A, M)}`,
       warning: (Z, A, M) => `您在每周限额${CUR(A)} ${TL(A, M)}中还剩余${CUR(A)}${Z}`,
     },
-    sendBcpt: {
+    sendERC20: {
       error: {
-        insufficient: `您没有足够的BCPT完成此交易`,
+        insufficient: (name) => `您没有足够的${name}完成此交易`,
         generic: `转账发生错误，请稍后再试`,
       },
-      transfer: `转账BCPT`,
-      address: `目标地址（无“0x”前缀）`,
-      balance: Y => `您当前的BCPT余额为${typeof Y === 'string' ? Y.slice(0,8) :''}`,
-      bcptAddress: `BCPT地址`,
+      transfer: (name) => `转账${name}`,
+      address: `目标地址`,
+      balance: (name, balance) => `您当前的${name}余额为${typeof balance === 'string' ? balance.slice(0,8) :''}`,
+      tokenAddress: (name) => `${name}地址`,
     },
     panelHeaders: [
-      `以太坊(及BCPT)地址`,
-      `以太坊余额`,
-      `BCPT余额`,
+      `Wallet Address`, // <-- translate me
+      `Crypto Balances`, // <-- translate me
       `删除账号`,
       `以太坊转账交易历史`,
       `启用PayPal`,
@@ -312,7 +311,7 @@ export default {
     record: `记录`,
     records: `记录`,
     chooseCurrency: `选择一个货币单位`,
-    
+
     createError: {
       amountTooLow: `金额必须大于0`,
       amountTooHigh: `金额必须低于$ 1,000,000,000`,
@@ -487,10 +486,10 @@ export default {
       end: `知道您已经通过PayPal完成结算。`,
     },
     kycSuccess: {
-      start: `谢谢！您的帐户被验证。  
-      
+      start: `谢谢！您的帐户被验证。
+
       `,
-      end: `当你的附加功能解锁后，您会收到通知。` 
+      end: `当你的附加功能解锁后，您会收到通知。`
     },
     status: `您可以通过交易活动界面`,
     activity: `查看此次交易状态。`,

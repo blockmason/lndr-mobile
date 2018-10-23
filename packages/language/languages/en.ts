@@ -192,7 +192,7 @@ export default {
         limitExceeded: (currency, multiplier) => `You can only send ${currencySymbols(currency)}${TL(currency, multiplier)} per week, please select a smaller amount`
       },
       amount: `AMOUNT TO SEND`,
-      address: `Destination Address (without '0x' prefix)`,
+      address: `Destination Address`,
       transfer: `TRANSFER ETH`,
       transferAll: `TRANSFER EVERYTHING`,
       balance: (balance) => `Your current ETH balance is ${typeof balance === 'string' ? balance.slice(0,8) :''}`,
@@ -208,7 +208,7 @@ export default {
         generic: `There was an error with the transfer, please try again later`,
       },
       transfer: (name) => `TRANSFER ${name}`,
-      address: `Destination Address (without '0x' prefix)`,
+      address: `Destination Address`,
       balance: (name, balance) => `Your current ${name} balance is ${typeof balance === 'string' ? balance.slice(0,8) :''}`,
       tokenAddress: (name) => `${name} Address`,
     },

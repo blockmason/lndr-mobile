@@ -194,7 +194,7 @@ export default {
         limitExceeded: (A, M) => `Anda hanya dapat mengirimkan ${CUR(A)} ${TL(A, M)} per minggu. Silakan pilih jumlah yang lebih kecil.`
       },
       amount: `Jumlah yang Dikirim`,
-      address: `Alamat Tujuan (tanpa awalan '0x')`,
+      address: `Alamat Tujuan`,
       transfer: `Transfer ETH`,
       transferAll: `Transfer Semuanya`,
       balance: Y => `Saldo ETH Anda saat ini adalah ${typeof Y === 'string' ? Y.slice(0,8) :''}.`,
@@ -204,20 +204,19 @@ export default {
       note: (A, M) => `Perhatian: Anda hanya dapat mentransfer ${CUR(A)} ${TL(A, M)} per minggu dari Lndr.`,
       warning: (Z, A, M) => `Anda memiliki ${CUR(A)}${Z} tersisa dari batas ${CUR(A)} ${TL(A, M)} Anda.`,
     },
-    sendBcpt: {
+    sendERC20: {
       error: {
-        insufficient: `Anda tidak memiliki cukup BCPT untuk transaksi ini.`,
+        insufficient: (name) => `Anda tidak memiliki cukup ${name} untuk transaksi ini.`,
         generic: `Terjadi kesalahan saat transfer. Silakan coba lagi nanti.`,
       },
-      transfer: `Transfer BCPT`,
-      address: `Alamat Tujuan (tanpa awalan '0x')`,
-      balance: Y => `Saldo BCPT Anda saat ini adalah ${typeof Y === 'string' ? Y.slice(0,8) :''}.`,
-      bcptAddress: `Alamat BCPT`,
+      transfer: (name) => `Transfer ${name}`,
+      address: `Alamat Tujuan`,
+      balance: (name, balance) => `Saldo ${name} Anda saat ini adalah ${typeof balance === 'string' ? balance.slice(0,8) :''}.`,
+      tokenAddress: (name) => `Alamat ${name}`,
     },
     panelHeaders: [
-      `Alamat ETH (& BCPT)`,
-      `Saldo ETH`,
-      `Saldo BCPT`,
+      `Wallet Address`, // <-- translate me
+      `Crypto Balances`, // <-- translate me
       `Hapus Akun`,
       `Riwayat Transaksi ETH`,
       `Aktifkan PayPal`,
@@ -487,10 +486,10 @@ export default {
       end: ` tahu bahwa Anda telah diselesaikan dengan PayPal.`,
     },
     kycSuccess: {
-      start: `Terima kasih! Akun Anda sedang diverifikasi.  
-      
+      start: `Terima kasih! Akun Anda sedang diverifikasi.
+
       `,
-      end: `Anda akan diberitahu ketika fitur tambahan Anda akan dibuka.` 
+      end: `Anda akan diberitahu ketika fitur tambahan Anda akan dibuka.`
     },
     status: `Anda dapat melihat status transaksi ini di `,
     activity: `tab aktivitas.`,

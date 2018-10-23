@@ -194,7 +194,7 @@ export default {
         limitExceeded: (A, M) => `Hetente csak ${CUR(A)} ${TL(A, M)} összeget küldhet, kérjük, adjon meg egy kisebb összeget`
       },
       amount: `Küldésre Szánt Összeg`,
-      address: `Rendeltetési Cím ('0x' előtag nélkül)`,
+      address: `Rendeltetési Cím`,
       transfer: `ETH Átutalása`,
       transferAll: `Minden átutalása`,
       balance: Y => `Jelenlegi ETH egyenlege ${typeof Y === 'string'? Y.slice (0,8): ''} `,
@@ -204,20 +204,19 @@ export default {
       note: (A, M) => `Kérjük, vegye figyelembe: a Lndr rendszerén kívül hetente csak ${CUR(A)} ${TL(A, M)} összeget utalhat át`,
       warning: (Z, A, M) => `${CUR(A)} ${Z} a fennmaradó összeg a ${CUR(A)} ${TL(A, M)} limitjéből:`,
     },
-    sendBcpt: {
+    sendERC20: {
       error: {
-        insufficient: `Ehhez a tranzakcióhoz nincs elegendő BCPT`,
+        insufficient: (name) => `Ehhez a tranzakcióhoz nincs elegendő ${name}`,
         generic: `Az átutalás során hiba történt, kérjük, később próbálja újra`,
       },
-      transfer: `BCPT Átutalása`,
-      address: `Rendeltetési Cím ('0x' előtag nélkül)`,
-      balance: Y => `Jelenlegi BCPT egyenlege ${typeof Y === 'string'? Y.slice (0,8): ''} `,
-      bcptAddress: `BCPT Cím`,
+      transfer: (name) => `${name} Átutalása`,
+      address: `Rendeltetési Cím`,
+      balance: (name, balance) => `Jelenlegi ${name} egyenlege ${typeof balance === 'string'? balance.slice (0,8): ''} `,
+      tokenAddress: (name) => `${name} Cím`,
     },
     panelHeaders: [
-      `ETH (& BCPT) Cím`,
-      `ETH Egyenleg`,
-      `BCPT Egyenleg`,
+      `Wallet Address`, // <-- translate me
+      `Crypto Balances`, // <-- translate me
       `Fiók Törlése`,
       `ETH Tranzakció Előzmények`,
       `Engedélyezze a PayPalt`,
@@ -487,10 +486,10 @@ export default {
       end: ` tudom, hogy már állandó PayPal.`,
     },
     kycSuccess: {
-      start: `Köszönöm! Fiókja vizsgálata folyamatban van.  
-      
+      start: `Köszönöm! Fiókja vizsgálata folyamatban van.
+
       `,
-      end: `Akkor be kell jelenteni, ha a kiegészítő funkciók nyithatóak.` 
+      end: `Akkor be kell jelenteni, ha a kiegészítő funkciók nyithatóak.`
     },
     status: `A tevékenység fülön megtekintheti a jelen `,
     activity: `tranzakció státuszát.`,
@@ -526,11 +525,11 @@ export default {
     feesInformation: `1. A PayPal számla kell kötni a bankszámlára.
     
 2. Pénznemben fizet eltér a bank deviza fizeti $ 0.35 díjat.
-    
+
 3. Nemzetközi átutalási díj:
     USA Kanada / Európa: $ 2.99
     USA bárhol máshol: $ 4.99
-    
+
 4. Ezek a díjak nem teljes körű. A legfrissebb információkért kérjük, látogasson el a:
 
     https://www.paypal.com/us/webapps/mpp/paypal-fees#sending-us`,

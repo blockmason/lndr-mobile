@@ -195,7 +195,7 @@ export default {
         limitExceeded: (A, M) => `한 주당 ${CUR(A)} ${TL(A, M)} 만 보낼 수 있습니다, 이보다 더 적은 금액을 선택하세요`
       },
       amount: `보내는 금액`,
-      address: `수신지 주소(0x 제외)`,
+      address: `수신지 주소`,
       transfer: `이더리움 송금`,
       transferAll: `전액 송금`,
       balance: (balance) => `당신의 현재 이더리움 잔액은 ${typeof balance === 'string' ? balance.slice(0,8) : ''}`,
@@ -205,20 +205,19 @@ export default {
       note: (A, M) => `참고 : Lndr에서는 일주일에 ${CUR(A)} ${TL(A, M)} 만 송금할 수 있습니다.`,
       warning: (Z, A, M) => `귀하의 거래 한도 ${CUR(A)}${Z} 중 ${CUR(A)} ${TL(A, M)} 이 남아있습니다`
     },
-    sendBcpt: {
+    sendERC20: {
       error: {
-        insufficient: `해당 거래를 완료하기에 보유한 BCPT 잔액이 부족합니다`,
+        insufficient: (name) => `해당 거래를 완료하기에 보유한 ${name} 잔액이 부족합니다`,
         generic: `거래 도중 에러가 발생하였습니다, 나중에 다시 시도해주세요`,
       },
-      transfer: `BCPT 송금`,
-      address: `수신지 주소(0x 제외)`,
-      balance: (balance) => `당신의 현재 BCPT 잔액은 ${typeof balance === 'string' ? balance.slice(0,8) : ''}`,
-      bcptAddress: `BCPT 주소`,
+      transfer: (name) => `${name} 송금`,
+      address: `수신지 주소`,
+      balance: (name, balance) => `당신의 현재 ${name} 잔액은 ${typeof balance === 'string' ? balance.slice(0,8) : ''}`,
+      tokenAddress: (name) => `${name} 주소`,
     },
     panelHeaders: [
-      `이더리움 (& BCPT) 주소`,
-      `이더리움 잔액`,
-      `BCPT 잔액`,
+      `Wallet Address`, // <-- translate me
+      `Crypto Balances`, // <-- translate me
       `계정 삭제`,
       `이더리움 거래 내역`,
       `차 환율 변경`,
@@ -488,10 +487,10 @@ export default {
       end: `는 PayPal로 정착 한 것으로 알려했습니다.`,
     },
     kycSuccess: {
-      start: `고맙습니다! 계정이 확인되고있다.  
-      
+      start: `고맙습니다! 계정이 확인되고있다.
+
       `,
-      end: `귀하의 추가 기능을 잠금 해제 할 때 통보를받을 것입니다.` 
+      end: `귀하의 추가 기능을 잠금 해제 할 때 통보를받을 것입니다.`
     },
     status: `거래 내역을 볼 수 있는 곳은 `,
     activity: ` 액티비티 탭.`,

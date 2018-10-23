@@ -194,7 +194,7 @@ export default {
         limitExceeded: (A, M) => `Du kan endast skicka ${CUR(A)} ${TL(A, M)} per vecka, välj en mindre summa`,
       },
       amount: `Belopp att skicka`,
-      address: `Mottagaradress (utan '0x' prefixet)`,
+      address: `Mottagaradress`,
       transfer: `Överför ETH`,
       transferAll: `Överför allt`,
       balance: Y => `Ditt aktuella ETH saldo är ${typeof Y === 'string' ? Y.slice (0,8): ''} `,
@@ -204,20 +204,19 @@ export default {
       note: (A, M) => `Observera: Du kan endast överföra ${CUR(A)} ${TL(A, M)} per vecka från Lndr`,
       warning: (Z, A, M) => `Du har ${CUR(A)} ${Z} återstående av din ${CUR(A)} ${TL(A, M)} gräns`,
     },
-    sendBcpt: {
+    sendERC20: {
       error: {
-        insufficient: `Du har inte tillräckligt BCPT för denna transaktion`,
+        insufficient: (name) => `Du har inte tillräckligt ${name} för denna transaktion`,
         generic: `Det uppstod ett fel med överföringen, vänligen försök igen senare`,
       },
-      transfer: `Överför BCPT`,
-      address: `Mottagaradress (utan '0x' prefixet)`,
-      balance: Y => `Ditt aktuella BCPT saldo är ${typeof Y === 'string'? Y.slice (0,8): ''} `,
-      bcptAddress: `BCPT Adress`,
+      transfer: (name) => `Överför ${name}`,
+      address: `Mottagaradress`,
+      balance: (name, balance) => `Ditt aktuella ${name} saldo är ${typeof balance === 'string'? balance.slice (0,8): ''} `,
+      tokenAddress: (name) => `${name} Adress`,
     },
     panelHeaders: [
-      `ETH (& BCPT) Adress`,
-      `ETH Saldo`,
-      `BCPT Saldo`,
+      `Wallet Address`, // <-- translate me
+      `Crypto Balances`, // <-- translate me
       `Ta bort konto`,
       `ETH Transaktionshistorik`,
       `Aktivera PayPal`,
@@ -312,7 +311,7 @@ export default {
     record: `Uppgift`,
     records: `Uppgifter`,
     chooseCurrency: `Välj en valuta`,
-    
+
     createError: {
       amountTooLow: `Beloppet måste vara större än $ 0`,
       amountTooHigh: `Beloppet måste vara mindre än $ 1000000000`,
@@ -487,10 +486,10 @@ export default {
       end: ` veta att du har fast med PayPal.`,
     },
     kycSuccess: {
-      start: `Tack! Ditt konto verifieras.  
-      
+      start: `Tack! Ditt konto verifieras.
+
       `,
-      end: `Du kommer att meddelas när dina ytterligare funktioner är olåst.` 
+      end: `Du kommer att meddelas när dina ytterligare funktioner är olåst.`
     },
     status: `Du kan se status för denna `,
     activity: `transaktion på aktivitetsfliken.`,
