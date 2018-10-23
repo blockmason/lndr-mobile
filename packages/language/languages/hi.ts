@@ -194,7 +194,7 @@ export default {
         limitExceeded: (A, M) => `आप एक हफ्ते में केवल ${CUR(A)} ${TL(A, M)} भेज सकते हैं, कृपया कोई छोटी राशि चुनें`
       },
       amount: `भेजी जाने वाली राशि`,
-      address: `गंतव्य पता ( '0x' प्रीफिक्स के बिना)`,
+      address: `गंतव्य पता`,
       transfer: `ट्रान्सफर ETH`,
       transferAll: `सब-कुछ ट्रान्सफर करें`,
       balance: Y => `आपका वर्तमान ETH बैलेन्स है ${typeof Y === 'string' ? Y.slice(0,8) :''}`,
@@ -204,20 +204,19 @@ export default {
       note: (A, M) => `कृपया नोट करें: आप हर हफ्ते केवल ${CUR(A)} ${TL(A, M)} ही Lndr से बाहर भेज सकते हैं`,
       warning: (Z, A, M) => `आपकी ${CUR(A)} ${TL(A, M)} लिमिट में ${CUR(A)}${Z} बाकी है`,
     },
-    sendBcpt: {
+    sendERC20: {
       error: {
-        insufficient: `आपके पास इस ट्रान्सफर के लिए पर्याप्त BCPT नहीं हैं`,
+        insufficient: (name) => `आपके पास इस ट्रान्सफर के लिए पर्याप्त ${name} नहीं हैं`,
         generic: `ट्रान्सफर में कोई गड़बड़ी हुई थी, बाद में दोबारा प्रयास करें`,
       },
-      transfer: `ट्रान्सफर BCPT`,
-      address: `गंतव्य पता ( '0x' प्रीफिक्स के बिना)`,
-      balance: Y => `आपका वर्तमान BCPT बैलेन्स ${typeof Y === 'string' ? Y.slice(0,8) :''} हैं`,
-      bcptAddress: `BCPT पता`,
+      transfer: (name) => `ट्रान्सफर ${name}`,
+      address: `गंतव्य पता`,
+      balance: (name, balance) => `आपका वर्तमान ${name} बैलेन्स ${typeof balance === 'string' ? balance.slice(0,8) :''} हैं`,
+      tokenAddress: (name) => `${name} पता`,
     },
     panelHeaders: [
-      `ETH (और BCPT) पता`,
-      `ETH बैलेंस`,
-      `BCPT बैलेंस`,
+      `Wallet Address`, // <-- translate me
+      `Crypto Balances`, // <-- translate me
       `अकाउंट डिलीट करें`,
       `ETH बैलेंस हिस्ट्री`,
       `पेपैल सक्षम करें`,
@@ -487,10 +486,10 @@ export default {
       end: ` जानते हैं कि आप पेपैल के साथ बसे कर दिया है है।`,
     },
     kycSuccess: {
-      start: `धन्यवाद! आपके खाते का सत्यापन किया जा रहा है।  
-      
+      start: `धन्यवाद! आपके खाते का सत्यापन किया जा रहा है।
+
       `,
-      end: `जब आपके अतिरिक्त सुविधाओं अनलॉक हैं आपको सूचित किया जाएगा।` 
+      end: `जब आपके अतिरिक्त सुविधाओं अनलॉक हैं आपको सूचित किया जाएगा।`
     },
     status: `आप इस ट्रैंज़ैक्शन का स्टेटस एक्टिविटी टैब `,
     activity: `में देख सकते हैं।`,

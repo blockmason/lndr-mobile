@@ -194,7 +194,7 @@ export default {
         limitExceeded: (A, M) => `można wysłać tylko ${CUR(A)} ${TL(A, M)} tygodniowo, wybierz mniejszą sumę`,
       },
       amount: `Kwota do Wysłania`,
-      address: `Adres docelowy (bez prefiksu „0x”)`,
+      address: `Adres docelowy`,
       transfer: `Prześlij ETH`,
       transferAll: `Prześlij wszystko`,
       balance: Y => `Obecne saldo ETH wynosi ${typeof Y === 'string'? Y.slice (0,8): ''} `,
@@ -204,20 +204,19 @@ export default {
       note: (A, M) => `Uwaga: można wysłać tylko ${CUR(A)} ${TL(A, M)} tygodniowo z Lndr`,
       warning: (Z, A, M) => `masz ${CUR(A)} ${Z} z Twojego limitu równego ${CUR(A)} ${TL(A, M)}`,
     },
-    sendBcpt: {
+    sendERC20: {
       error: {
-        insufficient: `Nie masz wystarczająco dużo BCPT dla tej transakcji`,
+        insufficient: (name) => `Nie masz wystarczająco dużo ${name} dla tej transakcji`,
         generic: `Wystąpił błąd z transferem, spróbuj ponownie później`,
       },
-      transfer: `Prześlij BCPT`,
-      address: `Adres docelowy (bez prefiksu „0x”)`,
-      balance: Y => `Obecne saldo BCPT wynosi ${typeof Y === 'string' ? Y.slice (0,8): ''} `,
-      bcptAddress: `Adres BCPT`,
+      transfer: (name) => `Prześlij ${name}`,
+      address: `Adres docelowy`,
+      balance: (name, balance) => `Obecne saldo ${name} wynosi ${typeof balance === 'string' ? balance.slice (0,8): ''} `,
+      tokenAddress: (name) => `Adres ${name}`,
     },
     panelHeaders: [
-      `Adres ETH (& BCPT)`,
-      `Bilans ETH`,
-      `Bilans BCPT`,
+      `Wallet Address`, // <-- translate me
+      `Crypto Balances`, // <-- translate me
       `Usuń Konto`,
       `Historia transakcji ETH`,
       `Podłącz PayPal`,
@@ -312,7 +311,7 @@ export default {
     record: `dokument`,
     records: `dokumentacja`,
     chooseCurrency: `Wybierz walutę`,
-    
+
     createError: {
       amountTooLow: `Kwota musi być większa niż $ 0`,
       amountTooHigh: `Kwota musi być mniej niż $ 1000000000`,
@@ -487,10 +486,10 @@ export default {
       end: `, że już rozliczyłeś się w systemie PayPal.`,
     },
     kycSuccess: {
-      start: `Dziękujmy! Twoje konto jest w trakcie weryfikacji.  
-      
+      start: `Dziękujmy! Twoje konto jest w trakcie weryfikacji.
+
       `,
-      end: `Zostaniesz powiadomiony, gdy dodatkowe funkcje zostaną odblokowane.` 
+      end: `Zostaniesz powiadomiony, gdy dodatkowe funkcje zostaną odblokowane.`
     },
     status: `Można sprawdzić status transakcji w zakładce aktywności`,
     activity: `,`,

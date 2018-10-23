@@ -194,7 +194,7 @@ export default {
         limitExceeded: (A, M) => `يمكنك فقط إرسال ${CUR(A)} ${TL(A, M)} في الأسبوع, الرجاء تحديد كمية أصغر`
       },
       amount: `المبلغ المراد إرساله`,
-      address: `عنوان الوجهة (بدون اللاحقة '0x')`,
+      address: `عنوان الوجهة`,
       transfer: `تحويل إثيريوم`,
       transferAll: `تحويل كل شيء`,
       balance: Y => `رصيدك الحالي من الإثيريوم هو ${typeof Y === 'string' ? Y.slice(0,8) :''}`,
@@ -204,20 +204,19 @@ export default {
       note: (A, M) => `يرجى الانتباه: يمكنك فقط تحويل ${CUR(A)} ${TL(A, M)} في الأسبوع من Lndr`,
       warning: (Z, A, M) => `لديك ${CUR(A)}${Z} متبقي من حدك ${CUR(A)} ${TL(A, M)}`,
     },
-    sendBcpt: {
+    sendERC20: {
       error: {
-        insufficient: `ليس لديك ما يكفي من BCPT لهذه العملية`,
+        insufficient: (name) => `ليس لديك ما يكفي من ${name} لهذه العملية`,
         generic: `حدث خطأ في عملية التحويل، الرجاء إعادة المحاولة مرة أخرى لاحقاً`,
       },
-      transfer: `تحويل BCPT`,
-      address: `عنوان الوجهة (بدون اللاحقة '0x')`,
-      balance: Y => `رصيدك الحالي من BCPT هو ${typeof Y === 'string' ? Y.slice(0,8) :''}`,
-      bcptAddress: `عنوان BCPT`,
+      transfer: (name) => `تحويل ${name}`,
+      address: `عنوان الوجهة`,
+      balance: (name, balance) => `رصيدك الحالي من ${name} هو ${typeof balance === 'string' ? balance.slice(0,8) :''}`,
+      tokenAddress: (name) => `عنوان ${name}`,
     },
     panelHeaders: [
-      `عنوان إثيريوم (& BCPT)`,
-      `رصيد الإثيريوم`,
-      `رصيد BCPT`,
+      `Wallet Address`, // <-- translate me
+      `Crypto Balances`, // <-- translate me
       `إزالة الحساب`,
       `سجل معاملات إثيريوم`,
       `تمكين باي بال`,
@@ -476,21 +475,21 @@ export default {
     },
     requestPayPalPayee: {
       start: ` أعرف أن كنت ترغب في تسوية مع باي بال`,
-      end: `لقد ترك `, 
+      end: `لقد ترك `,
     },
     requestPayPalPayment: {
       start: ` أعرف أنك تريد أن تدفع مع باي بال`,
-      end: `لقد ترك `, 
+      end: `لقد ترك `,
     },
     settledWithPayPal: {
       start: ` تعرف أنك قد استقر مع باي بال`,
-      end: `لقد ترك `, 
+      end: `لقد ترك `,
     },
     kycSuccess: {
-      start: `شكرا لكم! ويجري التحقق من حسابك.  
-      
+      start: `شكرا لكم! ويجري التحقق من حسابك.
+
       `,
-      end: `سيتم إعلامك عندما الميزات الإضافية الخاصة بك هي مقفلة.` 
+      end: `سيتم إعلامك عندما الميزات الإضافية الخاصة بك هي مقفلة.`
     },
     status: ` حالة هذه المعاملة من تبويب النشاط`,
     activity: `يمكنك رؤية`,

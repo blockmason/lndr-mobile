@@ -194,7 +194,7 @@ export default {
         limitExceeded: (A, M) => `Haftada sadece ${CUR(A)} ${TL(A, M)} gönderebilirsiniz, daha düşük bir miktar seçiniz`
       },
       amount: `Gönderilecek Tutar`,
-      address: `Hedef Adres ('0x' ön eki olmadan)`,
+      address: `Hedef Adres`,
       transfer: `ETH Aktar`,
       transferAll: `Her şeyi aktarın`,
       balance: Y => `Mevcut ETH bakiyeniz ${typeof Y === 'string' ? Y.slice(0,8) :''}`,
@@ -206,18 +206,17 @@ export default {
     },
     sendBcpt: {
       error: {
-        insufficient: `Bu işlem için yeterli BCPT ‘niz mevcut değil`,
+        insufficient: (name) => `Bu işlem için yeterli ${name} ‘niz mevcut değil`,
         generic: `Aktarımda bir hata oluştu, lütfen daha sonra tekrar deneyin`,
       },
-      transfer: `BCPT aktar`,
-      address: `Hedef Adresi ( '0x' ön eki olmadan)`,
-      balance: Y => `Geçerli BCPT bakiyeniz ${typeof Y === 'string' ? Y.slice(0,8) :''}`,
-      bcptAddress: `BCPT Adresi`,
+      transfer: (name) => `${name} aktar`,
+      address: `Hedef Adresi`,
+      balance: (name, balance) => `Geçerli ${name} bakiyeniz ${typeof balance === 'string' ? balance.slice(0,8) :''}`,
+      tokenAddress: (name) => `${name} Adresi`,
     },
     panelHeaders: [
-      `ETH (ve BCPT) Adresi`,
-      `ETH Bakiyesi`,
-      `BCPT Bakiyesi`,
+      `Wallet Address`, // <-- translate me
+      `Crypto Balances`, // <-- translate me
       `Hesabı Kaldır`,
       `ETH İşlem Geçmişi`,
       `Paypal etkinleştirme`,
@@ -312,7 +311,7 @@ export default {
     record: `kayıt`,
     records: `kayıt`,
     chooseCurrency: `Bir para birimi seç`,
-    
+
     createError: {
       amountTooLow: `Tutar 0$ 'dan büyük olmalıdır`,
       amountTooHigh: `Tutar 1,000,000,000$ ‘dan az olmalıdır`,
@@ -487,10 +486,10 @@ export default {
       end: ` PayPal ile sonuçlandığını bildirmiştiniz.`,
     },
     kycSuccess: {
-      start: `Teşekkür ederim! Hesabınız doğrulandı ediliyor.  
-      
+      start: `Teşekkür ederim! Hesabınız doğrulandı ediliyor.
+
       `,
-      end: `Sizin ek özellikler kilidi olduğunda bildirim yapılacaktır.` 
+      end: `Sizin ek özellikler kilidi olduğunda bildirim yapılacaktır.`
     },
     status: ``,
     activity: `Hareketler sekmesinde bu işlemin durumunu görebilirsiniz.`,

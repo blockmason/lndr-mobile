@@ -194,7 +194,7 @@ export default {
         limitExceeded: (A, M) => `U kunt maar ${CUR(A)} ${TL(A, M)} per week versturen, kies een kleiner bedrag`
       },
       amount: `Hoeveelheid te versturen`,
-      address: `Ontvangstadres (zonder voorvoegsel '0x')`,
+      address: `Ontvangstadres`,
       transfer: `Boek ETH over`,
       transferAll: `Boek alles over`,
       balance: Y => `Uw huidige ETH saldo is ${typeof Y === 'string'? Y.slice(0,8) : ''} `,
@@ -204,20 +204,19 @@ export default {
       note: (A, M) => `Let op: u kunt maar ${CUR(A)} ${TL(A, M)} per week overboeken uit Lndr`,
       warning: (Z, A, M) => `U heeft ${CUR(A)}${Z} over van uw ${CUR(A)} ${TL(A, M)} limiet`,
     },
-    sendBcpt: {
+    sendERC20: {
       error: {
-        insufficient: `U heeft niet genoeg BCPT voor deze transactie`,
+        insufficient: (name) => `U heeft niet genoeg ${name} voor deze transactie`,
         generic: `Er is een fout opgetreden bij de overboeking, probeer het later opnieuw`,
       },
-      transfer: `Boek BCPT over`,
-      address: `Ontvangstadres (zonder voorvoegsel '0x')`,
-      balance: Y => `Uw huidige BCPT saldo is ${typeof Y === 'string'? Y.slice (0,8) : ''} `,
-      bcptAddress: `BCPT Adres`,
+      transfer: (name) => `Boek ${name} over`,
+      address: `Ontvangstadres`,
+      balance: (name, balance) => `Uw huidige ${name} saldo is ${typeof balance === 'string'? balance.slice (0,8) : ''} `,
+      tokenAddress: (name) => `${name} Adres`,
     },
     panelHeaders: [
-      `ETH (& BCPT) Adres`,
-      `ETH saldo`,
-      `BCPT saldo`,
+      `Wallet Address`, // <-- translate me
+      `Crypto Balances`, // <-- translate me
       `Verwijder account`,
       `ETH transactiegeschiedenis`,
       `Inschakelen PayPal`,
@@ -312,7 +311,7 @@ export default {
     record: `Document`,
     records: `Documentatie`,
     chooseCurrency: `Kies een valuta`,
-    
+
     createError: {
       amountTooLow: `Het bedrag moet groter zijn dan $0`,
       amountTooHigh: `Het bedrag moet kleiner zijn dan $1.000.000.000`,
@@ -487,10 +486,10 @@ export default {
       end: ` weten dat je hebt verrekend met PayPal.`,
     },
     kycSuccess: {
-      start: `Dank je! Uw account wordt geverifieerd.  
-      
+      start: `Dank je! Uw account wordt geverifieerd.
+
       `,
-      end: `U ontvangt een melding wanneer uw extra functies worden ontgrendeld.` 
+      end: `U ontvangt een melding wanneer uw extra functies worden ontgrendeld.`
     },
     status: `U kunt de status van deze transactie zien in het `,
     activity: `tabblad activiteit.`,
@@ -526,11 +525,11 @@ export default {
     feesInformation: `1. Uw PayPal-rekening moet worden gekoppeld aan een bankrekening.
     
 2. Niet gratis in een andere valuta dan de valuta van uw bank zal oplopen een $ 0.35 kosten.
-    
+
 3. Internationale transfersommen:
     Verenigde Staten naar Canada / Europa: $ 2.99
     USA om ergens anders: $ 4.99
-    
+
 4. Deze kosten zijn niet volledig. Voor de meest actuele informatie ga naar:
 
     https://www.paypal.com/us/webapps/mpp/paypal-fees#sending-us`,

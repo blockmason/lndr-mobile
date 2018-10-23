@@ -194,7 +194,7 @@ export default {
         limitExceeded: (A, M) => `Du kan bare sende ${CUR(A)} ${TL(A, M)} per uke, vennligst velg et mindre beløp`,
       },
       amount: `Beløpet som skal sendes`,
-      address: `Bestemmelsesadresse (uten '0x' prefiks)`,
+      address: `Bestemmelsesadresse`,
       transfer: `Overfør ETH`,
       transferAll: `Overfør alt`,
       balance: Y => `Din nåværende ETH saldo er ${typeof Y === 'string' ? Y.slice (0,8) :''} `,
@@ -204,20 +204,19 @@ export default {
       note: (A, M) => `Merk: Du kan bare overføre ${CUR(A)} ${TL(A, M)} per uke ut av Lndr`,
       warning: (Z, A, M) => `Du har ${CUR(A)}${Z} igjen av ditt ${CUR(A)} ${TL(A, M)} maksbeløpet`,
     },
-    sendBcpt: {
+    sendERC20: {
       error: {
-        insufficient: `Du har ikke nok BCPT for denne transaksjonen`,
+        insufficient: (name) => `Du har ikke nok ${name} for denne transaksjonen`,
         generic: `Det oppstod en feil med overføringen, vennligst prøv igjen senere`,
       },
-      transfer: `Overfør BCPT`,
-      address: `Bestemmelsesadresse (uten '0x' prefiks)`,
-      balance: Y => `Din nåværende BCPT saldo er ${typeof Y === 'string' ? Y.slice(0,8) :''} `,
-      bcptAddress: `BCPT Adresse`,
+      transfer: (name) => `Overfør ${name}`,
+      address: `Bestemmelsesadresse`,
+      balance: (name, balance) => `Din nåværende ${name} saldo er ${typeof balance === 'string' ? balance.slice(0,8) :''} `,
+      tokenAddress: (name) => `${name} Adresse`,
     },
     panelHeaders: [
-      `ETH (og BCPT) Adresse`,
-      `ETH Balance`,
-      `BCPT Balance`,
+      `Wallet Address`, // <-- translate me
+      `Crypto Balances`, // <-- translate me
       `Fjern konto`,
       `ETH Transaksjonshistorikk`,
       `Aktiver PayPal`,
@@ -312,7 +311,7 @@ export default {
     record: `Oversikt`,
     records: `Oversikter`,
     chooseCurrency: `Velg en valuta`,
-    
+
     createError: {
       amountTooLow: `Beløpet må være større enn $ 0`,
       amountTooHigh: `Beløpet må være mindre enn $ 1.000.000.000`,
@@ -487,10 +486,10 @@ export default {
       end: ` vet at du har avgjort med PayPal.`,
     },
     kycSuccess: {
-      start: `Takk skal du ha! Din konto blir bekreftet.  
-      
+      start: `Takk skal du ha! Din konto blir bekreftet.
+
       `,
-      end: `Du vil bli varslet når tilleggsfunksjoner er ulåst.` 
+      end: `Du vil bli varslet når tilleggsfunksjoner er ulåst.`
     },
     status: `Du kan se statusen for denne transaksjonen `,
     activity: `i aktivitetsfanen.`,

@@ -194,7 +194,7 @@ export default {
         limitExceeded: (A, M) => `Sie können nur ${CUR(A)} ${TL(A, M)} pro Woche senden, wählen Sie bitte einen kleineren Betrag`,
       },
       amount: `Betrag, der gesendet werden soll`,
-      address: `Zieladresse (ohne ‚0x‘ Präfix)`,
+      address: `Zieladresse`,
       transfer: `ETH-Überweisung`,
       transferAll: `Überweisen Sie alles`,
       balance: Y => `Ihr aktueller ETH-Kontostand ist ${typeof Y === 'string'? Y.slice (0,8): ''} `,
@@ -204,20 +204,19 @@ export default {
       note: (A, M) => `Bitte beachten Sie: Sie können nur ${CUR(A)} ${TL(A, M)} pro Woche aus Lndr überweisen`,
       warning: (Z, A, M) => `Sie haben ${CUR(A)} ${Z} übrig von Ihrem ${CUR(A)} ${TL(A, M)} Limit`,
     },
-    sendBcpt: {
+    sendERC20: {
       error: {
-        insufficient: `Sie haben nicht genug BCPT für diese Transaktion`,
+        insufficient: (name) => `Sie haben nicht genug ${name} für diese Transaktion`,
         generic: `Es gab einen Fehler bei der Übertragung, bitte versuchen Sie es später noch einmal`,
       },
-      transfer: `Transfer BCPT`,
-      address: `Zieladresse (ohne ‚0x‘ Präfix)`,
-      balance: Y => `Ihr aktueller BCPT-Kontostand ist ${typeof Y === 'string'? Y.slice (0,8): ''} `,
-      bcptAddress: `BCPT-Adresse`,
+      transfer: (name) => `Transfer ${name}`,
+      address: `Zieladresse`,
+      balance: (name, balance) => `Ihr aktueller ${name}-Kontostand ist ${typeof balance === 'string'? balance.slice (0,8): ''} `,
+      tokenAddress: (name) => `${name}-Adresse`,
     },
     panelHeaders: [
-      `ETH (& BCPT) Adresse`,
-      `ETH-Kontostand`,
-      `BCPT-Kontostand`,
+      `Wallet Address`, // <-- translate me
+      `Crypto Balances`, // <-- translate me
       `Konto entfernen`,
       `ETH-Transaktionshistorie`,
       `Aktivieren Sie PayPal`,
@@ -487,10 +486,10 @@ export default {
       end: ` wissen, dass Sie mit PayPal entschieden haben.`,
     },
     kycSuccess: {
-      start: `Vielen Dank! Ihr Konto wird überprüft.  
-      
+      start: `Vielen Dank! Ihr Konto wird überprüft.
+
       `,
-      end: `Sie werden benachrichtigt, wenn Ihre zusätzlichen Funktionen freigeschaltet sind.` 
+      end: `Sie werden benachrichtigt, wenn Ihre zusätzlichen Funktionen freigeschaltet sind.`
     },
     status: `Sie können den Status dieser Transaktion in der `,
     activity: `Aktivität-Registerkarte sehen.`,
@@ -526,11 +525,11 @@ export default {
     feesInformation: `1. Ihr PayPal-Konto muss auf ein Bankkonto gebunden werden.
     
 2. Bezahlen in einer anderen Währung als Ihrer Bank Währung wird ein $ 0,35 Gebühr anfallen.
-    
+
 3. Internationale Transfergebühren:
     USA nach Kanada / Europa: $ 2.99
     USA anderswo: $ 4.99
-    
+
 4. Diese Gebühren sind nicht alle Informationen. Die aktuellsten Informationen erhalten Sie unter:
 
     https://www.paypal.com/us/webapps/mpp/paypal-fees#sending-us`,

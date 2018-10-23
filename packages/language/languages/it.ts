@@ -194,7 +194,7 @@ export default {
         limitExceeded: (A, M) => `È possibile inviare solo ${CUR(A)} ${TL(A, M)} a settimana, si prega di selezionare un importo minore`,
       },
       amount: `Importo da inviare`,
-      address: `Indirizzo di destinazione (senza il prefisso '0x')`,
+      address: `Indirizzo di destinazione`,
       transfer: `Trasferimento ETH`,
       transferAll: `Trasferire tutto`,
       balance: Y => `Il tuo saldo corrente è ETH ${typeof Y === 'string'? Y.slice (0,8): ''} `,
@@ -204,20 +204,19 @@ export default {
       note: (A, M) => `Si prega di notare: è possibile trasferire solo ${CUR(A)} ${TL(A, M)} a settimana fuori Lndr`,
       warning: (Z, A, M) => `Ti sono rimasti ${CUR(A)}${Z} del tuo limite ${CUR(A)} ${TL(A, M)}`,
     },
-    sendBcpt: {
+    sendERC20: {
       error: {
-        insufficient: `Non si dispone di abbastanza BCPT per questa transazione`,
+        insufficient: (name) => `Non si dispone di abbastanza ${name} per questa transazione`,
         generic: `C'è stato un errore con il trasferimento, si prega di riprovare più tardi`,
       },
-      transfer: `Trasferimento BCPT`,
-      address: `Indirizzo di destinazione (senza il prefisso '0x')`,
-      balance: Y => `Il tuo saldo corrente è ${typeof Y === 'string' ? Y.slice(0,8) :''}`,
-      bcptAddress: `Indirizzo BCPT`,
+      transfer: (name) => `Trasferimento ${name}`,
+      address: `Indirizzo di destinazione`,
+      balance: (name, balance) => `Il tuo attuale saldo ${name} è ${typeof balance === 'string' ? balance.slice(0,8) :''}`,
+      tokenAddress: (name) => `Indirizzo ${name}`,
     },
     panelHeaders: [
-      `Indirizzo ETH (& BCPT)`,
-      `Saldo ETH`,
-      `Saldo BCPT`,
+      `Wallet Address`, // <-- translate me
+      `Crypto Balances`, // <-- translate me
       `Rimuovi l'account`,
       `Cronologia delle Transazioni ETH`,
       `Abilita PayPal`,
@@ -487,10 +486,10 @@ export default {
       end: ` sapere che hai sistemato con PayPal.`,
     },
     kycSuccess: {
-      start: `Grazie! Il tuo account è in corso di verifica.  
-      
+      start: `Grazie! Il tuo account è in corso di verifica.
+
       `,
-      end: `Riceverai una notifica quando il tuo funzionalità aggiuntive sono sbloccati.` 
+      end: `Riceverai una notifica quando il tuo funzionalità aggiuntive sono sbloccati.`
     },
     status: `È possibile visualizzare lo stato di tale operazione nella `,
     activity: `scheda attività.`,
@@ -526,11 +525,11 @@ export default {
     feesInformation: `1. Il tuo conto PayPal deve essere legato a un conto bancario.
     
 2. A pagamento in una valuta diversa da quella della vostra banca incorrerà in una tassa di $ 0,35.
-    
+
 3. spese di trasferimento internazionali:
     USA a Canada / Europa: $ 2.99
     USA a altrove: $ 4.99
-    
+
 4. Queste spese non sono complete. Per le informazioni più aggiornate visitare il sito:
 
     https://www.paypal.com/us/webapps/mpp/paypal-fees#sending-us`,

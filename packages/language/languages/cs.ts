@@ -194,7 +194,7 @@ export default {
         limitExceeded: (A, M) => `Můžete poslat pouze ${CUR(A)} ${TL(A, M)} týdně, zvolte menší částku`
       },
       amount: `Částka k odeslání`,
-      address: `Cílová adresa (bez předpon '0x')`,
+      address: `Cílová adresa`,
       transfer: `Převést ETH`,
       transferAll: `Převést vše`,
       balance: Y => `Aktuální zůstatek ETH je ${typeof Y === 'string' ? Y.slice(0,8) :''}`,
@@ -204,20 +204,19 @@ export default {
       note: (A, M) => `Poznámka: můžete převést max. ${CUR(A)} ${TL(A, M)} týdně z Lndr`,
       warning: (Z, A, M) => `Zbývá vám ${CUR(A)}${Z} z vašeho limitu ${CUR(A)} ${TL(A, M)}`,
     },
-    sendBcpt: {
+    sendERC20: {
       error: {
-        insufficient: `Pro tuto transakci nemáte dostatek BCPT`,
+        insufficient: (name) => `Pro tuto transakci nemáte dostatek ${name}`,
         generic: `Došlo k chybě při převodu, zkuste to prosím později`,
       },
-      transfer: `Převést BCPT`,
-      address: `Cílová adresa (bez '0x' prefix)`,
-      balance: Y => `Aktuální BCPT zůstatek je ${typeof Y === 'string' ? Y.slice(0,8) :''}`,
-      bcptAddress: `BCPT adresa`,
+      transfer: (name) => `Převést ${name}`,
+      address: `Cílová adresa`,
+      balance: (name, balance) => `Aktuální ${name} zůstatek je ${typeof balance === 'string' ? balance.slice(0,8) :''}`,
+      tokenAddress: (name) => `${name} adresa`,
     },
     panelHeaders: [
-      `ETH (a BCPT) adresa`,
-      `Zůstatek ETH`,
-      `Zůstatek BCPT`,
+      `Wallet Address`, // <-- translate me
+      `Crypto Balances`, // <-- translate me
       `Odstranit účet`,
       `ETH Transakční historie`,
       `Umožnit PayPal`,
@@ -487,10 +486,10 @@ export default {
       end: ` vědět, že jste se vyrovnal s PayPal.`,
     },
     kycSuccess: {
-      start: `Děkuji! Váš účet je ověřen.  
-      
+      start: `Děkuji! Váš účet je ověřen.
+
       `,
-      end: `Budete upozorněni, když vaše další funkce jsou odemčené.` 
+      end: `Budete upozorněni, když vaše další funkce jsou odemčené.`
     },
     status: `Stav této transakce můžete sledovat v `,
     activity: `záložce Aktivita.`,
@@ -536,7 +535,7 @@ export default {
     https://www.paypal.com/us/webapps/mpp/paypal-fees#sending-us`,
     payPalSite: `PayPal.com`,
   },
-  
+
   countries: [
     { name: `Afghánistán`, code: 'AFG' },
     { name: `Albánie`, code: 'ALB' },

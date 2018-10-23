@@ -194,7 +194,7 @@ export default {
         limitExceeded: (A, M) => `Bạn chỉ có thể gởi ${CUR(A)} ${TL(A, M)} mỗi tuần, vui lòng chọn lựa số nhỏ hơn`
       },
       amount: `Số tiền gửi`,
-      address: `Địa chỉ Gửi đến (không gắn tiền tố '0x')`,
+      address: `Địa chỉ Gửi đến`,
       transfer: `Chuyển tiền ETH`,
       transferAll: `Chuyển hết`,
       balance: Y => `Số dư ETH hiện tại của bạn là ${typeof Y === 'string' ? Y.slice(0,8) :''}`,
@@ -204,20 +204,19 @@ export default {
       note: (A, M) => `Lưu ý: bạn chỉ có thể chuyển ${CUR(A)} ${TL(A, M)} mỗi tuần trên Lndr`,
       warning: (Z, A, M) => `Bạn còn lại ${CUR(A)}${Z} trong hạn mức ${CUR(A)} ${TL(A, M)}`,
     },
-    sendBcpt: {
+    sendERC20: {
       error: {
-        insufficient: `Bạn không có đủ BCPT để thực hiện giao dịch này`,
+        insufficient: (name) => `Bạn không có đủ ${name} để thực hiện giao dịch này`,
         generic: `Có lỗi xảy ra khi chuyển tiền, vui lòng thử lại sau`,
       },
-      transfer: `Chuyển tiền BCPT`,
-      address: `Địa chỉ Gửi đến (không gắn tiền tố '0x')`,
-      balance: Y => `Số dư BCPT hiện tại là ${typeof Y === 'string' ? Y.slice(0,8) :''}`,
-      bcptAddress: `Địa chỉ BCPT`,
+      transfer: (name) => `Chuyển tiền ${name}`,
+      address: `Địa chỉ Gửi đến`,
+      balance: (name, balance) => `Số dư ${name} hiện tại là ${typeof balance === 'string' ? balance.slice(0,8) :''}`,
+      tokenAddress: (name) => `Địa chỉ ${name}`,
     },
     panelHeaders: [
-      `Địa chỉ ETH (& BCPT)`,
-      `Số dư ETH`,
-      `Số dư BCPT`,
+      `Wallet Address`, // <-- translate me
+      `Crypto Balances`, // <-- translate me
       `Xoá tài khoản`,
       `Lịch sử giao dịch ETH`,
       `Bật PayPal`,
@@ -312,7 +311,7 @@ export default {
     record: `ghi chép`,
     records: `ghi chép`,
     chooseCurrency: `Chọn một tệ`,
-    
+
     createError: {
       amountTooLow: `Số tiền phải lớn hơn $0`,
       amountTooHigh: `Số tiền phải nhỏ hơn $1,000,000,000`,
@@ -487,10 +486,10 @@ export default {
       end: ` biết rằng bạn đã giải quyết với PayPal.`,
     },
     kycSuccess: {
-      start: `Cảm ơn bạn! Tài khoản của bạn đã được xác minh.  
-      
+      start: `Cảm ơn bạn! Tài khoản của bạn đã được xác minh.
+
       `,
-      end: `Bạn sẽ được thông báo khi các tính năng bổ sung của bạn được mở khóa.` 
+      end: `Bạn sẽ được thông báo khi các tính năng bổ sung của bạn được mở khóa.`
     },
     status: `Bạn có thể xem trạng thái của giao dịch này trong `,
     activity: `tab hoạt động.`,

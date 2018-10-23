@@ -194,7 +194,7 @@ export default {
         limitExceeded: (A, M) => `Sólo puede enviar ${CUR(A)} ${TL(A, M)} por semana, por favor seleccione un monto menor`,
       },
       amount: `Monto a Enviar`,
-      address: `Dirección de Destino (sin el prefijo '0x')`,
+      address: `Dirección de Destino`,
       transfer: `Transferencia de ETH (Ethereum)`,
       transferAll: `Transferir Todo`,
       balance: Y => `Su saldo actual en ETH (Ethereum) es de ${typeof Y === 'string' ? Y.slice (0,8): ''} `,
@@ -204,20 +204,19 @@ export default {
       note: (A, M) => `Atención: sólo se puede transferir ${CUR(A)} ${TL(A, M)} por semana a través de Lndr`,
       warning: (Z, A, M) => `Le quedan ${CUR(A)} ${Z} restantes de su ${CUR(A)} ${TL(A, M)} límite`,
     },
-    sendBcpt: {
+    sendERC20: {
       error: {
-        insufficient: `Usted no posee suficiente BCPT para continuar con esta transacción`,
+        insufficient: (name) => `Usted no posee suficiente ${name} para continuar con esta transacción`,
         generic: `Hubo un error en la transferencia, por favor intente de nuevo más tarde`,
       },
-      transfer: `Transferencia de BCPT`,
-      address: `Dirección de Destino (sin el prefijo '0x')`,
-      balance: Y => `Su saldo actual es de: BCPT ${typeof Y === 'string'? Y.slice (0,8): ''}`,
-      bcptAddress: `Dirección BCPT`,
+      transfer: (name) => `Transferencia de ${name}`,
+      address: `Dirección de Destino`,
+      balance: (name, balance) => `Su saldo actual es de: ${name} ${typeof balance === 'string'? balance.slice (0,8): ''}`,
+      tokenAddress: (name) => `Dirección ${name}`,
     },
     panelHeaders: [
-      `Dirección de ETH (y BCPT)`,
-      `Saldo de Ethereum`,
-      `Saldo de BCPT`,
+      `Wallet Address`, // <-- translate me
+      `Crypto Balances`, // <-- translate me
       `Eliminar Cuenta`,
       `Historial de Transacciones en Ethereum`,
       `Activar PayPal`,
@@ -487,10 +486,10 @@ export default {
       end: ` saber que usted se decida con PayPal.`,
     },
     kycSuccess: {
-      start: `¡Gracias! se está verificando su cuenta.  
-      
+      start: `¡Gracias! se está verificando su cuenta.
+
       `,
-      end: `Se le notificará cuando sus características adicionales están desbloqueados.` 
+      end: `Se le notificará cuando sus características adicionales están desbloqueados.`
     },
     status: `Puede ver el estado de esta transacción en la `,
     activity: `pestaña Actividad.`,
@@ -526,11 +525,11 @@ export default {
     feesInformation: `1. Su cuenta PayPal debe estar ligada a una cuenta bancaria.
     
 2. El pago en una moneda distinta a la moneda de su banco le cobrará un cargo de $ 0,35.
-    
+
 3. Los gastos de transferencia Internacionales:
     EE.UU. a Canadá / Europa: $ 2.99
     EE.UU. a cualquier otro lugar: $ 4.99
-    
+
 4. Estas tarifas no son exhaustivas. Para obtener la información más actualizada, visite:
 
     https://www.paypal.com/us/webapps/mpp/paypal-fees#sending-us`,

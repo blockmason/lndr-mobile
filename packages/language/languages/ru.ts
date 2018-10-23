@@ -194,7 +194,7 @@ export default {
         limitExceeded: (A, M) => `Вы можете отпровлять всево ${CUR(A)} ${TL(A, M)} в неделю, пожалуйста, выберите количество поменьше`
       },
       amount: `Сумма Отправить`,
-      address: `Адрес назначения (без префикса «0x»)`,
+      address: `Адрес назначения`,
       transfer: `Перевести ETH`,
       transferAll: `Перевести все`,
       balance: Y => `Ваш текущий баланс ETH ${typeof Y === 'string'? Y.slice (0,8): ''} `,
@@ -204,20 +204,19 @@ export default {
       note: (A, M) => `Пожалуйста, обратите внимание: вы можете передать ${CUR(A)} ${TL(A, M)} в неделю из Lndr`,
       warning: (Z, A, M) => `У вас есть ${CUR(A)} ${Z} в ваши ${CUR(A)} ${TL(A, M)} limit`,
     },
-    sendBcpt: {
+    sendERC20: {
       error: {
-        insufficient: `Вам не хватает BCPT для этой трансакций`,
+        insufficient: (name) => `Вам не хватает ${name} для этой трансакций`,
         generic: `При перевидение произошла ошибка, повторите попытку позже`,
       },
-      transfer: `Перевести BCPT`,
-      address: `Адрес назначения (без префикса «0x»)`,
-      balance: Y => `Ваш текущий баланс BCPT ${typeof Y === 'string' ? Y.slice (0,8): ''} `,
-      bcptAddress: `BCPT Адрес`,
+      transfer: (name) => `Перевести ${name}`,
+      address: `Адрес назначения`,
+      balance: (name, balance) => `Ваш текущий баланс ${name} ${typeof balance === 'string' ? balance.slice (0,8): ''} `,
+      tokenAddress: (name) => `${name} Адрес`,
     },
     panelHeaders: [
-      `ETH (и BCPT) Адрес`,
-      `ETH Баланс`,
-      `BCPT Баланс`,
+      `Wallet Address`, // <-- translate me
+      `Crypto Balances`, // <-- translate me
       `Удалить учетную запись`,
       `История транзакций ETH`,
       `Включить PayPal`,
@@ -312,7 +311,7 @@ export default {
     record: `записать`,
     records: `учет`,
     chooseCurrency: `Выберите валюту`,
-    
+
     createError: {
       amountTooLow: `Сумма должна быть больше, чем $ 0`,
       amountTooHigh: `Сумма должна быть меньше, чем $ 1000000000`,
@@ -487,10 +486,10 @@ export default {
       end: ` знать, что вы поселились с PayPal.`,
     },
     kycSuccess: {
-      start: `Спасибо! Ваша учетная запись проверяется.  
-      
+      start: `Спасибо! Ваша учетная запись проверяется.
+
       `,
-      end: `Вы будете уведомлены, когда ваши дополнительные функции разблокированы.` 
+      end: `Вы будете уведомлены, когда ваши дополнительные функции разблокированы.`
     },
     status: `Статус этой транзакции можно увидеть на вкладке `,
     activity: `«Активность».`,

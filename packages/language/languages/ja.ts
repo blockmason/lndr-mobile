@@ -203,20 +203,19 @@ export default {
       note: (A, M) => `一週間にLndrから引き出せるのは ${CUR(A)} ${TL(A, M)} までです`,
       warning: (Z, A, M) => `現在 ${CUR(A)} ${TL(A, M)} のうち ${CUR(A)}${Z}残っています `,
     },
-    sendBcpt: {
+    sendERC20: {
       error: {
-        insufficient: `送金に必要なBCPTが不足しています`,
+        insufficient: (name) => `送金に必要な${name}が不足しています`,
         generic: `エラーが発生しました。しばらく経ってから再度お試しください。`,
       },
-      transfer: `BCPTを送金する`,
-      address: `送付先アドレス（先頭の '0x'は入力不要）`,
-      balance: Y => `あなたの現在のBCPT残高は${typeof Y === 'string' ? Y.slice(0,8) :''}`,
-      bcptAddress: `BCPTアドレス`,
+      transfer: (name) => `${name}を送金する`,
+      address: `送付先アドレス`,
+      balance: (name, balance) => `あなたの現在の${name}残高は${typeof balance === 'string' ? balance.slice(0,8) :''}`,
+      tokenAddress: (name) => `${name}アドレス`,
     },
     panelHeaders: [
-      `ETH (& BCPT) アドレス`,
-      `ETH残高`,
-      `BCPT残高`,
+      `Wallet Address`, // <-- translate me
+      `Crypto Balances`, // <-- translate me
       `アカウントを削除する`,
       `ETHの取引履歴`,
       `ペイパルを接続します`,
@@ -319,7 +318,7 @@ export default {
       pending: `別の取引を行う前に、現在の作業を完了してください`,
       insufficientEth: E => `決済するためには少なくとも ${E} ETH 必要です, 自分の残高を確認するには設定をご覧ください`,
     },
-    
+
     fields: {
       currency: `通貨`,
       amount: `金額`,
@@ -488,10 +487,10 @@ export default {
       end: `に知らせました。`,
     },
     kycSuccess: {
-      start: `ありがとうございました！アカウントが確認されています。  
-      
+      start: `ありがとうございました！アカウントが確認されています。
+
       `,
-      end: `あなたの追加機能のロックが解除されたときに通知されます。` 
+      end: `あなたの追加機能のロックが解除されたときに通知されます。`
     },
     status: `この取引の状況をアクティビティ`,
     activity: `のタブから見ることができます。`,
