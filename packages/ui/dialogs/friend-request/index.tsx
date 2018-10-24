@@ -7,6 +7,7 @@ import Friend from 'lndr/friend'
 import profilePic from 'lndr/profile-pic'
 import DashboardShell from 'ui/components/dashboard-shell'
 
+import BackButton from 'ui/components/back-button'
 import Button from 'ui/components/button'
 import Loading, { LoadingContext } from 'ui/components/loading'
 
@@ -60,7 +61,7 @@ class FriendRequest extends Component<Props, State> {
       this.setState({ friend, isOutbound })
     }
   }
-  
+
   componentDidMount( ) {
     firebase.analytics().setCurrentScreen('friend-request', 'FriendRequest');
   }
@@ -101,7 +102,7 @@ class FriendRequest extends Component<Props, State> {
       <View style={general.view}>
         <DashboardShell text={pendingFriendRequestsLanguage.shell} navigation={this.props.navigation} />
         <Loading context={loadingContext} />
-        <Button close onPress={() => this.props.navigation.goBack(null)} />
+        <BackButton onPress={() => this.props.navigation.goBack()} />
       </View>
         <ScrollView style={general.view} keyboardShouldPersistTaps="always">
         <View style={general.centeredColumn}>

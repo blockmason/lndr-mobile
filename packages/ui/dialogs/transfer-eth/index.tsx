@@ -10,6 +10,7 @@ import { UserData } from 'lndr/user'
 import { ethAmount, isEthAddress, formatCommaDecimal, formatEthRemaining } from 'lndr/format'
 import { currencySymbols, isCommaDecimal, transferLimits, TRANSFER_LIMIT_STANDARD } from 'lndr/currencies'
 
+import BackButton from 'ui/components/back-button'
 import Button from 'ui/components/button'
 import Loading, { LoadingContext } from 'ui/components/loading'
 import DashboardShell from 'ui/components/dashboard-shell'
@@ -161,7 +162,7 @@ class TransferEth extends Component<Props, State> {
       <View style={general.view}>
         <Loading context={sendingEthLoader} />
         <DashboardShell text={accountManagement.sendEth.transferLowercase} navigation={this.props.navigation} />
-        <Button close onPress={() => this.props.navigation.goBack()} />
+        <BackButton onPress={() => this.props.navigation.goBack()} />
       </View>
       <KeyboardAvoidingView style={general.whiteFlex} behavior={Platform.OS === 'ios' ? 'padding' : 'position'} keyboardVerticalOffset={-200} >
         <ScrollView style={general.view} keyboardShouldPersistTaps='handled'>

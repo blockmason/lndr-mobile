@@ -15,6 +15,7 @@ import Friend from 'lndr/friend'
 import { currencySymbols, transferLimits, TRANSFER_LIMIT_STANDARD } from 'lndr/currencies'
 import profilePic from 'lndr/profile-pic'
 
+import BackButton from 'ui/components/back-button'
 import Button from 'ui/components/button'
 import Loading, { LoadingContext } from 'ui/components/loading'
 import DashboardShell from 'ui/components/dashboard-shell'
@@ -462,7 +463,7 @@ class Settlement extends Component<Props, State> {
     return <View style={general.whiteFlex}>
       <View style={general.view}>
         <DashboardShell text={debtManagement.settleUpLower} navigation={this.props.navigation} />
-        <Button close onPress={() => this.props.navigation.goBack()} />
+        <BackButton onPress={() => this.props.navigation.goBack()} />
       </View>
       <KeyboardAvoidingView style={general.whiteFlex} behavior={'padding'} keyboardVerticalOffset={vertOffset} >
         <ScrollView style={general.view} keyboardShouldPersistTaps='handled'>

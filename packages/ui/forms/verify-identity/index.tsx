@@ -8,6 +8,7 @@ import FontAwesome from 'react-native-vector-icons/FontAwesome'
 import { connect } from 'react-redux'
 import firebase from 'react-native-firebase'
 
+import BackButton from 'ui/components/back-button'
 import Button from 'ui/components/button'
 import DashboardShell from 'ui/components/dashboard-shell'
 import Loading, { LoadingContext } from 'ui/components/loading'
@@ -307,19 +308,19 @@ ${lndrVerified.utility}
         const resetAction = getResetAction( { routeName:'Confirmation', params: { type: 'kycSuccess' } } )
         this.props.navigation.dispatch(resetAction)
     }
-    
+
     submitForm = async () => {
         Keyboard.dismiss()
-        const { firstName, lastName, dob, street, phone, city, state, postCode, country, governmentPhoto, selfiePhoto, addressPhoto, agreement, 
+        const { firstName, lastName, dob, street, phone, city, state, postCode, country, governmentPhoto, selfiePhoto, addressPhoto, agreement,
             governmentPhotoType, addressPhotoType } = this.state
         const { email, address } = this.props.user
 
         if (firstName && lastName && street && city && state && postCode && phone && governmentPhoto && selfiePhoto && addressPhoto && agreement && governmentPhotoType.code && addressPhotoType.code) {
             this.setState({ submitted: true })
-            
-            const data = new KYC({ firstName, lastName, dob, street, phone, city, state, postCode, country: country.code, governmentPhoto, selfiePhoto, addressPhoto, 
+
+            const data = new KYC({ firstName, lastName, dob, street, phone, city, state, postCode, country: country.code, governmentPhoto, selfiePhoto, addressPhoto,
                 governmentPhotoType: governmentPhotoType.code, addressPhotoType: addressPhotoType.code, email, address })
-            
+
             try {
                 await loadingContext.wrap(this.props.submitKYC(data))
                 const resetAction = getResetAction( { routeName:'Confirmation', params: { type: 'kycSuccess' } } )
@@ -398,7 +399,7 @@ ${lndrVerified.utility}
             <View style={general.whiteFlex}>
                 <View style={general.view}>
                     <DashboardShell text="Verify Identity" navigation={this.props.navigation} />
-                    <Button close onPress={() => this.props.navigation.goBack()} />
+                    <BackButton onPress={() => this.props.navigation.goBack()} />
                 </View>
                 <KeyboardAvoidingView style={general.whiteFlex} behavior={'padding'} keyboardVerticalOffset={vertOffset} >
                     <ScrollView style={general.view} keyboardShouldPersistTaps="handled">

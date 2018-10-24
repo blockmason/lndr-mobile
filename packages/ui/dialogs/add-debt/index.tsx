@@ -7,6 +7,7 @@ import Friend from 'lndr/friend'
 import { formatMemo, amountFormat } from 'lndr/format'
 import { currencySymbols } from 'lndr/currencies'
 
+import BackButton from 'ui/components/back-button'
 import Button from 'ui/components/button'
 import Loading, { LoadingContext } from 'ui/components/loading'
 import FriendRow from 'ui/components/friend-row'
@@ -170,8 +171,7 @@ class AddDebt extends Component<Props, State> {
     const { hasPendingTransaction } = this.props
 
     return <ScrollView style={[general.view, {paddingTop: 30}]} keyboardShouldPersistTaps='handled'>
-      <Button close onPress={() => this.setState({ shouldSelectFriend: false })} />
-      <View style={{marginTop: 20}} />
+      <BackButton onPress={() => this.setState({ shouldSelectFriend: false })} />
       <Section>
         <View style={formStyle.horizontalView}>
           <View style={formStyle.textInputContainer}>
@@ -251,7 +251,7 @@ class AddDebt extends Component<Props, State> {
     return <View style={general.whiteFlex}>
       <View style={general.view}>
         <DashboardShell text={debtManagement.shell} navigation={this.props.navigation} />
-        <Button close onPress={() => this.cancel()} />
+        <BackButton onPress={() => this.cancel()} />
       </View>
       <KeyboardAvoidingView style={general.whiteFlex} behavior={'padding'} keyboardVerticalOffset={vertOffset} >
         <ScrollView style={general.view} keyboardShouldPersistTaps='handled'>
@@ -322,5 +322,5 @@ class AddDebt extends Component<Props, State> {
 
 export default connect((state) => ({ state: getStore(state)(), pendingTransactions: pendingTransactions(state),
   recentTransactions: recentTransactions(state), allCurrencies: getAllUcacCurrencies(state), primaryCurrency: getPrimaryCurrency(state),
-   hasPendingTransaction: hasPendingTransaction(state), 
+   hasPendingTransaction: hasPendingTransaction(state),
    getPendingFromFriend: getPendingFromFriend(state) }), { addDebt, getFriends, hasPendingMessage })(AddDebt)

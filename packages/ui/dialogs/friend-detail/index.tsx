@@ -13,6 +13,7 @@ import { currencySymbols } from 'lndr/currencies'
 import PendingView from 'ui/views/account/activity/pending'
 import RecentView from 'ui/views/account/activity/recent'
 import DashboardShell from 'ui/components/dashboard-shell'
+import BackButton from 'ui/components/back-button'
 import Button from 'ui/components/button'
 import Loading, { LoadingContext } from 'ui/components/loading'
 import BalanceSection from 'ui/components/balance-section'
@@ -167,7 +168,7 @@ class FriendDetail extends Component<Props, State> {
       <View style={general.view}>
         <DashboardShell text={friendShell} navigation={this.props.navigation} />
         <Loading context={loadingContext} />
-        <Button close onPress={this.goBack} />
+        <BackButton onPress={this.goBack} />
       </View>
       <ScrollView style={general.view}  keyboardShouldPersistTaps="always">
         <View style={general.centeredColumn}>
