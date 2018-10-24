@@ -5,6 +5,7 @@ import ImagePicker from 'react-native-image-picker'
 import Icon from 'react-native-vector-icons/Ionicons'
 import firebase from 'react-native-firebase'
 
+import BackButton from 'ui/components/back-button'
 import Button from 'ui/components/button'
 import Pinpad from 'ui/components/pinpad'
 import DashboardShell from 'ui/components/dashboard-shell'
@@ -516,14 +517,16 @@ class MyAccount extends Component<Props, State> {
       </View>
     } else if (step === 3 || step === 4) {
       return <View style={[general.fullHeight, general.view]}>
-        <Button close onPress={() => this.clearPinView()} />
+        <View style={{marginTop: 20}} />
+        <BackButton onPress={() => this.clearPinView()} />
         <View style={style.form}>
           <Pinpad onNumPress={(pin) => this.confirmPin(pin)} onBackspace={() => this.clearConfirmPin()} pin={confirmPassword} headerText={confirmPin} />
         </View>
       </View>
     } else if (step === 2) {
       return <View style={[general.fullHeight, general.view]}>
-        <Button close onPress={() => this.clearPinView()} />
+        <View style={{marginTop: 20}} />
+        <BackButton onPress={() => this.clearPinView()} />
         <View style={style.form}>
           <Pinpad onNumPress={(pin) => this.enterPin(pin)} onBackspace={() => this.clearPin()} pin={password} headerText={enterNewPin} />
         </View>
@@ -533,10 +536,7 @@ class MyAccount extends Component<Props, State> {
       return <View style={general.whiteFlex}>
         <View style={general.view}>
           <DashboardShell text={myAccount} navigation={this.props.navigation} hideSettings />
-          <View style={general.flexRow}>
-            <Button close onPress={() => this.props.navigation.goBack()} />
-            <View style={general.flex}/>
-          </View>
+          <BackButton onPress={() => this.props.navigation.goBack()} />
         </View>
         <KeyboardAvoidingView style={general.whiteFlex} behavior={'padding'} keyboardVerticalOffset={vertOffset} >
           <ScrollView ref='scrollContent' style={general.view} onScroll={event => this.handleScroll(event)} scrollEventThrottle={50} keyboardShouldPersistTaps='handled'>

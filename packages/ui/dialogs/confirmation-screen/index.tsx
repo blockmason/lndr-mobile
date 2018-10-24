@@ -7,6 +7,7 @@ import { copyToClipboard } from 'actions'
 import { getResetAction } from 'reducers/nav'
 import { connect } from 'react-redux'
 
+import BackButton from 'ui/components/back-button'
 import Button from 'ui/components/button'
 import DashboardShell from 'ui/components/dashboard-shell'
 
@@ -117,10 +118,7 @@ class ConfirmationScreen extends Component<Props, State> {
     return <View style={general.whiteFlex}>
       <View style={general.view}>
         <DashboardShell text={confirmation.shell} navigation={this.props.navigation} />
-        <View style={general.flexRow}>
-          <Button close onPress={() => this.goHome()} />
-          <View style={general.flex}/>
-        </View>
+        <BackButton onPress={() => this.goHome()} />
       </View>
       <ScrollView style={[general.whiteFlex]} keyboardShouldPersistTaps="always">
         <View style={[general.centeredColumn, general.standardHMargin]}>

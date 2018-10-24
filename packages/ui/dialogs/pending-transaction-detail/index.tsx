@@ -11,6 +11,7 @@ import profilePic from 'lndr/profile-pic'
 import { currencySymbols } from 'lndr/currencies'
 import Friend from 'lndr/friend'
 
+import BackButton from 'ui/components/back-button'
 import Button from 'ui/components/button'
 import Loading, { LoadingContext } from 'ui/components/loading'
 import DashboardShell from 'ui/components/dashboard-shell'
@@ -217,10 +218,7 @@ class PendingTransactionDetail extends Component<Props, State> {
       <View style={general.view}>
         <Loading context={loadingContext} />
         <DashboardShell text={pendingTransactionsLanguage.shell} navigation={this.props.navigation} />
-        <View style={general.flexRow}>
-          <Button close onPress={() => this.props.navigation.goBack()} />
-          <View style={general.flex}/>
-        </View>
+        <BackButton onPress={() => this.props.navigation.goBack()} />
       </View>
       <ScrollView style={general.whiteFlex} keyboardShouldPersistTaps="always">
         <View style={general.centeredColumn}>

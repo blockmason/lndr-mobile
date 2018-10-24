@@ -6,6 +6,7 @@ import profilePic from 'lndr/profile-pic'
 import { UserData } from 'lndr/user'
 
 import DashboardShell from 'ui/components/dashboard-shell'
+import BackButton from 'ui/components/back-button'
 import Button from 'ui/components/button'
 import Loading, { LoadingContext } from 'ui/components/loading'
 
@@ -85,10 +86,7 @@ class PayPalRequestDetail extends Component<Props, State> {
       <View style={general.view}>
         <DashboardShell text={pendingTransactionsLanguage.shell} navigation={this.props.navigation} />
         <Loading context={loadingContext} />
-        <View style={general.flexRow}>
-          <Button close onPress={this.goBack} />
-          <View style={general.flex}/>
-        </View>
+        <BackButton onPress={this.goBack} />
       </View>
       <ScrollView style={general.view} keyboardShouldPersistTaps="always">
         <View style={general.centeredColumn}>

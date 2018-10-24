@@ -8,6 +8,7 @@ import FontAwesome from 'react-native-vector-icons/FontAwesome'
 import { connect } from 'react-redux'
 import firebase from 'react-native-firebase'
 
+import BackButton from 'ui/components/back-button'
 import Button from 'ui/components/button'
 import DashboardShell from 'ui/components/dashboard-shell'
 import Loading, { LoadingContext } from 'ui/components/loading'
@@ -398,10 +399,7 @@ ${lndrVerified.utility}
             <View style={general.whiteFlex}>
                 <View style={general.view}>
                     <DashboardShell text="Verify Identity" navigation={this.props.navigation} />
-                    <View style={general.flexRow}>
-                      <Button close onPress={() => this.props.navigation.goBack()} />
-                      <View style={general.flex}/>
-                    </View>
+                    <BackButton onPress={() => this.props.navigation.goBack()} />
                 </View>
                 <KeyboardAvoidingView style={general.whiteFlex} behavior={'padding'} keyboardVerticalOffset={vertOffset} >
                     <ScrollView style={general.view} keyboardShouldPersistTaps="handled">

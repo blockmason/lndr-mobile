@@ -9,6 +9,7 @@ import { UserData } from 'lndr/user'
 import { bcptAmount, formatCommaDecimal, isEthAddress } from 'lndr/format'
 import { ERC20_Token } from 'lndr/erc-20'
 
+import BackButton from 'ui/components/back-button'
 import Button from 'ui/components/button'
 import Loading, { LoadingContext } from 'ui/components/loading'
 import DashboardShell from 'ui/components/dashboard-shell'
@@ -137,10 +138,7 @@ class TransferERC20 extends Component<Props, State> {
       <View style={general.view}>
         <Loading context={loadingContext} />
         <DashboardShell text={accountManagement.sendERC20.transfer(tokenName)} navigation={this.props.navigation} />
-        <View style={general.flexRow}>
-          <Button close onPress={() => this.props.navigation.goBack()} />
-          <View style={general.flex}/>
-        </View>
+        <BackButton onPress={() => this.props.navigation.goBack()} />
       </View>
       <KeyboardAvoidingView style={general.whiteFlex} behavior={'padding'} keyboardVerticalOffset={vertOffset} >
         <ScrollView style={general.view} keyboardShouldPersistTaps='handled'>
