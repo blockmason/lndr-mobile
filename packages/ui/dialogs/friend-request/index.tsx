@@ -60,7 +60,7 @@ class FriendRequest extends Component<Props, State> {
       this.setState({ friend, isOutbound })
     }
   }
-  
+
   componentDidMount( ) {
     firebase.analytics().setCurrentScreen('friend-request', 'FriendRequest');
   }
@@ -101,7 +101,10 @@ class FriendRequest extends Component<Props, State> {
       <View style={general.view}>
         <DashboardShell text={pendingFriendRequestsLanguage.shell} navigation={this.props.navigation} />
         <Loading context={loadingContext} />
-        <Button close onPress={() => this.props.navigation.goBack(null)} />
+        <View style={general.flexRow}>
+          <Button close onPress={() => this.props.navigation.goBack()} />
+          <View style={general.flex}/>
+        </View>
       </View>
         <ScrollView style={general.view} keyboardShouldPersistTaps="always">
         <View style={general.centeredColumn}>

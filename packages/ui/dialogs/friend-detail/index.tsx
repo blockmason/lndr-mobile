@@ -167,7 +167,10 @@ class FriendDetail extends Component<Props, State> {
       <View style={general.view}>
         <DashboardShell text={friendShell} navigation={this.props.navigation} />
         <Loading context={loadingContext} />
-        <Button close onPress={this.goBack} />
+        <View style={general.flexRow}>
+          <Button close onPress={this.goBack} />
+          <View style={general.flex}/>
+        </View>
       </View>
       <ScrollView style={general.view}  keyboardShouldPersistTaps="always">
         <View style={general.centeredColumn}>

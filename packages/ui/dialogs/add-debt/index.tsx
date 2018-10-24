@@ -251,7 +251,10 @@ class AddDebt extends Component<Props, State> {
     return <View style={general.whiteFlex}>
       <View style={general.view}>
         <DashboardShell text={debtManagement.shell} navigation={this.props.navigation} />
-        <Button close onPress={() => this.cancel()} />
+        <View style={general.flexRow}>
+          <Button close onPress={() => this.cancel()} />
+          <View style={general.flex}/>
+        </View>
       </View>
       <KeyboardAvoidingView style={general.whiteFlex} behavior={'padding'} keyboardVerticalOffset={vertOffset} >
         <ScrollView style={general.view} keyboardShouldPersistTaps='handled'>
@@ -322,5 +325,5 @@ class AddDebt extends Component<Props, State> {
 
 export default connect((state) => ({ state: getStore(state)(), pendingTransactions: pendingTransactions(state),
   recentTransactions: recentTransactions(state), allCurrencies: getAllUcacCurrencies(state), primaryCurrency: getPrimaryCurrency(state),
-   hasPendingTransaction: hasPendingTransaction(state), 
+   hasPendingTransaction: hasPendingTransaction(state),
    getPendingFromFriend: getPendingFromFriend(state) }), { addDebt, getFriends, hasPendingMessage })(AddDebt)

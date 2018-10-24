@@ -533,7 +533,10 @@ class MyAccount extends Component<Props, State> {
       return <View style={general.whiteFlex}>
         <View style={general.view}>
           <DashboardShell text={myAccount} navigation={this.props.navigation} hideSettings />
-          <Button close onPress={() => this.props.navigation.goBack()} />
+          <View style={general.flexRow}>
+            <Button close onPress={() => this.props.navigation.goBack()} />
+            <View style={general.flex}/>
+          </View>
         </View>
         <KeyboardAvoidingView style={general.whiteFlex} behavior={'padding'} keyboardVerticalOffset={vertOffset} >
           <ScrollView ref='scrollContent' style={general.view} onScroll={event => this.handleScroll(event)} scrollEventThrottle={50} keyboardShouldPersistTaps='handled'>

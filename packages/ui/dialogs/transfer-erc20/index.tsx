@@ -137,7 +137,10 @@ class TransferERC20 extends Component<Props, State> {
       <View style={general.view}>
         <Loading context={loadingContext} />
         <DashboardShell text={accountManagement.sendERC20.transfer(tokenName)} navigation={this.props.navigation} />
-        <Button close onPress={() => this.props.navigation.goBack()} />
+        <View style={general.flexRow}>
+          <Button close onPress={() => this.props.navigation.goBack()} />
+          <View style={general.flex}/>
+        </View>
       </View>
       <KeyboardAvoidingView style={general.whiteFlex} behavior={'padding'} keyboardVerticalOffset={vertOffset} >
         <ScrollView style={general.view} keyboardShouldPersistTaps='handled'>

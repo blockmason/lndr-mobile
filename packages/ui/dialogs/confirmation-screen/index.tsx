@@ -117,7 +117,10 @@ class ConfirmationScreen extends Component<Props, State> {
     return <View style={general.whiteFlex}>
       <View style={general.view}>
         <DashboardShell text={confirmation.shell} navigation={this.props.navigation} />
-        <Button close onPress={() => this.goHome()} />
+        <View style={general.flexRow}>
+          <Button close onPress={() => this.goHome()} />
+          <View style={general.flex}/>
+        </View>
       </View>
       <ScrollView style={[general.whiteFlex]} keyboardShouldPersistTaps="always">
         <View style={[general.centeredColumn, general.standardHMargin]}>

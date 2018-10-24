@@ -462,7 +462,10 @@ class Settlement extends Component<Props, State> {
     return <View style={general.whiteFlex}>
       <View style={general.view}>
         <DashboardShell text={debtManagement.settleUpLower} navigation={this.props.navigation} />
-        <Button close onPress={() => this.props.navigation.goBack()} />
+        <View style={general.flexRow}>
+          <Button close onPress={() => this.props.navigation.goBack()} />
+          <View style={general.flex}/>
+        </View>
       </View>
       <KeyboardAvoidingView style={general.whiteFlex} behavior={'padding'} keyboardVerticalOffset={vertOffset} >
         <ScrollView style={general.view} keyboardShouldPersistTaps='handled'>

@@ -161,7 +161,10 @@ class TransferEth extends Component<Props, State> {
       <View style={general.view}>
         <Loading context={sendingEthLoader} />
         <DashboardShell text={accountManagement.sendEth.transferLowercase} navigation={this.props.navigation} />
-        <Button close onPress={() => this.props.navigation.goBack()} />
+        <View style={general.flexRow}>
+          <Button close onPress={() => this.props.navigation.goBack()} />
+          <View style={general.flex}/>
+        </View>
       </View>
       <KeyboardAvoidingView style={general.whiteFlex} behavior={Platform.OS === 'ios' ? 'padding' : 'position'} keyboardVerticalOffset={-200} >
         <ScrollView style={general.view} keyboardShouldPersistTaps='handled'>
