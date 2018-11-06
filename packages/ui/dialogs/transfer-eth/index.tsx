@@ -38,6 +38,7 @@ interface Props {
   primaryCurrency: string
   ethExchange: (currency: string) => string
   sendEth: (address: string, amount: string) => any
+  getStore: () => any
 }
 
 interface State {
@@ -62,7 +63,7 @@ class TransferEth extends Component<Props, State> {
   async componentWillMount() {
     const { primaryCurrency, user } = this.props
     const txCost = await getTransactionCost('eth', primaryCurrency)
-    const transferLimitLevel = await getTransferLimitLevel(user.address, getStore(this.state))
+    const transferLimitLevel = await getTransferLimitLevel(user.address, this.props.getStore())
 
     this.setState({ txCost, transferLimitLevel })
   }
@@ -73,7 +74,7 @@ class TransferEth extends Component<Props, State> {
 
   async submit() {
     const { amount, address, transferLimitLevel } = this.state
-    const { primaryCurrency } = this.props
+    const { primaryCurrency, ethExchange, ethSentPastWeek } = this.props
 
     if (!address || !this.validAddress()) {
       this.setState({ formInputError: accountManagement.sendEth.error.address })
@@ -83,7 +84,7 @@ class TransferEth extends Component<Props, State> {
       return
     }
 
-    if (exceedsTransferLimit(Number(amount), transferLimitLevel, this.state)) {
+    if (exceedsTransferLimit(Number(amount), transferLimitLevel, ethExchange(primaryCurrency), ethSentPastWeek)) {
       this.setState({ formInputError: accountManagement.sendEth.error.limitExceeded(primaryCurrency, transferLimitLevel) })
       return
     }
@@ -210,5 +211,4 @@ class TransferEth extends Component<Props, State> {
 }
 
 export default connect((state) => ({ user: getUser(state)(), ethBalance: getEthBalance(state), ethExchange: getEthExchange(state),
-  ethSentPastWeek: getWeeklyEthTotal(state), primaryCurrency: getPrimaryCurrency(state) })
-  , { sendEth })(TransferEth)
+  ethSentPastWeek: getWeeklyEthTotal(state), primaryCurrency: getPrimaryCurrency(state), getStore: getStore(state) }), { sendEth })(TransferEth)

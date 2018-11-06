@@ -74,6 +74,7 @@ interface Props {
   getUcacCurrency: (ucac: string) => string
   cancelPayPalRequestFail: () => void
   getVerificationStatus: () => void
+  getStore: () => any
 }
 
 interface State {
@@ -126,7 +127,7 @@ class Settlement extends Component<Props, State> {
     const amount = (this.state.balance) ? formatSettlementAmount(String(Math.abs(this.state.balance)), primaryCurrency) : undefined
     this.updateTransactionCosts(settlementType, amount)
 
-    const transferLimitLevel = await getTransferLimitLevel(user.address, getStore(this.state))
+    const transferLimitLevel = await getTransferLimitLevel(user.address, this.props.getStore())
 
     this.setState({settlementType, friend, amount, pic, fromPayPalRequest, transferLimitLevel})
     unmounting = false
@@ -334,8 +335,8 @@ class Settlement extends Component<Props, State> {
     if (!this.isPayee()) {
       if (totalCryptoCost > Number(ethBalance))
         formInputError = accountManagement.sendEth.error.insufficient
-      else if (exceedsTransferLimit(Number(cleanAmount), this.state.transferLimitLevel, this.state))
-          formInputError = accountManagement.sendEth.error.limitExceeded(primaryCurrency, this.state.transferLimitLevel)
+      else if (exceedsTransferLimit(Number(cleanAmount), this.state.transferLimitLevel, ethExchange(primaryCurrency), ethSentPastWeek))
+        formInputError = accountManagement.sendEth.error.limitExceeded(primaryCurrency, this.state.transferLimitLevel)
     }
     if (!formInputError && hasPendingTransaction(friend) ) {
       formInputError = debtManagement.createError.pending
@@ -524,5 +525,6 @@ class Settlement extends Component<Props, State> {
 
 export default connect((state) => ({ user: getUser(state)(), ethBalance: getEthBalance(state), ethExchange: getEthExchange(state),
   recentTransactions: recentTransactions(state), ethSentPastWeek: getWeeklyEthTotal(state), hasPendingTransaction: hasPendingTransaction(state),
-  calculateBalance: calculateBalance(state), convertCurrency: convertCurrency(state), getUcacCurrency: getUcacCurrency(state), primaryCurrency: getPrimaryCurrency(state)}),
+  calculateBalance: calculateBalance(state), convertCurrency: convertCurrency(state), getUcacCurrency: getUcacCurrency(state), primaryCurrency: getPrimaryCurrency(state),
+  getStore: getStore(state)}),
   { addDebt, requestPayPalSettlement, cancelPayPalRequestFail })(Settlement)

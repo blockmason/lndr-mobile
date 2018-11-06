@@ -43,13 +43,13 @@ const sessionStorage = new Storage('session')
 const userStorage = new Storage('user')
 export const primaryCurrencyStorage = new Storage('primary-currency')
 
-const creditProtocol = new CreditProtocol('https://api.lndr.blockmason.io')
-// let creditProtocol
-// if (Platform.OS === 'ios' ) {
-//   creditProtocol = new CreditProtocol('http://localhost:7402')
-// } else {
-//   creditProtocol = new CreditProtocol('http://10.0.2.2:7402')
-// }
+// const creditProtocol = new CreditProtocol('https://api.lndr.blockmason.io')
+let creditProtocol
+if (Platform.OS === 'ios' ) {
+  creditProtocol = new CreditProtocol('http://localhost:7402')
+} else {
+  creditProtocol = new CreditProtocol('http://10.0.2.2:7402')
+}
 
 const GAS_TO_SEND_ERC20 = 65000
 const GAS_TO_SETTLE_WITH_ETH = 21000
@@ -128,7 +128,10 @@ export const getAccountInformation = () => {
     } catch (e) { console.log('ERROR GETTING NICKNAME: ', e) }
 
     try {
-      user.email = await creditProtocol.getEmail(user.address)
+      user.email = await creditProtocol.getEmail(user.address).then(data => {
+        console.log(data)
+        return data
+      })
     } catch (e) { console.log('ERROR GETTING EMAIL: ', e) }
 
     await userStorage.set(user)
@@ -463,7 +466,10 @@ export const getFriendRequests = () => {
     const rawPendingFriends = await creditProtocol.getFriendRequests(user.address)
     const pendingFriends = rawPendingFriends.map(jsonToPendingFriend)
 
-    const rawPendingOutboundFriends = await creditProtocol.getOutboundFriendRequests(user.address)
+    const rawPendingOutboundFriends = await creditProtocol.getOutboundFriendRequests(user.address).then(data => {
+      console.log(data)
+      return data
+    })
     const pendingOutboundFriends = rawPendingOutboundFriends.map(jsonToPendingFriend)
 
     dispatch(setState({ pendingFriends, pendingOutboundFriends, pendingFriendsLoaded: true }))
@@ -648,7 +654,7 @@ export const addDebt = (friend: Friend, amount: string, memo: string, direction:
       )
 
       const signature = creditRecord.sign(privateKeyBuffer)
-      await creditProtocol.submitCreditRecord(creditRecord, direction, signature, denomination)
+      await creditProtocol.submitCreditRecord(creditRecord, direction, signature, denomination).then(result => console.log('RESULT OF THE CALL', result))
 
       if(denomination === 'PAYPAL' && direction === 'borrow') {
         await creditProtocol.deletePayPalSettlementRequest(address, friend.address, privateKeyBuffer)
@@ -932,6 +938,7 @@ export const copyToClipboard = (text: string) => {
 }
 
 export const storeEthTransaction = async (dispatch, ethTx: object) => {
+  //TODO: modify this to calculate eth amount from ERC20 value
   const ethTransactions = await ethTransactionsStorage.get()
   if (!ethTransactions) {
     ethTransactionsStorage.set([ ethTx ])
@@ -944,7 +951,7 @@ export const storeEthTransaction = async (dispatch, ethTx: object) => {
 }
 
 export const getTransactionCost = async (settlementType: string, currency: string) => {
-  const gasNeeded = (settlementType == 'eth') ? GAS_TO_SETTLE_WITH_ETH : GAS_TO_SEND_ERC20
+  const gasNeeded = (settlementType.toUpperCase() === 'ETH') ? GAS_TO_SETTLE_WITH_ETH : GAS_TO_SEND_ERC20
   return creditProtocol.getTxCost(currency, gasNeeded)
 }
 
@@ -1023,29 +1030,53 @@ const settleBilateral = async (user, bilateralSettlements, dispatch, getState) =
   const gasPrice = await creditProtocol.getGasPrice()
   //Safe Low is in 10^8 Wei (deciGigaWei)
   const ethBalance = getState().store.ethBalance
+  console.log('lets do this')
 
   bilateralSettlements.forEach( async (settlement) => {
-    if (settlement.creditorAddress.indexOf(user.address) === -1 || settlement.txHash !== undefined) {
+    if (settlement.creditorAddress.indexOf(user.address) === -1 || !!settlement.txHash) {
       return
     }
+    console.log(1)
 
-    if ( Number(`${settlement.settlementAmount}`) > Number(web3.toWei(ethBalance, 'ether')) ) {
+    let insufficientFunds = false
+    if (settlement.settlementCurrency === 'ETH') {
+      insufficientFunds = Number(`${settlement.settlementAmount}`) > Number(web3.toWei(ethBalance, 'ether'))
+    } else {
+      //assumes ERC20 token
+      console.log(3)
+      const ERC20Token = getERC20_token(settlement.settlementCurrency)
+      const ERC20Balance = await ERC20Token.getBalance(user.address)
+      console.log(4, ERC20Balance)
+      insufficientFunds = Number(`${settlement.settlementAmount}`) > ( Number(ERC20Balance) * Math.pow(10, ERC20Token.decimals) )
+    }
+
+    if ( insufficientFunds ) {
       const debtorNickname = await getNicknameForAddress(settlement.debtorAddress)
       return dispatch(displayError(settlementManagement.bilateral.error.insufficient(debtorNickname)))
     }
+    console.log(5)
 
-    const ethTransaction = new ERC20_Transaction(settlement.creditorAddress, settlement.debtorAddress, settlement.settlementAmount, gasPrice, GAS_TO_SETTLE_WITH_ETH)
+    let ethTransaction
+    if (settlement.settlementCurrency === 'ETH') {
+      ethTransaction = new ERC20_Transaction(settlement.creditorAddress, settlement.debtorAddress, settlement.settlementAmount, gasPrice, GAS_TO_SETTLE_WITH_ETH)
+    } else {
+      console.log(6)
+      ethTransaction = new ERC20_Transaction(settlement.creditorAddress, settlement.debtorAddress, settlement.settlementAmount, gasPrice, GAS_TO_SEND_ERC20)
+    }
     try {
-      const txHash = await creditProtocol.settleWithEth(ethTransaction, user.privateKeyBuffer)
+      const txHash = await creditProtocol.settleWithEth(ethTransaction, user.privateKeyBuffer, settlement.settlementCurrency)
       if(settlement.multiSettlements !== undefined) {
         settlement.multiSettlements.map( async(hash) => await creditProtocol.storeSettlementHash(txHash, hash, settlement.creditorAddress, user.privateKeyBuffer) )
       } else {
         await creditProtocol.storeSettlementHash(txHash, settlement.hash, settlement.creditorAddress, user.privateKeyBuffer)
+        console.log(8)
       }
 
+      // TODO: change this to store any transaction
       storeEthTransaction(dispatch, {
         amount: ethTransaction.amount,
         user: ethTransaction.from,
+        currency: ethTransaction.currency,
         time: Date.now()
       })
     } catch (e) {
@@ -1070,7 +1101,6 @@ export const showPayPalSettlementError = (nickname: string) => {
 
 export const getVerificationStatus = () => {
   return async (dispatch, getState) => {
-    console.log('START')
     try {
       const { address, privateKeyBuffer } = getUser(getState())()
       const identityVerificationStatus = await creditProtocol.getKYCStatus(address, privateKeyBuffer)
@@ -1099,7 +1129,6 @@ export const getTransferLimitLevel = async (userAddress, store) => {
   return level
 }
 
-export const exceedsTransferLimit = (amount: number, transferLimitLevel: string, state) => {
-  const primaryCurrency = getPrimaryCurrency(state)
-  return (getWeeklyEthTotal(state) * Number(getEthExchange(state)(primaryCurrency)) + amount) > Number(transferLimits(primaryCurrency, transferLimitLevel))
+export const exceedsTransferLimit = (amount: number, transferLimitLevel: string, ethExchange: string, ethSentPastWeek: number) => {
+  return (ethSentPastWeek * Number(ethExchange) + amount) > Number(transferLimitLevel)
 }

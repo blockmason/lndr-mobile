@@ -59,6 +59,7 @@ interface Props {
   settlerIsMe: (pendingSettlement: PendingUnilateral) => boolean
   calculateBalance: (friend: Friend) => number
   getUcacCurrency: (ucac: string) => string
+  getStore: () => any
 }
 
 interface State {
@@ -81,7 +82,7 @@ class PendingSettlementDetail extends Component<Props, State> {
   async componentWillMount() {
     const { user, primaryCurrency } = this.props
 
-    const transferLimitLevel = await getTransferLimitLevel(this.props.user.address, getStore(this.state))
+    const transferLimitLevel = await getTransferLimitLevel(this.props.user.address, this.props.getStore())
     this.setState({transferLimitLevel})
 
     const txCost = await getTransactionCost('eth', primaryCurrency)
@@ -111,7 +112,7 @@ class PendingSettlementDetail extends Component<Props, State> {
     const settleTotal = multiSettlements !== undefined
     const formattedAmount = hasNoDecimals(this.props.getUcacCurrency(ucac)) ? amount : amount / 100
 
-    if ( (creditorAddress === user.address) && exceedsTransferLimit(formattedAmount, transferLimitLevel, this.state) ) {
+    if ( (creditorAddress === user.address) && exceedsTransferLimit(formattedAmount, transferLimitLevel, ethExchange(primaryCurrency), ethSentPastWeek) ) {
       this.setState({ confirmationError: accountManagement.sendEth.error.limitExceeded(primaryCurrency, transferLimitLevel) })
       return
     }
@@ -271,5 +272,5 @@ class PendingSettlementDetail extends Component<Props, State> {
 
 export default connect((state) => ({ user: getUser(state)(), settlerIsMe: settlerIsMe(state), ethExchange: getEthExchange(state),
   ethSentPastWeek: getWeeklyEthTotal(state), calculateBalance: calculateBalance(state), getUcacCurrency: getUcacCurrency(state),
-  primaryCurrency: getPrimaryCurrency(state), getFriendFromAddress: getFriendFromAddress(state) }),
+  primaryCurrency: getPrimaryCurrency(state), getFriendFromAddress: getFriendFromAddress(state), getStore: getStore(state) }),
   { addDebt, rejectPendingSettlement })(PendingSettlementDetail)
