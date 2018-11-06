@@ -20,8 +20,8 @@ import { ERC20_Transaction, WEI_PER_ETH, getERC20_token } from 'lndr/erc-20'
 import Tx from 'ethereumjs-tx'
 import Web3 from 'web3'
 
-// export const web3 = new Web3(new Web3.providers.HttpProvider('https://mainnet.infura.io/EoLr1OVfUMDqq3N2KaKA'))
-export const web3 = Platform.OS === 'ios' ? new Web3(new Web3.providers.HttpProvider('http://localhost:8545')) : new Web3(new Web3.providers.HttpProvider('http://10.0.2.2:8545'))
+export const web3 = new Web3(new Web3.providers.HttpProvider('https://mainnet.infura.io/EoLr1OVfUMDqq3N2KaKA'))
+// export const web3 = Platform.OS === 'ios' ? new Web3(new Web3.providers.HttpProvider('http://localhost:8545')) : new Web3(new Web3.providers.HttpProvider('http://10.0.2.2:8545'))
 
 export default class CreditProtocol {
   client: Client
@@ -315,7 +315,6 @@ export default class CreditProtocol {
   async settleWithEth(transaction: ERC20_Transaction, privateKeyBuffer: any, settlementCurrency) {
     // send using ERC20Token if not ETH
     if (!!settlementCurrency && settlementCurrency !== 'ETH') {
-      console.log(7)
       const ERC20 = getERC20_token(settlementCurrency)
       return ERC20.transfer(transaction, privateKeyBuffer)
     }
