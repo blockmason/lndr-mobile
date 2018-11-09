@@ -12,8 +12,9 @@ import RecentTransaction from 'lndr/recent-transaction'
 import PendingUnilateral from 'lndr/pending-unilateral'
 
 import Storage from 'lndr/storage'
-import { getEthBalance, web3 } from 'lndr/settlement'
+import { getEthBalance } from 'lndr/settlement'
 import { isTouchIdSupported } from 'lndr/touch-id'
+import web3 from 'lndr/web3-connection'
 
 import profilePic from 'lndr/profile-pic'
 import { getERC20_token, ERC20_Token, ERC20_Transaction } from 'lndr/erc-20'
@@ -43,12 +44,12 @@ const sessionStorage = new Storage('session')
 const userStorage = new Storage('user')
 export const primaryCurrencyStorage = new Storage('primary-currency')
 
-const creditProtocol = new CreditProtocol('https://api.lndr.blockmason.io')
+const creditProtocol = new CreditProtocol('https://api.lndr.io')
 // let creditProtocol
 // if (Platform.OS === 'ios' ) {
-//   creditProtocol = new CreditProtocol('http://localhost:7402')
+//   creditProtocol = new CreditProtocol('https://localhost:7402')
 // } else {
-//   creditProtocol = new CreditProtocol('http://10.0.2.2:7402')
+//   creditProtocol = new CreditProtocol('https://10.0.2.2:7402')
 // }
 
 const GAS_TO_SEND_ERC20 = 65000
@@ -799,7 +800,7 @@ export const sendEth = (destAddr: string, amount: string) => {
       const gasPrice = await creditProtocol.getGasPrice()
       const amountWei = Number(web3.toWei(Number(amount), 'ether'))
       const ethTransaction = new ERC20_Transaction(address, destAddr, amountWei, gasPrice, GAS_TO_SETTLE_WITH_ETH)
-      const txHash = await creditProtocol.settleWithEth(ethTransaction, privateKeyBuffer, 'ETH')
+      const txHash = await creditProtocol.settleWithERC20(ethTransaction, privateKeyBuffer, 'ETH')
       console.log('SENDING ETH, TXHASH:', txHash)
       storeEthTransaction(dispatch, {
         amount: ethTransaction.amount,
@@ -930,14 +931,13 @@ export const copyToClipboard = (text: string) => {
   }
 }
 
-export const storeEthTransaction = async (dispatch, ethTx: object) => {
-  //TODO: modify this to calculate eth amount from ERC20 value
+export const storeEthTransaction = async (dispatch, tx: object) => {
   const ethTransactions = await ethTransactionsStorage.get()
   if (!ethTransactions) {
-    ethTransactionsStorage.set([ ethTx ])
-    dispatch(setState({ ethTransactions: [ ethTx ] }))
+    ethTransactionsStorage.set([ tx ])
+    dispatch(setState({ ethTransactions: [ tx ] }))
   } else {
-    ethTransactions.push(ethTx)
+    ethTransactions.push(tx)
     await ethTransactionsStorage.set(ethTransactions)
     dispatch(setState({ ethTransactions }))
   }
@@ -1044,25 +1044,25 @@ const settleBilateral = async (user, bilateralSettlements, dispatch, getState) =
       return dispatch(displayError(settlementManagement.bilateral.error.insufficient(debtorNickname)))
     }
 
-    let ethTransaction
-    if (settlement.settlementCurrency === 'ETH') {
-      ethTransaction = new ERC20_Transaction(settlement.creditorAddress, settlement.debtorAddress, settlement.settlementAmount, gasPrice, GAS_TO_SETTLE_WITH_ETH)
-    } else {
-      ethTransaction = new ERC20_Transaction(settlement.creditorAddress, settlement.debtorAddress, settlement.settlementAmount, gasPrice, GAS_TO_SEND_ERC20)
-    }
+    const gasNeeded = (settlement.settlementCurrency.toUpperCase() === 'ETH') ? GAS_TO_SETTLE_WITH_ETH : GAS_TO_SEND_ERC20
+    const ethTransaction = new ERC20_Transaction(settlement.creditorAddress, settlement.debtorAddress, settlement.settlementAmount, gasPrice, gasNeeded)
+
     try {
-      const txHash = await creditProtocol.settleWithEth(ethTransaction, user.privateKeyBuffer, settlement.settlementCurrency)
+      const txHash = await creditProtocol.settleWithERC20(ethTransaction, user.privateKeyBuffer, settlement.settlementCurrency)
       if(settlement.multiSettlements !== undefined) {
         settlement.multiSettlements.map( async(hash) => await creditProtocol.storeSettlementHash(txHash, hash, settlement.creditorAddress, user.privateKeyBuffer) )
       } else {
         await creditProtocol.storeSettlementHash(txHash, settlement.hash, settlement.creditorAddress, user.privateKeyBuffer)
       }
 
-      // TODO: change this to store any transaction
+      let amountInEth = ethTransaction.amount
+      if (settlement.settlementCurrency === 'DAI') {
+        amountInEth = ethTransaction.amount / Number(getEthExchange(getState())('USD'))
+      }
+
       storeEthTransaction(dispatch, {
-        amount: ethTransaction.amount,
+        amount: amountInEth,
         user: ethTransaction.from,
-        currency: ethTransaction.currency,
         time: Date.now()
       })
     } catch (e) {
@@ -1115,6 +1115,6 @@ export const getTransferLimitLevel = async (userAddress, store) => {
   return level
 }
 
-export const exceedsTransferLimit = (amount: number, transferLimitLevel: string, ethExchange: string, ethSentPastWeek: number) => {
-  return (ethSentPastWeek * Number(ethExchange) + amount) > Number(transferLimitLevel)
+export const exceedsTransferLimit = (amount: number, transferLimit: string, ethExchange: string, ethSentPastWeek: number) => {
+  return (ethSentPastWeek * Number(ethExchange) + amount) > Number(transferLimit)
 }

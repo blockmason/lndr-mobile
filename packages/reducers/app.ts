@@ -109,7 +109,7 @@ export const payPalRequests = (state) : [PayPalRequest] => state.store.payPalReq
 export const getEthBalance = (state) : string => state.store.ethBalance
 
 export const getEthExchange = state => (currency: string) : string => {
-  return state.store.ethPrices[currency.toLowerCase()] === undefined ? '1000' : state.store.ethPrices[currency.toLowerCase()]
+  return state.store.ethPrices[currency.toLowerCase()] === undefined ? '200' : state.store.ethPrices[currency.toLowerCase()]
 }
 
 export const getEthPrices = (state) : object => state.store.ethPrices
