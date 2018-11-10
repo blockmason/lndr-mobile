@@ -394,7 +394,7 @@ export default {
     none: `You have no pending transactions`,
     confirmationQuestion: `Are you sure you want to confirm this transaction?`,
     pendingAnnouncement: `This transaction is waiting for confirmation by the other party.`,
-    bilateral: `Waiting on Eth transfer to complete`,
+    bilateral: `Waiting on transfer to complete`,
     confirm: `CONFIRM`,
     reject: `Reject Transaction`,
     rejectRequest: `Reject`,

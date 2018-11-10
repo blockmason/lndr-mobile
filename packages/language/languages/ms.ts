@@ -67,7 +67,7 @@ export default {
   errorTitle: `Ralat`,
   showMnemonic: `Tunjukkan Mnemonik 12 Perkataan`,
   mnemonicExhortation: `Frasa 12 perkataan ini diperlukan untuk memulihkan akaun anda, sila simpan ia di tempat selamat dan rahsia`,
-  addressExhortation: `Hantar Ethereum ke alamat anda supaya anda boleh menyelesaikan hutang di Lndr`,
+  addressExhortation: `Anda boleh menghantar ETH atau mana-mana disokong ERC-20 token alamat dompet anda.`,
   removeAccountTitle: `Adakah anda pasti anda mahu menghapuskan akaun anda dari peranti ini?`,
   removeAccountExhortation: `Pastikan anda mempunyai akses kepada mnemonik anda untuk memulihkan akaun anda kemudian, kerana ini adalah penghapusan kekal maklumat akaun anda dari peranti ini.`,
   myAccount: `Akaun Saya`,
@@ -180,8 +180,8 @@ export default {
     loadInformation: {
       error: generalCommunicationError
     },
-    ethBalance: {
-      display: Y => `Baki ETH anda adalah ${String(Y).slice(0,8)}`,
+    cryptoBalance: {
+      display: (N, B) => `Your ${N} balance is ${String(B).slice(0,8)}`,
       getError: `Tidak dapat mencari data baki ETH`,
       manage: `Uruskan ETH`,
     },
@@ -215,8 +215,8 @@ export default {
       tokenAddress: (name) => `Alamat ${name}`,
     },
     panelHeaders: [
-      `Wallet Address`, // <-- translate me
-      `Crypto Balances`, // <-- translate me
+      `Alamat Wallet`,
+      `Baki Akaun Crypto`,
       `Hapus Akaun`,
       `Sejarah Transaksi ETH`,
       `Membolehkan PayPal`,
@@ -239,10 +239,7 @@ export default {
     logoutError: generalCommunicationError,
   },
 
-  currentBalance: {
-    eth: `Baki ETH semasa anda ialah:`,
-    bcpt: `Baki BCPT semasa anda ialah:`,
-  },
+  currentBalance: name => `Baki semasa ${name} anda ialah`,
 
   welcomeView: {
     by: `DIBINA OLEH`,
@@ -374,6 +371,7 @@ export default {
       }
     },
     eth: `Selesaikan dengan ETH`,
+    erc20: name => `Settle with ${name}`,
     paypal: `Selesaikan dengan PayPal`,
     nonPayment: `Rekodkan Penyelesaian`,
     select: `Pilih Jenis Penyelesaian`,
@@ -400,7 +398,7 @@ export default {
     none: `Anda tidak mempunyai transaksi yang belum selesai`,
     confirmationQuestion: `Adakah anda pasti anda mahu mengesahkan urus niaga ini?`,
     pendingAnnouncement: `Urus niaga ini menunggu pengesahan pihak yang satu lagi.`,
-    bilateral: `Menunggu pemindahan ETH disempurnakan`,
+    bilateral: `Menunggu pemindahan disempurnakan`,
     confirm: `Sahkan Kata Laluan`,
     reject: `Tolak Transaksi`,
     rejectRequest: `Tolak`,
@@ -469,9 +467,9 @@ export default {
       start: `Anda telah berjaya menghantar `,
       end: ` ETH dan cincangan transaksi anda adalah `,
     },
-    bcptSent: {
+    erc20Sent: {
       start: `Anda telah berjaya menghantar `,
-      end: ` BCPT dan cincangan transaksi anda adalah `,
+      end: ` dan cincangan transaksi anda adalah `,
     },
     requestPayPalPayee: {
       start: `Kami telah biarkan `,

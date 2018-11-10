@@ -67,7 +67,7 @@ export default {
   errorTitle: `שגיאה`,
   showMnemonic: `להציג רמז בעל 12 מילים`,
   mnemonicExhortation: `ביטוי בעל 12 מילים זה נדרש כדי לשחזר את חשבונך, יש לשמור אותו במקום סודי ובטוח`,
-  addressExhortation: `לשלוח Ethereum לכתובת שלך, בכדי שתוכל להסדיר חובות ב Lndr`,
+  addressExhortation: `אתה יכול לשלוח ETH או כל אסימון ERC-20 נתמך לכתובת הארנק שלך.`,
   removeAccountTitle: `האם אתה בטוח שברצונך להסיר את חשבונך ממכשיר זה?`,
   removeAccountExhortation: `ודא שיש לך גישה לרמז שלך בכדי שתוכל לשחזר את חשבונך מאוחר יותר, שכן פרטי חשבונך יוסרו לצמיתות ממכשיר זה.`,
   myAccount: `החשבון שלי`,
@@ -180,8 +180,8 @@ export default {
     loadInformation: {
       error: generalCommunicationError
     },
-    ethBalance: {
-      display: Y => `${String(Y).slice(0,8)} שלך היא ETH -יתרת ה`,
+    cryptoBalance: {
+      display: (N, B) => `Your ${N} balance is ${String(B).slice(0,8)}`,
       getError: `לא ניתן לאחזר את יתרת Eth`,
       manage: `ניהול ETH`,
     },
@@ -215,8 +215,8 @@ export default {
       tokenAddress: (name) => `כתובת ${name}`,
     },
     panelHeaders: [
-      `Wallet Address`, // <-- translate me
-      `Crypto Balances`, // <-- translate me
+      `כתובת ארנק`,
+      `יתרות האנוסים`,
       `להסיר חשבון`,
       `היסטוריית עסקאות ETH`,
       `הפוך את PayPal`,
@@ -239,10 +239,7 @@ export default {
     logoutError: generalCommunicationError,
   },
 
-  currentBalance: {
-    eth: `יתרת ה-Eth הנוכחית שלך היא:`,
-    bcpt: `יתרת ה-BCPT הנוכחית שלך היא:`,
-  },
+  currentBalance: name => `שלך היא ${name} -יתרת ה`,
 
   welcomeView: {
     by: `נוצר ע"י`,
@@ -374,6 +371,7 @@ export default {
       }
     },
     eth: `החזרה בעזרת ETH`,
+    erc20: name => `Settle with ${name}`,
     paypal: `החזרה בעזרת PayPal`,
     nonPayment: `לרשום הסדר`,
     select: `סוג היישוב בחר`,
@@ -400,7 +398,7 @@ export default {
     none: `אין לך עסקאות ממתינות`,
     confirmationQuestion: `האם אתה בטוח שברצונך לאשר עסקה זו?`,
     pendingAnnouncement: `עסקה זו מחכה לאישור על ידי הצד השני.`,
-    bilateral: `ממתין עד שהעברת Eth תסתיים`,
+    bilateral: `ממתין עד שהעברת  תסתיים`,
     confirm: `לאשר`,
     reject: `לדחות עסקה`,
     rejectRequest: `לדחות`,
@@ -469,8 +467,8 @@ export default {
       start: `שלחת ETH `,
       end: ` בהצלחה ומספר העסקה שלך הוא`,
     },
-    bcptSent: {
-      start: `שלחת BCPT `,
+    erc20Sent: {
+      start: `שלחת  `,
       end: `בהצלחה ומספר העסקה שלך הוא `,
     },
     requestPayPalPayee: {

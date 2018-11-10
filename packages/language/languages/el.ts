@@ -67,7 +67,7 @@ export default {
   errorTitle: `Σφάλμα`,
   showMnemonic: `Εμφάνιση Μνημονικού 12 Λέξεων`,
   mnemonicExhortation: `Αυτή η φράση 12 λέξεων είναι απαραίτητη για την αποκατάσταση του λογαριασμού σας, παρακαλούμε κρατήστε την σε ασφαλές μέρος και μυστική`,
-  addressExhortation: `Αποστολή Ethereum στη διεύθυνσή σας, ώστε να μπορείτε να εξοφλήσετε όσα οφείλετε στο Lndr`,
+  addressExhortation: `Μπορείτε να στείλετε ETH ή οποιοδήποτε υποστηρίζεται ERC-20 κουπόνι για τη διεύθυνση πορτοφόλι σας.`,
   removeAccountTitle: `Είστε βέβαιοι ότι θέλετε να καταργήσετε το λογαριασμό σας από αυτήν τη συσκευή;`,
   removeAccountExhortation: `Βεβαιωθείτε ότι έχετε πρόσβαση στο μνημονικό σας για να επαναφέρετε το λογαριασμό σας αργότερα, καθώς πρόκειται για μόνιμη αφαίρεση των στοιχείων του λογαριασμού σας από αυτήν τη συσκευή.`,
   myAccount: `Ο Λογαριασμός μου`,
@@ -180,8 +180,8 @@ export default {
     loadInformation: {
       error: generalCommunicationError
     },
-    ethBalance: {
-      display: Y => `Το υπόλοιπο ETH σας είναι ${String(Y).slice (0,8)}`,
+    cryptoBalance: {
+      display: (N, B) => `Your ${N} balance is ${String(B).slice(0,8)}`,
       getError: `Αδυναμία ενημέρωσης υπολοίπου Eth`,
       manage: `Διαχείριση ETH`,
     },
@@ -215,8 +215,8 @@ export default {
       tokenAddress: (name) => `Διεύθυνση ${name}`,
     },
     panelHeaders: [
-      `Wallet Address`, // <-- translate me
-      `Crypto Balances`, // <-- translate me
+      `Πορτοφόλι Διεύθυνση`,
+      `Crypto Υπόλοιπα`,
       `Yπόλοιπο BCPT`,
       `Κατάργηση Λογαριασμού`,
       `Ιστορικό Συναλλαγών ETH`,
@@ -240,10 +240,7 @@ export default {
     logoutError: generalCommunicationError,
   },
 
-  currentBalance: {
-    eth: `Το τρέχον υπόλοιπό σας Eth είναι:`,
-    bcpt: `Το τρέχον υπόλοιπό σας BCPT είναι:`,
-  },
+  currentBalance: name => `Το τρέχον υπόλοιπο ${name} σας είναι`,
 
   welcomeView: {
     by: `ΚΑΤΑΣΚΕYΑΣΜΕΝΟ ΑΠΟ`,
@@ -375,6 +372,7 @@ export default {
       }
     },
     eth: `Διακανονισμός Με ETH`,
+    erc20: name => `Settle with ${name}`,
     paypal: `Διακανονισμός Με PayPal`,
     nonPayment: `Καταγράψτε έναν Διακανονισμό`,
     select: `Επιλογή τύπου Οικισμός`,
@@ -401,7 +399,7 @@ export default {
     none: `Δεν διαθέτετε εκκρεμείς συναλλαγές`,
     confirmationQuestion: `Σίγουρα θέλετε να επιβεβαιώσει αυτή τη συναλλαγή;`,
     pendingAnnouncement: `Η συναλλαγή αυτή βρίσκεται σε αναμονή προς επιβεβαίωση από το άλλο μέρος.`,
-    bilateral: `Αναμονή μεταφοράς Eth για ολοκλήρωση`,
+    bilateral: `Αναμονή μεταφοράς για ολοκλήρωση`,
     confirm: `Επιβεβαίωση`,
     reject: `Απόρριψη Συναλλαγής`,
     rejectRequest: `Απόρριψη`,
@@ -470,9 +468,9 @@ export default {
       start: `Έχετε στείλει με επιτυχία `,
       end: ` ETH και το hash της συναλλαγής σας είναι `,
     },
-    bcptSent: {
+    erc20Sent: {
       start: `Έχετε στείλει με επιτυχία `,
-      end: ` BCPT και το hash της συναλλαγής σας είναι `,
+      end: ` και το hash της συναλλαγής σας είναι `,
     },
     requestPayPalPayee: {
       start: `Έχουμε αφήσει `,

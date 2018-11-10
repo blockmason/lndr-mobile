@@ -66,7 +66,7 @@ export default {
   errorTitle: `エラー`,
   showMnemonic: `12個の復元用の単語を表示`,
   mnemonicExhortation: `この12個の単語はアカウントを復元する時に使用します。大切に保管しておいてください。`,
-  addressExhortation: `Lndrで貸し借りの帳消しをするため、あなたのアドレスにイーサリアムを送る`,
+  addressExhortation: `あなたの財布のアドレスにETHまたはサポートされている任意のERC-20トークンを送信することができます。`,
   removeAccountTitle: `本当にアカウントをこのデバイスから削除しますか？`,
   removeAccountExhortation: `ニューモニックが保管されていることを確認してください。さもないと、デバイスから永久にあなたのデータが消去され復元できません。`,
   myAccount: `自分のアカウント`,
@@ -179,8 +179,8 @@ export default {
     loadInformation: {
       error: generalCommunicationError
     },
-    ethBalance: {
-      display: Y => `あなたのETH残高は${String(Y).slice(0,8)}です`,
+    cryptoBalance: {
+      display: (N, B) => `Your ${N} balance is ${String(B).slice(0,8)}`,
       getError: `ETHの受けとりに失敗しました`,
       manage: `ETHの管理`,
     },
@@ -214,8 +214,8 @@ export default {
       tokenAddress: (name) => `${name}アドレス`,
     },
     panelHeaders: [
-      `Wallet Address`, // <-- translate me
-      `Crypto Balances`, // <-- translate me
+      `ウォレット住所`,
+      `暗号残高`,
       `アカウントを削除する`,
       `ETHの取引履歴`,
       `ペイパルを接続します`,
@@ -238,10 +238,7 @@ export default {
     logoutError: generalCommunicationError,
   },
 
-  currentBalance: {
-    eth: `現在のETH残高：`,
-    bcpt: `現在のBCPT残高：`,
-  },
+  currentBalance: name => `現在の${name}残高は`,
 
   welcomeView: {
     by: `BUILT BY`,
@@ -375,6 +372,7 @@ export default {
       }
     },
     eth: `ETHで決済`,
+    erc20: name => `Settle with ${name}`,
     paypal: `PayPalで決済`,
     nonPayment: `決済を記録する`,
     select: `決済タイプを選択します`,
@@ -401,7 +399,7 @@ export default {
     none: `承認待ちの取引はありません`,
     confirmationQuestion: `本当にこの取引を承認しますか？`,
     pendingAnnouncement: `この取引は相手の承認待ちです`,
-    bilateral: `ETHの送金が完了するのを待っています`,
+    bilateral: `送金が完了するのを待っています`,
     confirm: `確定する`,
     reject: `取引を拒否する`,
     rejectRequest: `拒否する`,
@@ -470,8 +468,8 @@ export default {
       start: `ETHを送信するのに成功しました。あなたのトランザクション・ハッシュは`,
       end: `です`,
     },
-    bcptSent: {
-      start: `BCPTを送信するのに成功しました。あなたのトランザクション・ハッシュは`,
+    erc20Sent: {
+      start: `を送信するのに成功しました。あなたのトランザクション・ハッシュは`,
       end: `です`,
     },
     requestPayPalPayee: {

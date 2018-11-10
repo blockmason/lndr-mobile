@@ -67,7 +67,7 @@ export default {
   errorTitle: `Terjadi kesalahan`,
   showMnemonic: `Tampilkan 12 kata frasa pemulih akun`,
   mnemonicExhortation: `Frasa 12 kata ini dibutuhkan untuk memulihkan akun Anda. Simpan di tempat yang aman dan rahasia.`,
-  addressExhortation: `Kirim Ethereum ke alamat Anda agar Anda dapat melunasi utang di Lndr.`,
+  addressExhortation: `Anda dapat mengirim ETH atau didukung ERC-20 token untuk alamat dompet Anda.`,
   removeAccountTitle: `Anda yakin ingin menghapus akun Anda dari perangkat ini?`,
   removeAccountExhortation: `Pastikan Anda memiliki akses ke frasa pemulih akun untuk memulihkan akun Anda nanti karena penghapusan informasi akun Anda dari perangkat ini bersifat permanen.`,
   myAccount: `Akun Saya`,
@@ -180,8 +180,8 @@ export default {
     loadInformation: {
       error: generalCommunicationError
     },
-    ethBalance: {
-      display: Y => `Saldo ETH Anda adalah ${String(Y).slice(0,8)}.`,
+    cryptoBalance: {
+      display: (N, B) => `Your ${N} balance is ${String(B).slice(0,8)}`,
       getError: `Tidak dapat memuat saldo ETH`,
       manage: `Kelola ETH`,
     },
@@ -215,8 +215,8 @@ export default {
       tokenAddress: (name) => `Alamat ${name}`,
     },
     panelHeaders: [
-      `Wallet Address`, // <-- translate me
-      `Crypto Balances`, // <-- translate me
+      `Dompet Alamat`,
+      `Saldo kripto`,
       `Hapus Akun`,
       `Riwayat Transaksi ETH`,
       `Aktifkan PayPal`,
@@ -239,10 +239,7 @@ export default {
     logoutError: generalCommunicationError,
   },
 
-  currentBalance: {
-    eth: `Saldo ETH Anda saat ini:`,
-    bcpt: `Saldo BCPT Anda saat ini:`,
-  },
+  currentBalance: name => `Saldo ${name} Anda saat ini adalah`,
 
   welcomeView: {
     by: `DIBUAT OLEH`,
@@ -374,6 +371,7 @@ export default {
       }
     },
     eth: `Lunasi dengan ETH`,
+    erc20: name => `Settle with ${name}`,
     paypal: `Lunasi dengan PayPal`,
     nonPayment: `Catat Pelunasan`,
     select: `Pilih Settlement Jenis`,
@@ -400,7 +398,7 @@ export default {
     none: `Anda tidak memiliki transaksi tertunda.`,
     confirmationQuestion: `Anda yakin ingin mengonfirmasi transaksi ini?`,
     pendingAnnouncement: `Transaksi ini menunggu konfirmasi dari pihak lain.`,
-    bilateral: `Menunggu transfer ETH selesai`,
+    bilateral: `Menunggu transfer selesai`,
     confirm: `Konfirmasi`,
     reject: `Tolak Transaksi`,
     rejectRequest: `Tolak`,
@@ -469,9 +467,9 @@ export default {
       start: `Anda berhasil mengirimkan `,
       end: ` ETH, dan hash transaksi Anda adalah `,
     },
-    bcptSent: {
+    erc20Sent: {
       start: `Anda berhasil mengirimkan `,
-      end: ` BCPT, dan hash transaksi Anda adalah `,
+      end: `, dan hash transaksi Anda adalah `,
     },
     requestPayPalPayee: {
       start: `Kami telah membiarkan `,

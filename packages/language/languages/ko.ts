@@ -68,7 +68,7 @@ export default {
   errorTitle: `에러`,
   showMnemonic: `12자 연상기호 보이기`,
   mnemonicExhortation: `해당 12자 기호는 계정 복구 시 필요함으로 반드시 안전한 곳에 저장하세요`,
-  addressExhortation: `Lndr에서 빚을 갚기 위해 이더리움을 내 주소로 보내기`,
+  addressExhortation: `당신은 당신의 지갑 주소로 ETH 또는 지원 ERC-20 토큰을 보낼 수 있습니다.`,
   removeAccountTitle: `기기로부터 계정을 정말 삭제하시겠습니까?`,
   removeAccountExhortation: `향후 계정을 복구할 시 입력할 연상 기호를 인지해야 합니다.`,
   myAccount: `나의 계정`,
@@ -181,8 +181,8 @@ export default {
     loadInformation: {
       error: generalCommunicationError
     },
-    ethBalance: {
-      display: balance => `당신의 이더리움 잔액은 ${String(balance).slice(0,8)} `,
+    cryptoBalance: {
+      display: (N, B) => `Your ${N} balance is ${String(B).slice(0,8)}`,
       getError: `이더리움 잔액내역을 불러오지 못했습니다`,
       manage: `이더리움 관리`,
     },
@@ -216,8 +216,8 @@ export default {
       tokenAddress: (name) => `${name} 주소`,
     },
     panelHeaders: [
-      `Wallet Address`, // <-- translate me
-      `Crypto Balances`, // <-- translate me
+      `지갑 주소`,
+      `암호화 계정 잔액`,
       `계정 삭제`,
       `이더리움 거래 내역`,
       `차 환율 변경`,
@@ -240,10 +240,7 @@ export default {
     logoutError: generalCommunicationError,
   },
 
-    currentBalance: {
-    eth: `당신의 현재 이더리움 잔액은:`,
-    bcpt: `당신의 현재 BCPT 잔액은:`,
-  },
+    currentBalance: name => `당신의 현재 ${name} 잔액은`,
 
     welcomeView: {
     by: `BUILT BY`,
@@ -375,6 +372,7 @@ export default {
       }
     },
     eth: `이더리움으로 청산하기`,
+    erc20: name => `Settle with ${name}`,
     paypal: `PayPal 청산하기`,
     nonPayment: `청산내역 기록하기`,
     select: `선택 결제 유형`,
@@ -401,7 +399,7 @@ export default {
     none: `계류중인 트랜잭션 내역이 없습니다`,
     confirmationQuestion: `해당 거래를 정말 진행하시겠습니까?`,
     pendingAnnouncement: `해당 거래는 제3자로부터 인증절차를 기다리고 있는 상태입니다.`,
-    bilateral: `ETH 송금을 기다리는 중입니다`,
+    bilateral: `송금을 기다리는 중입니다`,
     confirm: `인증`,
     reject: `트랜잭션 거부`,
     rejectRequest: `거부`,
@@ -470,9 +468,9 @@ export default {
       start: "성공적으로 보냈습니다 ",
       end: " 이더리움과 당신의 거래는 "
     },
-    bcptSent: {
+    erc20Sent: {
       start: "성공적으로 보냈습니다 ",
-      end: " BCPT 당신의 거래는 "
+      end: " 당신의 거래는 "
     },
     requestPayPalPayee: {
       start: `우리는 `,

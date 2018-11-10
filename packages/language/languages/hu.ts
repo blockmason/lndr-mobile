@@ -67,7 +67,7 @@ export default {
   errorTitle: `Hiba`,
   showMnemonic: `Jelenítse Meg A 12 Szavas Emlékeztetőt`,
   mnemonicExhortation: `Fiókja visszaállításához erre a 12 szavas mondatra van szüksége, kérjük tárolja biztonságos és titkos helyen.`,
-  addressExhortation: `Ahhoz, hogy a Lndr segítségével rendezhesse tartozásait, küldje el címére az Ethereumot.`,
+  addressExhortation: `Akkor küldje ETH vagy bármely támogatott ERC-20 tokent a pénztárca címet.`,
   removeAccountTitle: `Biztos, hogy el szeretné távolítani fiókját erről az eszközről?`,
   removeAccountExhortation: `Ügyeljen arra, hogy később hozzá tudjon férni emlékeztetőjéhez, mivel Fiókadatai erről az eszközről végleges törlésre kerülnek.`,
   myAccount: `Saját Fiók`,
@@ -180,8 +180,8 @@ export default {
     loadInformation: {
       error: generalCommunicationError
     },
-    ethBalance: {
-      display: Y => `ETH egyenlege ${String (Y) .slice (0,8)}`,
+    cryptoBalance: {
+      display: (N, B) => `Your ${N} balance is ${String(B).slice(0,8)}`,
       getError: `Az Eth egyenleg lekérdezése nem sikerült`,
       manage: `ETH KEZELÉSE`,
     },
@@ -215,8 +215,8 @@ export default {
       tokenAddress: (name) => `${name} Cím`,
     },
     panelHeaders: [
-      `Wallet Address`, // <-- translate me
-      `Crypto Balances`, // <-- translate me
+      `Wallet Cím`,
+      `Crypto mérlegek`,
       `Fiók Törlése`,
       `ETH Tranzakció Előzmények`,
       `Engedélyezze a PayPalt`,
@@ -239,10 +239,7 @@ export default {
     logoutError: generalCommunicationError,
   },
 
-  currentBalance: {
-    eth: `Aktuális Eth egyenlege:`,
-    bcpt: `Aktuális BCPT egyenlege:`,
-  },
+  currentBalance: name => `Jelenlegi ${name} egyenlege`,
 
   welcomeView: {
     by: `KÉSZÍTETTE`,
@@ -374,6 +371,7 @@ export default {
       }
     },
     eth: `Kiegyenlítés ETH használatával`,
+    erc20: name => `Settle with ${name}`,
     paypal: `Kiegyenlítés PayPal használatával`,
     nonPayment: `Kifizetés Rögzítése`,
     select: `Kiválasztás település típusa`,
@@ -400,7 +398,7 @@ export default {
     none: `Nincsenek függőben lévő tranzakciói`,
     confirmationQuestion: `Biztos, hogy szeretné megerősíteni ezt a tranzakciót?`,
     pendingAnnouncement: `Ez a tranzakció a másik fél megerősítésére vár.`,
-    bilateral: `Várakozás Eth átutalás befejezéséhez`,
+    bilateral: `Várakozás átutalás befejezéséhez`,
     confirm: `Megerősítés`,
     reject: `Tranzakció Elutasítása`,
     rejectRequest: `Elutasítás`,
@@ -469,9 +467,9 @@ export default {
       start: `Sikeresen elküldött `,
       end: ` ETH-t, és a tranzakciós hash `,
     },
-    bcptSent: {
+    erc20Sent: {
       start: `Sikeresen elküldött `,
-      end: ` BCPT-t, és a tranzakciós hash `,
+      end: ` -t, és a tranzakciós hash `,
     },
     requestPayPalPayee: {
       start: `Már hagyja `,

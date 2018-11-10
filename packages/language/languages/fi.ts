@@ -67,7 +67,7 @@ export default {
   errorTitle: `Virhe`,
   showMnemonic: `Näytä 12-sanainen muistisääntö`,
   mnemonicExhortation: `Sinulta vaaditaan tämä 12-sanainen lause, kun haluat palauttaa tilisi - pidä se turvassa ja salassa muilta`,
-  addressExhortation: `Lähetä Ethereum osoitteeseesi, jotta voit maksaa velkasi Lndr-sovelluksessa`,
+  addressExhortation: `Voit lähettää ETH tai tuettuja ERC-20 poletin lompakon osoite.`,
   removeAccountTitle: `Oletko varma, että haluat poistaa tilisi tältä laitteelta?`,
   removeAccountExhortation: `Varmista, että sinulla on pääsy muistisääntöön joka tarvitaan tilisi palauttamiseksi, sillä tämä toiminto poistaa tilisi pysyvästi  tältä laitteelta.`,
   myAccount: `Tilini`,
@@ -180,8 +180,8 @@ export default {
     loadInformation: {
       error: generalCommunicationError
     },
-    ethBalance: {
-      display: Y => `ETH-saldosi on ${String (Y) .slice (0,8)}`,
+    cryptoBalance: {
+      display: (N, B) => `Your ${N} balance is ${String(B).slice(0,8)}`,
       getError: `Emme pystyneet hakea Eth-saldoa`,
       manage: `Hallitse ETH:ta`,
     },
@@ -215,8 +215,8 @@ export default {
       tokenAddress: (name) => `${name}-Osoite`,
     },
     panelHeaders: [
-      `Wallet Address`, // <-- translate me
-      `Crypto Balances`, // <-- translate me
+      `Lompakko Osoite`,
+      `Crypto saldot`,
       `Poista tili`,
       `ETH-tapahtumahistoria`,
       `Ota PayPal`,
@@ -239,10 +239,7 @@ export default {
     logoutError: generalCommunicationError,
   },
 
-  currentBalance: {
-    eth: `Nykyinen Eth-saldosi on:`,
-    bcpt: `Nykyinen BCPT-saldosi on:`,
-  },
+  currentBalance: name => `Nykyinen ${name}-saldosi on`,
 
   welcomeView: {
     by: `TEKIJÄ:`,
@@ -373,8 +370,9 @@ export default {
         generic: X => `Tapahtui virhe, kun yritit maksaa velkasi ${X}:lle`
       }
     },
-    eth: `Maksa velkasi ETH:lla`,
-    paypal: `Maksa velkasi PAYPAL:lla`,
+    eth: `Maksa velkasi ETHlla:`,
+    erc20: name => `Settle with ${name}`,
+    paypal: `Maksa velkasi PAYPALlla:`,
     nonPayment: `Kirjaa maksu`,
     select: `Valitse maksujen tyyppi`,
   },
@@ -400,7 +398,7 @@ export default {
     none: `Sinulla ei ole odotustilassa olevia tapahtumia`,
     confirmationQuestion: `Oletko varma, että haluat vahvistaa tämän tapahtuman?`,
     pendingAnnouncement: `Toinen osapuoli odottaa tämän tapahtuman vahvistusta.`,
-    bilateral: `Odotetaan, että Eth-siirto on saatu loppuun`,
+    bilateral: `Odotetaan, että siirto on saatu loppuun`,
     confirm: `Vahvista`,
     reject: `Hylkää tapahtuma`,
     rejectRequest: `Hylkää`,
@@ -469,9 +467,9 @@ export default {
       start: `Olet onnistuneesti lähettänyt `,
       end: ` ETH:ta ja tapahtumasi tunnusnumero on `,
     },
-    bcptSent: {
+    erc20Sent: {
       start: `Olet onnistuneesti lähettänyt `,
-      end: ` BCPT:tä ja tapahtumasi tunnusnumero on `,
+      end: `:tä ja tapahtumasi tunnusnumero on `,
     },
     requestPayPalPayee: {
       start: `Olemme ilmoittaneet `,

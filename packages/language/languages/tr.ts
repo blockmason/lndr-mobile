@@ -67,7 +67,7 @@ export default {
   errorTitle: `Hata`,
   showMnemonic: `12-Kelimelik Anımsatıcı Kodu göster`,
   mnemonicExhortation: `Bu 12 kelimelik öbek hesabınızı kurtarmak için gereklidir, lütfen gizli ve güvenli bir yerde saklayın.`,
-  addressExhortation: `Lndr üzerindeki borçları kapatmak için adresinize Ethereum gönderin`,
+  addressExhortation: `Eğer cüzdan adresine ETH yada herhangi bir desteklenen ERC-20 simgesi gönderebilir.`,
   removeAccountTitle: `Bu cihazdan hesabınızı kaldırmak istediğinize emin misiniz?`,
   removeAccountExhortation: `Daha sonra hesabınızı kurtarmak için anımsatıcı kodunuza erişiminiz olduğundan emin olun, çünkü bu hareket hesap bilgilerinizin bu cihazdan kalıcı olarak silinmesi anlamına gelmektedir.`,
   myAccount: `Hesabım`,
@@ -180,8 +180,8 @@ export default {
     loadInformation: {
       error: generalCommunicationError
     },
-    ethBalance: {
-      display: Y => `ETH bakiyeniz ${String (Y) .slice (0,8)}`,
+    cryptoBalance: {
+      display: (N, B) => `Your ${N} balance is ${String(B).slice(0,8)}`,
       getError: `Eth bakiyesi çekilemedi`,
       manage: `ETH yönetimi`,
     },
@@ -204,7 +204,7 @@ export default {
       note: (A, M) => `Lütfen dikkat: Lndr dışına haftada sadece ${CUR(A)} ${TL(A, M)} aktarabilirsiniz`,
       warning: (Z, A, M) => `${CUR(A)} ${TL(A, M)} limitinizin ${CUR(A)}${Z} kısmı kalmış bulunmaktadır`
     },
-    sendBcpt: {
+    sendERC20: {
       error: {
         insufficient: (name) => `Bu işlem için yeterli ${name} ‘niz mevcut değil`,
         generic: `Aktarımda bir hata oluştu, lütfen daha sonra tekrar deneyin`,
@@ -215,8 +215,8 @@ export default {
       tokenAddress: (name) => `${name} Adresi`,
     },
     panelHeaders: [
-      `Wallet Address`, // <-- translate me
-      `Crypto Balances`, // <-- translate me
+      `Cüzdan Adresi`,
+      `Kripto Hesap Bakiyesi`,
       `Hesabı Kaldır`,
       `ETH İşlem Geçmişi`,
       `Paypal etkinleştirme`,
@@ -239,10 +239,7 @@ export default {
     logoutError: generalCommunicationError,
   },
 
-  currentBalance: {
-    eth: `Geçerli Eth bakiyeniz:`,
-    bcpt: `Geçerli BCPT bakiyeniz:`,
-  },
+  currentBalance: name => `Geçerli ${name} bakiyeniz`,
 
   welcomeView: {
     by: `GELİŞTİREN FİRMA`,
@@ -374,6 +371,7 @@ export default {
       }
     },
     eth: `Eth kullanarak ödeşin`,
+    erc20: name => `Settle with ${name}`,
     paypal: `PayPal kullanarak ödeşin`,
     nonPayment: `Bir ödeme kaydı oluşturun`,
     select: `Uzlaşma tipi seç`,
@@ -400,7 +398,7 @@ export default {
     none: `Beklemede olan işleminiz bulunmamakta`,
     confirmationQuestion: `Bu işlemi onaylamak istediğinize emin misiniz?`,
     pendingAnnouncement: `Bu işlem diğer tarafın onayını bekliyor.`,
-    bilateral: `Eth aktarımının tamamlanması bekleniyor`,
+    bilateral: `Aktarımının tamamlanması bekleniyor`,
     confirm: `Onayla`,
     reject: `İşlemi Reddet`,
     rejectRequest: `Reddet`,
@@ -469,9 +467,9 @@ export default {
       start: `Başarıyla `,
       end: ` ETH gönderdiniz ve işlem sağlama kodunuz `,
     },
-    bcptSent: {
+    erc20Sent: {
       start: `Başarıyla `,
-      end: ` BCPT gönderdiniz ve işlem sağlama kodunuz `,
+      end: ` gönderdiniz ve işlem sağlama kodunuz `,
     },
     requestPayPalPayee: {
       start: `Biz `,

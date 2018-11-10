@@ -67,7 +67,7 @@ export default {
   errorTitle: `ข้อผิดพลาด`,
   showMnemonic: `แสดงวลีช่วยจำ 12 คำ`,
   mnemonicExhortation: `วลี 12 คำนี้จำเป็นต้องใช้ในการกู้คืนบัญชีของคุณ กรุณาเก็บรักษาไว้ในที่ปลอดภัยและเป็นความลับ`,
-  addressExhortation: `ส่ง Ethereum ไปยังที่อยู่ของคุณ เพื่อให้คุณสามารถชำระหนี้ใน Lndr ได้`,
+  addressExhortation: `คุณสามารถส่งผลประโยชน์ทับซ้อนหรือการสนับสนุน ERC-20 โทเค็นการใด ๆ ไปยังที่อยู่กระเป๋าสตางค์ของคุณ`,
   removeAccountTitle: `คุณแน่ใจหรือว่าต้องการลบบัญชีของคุณออกจากอุปกรณ์นี้?`,
   removeAccountExhortation: `คุณต้องแน่ใจว่า คุณสามารถเข้าถึงวลีช่วยจำของคุณเพื่อกู้คืนบัญชีของคุณในภายหลัง เพราะนี่เป็นการลบข้อมูลบัญชีของคุณออกจากอุปกรณ์นี้โดยถาวร`,
   myAccount: `บัญชีของฉัน`,
@@ -180,8 +180,8 @@ export default {
     loadInformation: {
       error: generalCommunicationError
     },
-    ethBalance: {
-      display: Y => `ยอด ETH คงเหลือของคุณคือ ${String(Y).slice(0,8)}`,
+    cryptoBalance: {
+      display: (N, B) => `Your ${N} balance is ${String(B).slice(0,8)}`,
       getError: `ไม่สามารถเรียกข้อมูลยอด ETH คงเหลือคืนมาได้ `,
       manage: `จัดการ ETH`,
     },
@@ -215,8 +215,8 @@ export default {
       tokenAddress: (name) => `ที่อยู่ ${name}`,
     },
     panelHeaders: [
-      `Wallet Address`, // <-- translate me
-      `Crypto Balances`, // <-- translate me
+      `ที่อยู่ Wallet`,
+      `ยอดคงเหลือบัญชีลับ`,
       `ปิดบัญชี`,
       `ประวัติการทำธุรกรรม ETH`,
       `เปิดใช้งาน PayPal`,
@@ -239,10 +239,7 @@ export default {
     logoutError: generalCommunicationError,
   },
 
-  currentBalance: {
-    eth: `ยอด Eth คงเหลือในปัจจุบันของคุณคือ:`,
-    bcpt: `ยอด BCPT คงเหลือในปัจจุบันของคุณคือ:`,
-  },
+  currentBalance: name => `ยอด ${name} คงเหลือในปัจจุบันของคุณคือ`,
 
   welcomeView: {
     by: `สร้างโดย`,
@@ -374,6 +371,7 @@ export default {
       }
     },
     eth: `ชำระหนี้ด้วย ETH`,
+    erc20: name => `Settle with ${name}`,
     paypal: `ชำระหนี้ด้วย PayPal`,
     nonPayment: `บันทึกการชำระหนี้`,
     select: `เลือกประเภทการชำระบัญชี`,
@@ -400,7 +398,7 @@ export default {
     none: `คุณไม่มีธุรกรรมที่ค้างอยู่`,
     confirmationQuestion: `คุณแน่ใจหรือว่าต้องการยืนยันธุรกรรมนี้?`,
     pendingAnnouncement: `ธุรกรรมนี้กำลังรอการยืนยันจากอีกฝ่าย`,
-    bilateral: `กำลังรอให้การโอน Eth เสร็จสมบูรณ์`,
+    bilateral: `กำลังรอให้การโอน เสร็จสมบูรณ์`,
     confirm: `ยืนยัน`,
     reject: `ปฏิเสธธุรกรรม`,
     rejectRequest: `ปฏิเสธ`,
@@ -469,9 +467,9 @@ export default {
       start: `คุณได้ส่ง `,
       end: ` ETH เรียบร้อยแล้ว และแฮชธุรกรรมของคุณคือ `,
     },
-    bcptSent: {
+    erc20Sent: {
       start: `คุณได้ส่ง `,
-      end: ` BCPT เรียบร้อยแล้ว และแฮชธุรกรรมของคุณคือ `,
+      end: ` เรียบร้อยแล้ว และแฮชธุรกรรมของคุณคือ `,
     },
     requestPayPalPayee: {
       start: `เราได้แจ้งให้ `,

@@ -67,7 +67,7 @@ export default {
   errorTitle: `Ошибка`,
   showMnemonic: `Показать 12-словную мнемонику`,
   mnemonicExhortation: `Эта 12-словная фраза требуется для восстановления вашей учетной записи, пожалуйста, храните ее где-то в безопасности и в тайне`,
-  addressExhortation: `Отправьте Ethereum на свой адрес, чтобы вы могли погасить долги на Lndr`,
+  addressExhortation: `Вы можете отправить ETH или любой поддерживаемый ERC-20 маркер на ваш кошелек адрес.`,
   removeAccountTitle: `Вы уверены, что хотите удалить свою учетную запись с этого устройства?`,
   removeAccountExhortation: `Будте увереннами, что у вас есть доступ к вашем мнемонике, чтобы восстановить свою учетную запись позже, поскольку это постоянное удаление информации об учетной записи с этого устройства.`,
   myAccount: `Мой аккаунт`,
@@ -180,8 +180,8 @@ export default {
     loadInformation: {
       error: generalCommunicationError
     },
-    ethBalance: {
-      display: Y => `Ваш ETH баланс ${String (Y) .slice (0,8)} `,
+    cryptoBalance: {
+      display: (N, B) => `Your ${N} balance is ${String(B).slice(0,8)}`,
       getError: `Невозможно получить ETH баланс`,
       manage: `Управление ETH`,
     },
@@ -215,8 +215,8 @@ export default {
       tokenAddress: (name) => `${name} Адрес`,
     },
     panelHeaders: [
-      `Wallet Address`, // <-- translate me
-      `Crypto Balances`, // <-- translate me
+      `Кошелек Адрес`,
+      `Crypto Сальдо счета`,
       `Удалить учетную запись`,
       `История транзакций ETH`,
       `Включить PayPal`,
@@ -239,10 +239,7 @@ export default {
     logoutError: generalCommunicationError,
   },
 
-  currentBalance: {
-    eth: `Ваш текущий Eth баланс:`,
-    bcpt: `Ваш текущий BCPT баланс:`,
-  },
+  currentBalance: name => `Ваш текущий баланс ${name}`,
 
   welcomeView: {
     by: `ПОСТРОЕН`,
@@ -374,6 +371,7 @@ export default {
       }
     },
     eth: `Рассчитываться с помощью ETH`,
+    erc20: name => `Settle with ${name}`,
     paypal: `Рассчитываться с помощью PayPal`,
     nonPayment: `Записать расчет`,
     select: `Выбор типа расчетов`,
@@ -400,7 +398,7 @@ export default {
     none: `У вас нет ожидающих транзакций`,
     confirmationQuestion: `Вы уверены, что хотите подтвердить эту транзакцию?`,
     pendingAnnouncement: `Эта сделка ждет подтверждений другой стороны.`,
-    bilateral: `Ожидание передачи ETH для завершения`,
+    bilateral: `Ожидание передачи для завершения`,
     confirm: `Подтвердить`,
     reject: `Отклонить Транзакция`,
     rejectRequest: `Отклонять`,
@@ -469,9 +467,9 @@ export default {
       start: `Вы успешно отправили `,
       end: ` ETH, а хеш транзакции `,
     },
-    bcptSent: {
+    erc20Sent: {
       start: `Вы успешно отправили `,
-      end: ` BCPT, а хеш транзакции `,
+      end: `, а хеш транзакции `,
     },
     requestPayPalPayee: {
       start: `Мы позволили `,
