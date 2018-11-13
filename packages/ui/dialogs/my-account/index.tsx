@@ -118,6 +118,7 @@ class MyAccount extends Component<Props, State> {
   }
 
   async componentWillMount() {
+    console.log('WE HAVE A USER', this.props.user)
     const { address } = this.props.user
     this.props.setEthBalance()
     this.props.getProfilePic(address)

@@ -125,11 +125,12 @@ class Settlement extends Component<Props, State> {
 
     const { primaryCurrency, user } = this.props
     const amount = (this.state.balance) ? formatSettlementAmount(String(Math.abs(this.state.balance)), primaryCurrency) : undefined
-    this.updateTransactionCosts(settlementType, amount)
+    this.updateTransactionCosts({ settlementType }, amount)
 
     const transferLimitLevel = await getTransferLimitLevel(user.address, this.props.getStore())
 
-    this.setState({settlementType, friend, amount, pic, fromPayPalRequest, transferLimitLevel})
+    const pickerSelection = this.settlementChoices().find(choice => choice.settlementType === settlementType)
+    this.setState({settlementType, friend, amount, pic, fromPayPalRequest, transferLimitLevel, pickerSelection})
     unmounting = false
   }
 
@@ -159,9 +160,13 @@ class Settlement extends Component<Props, State> {
     ]
   }
 
-  async updateTransactionCosts(settlementType: string, amount) {
+  async updateTransactionCosts(pickerSelection: any, amount: any) {
+    if (!pickerSelection || pickerSelection.settlementType === undefined)
+      pickerSelection = this.settlementChoices()[0]
+    const { settlementType } = pickerSelection
+    
     if (this.isSettlementFree(settlementType)) {
-      this.setState({ formInputError: undefined, cryptoCost: '', txCost: '0', cryptoBalance: '', showPicker: false })
+      this.setState({ formInputError: undefined, cryptoCost: '', txCost: '0', cryptoBalance: '', showPicker: false, pickerSelection, settlementType })
       return
     }
 
@@ -177,7 +182,7 @@ class Settlement extends Component<Props, State> {
     } else
       cryptoBalance = this.props.ethBalance
 
-    this.setState({ formInputError, cryptoCost, txCost, cryptoBalance, showPicker: false })
+    this.setState({ formInputError, cryptoCost, txCost, cryptoBalance, showPicker: false, pickerSelection, settlementType })
   }
 
   getDenomination() {
@@ -388,12 +393,9 @@ class Settlement extends Component<Props, State> {
     }
   }
 
-  changeSettlementType(pickerSelection: any) {
-    setTimeout( async() => {
-      const { settlementType } = pickerSelection
-      this.setState({ settlementType, pickerSelection })
-      this.updateTransactionCosts(settlementType, this.state.amount)
-    }, 1)
+  changeSettlementType(pickerSelectionName: string) {
+    const pickerSelection = this.settlementChoices().find(choice => choice.name === pickerSelectionName)
+    this.updateTransactionCosts(pickerSelection, this.state.amount)
   }
 
   showActionSheet() {
@@ -403,7 +405,7 @@ class Settlement extends Component<Props, State> {
       title: settlementManagement.select
     },
     (index) => {
-      this.changeSettlementType(settlementChoices.slice(1)[index])
+      this.changeSettlementType(settlementChoices.slice(1)[index].name)
     })
   }
 
@@ -439,10 +441,10 @@ class Settlement extends Component<Props, State> {
   renderPicker(pickerSelection: any) {
     if(Platform.OS === 'android') {
       return <Picker
-        selectedValue={pickerSelection} style={formStyle.settlementPicker}
+        selectedValue={pickerSelection.name} style={formStyle.settlementPicker}
         onValueChange={this.changeSettlementType}>
         {this.settlementChoices().map((value, key) =>
-          <Picker.Item label={value.name} key={key} value={value}>{pickerSelection.name}</Picker.Item>)}
+          <Picker.Item label={value.name} key={key} value={value.name}>{pickerSelection.name}</Picker.Item>)}
       </Picker>
     } else {
       const text = this.state.pickerSelection ? this.state.pickerSelection.name : settlementManagement.select
@@ -452,7 +454,7 @@ class Settlement extends Component<Props, State> {
 
   render() {
     const { amount, balance, formInputError, pic, cryptoCost, friend, txCost, fromPayPalRequest, pickerSelection, settlementType } = this.state
-    const { convertCurrency, primaryCurrency, ethExchange } = this.props
+    const { primaryCurrency } = this.props
     const imageSource = pic ? { uri: pic } : require('images/person-outline-dark.png')
     const vertOffset = (Platform.OS === 'android') ? -300 : 20
 

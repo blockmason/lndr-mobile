@@ -47,9 +47,9 @@ export const primaryCurrencyStorage = new Storage('primary-currency')
 const creditProtocol = new CreditProtocol('https://api.lndr.io')
 // let creditProtocol
 // if (Platform.OS === 'ios' ) {
-//   creditProtocol = new CreditProtocol('https://localhost:7402')
+//   creditProtocol = new CreditProtocol('http://localhost:7402')
 // } else {
-//   creditProtocol = new CreditProtocol('https://10.0.2.2:7402')
+//   creditProtocol = new CreditProtocol('http://10.0.2.2:7402')
 // }
 
 const GAS_TO_SEND_ERC20 = 65000
@@ -1087,8 +1087,8 @@ export const showPayPalSettlementError = (nickname: string) => {
 
 export const getVerificationStatus = () => {
   return async (dispatch, getState) => {
+    const { address, privateKeyBuffer } = getUser(getState())()
     try {
-      const { address, privateKeyBuffer } = getUser(getState())()
       const identityVerificationStatus = await creditProtocol.getKYCStatus(address, privateKeyBuffer)
       identityVerificationStatus.status = identityVerificationStatus.status.trim()
       identityVerificationStatus.sumsubId = identityVerificationStatus.sumsubId.trim()
@@ -1096,6 +1096,9 @@ export const getVerificationStatus = () => {
       dispatch(setState({ identityVerificationStatus }))
     } catch(e) {
       console.log('ERROR GETTING KYC VERIFICATION: ', e)
+      if (e.toString().includes('404')) {
+        dispatch(setState({ identityVerificationStatus: { user: address, sumsubId: null, status: null } }))
+      }
     }
   }
 }
