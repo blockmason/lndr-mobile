@@ -255,6 +255,13 @@ export const formatSettlementAmount = (amount: string, primaryCurrency: string) 
   return formattedAmount
 }
 
+export const formatSettlementCurrencyAmount = (amount: string, isEth: boolean) : string => {
+  const endIndex = isEth ? 9 : amount.indexOf('.') + 3
+  const commaAdjusted = isCommaDecimal() ? amount.replace('.', ',') : amount
+  
+  return commaAdjusted.slice(0, endIndex)
+}
+
 export const formatEthRemaining = (ethExchange: Function, ethSentPastWeek: number, primaryCurrency: string, level = 'standard') => {
   const remaining = String(Number(transferLimits(primaryCurrency, level)) - Number(ethSentPastWeek) * Number(ethExchange(primaryCurrency)))
   const end = remaining.indexOf('.') === -1 ? remaining.length : remaining.indexOf('.') + 3
