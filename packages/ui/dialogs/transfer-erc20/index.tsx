@@ -24,7 +24,7 @@ const {
 } = language
 
 import { getUser, getPrimaryCurrency } from 'reducers/app'
-import { getTransactionCost, sendERC20 } from 'actions'
+import { getTransactionCosts, sendERC20 } from 'actions'
 import { connect } from 'react-redux'
 
 const loadingContext = new LoadingContext()
@@ -43,7 +43,8 @@ interface State {
   formInputError?: string
   token?: ERC20_Token
   tokenBalance: string
-  txCost: string
+  currencyCost: string
+  ethCost: string
 }
 
 class TransferERC20 extends Component<Props, State> {
@@ -52,7 +53,8 @@ class TransferERC20 extends Component<Props, State> {
     this.state = {
       token: undefined,
       tokenBalance: '0.00',
-      txCost: '0.00'
+      currencyCost: '0.00',
+      ethCost: '0.00'
     }
   }
 
@@ -60,9 +62,9 @@ class TransferERC20 extends Component<Props, State> {
     const { primaryCurrency, user } = this.props
     const token = this.props.navigation ? this.props.navigation.state.params.token : undefined
     if (token) {
-      const txCost = await getTransactionCost(token.tokenName, primaryCurrency)
+      const { currencyCost, ethCost } = await getTransactionCosts(token.tokenName, primaryCurrency)
       const tokenBalance = await token.getBalance(user.address as string)
-      this.setState({ token, txCost, tokenBalance })
+      this.setState({ token, currencyCost, ethCost, tokenBalance })
     }
   }
 
@@ -128,7 +130,7 @@ class TransferERC20 extends Component<Props, State> {
   }
 
   render() {
-    const { amount, destinationAddress, formInputError, token, tokenBalance, txCost } = this.state
+    const { amount, destinationAddress, formInputError, token, tokenBalance, currencyCost, ethCost } = this.state
     const { primaryCurrency } = this.props
 
     const tokenName = (token) ? token.tokenName : ''
@@ -170,7 +172,7 @@ class TransferERC20 extends Component<Props, State> {
                     onChangeText={amount => this.setState({ amount: this.setAmount(amount) })}
                   />
                 </View>
-                <Text style={[accountStyle.txCost, formStyle.spaceTop]}>{accountManagement.sendEth.txCost(formatCommaDecimal(txCost), primaryCurrency)}</Text>
+                <Text style={[accountStyle.txCost, formStyle.spaceTop]}>{accountManagement.sendEth.txCost(ethCost, formatCommaDecimal(currencyCost), primaryCurrency)}</Text>
               </View>
             </View>
             { !!formInputError && <Text style={formStyle.warningText}>{formInputError}</Text>}

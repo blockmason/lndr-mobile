@@ -40,7 +40,7 @@ const {
 
 import { getUser, recentTransactions, getEthBalance, getEthExchange, getWeeklyEthTotal, hasPendingTransaction,
   calculateBalance, convertCurrency, getUcacCurrency, getPrimaryCurrency } from 'reducers/app'
-import { addDebt, getTransactionCost, getTransferLimitLevel, exceedsTransferLimit, requestPayPalSettlement, cancelPayPalRequest, cancelPayPalRequestFail } from 'actions'
+import { addDebt, getTransactionCosts, getTransferLimitLevel, exceedsTransferLimit, requestPayPalSettlement, cancelPayPalRequest, cancelPayPalRequestFail } from 'actions'
 import { connect } from 'react-redux'
 
 const submittingTransaction = new LoadingContext()
@@ -83,7 +83,8 @@ interface State {
   formInputError?: string
   balance: number
   direction: string
-  txCost: string
+  currencyCost: string
+  ethCost: string
   cryptoCost: string
   cryptoBalance: string
   pic?: string
@@ -101,7 +102,8 @@ class Settlement extends Component<Props, State> {
     this.state = {
       balance: this.getRecentTotal(),
       direction: this.getRecentTotal() > 0 ? 'borrow' : 'lend',
-      txCost: '0.00',
+      currencyCost: '0.00',
+      ethCost: '0.00',
       cryptoCost: '',
       cryptoBalance: '',
       friend: new Friend('', ''),
@@ -167,13 +169,13 @@ class Settlement extends Component<Props, State> {
     const { settlementType } = pickerSelection
 
     if (isSettlementFree(settlementType)) {
-      this.setState({ formInputError: undefined, cryptoCost: '', txCost: '0', cryptoBalance: '', showPicker: false, pickerSelection, settlementType })
+      this.setState({ formInputError: undefined, cryptoCost: '', currencyCost: '0', ethCost: '0', cryptoBalance: '', showPicker: false, pickerSelection, settlementType })
       return
     }
 
-    const txCost = await getTransactionCost(settlementType, this.props.primaryCurrency)
-    const result = await this.checkSettlementCost(amount === undefined ? '0' : amount, txCost, settlementType)
-    this.setState({ ...result, txCost, showPicker: false, pickerSelection, settlementType })
+    const { currencyCost, ethCost } = await getTransactionCosts(settlementType, this.props.primaryCurrency)
+    const result = await this.checkSettlementCost(amount === undefined ? '0' : amount, currencyCost, settlementType)
+    this.setState({ ...result, currencyCost, ethCost, showPicker: false, pickerSelection, settlementType })
   }
 
   getDenomination() {
@@ -352,7 +354,7 @@ class Settlement extends Component<Props, State> {
   }
 
   async updateAmount(amount: string) {
-    const result = await this.checkSettlementCost(amount, this.state.txCost, this.state.settlementType)
+    const result = await this.checkSettlementCost(amount, this.state.currencyCost, this.state.settlementType)
     this.setState({ amount: amountFormat(amount, this.props.primaryCurrency, false), ...result })
   }
 
@@ -465,7 +467,7 @@ class Settlement extends Component<Props, State> {
   }
 
   render() {
-    const { amount, balance, formInputError, pic, cryptoCost, friend, txCost, fromPayPalRequest, pickerSelection, settlementType } = this.state
+    const { amount, balance, formInputError, pic, cryptoCost, friend, currencyCost, ethCost, fromPayPalRequest, pickerSelection, settlementType } = this.state
     const { primaryCurrency } = this.props
     const imageSource = pic ? { uri: pic } : require('images/person-outline-dark.png')
     const vertOffset = (Platform.OS === 'android') ? -300 : 20
@@ -505,7 +507,7 @@ class Settlement extends Component<Props, State> {
                     containerStyle={{marginTop: -6}}
                   />
                 </View> : null }
-                { isERC20 ? <Text style={[accountStyle.txCost, {marginLeft: '2%'}]}>{accountManagement.sendEth.txCost(formatCommaDecimal(txCost), this.props.primaryCurrency)}</Text> : null }
+                { isERC20 ? <Text style={[accountStyle.txCost, {marginLeft: '2%'}]}>{accountManagement.sendEth.txCost(ethCost, formatCommaDecimal(currencyCost), this.props.primaryCurrency)}</Text> : null }
                 { (isERC20 && balance > 0) ? <Text style={[formStyle.smallText, formStyle.spaceTop, formStyle.center]}>{accountManagement.sendEth.warning(this.getLimit(), primaryCurrency, this.state.transferLimitLevel)}</Text> : null}
                 <Text style={formStyle.titleLarge}>{debtManagement.fields.settlementAmount}</Text>
                 { isERC20 ? <TextInput
