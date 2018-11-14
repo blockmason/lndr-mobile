@@ -14,6 +14,7 @@ import CreditRecord from './lib/credit-record'
 export { default as CreditRecord } from './lib/credit-record'
 
 import { hasNoDecimals } from 'lndr/currencies'
+import { isERC20Settlement } from 'lndr/format'
 import KYC from 'lndr/kyc'
 
 import { ERC20_Transaction, WEI_PER_ETH, getERC20_token } from 'lndr/erc-20'
@@ -310,8 +311,8 @@ export default class CreditProtocol {
   }
 
   async settleWithERC20(transaction: ERC20_Transaction, privateKeyBuffer: any, settlementCurrency: string) {
-    // send using ERC20Token if not ETH
-    if (!!settlementCurrency && settlementCurrency !== 'ETH') {
+    if (isERC20Settlement(settlementCurrency)) {
+      // Send via ERC20Token transfer
       const ERC20 = getERC20_token(settlementCurrency)
       return ERC20.transfer(transaction, privateKeyBuffer)
     }

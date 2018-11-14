@@ -300,17 +300,17 @@ export const dobFormat = (dob: string) : string => {
 }
 
 export const isPayPalSettlement = (settlementType?: string) : boolean => {
-  return (!!settlementType && (settlementType.toLowerCase() === 'paypal'))
+  return (!!settlementType && (settlementType.toUpperCase() === 'PAYPAL'))
 }
 
 export const isEthSettlement = (settlementType?: string) : boolean => {
-  return (!!settlementType && (settlementType.toLowerCase() === 'eth'))
+  return (!!settlementType && (settlementType.toUpperCase() === 'ETH'))
 }
 
 export const isERC20Settlement = (settlementType?: string) : boolean => {
-  return (!!settlementType && (settlementType.toLowerCase() !== 'settlement') && !isPayPalSettlement(settlementType) && !isEthSettlement(settlementType))
+  return (!!settlementType && (settlementType.toUpperCase() !== 'SETTLEMENT') && !isPayPalSettlement(settlementType) && !isEthSettlement(settlementType))
 }
 
 export const isSettlementFree = (settlementType?: string) : boolean => {
-  return (!settlementType || settlementType.toLowerCase() === 'settlement' || isPayPalSettlement(settlementType))
+  return (!settlementType || settlementType.toUpperCase() === 'SETTLEMENT' || isPayPalSettlement(settlementType))
 }

@@ -944,7 +944,7 @@ export const storeEthTransaction = async (dispatch, tx: object) => {
 }
 
 export const getTransactionCost = async (settlementType: string, currency: string) => {
-  const gasNeeded = (settlementType.toUpperCase() === 'ETH') ? GAS_TO_SETTLE_WITH_ETH : GAS_TO_SEND_ERC20
+  const gasNeeded = isEthSettlement(settlementType) ? GAS_TO_SETTLE_WITH_ETH : GAS_TO_SEND_ERC20
   return creditProtocol.getTxCost(currency, gasNeeded)
 }
 
