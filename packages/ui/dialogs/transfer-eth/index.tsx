@@ -7,7 +7,7 @@ import { getStore } from 'reducers/app'
 import { getResetAction } from 'reducers/nav'
 
 import { UserData } from 'lndr/user'
-import { ethAmount, isEthAddress, formatCommaDecimal, formatEthRemaining } from 'lndr/format'
+import { cryptoAmount, isEthAddress, formatCommaDecimal, formatEthRemaining } from 'lndr/format'
 import { currencySymbols, isCommaDecimal, transferLimits, TRANSFER_LIMIT_STANDARD } from 'lndr/currencies'
 
 import BackButton from 'ui/components/back-button'
@@ -117,7 +117,7 @@ class TransferEth extends Component<Props, State> {
   }
 
   setAmount(amount: string) {
-    return `${ethAmount(amount)}`
+    return `${cryptoAmount(amount)}`
   }
 
   setAddress(address: string) {
