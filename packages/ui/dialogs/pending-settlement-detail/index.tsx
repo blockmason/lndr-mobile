@@ -93,8 +93,11 @@ class PendingSettlementDetail extends Component<Props, State> {
       const addr = user.address === pendingSettlement.creditorAddress ? pendingSettlement.debtorAddress : pendingSettlement.creditorAddress
       pic = await profilePic.get(addr)
     } catch (e) {}
-      if(!this.state.unmounting && pic) {
-        this.setState({ pic, txCost })
+    if(!this.state.unmounting) {
+      this.setState({ txCost })
+      if (pic) {
+        this.setState({ pic })
+      }
     }
   }
 
