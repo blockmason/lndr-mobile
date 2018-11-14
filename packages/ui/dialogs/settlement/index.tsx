@@ -10,7 +10,7 @@ import { getResetAction } from 'reducers/nav'
 import { UserData } from 'lndr/user'
 import { ERC20_Tokens, getERC20_token } from 'lndr/erc-20'
 import { currencyFormats, sanitizeAmount, formatSettlementAmount, formatExchangeCurrency, formatCommaDecimal, formatMemo,
-  formatEthRemaining, amountFormat, cleanFiatAmount } from 'lndr/format'
+  formatEthRemaining, amountFormat, cleanFiatAmount, isERC20Settlement, isEthSettlement, isPayPalSettlement, isSettlementFree } from 'lndr/format'
 import Friend from 'lndr/friend'
 import { currencySymbols, transferLimits, TRANSFER_LIMIT_STANDARD } from 'lndr/currencies'
 import profilePic from 'lndr/profile-pic'
@@ -166,7 +166,7 @@ class Settlement extends Component<Props, State> {
       pickerSelection = this.settlementChoices()[0]
     const { settlementType } = pickerSelection
 
-    if (this.isSettlementFree(settlementType)) {
+    if (isSettlementFree(settlementType)) {
       this.setState({ formInputError: undefined, cryptoCost: '', txCost: '0', cryptoBalance: '', showPicker: false, pickerSelection, settlementType })
       return
     }
@@ -179,9 +179,9 @@ class Settlement extends Component<Props, State> {
   getDenomination() {
     const { settlementType } = this.state
     if(this.props.navigation) {
-      if(this.isEthSettlement(settlementType)) {
+      if(isEthSettlement(settlementType)) {
         return 'ETH'
-      } else if(this.isPayPalSettlement(settlementType)) {
+      } else if(isPayPalSettlement(settlementType)) {
         return 'PAYPAL'
       } else
         return settlementType
@@ -223,7 +223,7 @@ class Settlement extends Component<Props, State> {
       )
     }
     let type = 'create'
-    if (this.isPayPalSettlement(settlementType))
+    if (isPayPalSettlement(settlementType))
       type = (this.isPayee()) ? 'requestPayPalPayment' : 'settledWithPayPal'
 
     this.displayConfirmation(success, type, friend)
@@ -253,22 +253,6 @@ class Settlement extends Component<Props, State> {
 
   isPayee() {
     return (this.state.direction === 'borrow')
-  }
-
-  isPayPalSettlement(settlementType?: string) {
-    return (settlementType && (settlementType === 'paypal'))
-  }
-
-  isEthSettlement(settlementType?: string) {
-    return (settlementType && (settlementType === 'eth'))
-  }
-
-  isCryptoSettlement(settlementType?: string) {
-    return (settlementType && (settlementType !== 'settlement') && !this.isPayPalSettlement(settlementType) && !this.isEthSettlement(settlementType))
-  }
-
-  isSettlementFree(settlementType?: string) {
-    return (!settlementType || settlementType === 'paypal' || settlementType === 'settlement')
   }
 
   getRecentTotal() {
@@ -303,9 +287,9 @@ class Settlement extends Component<Props, State> {
     const { settlementType } = this.state
     // console.log(`calculateExchangeRate: ${amount}`)
     let exchangeRate = 1.0
-    if (this.isEthSettlement(settlementType))
+    if (isEthSettlement(settlementType))
       exchangeRate = Number(ethExchange(primaryCurrency))
-    else if (settlementType && this.isCryptoSettlement(settlementType)) {
+    else if (settlementType && isERC20Settlement(settlementType)) {
       const token = getERC20_token(settlementType)
       if (token && token.exchangePerUSD) {
         const balanceUSD = amount*Number(token.exchangePerUSD)
@@ -332,7 +316,7 @@ class Settlement extends Component<Props, State> {
     // Check that we have enough Eth to cover Eth costs
     const ethExchangeRate = Number(ethExchange(primaryCurrency))
     let totalEthCost = Number(txCost) / ethExchangeRate
-    if (this.isEthSettlement(settlementType)) {
+    if (isEthSettlement(settlementType)) {
       totalEthCost += cleanAmount / ethExchangeRate
     }
 
@@ -343,7 +327,7 @@ class Settlement extends Component<Props, State> {
     let cryptoCostString = String(totalEthCost)
     let cryptoBalanceString = ethBalance
 
-    if (settlementType && this.isCryptoSettlement(settlementType)) {
+    if (settlementType && isERC20Settlement(settlementType)) {
       // Check we have enough non-Eth crypto (doesn't include transaction cost)
       const exchangeRate = this.calculateExchangeRate(cleanAmount)
       const cryptoCost = cleanAmount / exchangeRate
@@ -428,7 +412,7 @@ class Settlement extends Component<Props, State> {
 
     const isDisabled = !!formInputError || pickerSelection.settlementType === undefined
     let paymentButton = <Button large round wide onPress={this.submit} text={debtManagement.settleUp} disabled={isDisabled}/>
-    if (this.isPayPalSettlement(settlementType)) {
+    if (isPayPalSettlement(settlementType)) {
       const cleanAmount = amount.replace(/[^0-9\.]/g, '')
       const memo = debtManagement.settleUpMemo(direction, amount)
       paymentButton = (
@@ -482,11 +466,11 @@ class Settlement extends Component<Props, State> {
     const imageSource = pic ? { uri: pic } : require('images/person-outline-dark.png')
     const vertOffset = (Platform.OS === 'android') ? -300 : 20
 
-    const cryptoBalance = this.isEthSettlement(settlementType) ? this.props.ethBalance : this.state.cryptoBalance
+    const cryptoBalance = isEthSettlement(settlementType) ? this.props.ethBalance : this.state.cryptoBalance
     const paymentButton = this.renderPaymentButton()
     const cleanAmount = cleanFiatAmount(String(amount))
     const exchangeRate = this.calculateExchangeRate(cleanAmount)
-    const isERC20 = this.isEthSettlement(settlementType) || this.isCryptoSettlement(settlementType)
+    const isERC20 = isEthSettlement(settlementType) || isERC20Settlement(settlementType)
 
     return <View style={general.whiteFlex}>
       <View style={general.view}>
@@ -533,7 +517,7 @@ class Settlement extends Component<Props, State> {
                 /> : <Text style={formStyle.jumboInput}>{amount}</Text>}
               </View>
             </View>
-            { this.isPayPalSettlement(settlementType) ? <View style={general.centeredColumn}>
+            { isPayPalSettlement(settlementType) ? <View style={general.centeredColumn}>
               <Button alternate small arrow onPress={this.payPalFeesAlert} text={payPalLanguage.feesNotification} />
             </View> : null }
             { settlementType && isERC20 && cryptoCost !== '' && <Text style={[formStyle.smallText, formStyle.spaceTop, formStyle.center]}>{`${formatCommaDecimal(cryptoCost.slice(0, 6))} ${settlementType.toUpperCase()}`}</Text>}

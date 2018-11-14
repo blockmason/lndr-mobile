@@ -6,7 +6,7 @@ import { getStore } from 'reducers/app'
 import { getResetAction } from 'reducers/nav'
 
 import { UserData } from 'lndr/user'
-import { currencyFormats, formatCommaDecimal, formatEthRemaining } from 'lndr/format'
+import { currencyFormats, formatCommaDecimal, formatEthRemaining, isERC20Settlement } from 'lndr/format'
 import PendingUnilateral from 'lndr/pending-unilateral'
 import profilePic from 'lndr/profile-pic'
 import Friend from 'lndr/friend'
@@ -66,7 +66,6 @@ interface State {
   txCost: string
   pic?: string
   confirmationError?: string
-  unmounting?: boolean
   transferLimitLevel: string
   token?: ERC20_Token
 }
@@ -75,6 +74,7 @@ class PendingSettlementDetail extends Component<Props, State> {
   constructor(props) {
     super(props)
     this.state = {
+      token: undefined,
       txCost: '0.00',
       transferLimitLevel: TRANSFER_LIMIT_STANDARD
     }
@@ -85,29 +85,23 @@ class PendingSettlementDetail extends Component<Props, State> {
 
     const transferLimitLevel = await getTransferLimitLevel(this.props.user.address, this.props.getStore())
     const pendingSettlement = this.getPendingSettlement()
-    const txCost = await getTransactionCost(pendingSettlement.settlementCurrency, primaryCurrency)
+    const settlementType = pendingSettlement.settlementCurrency
 
-    let pic, token
-    const type = pendingSettlement.settlementCurrency.toUpperCase()
-    if (type !== 'ETH') {
-      token = getERC20_token(pendingSettlement.settlementCurrency)
+    const txCost = await getTransactionCost(settlementType, primaryCurrency)
+    this.setState({ transferLimitLevel, txCost })
+
+    if (isERC20Settlement(settlementType)) {
+      this.setState({ token: getERC20_token(settlementType) })
     }
 
+    const friendAddress = (user.address === pendingSettlement.creditorAddress) ? pendingSettlement.debtorAddress : pendingSettlement.creditorAddress
     try {
-      const addr = user.address === pendingSettlement.creditorAddress ? pendingSettlement.debtorAddress : pendingSettlement.creditorAddress
-      pic = await profilePic.get(addr)
-    } catch (e) {}
-
-    if(!this.state.unmounting) {
-      this.setState({ txCost, token, transferLimitLevel })
+      const pic = await profilePic.get(friendAddress)
       if (pic) {
         this.setState({ pic })
       }
+    } catch (e) {
     }
-  }
-
-  componentWillUnmount() {
-    this.setState({unmounting: true})
   }
 
   async addDebt(pendingSettlement: PendingUnilateral) {
@@ -208,7 +202,6 @@ class PendingSettlementDetail extends Component<Props, State> {
     const { user } = this.props
     const pendingSettlement = this.getPendingSettlement()
 
-    //this is specific to ETH
     const divisor = !!this.state.token ? Math.pow(10, this.state.token.decimals) : WEI_PER_ETH
     return `${pendingSettlement.settlementAmount / divisor}`.slice(0, 9)
   }
@@ -235,7 +228,8 @@ class PendingSettlementDetail extends Component<Props, State> {
     const { txCost, confirmationError, transferLimitLevel } = this.state
     const { user, primaryCurrency } = this.props
     const pendingSettlement = this.getPendingSettlement()
-    const friendAddress = user.address === pendingSettlement.creditorAddress ? pendingSettlement.debtorAddress : pendingSettlement.creditorAddress
+    const isPayee = (user.address === pendingSettlement.debtorAddress)
+    const friendAddress = isPayee ? pendingSettlement.creditorAddress : pendingSettlement.debtorAddress
     const friend = this.props.getFriendFromAddress(friendAddress) || new Friend('', '')
 
     return <View style={general.whiteFlex}>
@@ -260,9 +254,9 @@ class PendingSettlementDetail extends Component<Props, State> {
           <BalanceSection friend={friend} />
           }
           <View style={{marginBottom: 20}}/>
-          {user.address === pendingSettlement.debtorAddress ? null : <Text style={[formStyle.smallText, formStyle.spaceTop, formStyle.center]}>{accountManagement.sendEth.warning(this.getLimit(), primaryCurrency, transferLimitLevel)}</Text>}
-          <Text style={[accountStyle.txCost, formStyle.spaceBottom, {marginLeft: '2%'}]}>{accountManagement.sendEth.txCost(formatCommaDecimal(txCost), primaryCurrency)}</Text>
-          { confirmationError && <Text style={[formStyle.warningText, {alignSelf: 'center'}]}>{confirmationError}</Text>}
+          {!isPayee && <Text style={[formStyle.smallText, formStyle.spaceTop, formStyle.center]}>{accountManagement.sendEth.warning(this.getLimit(), primaryCurrency, transferLimitLevel)}</Text>}
+          {!isPayee && <Text style={[accountStyle.txCost, formStyle.spaceBottom, {marginLeft: '2%'}]}>{accountManagement.sendEth.txCost(formatCommaDecimal(txCost), primaryCurrency)}</Text>}
+          {confirmationError && <Text style={[formStyle.warningText, {alignSelf: 'center'}]}>{confirmationError}</Text>}
           {this.showButtons()}
           <View style={general.spaceBelow}/>
         </View>

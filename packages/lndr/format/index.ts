@@ -298,3 +298,19 @@ export const dobFormat = (dob: string) : string => {
     return cleanDob.slice(0, -1)
   }
 }
+
+export const isPayPalSettlement = (settlementType?: string) : boolean => {
+  return (!!settlementType && (settlementType.toLowerCase() === 'paypal'))
+}
+
+export const isEthSettlement = (settlementType?: string) : boolean => {
+  return (!!settlementType && (settlementType.toLowerCase() === 'eth'))
+}
+
+export const isERC20Settlement = (settlementType?: string) : boolean => {
+  return (!!settlementType && (settlementType.toLowerCase() !== 'settlement') && !isPayPalSettlement(settlementType) && !isEthSettlement(settlementType))
+}
+
+export const isSettlementFree = (settlementType?: string) : boolean => {
+  return (!settlementType || settlementType.toLowerCase() === 'settlement' || isPayPalSettlement(settlementType))
+}
