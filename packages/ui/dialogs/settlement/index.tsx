@@ -454,7 +454,10 @@ class Settlement extends Component<Props, State> {
     if(Platform.OS === 'android') {
       return <Picker
         selectedValue={pickerSelection.name} style={formStyle.settlementPicker}
-        onValueChange={this.changeSettlementType}>
+        onValueChange={(newVal) => {
+          this.setState({pickerSelection: this.settlementChoices().find(choice => choice.name === newVal)})
+          this.changeSettlementType(newVal)
+        } }>
         {this.settlementChoices().map((value, key) =>
           <Picker.Item label={value.name} key={key} value={value.name}>{pickerSelection.name}</Picker.Item>)}
       </Picker>
