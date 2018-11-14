@@ -827,7 +827,7 @@ export const sendERC20 = (token: ERC20_Token, destinationAddress: string, amount
 
       const tokenBalance = await token.getBalance(address)
       if (Number(tokenBalance) < Number(amount)) {
-        return dispatch(displayError(accountManagement.sendERC20.error.insufficient))
+        return dispatch(displayError(accountManagement.sendERC20.error.insufficient(token.tokenName)))
       }
 
       const transferBalance = Number(amount) * Math.pow(10, token.decimals)
@@ -841,7 +841,7 @@ export const sendERC20 = (token: ERC20_Token, destinationAddress: string, amount
     } catch (e) {
       console.log('ERROR SENDING BCPT', e)
       if (typeof e === 'string' && e.indexOf('insufficient') !== -1) {
-        return dispatch(displayError(accountManagement.sendERC20.error.insufficient))
+        return dispatch(displayError(accountManagement.sendERC20.error.insufficient(token.tokenName)))
       } else {
         return dispatch(displayError(accountManagement.sendERC20.error.generic))
       }
@@ -1022,6 +1022,7 @@ const refreshTransactions = () => {
 const settleBilateral = async (user, bilateralSettlements, dispatch, getState) => {
   const gasPrice = await creditProtocol.getGasPrice()
   //Safe Low is in 10^8 Wei (deciGigaWei)
+// FIXME: this shouldn't be coming from the store and then we don't need to pass the State
   const ethBalance = getState().store.ethBalance
 
   bilateralSettlements.forEach( async (settlement) => {
@@ -1029,14 +1030,22 @@ const settleBilateral = async (user, bilateralSettlements, dispatch, getState) =
       return
     }
 
+    const gasNeeded = (settlement.settlementCurrency.toUpperCase() === 'ETH') ? GAS_TO_SETTLE_WITH_ETH : GAS_TO_SEND_ERC20
+    const erc20Transaction = new ERC20_Transaction(settlement.creditorAddress, settlement.debtorAddress, settlement.settlementAmount, gasPrice, gasNeeded)
+
+    let amountInEth = erc20Transaction.amount
     let insufficientFunds = false
+
     if (settlement.settlementCurrency === 'ETH') {
-      insufficientFunds = Number(`${settlement.settlementAmount}`) > Number(web3.toWei(ethBalance, 'ether'))
+      insufficientFunds = Number(settlement.settlementAmount) > Number(web3.toWei(ethBalance, 'ether'))
     } else {
-      //assumes ERC20 token
-      const ERC20Token = getERC20_token(settlement.settlementCurrency)
-      const ERC20Balance = await ERC20Token.getBalance(user.address)
-      insufficientFunds = Number(`${settlement.settlementAmount}`) > ( Number(ERC20Balance) * Math.pow(10, ERC20Token.decimals) )
+      const erc20Token = getERC20_token(settlement.settlementCurrency)
+      const erc20Balance = await erc20Token.getBalance(user.address)
+      insufficientFunds = Number(settlement.settlementAmount) > ( Number(erc20Balance) * Math.pow(10, erc20Token.decimals) )
+      amountInEth = erc20Transaction.amount / Number(getEthExchange(getState())('USD'))
+      // E.g. Eth = DAI / (DAI/Eth) = DAI / (DAI/USD * USD/Eth)
+      if (erc20Token.exchangePerUSD)
+        amountInEth = amountInEth / erc20Token.exchangePerUSD
     }
 
     if ( insufficientFunds ) {
@@ -1044,25 +1053,17 @@ const settleBilateral = async (user, bilateralSettlements, dispatch, getState) =
       return dispatch(displayError(settlementManagement.bilateral.error.insufficient(debtorNickname)))
     }
 
-    const gasNeeded = (settlement.settlementCurrency.toUpperCase() === 'ETH') ? GAS_TO_SETTLE_WITH_ETH : GAS_TO_SEND_ERC20
-    const ethTransaction = new ERC20_Transaction(settlement.creditorAddress, settlement.debtorAddress, settlement.settlementAmount, gasPrice, gasNeeded)
-
     try {
-      const txHash = await creditProtocol.settleWithERC20(ethTransaction, user.privateKeyBuffer, settlement.settlementCurrency)
+      const txHash = await creditProtocol.settleWithERC20(erc20Transaction, user.privateKeyBuffer, settlement.settlementCurrency)
       if(settlement.multiSettlements !== undefined) {
         settlement.multiSettlements.map( async(hash) => await creditProtocol.storeSettlementHash(txHash, hash, settlement.creditorAddress, user.privateKeyBuffer) )
       } else {
         await creditProtocol.storeSettlementHash(txHash, settlement.hash, settlement.creditorAddress, user.privateKeyBuffer)
       }
 
-      let amountInEth = ethTransaction.amount
-      if (settlement.settlementCurrency === 'DAI') {
-        amountInEth = ethTransaction.amount / Number(getEthExchange(getState())('USD'))
-      }
-
       storeEthTransaction(dispatch, {
         amount: amountInEth,
-        user: ethTransaction.from,
+        user: erc20Transaction.from,
         time: Date.now()
       })
     } catch (e) {
