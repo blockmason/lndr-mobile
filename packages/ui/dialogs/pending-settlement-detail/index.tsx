@@ -88,7 +88,8 @@ class PendingSettlementDetail extends Component<Props, State> {
     const txCost = await getTransactionCost(pendingSettlement.settlementCurrency, primaryCurrency)
 
     let pic, token
-    if (pendingSettlement.settlementCurrency === 'DAI') { //add additional tokens here
+    const type = pendingSettlement.settlementCurrency.toUpperCase()
+    if (type !== 'ETH') {
       token = getERC20_token(pendingSettlement.settlementCurrency)
     }
 
