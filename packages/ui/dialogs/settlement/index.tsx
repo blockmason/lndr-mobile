@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import { Text, TextInput, View, Image, ScrollView, KeyboardAvoidingView, Platform, Linking, Alert, Picker, Modal,
+import { Text, TextInput, TouchableHighlight, View, Image, ScrollView, KeyboardAvoidingView, Platform, Linking, Alert, Picker, Modal,
   ActionSheetIOS } from 'react-native'
 import firebase from 'react-native-firebase'
 import FontAwesome from 'react-native-vector-icons/FontAwesome'
@@ -26,6 +26,7 @@ import style from 'theme/friend'
 import formStyle from 'theme/form'
 import general from 'theme/general'
 import accountStyle from 'theme/account'
+import { white } from 'theme/include/colors'
 
 import language from 'language'
 const {
@@ -452,18 +453,26 @@ class Settlement extends Component<Props, State> {
 
   renderPicker(pickerSelection: any) {
     if(Platform.OS === 'android') {
-      return <Picker
-        selectedValue={pickerSelection.name} style={formStyle.settlementPicker}
-        onValueChange={(newVal) => {
-          this.setState({pickerSelection: this.settlementChoices().find(choice => choice.name === newVal)})
-          this.changeSettlementType(newVal)
-        } }>
-        {this.settlementChoices().map((value, key) =>
-          <Picker.Item label={value.name} key={key} value={value.name}>{pickerSelection.name}</Picker.Item>)}
-      </Picker>
+      return <View style={formStyle.settlementPickerBackground}>
+        <Picker
+          selectedValue={pickerSelection.name} style={formStyle.settlementPicker}
+          onValueChange={(newVal) => {
+            this.setState({pickerSelection: this.settlementChoices().find(choice => choice.name === newVal)})
+            this.changeSettlementType(newVal)
+          } }>
+          {this.settlementChoices().map((value, key) =>
+            <Picker.Item label={value.name} key={key} value={value.name}>{pickerSelection.name}</Picker.Item>)}
+        </Picker>
+        <FontAwesome style={formStyle.whiteCaretDown} name={'caret-down'} />
+      </View>
     } else {
       const text = this.state.pickerSelection ? this.state.pickerSelection.name : settlementManagement.select
-      return <Text style={[formStyle.settlementPicker, {paddingTop: 12}]} onPress={this.showActionSheet}>{text}</Text>
+      return <TouchableHighlight onPress={this.showActionSheet} underlayColor={white}>
+        <View style={formStyle.settlementPickerBackground}>
+          <Text style={[formStyle.settlementPicker, {paddingTop: 12}]}>{text}</Text>
+          <FontAwesome style={formStyle.whiteCaretDown} name={'caret-down'} />
+        </View>
+      </TouchableHighlight>
     }
   }
 
@@ -497,10 +506,7 @@ class Settlement extends Component<Props, State> {
               </View>
 
               <View style={general.centeredColumn}>
-                <View style={formStyle.settlementPickerBackground}>
-                  {this.renderPicker(pickerSelection)}
-                  <FontAwesome style={formStyle.whiteCaretDown} name={'caret-down'} />
-                </View>
+                {this.renderPicker(pickerSelection)}
               </View>
 
               <View style={general.centeredColumn}>
