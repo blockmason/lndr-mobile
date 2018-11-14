@@ -67,7 +67,7 @@ export default {
   errorTitle: `Fejl`,
   showMnemonic: `Vis Mnemonic på 12 ord`,
   mnemonicExhortation: `Denne 12-ords sætning er nødvendig for at kunne oprette din konto. Opbevar venligst koden et sikkert og hemmeligt sted`,
-  addressExhortation: `Send Ethereum til din adresse, så du kan indfri gæld på Lndr`,
+  addressExhortation: `Du kan sende ETH eller alle understøttede ERC-20 token til din tegnebog adresse.`,
   removeAccountTitle: `Er du sikker på, du vil fjerne din konto fra denne enhed?`,
   removeAccountExhortation: `Sørg for at du har adgang til din mnemonic for at gendanne din konto siden, da dette er en permanent fjernelse af dine kontooplysninger fra denne enhed.`,
   myAccount: `Min konto`,
@@ -180,8 +180,8 @@ export default {
     loadInformation: {
       error: generalCommunicationError
     },
-    ethBalance: {
-      display: Y => `Din ETH saldo er ${String(Y).slice(0,8)}`,
+    cryptoBalance: {
+      display: (N, B) => `Your ${N} balance is ${String(B).slice(0,8)}`,
       getError: `Kunne ikke indlæse Eth saldo`,
       manage: `Administrer ETH`,
     },
@@ -215,8 +215,8 @@ export default {
       tokenAddress: (name) => `${name} Adresse`,
     },
     panelHeaders: [
-      `Wallet Address`, // <-- translate me
-      `Crypto Balances`, // <-- translate me
+      `Wallet Adresse`,
+      `Crypto Vægte`,
       `Fjern konto`,
       `ETH Transaktionshistorik`,
       `Aktiver PayPal`,
@@ -239,10 +239,7 @@ export default {
     logoutError: generalCommunicationError,
   },
 
-  currentBalance: {
-    eth: `Din aktuelle Eth saldo er:`,
-    bcpt: `Din aktuelle BCPT saldo er:`,
-  },
+  currentBalance: name => `Aktuelle ${name} saldo`,
 
   welcomeView: {
     by: `BYGGET AF`,
@@ -374,6 +371,7 @@ export default {
       }
     },
     eth: `Gør op med ETH`,
+    erc20: name => `Settle with ${name}`,
     paypal: `Gør op med PayPal`,
     nonPayment: `Gem afregningen`,
     select: `Vælg Afregning type`,
@@ -400,7 +398,7 @@ export default {
     none: `Du har ingen ventende transaktioner`,
     confirmationQuestion: `Er du sikker på du vil bekræfte denne transaktion?`,
     pendingAnnouncement: `Denne transaktion afventer bekræftelse fra modparten.`,
-    bilateral: `Afventer fuldførelse af Eth overførslen`,
+    bilateral: `Afventer fuldførelse af overførslen`,
     confirm: `Bekræft`,
     reject: `Afvis transaktion`,
     rejectRequest: `Afvis`,
@@ -469,9 +467,9 @@ export default {
       start: `Du har nu sendt `,
       end: ` ETH og dit transaktion ID er `,
     },
-    bcptSent: {
+    erc20Sent: {
       start: `Du har nu sendt `,
-      end: ` BCPT og dit transaktion ID er `,
+      end: ` og dit transaktion ID er `,
     },
     requestPayPalPayee: {
       start: `Vi har ladet `,

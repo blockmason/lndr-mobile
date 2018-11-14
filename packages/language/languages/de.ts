@@ -67,7 +67,7 @@ export default {
   errorTitle: `Fehler`,
   showMnemonic: `Zeigen Sie die 12-Wort-Mnemonic`,
   mnemonicExhortation: `Dieser Satz mit 12 Wörtern wird benötigt, um Ihr Konto wiederzuherzustellen. Bitte bewahren Sie ihn sicher und geheim auf.`,
-  addressExhortation: `Senden Sie Ethereum zu Ihrer Adresse, so dass Sie Schulden auf Lndr begleichen können`,
+  addressExhortation: `Sie können ETH oder jede unterstützte ERC-20-Token an Ihren Geldbeutel-Adresse senden.`,
   removeAccountTitle: `Sind Sie sicher, dass Sie Ihr Konto von diesem Gerät entfernen möchten?`,
   removeAccountExhortation: `Achten Sie darauf, dass Sie Zugriff auf Ihre Mnemonic haben, um Ihr Konto später wiederherzustellen, da dies eine dauerhafte Entfernung von Ihren Kontoinformationen von diesem Gerät ist.`,
   myAccount: `Mein Konto`,
@@ -180,8 +180,8 @@ export default {
     loadInformation: {
       error: generalCommunicationError
     },
-    ethBalance: {
-      display: Y => `Ihr ETH-Kontostand ist ${String (Y) .slice (0,8)}`,
+    cryptoBalance: {
+      display: (N, B) => `Your ${N} balance is ${String(B).slice(0,8)}`,
       getError: `Eth-Kontostand kann nicht abgerufen werden`,
       manage: `ETH verwalten`,
     },
@@ -215,8 +215,8 @@ export default {
       tokenAddress: (name) => `${name}-Adresse`,
     },
     panelHeaders: [
-      `Wallet Address`, // <-- translate me
-      `Crypto Balances`, // <-- translate me
+      `Wallet-Adresse`,
+      `Crypto Balances`,
       `Konto entfernen`,
       `ETH-Transaktionshistorie`,
       `Aktivieren Sie PayPal`,
@@ -239,10 +239,7 @@ export default {
     logoutError: generalCommunicationError,
   },
 
-  currentBalance: {
-    eth: `Ihr aktuelles Eth-Guthaben beträgt:`,
-    bcpt: `Ihr aktuelles BCPT-Guthaben beträgt:`,
-  },
+  currentBalance: name => `Aktueller ${name}-Kontostand`,
 
   welcomeView: {
     by: `GEBAUT VON`,
@@ -374,6 +371,7 @@ export default {
       }
     },
     eth: `Mit ETH begleichen`,
+    erc20: name => `Settle with ${name}`,
     paypal: `Mit PayPal begleichen`,
     nonPayment: `Eine Abrechnung erfassen`,
     select: `Wählen Sie Abrechnungsart`,
@@ -400,7 +398,7 @@ export default {
     none: `Sie haben keine ausstehenden Transaktionen`,
     confirmationQuestion: `Sind Sie sicher, dass Sie diese Transaktion bestätigen möchten?`,
     pendingAnnouncement: `Diese Transaktion wartet auf die Bestätigung von der Gegenseite.`,
-    bilateral: `Warten bis die Eth-Überweisung abgeschlossen ist`,
+    bilateral: `Warten bis die Überweisung abgeschlossen ist`,
     confirm: `Bestätigen`,
     reject: `Transaktion ablehnen`,
     rejectRequest: `Ablehnen`,
@@ -469,9 +467,9 @@ export default {
       start: `Sie haben erfolgreich `,
       end: ` ETH gesendet und Ihre Transaktion-Hash ist `,
     },
-    bcptSent: {
+    erc20Sent: {
       start: `Sie haben erfolgreich `,
-      end: ` BCPT gesendet und Ihre Transaktion-Hash ist `,
+      end: ` gesendet und Ihre Transaktion-Hash ist `,
     },
     requestPayPalPayee: {
       start: `Wir haben lassen `,

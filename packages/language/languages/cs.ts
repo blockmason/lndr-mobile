@@ -67,7 +67,7 @@ export default {
   errorTitle: `Chyba`,
   showMnemonic: `Ukázat 12 slov mnemotechniky`,
   mnemonicExhortation: `Tato fráze o 12 slovech je vyžadována k obnovení účtu, bezpečně ji proto uschovejte.`,
-  addressExhortation: `Zaslat Ethereum na email za účelem vypořádání dluhů na Lndr`,
+  addressExhortation: `Můžete poslat ETH nebo libovolného podporovaného ERC-20 token vaší peněženky adresu.`,
   removeAccountTitle: `Opravdu chcete odstranit svůj účet z tohoto zařízení?`,
   removeAccountExhortation: `Ujistěte se, že máte přístup ke své mnemotechnické pomůcce pro obnovení účtu, protože odstranění vašeho účtu z tohoto zařízení je trvalé.`,
   myAccount: `Můj účet`,
@@ -180,8 +180,8 @@ export default {
     loadInformation: {
       error: generalCommunicationError
     },
-    ethBalance: {
-      display: Y => `Váš zůstatek ETH je ${String(Y).slice(0,8)}`,
+    cryptoBalance: {
+      display: (N, B) => `Your ${N} balance is ${String(B).slice(0,8)}`,
       getError: `Nelze načíst Eth rovnováhu`,
       manage: `Správovat ETH`,
     },
@@ -215,8 +215,8 @@ export default {
       tokenAddress: (name) => `${name} adresa`,
     },
     panelHeaders: [
-      `Wallet Address`, // <-- translate me
-      `Crypto Balances`, // <-- translate me
+      `Peněženka Address`,
+      `Crypto váhy`,
       `Odstranit účet`,
       `ETH Transakční historie`,
       `Umožnit PayPal`,
@@ -239,10 +239,7 @@ export default {
     logoutError: generalCommunicationError,
   },
 
-  currentBalance: {
-    eth: `Váš současný Eth zůstatek:`,
-    bcpt: `Váš současný BCPT zůstatek:`,
-  },
+  currentBalance: name => `Aktuální ${name} zůstatek`,
 
   welcomeView: {
     by: `VYTVOŘENO`,
@@ -374,6 +371,7 @@ export default {
       }
     },
     eth: `Vyrovnat prostřednictvím ETH`,
+    erc20: name => `Settle with ${name}`,
     paypal: `Vyrovnat prostřednictvím PayPal`,
     nonPayment: `Nahrát vyrovnání`,
     select: `Vyberte typ vypořádání`,
@@ -400,7 +398,7 @@ export default {
     none: `Nemáte žádné nevyřízené transakce`,
     confirmationQuestion: `Opravdu chcete potvrdit tuto transakci?`,
     pendingAnnouncement: `Tato transakce čeká na potvrzení druhou stranou.`,
-    bilateral: `Čekání na dokončení převodu Eth`,
+    bilateral: `Čekání na dokončení převodu`,
     confirm: `Potvrdit`,
     reject: `Odmítnout transakci`,
     rejectRequest: `Odmítnout`,
@@ -469,9 +467,9 @@ export default {
       start: `Úspěšně jste odeslal(a) `,
       end: ` ETH a hash vaší transakce je `,
     },
-    bcptSent: {
+    erc20Sent: {
       start: `Úspěšně jste odeslali `,
-      end: ` BCPT a hash vaší transakce je `,
+      end: ` a hash vaší transakce je `,
     },
     requestPayPalPayee: {
       start: `Máme nechat `,

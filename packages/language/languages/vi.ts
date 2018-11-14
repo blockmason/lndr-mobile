@@ -67,7 +67,7 @@ export default {
   errorTitle: `Lỗi`,
   showMnemonic: `Hiển thị 12-Chữ Gợi ý`,
   mnemonicExhortation: `Cụm 12 chữ này cần thiết để khôi phục lại tài khoản của bạn, xin vui lòng giữ nó an toàn và bảo mật`,
-  addressExhortation: `Gửi Ethereum đến địa chỉ của bạn để bạn có thể thanh toán các khoản nợ trên Lndr`,
+  addressExhortation: `Bạn có thể gửi ETH hoặc bất kỳ hỗ trợ ERC-20 dấu hiệu đến địa chỉ ví của bạn.`,
   removeAccountTitle: `Bạn có chắc chắn muốn xóa tài khoản của bạn từ thiết bị này?`,
   removeAccountExhortation: `Hãy chắc chắn rằng bạn có thể truy cập vào gợi ý ghi nhớ để khôi phục lại tài khoản của bạn sau này, do thao tác này sẽ xóa bỏ vĩnh viễn thông tin tài khoản của bạn từ thiết bị này.`,
   myAccount: `Tài khoản của tôi`,
@@ -180,8 +180,8 @@ export default {
     loadInformation: {
       error: generalCommunicationError
     },
-    ethBalance: {
-      display: Y => `Số dư ETH của bạn là ${String(Y).slice(0,8)}`,
+    cryptoBalance: {
+      display: (N, B) => `Your ${N} balance is ${String(B).slice(0,8)}`,
       getError: `Không thể lấy số dư Eth`,
       manage: `Quản lý ETH`,
     },
@@ -215,8 +215,8 @@ export default {
       tokenAddress: (name) => `Địa chỉ ${name}`,
     },
     panelHeaders: [
-      `Wallet Address`, // <-- translate me
-      `Crypto Balances`, // <-- translate me
+      `Wallet Địa chỉ`,
+      `Số dư tài khoản Crypto`,
       `Xoá tài khoản`,
       `Lịch sử giao dịch ETH`,
       `Bật PayPal`,
@@ -239,10 +239,7 @@ export default {
     logoutError: generalCommunicationError,
   },
 
-  currentBalance: {
-    eth: `Số Eth còn lại hiện tại của bạn là:`,
-    bcpt: `Số BCPT còn lại hiện tại của bạn là:`,
-  },
+  currentBalance: name => `Số dư ${name} hiện tại là`,
 
   welcomeView: {
     by: `ĐƯỢC XÂY DỰNG BỞI`,
@@ -374,6 +371,7 @@ export default {
       }
     },
     eth: `Thanh toán bằng ​​ETH`,
+    erc20: name => `Settle with ${name}`,
     paypal: `Thanh toán bằng ​​PayPal`,
     nonPayment: `Ghi chép Thanh toán`,
     select: `Chọn Loại Settlement`,
@@ -400,7 +398,7 @@ export default {
     none: `Bạn không có giao dịch đang chờ xử lý`,
     confirmationQuestion: `Bạn có chắc chắn muốn xác nhận giao dịch này?`,
     pendingAnnouncement: `Giao dịch này đang chờ xác nhận của bên còn lại.`,
-    bilateral: `Đang chờ chuyển tiền Eth hoàn tất`,
+    bilateral: `Đang chờ chuyển tiền hoàn tất`,
     confirm: `Xác nhận`,
     reject: `Từ chối Giao dịch`,
     rejectRequest: `Từ chối`,
@@ -469,9 +467,9 @@ export default {
       start: `Bạn đã gửi thành công `,
       end: ` ETH và mã hóa giao dịch của bạn là `,
     },
-    bcptSent: {
+    erc20Sent: {
       start: `Bạn đã gửi thành công `,
-      end: ` BCPT và mã hóa giao dịch của bạn là `,
+      end: ` và mã hóa giao dịch của bạn là `,
     },
     requestPayPalPayee: {
       start: `Chúng tôi đã để cho `,

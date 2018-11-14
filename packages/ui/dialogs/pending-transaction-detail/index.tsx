@@ -5,7 +5,7 @@ import { getResetAction } from 'reducers/nav'
 import { getUcacCurrency } from 'reducers/app'
 
 import { UserData } from 'lndr/user'
-import { currencyFormats } from 'lndr/format'
+import { currencyFormats, isPayPalSettlement } from 'lndr/format'
 import PendingTransaction from 'lndr/pending-transaction'
 import profilePic from 'lndr/profile-pic'
 import { currencySymbols } from 'lndr/currencies'
@@ -65,10 +65,9 @@ class PendingTransactionDetail extends Component<Props, State> {
   async componentWillMount() {
     const { user, navigation } = this.props
     const pendingTransaction = navigation.state ? navigation.state.params.pendingTransaction : {}
-    const isPayPalSettlement = pendingTransaction.settlementCurrency === 'PAYPAL'
     let pic
 
-    this.setState({ isPayPalSettlement })
+    this.setState({ isPayPalSettlement: isPayPalSettlement(pendingTransaction.settlementCurrency) })
     try {
       const addr = user.address === pendingTransaction.creditorAddress ? pendingTransaction.debtorAddress : pendingTransaction.creditorAddress
       pic = await profilePic.get(addr)

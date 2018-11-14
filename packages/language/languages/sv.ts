@@ -67,7 +67,7 @@ export default {
   errorTitle: `Felaktigt`,
   showMnemonic: `Visa 12-ords minneskod`,
   mnemonicExhortation: `Denna 12-ords minneskod krävs för att återställa ditt konto, vänligen förvarara det på ett säkert och hemligt ställe`,
-  addressExhortation: `Skicka Ethereum till din Ethereum-adress så att du kan betala på Lndr`,
+  addressExhortation: `Du kan skicka ETH eller stöds ERC-20 token till din plånbok adress.`,
   removeAccountTitle: `Är du säker på att du vill ta bort ditt konto från den här enheten?`,
   removeAccountExhortation: `Se till att du har tillgång till din minneskod för att kunna återställa ditt konto senare, eftersom detta permanent kommer ta bort dina kontouppgifter från den här enheten.`,
   myAccount: `Mitt konto`,
@@ -180,8 +180,8 @@ export default {
     loadInformation: {
       error: generalCommunicationError
     },
-    ethBalance: {
-      display: Y => `Ditt ETH saldo är ${String (Y) .slice (0,8)} `,
+    cryptoBalance: {
+      display: (N, B) => `Your ${N} balance is ${String(B).slice(0,8)}`,
       getError: `Det gick inte att inhämta Eth saldo`,
       manage: `Hantera ETH`,
     },
@@ -215,8 +215,8 @@ export default {
       tokenAddress: (name) => `${name} Adress`,
     },
     panelHeaders: [
-      `Wallet Address`, // <-- translate me
-      `Crypto Balances`, // <-- translate me
+      `Plånbok Adress`,
+      `Crypto Konto Vågar`,
       `Ta bort konto`,
       `ETH Transaktionshistorik`,
       `Aktivera PayPal`,
@@ -239,10 +239,7 @@ export default {
     logoutError: generalCommunicationError,
   },
 
-  currentBalance: {
-    eth: `Ditt nuvarande Eth saldo är:`,
-    bcpt: `Din nuvarande BCPT saldo är:`,
-  },
+  currentBalance: name => `Aktuella ${name} saldo är`,
 
   welcomeView: {
     by: `SKAPAD AV`,
@@ -374,6 +371,7 @@ export default {
       }
     },
     eth: `Betala genom ETH`,
+    erc20: name => `Settle with ${name}`,
     paypal: `Betala genom PayPal`,
     nonPayment: `Registrera betalning`,
     select: `Välj Settlement Typ`,
@@ -400,7 +398,7 @@ export default {
     none: `Du har inga väntande transaktioner`,
     confirmationQuestion: `Är du säker på att du vill godkänna denna transaktion?`,
     pendingAnnouncement: `Transaktionen väntar på godkännande av den andra parten.`,
-    bilateral: `Väntar på Eth överföring för att slutföra`,
+    bilateral: `Väntar på överföring för att slutföra`,
     confirm: `Bekräfta`,
     reject: `Avvisa transaktion`,
     rejectRequest: `Avvisa`,
@@ -469,9 +467,9 @@ export default {
       start: `Du har framgångsrikt skickat `,
       end: ` ETH och din transaktionshash är `,
     },
-    bcptSent: {
+    erc20Sent: {
       start: `Du har framgångsrikt skickat `,
-      end: ` BCPT och din transaktionshash är `,
+      end: ` och din transaktionshash är `,
     },
     requestPayPalPayee: {
       start: `Vi har låtit `,

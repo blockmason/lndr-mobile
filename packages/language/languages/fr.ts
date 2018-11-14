@@ -67,7 +67,7 @@ export default {
   errorTitle: `Erreur`,
   showMnemonic: `Afficher le code mnémonique de 12 mots`,
   mnemonicExhortation: `Cette phrase de 12 mots est nécessaire afin restaurer votre compte, merci de la garder dans un endroit sûr et secret`,
-  addressExhortation: `Envoyer de l'ethereum à votre adresse afin que vous puissiez régler des dettes sur Lndr`,
+  addressExhortation: `Vous pouvez envoyer ETH ou tout ERC-20 pris en charge jeton à votre adresse de portefeuille.`,
   removeAccountTitle: `Etes-vous sûr de vouloir supprimer votre compte sur cet appareil ?`,
   removeAccountExhortation: `Assurez-vous d'avoir accès à votre code mnémonique afin de restaurer votre compte plus tard, car votre compte sera supprimé de manière permanente sur cet appareil`,
   myAccount: `Mon compte`,
@@ -180,8 +180,8 @@ export default {
     loadInformation: {
       error: generalCommunicationError
     },
-    ethBalance: {
-      display: Y => `Votre solde en ETH est de ${String (Y) .slice (0,8)}`,
+    cryptoBalance: {
+      display: (N, B) => `Your ${N} balance is ${String(B).slice(0,8)}`,
       getError: `Impossible de récupérer votre solde en ETH`,
       manage: `Gérer vos ETH`,
     },
@@ -215,8 +215,8 @@ export default {
       tokenAddress: (name) => `Adresse ${name}`,
     },
     panelHeaders: [
-      `Wallet Address`, // <-- translate me
-      `Crypto Balances`, // <-- translate me
+      `Adresse Wallet`,
+      `Balances crypto`,
       `Supprimer le compte`,
       `Historique des transactions en ETH`,
       `Activer PayPal`,
@@ -239,10 +239,7 @@ export default {
     logoutError: generalCommunicationError,
   },
 
-  currentBalance: {
-    eth: `Votre solde actuel en ETH est :`,
-    bcpt: `Votre solde actuel en BCPT est :`,
-  },
+  currentBalance: name => `Votre solde en ${name} est de`,
 
   welcomeView: {
     by: `CONSTRUIT PAR`,
@@ -374,6 +371,7 @@ export default {
       }
     },
     eth: `Régler avec de l'ETH`,
+    erc20: name => `Settle with ${name}`,
     paypal: `Régler avec de PayPal`,
     nonPayment: `Enregistrement un règlement`,
     select: `Sélectionner le type de règlement`,
@@ -400,7 +398,7 @@ export default {
     none: `Vous n'avez pas de transaction en attente`,
     confirmationQuestion: `Êtes-vous sûr de vouloir confirmer cette transaction?`,
     pendingAnnouncement: `Cette transaction est en attente de confirmation par l'autre partie.`,
-    bilateral: `En attente du transfert Eth pour terminer`,
+    bilateral: `En attente du transfert pour terminer`,
     confirm: `Confirmer`,
     reject: `Rejeter la transaction`,
     rejectRequest: `Rejeter`,
@@ -469,9 +467,9 @@ export default {
       start: `Vous avez envoyé avec succès `,
       end: ` ETH et le hachage de votre transaction est `,
     },
-    bcptSent: {
+    erc20Sent: {
       start: `Vous avez envoyé avec succès `,
-      end: ` BCPT et le hachage de votre transaction est `,
+      end: ` et le hachage de votre transaction est `,
     },
     requestPayPalPayee: {
       start: `Nous avons laissé `,

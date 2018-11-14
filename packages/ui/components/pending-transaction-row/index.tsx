@@ -4,7 +4,7 @@ import { Text, TouchableHighlight, View, Image } from 'react-native'
 import ZIcon from 'react-native-vector-icons/Zocial'
 import { connect } from 'react-redux'
 
-import { currencyFormats } from 'lndr/format'
+import { currencyFormats, isPayPalSettlement } from 'lndr/format'
 import PendingTransaction from 'lndr/pending-transaction'
 import UserData from 'lndr/user'
 import profilePic from 'lndr/profile-pic'
@@ -99,15 +99,11 @@ class PendingTransactionRow extends Component<Props, State> {
     return this.getAmount().includes('-') ? style.redAmount : style.greenAmount
   }
 
-  isPayPalSettlement() {
-    return (this.props.pendingTransaction.settlementCurrency === 'PAYPAL')
-  }
-
   render() {
     const { onPress, pendingTransaction, friend } = this.props
     const { pic } = this.state
     const imageSource = pic ? { uri: pic } : require('images/person-outline-dark.png')
-    const paymentIcon = (this.isPayPalSettlement()) ? (<ZIcon name='paypal' color={darkAqua} style={{fontSize:15}}/>) : null
+    const paymentIcon = isPayPalSettlement(pendingTransaction.settlementCurrency) ? (<ZIcon name='paypal' color={darkAqua} style={{fontSize:15}}/>) : null
 
     return (
       <TouchableHighlight style={style.pendingTransaction} onPress={onPress} underlayColor={white} activeOpacity={1}>

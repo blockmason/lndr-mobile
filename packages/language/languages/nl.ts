@@ -67,7 +67,7 @@ export default {
   errorTitle: `Fout`,
   showMnemonic: `Toon geheugensteun van 12 woorden`,
   mnemonicExhortation: `Deze zin van 12 woorden is vereist om uw account te herstellen, bewaar het op een veilige en geheime plek`,
-  addressExhortation: `Stuur Ethereum naar uw adres, zodat u uw schulden kunt betalen op Lndr`,
+  addressExhortation: `U kunt ETH of elk ondersteund ERC-20 token te sturen naar uw portemonnee adres.`,
   removeAccountTitle: `Bent u zeker dat u uw account wilt verwijderen van dit apparaat?`,
   removeAccountExhortation: `Zorg ervoor dat u toegang tot uw geheugensteun heeft om later uw account te herstellen, want dit is een permanente verwijdering van uw accountgegevens van dit apparaat.`,
   myAccount: `Mijn account`,
@@ -180,8 +180,8 @@ export default {
     loadInformation: {
       error: generalCommunicationError
     },
-    ethBalance: {
-      display: Y => `Uw ETH saldo is ${String(Y).slice(0,8)}`,
+    cryptoBalance: {
+      display: (N, B) => `Your ${N} balance is ${String(B).slice(0,8)}`,
       getError: `Kan Eth balans niet ophalen`,
       manage: `Beheer ETH`,
     },
@@ -215,8 +215,8 @@ export default {
       tokenAddress: (name) => `${name} Adres`,
     },
     panelHeaders: [
-      `Wallet Address`, // <-- translate me
-      `Crypto Balances`, // <-- translate me
+      `Wallet Adres`,
+      `Crypto Rekeningsaldi`,
       `Verwijder account`,
       `ETH transactiegeschiedenis`,
       `Inschakelen PayPal`,
@@ -239,10 +239,7 @@ export default {
     logoutError: generalCommunicationError,
   },
 
-  currentBalance: {
-    eth: `Uw huidige Eth saldo is:`,
-    bcpt: `Uw huidige BCPT saldo is:`,
-  },
+  currentBalance: name => `Uw huidige ${name} saldo is`,
 
   welcomeView: {
     by: `GEBOUWD DOOR`,
@@ -374,6 +371,7 @@ export default {
       }
     },
     eth: `Betaal met ETH`,
+    erc20: name => `Settle with ${name}`,
     paypal: `Betaal met PayPal`,
     nonPayment: `Documenteer een betaling`,
     select: `Selecteer Betalingssoort`,
@@ -400,7 +398,7 @@ export default {
     none: `U heeft geen transacties in behandeling`,
     confirmationQuestion: `Bent u zeker dat u deze transactie wilt bevestigen?`,
     pendingAnnouncement: `Deze transactie wacht op bevestiging door de andere partij.`,
-    bilateral: `Wachten op voltooien van de Eth overboeking`,
+    bilateral: `Wachten op voltooien van de overboeking`,
     confirm: `Bevestig`,
     reject: `Weiger transactie`,
     rejectRequest: `Wijs af`,
@@ -469,9 +467,9 @@ export default {
       start: `U heeft succesvol `,
       end: ` ETH verzonden en uw transactiekenmerk is `,
     },
-    bcptSent: {
+    erc20Sent: {
       start: `U heeft succesvol `,
-      end: ` BCPT verzonden en uw transactiekenmerk is `,
+      end: ` verzonden en uw transactiekenmerk is `,
     },
     requestPayPalPayee: {
       start: `We hebben laten `,

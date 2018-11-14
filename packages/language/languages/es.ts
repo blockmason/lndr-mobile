@@ -67,7 +67,7 @@ export default {
   errorTitle: `Error`,
   showMnemonic: `Mostrar el Recordatorio de 12 Palabras`,
   mnemonicExhortation: `Se requiere esta frase de 12 palabras para restaurar su cuenta, por favor consérvela en un lugar seguro y secreto`,
-  addressExhortation: `Cargue Ethereum a su Dirección para que pueda Pagar sus Deudas en Lndr`,
+  addressExhortation: `Puede enviar ETH o cualquier apoyado ERC-20 de contadores a su dirección de cartera.`,
   removeAccountTitle: `¿Está seguro de querer eliminar su cuenta de este dispositivo?`,
   removeAccountExhortation: `Asegúrese de que tiene acceso a su Recordatorio para restaurar la cuenta más tarde, ya que está procediendo a eliminar permanentemente la información de su cuenta desde este dispositivo.`,
   myAccount: `Mi cuenta`,
@@ -180,8 +180,8 @@ export default {
     loadInformation: {
       error: generalCommunicationError
     },
-    ethBalance: {
-      display: Y => `Su Saldo en ETH (Ethereum) es: ${String (Y) .slice (0,8)}`,
+    cryptoBalance: {
+      display: (N, B) => `Your ${N} balance is ${String(B).slice(0,8)}`,
       getError: `No se pudo recuperar su balance de ETH (Ethereum)`,
       manage: `Administrar ETH (Ethereum)`,
     },
@@ -211,12 +211,12 @@ export default {
       },
       transfer: (name) => `Transferencia de ${name}`,
       address: `Dirección de Destino`,
-      balance: (name, balance) => `Su saldo actual es de: ${name} ${typeof balance === 'string'? balance.slice (0,8): ''}`,
+      balance: (name, balance) => `Su saldo actual de ${name} es:  ${typeof balance === 'string'? balance.slice (0,8): ''}`,
       tokenAddress: (name) => `Dirección ${name}`,
     },
     panelHeaders: [
-      `Wallet Address`, // <-- translate me
-      `Crypto Balances`, // <-- translate me
+      `Monedero Dirección`,
+      `Los saldos Crypto`,
       `Eliminar Cuenta`,
       `Historial de Transacciones en Ethereum`,
       `Activar PayPal`,
@@ -239,10 +239,7 @@ export default {
     logoutError: generalCommunicationError,
   },
 
-  currentBalance: {
-    eth: `Su Saldo Actual de ETH (Ethereum) es:`,
-    bcpt: `Su Saldo Actual de BCPT es:`,
-  },
+  currentBalance: name => `Saldo actual de ${name}`,
 
   welcomeView: {
     by: `CONSTRUIDO POR`,
@@ -374,6 +371,7 @@ export default {
       }
     },
     eth: `Pagar con ETH (Ethereum)`,
+    erc20: name => `Settle with ${name}`,
     paypal: `Pagar con PayPal`,
     nonPayment: `Archivar un Pago`,
     select: `Seleccionar el tipo de pago`,
@@ -400,7 +398,7 @@ export default {
     none: `No tiene transacciones pendientes`,
     confirmationQuestion: `¿Está seguro de que desea confirmar esta transacción?`,
     pendingAnnouncement: `Esta transacción está esperando la confirmación de su contraparte.`,
-    bilateral: `Esperando por la transferencia de ETH (Ethereum) para completar el proceso`,
+    bilateral: `Esperando por la transferencia para completar el proceso`,
     confirm: `Confirmar`,
     reject: `Rechazar Transacción`,
     rejectRequest: `Rechazar`,
@@ -469,9 +467,9 @@ export default {
       start: `Ha enviado `,
       end: ` ETH con éxito, y el hash de la transacción es `,
     },
-    bcptSent: {
+    erc20Sent: {
       start: `Has enviado `,
-      end: ` BCPT con éxito, y el hash de la transacción es `,
+      end: ` con éxito, y el hash de la transacción es `,
     },
     requestPayPalPayee: {
       start: `Hemos dejado `,

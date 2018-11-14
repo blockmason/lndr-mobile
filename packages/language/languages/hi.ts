@@ -67,7 +67,7 @@ export default {
   errorTitle: `गलती हुई`,
   showMnemonic: `12-शब्द का स्मरक दिखाएँ`,
   mnemonicExhortation: `आपके अकाउंट को बहाल करने के लिए इस 12-शब्द के वाक्यांश की जरूरत होगी, कृपया इसे कहीं सुरक्षित रखें`,
-  addressExhortation: `Ethereum अपने पते पर भेजें ताकि आप Lndr पर कर्जों का निपटान कर सकें`,
+  addressExhortation: `आप अपने बटुए का पता करने के लिए ETH या किसी समर्थित ईआरसी -20 टोकन भेज सकते हैं।`,
   removeAccountTitle: `क्या आप वाकई में इस डिवाइस से अपने अकाउंट को हटाना चाहते हैं?`,
   removeAccountExhortation: `आप अकाउंट को डिवाइस से परमानेंट रूप से हटा रहे हैं। सुनिश्चित कर लें कि बाद में अपने खाते बहाल करने के लिए यह स्मरक आपकी पहुँच में हो।`,
   myAccount: `मेरा अकाउंट`,
@@ -180,8 +180,8 @@ export default {
     loadInformation: {
       error: generalCommunicationError
     },
-    ethBalance: {
-      display: Y => `आपका ETH बैलेन्स $ है ${String(Y).slice(0,8)}`,
+    cryptoBalance: {
+      display: (N, B) => `Your ${N} balance is ${String(B).slice(0,8)}`,
       getError: `Eth बैलेन्स प्राप्त नहीं कर पा रहा`,
       manage: `ETH मैनेज करें`,
     },
@@ -215,8 +215,8 @@ export default {
       tokenAddress: (name) => `${name} पता`,
     },
     panelHeaders: [
-      `Wallet Address`, // <-- translate me
-      `Crypto Balances`, // <-- translate me
+      `बटुआ पता`,
+      `क्रिप्टो शेष`,
       `अकाउंट डिलीट करें`,
       `ETH बैलेंस हिस्ट्री`,
       `पेपैल सक्षम करें`,
@@ -239,10 +239,7 @@ export default {
     logoutError: generalCommunicationError,
   },
 
-  currentBalance: {
-    eth: `आपका वर्तमान Eth बैलेन्स है:`,
-    bcpt: `आपका वर्तमान BCPT बैलेन्स है:`,
-  },
+  currentBalance: name => `आपका वर्तमान ${name} बैलेन्स`,
 
   welcomeView: {
     by: `निर्माता`,
@@ -374,6 +371,7 @@ export default {
       }
     },
     eth: `ETH से निपटाएँ`,
+    erc20: name => `Settle with ${name}`,
     paypal: `PayPal से निपटाएँ`,
     nonPayment: `कोई निपटान रिकॉर्ड करें`,
     select: `चुनें निपटान प्रकार`,
@@ -400,7 +398,7 @@ export default {
     none: `आपके कोई पेंडिंग ट्रैंज़ैक्शन नहीं हैं`,
     confirmationQuestion: `क्या आप वाकई में इस ट्रैंज़ैक्शन को कन्फ़र्म करना चाहते हैं?`,
     pendingAnnouncement: `यह ट्रैंज़ैक्शन थर्ड-पार्टी के कन्फ़र्मेशन का इंतज़ार कर रहा है।`,
-    bilateral: `Eth ट्रान्सफर पूरा होने का इंतज़ार कर रहा है`,
+    bilateral: `ट्रान्सफर पूरा होने का इंतज़ार कर रहा है`,
     confirm: `कन्फ़र्म करें`,
     reject: `ट्रैंज़ैक्शन रिजेक्ट करें`,
     rejectRequest: `रिजेक्ट करें`,
@@ -469,9 +467,9 @@ export default {
       start: `आपने `,
       end: ` ETH भेज दिये हैं और आपका ट्रैंज़ैक्शन हैश `,
     },
-    bcptSent: {
+    erc20Sent: {
       start: `आपने `,
-      end: ` BCPT भेज दिए हैं और आपका ट्रैंज़ैक्शन हैश `,
+      end: ` भेज दिए हैं और आपका ट्रैंज़ैक्शन हैश `,
     },
     requestPayPalPayee: {
       start: `हम `,

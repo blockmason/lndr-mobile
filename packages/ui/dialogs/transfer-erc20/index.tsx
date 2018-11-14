@@ -6,7 +6,7 @@ import firebase from 'react-native-firebase'
 import { getResetAction } from 'reducers/nav'
 
 import { UserData } from 'lndr/user'
-import { bcptAmount, formatCommaDecimal, isEthAddress } from 'lndr/format'
+import { cryptoAmount, formatCommaDecimal, isEthAddress } from 'lndr/format'
 import { ERC20_Token } from 'lndr/erc-20'
 
 import BackButton from 'ui/components/back-button'
@@ -115,7 +115,7 @@ class TransferERC20 extends Component<Props, State> {
   }
 
   setAmount(amount) {
-    return `${bcptAmount(amount)}`
+    return `${cryptoAmount(amount)}`
   }
 
   setDestinationAddress(destinationAddress) {

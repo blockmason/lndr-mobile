@@ -67,7 +67,7 @@ export default {
   errorTitle: `错误`,
   showMnemonic: `显示12个单词的助记符`,
   mnemonicExhortation: `当您恢复账户的时候需要使用此12个单词，请将其妥善保存在安全、私密的地方`,
-  addressExhortation: `将以太坊转到您的地址以便您在Lndr偿还账单`,
+  addressExhortation: `您可以发送ETH或任何支持的ERC-20标记你的钱包地址。`,
   removeAccountTitle: `您确定从该设备上移除您的帐户吗？`,
   removeAccountExhortation: `请确保您已经保存恢复账户需使用的助记符，因为您的账户信息将被从此设备永久删除。`,
   myAccount: `我的帐户`,
@@ -180,8 +180,8 @@ export default {
     loadInformation: {
       error: generalCommunicationError
     },
-    ethBalance: {
-      display: Y => `您的以太坊余额为${String(Y).slice(0,8)}`,
+    cryptoBalance: {
+      display: (N, B) => `Your ${N} balance is ${String(B).slice(0,8)}`,
       getError: `无法检索您的以太坊余额`,
       manage: `管理您的以太坊`,
     },
@@ -215,8 +215,8 @@ export default {
       tokenAddress: (name) => `${name}地址`,
     },
     panelHeaders: [
-      `Wallet Address`, // <-- translate me
-      `Crypto Balances`, // <-- translate me
+      `钱包地址`,
+      `加密账户余额`,
       `删除账号`,
       `以太坊转账交易历史`,
       `启用PayPal`,
@@ -239,10 +239,7 @@ export default {
     logoutError: generalCommunicationError,
   },
 
-  currentBalance: {
-    eth: `您当前的Eth余额为：`,
-    bcpt: `您当前的BCPT余额为：`,
-  },
+  currentBalance: name => `当前的${name}余额为`,
 
   welcomeView: {
     by: `创建者`,
@@ -374,6 +371,7 @@ export default {
       }
     },
     eth: `使用以太坊结算`,
+    erc20: name => `Settle with ${name}`,
     paypal: `使用PayPal结算`,
     nonPayment: `记录一笔结账清算`,
     select: `选择结算类型`,
@@ -400,7 +398,7 @@ export default {
     none: `您没有待定交易`,
     confirmationQuestion: `您确定要确认此交易吗？`,
     pendingAnnouncement: `本次交易仍待对方确认。`,
-    bilateral: `等待以太坊转账完成`,
+    bilateral: `等待转账完成`,
     confirm: `确认`,
     reject: `拒绝交易`,
     rejectRequest: `拒绝`,
@@ -469,9 +467,9 @@ export default {
       start: `您已成功发送`,
       end: `个以太坊且您的交易哈希为`,
     },
-    bcptSent: {
+    erc20Sent: {
       start: `您已成功发送`,
-      end: `个BCPT且您的交易哈希为`,
+      end: `且您的交易哈希为`,
     },
     requestPayPalPayee: {
       start: `我们已经让`,

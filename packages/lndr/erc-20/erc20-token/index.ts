@@ -28,13 +28,14 @@ class ERC20_Model {
 }
 
 const web3 = new Web3(new Web3.providers.HttpProvider('https://mainnet.infura.io/EoLr1OVfUMDqq3N2KaKA'))
+// const web3 = Platform.OS === 'ios' ? new Web3(new Web3.providers.HttpProvider('http://localhost:8545')) : new Web3(new Web3.providers.HttpProvider('http://10.0.2.2:8545'))
 const ERC20Contract = web3.eth.contract(ERC20_ABI)
 
 export default class ERC20_Token {
   tokenName : string
   contractAddress: string
   decimals: number
-  exchangePerUSD?: number
+  exchangePerUSD?: number // Note: this should be undefined for tokens that are not available for Settlement, e.g. BCPT
 
   constructor(tokenName: string, contractAddress: string, decimals: number, exchangePerUSD?: number) {
     this.tokenName = tokenName

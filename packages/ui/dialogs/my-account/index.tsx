@@ -68,6 +68,7 @@ interface Props {
   setPrimaryCurrency: (value: string) => any
   failedValidatePin: () => void
   getVerificationStatus: () => void
+  getStore: () => any
 }
 
 interface State {
@@ -117,6 +118,7 @@ class MyAccount extends Component<Props, State> {
   }
 
   async componentWillMount() {
+    console.log('WE HAVE A USER', this.props.user)
     const { address } = this.props.user
     this.props.setEthBalance()
     this.props.getProfilePic(address)
@@ -138,7 +140,7 @@ class MyAccount extends Component<Props, State> {
       })
     })
 
-    const transferLimitLevel = await getTransferLimitLevel(this.props.user.address, getStore(this.state))
+    const transferLimitLevel = await getTransferLimitLevel(this.props.user.address, this.props.getStore())
 
     this.setState({cryptoBalances: cryptoBalances,
       transferLimitLevel: transferLimitLevel})
@@ -591,6 +593,6 @@ class MyAccount extends Component<Props, State> {
 }
 
 export default connect((state) => ({ user: getUser(state)(), state: getStore(state)(), allCurrencies: getAllUcacCurrencies(state),
-  primaryCurrency: getPrimaryCurrency(state)}), { updateEmail, updateNickname,
+  primaryCurrency: getPrimaryCurrency(state), getStore: getStore(state)}), { updateEmail, updateNickname,
   getAccountInformation, logoutAccount, toggleNotifications, setEthBalance, updateLockTimeout, updatePin,
   getProfilePic, setProfilePic, copyToClipboard, setPrimaryCurrency, failedValidatePin, getVerificationStatus })(MyAccount)

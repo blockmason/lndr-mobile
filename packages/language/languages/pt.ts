@@ -67,7 +67,7 @@ export default {
   errorTitle: `Erro`,
   showMnemonic: `Mostrar 12-Palavras Mnemonic`,
   mnemonicExhortation: `Esta frase de 12 palavras é necessária para restaurar sua conta, por favor salve-a em algum lugar seguro e secreto`,
-  addressExhortation: `Enviar Ethereum para o seu endereço para que você possa pagar as dívidas no Lndr`,
+  addressExhortation: `Você pode enviar ETH ou qualquer suportado ERC-20 token para o seu endereço de carteira.`,
   removeAccountTitle: `Tem certeza de que deseja remover a sua conta deste dispositivo?`,
   removeAccountExhortation: `Certifique-se de que você tem acesso ao seu mnemonic para restaurar sua conta mais tarde, pois esta é uma remoção permanente das informações da sua conta deste dispositivo.`,
   myAccount: `Minha Conta`,
@@ -180,8 +180,8 @@ export default {
     loadInformation: {
       error: generalCommunicationError
     },
-    ethBalance: {
-      display: Y => `Seu saldo ETH é de R ${String (Y) .slice (0,8)}`,
+    cryptoBalance: {
+      display: (N, B) => `Your ${N} balance is ${String(B).slice(0,8)}`,
       getError: `Não é possível recuperar o saldo Eth`,
       manage: `Gerenciar ETH`,
     },
@@ -215,8 +215,8 @@ export default {
       tokenAddress: (name) => `Endereço ${name}`,
     },
     panelHeaders: [
-      `Wallet Address`, // <-- translate me
-      `Crypto Balances`, // <-- translate me
+      `Carteira Endereço`,
+      `Saldos de Contas de criptografia`,
       `Remover conta`,
       `Histórico de Transações ETH`,
       `Ativar PayPal`,
@@ -239,10 +239,7 @@ export default {
     logoutError: generalCommunicationError,
   },
 
-  currentBalance: {
-    eth: `Seu saldo Eth é:`,
-    bcpt: `Seu saldo BCPT atual é:`,
-  },
+  currentBalance: name => `Seu saldo ${name} atual é de R`,
 
   welcomeView: {
     by: `CONSTRUIDO POR`,
@@ -374,6 +371,7 @@ export default {
       }
     },
     eth: `Pagar com ETH`,
+    erc20: name => `Settle with ${name}`,
     paypal: `Pagar com PayPal`,
     nonPayment: `Gravar um Pagamento`,
     select: `Escolha um tipo de liquidação`,
@@ -400,7 +398,7 @@ export default {
     none: `Você não tem transações pendentes`,
     confirmationQuestion: `Tem certeza de que deseja confirmar esta transação?`,
     pendingAnnouncement: `Esta transação está aguardando a confirmação pela outra parte.`,
-    bilateral: `Esperando transferência Eth para completar`,
+    bilateral: `Esperando transferência para completar`,
     confirm: `Confirmar`,
     reject: `Rejeitar Transação`,
     rejectRequest: `Rejeitar`,
@@ -469,9 +467,9 @@ export default {
       start: `Você enviou com sucesso `,
       end: ` ETH e seu hash de transação é `,
     },
-    bcptSent: {
+    erc20Sent: {
       start: `Você enviou com sucesso `,
-      end: ` BCPT e seu hash de transação é `,
+      end: ` e seu hash de transação é `,
     },
     requestPayPalPayee: {
       start: `Deixamos `,

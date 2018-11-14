@@ -6,12 +6,12 @@ import { getStore } from 'reducers/app'
 import { getResetAction } from 'reducers/nav'
 
 import { UserData } from 'lndr/user'
-import { currencyFormats, formatCommaDecimal, formatEthRemaining } from 'lndr/format'
+import { currencyFormats, formatCommaDecimal, formatEthRemaining, isERC20Settlement } from 'lndr/format'
 import PendingUnilateral from 'lndr/pending-unilateral'
 import profilePic from 'lndr/profile-pic'
 import Friend from 'lndr/friend'
 import { currencySymbols, transferLimits, hasNoDecimals, TRANSFER_LIMIT_STANDARD } from 'lndr/currencies'
-import { WEI_PER_ETH } from 'lndr/erc-20'
+import { WEI_PER_ETH, ERC20_Token, getERC20_token } from 'lndr/erc-20'
 
 import BackButton from 'ui/components/back-button'
 import Button from 'ui/components/button'
@@ -59,20 +59,22 @@ interface Props {
   settlerIsMe: (pendingSettlement: PendingUnilateral) => boolean
   calculateBalance: (friend: Friend) => number
   getUcacCurrency: (ucac: string) => string
+  getStore: () => any
 }
 
 interface State {
   txCost: string
   pic?: string
   confirmationError?: string
-  unmounting?: boolean
   transferLimitLevel: string
+  token?: ERC20_Token
 }
 
 class PendingSettlementDetail extends Component<Props, State> {
   constructor(props) {
     super(props)
     this.state = {
+      token: undefined,
       txCost: '0.00',
       transferLimitLevel: TRANSFER_LIMIT_STANDARD
     }
@@ -81,25 +83,25 @@ class PendingSettlementDetail extends Component<Props, State> {
   async componentWillMount() {
     const { user, primaryCurrency } = this.props
 
-    const transferLimitLevel = await getTransferLimitLevel(this.props.user.address, getStore(this.state))
-    this.setState({transferLimitLevel})
-
-    const txCost = await getTransactionCost('eth', primaryCurrency)
+    const transferLimitLevel = await getTransferLimitLevel(this.props.user.address, this.props.getStore())
     const pendingSettlement = this.getPendingSettlement()
-    let pic
+    const settlementType = pendingSettlement.settlementCurrency
 
-    try {
-      const addr = user.address === pendingSettlement.creditorAddress ? pendingSettlement.debtorAddress : pendingSettlement.creditorAddress
-      pic = await profilePic.get(addr)
-    } catch (e) {}
-      if(!this.state.unmounting && pic) {
-        this.setState({ pic, txCost })
+    const txCost = await getTransactionCost(settlementType, primaryCurrency)
+    this.setState({ transferLimitLevel, txCost })
+
+    if (isERC20Settlement(settlementType)) {
+      this.setState({ token: getERC20_token(settlementType) })
     }
-  }
 
-
-  componentWillUnmount() {
-    this.setState({unmounting: true})
+    const friendAddress = (user.address === pendingSettlement.creditorAddress) ? pendingSettlement.debtorAddress : pendingSettlement.creditorAddress
+    try {
+      const pic = await profilePic.get(friendAddress)
+      if (pic) {
+        this.setState({ pic })
+      }
+    } catch (e) {
+    }
   }
 
   async addDebt(pendingSettlement: PendingUnilateral) {
@@ -111,7 +113,7 @@ class PendingSettlementDetail extends Component<Props, State> {
     const settleTotal = multiSettlements !== undefined
     const formattedAmount = hasNoDecimals(this.props.getUcacCurrency(ucac)) ? amount : amount / 100
 
-    if ( (creditorAddress === user.address) && exceedsTransferLimit(formattedAmount, transferLimitLevel, this.state) ) {
+    if ( (creditorAddress === user.address) && exceedsTransferLimit(formattedAmount, transferLimitLevel, ethExchange(primaryCurrency), ethSentPastWeek) ) {
       this.setState({ confirmationError: accountManagement.sendEth.error.limitExceeded(primaryCurrency, transferLimitLevel) })
       return
     }
@@ -199,16 +201,9 @@ class PendingSettlementDetail extends Component<Props, State> {
   getSettlementAmount() {
     const { user } = this.props
     const pendingSettlement = this.getPendingSettlement()
-    let sign = ''
 
-    if (user.address === pendingSettlement.creditorAddress) {
-      sign = '+'
-    } else if (user.address === pendingSettlement.debtorAddress) {
-      sign = '-'
-    }
-
-    //this is specific to ETH
-    return `${pendingSettlement.settlementAmount / WEI_PER_ETH}`.slice(0, 9)
+    const divisor = !!this.state.token ? Math.pow(10, this.state.token.decimals) : WEI_PER_ETH
+    return `${pendingSettlement.settlementAmount / divisor}`.slice(0, 9)
   }
 
   showButtons() {
@@ -233,7 +228,8 @@ class PendingSettlementDetail extends Component<Props, State> {
     const { txCost, confirmationError, transferLimitLevel } = this.state
     const { user, primaryCurrency } = this.props
     const pendingSettlement = this.getPendingSettlement()
-    const friendAddress = user.address === pendingSettlement.creditorAddress ? pendingSettlement.debtorAddress : pendingSettlement.creditorAddress
+    const isPayee = (user.address === pendingSettlement.debtorAddress)
+    const friendAddress = isPayee ? pendingSettlement.creditorAddress : pendingSettlement.debtorAddress
     const friend = this.props.getFriendFromAddress(friendAddress) || new Friend('', '')
 
     return <View style={general.whiteFlex}>
@@ -258,9 +254,9 @@ class PendingSettlementDetail extends Component<Props, State> {
           <BalanceSection friend={friend} />
           }
           <View style={{marginBottom: 20}}/>
-          {user.address === pendingSettlement.debtorAddress ? null : <Text style={[formStyle.smallText, formStyle.spaceTop, formStyle.center]}>{accountManagement.sendEth.warning(this.getLimit(), primaryCurrency, transferLimitLevel)}</Text>}
-          <Text style={[accountStyle.txCost, formStyle.spaceBottom, {marginLeft: '2%'}]}>{accountManagement.sendEth.txCost(formatCommaDecimal(txCost), primaryCurrency)}</Text>
-          { confirmationError && <Text style={[formStyle.warningText, {alignSelf: 'center'}]}>{confirmationError}</Text>}
+          {!isPayee && <Text style={[formStyle.smallText, formStyle.spaceTop, formStyle.center]}>{accountManagement.sendEth.warning(this.getLimit(), primaryCurrency, transferLimitLevel)}</Text>}
+          {!isPayee && <Text style={[accountStyle.txCost, formStyle.spaceBottom, {marginLeft: '2%'}]}>{accountManagement.sendEth.txCost(formatCommaDecimal(txCost), primaryCurrency)}</Text>}
+          {confirmationError && <Text style={[formStyle.warningText, {alignSelf: 'center'}]}>{confirmationError}</Text>}
           {this.showButtons()}
           <View style={general.spaceBelow}/>
         </View>
@@ -271,5 +267,5 @@ class PendingSettlementDetail extends Component<Props, State> {
 
 export default connect((state) => ({ user: getUser(state)(), settlerIsMe: settlerIsMe(state), ethExchange: getEthExchange(state),
   ethSentPastWeek: getWeeklyEthTotal(state), calculateBalance: calculateBalance(state), getUcacCurrency: getUcacCurrency(state),
-  primaryCurrency: getPrimaryCurrency(state), getFriendFromAddress: getFriendFromAddress(state) }),
+  primaryCurrency: getPrimaryCurrency(state), getFriendFromAddress: getFriendFromAddress(state), getStore: getStore(state) }),
   { addDebt, rejectPendingSettlement })(PendingSettlementDetail)

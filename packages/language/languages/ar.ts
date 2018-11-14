@@ -67,7 +67,7 @@ export default {
   errorTitle: `خطأ`,
   showMnemonic: `إظهار الاستذكار المؤلف من 12-كلمة`,
   mnemonicExhortation: `هذه العبارة المؤلفة من 12-كلمة مطلوبة لاسترداد حسابك، الرجاء الاحتفاظ بها في مكان آمن وسري`,
-  addressExhortation: `أرسل إثيريوم إلى عنوانك لكي تتمكن من تسديد الديون على Lndr `,
+  addressExhortation: `أيمكنك إرسال ETH أو أي دعم ERC-20 رمز إلى عنوان محفظتك.`,
   removeAccountTitle: `هل أنت متأكد من إزالة حسابك من هذا الجهاز؟`,
   removeAccountExhortation: `تأكد من إمكانيتك الوصول إلى الاستذكار الخاص بك لكي تتمكن من استرداد حسابك لاحقاً، فهذه إزالة دائمة لمعلومات حسابك من هذا الجهاز.`,
   myAccount: `حسابي`,
@@ -180,8 +180,8 @@ export default {
     loadInformation: {
       error: generalCommunicationError
     },
-    ethBalance: {
-      display: Y => `رصيد الإثيريوم الخاص بك هو ${String(Y).slice(0,8)}`,
+    cryptoBalance: {
+      display: (N, B) => `Your ${N} balance is ${String(B).slice(0,8)}`,
       getError: `تعذر استرداد رصيد إثيريوم`,
       manage: `إدارة إثيريوم`,
     },
@@ -215,8 +215,8 @@ export default {
       tokenAddress: (name) => `عنوان ${name}`,
     },
     panelHeaders: [
-      `Wallet Address`, // <-- translate me
-      `Crypto Balances`, // <-- translate me
+      `محفظة عنوان`,
+      `أرصدة التشفير`,
       `إزالة الحساب`,
       `سجل معاملات إثيريوم`,
       `تمكين باي بال`,
@@ -239,10 +239,7 @@ export default {
     logoutError: generalCommunicationError,
   },
 
-  currentBalance: {
-    eth: `رصيدك الحالي من الإثيريوم هو:`,
-    bcpt: `رصيدك الحالي من BCPT هو:`,
-  },
+  currentBalance: name => `رصيدك الحالي من ${name} هو`,
 
   welcomeView: {
     by: `تم تصميمه من قبل`,
@@ -374,6 +371,7 @@ export default {
       }
     },
     eth: `سدد الحساب بالإثيريوم`,
+    erc20: name => `Settle with ${name}`,
     paypal: `دفع الفاتورة مع باي بال`,
     nonPayment: `سجّل مبلغ سداد`,
     select: `حدد نوع التسوية`,
@@ -400,7 +398,7 @@ export default {
     none: `ليس لديك أي معاملات معلقة`,
     confirmationQuestion: `هل أنت متأكد من تأكيد هذه المعاملة؟`,
     pendingAnnouncement: `هذه المعاملة في انتظار تأكيد الطرف الآخر. `,
-    bilateral: `في انتظار اكتمال تحويل الإثيريوم`,
+    bilateral: `في انتظار نقلها إلى استكمال`,
     confirm: `تأكيد`,
     reject: `رفض المعاملة`,
     rejectRequest: `رفض`,
@@ -469,9 +467,9 @@ export default {
       start: `لقد أرسلت `,
       end: ` إثيريوم بنجاح ورقم الهاش لمعاملتك هو `,
     },
-    bcptSent: {
+    erc20Sent: {
       start: ` بنجاح ورقم الهاش لمعاملتك هو `,
-      end: ` لقد أرسلت  BCPT `,
+      end: ` لقد أرسلت  `,
     },
     requestPayPalPayee: {
       start: ` أعرف أن كنت ترغب في تسوية مع باي بال`,

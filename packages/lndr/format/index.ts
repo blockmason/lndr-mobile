@@ -196,7 +196,7 @@ const isChecksumAddress = address => {
     return true
 }
 
-export const ethAmount = amount => {
+export const cryptoAmount = amount => {
   if(isCommaDecimal()) {
     return amount.replace(/[^0-9,]/g, '')
   } else {
@@ -207,8 +207,6 @@ export const ethAmount = amount => {
 export const emailFormatIncorrect = email => !( /^(([^<>()\[\]\.,;:\s@\"]+(\.[^<>()\[\]\.,;:\s@\"]+)*)|(\".+\"))@(([^<>()[\]\.,;:\s@\"]+\.)+[^<>()[\]\.,;:\s@\"]{2,})$/i.test(email) )
 
 export const nickLengthIncorrect = nick => typeof nick === 'string' && nick.length < 3
-
-export const bcptAmount = amount => amount.replace(/[^0-9]/g, '')
 
 export const convertCommaDecimalToPoint = (amount: string) : string => {
   if(!isCommaDecimal()) {
@@ -297,4 +295,20 @@ export const dobFormat = (dob: string) : string => {
   } else {
     return cleanDob.slice(0, -1)
   }
+}
+
+export const isPayPalSettlement = (settlementType?: string) : boolean => {
+  return (!!settlementType && (settlementType.toUpperCase() === 'PAYPAL'))
+}
+
+export const isEthSettlement = (settlementType?: string) : boolean => {
+  return (!!settlementType && (settlementType.toUpperCase() === 'ETH'))
+}
+
+export const isERC20Settlement = (settlementType?: string) : boolean => {
+  return (!!settlementType && (settlementType.toUpperCase() !== 'SETTLEMENT') && !isPayPalSettlement(settlementType) && !isEthSettlement(settlementType))
+}
+
+export const isSettlementFree = (settlementType?: string) : boolean => {
+  return (!settlementType || settlementType.toUpperCase() === 'SETTLEMENT' || isPayPalSettlement(settlementType))
 }
