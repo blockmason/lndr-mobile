@@ -6,7 +6,7 @@ import { getStore } from 'reducers/app'
 import { getResetAction } from 'reducers/nav'
 
 import { UserData } from 'lndr/user'
-import { currencyFormats, formatCommaDecimal, formatEthRemaining, isERC20Settlement, formatSettlementCurrencyAmount } from 'lndr/format'
+import { currencyFormats, formatCommaDecimal, formatEthRemaining, isERC20Settlement, formatSettlementCurrencyAmount, isEthSettlement } from 'lndr/format'
 import PendingUnilateral from 'lndr/pending-unilateral'
 import profilePic from 'lndr/profile-pic'
 import Friend from 'lndr/friend'
@@ -202,7 +202,7 @@ class PendingSettlementDetail extends Component<Props, State> {
     const pendingSettlement = this.getPendingSettlement()
 
     const divisor = !!this.state.token ? Math.pow(10, this.state.token.decimals) : WEI_PER_ETH
-    return formatSettlementCurrencyAmount(`${pendingSettlement.settlementAmount / divisor}`, pendingSettlement.settlementCurrency === 'ETH')
+    return formatSettlementCurrencyAmount(`${pendingSettlement.settlementAmount / divisor}`, isEthSettlement(pendingSettlement.settlementCurrency))
   }
 
   showButtons() {
