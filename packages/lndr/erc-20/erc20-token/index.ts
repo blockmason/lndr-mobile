@@ -35,9 +35,9 @@ export default class ERC20_Token {
   tokenName : string
   contractAddress: string
   decimals: number
-  exchangePerUSD?: number
+  exchangePerUSD?: number // Note: this should be undefined for tokens that are not available for Settlement, e.g. BCPT
 
-  constructor(tokenName: string, contractAddress: string, decimals: number, exchangePerUSD = 1) {
+  constructor(tokenName: string, contractAddress: string, decimals: number, exchangePerUSD?: number) {
     this.tokenName = tokenName
     this.contractAddress = contractAddress
     this.decimals = decimals
