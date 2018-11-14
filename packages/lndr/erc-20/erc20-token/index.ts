@@ -37,7 +37,7 @@ export default class ERC20_Token {
   decimals: number
   exchangePerUSD?: number
 
-  constructor(tokenName: string, contractAddress: string, decimals: number, exchangePerUSD?: number) {
+  constructor(tokenName: string, contractAddress: string, decimals: number, exchangePerUSD = 1) {
     this.tokenName = tokenName
     this.contractAddress = contractAddress
     this.decimals = decimals

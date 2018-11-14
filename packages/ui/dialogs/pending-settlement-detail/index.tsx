@@ -11,7 +11,7 @@ import PendingUnilateral from 'lndr/pending-unilateral'
 import profilePic from 'lndr/profile-pic'
 import Friend from 'lndr/friend'
 import { currencySymbols, transferLimits, hasNoDecimals, TRANSFER_LIMIT_STANDARD } from 'lndr/currencies'
-import { WEI_PER_ETH } from 'lndr/erc-20'
+import { WEI_PER_ETH, ERC20_Token, getERC20_token } from 'lndr/erc-20'
 
 import BackButton from 'ui/components/back-button'
 import Button from 'ui/components/button'
@@ -68,6 +68,7 @@ interface State {
   confirmationError?: string
   unmounting?: boolean
   transferLimitLevel: string
+  token?: ERC20_Token
 }
 
 class PendingSettlementDetail extends Component<Props, State> {
@@ -83,24 +84,26 @@ class PendingSettlementDetail extends Component<Props, State> {
     const { user, primaryCurrency } = this.props
 
     const transferLimitLevel = await getTransferLimitLevel(this.props.user.address, this.props.getStore())
-    this.setState({transferLimitLevel})
-
     const pendingSettlement = this.getPendingSettlement()
     const txCost = await getTransactionCost(pendingSettlement.settlementCurrency, primaryCurrency)
-    let pic
+
+    let pic, token
+    if (pendingSettlement.settlementCurrency === 'DAI') { //add additional tokens here
+      token = getERC20_token(pendingSettlement.settlementCurrency)
+    }
 
     try {
       const addr = user.address === pendingSettlement.creditorAddress ? pendingSettlement.debtorAddress : pendingSettlement.creditorAddress
       pic = await profilePic.get(addr)
     } catch (e) {}
+
     if(!this.state.unmounting) {
-      this.setState({ txCost })
+      this.setState({ txCost, token, transferLimitLevel })
       if (pic) {
         this.setState({ pic })
       }
     }
   }
-
 
   componentWillUnmount() {
     this.setState({unmounting: true})
@@ -203,16 +206,10 @@ class PendingSettlementDetail extends Component<Props, State> {
   getSettlementAmount() {
     const { user } = this.props
     const pendingSettlement = this.getPendingSettlement()
-    let sign = ''
-
-    if (user.address === pendingSettlement.creditorAddress) {
-      sign = '+'
-    } else if (user.address === pendingSettlement.debtorAddress) {
-      sign = '-'
-    }
 
     //this is specific to ETH
-    return `${pendingSettlement.settlementAmount / WEI_PER_ETH}`.slice(0, 9)
+    const divisor = !!this.state.token ? Math.pow(10, this.state.token.decimals) : WEI_PER_ETH
+    return `${pendingSettlement.settlementAmount / divisor}`.slice(0, 9)
   }
 
   showButtons() {
