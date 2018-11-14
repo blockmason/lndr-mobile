@@ -436,7 +436,13 @@ class Settlement extends Component<Props, State> {
   }
 
   renderPicker(pickerSelection: any) {
-    if(Platform.OS === 'android') {
+    const text = this.state.pickerSelection ? this.state.pickerSelection.name : settlementManagement.select
+    if (this.state.fromPayPalRequest) {
+      return <View style={formStyle.settlementPickerBackground}>
+        <Text style={[formStyle.settlementPicker, {paddingTop: 12}]}>{text}</Text>
+        <FontAwesome style={formStyle.whiteCaretDown} name={'caret-down'} />
+      </View>
+    } else if(Platform.OS === 'android') {
       return <View style={formStyle.settlementPickerBackground}>
         <Picker
           selectedValue={pickerSelection.name} style={formStyle.settlementPicker}
@@ -450,7 +456,6 @@ class Settlement extends Component<Props, State> {
         <FontAwesome style={formStyle.whiteCaretDown} name={'caret-down'} />
       </View>
     } else {
-      const text = this.state.pickerSelection ? this.state.pickerSelection.name : settlementManagement.select
       return <TouchableHighlight onPress={this.showActionSheet} underlayColor={white}>
         <View style={formStyle.settlementPickerBackground}>
           <Text style={[formStyle.settlementPicker, {paddingTop: 12}]}>{text}</Text>
