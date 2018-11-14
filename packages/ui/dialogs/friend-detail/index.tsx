@@ -20,6 +20,7 @@ import BalanceSection from 'ui/components/balance-section'
 import AddDebtButtons from 'ui/components/add-debt-buttons'
 
 import style from 'theme/friend'
+import formStyle from 'theme/form'
 import general from 'theme/general'
 import pendingStyle from 'theme/pending'
 import accountStyle from 'theme/account'
@@ -32,13 +33,14 @@ const {
   recentTransactionsLanguage,
   removeFriendConfirmationQuestion,
   confirmAccount,
-  cancel
+  cancel,
+  copy
 } = language
 const removeFriendText = language.removeFriend
 
 import { getUser, pendingTransactions, recentTransactions, convertCurrency, calculateBalance,
   getPrimaryCurrency, getPendingFromFriend } from 'reducers/app'
-import { getTwoPartyBalance, removeFriend } from 'actions'
+import { getTwoPartyBalance, removeFriend, copyToClipboard } from 'actions'
 import { connect } from 'react-redux'
 
 const loadingContext = new LoadingContext()
@@ -50,6 +52,7 @@ interface Props {
   pendingTransactions: any
   navigation: any
   calculateBalance: (friend: Friend) => number
+  copyToClipboard: (text: string) => any
   getTwoPartyBalance: (user, friend) => Balance
   primaryCurrency: string
   getPendingFromFriend: (friendNick: string) => any
@@ -159,7 +162,7 @@ class FriendDetail extends Component<Props, State> {
 
   render() {
     const { friend } = this.state
-    const { navigation, primaryCurrency, getPendingFromFriend } = this.props
+    const { navigation, primaryCurrency, getPendingFromFriend, copyToClipboard } = this.props
     const { pic } = this.state
     const imageSource = pic ? { uri: pic } : require('images/person-outline-dark.png')
     const { route } = getPendingFromFriend(friend.nickname)
@@ -190,6 +193,12 @@ class FriendDetail extends Component<Props, State> {
             <Text style={accountStyle.transactionHeader}>{recentTransactionsLanguage.title}</Text>
             <RecentView friend={friend} navigation={navigation} />
           </View>
+          <View style={formStyle.spaceHorizontalL}>
+            <Text selectable style={formStyle.displayText}>{`0x${friend.address}`}</Text>
+            <View style={formStyle.horizontalView}>
+              <Button round onPress={() => copyToClipboard(`0x${friend.address}`)} text={copy} />
+            </View>
+          </View>
           <Button round danger onPress={this.confirmRemoveFriend} text={removeFriendText} containerStyle={style.spaceBottom} />
         </View>
       </ScrollView>
@@ -200,4 +209,4 @@ class FriendDetail extends Component<Props, State> {
 export default connect((state) => ({ user: getUser(state)(), pendingTransactions: pendingTransactions(state), getTwoPartyBalance: getTwoPartyBalance(state),
   recentTransactions: recentTransactions(state), calculateBalance: calculateBalance(state), convertCurrency: convertCurrency(state),
   primaryCurrency: getPrimaryCurrency(state), getPendingFromFriend: getPendingFromFriend(state) }),
-  { removeFriend })(FriendDetail)
+  { removeFriend, copyToClipboard })(FriendDetail)
