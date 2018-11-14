@@ -282,22 +282,21 @@ class Settlement extends Component<Props, State> {
     return `${balance < 0 ? '' : '+'}${currencySymbols(primaryCurrency)}${currencyFormats(primaryCurrency)(balance)}`
   }
 
-  calculateExchangeRate(amount: number):number {
+  calculateExchangeRate(amount: number, settlementType: string | undefined) : number {
     const { ethExchange, convertCurrency, primaryCurrency } = this.props
-    const { settlementType } = this.state
-    // console.log(`calculateExchangeRate: ${amount}`)
+
     let exchangeRate = 1.0
     if (isEthSettlement(settlementType))
       exchangeRate = Number(ethExchange(primaryCurrency))
     else if (settlementType && isERC20Settlement(settlementType)) {
       const token = getERC20_token(settlementType)
       if (token && token.exchangePerUSD) {
-        const balanceUSD = amount*Number(token.exchangePerUSD)
+        const balanceUSD = amount * Number(token.exchangePerUSD)
         const balancePrimaryCurrency = convertCurrency('USD', balanceUSD)
         exchangeRate = token.exchangePerUSD * balancePrimaryCurrency / balanceUSD
-        // console.log(`Exchange rate from ${token.tokenName} to ${primaryCurrency}: ${exchangeRate}`)
       }
     }
+
     return exchangeRate
   }
 
@@ -329,7 +328,7 @@ class Settlement extends Component<Props, State> {
 
     if (settlementType && isERC20Settlement(settlementType)) {
       // Check we have enough non-Eth crypto (doesn't include transaction cost)
-      const exchangeRate = this.calculateExchangeRate(cleanAmount)
+      const exchangeRate = this.calculateExchangeRate(cleanAmount, settlementType)
       const cryptoCost = cleanAmount / exchangeRate
       cryptoCostString = String(cryptoCost)
 
@@ -474,7 +473,7 @@ class Settlement extends Component<Props, State> {
     const cryptoBalance = isEthSettlement(settlementType) ? this.props.ethBalance : this.state.cryptoBalance
     const paymentButton = this.renderPaymentButton()
     const cleanAmount = cleanFiatAmount(String(amount))
-    const exchangeRate = this.calculateExchangeRate(cleanAmount)
+    const exchangeRate = this.calculateExchangeRate(cleanAmount, settlementType)
     const isERC20 = isEthSettlement(settlementType) || isERC20Settlement(settlementType)
 
     return <View style={general.whiteFlex}>
