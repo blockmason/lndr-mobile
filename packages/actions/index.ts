@@ -19,7 +19,7 @@ import web3 from 'lndr/web3-connection'
 import profilePic from 'lndr/profile-pic'
 import { getERC20_token, ERC20_Token, ERC20_Transaction } from 'lndr/erc-20'
 import { getEtherscanTransactions } from 'lndr/etherscan'
-import { sanitizeAmount } from 'lndr/format'
+import { isEthSettlement, sanitizeAmount } from 'lndr/format'
 import { jsonToPendingFriend, jsonToPendingTransaction, jsonToRecentTransaction, jsonToPendingUnilateral,
   jsonToPendingBilateral, jsonToPayPalRequest } from 'lndr/json-mapping'
 
@@ -1021,8 +1021,7 @@ const refreshTransactions = () => {
 
 const settleBilateral = async (user, bilateralSettlements, dispatch, getState) => {
   const gasPrice = await creditProtocol.getGasPrice()
-  //Safe Low is in 10^8 Wei (deciGigaWei)
-// FIXME: this shouldn't be coming from the store and then we don't need to pass the State
+  // TODO: this shouldn't be coming from the store and then we don't need to pass the State
   const ethBalance = getState().store.ethBalance
 
   bilateralSettlements.forEach( async (settlement) => {
@@ -1030,20 +1029,25 @@ const settleBilateral = async (user, bilateralSettlements, dispatch, getState) =
       return
     }
 
-    const gasNeeded = (settlement.settlementCurrency.toUpperCase() === 'ETH') ? GAS_TO_SETTLE_WITH_ETH : GAS_TO_SEND_ERC20
+    const gasNeeded = isEthSettlement(settlement.settlementCurrency) ? GAS_TO_SETTLE_WITH_ETH : GAS_TO_SEND_ERC20
     const erc20Transaction = new ERC20_Transaction(settlement.creditorAddress, settlement.debtorAddress, settlement.settlementAmount, gasPrice, gasNeeded)
+
+    // TODO: this probably needs a re-think to separate gas funds from settlement funds
+    // Gas is always supplied in Eth, while settlement happens in a given settlementCurrency
+
+    // TODO: ethBalance should decrease with each iteration of this loop
 
     let amountInEth = erc20Transaction.amount
     let insufficientFunds = false
 
-    if (settlement.settlementCurrency === 'ETH') {
+    if (isEthSettlement(settlement.settlementCurrency)) {
       insufficientFunds = Number(settlement.settlementAmount) > Number(web3.toWei(ethBalance, 'ether'))
     } else {
       const erc20Token = getERC20_token(settlement.settlementCurrency)
       const erc20Balance = await erc20Token.getBalance(user.address)
       insufficientFunds = Number(settlement.settlementAmount) > ( Number(erc20Balance) * Math.pow(10, erc20Token.decimals) )
       amountInEth = erc20Transaction.amount / Number(getEthExchange(getState())('USD'))
-      // E.g. Eth = DAI / (DAI/Eth) = DAI / (DAI/USD * USD/Eth)
+      // E.g. Eth = BCPT / (BCPT/Eth) = BCPT / (BCPT/USD * USD/Eth)
       if (erc20Token.exchangePerUSD)
         amountInEth = amountInEth / erc20Token.exchangePerUSD
     }
