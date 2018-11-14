@@ -85,8 +85,8 @@ class PendingSettlementDetail extends Component<Props, State> {
     const transferLimitLevel = await getTransferLimitLevel(this.props.user.address, this.props.getStore())
     this.setState({transferLimitLevel})
 
-    const txCost = await getTransactionCost('eth', primaryCurrency)
     const pendingSettlement = this.getPendingSettlement()
+    const txCost = await getTransactionCost(pendingSettlement.settlementCurrency, primaryCurrency)
     let pic
 
     try {
