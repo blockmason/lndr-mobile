@@ -43,8 +43,7 @@ interface State {
   formInputError?: string
   token?: ERC20_Token
   tokenBalance: string
-  currencyCost: string
-  ethCost: string
+  transactionCosts: any
 }
 
 class TransferERC20 extends Component<Props, State> {
@@ -53,8 +52,7 @@ class TransferERC20 extends Component<Props, State> {
     this.state = {
       token: undefined,
       tokenBalance: '0.00',
-      currencyCost: '0.00',
-      ethCost: '0.00'
+      transactionCosts: {},
     }
   }
 
@@ -62,9 +60,9 @@ class TransferERC20 extends Component<Props, State> {
     const { primaryCurrency, user } = this.props
     const token = this.props.navigation ? this.props.navigation.state.params.token : undefined
     if (token) {
-      const { currencyCost, ethCost } = await getTransactionCosts(token.tokenName, primaryCurrency)
+      const transactionCosts = await getTransactionCosts(token.tokenName, primaryCurrency)
       const tokenBalance = await token.getBalance(user.address as string)
-      this.setState({ token, currencyCost, ethCost, tokenBalance })
+      this.setState({ token, transactionCosts, tokenBalance })
     }
   }
 
@@ -130,7 +128,8 @@ class TransferERC20 extends Component<Props, State> {
   }
 
   render() {
-    const { amount, destinationAddress, formInputError, token, tokenBalance, currencyCost, ethCost } = this.state
+    const { amount, destinationAddress, formInputError, token, tokenBalance } = this.state
+    const { currencyCostFormatted, ethCostFormatted} = this.state.transactionCosts
     const { primaryCurrency } = this.props
 
     const tokenName = (token) ? token.tokenName : ''
@@ -172,7 +171,7 @@ class TransferERC20 extends Component<Props, State> {
                     onChangeText={amount => this.setState({ amount: this.setAmount(amount) })}
                   />
                 </View>
-                <Text style={[accountStyle.txCost, formStyle.spaceTop]}>{accountManagement.sendEth.txCost(ethCost, currencyCost)}</Text>
+                <Text style={[accountStyle.txCost, formStyle.spaceTop]}>{accountManagement.sendEth.txCost(ethCostFormatted, currencyCostFormatted)}</Text>
               </View>
             </View>
             { !!formInputError && <Text style={formStyle.warningText}>{formInputError}</Text>}

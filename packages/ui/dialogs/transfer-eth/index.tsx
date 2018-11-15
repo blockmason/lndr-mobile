@@ -45,8 +45,7 @@ interface State {
   amount?: string
   formInputError?: string
   address?: string
-  currencyCost: string
-  ethCost: string
+  transactionCosts: any
   transferLimitLevel: string
 }
 
@@ -54,8 +53,7 @@ class TransferEth extends Component<Props, State> {
   constructor(props) {
     super(props)
     this.state = {
-      currencyCost: '0.00',
-      ethCost: '0.00',
+      transactionCosts: {},
       transferLimitLevel: TRANSFER_LIMIT_STANDARD
     }
 
@@ -64,10 +62,10 @@ class TransferEth extends Component<Props, State> {
 
   async componentWillMount() {
     const { primaryCurrency, user } = this.props
-    const { ethCost, currencyCost } = await getTransactionCosts('eth', primaryCurrency)
+    const transactionCosts = await getTransactionCosts('eth', primaryCurrency)
     const transferLimitLevel = await getTransferLimitLevel(user.address, this.props.getStore())
 
-    this.setState({ ethCost, currencyCost, transferLimitLevel })
+    this.setState({ transactionCosts, transferLimitLevel })
   }
 
   componentDidMount( ) {
@@ -158,7 +156,8 @@ class TransferEth extends Component<Props, State> {
   }
 
   render() {
-    const { amount, address, currencyCost, ethCost, formInputError, transferLimitLevel } = this.state
+    const { amount, address, formInputError, transferLimitLevel } = this.state
+    const { currencyCostFormatted, ethCostFormatted} = this.state.transactionCosts
     const { ethBalance, ethExchange, primaryCurrency } = this.props
 
     return <ScrollView style={general.whiteFlex}>
@@ -201,7 +200,7 @@ class TransferEth extends Component<Props, State> {
                 </View>
               </View>
               <Text style={[formStyle.smallText, formStyle.center, formStyle.spaceTopS]}>{`${currencySymbols(primaryCurrency)}${this.toFiat(amount, ethExchange(primaryCurrency))}`}</Text>
-              <Text style={[accountStyle.txCost, formStyle.spaceTop]}>{accountManagement.sendEth.txCost(ethCost, currencyCost)}</Text>
+              <Text style={[accountStyle.txCost, formStyle.spaceTop]}>{accountManagement.sendEth.txCost(ethCostFormatted, currencyCostFormatted)}</Text>
             </View>
             { formInputError && <Text style={[formStyle.warningText, {alignSelf: 'center'}]}>{formInputError}</Text>}
             <Button large round wide onPress={() => this.submit()} text={accountManagement.sendEth.transfer} />

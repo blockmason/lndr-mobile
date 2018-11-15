@@ -63,8 +63,7 @@ interface Props {
 }
 
 interface State {
-  currencyCost: string
-  ethCost: string
+  transactionCosts: any
   pic?: string
   confirmationError?: string
   transferLimitLevel: string
@@ -76,8 +75,7 @@ class PendingSettlementDetail extends Component<Props, State> {
     super(props)
     this.state = {
       token: undefined,
-      currencyCost: '0.00',
-      ethCost: '0.00',
+      transactionCosts: {},
       transferLimitLevel: TRANSFER_LIMIT_STANDARD
     }
   }
@@ -89,8 +87,8 @@ class PendingSettlementDetail extends Component<Props, State> {
     const pendingSettlement = this.getPendingSettlement()
     const settlementType = pendingSettlement.settlementCurrency
 
-    const { currencyCost, ethCost } = await getTransactionCosts(settlementType, primaryCurrency)
-    this.setState({ transferLimitLevel, currencyCost, ethCost })
+    const transactionCosts = await getTransactionCosts(settlementType, primaryCurrency)
+    this.setState({ transferLimitLevel, transactionCosts })
 
     if (isERC20Settlement(settlementType)) {
       this.setState({ token: getERC20_token(settlementType) })
@@ -226,7 +224,8 @@ class PendingSettlementDetail extends Component<Props, State> {
   }
 
   render() {
-    const { currencyCost, ethCost, confirmationError, transferLimitLevel } = this.state
+    const { confirmationError, transferLimitLevel } = this.state
+    const { currencyCostFormatted, ethCostFormatted } = this.state.transactionCosts
     const { user, primaryCurrency } = this.props
     const pendingSettlement = this.getPendingSettlement()
     const isPayee = (user.address === pendingSettlement.debtorAddress)
@@ -256,7 +255,7 @@ class PendingSettlementDetail extends Component<Props, State> {
           }
           <View style={{marginBottom: 20}}/>
           {!isPayee && <Text style={[formStyle.smallText, formStyle.spaceTop, formStyle.center]}>{accountManagement.sendEth.warning(this.getLimit(), primaryCurrency, transferLimitLevel)}</Text>}
-          {!isPayee && <Text style={[accountStyle.txCost, formStyle.spaceBottom, {marginLeft: '2%'}]}>{accountManagement.sendEth.txCost(ethCost, currencyCost)}</Text>}
+          {!isPayee && <Text style={[accountStyle.txCost, formStyle.spaceBottom, {marginLeft: '2%'}]}>{accountManagement.sendEth.txCost(ethCostFormatted, currencyCostFormatted)}</Text>}
           {confirmationError && <Text style={[formStyle.warningText, {alignSelf: 'center'}]}>{confirmationError}</Text>}
           {this.showButtons()}
           <View style={general.spaceBelow}/>

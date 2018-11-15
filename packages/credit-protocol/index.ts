@@ -422,16 +422,26 @@ export default class CreditProtocol {
     try {
       const gasPrice = await this.getGasPrice()
       const rate = await this.getEthExchange(currency)
-      const ethCost = gasPrice * gasNeeded / WEI_PER_ETH
+      const weiCost = gasPrice * gasNeeded
+      const ethCost = weiCost / WEI_PER_ETH
       const currencyCost = Math.max( 0.01, ethCost * Number(rate) )
       return {
-        ethCost: `${ethCost}`.slice(0,6),
-        currencyCost: formatSettlementAmount(String(currencyCost), currency)
+        ethCost,
+        ethCostFormatted: `${ethCost}`.slice(0,6),
+        currencyCost,
+        currencyFormatted: formatSettlementAmount(String(currencyCost), currency),
+        weiCost
       }
     } catch (e) {
     }
 
-    return { ethCost: '0', currencyCost: formatSettlementAmount('0.00', currency) }
+    return {
+      ethCost: 0,
+      ethCostFormatted: '0',
+      currencyCost: 0,
+      currencyCostFormatted: formatSettlementAmount('0.00', currency),
+      weiCost: 0
+    }
   }
 
   async getEthExchange(currency: string) {
