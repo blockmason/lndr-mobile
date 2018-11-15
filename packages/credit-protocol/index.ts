@@ -13,8 +13,8 @@ import Client from './lib/client'
 import CreditRecord from './lib/credit-record'
 export { default as CreditRecord } from './lib/credit-record'
 
-import { hasNoDecimals } from 'lndr/currencies'
-import { formatSettlementAmount, isERC20Settlement } from 'lndr/format'
+import { currencySymbols, hasNoDecimals } from 'lndr/currencies'
+import { formatSettlementCurrencyAmount, formatSettlementAmount, isERC20Settlement } from 'lndr/format'
 import KYC from 'lndr/kyc'
 
 import { ERC20_Transaction, WEI_PER_ETH, getERC20_token } from 'lndr/erc-20'
@@ -425,11 +425,12 @@ export default class CreditProtocol {
       const weiCost = gasPrice * gasNeeded
       const ethCost = weiCost / WEI_PER_ETH
       const currencyCost = Math.max( 0.01, ethCost * Number(rate) )
+
       return {
         ethCost,
         ethCostFormatted: `${ethCost}`.slice(0,6),
         currencyCost,
-        currencyFormatted: formatSettlementAmount(String(currencyCost), currency),
+        currencyCostFormatted: `${currencySymbols(currency)}${formatSettlementCurrencyAmount(String(currencyCost), false)}`,
         weiCost
       }
     } catch (e) {

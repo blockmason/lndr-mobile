@@ -345,7 +345,7 @@ class Settlement extends Component<Props, State> {
       settlementBalance,
       settlementBalancePrimary: formatExchangeCurrency(settlementBalance, String(exchangeRate), primaryCurrency),
       settlementCost,
-      settlementCostFormatted: formatCommaDecimal(settlementCost.slice(0, 6))
+      settlementCostFormatted: formatCommaDecimal(String(settlementCost).slice(0, 6))
     }
   }
 
