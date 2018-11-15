@@ -256,7 +256,7 @@ class PendingSettlementDetail extends Component<Props, State> {
           }
           <View style={{marginBottom: 20}}/>
           {!isPayee && <Text style={[formStyle.smallText, formStyle.spaceTop, formStyle.center]}>{accountManagement.sendEth.warning(this.getLimit(), primaryCurrency, transferLimitLevel)}</Text>}
-          {!isPayee && <Text style={[accountStyle.txCost, formStyle.spaceBottom, {marginLeft: '2%'}]}>{accountManagement.sendEth.txCost(ethCost, formatCommaDecimal(currencyCost), primaryCurrency)}</Text>}
+          {!isPayee && <Text style={[accountStyle.txCost, formStyle.spaceBottom, {marginLeft: '2%'}]}>{accountManagement.sendEth.txCost(ethCost, currencyCost)}</Text>}
           {confirmationError && <Text style={[formStyle.warningText, {alignSelf: 'center'}]}>{confirmationError}</Text>}
           {this.showButtons()}
           <View style={general.spaceBelow}/>

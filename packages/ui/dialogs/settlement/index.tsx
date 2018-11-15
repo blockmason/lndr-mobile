@@ -507,7 +507,7 @@ class Settlement extends Component<Props, State> {
                     containerStyle={{marginTop: -6}}
                   />
                 </View> : null }
-                { isERC20 ? <Text style={[accountStyle.txCost, {marginLeft: '2%'}]}>{accountManagement.sendEth.txCost(ethCost, formatCommaDecimal(currencyCost), this.props.primaryCurrency)}</Text> : null }
+                { isERC20 ? <Text style={[accountStyle.txCost, {marginLeft: '2%'}]}>{accountManagement.sendEth.txCost(ethCost, currencyCost)}</Text> : null }
                 { (isERC20 && balance > 0) ? <Text style={[formStyle.smallText, formStyle.spaceTop, formStyle.center]}>{accountManagement.sendEth.warning(this.getLimit(), primaryCurrency, this.state.transferLimitLevel)}</Text> : null}
                 <Text style={formStyle.titleLarge}>{debtManagement.fields.settlementAmount}</Text>
                 { isERC20 ? <TextInput

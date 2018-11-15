@@ -201,7 +201,7 @@ class TransferEth extends Component<Props, State> {
                 </View>
               </View>
               <Text style={[formStyle.smallText, formStyle.center, formStyle.spaceTopS]}>{`${currencySymbols(primaryCurrency)}${this.toFiat(amount, ethExchange(primaryCurrency))}`}</Text>
-              <Text style={[accountStyle.txCost, formStyle.spaceTop]}>{accountManagement.sendEth.txCost(ethCost, formatCommaDecimal(currencyCost), primaryCurrency)}</Text>
+              <Text style={[accountStyle.txCost, formStyle.spaceTop]}>{accountManagement.sendEth.txCost(ethCost, currencyCost)}</Text>
             </View>
             { formInputError && <Text style={[formStyle.warningText, {alignSelf: 'center'}]}>{formInputError}</Text>}
             <Button large round wide onPress={() => this.submit()} text={accountManagement.sendEth.transfer} />

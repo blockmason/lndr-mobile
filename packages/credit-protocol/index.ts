@@ -14,7 +14,7 @@ import CreditRecord from './lib/credit-record'
 export { default as CreditRecord } from './lib/credit-record'
 
 import { hasNoDecimals } from 'lndr/currencies'
-import { isERC20Settlement } from 'lndr/format'
+import { formatSettlementAmount, isERC20Settlement } from 'lndr/format'
 import KYC from 'lndr/kyc'
 
 import { ERC20_Transaction, WEI_PER_ETH, getERC20_token } from 'lndr/erc-20'
@@ -423,14 +423,15 @@ export default class CreditProtocol {
       const gasPrice = await this.getGasPrice()
       const rate = await this.getEthExchange(currency)
       const ethCost = gasPrice * gasNeeded / WEI_PER_ETH
-
+      const currencyCost = Math.max( 0.01, ethCost * Number(rate) )
       return {
         ethCost: `${ethCost}`.slice(0,6),
-        currencyCost: `${Math.max( 0.01, ethCost * Number(rate) )}`.slice(0,6)
+        currencyCost: formatSettlementAmount(String(currencyCost), currency)
       }
-    } catch (e) {}
+    } catch (e) {
+    }
 
-    return { ethCost: '0', currencyCost: '0.00' }
+    return { ethCost: '0', currencyCost: formatSettlementAmount('0.00', currency) }
   }
 
   async getEthExchange(currency: string) {
