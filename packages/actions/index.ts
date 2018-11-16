@@ -27,8 +27,8 @@ import { triggerTouchId, getEthInfo, generateMultiTransaction, filterMultiTransa
 
 import CreditProtocol from 'credit-protocol'
 
-import language from 'language'
-const { accountManagement, debtManagement, settlementManagement, copiedClipboard, lndrVerified } = language
+import languageValues, { language } from 'language'
+const { accountManagement, debtManagement, settlementManagement, copiedClipboard, lndrVerified } = languageValues
 
 import { ToastActionsCreators } from 'react-native-redux-toast'
 import { defaultCurrency, transferLimits, TRANSFER_LIMIT_STANDARD, TRANSFER_LIMIT_BCPT, TRANSFER_LIMIT_KYC } from 'lndr/currencies'
@@ -407,7 +407,9 @@ export const getFriends = () => {
   return async (dispatch, getState) => {
     const { address } = getUser(getState())()
     const friends = await creditProtocol.getFriends(address)
-    const result = friends.map(jsonToFriend)
+    const result = friends.map(jsonToFriend).sort( (friend1, friend2) => {
+      return friend1.nickname.localeCompare(friend2.nickname, language)
+    })
     await ensureNicknames(result)
     return dispatch(setState({ friends: result, friendsLoaded: true }))
   }
@@ -421,7 +423,9 @@ export async function searchUsers(searchData) {
   }
   if (nickname.length >= minimumNicknameLength) {
     const users = await creditProtocol.searchUsers(nickname)
-    return users.map(jsonToFriend)
+    return users.map(jsonToFriend).sort( (user1, user2) => {
+      return user1.nickname.localeCompare(user2.nickname, language)
+    })
   } else {
     return []
   }
@@ -462,7 +466,9 @@ export const getFriendRequests = () => {
   return async (dispatch, getState) => {
     const user = getUser(getState())()
     const rawPendingFriends = await creditProtocol.getFriendRequests(user.address)
-    const pendingFriends = rawPendingFriends.map(jsonToPendingFriend)
+    const pendingFriends = rawPendingFriends.map(jsonToPendingFriend).sort( (friend1, friend2) => {
+      return friend1.nickname.localeCompare(friend2.nickname, language)
+    })
 
     const rawPendingOutboundFriends = await creditProtocol.getOutboundFriendRequests(user.address)
     const pendingOutboundFriends = rawPendingOutboundFriends.map(jsonToPendingFriend)
