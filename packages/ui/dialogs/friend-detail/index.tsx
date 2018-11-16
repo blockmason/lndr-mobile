@@ -200,7 +200,7 @@ class FriendDetail extends Component<Props, State> {
             <Text style={accountStyle.transactionHeader}>{recentTransactionsLanguage.title}</Text>
             <RecentView friend={friend} navigation={navigation} />
           </View>
-          <View style={formStyle.spaceBottomL}>
+          <View style={[formStyle.spaceTop, formStyle.spaceBottomL]}>
             <TouchableHighlight {...underlayColor} onPress={this.toggleShowWallet}>
               <View style={formStyle.panelHeader}>
                 <Text style={formStyle.panelText}>{'Wallet Address'}</Text>
