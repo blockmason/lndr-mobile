@@ -199,7 +199,6 @@ export default {
       transferAll: `Överför allt`,
       balance: Y => `Ditt aktuella ETH saldo är ${typeof Y === 'string' ? Y.slice (0,8): ''} `,
       ethAddress: `Ethereum Adress`,
-      txCost: (B, A) => `Den aktuella transaktionskostnaden är ${CUR(A)} ${B}`,
       transferLowercase: `Överför Eth`,
       note: (A, M) => `Observera: Du kan endast överföra ${CUR(A)} ${TL(A, M)} per vecka från Lndr`,
       warning: (Z, A, M) => `Du har ${CUR(A)} ${Z} återstående av din ${CUR(A)} ${TL(A, M)} gräns`,
@@ -213,6 +212,7 @@ export default {
       address: `Mottagaradress`,
       balance: (name, balance) => `Ditt aktuella ${name} saldo är ${typeof balance === 'string'? balance.slice (0,8): ''} `,
       tokenAddress: (name) => `${name} Adress`,
+      txCost: (ethCost, currencyCost) => `Transaktionskostnad: ${ethCost} ETH (${currencyCost})`,
     },
     panelHeaders: [
       `Plånbok Adress`,

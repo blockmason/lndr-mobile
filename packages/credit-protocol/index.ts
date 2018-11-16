@@ -13,13 +13,29 @@ import Client from './lib/client'
 import CreditRecord from './lib/credit-record'
 export { default as CreditRecord } from './lib/credit-record'
 
-import { hasNoDecimals } from 'lndr/currencies'
-import { isERC20Settlement } from 'lndr/format'
+import { currencySymbols, hasNoDecimals } from 'lndr/currencies'
+import { formatSettlementCurrencyAmount, formatSettlementAmount, isERC20Settlement } from 'lndr/format'
 import KYC from 'lndr/kyc'
 
 import { ERC20_Transaction, WEI_PER_ETH, getERC20_token } from 'lndr/erc-20'
 import Tx from 'ethereumjs-tx'
 import web3 from 'lndr/web3-connection'
+
+export interface TransactionCosts {
+  ethCost: number,
+  ethCostFormatted: string,
+  currencyCost: number,
+  currencyCostFormatted: string,
+  weiCost: number
+}
+
+export const defaultTransactionCosts = () : TransactionCosts => ({
+  ethCost: 0,
+  ethCostFormatted: '',
+  currencyCost: 0,
+  currencyCostFormatted: '',
+  weiCost: 0
+})
 
 export default class CreditProtocol {
   client: Client
@@ -418,15 +434,26 @@ export default class CreditProtocol {
     return config.gasPrice
   }
 
-  async getTxCost(currency: string, gasNeeded: number) {
+  async getTransactionCosts(currency: string, gasNeeded: number) : Promise<TransactionCosts> {
     try {
       const gasPrice = await this.getGasPrice()
       const rate = await this.getEthExchange(currency)
+      const weiCost = gasPrice * gasNeeded
+      const ethCost = weiCost / WEI_PER_ETH
+      const currencyCost = Math.max( 0.01, ethCost * Number(rate) )
 
-      return `${Math.max( 0.01, gasPrice * Number(rate) * gasNeeded / WEI_PER_ETH )}`.slice(0,6)
-    } catch (e) {}
+      return {
+        ethCost,
+        ethCostFormatted: `${ethCost}`.slice(0,7),
+        currencyCost,
+        currencyCostFormatted: `${currencySymbols(currency)}${formatSettlementCurrencyAmount(String(currencyCost), false)}`,
+        weiCost
+      }
+    } catch (e) {
+      console.log('ERROR TRANSACTION COSTS', e)
+    }
 
-    return '0.00'
+    return defaultTransactionCosts()
   }
 
   async getEthExchange(currency: string) {

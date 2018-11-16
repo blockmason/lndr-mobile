@@ -199,7 +199,6 @@ export default {
       transferAll: `सब-कुछ ट्रान्सफर करें`,
       balance: Y => `आपका वर्तमान ETH बैलेन्स है ${typeof Y === 'string' ? Y.slice(0,8) :''}`,
       ethAddress: `Ethereum पता`,
-      txCost: (B, A) => `वर्तमान ट्रैंज़ैक्शन खर्च है ${CUR(A)}${B}`,
       transferLowercase: `Eth ट्रान्सफर`,
       note: (A, M) => `कृपया नोट करें: आप हर हफ्ते केवल ${CUR(A)} ${TL(A, M)} ही Lndr से बाहर भेज सकते हैं`,
       warning: (Z, A, M) => `आपकी ${CUR(A)} ${TL(A, M)} लिमिट में ${CUR(A)}${Z} बाकी है`,
@@ -213,6 +212,7 @@ export default {
       address: `गंतव्य पता`,
       balance: (name, balance) => `आपका वर्तमान ${name} बैलेन्स ${typeof balance === 'string' ? balance.slice(0,8) :''} हैं`,
       tokenAddress: (name) => `${name} पता`,
+      txCost: (ethCost, currencyCost) => `लेनदेन लागत: ${ethCost} ETH (${currencyCost})`,
     },
     panelHeaders: [
       `बटुआ पता`,

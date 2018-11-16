@@ -5,6 +5,7 @@ import { Text, View, Image, ScrollView } from 'react-native'
 import { getStore } from 'reducers/app'
 import { getResetAction } from 'reducers/nav'
 
+import { defaultTransactionCosts, TransactionCosts } from 'credit-protocol'
 import { UserData } from 'lndr/user'
 import { currencyFormats, formatCommaDecimal, formatEthRemaining, isERC20Settlement, formatSettlementCurrencyAmount, isEthSettlement } from 'lndr/format'
 import PendingUnilateral from 'lndr/pending-unilateral'
@@ -34,7 +35,7 @@ const {
 
 import { getUser, settlerIsMe, getEthExchange, getWeeklyEthTotal, calculateBalance, getUcacCurrency, getPrimaryCurrency,
   getFriendFromAddress } from 'reducers/app'
-import { addDebt, rejectPendingSettlement, getTransactionCost, getTransferLimitLevel, exceedsTransferLimit } from 'actions'
+import { addDebt, rejectPendingSettlement, getTransactionCosts, getTransferLimitLevel, exceedsTransferLimit } from 'actions'
 import { connect } from 'react-redux'
 
 const loadingContext = new LoadingContext()
@@ -63,7 +64,7 @@ interface Props {
 }
 
 interface State {
-  txCost: string
+  transactionCosts: TransactionCosts
   pic?: string
   confirmationError?: string
   transferLimitLevel: string
@@ -75,7 +76,7 @@ class PendingSettlementDetail extends Component<Props, State> {
     super(props)
     this.state = {
       token: undefined,
-      txCost: '0.00',
+      transactionCosts: defaultTransactionCosts(),
       transferLimitLevel: TRANSFER_LIMIT_STANDARD
     }
   }
@@ -87,8 +88,8 @@ class PendingSettlementDetail extends Component<Props, State> {
     const pendingSettlement = this.getPendingSettlement()
     const settlementType = pendingSettlement.settlementCurrency
 
-    const txCost = await getTransactionCost(settlementType, primaryCurrency)
-    this.setState({ transferLimitLevel, txCost })
+    const transactionCosts = await getTransactionCosts(settlementType, primaryCurrency)
+    this.setState({ transferLimitLevel, transactionCosts })
 
     if (isERC20Settlement(settlementType)) {
       this.setState({ token: getERC20_token(settlementType) })
@@ -224,7 +225,8 @@ class PendingSettlementDetail extends Component<Props, State> {
   }
 
   render() {
-    const { txCost, confirmationError, transferLimitLevel } = this.state
+    const { confirmationError, transferLimitLevel } = this.state
+    const { currencyCostFormatted, ethCostFormatted } = this.state.transactionCosts
     const { user, primaryCurrency } = this.props
     const pendingSettlement = this.getPendingSettlement()
     const isPayee = (user.address === pendingSettlement.debtorAddress)
@@ -254,7 +256,7 @@ class PendingSettlementDetail extends Component<Props, State> {
           }
           <View style={{marginBottom: 20}}/>
           {!isPayee && <Text style={[formStyle.smallText, formStyle.spaceTop, formStyle.center]}>{accountManagement.sendEth.warning(this.getLimit(), primaryCurrency, transferLimitLevel)}</Text>}
-          {!isPayee && <Text style={[accountStyle.txCost, formStyle.spaceBottom, {marginLeft: '2%'}]}>{accountManagement.sendEth.txCost(formatCommaDecimal(txCost), primaryCurrency)}</Text>}
+          {!isPayee && <Text style={[accountStyle.txCost, formStyle.spaceBottom, {marginLeft: '2%'}]}>{accountManagement.sendERC20.txCost(ethCostFormatted, currencyCostFormatted)}</Text>}
           {confirmationError && <Text style={[formStyle.warningText, {alignSelf: 'center'}]}>{confirmationError}</Text>}
           {this.showButtons()}
           <View style={general.spaceBelow}/>

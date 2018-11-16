@@ -199,7 +199,6 @@ export default {
       transferAll: `Μεταφορά όλων`,
       balance: Y => `Το τρέχον υπόλοιπο ETH σας είναι ${typeof Y ==='string' ? Y.slice (0,8): ''} `,
       ethAddress: `Διεύθυνση Ethereum`,
-      txCost: (Β, A) => `Το τρέχον κόστος συναλλαγής είναι ${CUR(A)}${Β}`,
       transferLowercase: `Μεταφορά Eth`,
       note: (A, M) => `Παρακαλώ σημειώστε: μπορείτε να μεταφέρετε μόνο ${CUR(A)} ${TL(A, M)} την εβδομάδα εκτός Lndr`,
       warning: (Z, A, M) => `Έχετε ${CUR(A)} ${Z} υπόλοιπο ${CUR(A)} ${TL(A, M)} στο όριό σας`,
@@ -213,6 +212,7 @@ export default {
       address: `Διεύθυνση Προορισμού`,
       balance: (name, balance) => `Το τρέχον υπόλοιπο ${name} σας είναι ${typeof balance === 'string' ? balance.slice (0,8): ''} `,
       tokenAddress: (name) => `Διεύθυνση ${name}`,
+      txCost: (ethCost, currencyCost) => `Κόστος συναλλαγής: ${ethCost} ETH (${currencyCost})`,
     },
     panelHeaders: [
       `Πορτοφόλι Διεύθυνση`,

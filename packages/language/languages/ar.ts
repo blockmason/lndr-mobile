@@ -199,7 +199,6 @@ export default {
       transferAll: `تحويل كل شيء`,
       balance: Y => `رصيدك الحالي من الإثيريوم هو ${typeof Y === 'string' ? Y.slice(0,8) :''}`,
       ethAddress: `عنوان إثيريوم`,
-      txCost: (B, A) => `تكلفة المعاملة الحالية هو ${CUR(A)}${B}`,
       transferLowercase: `تحويل إثيريوم`,
       note: (A, M) => `يرجى الانتباه: يمكنك فقط تحويل ${CUR(A)} ${TL(A, M)} في الأسبوع من Lndr`,
       warning: (Z, A, M) => `لديك ${CUR(A)}${Z} متبقي من حدك ${CUR(A)} ${TL(A, M)}`,
@@ -213,6 +212,7 @@ export default {
       address: `عنوان الوجهة`,
       balance: (name, balance) => `رصيدك الحالي من ${name} هو ${typeof balance === 'string' ? balance.slice(0,8) :''}`,
       tokenAddress: (name) => `عنوان ${name}`,
+      txCost: (ethCost, currencyCost) => `(${currencyCost}) ETH ${ethCost} :تكلفة المعاملة`,
     },
     panelHeaders: [
       `محفظة عنوان`,

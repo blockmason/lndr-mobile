@@ -197,7 +197,6 @@ export default {
       transferAll: `TRANSFER EVERYTHING`,
       balance: (balance) => `Your current ETH balance is ${typeof balance === 'string' ? balance.slice(0,8) :''}`,
       ethAddress: `Ethereum Address`,
-      txCost: (cost, currency) => `The current transaction cost is ${currencySymbols(currency)}${cost}`,
       transferLowercase: `Transfer Eth`,
       note: (currency, multiplier) => `Please note: you can only transfer ${currencySymbols(currency)}${TL(currency, multiplier)} per week out of Lndr`,
       warning: (amount, currency, multiplier) => `You have ${currencySymbols(currency)}${amount} remaining of your ${currencySymbols(currency)}${TL(currency, multiplier)} limit`,
@@ -211,6 +210,7 @@ export default {
       address: `Destination Address`,
       balance: (name, balance) => `Your current ${name} balance is ${typeof balance === 'string' ? balance.slice(0,8) :''}`,
       tokenAddress: (name) => `${name} Address`,
+      txCost: (ethCost, currencyCost) => `Transaction cost: ${ethCost} ETH (${currencyCost})`,
     },
     panelHeaders: [
       `Wallet Address`,

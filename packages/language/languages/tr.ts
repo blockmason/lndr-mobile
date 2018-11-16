@@ -199,7 +199,6 @@ export default {
       transferAll: `Her şeyi aktarın`,
       balance: Y => `Mevcut ETH bakiyeniz ${typeof Y === 'string' ? Y.slice(0,8) :''}`,
       ethAddress: `Ethereum Adresi`,
-      txCost: (B, A) => `Mevcut işlem maliyeti ${CUR(A)}${B} 'dir` ,
       transferLowercase: `ETH Aktar`,
       note: (A, M) => `Lütfen dikkat: Lndr dışına haftada sadece ${CUR(A)} ${TL(A, M)} aktarabilirsiniz`,
       warning: (Z, A, M) => `${CUR(A)} ${TL(A, M)} limitinizin ${CUR(A)}${Z} kısmı kalmış bulunmaktadır`
@@ -213,6 +212,7 @@ export default {
       address: `Hedef Adresi`,
       balance: (name, balance) => `Geçerli ${name} bakiyeniz ${typeof balance === 'string' ? balance.slice(0,8) :''}`,
       tokenAddress: (name) => `${name} Adresi`,
+      txCost: (ethCost, currencyCost) => `İşlem maliyeti: ${ethCost} ETH (${currencyCost}) 'dir` ,
     },
     panelHeaders: [
       `Cüzdan Adresi`,

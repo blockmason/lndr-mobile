@@ -199,7 +199,6 @@ export default {
       transferAll: `Tout transférer`,
       balance: Y => `Votre solde en ETH est de ${typeof Y === 'string'? Y.slice (0,8): ''} `,
       ethAddress: `Adresse Ethereum`,
-      txCost: (B, A) => `Le coût actuel de la transaction est de ${CUR(A)} ${B}`,
       transferLowercase: `Transférer de l'ETH`,
       note: (A, M) => `Merci de noter que vous ne pouvez transférer que ${CUR(A)} ${TL(A, M)} par semaine sur Lndr`,
       warning: (Z, A, M) => `Vous avez ${CUR(A)} ${Z} restants sur votre limite de ${CUR(A)} ${TL(A, M)} `,
@@ -213,6 +212,7 @@ export default {
       address: `Adresse de destination`,
       balance: (name, balance) => `Votre solde en ${name} est de ${typeof balance === 'string'? balance.slice (0,8): ''} `,
       tokenAddress: (name) => `Adresse ${name}`,
+      txCost: (ethCost, currencyCost) => `Coût de la transaction: ${ethCost} ETH (${currencyCost})`,
     },
     panelHeaders: [
       `Adresse Wallet`,

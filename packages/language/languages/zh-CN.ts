@@ -199,7 +199,6 @@ export default {
       transferAll: `全部转移`,
       balance: Y => `您当前的以太坊余额为 ${typeof Y === 'string' ? Y.slice(0,8) :''}`,
       ethAddress: `以太坊地址`,
-      txCost: (B, A) => `当前交易成本为${CUR(A)}${B}`,
       transferLowercase: `转账以太坊`,
       note: (A, M) => `请注意：您每周只能从Lndr转出${CUR(A)} ${TL(A, M)}`,
       warning: (Z, A, M) => `您在每周限额${CUR(A)} ${TL(A, M)}中还剩余${CUR(A)}${Z}`,
@@ -213,6 +212,7 @@ export default {
       address: `目标地址`,
       balance: (name, balance) => `您当前的${name}余额为${typeof balance === 'string' ? balance.slice(0,8) :''}`,
       tokenAddress: (name) => `${name}地址`,
+      txCost: (ethCost, currencyCost) => `交易成本：${ethCost} ETH (${currencyCost})`,
     },
     panelHeaders: [
       `钱包地址`,

@@ -199,7 +199,6 @@ export default {
       transferAll: `Siirrä kaikki`,
       balance: Y => `Nykyinen ETH-saldosi on ${typeof Y === 'string' ? Y.slice (0,8): ''} `,
       ethAddress: `Ethereum-osoite`,
-      txCost: (B, A) => `Nykyinen tapahtuma maksaa ${CUR(A)} ${B}`,
       transferLowercase: `Siirrä Eth`,
       note: (A, M) => `Huom.: Voit siirtää Lndr-sovelluksesta vain ${CUR(A)} ${TL(A, M)} viikossa`,
       warning: (Z, A, M) => `Sinulla on jäljellä ${CUR(A)} ${Z}, ennen kuin saavutat ${CUR(A)} ${TL(A, M)} ylärajasi`,
@@ -213,6 +212,7 @@ export default {
       address: `Kohdeosoite`,
       balance: (name, balance) => `Nykyinen ${name}-saldosi on ${typeof balance === 'string' ? balance.slice (0,8): ''} `,
       tokenAddress: (name) => `${name}-Osoite`,
+      txCost: (ethCost, currencyCost) => `Tapahtumakustannukset: ${ethCost} ETH (${currencyCost})`,
     },
     panelHeaders: [
       `Lompakko Osoite`,

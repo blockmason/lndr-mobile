@@ -199,7 +199,6 @@ export default {
       transferAll: `โอนทุกอย่าง`,
       balance: Y => `ยอด ETH คงเหลือในปัจจุบันของคุณคือ ${typeof Y === 'string' ? Y.slice(0,8) :''}`,
       ethAddress: `ที่อยู่ Ethereum`,
-      txCost: (B, A) => `ค่าใช้จ่ายในการทำธุรกรรมในปัจจุบันคือ ${CUR(A)}${B}`,
       transferLowercase: `โอน Eth`,
       note: (A, M) => `โปรดทราบ: คุณสามารถโอนจาก Lndr ได้ ${CUR(A)} ${TL(A, M)} ต่อสัปดาห์เท่านั้น`,
       warning: (Z, A, M) => `คุณเหลือ ${CUR(A)}${Z} จากขีดจำกัด ${CUR(A)} ${TL(A, M)} ของคุณ`,
@@ -213,6 +212,7 @@ export default {
       address: `ที่อยู่ปลายทาง`,
       balance: (name, balance) => `ยอด ${name} คงเหลือในปัจจุบันของคุณคือ ${typeof balance === 'string' ? balance.slice(0,8) :''}`,
       tokenAddress: (name) => `ที่อยู่ ${name}`,
+      txCost: (ethCost, currencyCost) => `ค่าใช้จ่ายในการทำธุรกรรม: ${ethCost} ETH (${currencyCost})`,
     },
     panelHeaders: [
       `ที่อยู่ Wallet`,

@@ -7,6 +7,7 @@ import FontAwesome from 'react-native-vector-icons/FontAwesome'
 import { getStore } from 'reducers/app'
 import { getResetAction } from 'reducers/nav'
 
+import { TransactionCosts, defaultTransactionCosts } from 'credit-protocol'
 import { UserData } from 'lndr/user'
 import { ERC20_Tokens, getERC20_token } from 'lndr/erc-20'
 import { currencyFormats, sanitizeAmount, formatSettlementAmount, formatExchangeCurrency, formatCommaDecimal, formatMemo,
@@ -40,13 +41,29 @@ const {
 
 import { getUser, recentTransactions, getEthBalance, getEthExchange, getWeeklyEthTotal, hasPendingTransaction,
   calculateBalance, convertCurrency, getUcacCurrency, getPrimaryCurrency } from 'reducers/app'
-import { addDebt, getTransactionCost, getTransferLimitLevel, exceedsTransferLimit, requestPayPalSettlement, cancelPayPalRequest, cancelPayPalRequestFail } from 'actions'
+import { addDebt, getTransactionCosts, getTransferLimitLevel, exceedsTransferLimit, requestPayPalSettlement, cancelPayPalRequest, cancelPayPalRequestFail } from 'actions'
 import { connect } from 'react-redux'
 
 const submittingTransaction = new LoadingContext()
 const loadingContext = new LoadingContext()
 
 let unmounting = false
+
+interface SettlementInfo {
+  formInputError?: string,
+  settlementBalance: number,
+  settlementBalancePrimary: string,
+  settlementCost: number,
+  settlementCostFormatted: string
+}
+
+const defaultSettlementInfo = () : SettlementInfo => ({
+  formInputError: undefined,
+  settlementBalance: 0,
+  settlementBalancePrimary: '',
+  settlementCost: 0,
+  settlementCostFormatted: ''
+})
 
 interface Props {
   user: UserData
@@ -80,18 +97,16 @@ interface Props {
 
 interface State {
   amount?: string
-  formInputError?: string
   balance: number
   direction: string
-  txCost: string
-  cryptoCost: string
-  cryptoBalance: string
   pic?: string
   settlementType?: string
   friend: Friend
   fromPayPalRequest?: boolean
   pickerSelection: any
+  settlementInfo: SettlementInfo
   showPicker: boolean
+  transactionCosts: TransactionCosts
   transferLimitLevel: string
 }
 
@@ -101,12 +116,11 @@ class Settlement extends Component<Props, State> {
     this.state = {
       balance: this.getRecentTotal(),
       direction: this.getRecentTotal() > 0 ? 'borrow' : 'lend',
-      txCost: '0.00',
-      cryptoCost: '',
-      cryptoBalance: '',
       friend: new Friend('', ''),
       pickerSelection: { settlementType: undefined, name: settlementManagement.select },
+      settlementInfo: defaultSettlementInfo(),
       showPicker: false,
+      transactionCosts: defaultTransactionCosts(),
       transferLimitLevel: TRANSFER_LIMIT_STANDARD
     }
 
@@ -167,13 +181,13 @@ class Settlement extends Component<Props, State> {
     const { settlementType } = pickerSelection
 
     if (isSettlementFree(settlementType)) {
-      this.setState({ formInputError: undefined, cryptoCost: '', txCost: '0', cryptoBalance: '', showPicker: false, pickerSelection, settlementType })
+      this.setState({ settlementInfo: defaultSettlementInfo(), transactionCosts: defaultTransactionCosts(), showPicker: false, pickerSelection, settlementType })
       return
     }
 
-    const txCost = await getTransactionCost(settlementType, this.props.primaryCurrency)
-    const result = await this.checkSettlementCost(amount === undefined ? '0' : amount, txCost, settlementType)
-    this.setState({ ...result, txCost, showPicker: false, pickerSelection, settlementType })
+    const transactionCosts = await getTransactionCosts(settlementType, this.props.primaryCurrency)
+    const settlementInfo = await this.checkSettlementCost(amount === undefined ? '0' : amount, transactionCosts, settlementType)
+    this.setState({ pickerSelection, settlementInfo, showPicker: false, settlementType, transactionCosts })
   }
 
   getDenomination() {
@@ -190,7 +204,7 @@ class Settlement extends Component<Props, State> {
   }
 
   async submit() {
-    const { amount, direction, formInputError, settlementType } = this.state
+    const { amount, direction, settlementType, settlementInfo: { formInputError } } = this.state
     const { primaryCurrency } = this.props
     const friend = this.props.navigation ? this.props.navigation.state.params.friend : {}
     const denomination = this.getDenomination()
@@ -300,7 +314,7 @@ class Settlement extends Component<Props, State> {
     return exchangeRate
   }
 
-  async checkSettlementCost(amount: string, txCost: string, settlementType?: string) {
+  async checkSettlementCost(amount: string, transactionCosts: TransactionCosts, settlementType?: string) : Promise<SettlementInfo> {
     const { ethBalance, ethExchange, ethSentPastWeek, hasPendingTransaction, primaryCurrency } = this.props
     const friend = this.props.navigation ? this.props.navigation.state.params.friend : {}
 
@@ -313,9 +327,9 @@ class Settlement extends Component<Props, State> {
     const cleanAmount = cleanFiatAmount(amount)
 
     // Check that we have enough Eth to cover Eth costs
-    const ethExchangeRate = Number(ethExchange(primaryCurrency))
-    let totalEthCost = Number(txCost) / ethExchangeRate
+    let totalEthCost = transactionCosts.ethCost
     if (isEthSettlement(settlementType)) {
+      const ethExchangeRate = Number(ethExchange(primaryCurrency))
       totalEthCost += cleanAmount / ethExchangeRate
     }
 
@@ -323,27 +337,33 @@ class Settlement extends Component<Props, State> {
         formInputError = accountManagement.sendEth.error.insufficient
     }
 
-    let cryptoCostString = String(totalEthCost)
-    let cryptoBalanceString = ethBalance
+    let settlementCost, settlementBalance
 
+    const exchangeRate = this.calculateExchangeRate(cleanAmount, settlementType)
     if (settlementType && isERC20Settlement(settlementType)) {
       // Check we have enough non-Eth crypto (doesn't include transaction cost)
-      const exchangeRate = this.calculateExchangeRate(cleanAmount, settlementType)
-      const cryptoCost = cleanAmount / exchangeRate
-      cryptoCostString = String(cryptoCost)
+      settlementCost = cleanAmount / exchangeRate
 
       const token = getERC20_token(settlementType)
-      cryptoBalanceString = await token.getBalance(this.props.user.address)
+      settlementBalance = Number(await token.getBalance(this.props.user.address))
 
-      if (!formInputError && !this.isPayee() && (cryptoCost > Number(cryptoBalanceString))) {
+      if (!formInputError && !this.isPayee() && (settlementCost > settlementBalance)) {
         formInputError = accountManagement.sendERC20.error.insufficient(token.tokenName)
       }
+    } else {
+      settlementCost = totalEthCost
+      settlementBalance = Number(ethBalance)
     }
 
     if (!formInputError && !this.isPayee() && exceedsTransferLimit(Number(cleanAmount), this.state.transferLimitLevel, ethExchange(primaryCurrency), ethSentPastWeek))
       formInputError = accountManagement.sendEth.error.limitExceeded(primaryCurrency, this.state.transferLimitLevel)
 
-    return { formInputError, cryptoCost: cryptoCostString, cryptoBalance: cryptoBalanceString }
+    return { formInputError,
+      settlementBalance,
+      settlementBalancePrimary: formatExchangeCurrency(settlementBalance, String(exchangeRate), primaryCurrency),
+      settlementCost,
+      settlementCostFormatted: formatCommaDecimal(String(settlementCost).slice(0, 6))
+    }
   }
 
   getLimit() {
@@ -352,8 +372,8 @@ class Settlement extends Component<Props, State> {
   }
 
   async updateAmount(amount: string) {
-    const result = await this.checkSettlementCost(amount, this.state.txCost, this.state.settlementType)
-    this.setState({ amount: amountFormat(amount, this.props.primaryCurrency, false), ...result })
+    const settlementInfo = await this.checkSettlementCost(amount, this.state.transactionCosts, this.state.settlementType)
+    this.setState({ amount: amountFormat(amount, this.props.primaryCurrency, false), settlementInfo })
   }
 
   blurCurrencyFormat() {
@@ -405,7 +425,7 @@ class Settlement extends Component<Props, State> {
   }
 
   renderPaymentButton() {
-    const { amount, direction, formInputError, pickerSelection, settlementType } = this.state
+    const { amount, direction, pickerSelection, settlementInfo: { formInputError }, settlementType } = this.state
     if (typeof amount !== 'string')
       return null
 
@@ -465,16 +485,19 @@ class Settlement extends Component<Props, State> {
   }
 
   render() {
-    const { amount, balance, formInputError, pic, cryptoCost, friend, txCost, fromPayPalRequest, pickerSelection, settlementType } = this.state
+    const { amount, balance, pic, friend, fromPayPalRequest, pickerSelection, settlementType } = this.state
+    const { currencyCostFormatted, ethCostFormatted} = this.state.transactionCosts
+    const { formInputError, settlementBalance, settlementBalancePrimary, settlementCost, settlementCostFormatted } = this.state.settlementInfo
     const { primaryCurrency } = this.props
     const imageSource = pic ? { uri: pic } : require('images/person-outline-dark.png')
     const vertOffset = (Platform.OS === 'android') ? -300 : 20
 
-    const cryptoBalance = isEthSettlement(settlementType) ? this.props.ethBalance : this.state.cryptoBalance
     const paymentButton = this.renderPaymentButton()
     const cleanAmount = cleanFiatAmount(String(amount))
     const exchangeRate = this.calculateExchangeRate(cleanAmount, settlementType)
     const isERC20 = isEthSettlement(settlementType) || isERC20Settlement(settlementType)
+
+    const settlementText = (settlementType && isERC20 && settlementCostFormatted !== '') ? `${settlementCostFormatted} ${settlementType.toUpperCase()}` : amount
 
     return <View style={general.whiteFlex}>
       <View style={general.view}>
@@ -499,32 +522,32 @@ class Settlement extends Component<Props, State> {
 
               <View style={general.centeredColumn}>
                 { (settlementType && isERC20) ? <View style={[accountStyle.balanceRow, {marginTop: 20}]}>
-                  <Text style={[accountStyle.balance, {marginLeft: '2%'}]}>{accountManagement.cryptoBalance.display(settlementType.toUpperCase(), formatCommaDecimal(cryptoBalance))}</Text>
+                  <Text style={[accountStyle.balance, {marginLeft: '2%'}]}>{accountManagement.cryptoBalance.display(settlementType.toUpperCase(), formatCommaDecimal(String(settlementBalance)))}</Text>
                   <Button alternate blackText narrow arrow small onPress={() => {this.props.navigation.navigate('MyAccount')}}
-                    text={formatExchangeCurrency(cryptoBalance, String(exchangeRate), primaryCurrency)}
+                    text={settlementBalancePrimary}
                     containerStyle={{marginTop: -6}}
                   />
                 </View> : null }
-                { isERC20 ? <Text style={[accountStyle.txCost, {marginLeft: '2%'}]}>{accountManagement.sendEth.txCost(formatCommaDecimal(txCost), this.props.primaryCurrency)}</Text> : null }
+                { isERC20 ? <Text style={[accountStyle.txCost, {marginLeft: '2%'}]}>{accountManagement.sendERC20.txCost(ethCostFormatted, currencyCostFormatted)}</Text> : null }
                 { (isERC20 && balance > 0) ? <Text style={[formStyle.smallText, formStyle.spaceTop, formStyle.center]}>{accountManagement.sendEth.warning(this.getLimit(), primaryCurrency, this.state.transferLimitLevel)}</Text> : null}
                 <Text style={formStyle.titleLarge}>{debtManagement.fields.settlementAmount}</Text>
                 { isERC20 ? <TextInput
                   style={[formStyle.jumboInput, formStyle.settleAmount]}
                   placeholder={`${currencySymbols(primaryCurrency)}0`}
                   placeholderTextColor='black'
-                  value={amount}
+                  value={settlementText}
                   maxLength={11}
                   underlineColorAndroid='transparent'
                   keyboardType='numeric'
                   onChangeText={this.updateAmount}
                   onBlur={this.blurCurrencyFormat}
-                /> : <Text style={formStyle.jumboInput}>{amount}</Text>}
+                /> : <Text style={formStyle.jumboInput}>{settlementText}</Text>}
               </View>
             </View>
             { isPayPalSettlement(settlementType) ? <View style={general.centeredColumn}>
               <Button alternate small arrow onPress={this.payPalFeesAlert} text={payPalLanguage.feesNotification} />
             </View> : null }
-            { settlementType && isERC20 && cryptoCost !== '' && <Text style={[formStyle.smallText, formStyle.spaceTop, formStyle.center]}>{`${formatCommaDecimal(cryptoCost.slice(0, 6))} ${settlementType.toUpperCase()}`}</Text>}
+            { settlementType && isERC20 && settlementCostFormatted !== '' && <Text style={[formStyle.smallText, formStyle.spaceVertical, formStyle.center]}>{amount}</Text>}
             { !!formInputError && <Text style={[formStyle.warningText, {alignSelf: 'center', marginHorizontal: 15}]}>{formInputError}</Text>}
             { paymentButton }
             { !!fromPayPalRequest ? <Button danger round containerStyle={{width: '80%'}} onPress={this.rejectPayPalRequest} text={pendingTransactionsLanguage.rejectRequest} /> : null }

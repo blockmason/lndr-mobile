@@ -2,8 +2,12 @@ import React, { Component } from 'react'
 
 import { Text, TextInput, View, ScrollView, KeyboardAvoidingView, Platform } from 'react-native'
 import firebase from 'react-native-firebase'
+import { connect } from 'react-redux'
 
+import { getUser, getPrimaryCurrency } from 'reducers/app'
 import { getResetAction } from 'reducers/nav'
+import { getTransactionCosts, sendERC20 } from 'actions'
+import { defaultTransactionCosts, TransactionCosts } from 'credit-protocol'
 
 import { UserData } from 'lndr/user'
 import { cryptoAmount, formatCommaDecimal, isEthAddress } from 'lndr/format'
@@ -23,10 +27,6 @@ const {
   accountManagement
 } = language
 
-import { getUser, getPrimaryCurrency } from 'reducers/app'
-import { getTransactionCost, sendERC20 } from 'actions'
-import { connect } from 'react-redux'
-
 const loadingContext = new LoadingContext()
 
 interface Props {
@@ -43,7 +43,7 @@ interface State {
   formInputError?: string
   token?: ERC20_Token
   tokenBalance: string
-  txCost: string
+  transactionCosts: TransactionCosts
 }
 
 class TransferERC20 extends Component<Props, State> {
@@ -52,7 +52,7 @@ class TransferERC20 extends Component<Props, State> {
     this.state = {
       token: undefined,
       tokenBalance: '0.00',
-      txCost: '0.00'
+      transactionCosts: defaultTransactionCosts(),
     }
   }
 
@@ -60,9 +60,9 @@ class TransferERC20 extends Component<Props, State> {
     const { primaryCurrency, user } = this.props
     const token = this.props.navigation ? this.props.navigation.state.params.token : undefined
     if (token) {
-      const txCost = await getTransactionCost(token.tokenName, primaryCurrency)
+      const transactionCosts = await getTransactionCosts(token.tokenName, primaryCurrency)
       const tokenBalance = await token.getBalance(user.address as string)
-      this.setState({ token, txCost, tokenBalance })
+      this.setState({ token, transactionCosts, tokenBalance })
     }
   }
 
@@ -128,7 +128,8 @@ class TransferERC20 extends Component<Props, State> {
   }
 
   render() {
-    const { amount, destinationAddress, formInputError, token, tokenBalance, txCost } = this.state
+    const { amount, destinationAddress, formInputError, token, tokenBalance } = this.state
+    const { currencyCostFormatted, ethCostFormatted} = this.state.transactionCosts
     const { primaryCurrency } = this.props
 
     const tokenName = (token) ? token.tokenName : ''
@@ -170,7 +171,7 @@ class TransferERC20 extends Component<Props, State> {
                     onChangeText={amount => this.setState({ amount: this.setAmount(amount) })}
                   />
                 </View>
-                <Text style={[accountStyle.txCost, formStyle.spaceTop]}>{accountManagement.sendEth.txCost(formatCommaDecimal(txCost), primaryCurrency)}</Text>
+                <Text style={[accountStyle.txCost, formStyle.spaceTop]}>{accountManagement.sendERC20.txCost(ethCostFormatted, currencyCostFormatted)}</Text>
               </View>
             </View>
             { !!formInputError && <Text style={formStyle.warningText}>{formInputError}</Text>}

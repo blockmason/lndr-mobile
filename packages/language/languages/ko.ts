@@ -200,7 +200,6 @@ export default {
       transferAll: `전액 송금`,
       balance: (balance) => `당신의 현재 이더리움 잔액은 ${typeof balance === 'string' ? balance.slice(0,8) : ''}`,
       ethAddress: `이더리움 주소`,
-      txCost: (cost, A) => `현재 이더리움 거래에 드는 비용은 한 거래당 ${CUR(A)}${cost} 달러입니다`,
       transferLowercase: `이더리움 송금`,
       note: (A, M) => `참고 : Lndr에서는 일주일에 ${CUR(A)} ${TL(A, M)} 만 송금할 수 있습니다.`,
       warning: (Z, A, M) => `귀하의 거래 한도 ${CUR(A)}${Z} 중 ${CUR(A)} ${TL(A, M)} 이 남아있습니다`
@@ -214,6 +213,7 @@ export default {
       address: `수신지 주소`,
       balance: (name, balance) => `당신의 현재 ${name} 잔액은 ${typeof balance === 'string' ? balance.slice(0,8) : ''}`,
       tokenAddress: (name) => `${name} 주소`,
+      txCost: (ethCost, currencyCost) => `거래 비용 : ${ethCost} ETH (${currencyCost}) 달러입니다`,
     },
     panelHeaders: [
       `지갑 주소`,

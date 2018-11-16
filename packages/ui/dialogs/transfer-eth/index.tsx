@@ -6,6 +6,7 @@ import firebase from 'react-native-firebase'
 import { getStore } from 'reducers/app'
 import { getResetAction } from 'reducers/nav'
 
+import { defaultTransactionCosts, TransactionCosts } from 'credit-protocol'
 import { UserData } from 'lndr/user'
 import { cryptoAmount, isEthAddress, formatCommaDecimal, formatEthRemaining } from 'lndr/format'
 import { currencySymbols, isCommaDecimal, transferLimits, TRANSFER_LIMIT_STANDARD } from 'lndr/currencies'
@@ -25,7 +26,7 @@ const {
 } = language
 
 import { getUser, getEthBalance, getEthExchange, getWeeklyEthTotal, getPrimaryCurrency } from 'reducers/app'
-import { sendEth, getTransactionCost, getTransferLimitLevel, exceedsTransferLimit } from 'actions'
+import { sendEth, getTransactionCosts, getTransferLimitLevel, exceedsTransferLimit } from 'actions'
 import { connect } from 'react-redux'
 
 const sendingEthLoader = new LoadingContext()
@@ -45,7 +46,7 @@ interface State {
   amount?: string
   formInputError?: string
   address?: string
-  txCost: string
+  transactionCosts: TransactionCosts
   transferLimitLevel: string
 }
 
@@ -53,7 +54,7 @@ class TransferEth extends Component<Props, State> {
   constructor(props) {
     super(props)
     this.state = {
-      txCost: '0.00',
+      transactionCosts: defaultTransactionCosts(),
       transferLimitLevel: TRANSFER_LIMIT_STANDARD
     }
 
@@ -62,10 +63,10 @@ class TransferEth extends Component<Props, State> {
 
   async componentWillMount() {
     const { primaryCurrency, user } = this.props
-    const txCost = await getTransactionCost('eth', primaryCurrency)
+    const transactionCosts = await getTransactionCosts('eth', primaryCurrency)
     const transferLimitLevel = await getTransferLimitLevel(user.address, this.props.getStore())
 
-    this.setState({ txCost, transferLimitLevel })
+    this.setState({ transactionCosts, transferLimitLevel })
   }
 
   componentDidMount( ) {
@@ -156,7 +157,8 @@ class TransferEth extends Component<Props, State> {
   }
 
   render() {
-    const { amount, address, txCost, formInputError, transferLimitLevel } = this.state
+    const { amount, address, formInputError, transferLimitLevel } = this.state
+    const { currencyCostFormatted, ethCostFormatted} = this.state.transactionCosts
     const { ethBalance, ethExchange, primaryCurrency } = this.props
 
     return <ScrollView style={general.whiteFlex}>
@@ -199,7 +201,7 @@ class TransferEth extends Component<Props, State> {
                 </View>
               </View>
               <Text style={[formStyle.smallText, formStyle.center, formStyle.spaceTopS]}>{`${currencySymbols(primaryCurrency)}${this.toFiat(amount, ethExchange(primaryCurrency))}`}</Text>
-              <Text style={[accountStyle.txCost, formStyle.spaceTop]}>{accountManagement.sendEth.txCost(formatCommaDecimal(txCost), primaryCurrency)}</Text>
+              <Text style={[accountStyle.txCost, formStyle.spaceTop]}>{accountManagement.sendERC20.txCost(ethCostFormatted, currencyCostFormatted)}</Text>
             </View>
             { formInputError && <Text style={[formStyle.warningText, {alignSelf: 'center'}]}>{formInputError}</Text>}
             <Button large round wide onPress={() => this.submit()} text={accountManagement.sendEth.transfer} />

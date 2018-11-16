@@ -25,7 +25,7 @@ import { jsonToPendingFriend, jsonToPendingTransaction, jsonToRecentTransaction,
 
 import { triggerTouchId, getEthInfo, generateMultiTransaction, filterMultiTransactions, resizeKYCImage } from './util'
 
-import CreditProtocol from 'credit-protocol'
+import CreditProtocol, { TransactionCosts } from 'credit-protocol'
 
 import languageValues, { language } from 'language'
 const { accountManagement, debtManagement, settlementManagement, copiedClipboard, lndrVerified } = languageValues
@@ -949,9 +949,9 @@ export const storeEthTransaction = async (dispatch, tx: object) => {
   }
 }
 
-export const getTransactionCost = async (settlementType: string, currency: string) => {
+export const getTransactionCosts = async (settlementType: string, currency: string) : Promise<TransactionCosts> => {
   const gasNeeded = isEthSettlement(settlementType) ? GAS_TO_SETTLE_WITH_ETH : GAS_TO_SEND_ERC20
-  return creditProtocol.getTxCost(currency, gasNeeded)
+  return creditProtocol.getTransactionCosts(currency, gasNeeded)
 }
 
 export const confirmFriendRequest = (friend: string) => {

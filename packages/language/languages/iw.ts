@@ -199,7 +199,6 @@ export default {
       transferAll: `להעביר הכל`,
       balance: Y => `${typeof Y === 'string' ? Y.slice(0,8) :''} הנוכחית שלך היא ETH- יתרת ה`,
       ethAddress: `כתובת Ethereum`,
-      txCost: (B, A) => `${CUR(A)}${B} מחיר ההעברה הנוכחי הוא`,
       transferLowercase: `להעביר Eth`,
       note: (A, M) => `Lndr-בלבד מחוץ ל ${CUR(A)} ${TL(A, M)} שים לב: אתה יכול להעביר בשבוע`,
       warning: (Z, A, M) => `שלך ${CUR(A)} ${TL(A, M)} -מהמגבלת ה ${CUR(A)}${Z} נותרו לך`,
@@ -213,6 +212,7 @@ export default {
       address: `כתובת יעד`,
       balance: (name, balance) => ` ${typeof balance === 'string' ? balance.slice(0,8) :''} שלך היא ${name} -יתרת ה`,
       tokenAddress: (name) => `כתובת ${name}`,
+      txCost: (ethCost, currencyCost) => `(${currencyCost}) ETH ${ethCost} :עלות העסקה`,
     },
     panelHeaders: [
       `כתובת ארנק`,
