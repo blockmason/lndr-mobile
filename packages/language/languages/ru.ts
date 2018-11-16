@@ -199,7 +199,6 @@ export default {
       transferAll: `Перевести все`,
       balance: Y => `Ваш текущий баланс ETH ${typeof Y === 'string'? Y.slice (0,8): ''} `,
       ethAddress: `Ethereum Адрес`,
-      txCost: (B, А) => `Текущая стоимость транзакции составляет ${CUR(А)} ${B}`,
       transferLowercase: `Перевидение ETH`,
       note: (A, M) => `Пожалуйста, обратите внимание: вы можете передать ${CUR(A)} ${TL(A, M)} в неделю из Lndr`,
       warning: (Z, A, M) => `У вас есть ${CUR(A)} ${Z} в ваши ${CUR(A)} ${TL(A, M)} limit`,
@@ -213,6 +212,7 @@ export default {
       address: `Адрес назначения`,
       balance: (name, balance) => `Ваш текущий баланс ${name} ${typeof balance === 'string' ? balance.slice (0,8): ''} `,
       tokenAddress: (name) => `${name} Адрес`,
+      txCost: (ethCost, currencyCost) => `Стоимость транзакции: ${ethCost} ETH (${currencyCost})`,
     },
     panelHeaders: [
       `Кошелек Адрес`,

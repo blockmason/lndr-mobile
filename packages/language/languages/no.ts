@@ -199,7 +199,6 @@ export default {
       transferAll: `Overfør alt`,
       balance: Y => `Din nåværende ETH saldo er ${typeof Y === 'string' ? Y.slice (0,8) :''} `,
       ethAddress: `Ethereum adresse`,
-      txCost: (B, A) => `De aktuelle transaksjonskostnader er ${CUR(A)}${B}`,
       transferLowercase: `Overfør Eth`,
       note: (A, M) => `Merk: Du kan bare overføre ${CUR(A)} ${TL(A, M)} per uke ut av Lndr`,
       warning: (Z, A, M) => `Du har ${CUR(A)}${Z} igjen av ditt ${CUR(A)} ${TL(A, M)} maksbeløpet`,
@@ -213,6 +212,7 @@ export default {
       address: `Bestemmelsesadresse`,
       balance: (name, balance) => `Din nåværende ${name} saldo er ${typeof balance === 'string' ? balance.slice(0,8) :''} `,
       tokenAddress: (name) => `${name} Adresse`,
+      txCost: (ethCost, currencyCost) => `Transaksjonskostnad: ${ethCost} ETH (${currencyCost})`,
     },
     panelHeaders: [
       `Lommebok Adresse`,

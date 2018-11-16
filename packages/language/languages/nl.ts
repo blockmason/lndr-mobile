@@ -199,7 +199,6 @@ export default {
       transferAll: `Boek alles over`,
       balance: Y => `Uw huidige ETH saldo is ${typeof Y === 'string'? Y.slice(0,8) : ''} `,
       ethAddress: `Ethereum Adres`,
-      txCost: (B, A) => `De huidige transactie kost ${CUR(A)}${B}`,
       transferLowercase: `Boek ETH over`,
       note: (A, M) => `Let op: u kunt maar ${CUR(A)} ${TL(A, M)} per week overboeken uit Lndr`,
       warning: (Z, A, M) => `U heeft ${CUR(A)}${Z} over van uw ${CUR(A)} ${TL(A, M)} limiet`,
@@ -213,6 +212,7 @@ export default {
       address: `Ontvangstadres`,
       balance: (name, balance) => `Uw huidige ${name} saldo is ${typeof balance === 'string'? balance.slice (0,8) : ''} `,
       tokenAddress: (name) => `${name} Adres`,
+      txCost: (ethCost, currencyCost) => `Transactiekosten: ${ethCost} ETH (${currencyCost})`,
     },
     panelHeaders: [
       `Wallet Adres`,

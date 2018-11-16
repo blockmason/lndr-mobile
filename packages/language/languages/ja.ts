@@ -198,7 +198,6 @@ export default {
       transferAll: `全てを送金する`,
       balance: Y => `あなたの現在のETH残高は${typeof Y === 'string' ? Y.slice(0,8) :''}です`,
       ethAddress: `イーサリアムアドレス`,
-      txCost: (B, A) => `現在の取引手数料は ${CUR(A)}${B}です`,
       transferLowercase: `ETHを送金する`,
       note: (A, M) => `一週間にLndrから引き出せるのは ${CUR(A)} ${TL(A, M)} までです`,
       warning: (Z, A, M) => `現在 ${CUR(A)} ${TL(A, M)} のうち ${CUR(A)}${Z}残っています `,
@@ -212,6 +211,7 @@ export default {
       address: `送付先アドレス`,
       balance: (name, balance) => `あなたの現在の${name}残高は${typeof balance === 'string' ? balance.slice(0,8) :''}`,
       tokenAddress: (name) => `${name}アドレス`,
+      txCost: (ethCost, currencyCost) => `取引コスト： ${ethCost} ETH (${currencyCost}) です`,
     },
     panelHeaders: [
       `ウォレット住所`,

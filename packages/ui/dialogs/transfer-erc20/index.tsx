@@ -171,7 +171,7 @@ class TransferERC20 extends Component<Props, State> {
                     onChangeText={amount => this.setState({ amount: this.setAmount(amount) })}
                   />
                 </View>
-                <Text style={[accountStyle.txCost, formStyle.spaceTop]}>{accountManagement.sendEth.txCost(ethCostFormatted, currencyCostFormatted)}</Text>
+                <Text style={[accountStyle.txCost, formStyle.spaceTop]}>{accountManagement.sendERC20.txCost(ethCostFormatted, currencyCostFormatted)}</Text>
               </View>
             </View>
             { !!formInputError && <Text style={formStyle.warningText}>{formInputError}</Text>}

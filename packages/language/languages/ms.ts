@@ -199,7 +199,6 @@ export default {
       transferAll: `Pindahkan semua`,
       balance: Y => `Baki semasa ETH anda ialah ${typeof Y === 'string' ? Y.slice (0,8): ''} `,
       ethAddress: `Alamat Ethereum`,
-      txCost: (B, A) => `Kos transaksi semasa adalah ${CUR(A)}${B}`,
       transferLowercase: `Pindahkan ETH`,
       note: (A, M) => `Sila ambil perhatian: anda hanya boleh memindahkan ${CUR(A)} ${TL(A, M)} setiap minggu daripada Lndr`,
       warning: (Z, A, M) => `Anda mempunyai ${CUR(A)}${Z} baki daripada ${CUR(A)} ${TL(A, M)} had anda`,
@@ -213,6 +212,7 @@ export default {
       address: `Alamat Destinasi`,
       balance: (name, balance) => `Baki semasa ${name} anda ialah ${typeof balance === 'string' ? balance.slice(0,8) : ''} `,
       tokenAddress: (name) => `Alamat ${name}`,
+      txCost: (ethCost, currencyCost) => `Kos urus niaga: ${ethCost} ETH (${currencyCost})`,
     },
     panelHeaders: [
       `Alamat Wallet`,

@@ -199,7 +199,6 @@ export default {
       transferAll: `Chuyển hết`,
       balance: Y => `Số dư ETH hiện tại của bạn là ${typeof Y === 'string' ? Y.slice(0,8) :''}`,
       ethAddress: `Địa chỉ Ethereum`,
-      txCost: (B, A) => `Chi phí giao dịch hiện tại là ${CUR(A)}${B}`,
       transferLowercase: `Chuyển tiền Eth`,
       note: (A, M) => `Lưu ý: bạn chỉ có thể chuyển ${CUR(A)} ${TL(A, M)} mỗi tuần trên Lndr`,
       warning: (Z, A, M) => `Bạn còn lại ${CUR(A)}${Z} trong hạn mức ${CUR(A)} ${TL(A, M)}`,
@@ -213,6 +212,7 @@ export default {
       address: `Địa chỉ Gửi đến`,
       balance: (name, balance) => `Số dư ${name} hiện tại là ${typeof balance === 'string' ? balance.slice(0,8) :''}`,
       tokenAddress: (name) => `Địa chỉ ${name}`,
+      txCost: (ethCost, currencyCost) => `Chi phí giao dịch: ${ethCost} ETH (${currencyCost})`,
     },
     panelHeaders: [
       `Wallet Địa chỉ`,

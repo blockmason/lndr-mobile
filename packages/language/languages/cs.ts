@@ -199,7 +199,6 @@ export default {
       transferAll: `Převést vše`,
       balance: Y => `Aktuální zůstatek ETH je ${typeof Y === 'string' ? Y.slice(0,8) :''}`,
       ethAddress: `Ethereum adresa`,
-      txCost: (B, A) => `Aktuální cena transakce je ${CUR(A)}${B}`,
       transferLowercase: `Převést Eth`,
       note: (A, M) => `Poznámka: můžete převést max. ${CUR(A)} ${TL(A, M)} týdně z Lndr`,
       warning: (Z, A, M) => `Zbývá vám ${CUR(A)}${Z} z vašeho limitu ${CUR(A)} ${TL(A, M)}`,
@@ -213,6 +212,7 @@ export default {
       address: `Cílová adresa`,
       balance: (name, balance) => `Aktuální ${name} zůstatek je ${typeof balance === 'string' ? balance.slice(0,8) :''}`,
       tokenAddress: (name) => `${name} adresa`,
+      txCost: (ethCost, currencyCost) => `Transakční náklady: ${ethCost} ETH (${currencyCost})`,
     },
     panelHeaders: [
       `Peněženka Address`,

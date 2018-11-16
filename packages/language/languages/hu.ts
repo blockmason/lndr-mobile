@@ -199,7 +199,6 @@ export default {
       transferAll: `Minden átutalása`,
       balance: Y => `Jelenlegi ETH egyenlege ${typeof Y === 'string'? Y.slice (0,8): ''} `,
       ethAddress: `Ethereum Cím`,
-      txCost: (B, A) => `Jelenlegi tranzakciós költsége ${CUR(A)} ${B}`,
       transferLowercase: `Eth Átutalása`,
       note: (A, M) => `Kérjük, vegye figyelembe: a Lndr rendszerén kívül hetente csak ${CUR(A)} ${TL(A, M)} összeget utalhat át`,
       warning: (Z, A, M) => `${CUR(A)} ${Z} a fennmaradó összeg a ${CUR(A)} ${TL(A, M)} limitjéből:`,
@@ -213,6 +212,7 @@ export default {
       address: `Rendeltetési Cím`,
       balance: (name, balance) => `Jelenlegi ${name} egyenlege ${typeof balance === 'string'? balance.slice (0,8): ''} `,
       tokenAddress: (name) => `${name} Cím`,
+      txCost: (ethCost, currencyCost) => `Tranzakciós költség: ${ethCost} ETH (${currencyCost})`,
     },
     panelHeaders: [
       `Wallet Cím`,
