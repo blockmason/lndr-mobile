@@ -7,6 +7,7 @@ import FontAwesome from 'react-native-vector-icons/FontAwesome'
 import { getStore } from 'reducers/app'
 import { getResetAction } from 'reducers/nav'
 
+import { TransactionCosts, defaultTransactionCosts } from 'credit-protocol'
 import { UserData } from 'lndr/user'
 import { ERC20_Tokens, getERC20_token } from 'lndr/erc-20'
 import { currencyFormats, sanitizeAmount, formatSettlementAmount, formatExchangeCurrency, formatCommaDecimal, formatMemo,
@@ -48,6 +49,22 @@ const loadingContext = new LoadingContext()
 
 let unmounting = false
 
+interface SettlementInfo {
+  formInputError?: string,
+  settlementBalance: number,
+  settlementBalancePrimary: string,
+  settlementCost: number,
+  settlementCostFormatted: string
+}
+
+const defaultSettlementInfo = () : SettlementInfo => ({
+  formInputError: undefined,
+  settlementBalance: 0,
+  settlementBalancePrimary: '',
+  settlementCost: 0,
+  settlementCostFormatted: ''
+})
+
 interface Props {
   user: UserData
   verificationStatus: any
@@ -87,9 +104,9 @@ interface State {
   friend: Friend
   fromPayPalRequest?: boolean
   pickerSelection: any
-  settlementInfo: any
+  settlementInfo: SettlementInfo
   showPicker: boolean
-  transactionCosts: any
+  transactionCosts: TransactionCosts
   transferLimitLevel: string
 }
 
@@ -101,9 +118,9 @@ class Settlement extends Component<Props, State> {
       direction: this.getRecentTotal() > 0 ? 'borrow' : 'lend',
       friend: new Friend('', ''),
       pickerSelection: { settlementType: undefined, name: settlementManagement.select },
-      settlementInfo: {},
+      settlementInfo: defaultSettlementInfo(),
       showPicker: false,
-      transactionCosts: {},
+      transactionCosts: defaultTransactionCosts(),
       transferLimitLevel: TRANSFER_LIMIT_STANDARD
     }
 
@@ -164,7 +181,7 @@ class Settlement extends Component<Props, State> {
     const { settlementType } = pickerSelection
 
     if (isSettlementFree(settlementType)) {
-      this.setState({ settlementInfo: {}, transactionCosts: {}, showPicker: false, pickerSelection, settlementType })
+      this.setState({ settlementInfo: defaultSettlementInfo(), transactionCosts: defaultTransactionCosts(), showPicker: false, pickerSelection, settlementType })
       return
     }
 
@@ -297,7 +314,7 @@ class Settlement extends Component<Props, State> {
     return exchangeRate
   }
 
-  async checkSettlementCost(amount: string, transactionCosts: any, settlementType?: string) {
+  async checkSettlementCost(amount: string, transactionCosts: TransactionCosts, settlementType?: string) : Promise<SettlementInfo> {
     const { ethBalance, ethExchange, ethSentPastWeek, hasPendingTransaction, primaryCurrency } = this.props
     const friend = this.props.navigation ? this.props.navigation.state.params.friend : {}
 
@@ -470,7 +487,7 @@ class Settlement extends Component<Props, State> {
   render() {
     const { amount, balance, pic, friend, fromPayPalRequest, pickerSelection, settlementType } = this.state
     const { currencyCostFormatted, ethCostFormatted} = this.state.transactionCosts
-    const { formInputError, settlementBalance, settlementBalanceFormatted, settlementCost, settlementCostFormatted } = this.state.settlementInfo
+    const { formInputError, settlementBalance, settlementBalancePrimary, settlementCost, settlementCostFormatted } = this.state.settlementInfo
     const { primaryCurrency } = this.props
     const imageSource = pic ? { uri: pic } : require('images/person-outline-dark.png')
     const vertOffset = (Platform.OS === 'android') ? -300 : 20
@@ -503,9 +520,9 @@ class Settlement extends Component<Props, State> {
 
               <View style={general.centeredColumn}>
                 { (settlementType && isERC20) ? <View style={[accountStyle.balanceRow, {marginTop: 20}]}>
-                  <Text style={[accountStyle.balance, {marginLeft: '2%'}]}>{accountManagement.cryptoBalance.display(settlementType.toUpperCase(), formatCommaDecimal(settlementBalance))}</Text>
+                  <Text style={[accountStyle.balance, {marginLeft: '2%'}]}>{accountManagement.cryptoBalance.display(settlementType.toUpperCase(), formatCommaDecimal(String(settlementBalance)))}</Text>
                   <Button alternate blackText narrow arrow small onPress={() => {this.props.navigation.navigate('MyAccount')}}
-                    text={settlementBalanceFormatted}
+                    text={settlementBalancePrimary}
                     containerStyle={{marginTop: -6}}
                   />
                 </View> : null }

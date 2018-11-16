@@ -5,6 +5,7 @@ import { Text, View, Image, ScrollView } from 'react-native'
 import { getStore } from 'reducers/app'
 import { getResetAction } from 'reducers/nav'
 
+import { defaultTransactionCosts, TransactionCosts } from 'credit-protocol'
 import { UserData } from 'lndr/user'
 import { currencyFormats, formatCommaDecimal, formatEthRemaining, isERC20Settlement, formatSettlementCurrencyAmount, isEthSettlement } from 'lndr/format'
 import PendingUnilateral from 'lndr/pending-unilateral'
@@ -63,7 +64,7 @@ interface Props {
 }
 
 interface State {
-  transactionCosts: any
+  transactionCosts: TransactionCosts
   pic?: string
   confirmationError?: string
   transferLimitLevel: string
@@ -75,7 +76,7 @@ class PendingSettlementDetail extends Component<Props, State> {
     super(props)
     this.state = {
       token: undefined,
-      transactionCosts: {},
+      transactionCosts: defaultTransactionCosts(),
       transferLimitLevel: TRANSFER_LIMIT_STANDARD
     }
   }

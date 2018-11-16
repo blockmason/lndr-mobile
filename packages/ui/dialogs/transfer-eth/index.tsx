@@ -6,6 +6,7 @@ import firebase from 'react-native-firebase'
 import { getStore } from 'reducers/app'
 import { getResetAction } from 'reducers/nav'
 
+import { defaultTransactionCosts, TransactionCosts } from 'credit-protocol'
 import { UserData } from 'lndr/user'
 import { cryptoAmount, isEthAddress, formatCommaDecimal, formatEthRemaining } from 'lndr/format'
 import { currencySymbols, isCommaDecimal, transferLimits, TRANSFER_LIMIT_STANDARD } from 'lndr/currencies'
@@ -45,7 +46,7 @@ interface State {
   amount?: string
   formInputError?: string
   address?: string
-  transactionCosts: any
+  transactionCosts: TransactionCosts
   transferLimitLevel: string
 }
 
@@ -53,7 +54,7 @@ class TransferEth extends Component<Props, State> {
   constructor(props) {
     super(props)
     this.state = {
-      transactionCosts: {},
+      transactionCosts: defaultTransactionCosts(),
       transferLimitLevel: TRANSFER_LIMIT_STANDARD
     }
 

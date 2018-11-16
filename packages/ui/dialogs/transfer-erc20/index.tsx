@@ -2,8 +2,12 @@ import React, { Component } from 'react'
 
 import { Text, TextInput, View, ScrollView, KeyboardAvoidingView, Platform } from 'react-native'
 import firebase from 'react-native-firebase'
+import { connect } from 'react-redux'
 
+import { getUser, getPrimaryCurrency } from 'reducers/app'
 import { getResetAction } from 'reducers/nav'
+import { getTransactionCosts, sendERC20 } from 'actions'
+import { defaultTransactionCosts, TransactionCosts } from 'credit-protocol'
 
 import { UserData } from 'lndr/user'
 import { cryptoAmount, formatCommaDecimal, isEthAddress } from 'lndr/format'
@@ -23,10 +27,6 @@ const {
   accountManagement
 } = language
 
-import { getUser, getPrimaryCurrency } from 'reducers/app'
-import { getTransactionCosts, sendERC20 } from 'actions'
-import { connect } from 'react-redux'
-
 const loadingContext = new LoadingContext()
 
 interface Props {
@@ -43,7 +43,7 @@ interface State {
   formInputError?: string
   token?: ERC20_Token
   tokenBalance: string
-  transactionCosts: any
+  transactionCosts: TransactionCosts
 }
 
 class TransferERC20 extends Component<Props, State> {
@@ -52,7 +52,7 @@ class TransferERC20 extends Component<Props, State> {
     this.state = {
       token: undefined,
       tokenBalance: '0.00',
-      transactionCosts: {},
+      transactionCosts: defaultTransactionCosts(),
     }
   }
 

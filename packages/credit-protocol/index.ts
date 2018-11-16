@@ -21,6 +21,22 @@ import { ERC20_Transaction, WEI_PER_ETH, getERC20_token } from 'lndr/erc-20'
 import Tx from 'ethereumjs-tx'
 import web3 from 'lndr/web3-connection'
 
+export interface TransactionCosts {
+  ethCost: number,
+  ethCostFormatted: string,
+  currencyCost: number,
+  currencyCostFormatted: string,
+  weiCost: number
+}
+
+export const defaultTransactionCosts = () : TransactionCosts => ({
+  ethCost: 0,
+  ethCostFormatted: '',
+  currencyCost: 0,
+  currencyCostFormatted: '',
+  weiCost: 0
+})
+
 export default class CreditProtocol {
   client: Client
   tempStorage: any
@@ -418,7 +434,7 @@ export default class CreditProtocol {
     return config.gasPrice
   }
 
-  async getTransactionCosts(currency: string, gasNeeded: number) {
+  async getTransactionCosts(currency: string, gasNeeded: number) : Promise<TransactionCosts> {
     try {
       const gasPrice = await this.getGasPrice()
       const rate = await this.getEthExchange(currency)
@@ -428,7 +444,7 @@ export default class CreditProtocol {
 
       return {
         ethCost,
-        ethCostFormatted: `${ethCost}`.slice(0,6),
+        ethCostFormatted: `${ethCost}`.slice(0,7),
         currencyCost,
         currencyCostFormatted: `${currencySymbols(currency)}${formatSettlementCurrencyAmount(String(currencyCost), false)}`,
         weiCost
@@ -436,13 +452,7 @@ export default class CreditProtocol {
     } catch (e) {
     }
 
-    return {
-      ethCost: 0,
-      ethCostFormatted: '0',
-      currencyCost: 0,
-      currencyCostFormatted: formatSettlementAmount('0.00', currency),
-      weiCost: 0
-    }
+    return defaultTransactionCosts()
   }
 
   async getEthExchange(currency: string) {
