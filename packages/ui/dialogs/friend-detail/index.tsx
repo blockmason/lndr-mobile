@@ -1,6 +1,6 @@
 import React, { Component } from 'react'
 
-import { Text, View, Image, ScrollView, BackHandler, Alert } from 'react-native'
+import { Text, TouchableHighlight, View, Image, ScrollView, BackHandler, Alert } from 'react-native'
 import firebase from 'react-native-firebase'
 
 import Balance from 'lndr/balance'
@@ -21,7 +21,7 @@ import AddDebtButtons from 'ui/components/add-debt-buttons'
 
 import style from 'theme/friend'
 import formStyle from 'theme/form'
-import general from 'theme/general'
+import general, {underlayColor} from 'theme/general'
 import pendingStyle from 'theme/pending'
 import accountStyle from 'theme/account'
 
@@ -61,6 +61,7 @@ interface Props {
 interface State {
   balanceLoaded: boolean
   balance: Balance
+  isWalletShowing: boolean
   friend: Friend
   pic?: string
 }
@@ -71,6 +72,7 @@ class FriendDetail extends Component<Props, State> {
     this.state = {
       balanceLoaded: false,
       balance: new Balance({ relativeToNickname: "", relativeTo: "", amount: 0 }),
+      isWalletShowing: false,
       friend: new Friend('', '')
     }
 
@@ -78,6 +80,7 @@ class FriendDetail extends Component<Props, State> {
     this.goBack = this.goBack.bind(this)
     this.goSettleUp = this.goSettleUp.bind(this)
     this.confirmRemoveFriend = this.confirmRemoveFriend.bind(this)
+    this.toggleShowWallet = this.toggleShowWallet.bind(this)
   }
 
   async componentWillMount() {
@@ -160,6 +163,10 @@ class FriendDetail extends Component<Props, State> {
     navigation.navigate('AddDebt', { friend, direction })
   }
 
+  toggleShowWallet() {
+    this.setState({ isWalletShowing: !this.state.isWalletShowing })
+  }
+
   render() {
     const { friend } = this.state
     const { navigation, primaryCurrency, getPendingFromFriend, copyToClipboard } = this.props
@@ -193,11 +200,19 @@ class FriendDetail extends Component<Props, State> {
             <Text style={accountStyle.transactionHeader}>{recentTransactionsLanguage.title}</Text>
             <RecentView friend={friend} navigation={navigation} />
           </View>
-          <View style={formStyle.spaceHorizontalL}>
-            <Text selectable style={formStyle.displayText}>{`0x${friend.address}`}</Text>
-            <View style={formStyle.horizontalView}>
-              <Button round onPress={() => copyToClipboard(`0x${friend.address}`)} text={copy} />
-            </View>
+          <View style={formStyle.spaceBottomL}>
+            <TouchableHighlight {...underlayColor} onPress={this.toggleShowWallet}>
+              <View style={formStyle.panelHeader}>
+                <Text style={formStyle.panelText}>{'Wallet Address'}</Text>
+                <Image source={require('images/button-arrow.png')} style={this.state.isWalletShowing ? formStyle.panelIconDown : formStyle.panelIconRight} />
+              </View>
+            </TouchableHighlight>
+            {this.state.isWalletShowing && <View style={formStyle.spaceHorizontalL}>
+              <Text selectable style={formStyle.displayText}>{`0x${friend.address}`}</Text>
+              <View style={formStyle.horizontalView}>
+                <Button round onPress={() => copyToClipboard(`0x${friend.address}`)} text={copy} />
+              </View>
+            </View>}
           </View>
           <Button round danger onPress={this.confirmRemoveFriend} text={removeFriendText} containerStyle={style.spaceBottom} />
         </View>
