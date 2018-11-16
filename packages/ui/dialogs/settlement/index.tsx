@@ -497,6 +497,8 @@ class Settlement extends Component<Props, State> {
     const exchangeRate = this.calculateExchangeRate(cleanAmount, settlementType)
     const isERC20 = isEthSettlement(settlementType) || isERC20Settlement(settlementType)
 
+    const settlementText = (settlementType && isERC20 && settlementCostFormatted !== '') ? `${settlementCostFormatted} ${settlementType.toUpperCase()}` : amount
+
     return <View style={general.whiteFlex}>
       <View style={general.view}>
         <DashboardShell text={debtManagement.settleUpLower} navigation={this.props.navigation} />
@@ -533,19 +535,19 @@ class Settlement extends Component<Props, State> {
                   style={[formStyle.jumboInput, formStyle.settleAmount]}
                   placeholder={`${currencySymbols(primaryCurrency)}0`}
                   placeholderTextColor='black'
-                  value={amount}
+                  value={settlementText}
                   maxLength={11}
                   underlineColorAndroid='transparent'
                   keyboardType='numeric'
                   onChangeText={this.updateAmount}
                   onBlur={this.blurCurrencyFormat}
-                /> : <Text style={formStyle.jumboInput}>{amount}</Text>}
+                /> : <Text style={formStyle.jumboInput}>{settlementText}</Text>}
               </View>
             </View>
             { isPayPalSettlement(settlementType) ? <View style={general.centeredColumn}>
               <Button alternate small arrow onPress={this.payPalFeesAlert} text={payPalLanguage.feesNotification} />
             </View> : null }
-            { settlementType && isERC20 && settlementCostFormatted !== '' && <Text style={[formStyle.smallText, formStyle.spaceTop, formStyle.center]}>{`${settlementCostFormatted} ${settlementType.toUpperCase()}`}</Text>}
+            { settlementType && isERC20 && settlementCostFormatted !== '' && <Text style={[formStyle.smallText, formStyle.spaceVertical, formStyle.center]}>{amount}</Text>}
             { !!formInputError && <Text style={[formStyle.warningText, {alignSelf: 'center', marginHorizontal: 15}]}>{formInputError}</Text>}
             { paymentButton }
             { !!fromPayPalRequest ? <Button danger round containerStyle={{width: '80%'}} onPress={this.rejectPayPalRequest} text={pendingTransactionsLanguage.rejectRequest} /> : null }
