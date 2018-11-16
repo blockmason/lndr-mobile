@@ -450,6 +450,7 @@ export default class CreditProtocol {
         weiCost
       }
     } catch (e) {
+      console.log('ERROR TRANSACTION COSTS', e)
     }
 
     return defaultTransactionCosts()
