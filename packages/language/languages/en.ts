@@ -182,6 +182,7 @@ export default {
       display: (name, balance) => `Your ${name} balance is ${String(balance).slice(0,8)}`,
       getError: `Unable to retrieve Eth balance`,
       manage: `Manage ETH`,
+      transfer: `TRANSFER`
     },
     sendEth: {
       error: {

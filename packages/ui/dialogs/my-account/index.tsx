@@ -34,12 +34,12 @@ import { underlayColor } from 'theme/general'
 import popupStyle from 'theme/popup'
 import pendingStyle from 'theme/pending'
 
-import language from 'language'
+import languageValues, { language } from 'language'
 const { nickname, setNickname, email, setEmail, copy, accountManagement, changePin, enterNewPin, confirmPin, pleaseWait,
   mnemonicExhortation, addressExhortation, logoutAction, notifications, currentBalance, showMnemonic, enterCurrentPin,
   myAccount, debtManagement, removeAccount, payPalLanguage, cancel, confirmAccount, lndrVerified
-} = language
-const updateAccountText = language.updateAccount
+} = languageValues
+const updateAccountText = languageValues.updateAccount
 
 const loadingContext = new LoadingContext()
 const loadingPayPal = new LoadingContext()
@@ -396,28 +396,30 @@ class MyAccount extends Component<Props, State> {
     const { ethBalance } = this.props.state
     const { cryptoBalances } = this.state
 
-    const cryptoSubpanels = ERC20_Tokens.map( (token, index) => {
-      const cryptoBalance = cryptoBalances[token.tokenName] === undefined ? "0.0" : cryptoBalances[token.tokenName]
+    const sortedTokens = ERC20_Tokens.sort( (token1, token2) => {
+      return token1.tokenName.localeCompare(token2.tokenName, language)
+    })
+    const allTokens = [{tokenName: 'ETH'}, ...sortedTokens]
+    const cryptoSubpanels = allTokens.map( (token, index) => {
+      const tokenName = token.tokenName
+      const cryptoBalance = tokenName === 'ETH' ? ethBalance : cryptoBalances[tokenName]
+      const displayBalance = formatCommaDecimal(cryptoBalance === undefined ? '0.0' : cryptoBalance)
       return (
-        <View style={style.spaceHorizontalL} key={`cryptosub-${index}`}>
-          <Text style={[style.text, style.spaceTopL, style.center]}>{currentBalance(token.tokenName)}</Text>
-          <Text selectable style={style.displayText}>{cryptoBalance}</Text>
-          <Button disabled={Number(cryptoBalance) <= 0} round onPress={() => this.props.navigation.navigate('TransferERC20', { token })} text={accountManagement.sendERC20.transfer(token.tokenName)} />
+        <View style={[general.betweenRow, general.alignCenter, general.smallTopMargin, general.standardHMargin]} key={`cryptosub-${index}`}>
+          <Text style={[style.titleLarge, {marginTop:0}]}>{token.tokenName}</Text>
+          <Text selectable style={[style.displayText, {width:'50%'}, {textAlign:'right'}]}>{displayBalance}</Text>
+          <Button disabled={Number(cryptoBalance) <= 0} narrow round small onPress={() => this.props.navigation.navigate('TransferERC20', { token })} text={accountManagement.cryptoBalance.transfer} />
         </View>
       )
     })
 
     return (
       <View>
-        <View style={style.spaceHorizontalL}>
-          <Text style={[style.text, style.spaceTopL, style.center]}>{currentBalance('Eth')}</Text>
-          <Text selectable style={style.displayText}>{formatCommaDecimal(ethBalance)}</Text>
-          <Button disabled={Number(ethBalance) <= 0} round onPress={() => this.props.navigation.navigate('TransferEth')} text={accountManagement.sendEth.transfer} />
-        </View>
         {cryptoSubpanels}
       </View>
     )
   }
+
   renderPanels() {
     const { user, updateEmail, copyToClipboard } = this.props
     const { notificationsEnabled, ethBalance } = this.props.state
