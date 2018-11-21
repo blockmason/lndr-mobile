@@ -408,7 +408,7 @@ class MyAccount extends Component<Props, State> {
         <View style={[general.betweenRow, general.alignCenter, general.smallTopMargin, general.standardHMargin]} key={`cryptosub-${index}`}>
           <Text style={[style.titleLarge, {marginTop:0}]}>{token.tokenName}</Text>
           <Text selectable style={[style.displayText, {width:'50%'}, {textAlign:'right'}]}>{displayBalance}</Text>
-          <Button disabled={Number(cryptoBalance) <= 0} narrow round small onPress={() => this.props.navigation.navigate('TransferERC20', { token })} text={accountManagement.cryptoBalance.transfer} />
+          <Button disabled={Number(cryptoBalance) <= 0} icon='md-send' iconStyle={[{marginLeft: 0},{textAlign:'center'}]} round style={[{marginRight:10}]} onPress={() => this.props.navigation.navigate('TransferERC20', { token })} />
         </View>
       )
     })

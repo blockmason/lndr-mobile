@@ -31,6 +31,7 @@ interface Props {
   icon?: string
   zicon?: string
   containerStyle?: any
+  iconStyle?: any
   style?: any
   disabled?: boolean
 }
@@ -123,7 +124,7 @@ const getIconStyle = (round?: boolean) => {
   return buttonStyle.icon
 }
 
-export default ({ action, danger, black, blackText, friend, check, close, large, small, round, wide, narrow, arrow, arrowRed, link, underline, fat, dark, alternate, containerStyle, style, icon, zicon, text, onPress, disabled }: Props) => {
+export default ({ action, danger, black, blackText, friend, check, close, large, small, round, wide, narrow, arrow, arrowRed, link, underline, fat, dark, alternate, containerStyle, style, icon, iconStyle, zicon, text, onPress, disabled }: Props) => {
   if (close) {
     return (<TouchableHighlight
       underlayColor='#fff'
@@ -145,12 +146,12 @@ export default ({ action, danger, black, blackText, friend, check, close, large,
     style={containerStyles}
   >
     <View style={getStyle(danger, round, wide, narrow, alternate, action, dark, black, friend, style)}>
-      {icon ? <Icon style={getIconStyle(round)} name={icon} /> : null}
-      {zicon ? <ZIcon style={getIconStyle(round)} name={zicon} /> : null}
-      {showText(text, alternate, blackText, large, small, fat, link, underline)}
-      {arrow ? <Image style={buttonStyle.arrow} source={require('images/button-arrow.png')} /> : null}
-      {arrowRed ? <Image style={buttonStyle.arrow} source={require('images/button-arrow-red.png')} /> : null}
-      {check ? <Image style={buttonStyle.check} source={require('images/check-white.png')} /> : null}
+      {icon && <Icon style={[getIconStyle(round), iconStyle]} name={icon} />}
+      {zicon && <ZIcon style={[getIconStyle(round), iconStyle]} name={zicon} />}
+      {text && showText(text, alternate, blackText, large, small, fat, link, underline)}
+      {arrow && <Image style={buttonStyle.arrow} source={require('images/button-arrow.png')} />}
+      {arrowRed && <Image style={buttonStyle.arrow} source={require('images/button-arrow-red.png')} />}
+      {check && <Image style={buttonStyle.check} source={require('images/check-white.png')} />}
     </View>
   </TouchableHighlight>)
 }
