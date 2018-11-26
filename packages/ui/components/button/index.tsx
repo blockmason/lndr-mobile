@@ -30,8 +30,8 @@ interface Props {
   text?: string
   icon?: string
   zicon?: string
+  iconButton?: boolean
   containerStyle?: any
-  iconStyle?: any
   style?: any
   disabled?: boolean
 }
@@ -70,15 +70,13 @@ const showText = (text?: string, alternate?: boolean, blackText?: boolean, large
   return <Text style={styles}>{text}</Text>
 }
 
-const getStyle = (danger?: boolean, round?: boolean, wide?: boolean, narrow?: boolean, alternate?: boolean, action?: boolean, dark?: boolean, black?: boolean, friend?: boolean, customStyle?: any) => {
+const getStyle = (danger?: boolean, round?: boolean, wide?: boolean, narrow?: boolean, alternate?: boolean, action?: boolean, dark?: boolean, black?: boolean, friend?: boolean, customStyle?: any, iconButton?: boolean) => {
   let styles: any[] = []
 
-  if (alternate) {
-    styles.push(buttonStyle.buttonAlternate)
-  } else if (action) {
+  styles.push(alternate ? buttonStyle.buttonAlternate : buttonStyle.button)
+
+  if (action) {
     styles.push(buttonStyle.buttonAction)
-  } else {
-    styles.push(buttonStyle.button)
   }
 
   if (round) {
@@ -113,18 +111,26 @@ const getStyle = (danger?: boolean, round?: boolean, wide?: boolean, narrow?: bo
     styles.push(buttonStyle.friend)
   }
 
+  if (iconButton) {
+    styles.push(buttonStyle.iconButton)
+  }
+
   return styles
 }
 
-const getIconStyle = (round?: boolean) => {
-  if (round) {
-    return buttonStyle.iconRound
+const getIconStyle = (round?: boolean, iconButton?: boolean) => {
+  const styles:any[] = []
+
+  styles.push( round ? buttonStyle.iconRound : buttonStyle.icon)
+
+  if (iconButton) {
+    styles.push(buttonStyle.centeredIcon)
   }
 
-  return buttonStyle.icon
+  return styles
 }
 
-export default ({ action, danger, black, blackText, friend, check, close, large, small, round, wide, narrow, arrow, arrowRed, link, underline, fat, dark, alternate, containerStyle, style, icon, iconStyle, zicon, text, onPress, disabled }: Props) => {
+export default ({ action, danger, black, blackText, friend, check, close, large, small, round, wide, narrow, arrow, arrowRed, link, underline, fat, dark, alternate, containerStyle, style, icon, iconButton, zicon, text, onPress, disabled }: Props) => {
   if (close) {
     return (<TouchableHighlight
       underlayColor='#fff'
@@ -145,9 +151,9 @@ export default ({ action, danger, black, blackText, friend, check, close, large,
     onPress={disabled ? () => null : onPress}
     style={containerStyles}
   >
-    <View style={getStyle(danger, round, wide, narrow, alternate, action, dark, black, friend, style)}>
-      {icon && <Icon style={[getIconStyle(round), iconStyle]} name={icon} />}
-      {zicon && <ZIcon style={[getIconStyle(round), iconStyle]} name={zicon} />}
+    <View style={getStyle(danger, round, wide, narrow, alternate, action, dark, black, friend, style, iconButton)}>
+      {icon && <Icon style={getIconStyle(round, iconButton)} name={icon} />}
+      {zicon && <ZIcon style={getIconStyle(round, iconButton)} name={zicon} />}
       {text && showText(text, alternate, blackText, large, small, fat, link, underline)}
       {arrow && <Image style={buttonStyle.arrow} source={require('images/button-arrow.png')} />}
       {arrowRed && <Image style={buttonStyle.arrow} source={require('images/button-arrow-red.png')} />}

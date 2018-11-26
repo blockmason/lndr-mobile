@@ -32,6 +32,15 @@ export default StyleSheet.create({
     color: light,
     backgroundColor: transparent
   },
+  iconButton: {
+    minHeight: 36,
+    minWidth: 40,
+  },
+  centeredIcon: {
+    marginLeft: 4,
+    textAlign: 'center',
+    fontSize:20
+  },
   round: {
     borderRadius: 100
   },
