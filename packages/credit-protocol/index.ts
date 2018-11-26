@@ -456,6 +456,16 @@ export default class CreditProtocol {
     return defaultTransactionCosts()
   }
 
+  async getERC20EthPrice(tokenName: string) {
+    const prices = await this.getERC20EthPrices()
+    return prices.find( dataObj => dataObj.symbol === tokenName );
+  }
+
+  async getERC20EthPrices() {
+    const config = await this.getConfig()
+    return config.tokenExchangeRates
+  }
+
   async getEthExchange(currency: string) {
     const prices = await this.getEthPrices()
     return prices[currency.toLowerCase()] === undefined ? '0' : prices[currency.toLowerCase()]

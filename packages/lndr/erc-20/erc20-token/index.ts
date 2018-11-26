@@ -35,13 +35,13 @@ export default class ERC20_Token {
   tokenName : string
   contractAddress: string
   decimals: number
-  exchangePerUSD?: number // Note: this should be undefined for tokens that are not available for Settlement, e.g. BCPT
+  canTransfer: boolean
 
-  constructor(tokenName: string, contractAddress: string, decimals: number, exchangePerUSD?: number) {
+  constructor(tokenName: string, contractAddress: string, decimals: number, canTransfer: boolean) {
     this.tokenName = tokenName
     this.contractAddress = contractAddress
     this.decimals = decimals
-    this.exchangePerUSD = exchangePerUSD
+    this.canTransfer = canTransfer
   }
 
   async getBalance(walletAddress: string) {
