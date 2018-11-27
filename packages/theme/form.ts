@@ -225,6 +225,14 @@ export default StyleSheet.create({
     padding: m,
     ...thinSoftBorder
   },
+  displayTextBorderRight: {
+    ...medium,
+    ...verticalMargin,
+    padding: m,
+    ...thinSoftBorder,
+    textAlign: 'right',
+    width: '50%',
+  },
   bold: {
     ...bold
   },
