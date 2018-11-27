@@ -115,9 +115,7 @@ export const getEthExchange = state => (currency: string) : string => {
 export const getEthPrices = (state) : [object] => state.store.ethPrices
 
 export const getERC20EthPrice = state => (symbol: string) : number => {
-  const erc20PriceObj = state.store.erc20EthPrices.find( dataObj => dataObj.symbol === symbol );
-  return erc20PriceObj.ethPrice
-  //return Number(state.store.erc20EthPrices[symbol])
+  return Number(state.store.erc20EthPrices[symbol])
 }
 
 export const convertCurrency = state => (fromUcac: string, amount: number) : number => {
