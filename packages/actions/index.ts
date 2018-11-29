@@ -82,19 +82,22 @@ export const initializeStorage = () => {
       await sessionStorage.set(moment())
       let { ethBalance, ethPrices } = await getEthInfo(storedUser, creditProtocol)
       let ucacAddresses = await creditProtocol.getUcacAddresses()
+      const erc20EthPrices = await creditProtocol.getERC20EthPrices()
       let ethTransactions = await ethTransactionsStorage.get()
       const payload = { hasStoredUser: true, welcomeComplete: true, privacyPolicyVerified: true, user: storedUser, notificationsEnabled, ethBalance,
-        ethPrices, ucacAddresses, ethTransactions, primaryCurrency }
+        ethPrices, ucacAddresses, erc20EthPrices, ethTransactions, primaryCurrency }
       dispatch(setState(payload))
 
     } else if (touchIdSupported && storedMnemonic && storedUser) {
       let { ethBalance, ethPrices } = await getEthInfo(storedUser, creditProtocol)
       let ucacAddresses = await creditProtocol.getUcacAddresses()
+      const erc20EthPrices = await creditProtocol.getERC20EthPrices()
       let ethTransactions = await ethTransactionsStorage.get()
       const payload = await triggerTouchId(storedUser, notificationsEnabled, sessionStorage)
       payload.ethBalance = ethBalance
       payload.ethPrices = ethPrices
       payload.ucacAddresses = ucacAddresses
+      payload.erc20EthPrices = erc20EthPrices
       payload.ethTransactions = ethTransactions
       payload.primaryCurrency = primaryCurrency
       dispatch(setState(payload))
@@ -254,8 +257,9 @@ export const confirmAccount = async (recovery: boolean, shouldDisplayMnemonic: b
     await storeUserSession(user)
     let { ethBalance, ethPrices } = await getEthInfo(user, creditProtocol)
     let ucacAddresses = await creditProtocol.getUcacAddresses()
+    const erc20EthPrices = await creditProtocol.getERC20EthPrices()
     let ethTransactions = await getEthTransactions(user.address, recovery)
-    const payload = { user, hasStoredUser: true, ethBalance, ethPrices, ucacAddresses, ethTransactions, shouldDisplayMnemonic, password, mnemonic }
+    const payload = { user, hasStoredUser: true, ethBalance, ethPrices, ucacAddresses, erc20EthPrices, ethTransactions, shouldDisplayMnemonic, password, mnemonic }
     return payload
 }
 
@@ -689,9 +693,10 @@ export const loginAccount = (loginData: LoginAccountData) => {
     await storeUserSession(user)
     let { ethBalance, ethPrices } = await getEthInfo(user, creditProtocol)
     let ucacAddresses = await creditProtocol.getUcacAddresses()
+    const erc20EthPrices = await creditProtocol.getERC20EthPrices()
     let ethTransactions = await ethTransactionsStorage.get()
 
-    const payload = { user, hasStoredUser: true, ethBalance, ethPrices, ucacAddresses, ethTransactions }
+    const payload = { user, hasStoredUser: true, ethBalance, ethPrices, ucacAddresses, erc20EthPrices, ethTransactions }
     dispatch(setState(payload))
     refreshTransactions()
     return true
@@ -1052,10 +1057,15 @@ const settleBilateral = async (user, bilateralSettlements, dispatch, getState) =
       const erc20Token = getERC20_token(settlement.settlementCurrency)
       const erc20Balance = await erc20Token.getBalance(user.address)
       insufficientFunds = Number(settlement.settlementAmount) > ( Number(erc20Balance) * Math.pow(10, erc20Token.decimals) )
-      amountInEth = erc20Transaction.amount / Number(getEthExchange(getState())('USD'))
-      // E.g. Eth = BCPT / (BCPT/Eth) = BCPT / (BCPT/USD * USD/Eth)
-      if (erc20Token.exchangePerUSD)
-        amountInEth = amountInEth / erc20Token.exchangePerUSD
+
+      // TODO: review this and test
+      const ethPrice = await creditProtocol.getERC20EthPrice(erc20Token.tokenName)
+      if (!ethPrice) {
+        const debtorNickname = await getNicknameForAddress(settlement.debtorAddress)
+        return dispatch(displayError(settlementManagement.bilateral.error.generic(debtorNickname)))
+      }
+
+      amountInEth = ethPrice * erc20Transaction.amount
     }
 
     if ( insufficientFunds ) {

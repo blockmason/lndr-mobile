@@ -403,7 +403,7 @@ class MyAccount extends Component<Props, State> {
     const cryptoSubpanels = allTokens.map( (token, index) => {
       const tokenName = token.tokenName
       const cryptoBalance = tokenName === 'ETH' ? ethBalance : cryptoBalances[tokenName]
-      const displayBalance = formatCommaDecimal(cryptoBalance === undefined ? '0.0' : cryptoBalance)
+      const displayBalance = formatCommaDecimal(cryptoBalance === undefined ? '0.0' : cryptoBalance).slice(0, 14)
       return (
         <View style={[general.betweenRow, general.alignCenter, general.smallTopMargin, general.standardHMargin]} key={`cryptosub-${index}`}>
           <Text style={[style.titleLarge, {marginTop:0}]}>{token.tokenName}</Text>

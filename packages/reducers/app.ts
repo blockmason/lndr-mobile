@@ -112,7 +112,11 @@ export const getEthExchange = state => (currency: string) : string => {
   return state.store.ethPrices[currency.toLowerCase()] === undefined ? '200' : state.store.ethPrices[currency.toLowerCase()]
 }
 
-export const getEthPrices = (state) : object => state.store.ethPrices
+export const getEthPrices = (state) : [object] => state.store.ethPrices
+
+export const getERC20EthPrice = state => (symbol: string) : number => {
+  return Number(state.store.erc20EthPrices[symbol])
+}
 
 export const convertCurrency = state => (fromUcac: string, amount: number) : number => {
   const primaryCurrency = getPrimaryCurrency(state)

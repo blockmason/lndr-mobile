@@ -356,7 +356,7 @@ export default class CreditProtocol {
     tx.sign(privateKeyBuffer)
     const serializedTx = tx.serialize()
 
-    console.log('TOTAL ETH TO BE SENT: ', Number(transaction.amount), ', ', Number(transaction.amount) + Number(transaction.gas * transaction.gasPrice) )
+    console.log(`TOTAL ${settlementCurrency} TO BE SENT: `, Number(transaction.amount), ', ', Number(transaction.amount) + Number(transaction.gas * transaction.gasPrice) )
 
     return new Promise((resolve, reject) => {
       web3.eth.sendRawTransaction(('0x' + serializedTx.toString('hex')), (e, data) => {
@@ -454,6 +454,16 @@ export default class CreditProtocol {
     }
 
     return defaultTransactionCosts()
+  }
+
+  async getERC20EthPrice(tokenName: string) {
+    const prices = await this.getERC20EthPrices()
+    return prices[tokenName]
+  }
+
+  async getERC20EthPrices() {
+    const config = await this.getConfig()
+    return config.erc20EthereumPrices
   }
 
   async getEthExchange(currency: string) {

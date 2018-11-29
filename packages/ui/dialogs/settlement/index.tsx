@@ -39,7 +39,7 @@ const {
   settlementManagement
 } = language
 
-import { getUser, recentTransactions, getEthBalance, getEthExchange, getWeeklyEthTotal, hasPendingTransaction,
+import { getUser, recentTransactions, getEthBalance, getEthExchange, getERC20EthPrice, getWeeklyEthTotal, hasPendingTransaction,
   calculateBalance, convertCurrency, getUcacCurrency, getPrimaryCurrency } from 'reducers/app'
 import { addDebt, getTransactionCosts, getTransferLimitLevel, exceedsTransferLimit, requestPayPalSettlement, cancelPayPalRequest, cancelPayPalRequestFail } from 'actions'
 import { connect } from 'react-redux'
@@ -86,6 +86,7 @@ interface Props {
     denomination?: string
   ) => any
   hasPendingTransaction: (friend: Friend) => boolean
+  erc20EthPrice: (symbol: string) => number
   ethExchange: (currency: string) => string
   calculateBalance: (friend: Friend) => number
   convertCurrency: (fromUcac: string, amount: number) => number
@@ -158,7 +159,7 @@ class Settlement extends Component<Props, State> {
   }
 
   settlementChoices() {
-    const transferableTokens = ERC20_Tokens.filter( (token) => !!token.exchangePerUSD )
+    const transferableTokens = ERC20_Tokens.filter( (token) => token.canTransfer )
     const cryptoSettlementChoices = transferableTokens.map( (token) => {
       return {
         settlementType: token.tokenName,
@@ -296,19 +297,18 @@ class Settlement extends Component<Props, State> {
     return `${balance < 0 ? '' : '+'}${currencySymbols(primaryCurrency)}${currencyFormats(primaryCurrency)(balance)}`
   }
 
-  calculateExchangeRate(amount: number, settlementType: string | undefined) : number {
-    const { ethExchange, convertCurrency, primaryCurrency } = this.props
+  calculateExchangeRate(settlementType: string | undefined) : number {
+    const { erc20EthPrice, ethExchange, convertCurrency, primaryCurrency } = this.props
 
     let exchangeRate = 1.0
+
+    const ethExchangeRate = Number(ethExchange(primaryCurrency))
     if (isEthSettlement(settlementType))
-      exchangeRate = Number(ethExchange(primaryCurrency))
+      exchangeRate = ethExchangeRate
     else if (settlementType && isERC20Settlement(settlementType)) {
       const token = getERC20_token(settlementType)
-      if (token && token.exchangePerUSD) {
-        const balanceUSD = amount * Number(token.exchangePerUSD)
-        const balancePrimaryCurrency = convertCurrency('USD', balanceUSD)
-        exchangeRate = token.exchangePerUSD * balancePrimaryCurrency / balanceUSD
-      }
+      const tokenEthPrice = erc20EthPrice(settlementType)
+      exchangeRate = ethExchangeRate * tokenEthPrice
     }
 
     return exchangeRate
@@ -339,7 +339,7 @@ class Settlement extends Component<Props, State> {
 
     let settlementCost, settlementBalance
 
-    const exchangeRate = this.calculateExchangeRate(cleanAmount, settlementType)
+    const exchangeRate = this.calculateExchangeRate(settlementType)
     if (settlementType && isERC20Settlement(settlementType)) {
       // Check we have enough non-Eth crypto (doesn't include transaction cost)
       settlementCost = cleanAmount / exchangeRate
@@ -494,7 +494,7 @@ class Settlement extends Component<Props, State> {
 
     const paymentButton = this.renderPaymentButton()
     const cleanAmount = cleanFiatAmount(String(amount))
-    const exchangeRate = this.calculateExchangeRate(cleanAmount, settlementType)
+    const exchangeRate = this.calculateExchangeRate(settlementType)
     const isERC20 = isEthSettlement(settlementType) || isERC20Settlement(settlementType)
 
     const settlementText = (settlementType && isERC20 && settlementCostFormatted !== '') ? `${settlementCostFormatted} ${settlementType.toUpperCase()}` : amount
@@ -558,7 +558,7 @@ class Settlement extends Component<Props, State> {
   }
 }
 
-export default connect((state) => ({ user: getUser(state)(), ethBalance: getEthBalance(state), ethExchange: getEthExchange(state),
+export default connect((state) => ({ user: getUser(state)(), ethBalance: getEthBalance(state), ethExchange: getEthExchange(state), erc20EthPrice: getERC20EthPrice(state),
   recentTransactions: recentTransactions(state), ethSentPastWeek: getWeeklyEthTotal(state), hasPendingTransaction: hasPendingTransaction(state),
   calculateBalance: calculateBalance(state), convertCurrency: convertCurrency(state), getUcacCurrency: getUcacCurrency(state), primaryCurrency: getPrimaryCurrency(state),
   getStore: getStore(state)}),
