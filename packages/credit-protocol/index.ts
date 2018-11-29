@@ -356,7 +356,7 @@ export default class CreditProtocol {
     tx.sign(privateKeyBuffer)
     const serializedTx = tx.serialize()
 
-    console.log('TOTAL ETH TO BE SENT: ', Number(transaction.amount), ', ', Number(transaction.amount) + Number(transaction.gas * transaction.gasPrice) )
+    console.log(`TOTAL ${settlementCurrency} TO BE SENT: `, Number(transaction.amount), ', ', Number(transaction.amount) + Number(transaction.gas * transaction.gasPrice) )
 
     return new Promise((resolve, reject) => {
       web3.eth.sendRawTransaction(('0x' + serializedTx.toString('hex')), (e, data) => {

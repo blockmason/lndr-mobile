@@ -1060,7 +1060,7 @@ const settleBilateral = async (user, bilateralSettlements, dispatch, getState) =
 
       // TODO: review this and test
       const ethPrice = await creditProtocol.getERC20EthPrice(erc20Token.tokenName)
-      if (!!ethPrice) {
+      if (!ethPrice) {
         const debtorNickname = await getNicknameForAddress(settlement.debtorAddress)
         return dispatch(displayError(settlementManagement.bilateral.error.generic(debtorNickname)))
       }
