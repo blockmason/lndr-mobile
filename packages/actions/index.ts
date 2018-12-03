@@ -619,7 +619,7 @@ export const addDebt = (friend: Friend, amount: string, memo: string, direction:
       return dispatch(displayError(debtManagement.createError.amountTooHigh))
     }
 
-    if(settleTotal && Object.keys(ucacBalances).length > 1) {
+    if(settleTotal) {
       const { transactions, tooLow, tooHigh } = await generateMultiTransaction(address, friend.address, ucacBalances, memo, getState, privateKeyBuffer, creditProtocol, denomination)
 
       if (tooLow) {
@@ -659,6 +659,7 @@ export const addDebt = (friend: Friend, amount: string, memo: string, direction:
       )
 
       const signature = creditRecord.sign(privateKeyBuffer)
+
       await creditProtocol.submitCreditRecord(creditRecord, direction, signature, denomination)
 
       if(denomination === 'PAYPAL' && direction === 'borrow') {
@@ -1076,7 +1077,7 @@ const settleBilateral = async (user, bilateralSettlements, dispatch, getState) =
     try {
       const txHash = await creditProtocol.settleWithERC20(erc20Transaction, user.privateKeyBuffer, settlement.settlementCurrency)
       if(settlement.multiSettlements !== undefined) {
-        settlement.multiSettlements.map( async(hash) => await creditProtocol.storeSettlementHash(txHash, hash, settlement.creditorAddress, user.privateKeyBuffer) )
+        await Promise.all(settlement.multiSettlements.map( async(bilatSettlement) => await creditProtocol.storeSettlementHash(txHash, bilatSettlement.hash, settlement.creditorAddress, user.privateKeyBuffer) ))
       } else {
         await creditProtocol.storeSettlementHash(txHash, settlement.hash, settlement.creditorAddress, user.privateKeyBuffer)
       }

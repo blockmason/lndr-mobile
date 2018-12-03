@@ -369,7 +369,7 @@ export default class CreditProtocol {
     })
   }
 
-  storeSettlementHash(txHash: any, hash: any, creditorAddress: string, privateKeyBuffer: any) {
+  storeSettlementHash(txHash: any, hash: string, creditorAddress: string, privateKeyBuffer: any) {
     const hashBuffer = Buffer.concat([
       hash,
       hexToBuffer(txHash),
