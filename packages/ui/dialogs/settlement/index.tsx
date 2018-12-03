@@ -225,8 +225,6 @@ class Settlement extends Component<Props, State> {
         )
       )
     } else {
-      console.log('AMOUNT SHOULD BE 50', amount)
-
       success = await submittingTransaction.wrap(
         this.props.addDebt(
           friend as Friend,
