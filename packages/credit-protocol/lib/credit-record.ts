@@ -14,7 +14,7 @@ export default class CreditRecord {
 
   hash: any
 
-  constructor(ucacAddress: string, creditorAddress: string, debtorAddress: string, amount: number, memo: string, nonce: number) {
+  constructor(ucacAddress: string, creditorAddress: string, debtorAddress: string, amount: number, memo: string, nonce: number, hash?: string) {
     this.ucacAddress = ucacAddress
     this.creditorAddress = creditorAddress.replace('0x', '')
     this.debtorAddress = debtorAddress.replace('0x', '')
@@ -30,7 +30,7 @@ export default class CreditRecord {
       int32ToBuffer(nonce)
     ])
 
-    this.hash = ethUtil.sha3(buffer)
+    this.hash = hash ? hexToBuffer(hash) : ethUtil.sha3(buffer)
   }
 
   sign(privateKeyBuffer): String {

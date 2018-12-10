@@ -15,7 +15,7 @@ export default class PendingBilateral {
     const { txHash } = data
     const { creditor, debtor, amount, memo, nonce, ucac, submitter, hash, settlementAmount, settlementCurrency, settlementBlocknumber, multiSettlements } = data.creditRecord
     this.submitter = submitter.replace('0x', '')
-    this.creditRecord = new CreditRecord(ucac, creditor, debtor, amount, memo, nonce)
+    this.creditRecord = new CreditRecord(ucac, creditor, debtor, amount, memo, nonce, hash)
     this.txHash = txHash
     this.settlementAmount = settlementAmount
     this.settlementBlocknumber = settlementBlocknumber
