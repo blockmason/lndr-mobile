@@ -75,6 +75,11 @@ export default {
   setEmail: `Lndr अपडेट प्राप्त करने के लिए कोई ई-मेल सेट करें`,
   nickname: `छोटा नाम (लोअरकेस और संख्याएँ)`,
   email: `ईमेल पता`,
+  inviteLink: `Invite Link`,
+  splitExpense: `Split an expense with me on the LNDR app`,
+  sendInvite: `Send via email or text`,
+  unknownTransaction: `Unknown Transaction`,
+  yourFriend: `your friend`,
   lndrVerified: {
     ok: `ठीक`,
     title: `अपने ग्राहक को आवश्यकताओं के बारे में जानें पूरा करके उच्च निपटान सीमा और क्रिप्टो वापसी मात्रा निर्धारित करें।`,

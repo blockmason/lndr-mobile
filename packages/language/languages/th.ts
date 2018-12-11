@@ -75,6 +75,11 @@ export default {
   setEmail: `ตั้งค่าอีเมลเพื่อรับข้อมูลอัพเดตจาก Lndr`,
   nickname: `ชื่อเล่น (ตัวพิมพ์เล็กและตัวเลข)`,
   email: `อีเมลแอดเดรส`,
+  inviteLink: `Invite Link`,
+  splitExpense: `Split an expense with me on the LNDR app`,
+  sendInvite: `Send via email or text`,
+  unknownTransaction: `Unknown Transaction`,
+  yourFriend: `your friend`,
   lndrVerified: {
     ok: `ตกลง`,
     title: `กำหนดวงเงินการตั้งถิ่นฐานและการถอนการเข้ารหัสลับปริมาณที่สูงขึ้นโดยเติมทราบความต้องการของลูกค้าของคุณ`,

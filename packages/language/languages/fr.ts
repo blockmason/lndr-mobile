@@ -75,6 +75,11 @@ export default {
   setEmail: `Définir un e-mail pour recevoir des informations sur les mises à jour Lndr`,
   nickname: `Pseudonyme (lettres en minuscules et chiffres)`,
   email: `Adresse e-mail`,
+  inviteLink: `Invite Link`,
+  splitExpense: `Split an expense with me on the LNDR app`,
+  sendInvite: `Send via email or text`,
+  unknownTransaction: `Unknown Transaction`,
+  yourFriend: `your friend`,
   lndrVerified: {
     ok: `D'accord`,
     title: `Définir la limite de règlement et des montants de retrait de Crypto en complétant connaître vos besoins clients.`,

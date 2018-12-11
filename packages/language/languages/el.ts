@@ -75,6 +75,11 @@ export default {
   setEmail: `Ορίστε ένα email για να λαμβάνετε πληροφορίες σχετικά με ενημερώσεις του Lndr`,
   nickname: `Ψευδώνυμο (πεζά & αριθμοί)`,
   email: `Διεύθυνση Ηλεκτρονικού Ταχυδρομείου`,
+  inviteLink: `Invite Link`,
+  splitExpense: `Split an expense with me on the LNDR app`,
+  sendInvite: `Send via email or text`,
+  unknownTransaction: `Unknown Transaction`,
+  yourFriend: `your friend`,
   lndrVerified: {
     ok: `Εντάξει`,
     title: `Ορίστε υψηλότερο όριο οικισμού και την απόσυρση κρυπτο ποσά συμπληρώνοντας Γνωρίστε τις απαιτήσεις των πελατών σας.`,

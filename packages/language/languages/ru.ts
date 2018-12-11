@@ -75,6 +75,11 @@ export default {
   setEmail: `Установите электронное письмо для получения информации о обновлениях Lndr`,
   nickname: `Псевдоним (в нижнем регистре и цифры)`,
   email: `Адрес электронной почты`,
+  inviteLink: `Invite Link`,
+  splitExpense: `Split an expense with me on the LNDR app`,
+  sendInvite: `Send via email or text`,
+  unknownTransaction: `Unknown Transaction`,
+  yourFriend: `your friend`,
   lndrVerified: {
     ok: `ОК`,
     title: `Установите более высокий лимит расчетов и вывод крипто сумму, заполнив знать ваши требования клиентов.`,

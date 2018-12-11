@@ -74,6 +74,11 @@ export default {
   setEmail: `Lndrから最新情報を受け取るためのメールアドレスを設定`,
   nickname: `ニックネーム（小文字と数字）`,
   email: `メールアドレス`,
+  inviteLink: `Invite Link`,
+  splitExpense: `Split an expense with me on the LNDR app`,
+  sendInvite: `Send via email or text`,
+  unknownTransaction: `Unknown Transaction`,
+  yourFriend: `your friend`,
   lndrVerified: {
     ok: `OK`,
     title: `あなたの顧客の要件を知って完了することにより、高い決済上限と暗​​号引き出し額を設定してください。`,

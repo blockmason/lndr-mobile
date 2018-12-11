@@ -15,6 +15,8 @@ import PendingTransactionRow from 'ui/components/pending-transaction-row'
 import PendingSettlementRow from 'ui/components/pending-settlement-row'
 import PendingFriendRow from 'ui/components/pending-friend-row'
 import PayPalRequestRow from 'ui/components/paypal-request-row'
+import PendingEmailTxRow from 'ui/components/pending-email-tx-row'
+import InviteTransaction from 'lndr/invite-transaction'
 
 import style from 'theme/account'
 
@@ -22,7 +24,7 @@ import language from 'language'
 const { pendingTransactionsLanguage, pendingFriendRequestsLanguage } = language
 
 import { getStore, getUser, submitterIsMe, settlerIsMe, pendingSettlements, bilateralSettlements,
-  payPalRequests } from 'reducers/app'
+  payPalRequests, pendingInviteTxs } from 'reducers/app'
 import { isFocusingOn } from 'reducers/nav'
 import { getPending } from 'actions'
 import { connect } from 'react-redux'
@@ -39,6 +41,7 @@ interface Props {
   isFocused: boolean
   pendingSettlements: [PendingUnilateral]
   bilateralSettlements: [PendingBilateral]
+  pendingInviteTxs: [InviteTransaction]
   payPalRequests: [PayPalRequest]
   submitterIsMe: (pendingTransaction: PendingTransaction) => any
   settlerIsMe: (pendingSettlement: PendingUnilateral) => boolean
@@ -84,7 +87,7 @@ class PendingView extends Component<Props, State> {
   }
 
   showNoneMessage() {
-    const { pendingTransactionsLoaded, pendingTransactions, pendingSettlements, bilateralSettlements, pendingFriends, pendingOutboundFriends, payPalRequests } = this.props.state
+    const { pendingTransactionsLoaded, pendingTransactions, pendingSettlements, bilateralSettlements, pendingFriends, pendingOutboundFriends, payPalRequests, pendingInviteTxs } = this.props.state
     const { friend } = this.props
 
     let showNone = false
@@ -96,7 +99,8 @@ class PendingView extends Component<Props, State> {
         + pendingSettlements.length
         + pendingFriends.length
         + pendingOutboundFriends.length
-        + payPalRequests.length) === 0
+        + payPalRequests.length
+        + pendingInviteTxs.length) === 0
     } else if (friend) {
       showNone = true
       pendingTransactions.map( (pending) => {
@@ -124,8 +128,8 @@ class PendingView extends Component<Props, State> {
   }
 
   render() {
-    const { pendingTransactions, pendingFriends, pendingOutboundFriends } = this.props.state
-    const { pendingSettlements, settlerIsMe, payPalRequests, bilateralSettlements, user, friend, homeScreen, onlyFriends, navigation } = this.props
+    const { pendingSettlements, settlerIsMe, payPalRequests, bilateralSettlements, user, friend, homeScreen, onlyFriends, navigation, pendingInviteTxs,
+      state: { pendingTransactions, pendingFriends, pendingOutboundFriends } } = this.props
 
     if (onlyFriends) {
       if (pendingFriends.length === 0)
@@ -233,6 +237,16 @@ class PendingView extends Component<Props, State> {
             />
           })
         }
+        { homeScreen || !pendingInviteTxs.length ? null :
+          pendingInviteTxs.map( tx => {
+            return <PendingEmailTxRow
+              user={user}
+              key={tx.hash}
+              onPress={() => this.props.navigation.navigate('PendingTransaction', { emailTransaction: tx })}
+              inviteTx={tx}
+            />
+          })
+        }
       </Section>
     </View>
   }
@@ -240,4 +254,4 @@ class PendingView extends Component<Props, State> {
 
 export default connect<any, any, PassedProps>((state) => ({ state: getStore(state)(), user: getUser(state)(), isFocused: isFocusingOn(state)('Activity'),
 pendingSettlements: pendingSettlements(state), bilateralSettlements: bilateralSettlements(state), submitterIsMe: submitterIsMe(state),
-settlerIsMe: settlerIsMe(state), payPalRequests: payPalRequests(state) }), { getPending })(PendingView)
+settlerIsMe: settlerIsMe(state), payPalRequests: payPalRequests(state), pendingInviteTxs: pendingInviteTxs(state) }), { getPending })(PendingView)

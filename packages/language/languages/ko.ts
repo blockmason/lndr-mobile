@@ -76,6 +76,11 @@ export default {
   setEmail: `이메일 설정하고 Lndr 업데이트 정보 받아보기`,
   nickname: `닉네임(소문자 & 숫자)`,
   email: `이메일 주소`,
+  inviteLink: `Invite Link`,
+  splitExpense: `Split an expense with me on the LNDR app`,
+  sendInvite: `Send via email or text`,
+  unknownTransaction: `Unknown Transaction`,
+  yourFriend: `your friend`,
   lndrVerified: {
     ok: `승인`,
     title: `고객의 요구 사항을 알고 완료하여 높은 결제 제한 및 암호화 인출 금액을 설정합니다.`,

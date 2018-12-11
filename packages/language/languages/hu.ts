@@ -75,6 +75,11 @@ export default {
   setEmail: `Adjon meg egy email címet, hogy a Lndr frissítésekről tájékoztatást kapjon.`,
   nickname: `Becenév (kisbetűk és számok)`,
   email: `Email Cím`,
+  inviteLink: `Invite Link`,
+  splitExpense: `Split an expense with me on the LNDR app`,
+  sendInvite: `Send via email or text`,
+  unknownTransaction: `Unknown Transaction`,
+  yourFriend: `your friend`,
   lndrVerified: {
     ok: `rendben`,
     title: `Állítsa magasabb település határa és kripto elvonási mennyiségű kitöltésével Know Your Customer követelményeknek.`,

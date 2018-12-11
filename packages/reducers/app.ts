@@ -102,6 +102,8 @@ export const pendingSettlements = state => state.store.pendingSettlements
 
 export const bilateralSettlements = state => state.store.bilateralSettlements
 
+export const pendingInviteTxs = state => state.store.pendingInviteTxs
+
 export const pendingFriends = state => state.store.pendingFriends
 
 export const payPalRequests = (state) : [PayPalRequest] => state.store.payPalRequests

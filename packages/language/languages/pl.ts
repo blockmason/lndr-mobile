@@ -75,6 +75,11 @@ export default {
   setEmail: `Dodaj e-mail, aby otrzymywać informacje o aktualizacjach Lndr`,
   nickname: `Nazwa użytkownika (małe litery i cyfry)`,
   email: `Adres e-mail`,
+  inviteLink: `Invite Link`,
+  splitExpense: `Split an expense with me on the LNDR app`,
+  sendInvite: `Send via email or text`,
+  unknownTransaction: `Unknown Transaction`,
+  yourFriend: `your friend`,
   lndrVerified: {
     ok: `ok`,
     title: `Wypełnij formularz KYC aby podwyższyć limity rozliczeń oraz transferów w kryptowalutach.`,

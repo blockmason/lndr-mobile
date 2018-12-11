@@ -75,6 +75,11 @@ export default {
   setEmail: `设置电子邮件以接收Lndr的更新信息`,
   nickname: `昵称（小写＆数字）`,
   email: `电子邮件地址`,
+  inviteLink: `Invite Link`,
+  splitExpense: `Split an expense with me on the LNDR app`,
+  sendInvite: `Send via email or text`,
+  unknownTransaction: `Unknown Transaction`,
+  yourFriend: `your friend`,
   lndrVerified: {
     ok: `好`,
     title: `通过设置完成了解你的客户要求更高的结算限额和密码取款金额。`,

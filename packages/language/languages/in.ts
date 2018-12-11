@@ -75,6 +75,11 @@ export default {
   setEmail: `Atur email untuk menerima informasi tentang update Lndr`,
   nickname: `Nama panggilan (huruf kecil & angka)`,
   email: `Alamat Email`,
+  inviteLink: `Invite Link`,
+  splitExpense: `Split an expense with me on the LNDR app`,
+  sendInvite: `Send via email or text`,
+  unknownTransaction: `Unknown Transaction`,
+  yourFriend: `your friend`,
   lndrVerified: {
     ok: `baik`,
     title: `Ditetapkan lebih tinggi batas pemukiman dan penarikan kripto jumlah dengan melengkapi Tahu persyaratan Nasabah.`,

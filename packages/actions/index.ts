@@ -11,6 +11,7 @@ import PendingTransaction from 'lndr/pending-transaction'
 import RecentTransaction from 'lndr/recent-transaction'
 import PendingUnilateral from 'lndr/pending-unilateral'
 
+import InviteTransaction from 'lndr/invite-transaction'
 import Storage from 'lndr/storage'
 import { getEthBalance } from 'lndr/settlement'
 import { isTouchIdSupported } from 'lndr/touch-id'
@@ -459,10 +460,17 @@ export const getPending = () => {
     const bilateralSettlements = filterMultiTransactions(user.address, rawPendingSettlements.bilateralSettlements.map(jsonToPendingBilateral), getState())
     settleBilateral(user, bilateralSettlements, dispatch, getState)
 
+
+    const rawInviteTxs = await creditProtocol.getInviteTransactions(user.address)
+    const pendingInviteTxs = rawInviteTxs.map(tx => new InviteTransaction(tx, true))
+    console.log('RAW PENDING INVITE TRANSACTIONS: ', rawInviteTxs)
+
+    await Promise.all(pendingTransactions.map((tx: PendingTransaction) => tx.fromLink ? sendConfirmedTransaction(dispatch, getState, tx) : null))
+
     await ensureTransactionNicknames(pendingSettlements)
     await ensureTransactionNicknames(bilateralSettlements)
     await ensureTransactionNicknames(pendingTransactions)
-    dispatch(setState({ pendingTransactions, pendingTransactionsLoaded: true, pendingSettlements, pendingSettlementsLoaded: true, bilateralSettlements }))
+    dispatch(setState({ pendingTransactions, pendingTransactionsLoaded: true, pendingSettlements, pendingSettlementsLoaded: true, bilateralSettlements, pendingInviteTxs }))
   }
 }
 
@@ -510,49 +518,58 @@ export const cancelPayPalRequestFail = () => {
   }
 }
 
-export const confirmPendingTransaction = (pendingTransaction: PendingTransaction) => {
-  return async (dispatch, getState) => {
-    const { creditorAddress, debtorAddress, amount, memo, creditorNickname, debtorNickname, creditRecord, multiTransactions } = pendingTransaction
-    const { ucacAddress } = creditRecord
-    const { address, privateKeyBuffer } = getUser(getState())()
-    const direction = address === creditorAddress ? 'lend' : 'borrow'
-    const friendAddress = address === creditorAddress ? debtorAddress : creditorAddress
-    const friendNickname = address === creditorAddress ? debtorNickname : creditorNickname
+const sendConfirmedTransaction = async(dispatch: any, getState: any, pendingTransaction: PendingTransaction) => {
+  if (!pendingTransaction)
+      return
+    
+  const { address, privateKeyBuffer } = getUser(getState())()
+  const { creditorAddress, debtorAddress, amount, memo, creditorNickname, debtorNickname, creditRecord, multiTransactions } = pendingTransaction
+  const { ucacAddress } = creditRecord
+  const direction = address === creditorAddress ? 'lend' : 'borrow'
+  const friendAddress = address === creditorAddress ? debtorAddress : creditorAddress
+  const friendNickname = address === creditorAddress ? debtorNickname : creditorNickname
 
-    if(multiTransactions !== undefined) {
-      const { ucacBalances } = calculateUcacBalances(getState())(friendAddress)
-      const { transactions } = await generateMultiTransaction(address, friendAddress, ucacBalances, memo, getState, privateKeyBuffer, creditProtocol)
+  if(multiTransactions !== undefined) {
+    const { ucacBalances } = calculateUcacBalances(getState())(friendAddress)
+    const { transactions } = await generateMultiTransaction(address, friendAddress, ucacBalances, memo, getState, privateKeyBuffer, creditProtocol)
 
-      try {
-        await creditProtocol.submitMultiSettlement(transactions)
-        refreshTransactions()
+    try {
+      await creditProtocol.submitMultiSettlement(transactions)
+      refreshTransactions()
 
-        dispatch(displaySuccess(debtManagement.confirmation.transaction(friendNickname)))
-        return true
-      } catch (e) {
-        dispatch(displayError(debtManagement.pending.error))
-        return false
-      }
-    } else {
-      try {
-        const creditRecord = await creditProtocol.createCreditRecord(ucacAddress, creditorAddress, debtorAddress, amount, memo)
-        const signature = creditRecord.sign(privateKeyBuffer)
-        await creditProtocol.submitCreditRecord(creditRecord, direction, signature)
-        refreshTransactions()
+      dispatch(displaySuccess(debtManagement.confirmation.transaction(friendNickname)))
+      return true
+    } catch (e) {
+      dispatch(displayError(debtManagement.pending.error))
+      return false
+    }
+  } else {
+    try {
+      const creditRecord = await creditProtocol.createCreditRecord(ucacAddress, creditorAddress, debtorAddress, amount, memo)
+      const signature = creditRecord.sign(privateKeyBuffer)
+      await creditProtocol.submitCreditRecord(creditRecord, direction, signature)
+      refreshTransactions()
 
-        dispatch(displaySuccess(debtManagement.confirmation.transaction(friendNickname)))
-        return true
-      } catch (e) {
-        console.log('----------------------ERROR CONFIRMING TRANSACTION', e)
-        dispatch(displayError(debtManagement.confirmation.error))
-        return false
-      }
+      dispatch(displaySuccess(debtManagement.confirmation.transaction(friendNickname)))
+      return true
+    } catch (e) {
+      console.log('----------------------ERROR CONFIRMING TRANSACTION', e)
+      dispatch(displayError(debtManagement.confirmation.error))
+      return false
     }
   }
 }
 
-export const rejectPendingTransaction = (pendingTransaction: PendingTransaction) => {
+export const confirmPendingTransaction = (pendingTransaction: PendingTransaction) => {
   return async (dispatch, getState) => {
+    return sendConfirmedTransaction(dispatch, getState, pendingTransaction)
+  }
+}
+
+export const rejectPendingTransaction = (pendingTransaction: PendingTransaction | undefined) => {
+  return async (dispatch, getState) => {
+    if (!pendingTransaction)
+      return
     const { privateKeyBuffer } = getUser(getState())()
     const { hash, multiTransactions } = pendingTransaction
     try {
@@ -1142,4 +1159,65 @@ export const getTransferLimitLevel = async (userAddress, store) => {
 
 export const exceedsTransferLimit = (amount: number, transferLimit: string, ethExchange: string, ethSentPastWeek: number) => {
   return (ethSentPastWeek * Number(ethExchange) + amount) > Number(transferLimit)
+}
+
+export const sendEmailTx = (inviteTx: InviteTransaction) => {
+  return async (dispatch, getState) => {
+    const { privateKeyBuffer } = getUser(getState())()
+
+    return creditProtocol.sendEmailTx(inviteTx, privateKeyBuffer)
+    .catch(err => {
+      dispatch(displayError(debtManagement.pending.error))
+      throw new Error('Unable to send email transaction: ' + err)
+    })
+  }
+}
+
+export const getEmailTx = (hash: string) => {
+  return creditProtocol.getEmailTx(hash)
+}
+
+  // return creditProtocol.deleteEmailTx(hash)
+
+export const confirmEmailTx = (inviteTx: InviteTransaction) => {
+  return async (dispatch, getState) => {
+    const { address, privateKeyBuffer } = getUser(getState())()
+    // create the transaction here
+    const creditorAddress = inviteTx.direction === 'lend' ? inviteTx.address : address
+    const debtorAddress = inviteTx.direction === 'lend' ? address : inviteTx.address
+    const direction = inviteTx.direction === 'lend' ? 'borrow' : 'lend'
+    try {
+      const creditRecord = await creditProtocol.createCreditRecord(inviteTx.ucac, creditorAddress, debtorAddress, inviteTx.amount, inviteTx.memo, true)
+      const signature = creditRecord.sign(privateKeyBuffer)
+      await creditProtocol.submitCreditRecord(creditRecord, direction, signature)
+      await creditProtocol.deleteEmailTx(inviteTx.hash)
+      refreshTransactions()
+
+      const friendNickname = await getNicknameForAddress(inviteTx.address)
+      dispatch(displaySuccess(debtManagement.confirmation.transaction(friendNickname)))
+      return true
+    } catch (e) {
+      console.log('----------------------ERROR CONFIRMING EMAIL TRANSACTION', e)
+      dispatch(displayError(debtManagement.confirmation.error))
+      return false
+    }
+  }
+}
+
+export const rejectEmailTx = (inviteTx: InviteTransaction) => {
+  return async (dispatch, _getState) => {
+    const { hash } = inviteTx
+    try {
+      await creditProtocol.deleteEmailTx(hash)
+      console.log('deleted!')
+      dispatch(displaySuccess(debtManagement.rejection.success))
+      refreshTransactions()
+      return true
+    }
+    catch (e) {
+      console.log('REJECTION ERROR', e)
+      dispatch(displayError(debtManagement.rejection.error))
+      return false
+    }
+  }
 }

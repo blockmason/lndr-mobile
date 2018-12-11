@@ -11,6 +11,7 @@
 #import "SplashScreen.h"
 
 #import <Firebase.h>
+#import "RNFirebaseLinks.h"
 #import <React/RCTBundleURLProvider.h>
 #import <React/RCTRootView.h>
 
@@ -24,6 +25,7 @@
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
 {
+  [FIROptions defaultOptions].deepLinkURLScheme = @"io.lndr";
   [FIRApp configure];
   
   [PayPalManager setup];
@@ -53,6 +55,18 @@
   
   [SplashScreen show];
   return YES;
+}
+
+- (BOOL)application:(UIApplication *)application
+            openURL:(NSURL *)url
+            options:(NSDictionary<NSString *, id> *)options {
+    return [[RNFirebaseLinks instance] application:application openURL:url options:options];
+}
+
+- (BOOL)application:(UIApplication *)application
+continueUserActivity:(NSUserActivity *)userActivity
+ restorationHandler:(void (^)(NSArray *))restorationHandler {
+     return [[RNFirebaseLinks instance] application:application continueUserActivity:userActivity restorationHandler:restorationHandler];
 }
 
 @end

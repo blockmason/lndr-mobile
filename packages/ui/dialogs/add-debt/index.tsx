@@ -1,8 +1,9 @@
 import React, { Component } from 'react'
-import { View, ScrollView, Text, TextInput, TouchableHighlight, Platform, Modal, Keyboard, KeyboardAvoidingView } from 'react-native'
+import { View, ScrollView, Text, TextInput, TouchableHighlight, Platform, Modal, Keyboard, KeyboardAvoidingView, Share, Dimensions } from 'react-native'
 
 import firebase from 'react-native-firebase'
 
+import InviteTransaction from 'lndr/invite-transaction'
 import Friend from 'lndr/friend'
 import { formatMemo, amountFormat } from 'lndr/format'
 import { currencySymbols } from 'lndr/currencies'
@@ -22,12 +23,12 @@ import general from 'theme/general'
 import popupStyle from 'theme/popup'
 
 import language from 'language'
-const { debtManagement, noFriends, submit, nickname } = language
+const { debtManagement, noFriends, submit, nickname, share, splitExpense, inviteLink, sendInvite } = language
 
 import { getStore, pendingTransactions, recentTransactions, getAllUcacCurrencies, hasPendingTransaction, getPrimaryCurrency,
-  getPendingFromFriend } from 'reducers/app'
+  getPendingFromFriend, getUcacAddr } from 'reducers/app'
 import { getResetAction } from 'reducers/nav'
-import { addDebt, getFriends, hasPendingMessage } from 'actions'
+import { addDebt, getFriends, hasPendingMessage, sendEmailTx } from 'actions'
 import { connect } from 'react-redux'
 
 const loadingFriends = new LoadingContext()
@@ -48,9 +49,11 @@ interface Props {
     direction: string,
     currency: string
   ) => any
+  sendEmailTx: (inviteTx: InviteTransaction) => Promise<any>
   hasPendingMessage: () => any
   hasPendingTransaction: (friend: Friend) => boolean
   getPendingFromFriend: (friendNick: string) => any
+  getUcacFromCurrency: (currency: string) => string
 }
 
 interface State {
@@ -61,6 +64,7 @@ interface State {
   currency: string
   shouldPickCurrency: boolean
   searchText: string
+  sendViaLink: boolean
 }
 
 class AddDebt extends Component<Props, State> {
@@ -73,7 +77,8 @@ class AddDebt extends Component<Props, State> {
       shouldSelectFriend: false,
       currency: props.primaryCurrency,
       shouldPickCurrency: false,
-      searchText: ''
+      searchText: '',
+      sendViaLink: false
     }
 
     this.blurCurrencyFormat = this.blurCurrencyFormat.bind(this)
@@ -93,20 +98,62 @@ class AddDebt extends Component<Props, State> {
 
   async submit() {
     const direction = this.props.navigation.state.params ? this.props.navigation.state.params.direction : 'lend'
-    const { friend, amount, memo, currency } = this.state
-    const success = await submittingTransaction.wrap(
-      this.props.addDebt(
-        friend as Friend,
-        amount as string,
-        memo as string,
-        direction as string,
-        currency as string
+    const { friend, amount, memo, currency, sendViaLink } = this.state
+    let success
+
+    if (sendViaLink) {
+      const { state: { user: { address } }, getUcacFromCurrency, sendEmailTx } = this.props
+      const ucac = getUcacFromCurrency(currency)
+      const inviteTx = new InviteTransaction({ address, amount, memo, ucac, direction, currency })
+
+      const buildLink = new firebase.links.DynamicLink(inviteTx.hash, 'lndr.page.link')
+      buildLink
+      .android.setPackageName('com.lndr')
+      .android.setFallbackUrl('https://play.google.com/store/apps/details?id=com.lndr')
+      .ios.setAppStoreId('1322487591')
+      .ios.setBundleId('io.lndr')
+
+      firebase.links().createDynamicLink(buildLink)
+      .then(url => {
+        Share.share({
+          message: `${splitExpense}: ${url}`,
+          url: url,
+          title: splitExpense
+        }, {
+          // Android only:
+          dialogTitle: splitExpense
+        })
+        .then( async() => {
+          console.log(3)
+          try {
+            console.log(4)
+            await submittingTransaction.wrap(sendEmailTx(inviteTx))
+            console.log(5)
+            this.clearAndGoHome(friend, { type: true })
+          } catch(e) {
+            console.log('ERROR SENDING EMAIL TRANSACTION: ', e)
+            this.clearAndGoHome(friend, false)
+          }
+        })
+        .catch(() => console.log('USER CANCELLED TRANSACTION'))
+      })
+    } else {
+      success = await submittingTransaction.wrap(
+        this.props.addDebt(
+          friend as Friend,
+          amount as string,
+          memo as string,
+          direction as string,
+          currency as string
+        )
       )
-    )
 
+      this.clearAndGoHome(friend, success)
+    }
+  }
+
+  clearAndGoHome(friend: Friend | undefined, success: any) {
     this.clear()
-
-    const { navigation } = this.props
     let resetAction
 
     if (success && success.type !== '@@TOAST/DISPLAY_ERROR') {
@@ -116,7 +163,7 @@ class AddDebt extends Component<Props, State> {
       resetAction = getResetAction( { routeName: 'Dashboard' } )
     }
 
-    navigation.dispatch(resetAction)
+    this.props.navigation.dispatch(resetAction)
   }
 
   blurCurrencyFormat() {
@@ -136,12 +183,12 @@ class AddDebt extends Component<Props, State> {
       this.props.navigation.navigate(route, { pendingSettlement, pendingTransaction })
       hasPendingMessage()
     } else {
-      this.setState({ shouldSelectFriend: false, friend })
+      this.setState({ shouldSelectFriend: false, friend, sendViaLink: false })
     }
   }
 
   renderSelectedFriend() {
-    const { friend } = this.state
+    const { friend, sendViaLink } = this.state
     const { navigation } = this.props
     const { friendsLoaded, friends } = this.props.state
     const selectFriend = () => {
@@ -154,13 +201,13 @@ class AddDebt extends Component<Props, State> {
       }
     }
 
-    if (!friend) {
+    if (!friend && !sendViaLink) {
       return <Button round onPress={selectFriend} text={debtManagement.selectFriend} />
     }
 
     return (<TouchableHighlight onPress={selectFriend}>
       <View style={general.centeredColumn}>
-        <Text style={style.nickname}>{`@${friend.nickname}`}</Text>
+        <Text style={style.nickname}>{!!friend ? `@${friend.nickname}` : inviteLink}</Text>
       </View>
     </TouchableHighlight>)
   }
@@ -185,10 +232,11 @@ class AddDebt extends Component<Props, State> {
             />
           </View>
         </View>
+        <Button round onPress={() => this.setState({ sendViaLink: true, shouldSelectFriend: false, friend: undefined })} text={sendInvite}/>
       </Section>
-      <View style={style.list}>
+      <View style={[style.list, { height: 400 }]}>
         <Loading context={loadingFriends} />
-        {friendsLoaded && friends.length === 0 ? <Text style={style.emptyState}>{noFriends}</Text> : null}
+        {!!friendsLoaded && friends.length === 0 ? <Text style={style.emptyState}>{noFriends}</Text> : null}
         {friends.map(
           friend => friend.nickname.indexOf(searchText) === -1 ? null : (
             <FriendRow
@@ -226,8 +274,8 @@ class AddDebt extends Component<Props, State> {
   }
 
   renderSubmit() {
-    const { friend, amount, memo } = this.state
-    if (friend && amount && memo) {
+    const { friend, amount, memo, sendViaLink } = this.state
+    if ((friend || sendViaLink) && amount && memo) {
       return (
         <View>
           <Loading context={submittingTransaction} />
@@ -322,5 +370,5 @@ class AddDebt extends Component<Props, State> {
 
 export default connect((state) => ({ state: getStore(state)(), pendingTransactions: pendingTransactions(state),
   recentTransactions: recentTransactions(state), allCurrencies: getAllUcacCurrencies(state), primaryCurrency: getPrimaryCurrency(state),
-   hasPendingTransaction: hasPendingTransaction(state),
-   getPendingFromFriend: getPendingFromFriend(state) }), { addDebt, getFriends, hasPendingMessage })(AddDebt)
+  hasPendingTransaction: hasPendingTransaction(state), getPendingFromFriend: getPendingFromFriend(state),
+  getUcacFromCurrency: getUcacAddr(state) }), { addDebt, getFriends, hasPendingMessage, sendEmailTx })(AddDebt)

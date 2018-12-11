@@ -1,35 +1,76 @@
 PODS:
   - CardIO (5.4.1)
-  - Firebase/Core (4.10.1):
-    - FirebaseAnalytics (= 4.1.0)
-    - FirebaseCore (= 4.0.17)
-  - FirebaseAnalytics (4.1.0):
-    - FirebaseCore (~> 4.0)
-    - FirebaseInstanceID (~> 2.0)
-    - "GoogleToolboxForMac/NSData+zlib (~> 2.1)"
+  - Firebase/Analytics (5.11.0):
+    - Firebase/Core
+  - Firebase/Core (5.11.0):
+    - Firebase/CoreOnly
+    - FirebaseAnalytics (= 5.3.0)
+  - Firebase/CoreOnly (5.11.0):
+    - FirebaseCore (= 5.1.6)
+  - Firebase/DynamicLinks (5.11.0):
+    - Firebase/CoreOnly
+    - FirebaseDynamicLinks (= 3.1.1)
+  - FirebaseAnalytics (5.3.0):
+    - FirebaseCore (~> 5.1)
+    - FirebaseInstanceID (~> 3.3)
+    - GoogleAppMeasurement (~> 5.3)
+    - GoogleUtilities/AppDelegateSwizzler (~> 5.2)
+    - GoogleUtilities/MethodSwizzler (~> 5.2)
+    - GoogleUtilities/Network (~> 5.2)
+    - "GoogleUtilities/NSData+zlib (~> 5.2)"
     - nanopb (~> 0.3)
-  - FirebaseCore (4.0.17):
-    - "GoogleToolboxForMac/NSData+zlib (~> 2.1)"
-  - FirebaseInstanceID (2.0.9):
-    - FirebaseCore (~> 4.0)
-  - GoogleToolboxForMac/Defines (2.1.3)
-  - "GoogleToolboxForMac/NSData+zlib (2.1.3)":
-    - GoogleToolboxForMac/Defines (= 2.1.3)
-  - nanopb (0.3.8):
-    - nanopb/decode (= 0.3.8)
-    - nanopb/encode (= 0.3.8)
-  - nanopb/decode (0.3.8)
-  - nanopb/encode (0.3.8)
+  - FirebaseAnalyticsInterop (1.1.0)
+  - FirebaseCore (5.1.6):
+    - GoogleUtilities/Logger (~> 5.2)
+  - FirebaseDynamicLinks (3.1.1):
+    - FirebaseAnalytics (~> 5.1)
+    - FirebaseAnalyticsInterop (~> 1.0)
+    - FirebaseCore (~> 5.1)
+  - FirebaseInstanceID (3.3.0):
+    - FirebaseCore (~> 5.1)
+    - GoogleUtilities/Environment (~> 5.3)
+    - GoogleUtilities/UserDefaults (~> 5.3)
+  - GoogleAppMeasurement (5.3.0):
+    - GoogleUtilities/AppDelegateSwizzler (~> 5.2)
+    - GoogleUtilities/MethodSwizzler (~> 5.2)
+    - GoogleUtilities/Network (~> 5.2)
+    - "GoogleUtilities/NSData+zlib (~> 5.2)"
+    - nanopb (~> 0.3)
+  - GoogleUtilities/AppDelegateSwizzler (5.3.6):
+    - GoogleUtilities/Environment
+    - GoogleUtilities/Logger
+    - GoogleUtilities/Network
+  - GoogleUtilities/Environment (5.3.6)
+  - GoogleUtilities/Logger (5.3.6):
+    - GoogleUtilities/Environment
+  - GoogleUtilities/MethodSwizzler (5.3.6):
+    - GoogleUtilities/Logger
+  - GoogleUtilities/Network (5.3.6):
+    - GoogleUtilities/Logger
+    - "GoogleUtilities/NSData+zlib"
+    - GoogleUtilities/Reachability
+  - "GoogleUtilities/NSData+zlib (5.3.6)"
+  - GoogleUtilities/Reachability (5.3.6):
+    - GoogleUtilities/Logger
+  - GoogleUtilities/UserDefaults (5.3.6):
+    - GoogleUtilities/Logger
+  - nanopb (0.3.901):
+    - nanopb/decode (= 0.3.901)
+    - nanopb/encode (= 0.3.901)
+  - nanopb/decode (0.3.901)
+  - nanopb/encode (0.3.901)
   - PayPal-iOS-SDK (2.18.1):
     - PayPal-iOS-SDK/CardIO (= 2.18.1)
     - PayPal-iOS-SDK/Core (= 2.18.1)
   - PayPal-iOS-SDK/CardIO (2.18.1):
     - CardIO (~> 5.4.1)
   - PayPal-iOS-SDK/Core (2.18.1)
-  - UrbanAirship-iOS-SDK (9.0.3)
+  - UrbanAirship-iOS-SDK (9.4.0)
 
 DEPENDENCIES:
-  - Firebase/Core
+  - Firebase/Analytics
+  - Firebase/Core (~> 5.11.0)
+  - Firebase/DynamicLinks (~> 5.11.0)
   - PayPal-iOS-SDK
   - UrbanAirship-iOS-SDK (~> 9.0)
 
@@ -38,24 +79,30 @@ SPEC REPOS:
     - CardIO
     - Firebase
     - FirebaseAnalytics
+    - FirebaseAnalyticsInterop
     - FirebaseCore
+    - FirebaseDynamicLinks
     - FirebaseInstanceID
-    - GoogleToolboxForMac
+    - GoogleAppMeasurement
+    - GoogleUtilities
     - nanopb
     - PayPal-iOS-SDK
     - UrbanAirship-iOS-SDK
 
 SPEC CHECKSUMS:
   CardIO: 56983b39b62f495fc6dae9ad7cf875143df06443
-  Firebase: 92c6ba593e32db0defde464a9adc981d5cb49f97
-  FirebaseAnalytics: 3dfae28d4a5e06f86c4fae830efc2ad3fadb19bc
-  FirebaseCore: 872307b001bbefda1dfa0dbfffa50a6919023d4a
-  FirebaseInstanceID: d2058a35e9bebda1b6dd42486b84917bde552a9d
-  GoogleToolboxForMac: 2501e2ad72a52eb3dfe7bd9aee7dad11b858bd20
-  nanopb: 5601e6bca2dbf1ed831b519092ec110f66982ca3
+  Firebase: b48f9e653da971ecce5b8c749684bc8bb2d26bd3
+  FirebaseAnalytics: 63202d2665de4e6adcbdce189135255d8b5962ba
+  FirebaseAnalyticsInterop: e5f21be9af6548372e2f0815834ff909bff395a2
+  FirebaseCore: d16552f06821489ce1affe2e5e3e5593402ddfe3
+  FirebaseDynamicLinks: 000130a3fc3d81ac7322731b895009f3199ef584
+  FirebaseInstanceID: e2fa4cb35ef5558c200f7f0ad8a53e212215f93e
+  GoogleAppMeasurement: 5029d78f2b438bd30ffb44e6c558b57c21622727
+  GoogleUtilities: 95996bea7c7d9b8fb811b7507669a4a8762f80c7
+  nanopb: 2901f78ea1b7b4015c860c2fdd1ea2fee1a18d48
   PayPal-iOS-SDK: 10654cd111e911a9807bddb96fae81aacb8e9915
-  UrbanAirship-iOS-SDK: 2dca9836a46c4b3d91337e780226cd60fc4d309b
+  UrbanAirship-iOS-SDK: 25f155c0142b62e4a94ec21093d65c6e128f5213
 
-PODFILE CHECKSUM: 491ed2f70b9ae0d9fe1726d45b9c1a24e5453049
+PODFILE CHECKSUM: fc3a85473e991d9b7b70eb061230f05657ac4c4d
 
 COCOAPODS: 1.5.3
