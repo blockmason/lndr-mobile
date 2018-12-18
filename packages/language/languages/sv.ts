@@ -75,6 +75,11 @@ export default {
   setEmail: `Ange en e-post för att ta emot information om uppdateringar från Lndr`,
   nickname: `Användarnamn (små bokstäver & siffror)`,
   email: `E-postadress`,
+  inviteLink: `Bjud Link`,
+  splitExpense: `Split en kostnad med mig på LNDR appen`,
+  sendInvite: `Skicka via e-post eller text`,
+  unknownTransaction: `okänd transaktion`,
+  yourFriend: `din vän`,
   lndrVerified: {
     ok: `ok`,
     title: `Ställa högre uppgörelse limit och kryptouttagsbelopp genom att fylla Know Your Customer krav.`,

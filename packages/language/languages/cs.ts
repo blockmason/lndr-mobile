@@ -75,6 +75,11 @@ export default {
   setEmail: `Nastavit e-mail pro účely zasílání aktualit z Lndr`,
   nickname: `Přezdívka (malá písmena a čísla)`,
   email: `Emailová adresa`,
+  inviteLink: `Pozvat Link`,
+  splitExpense: `Rozdělit náklady se mnou na aplikaci LNDR`,
+  sendInvite: `Poslat e-mailem nebo textu`,
+  unknownTransaction: `neznámý Transaction`,
+  yourFriend: `tvůj kamarád`,
   lndrVerified: {
     ok: `OK`,
     title: `Stanovit vyšší mezní osídlení a abstinenční krypto množství vyplněním Know Your požadavky zákazníků.`,

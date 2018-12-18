@@ -75,6 +75,11 @@ export default {
   setEmail: `Vælg en e-mail for at modtage information om Lndr opdateringer`,
   nickname: `Brugernavn (små bogstaver & tal)`,
   email: `Email adresse`,
+  inviteLink: `Inviter Link`,
+  splitExpense: `Split en udgift med mig på LNDR app`,
+  sendInvite: `Send via email eller tekst`,
+  unknownTransaction: `ukendt Transaktion`,
+  yourFriend: `din ven`,
   lndrVerified: {
     ok: `Okay`,
     title: `Set højere grænse forlig og krypto tilbagetrækning mængder ved at udfylde Kend din Kunde krav.`,

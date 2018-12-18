@@ -54,6 +54,7 @@ const initialState = {
   pendingFriends: [],
   pendingOutboundFriends: [],
   bilateralSettlements: [],
+  pendingInviteTxs: [],
   notificationsEnabled: true,
   ethBalance: '0',
   ethPrices: {},

@@ -20,6 +20,19 @@
 	<string>1.60</string>
 	<key>CFBundleSignature</key>
 	<string>????</string>
+	<key>CFBundleURLTypes</key>
+	<array>
+		<dict>
+			<key>CFBundleTypeRole</key>
+			<string>Editor</string>
+			<key>CFBundleURLName</key>
+			<string>lndr.email.tx</string>
+			<key>CFBundleURLSchemes</key>
+			<array>
+				<string>io.lndr</string>
+			</array>
+		</dict>
+	</array>
 	<key>CFBundleVersion</key>
 	<string>52</string>
 	<key>LSRequiresIPhoneOS</key>
@@ -28,12 +41,17 @@
 	<dict>
 		<key>NSExceptionDomains</key>
 		<dict>
+			<key>localhost</key>
+			<dict>
+				<key>NSExceptionAllowsInsecureHTTPLoads</key>
+				<true/>
+			</dict>
 		</dict>
 	</dict>
 	<key>NSCameraUsageDescription</key>
 	<string>To add a profile photo, Lndr needs access to your camera</string>
 	<key>NSLocationWhenInUseUsageDescription</key>
-	<string></string>
+	<string/>
 	<key>NSPhotoLibraryUsageDescription</key>
 	<string>To add a profile photo, Lndr needs access to your photos</string>
 	<key>UIAppFonts</key>

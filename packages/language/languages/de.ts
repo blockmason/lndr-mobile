@@ -75,6 +75,11 @@ export default {
   setEmail: `Wählen Sie eine E-Mail-Adresse, um Informationen über Lndr-Updates zu erhalten`,
   nickname: `Nickname (Kleinbuchstaben & Zahlen)`,
   email: `E-Mail-Addresse`,
+  inviteLink: `Einladen Link`,
+  splitExpense: `Split einen Aufwand mit mir auf der LNDR App`,
+  sendInvite: `Senden Sie per E-Mail oder Text`,
+  unknownTransaction: `unbekannte Transaktion`,
+  yourFriend: `dein Freund`,
   lndrVerified: {
     ok: `OK`,
     title: `Stellen Sie höhere Siedlungsgrenze und Krypto Rückzug Mengen durch Ausfüllen Ihre Kundenanforderungen kennen.`,

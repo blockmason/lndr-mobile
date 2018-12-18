@@ -75,6 +75,11 @@ export default {
   setEmail: `Imposta una e-mail per ricevere informazioni sugli aggiornamenti Lndr`,
   nickname: `Soprannome (lettere minuscole e cifre)`,
   email: `Indirizzo email`,
+  inviteLink: `Invita link`,
+  splitExpense: `Split una spesa con me sul app LNDR`,
+  sendInvite: `Invia via e-mail o il testo`,
+  unknownTransaction: `Operazione sconosciuta`,
+  yourFriend: `tuo amico`,
   lndrVerified: {
     ok: `ok`,
     title: `Impostare più elevati limiti di liquidazione e di astinenza crypto quantità completando sapere esigenze del cliente.`,

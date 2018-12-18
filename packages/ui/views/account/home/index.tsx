@@ -1,15 +1,16 @@
 import React, { Component } from 'react'
 import { connect } from 'react-redux'
 
-import { Text, View, ScrollView, Platform, Dimensions, Image, TouchableHighlight, RefreshControl } from 'react-native'
+import { Text, View, ScrollView, Platform, Dimensions, Image, TouchableHighlight, RefreshControl, Linking } from 'react-native'
 import firebase from 'react-native-firebase'
 
-import { currencyFormats, formatExchangeCurrency, formatCommaDecimal } from 'lndr/format'
 import Balance from 'lndr/balance'
 import { UserData } from 'lndr/user'
 import PendingTransaction from 'lndr/pending-transaction'
 import Friend from 'lndr/friend'
+import InviteTransaction from 'lndr/invite-transaction'
 import { currencySymbols } from 'lndr/currencies'
+import { currencyFormats, formatExchangeCurrency, formatCommaDecimal } from 'lndr/format'
 
 import Button from 'ui/components/button'
 import { LoadingContext } from 'ui/components/loading'
@@ -21,7 +22,7 @@ import { isFocusingOn } from 'reducers/nav'
 import { getStore, getUser, getNeedsReviewCount, calculateBalance, calculateCounterparties,
   getPrimaryCurrency, getFriendList, getPendingFromFriend, getEthExchange, getFriendFromNick } from 'reducers/app'
 import { getAccountInformation, displayError, getPending, getFriends, getFriendRequests,
-  getRecentTransactions, registerChannelID, getPayPalRequests, setInitialHomeLoad, getVerificationStatus } from 'actions'
+  getRecentTransactions, registerChannelID, getPayPalRequests, setInitialHomeLoad, getVerificationStatus, getEmailTx, getNicknameForAddress } from 'actions'
 import { UrbanAirship } from 'urbanairship-react-native'
 
 import style from 'theme/account'
@@ -71,6 +72,8 @@ interface Props {
   getFriendRequests: () => void
   setInitialHomeLoad: (value: any) => void
   getVerificationStatus: () => void
+  getEmailTx: (hash: string) => any
+  getNicknameForAddress: (address: string) => any
 }
 
 interface State {
@@ -96,6 +99,25 @@ class HomeView extends Component<Props, State> {
 
     catch (error) {
       this.props.displayError(accountManagement.loadInformation.error)
+    }
+
+    if (this.props.state.initialHomeLoad) {
+      await Linking.getInitialURL().then((url) => {
+        if (url) {
+          this.props.setInitialHomeLoad(null)
+
+          const startIndex = url.indexOf('link=')
+          const hash = url.slice(startIndex + 5)
+          console.log('Initial url hash is: ' + hash)
+          return this.props.getEmailTx(hash)
+          .then( async (rawEmailTx) => {
+            const inviteTx = new InviteTransaction(rawEmailTx, true)
+            const submitterNickname = await getNicknameForAddress(inviteTx.address)
+            inviteTx.submitterNickname = submitterNickname
+            this.props.navigation.navigate('PendingTransaction', { emailTransaction: inviteTx })
+          })
+        }
+      }).catch(err => console.log('An error occurred getting the email transaction', err))
     }
 
     this.props.getVerificationStatus()
@@ -268,6 +290,6 @@ class HomeView extends Component<Props, State> {
 export default connect((state) => ({ state: getStore(state)(), user: getUser(state)(), isFocused: isFocusingOn(state)('Home'),
   needsReviewCount: getNeedsReviewCount(state), calculateBalance: calculateBalance(state), calculateCounterparties: calculateCounterparties(state),
   primaryCurrency: getPrimaryCurrency(state), friendList: getFriendList(state)(), getPendingFromFriend: getPendingFromFriend(state),
-  ethExchange: getEthExchange(state), getFriendFromNick: getFriendFromNick(state) }),
+  ethExchange: getEthExchange(state), getFriendFromNick: getFriendFromNick(state), getEmailTx, getNicknameForAddress }),
   { getAccountInformation, displayError, getPending, getPayPalRequests, getRecentTransactions, getFriends, registerChannelID, getFriendRequests,
     setInitialHomeLoad, getVerificationStatus })(HomeView)

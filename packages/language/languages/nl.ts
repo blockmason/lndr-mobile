@@ -75,6 +75,11 @@ export default {
   setEmail: `Stel een e-mailadres in om informatie over Lndr updates te ontvangen`,
   nickname: `Gebruikersnaam (kleine letters en nummers)`,
   email: `E-mailadres`,
+  inviteLink: `Nodig Link`,
+  splitExpense: `Split een last met mij op de LNDR app`,
+  sendInvite: `Stuur via e-mail of tekst`,
+  unknownTransaction: `onbekend Transactie`,
+  yourFriend: `je vriend`,
   lndrVerified: {
     ok: `OK`,
     title: `Stel hogere limiet afwikkeling en crypto uitbetalingsbedragen door het invullen van Ken uw klant eisen.`,

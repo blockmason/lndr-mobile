@@ -24,24 +24,23 @@ import accountStyle from 'theme/account'
 import formStyle from 'theme/form'
 
 import language from 'language'
-const {
-  back,
-  pendingTransactionsLanguage,
-  payPalLanguage
-} = language
+const { back, pendingTransactionsLanguage, payPalLanguage, inviteLink, unknownTransaction, yourFriend } = language
 
 import { getUser, submitterIsMe, getFriendFromAddress } from 'reducers/app'
-import { confirmPendingTransaction, rejectPendingTransaction, requestPayPalSettlement } from 'actions'
+import { confirmPendingTransaction, rejectPendingTransaction, requestPayPalSettlement, confirmEmailTx, rejectEmailTx } from 'actions'
 import { connect } from 'react-redux'
+import InviteTransaction from 'lndr/invite-transaction'
 
 const loadingContext = new LoadingContext()
 
 interface Props {
-  confirmPendingTransaction: (pendingTransaction: PendingTransaction) => any
-  rejectPendingTransaction: (pendingTransaction: PendingTransaction) => any
+  confirmPendingTransaction: (pendingTransaction: PendingTransaction | undefined) => any
+  rejectPendingTransaction: (pendingTransaction: PendingTransaction | undefined) => any
+  confirmEmailTx: (pendingTransaction: InviteTransaction) => any
+  rejectEmailTx: (pendingTransaction: InviteTransaction) => any
   getUcacCurrency: (ucac: string) => string
   user: UserData
-  submitterIsMe: (pendingTransaction: PendingTransaction) => boolean
+  submitterIsMe: (pendingTransaction: PendingTransaction | InviteTransaction) => boolean
   navigation: any
   getFriendFromAddress: (address: string) => Friend | undefined
   requestPayPalSettlement: (
@@ -54,23 +53,35 @@ interface State {
   pic?: string
   unmounting?: boolean
   isPayPalSettlement?: boolean
+  pendingTransaction?: PendingTransaction
+  emailTransaction?: InviteTransaction
 }
 
 class PendingTransactionDetail extends Component<Props, State> {
   constructor(props) {
     super(props)
-    this.state = { userPic: '' }
+    this.state = {
+      userPic: ''
+    }
+
+    this.rejectPendingTransaction = this.rejectPendingTransaction.bind(this)
+    this.confirmPendingTransaction = this.confirmPendingTransaction.bind(this)
   }
 
   async componentWillMount() {
-    const { user, navigation } = this.props
-    const pendingTransaction = navigation.state ? navigation.state.params.pendingTransaction : {}
-    let pic
+    let { user, navigation: { state: { params : { pendingTransaction, emailTransaction } } } } = this.props
+    let pic, addr
 
-    this.setState({ isPayPalSettlement: isPayPalSettlement(pendingTransaction.settlementCurrency) })
+    this.setState({ pendingTransaction, emailTransaction })
+    if (!!pendingTransaction) {
+      this.setState({ isPayPalSettlement: isPayPalSettlement(pendingTransaction.settlementCurrency) })
+    }
+
     try {
-      const addr = user.address === pendingTransaction.creditorAddress ? pendingTransaction.debtorAddress : pendingTransaction.creditorAddress
-      pic = await profilePic.get(addr)
+      if (!!pendingTransaction) {
+        addr = user.address === pendingTransaction.creditorAddress ? pendingTransaction.debtorAddress : pendingTransaction.creditorAddress
+        pic = await profilePic.get(addr)
+      }
     } catch (e) {}
     if(!this.state.unmounting && pic) {
       this.setState({ pic })
@@ -81,11 +92,12 @@ class PendingTransactionDetail extends Component<Props, State> {
     this.setState({unmounting: true})
   }
 
-  async confirmPendingTransaction(pendingTransaction: PendingTransaction) {
-    const success = await loadingContext.wrap(
-      this.props.confirmPendingTransaction(pendingTransaction)
-    )
+  async confirmPendingTransaction() {
+    const { state: { pendingTransaction, emailTransaction }, props: { confirmPendingTransaction, confirmEmailTx } }= this
 
+    const success = await loadingContext.wrap(
+      !!emailTransaction ? confirmEmailTx(emailTransaction) : confirmPendingTransaction(pendingTransaction)
+    )
     if (success) {
       this.closePopup(this.state.isPayPalSettlement ? 'settledWithPayPal' : 'confirm')
     } else {
@@ -93,9 +105,10 @@ class PendingTransactionDetail extends Component<Props, State> {
     }
   }
 
-  async rejectPendingTransaction(pendingTransaction: PendingTransaction) {
+  async rejectPendingTransaction() {
+    const { state: { pendingTransaction, emailTransaction }, props: { rejectPendingTransaction, rejectEmailTx } }= this
     const success = await loadingContext.wrap(
-      this.props.rejectPendingTransaction(pendingTransaction)
+      !!emailTransaction ? rejectEmailTx(emailTransaction) : rejectPendingTransaction(pendingTransaction)
     )
 
     if (success) {
@@ -107,15 +120,19 @@ class PendingTransactionDetail extends Component<Props, State> {
 
   closePopup(type) {
     const nickname = this.getFriendNickname()
-
     const resetAction = getResetAction({ routeName:'Confirmation', params: { type: type, friend: { nickname } } })
-
     this.props.navigation.dispatch(resetAction)
   }
 
   getFriendNickname() {
-    const { user, navigation} = this.props
-    const pendingTransaction = navigation.state ? navigation.state.params.pendingTransaction : {}
+    const { state: { pendingTransaction, emailTransaction }, props: { user } } = this
+    if (!pendingTransaction) {
+      if (!!emailTransaction && emailTransaction.address !== user.address) {
+        return emailTransaction.submitterNickname
+      } else {
+        return yourFriend
+      }
+    }
 
     if (user.address === pendingTransaction.creditorAddress) {
       return pendingTransaction.debtorNickname
@@ -125,22 +142,31 @@ class PendingTransactionDetail extends Component<Props, State> {
   }
 
   getTitle() {
-    const { user, navigation } = this.props
-    const pendingTransaction = navigation.state ? navigation.state.params.pendingTransaction : {}
+    const { state: { pendingTransaction, emailTransaction }, props: { user } } = this
+    if (!pendingTransaction){
+      if (!!emailTransaction && emailTransaction.address !== user.address) {
+        return emailTransaction.submitterNickname
+      } else {
+        return inviteLink
+      }
+    }
 
     if (user.address === pendingTransaction.creditorAddress) {
       return `@${pendingTransaction.debtorNickname}`
     } else if (user.address === pendingTransaction.debtorAddress) {
       return `@${pendingTransaction.creditorNickname}`
     } else {
-      return 'Unknown Transaction'
+      return unknownTransaction
     }
   }
 
   getColor() {
-    const { user, navigation } = this.props
-    const pendingTransaction = navigation.state ? navigation.state.params.pendingTransaction : {}
-    return user.address === pendingTransaction.creditorAddress ? accountStyle.greenAmount : accountStyle.redAmount
+    const { state: { pendingTransaction, emailTransaction }, props: { user } } = this
+    if (!!emailTransaction) {
+      return emailTransaction.address === user.address && emailTransaction.direction === 'lend' || emailTransaction.address !== user.address && emailTransaction.direction === 'borrow' ? accountStyle.greenAmount : accountStyle.redAmount
+    } else {
+      return pendingTransaction && user.address === pendingTransaction.creditorAddress ? accountStyle.greenAmount : accountStyle.redAmount
+    }
   }
 
   labelRow(memo) {
@@ -163,11 +189,10 @@ class PendingTransactionDetail extends Component<Props, State> {
   }
 
   renderPaymentButton() {
-    const { navigation, user } = this.props
-    const pendingTransaction = navigation.state ? navigation.state.params.pendingTransaction : {}
+    const { state: { pendingTransaction }, props: { user, navigation } } = this
+    const isCreditor = (pendingTransaction && user.address === pendingTransaction.creditorAddress)
 
-    const isCreditor = (user.address === pendingTransaction.creditorAddress)
-    if (this.state.isPayPalSettlement && isCreditor) {
+    if (this.state.isPayPalSettlement && isCreditor && pendingTransaction) {
       const friend = this.props.getFriendFromAddress(pendingTransaction.debtorAddress)
       return (
         <PayPalSettlementButton
@@ -176,7 +201,7 @@ class PendingTransactionDetail extends Component<Props, State> {
           memo={pendingTransaction.memo}
           direction={'lend'}
           onRequestPayPalPayment={() => console.warn("Can't happen")}
-          onPayPalPaymentSuccess={() => this.confirmPendingTransaction(pendingTransaction)}
+          onPayPalPaymentSuccess={this.confirmPendingTransaction}
           onRequestPayPalPayee={() => console.warn("Can't happen")}
           friend={friend}
           isPendingTransaction
@@ -184,34 +209,44 @@ class PendingTransactionDetail extends Component<Props, State> {
       )
     }
 
-    return <Button round large onPress={() => this.confirmPendingTransaction(pendingTransaction)} text={pendingTransactionsLanguage.confirm} />
+    return <Button round large onPress={this.confirmPendingTransaction} text={pendingTransactionsLanguage.confirm} />
   }
 
   renderButtons() {
-    const { submitterIsMe, navigation } = this.props
-    const pendingTransaction = navigation.state ? navigation.state.params.pendingTransaction : {}
-    const buttons = (submitterIsMe(pendingTransaction))
-        ? (<Button danger round onPress={() => this.rejectPendingTransaction(pendingTransaction)} text={pendingTransactionsLanguage.cancel} />)
-        : (<View style={{marginBottom: 10, width: '80%'}}>
-            {this.renderPaymentButton()}
-            <Button danger round onPress={() => this.rejectPendingTransaction(pendingTransaction)} text={pendingTransactionsLanguage.reject} />
-          </View>)
+    const { state: { pendingTransaction, emailTransaction }, props: { user, submitterIsMe } } = this
+    const userIsSubmitter = (pendingTransaction && submitterIsMe(pendingTransaction)) || (emailTransaction && emailTransaction.address === user.address)
+
+    const buttons = (userIsSubmitter)
+      ? (<Button danger round onPress={this.rejectPendingTransaction} text={pendingTransactionsLanguage.cancel} />)
+      : (<View style={{marginBottom: 10, width: '80%'}}>
+          {this.renderPaymentButton()}
+          <Button danger round onPress={this.rejectPendingTransaction} text={pendingTransactionsLanguage.reject} />
+        </View>)
     return <View>
       <Loading context={loadingContext} />
       {buttons}
     </View>
   }
 
-
   render() {
-    const { user, navigation, getUcacCurrency } = this.props
-    const { userPic, isPayPalSettlement } = this.state
-    const pendingTransaction = navigation.state ? navigation.state.params.pendingTransaction : {}
+    const { state: { pendingTransaction, emailTransaction, userPic, isPayPalSettlement }, props: { user, getUcacCurrency } } = this
     const imageSource = userPic ? {uri: userPic} : require('images/person-outline-dark.png')
-    const currency = getUcacCurrency(pendingTransaction.ucac)
+    let friendAddress, friend, currency, amount, memo
+
+    if (!!pendingTransaction) {
+      currency = getUcacCurrency(pendingTransaction.ucac)
+      friendAddress = user.address === pendingTransaction.creditorAddress ? pendingTransaction.debtorAddress : pendingTransaction.creditorAddress
+      friend = this.props.getFriendFromAddress(friendAddress) || new Friend('', '')
+      memo = pendingTransaction.memo.trim()
+      amount = pendingTransaction.amount
+    } else if (!!emailTransaction) {
+      currency = getUcacCurrency(emailTransaction.ucac)
+      memo = emailTransaction.memo.trim()
+      amount = emailTransaction.amount
+    } else {
+      return <View/>
+    }
     const color = this.getColor()
-    const friendAddress = user.address === pendingTransaction.creditorAddress ? pendingTransaction.debtorAddress : pendingTransaction.creditorAddress
-    const friend = this.props.getFriendFromAddress(friendAddress) || new Friend('', '')
 
     return <View style={general.whiteFlex}>
       <View style={general.view}>
@@ -225,11 +260,11 @@ class PendingTransactionDetail extends Component<Props, State> {
           <Text style={[style.title, color]}>{this.getTitle()}</Text>
           <View style={style.balanceRow}>
             <Text style={[style.balanceInfo, color]}>{currencySymbols(currency)}</Text>
-            <Text style={[style.amount, color]}>{currencyFormats(currency)(pendingTransaction.amount)}</Text>
+            <Text style={[style.amount, color]}>{currencyFormats(currency)(amount)}</Text>
           </View>
-          {this.labelRow(pendingTransaction.memo.trim())}
+          {this.labelRow(memo)}
           <View style={{marginVertical: 20, width: '100%'}}>
-          {pendingTransaction.multiTransactions === undefined ? null :
+          {!pendingTransaction || (!!pendingTransaction && pendingTransaction.multiTransactions === undefined) ? null :
             <View style={[general.centeredColumn, {marginBottom: 10, marginHorizontal: 40}]}>
               <BalanceSection friend={friend} />
             </View>
@@ -246,4 +281,4 @@ class PendingTransactionDetail extends Component<Props, State> {
 
 export default connect((state) => ({ user: getUser(state)(), submitterIsMe: submitterIsMe(state),
   getUcacCurrency: getUcacCurrency(state), getFriendFromAddress: getFriendFromAddress(state)
-}), { confirmPendingTransaction, rejectPendingTransaction, requestPayPalSettlement })(PendingTransactionDetail)
+}), { confirmPendingTransaction, rejectPendingTransaction, requestPayPalSettlement, confirmEmailTx, rejectEmailTx })(PendingTransactionDetail)

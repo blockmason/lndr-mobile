@@ -75,6 +75,11 @@ export default {
   setEmail: `Angi en e-postadresse for å motta informasjon om Lndr oppdateringer`,
   nickname: `Brukernavn (små bokstaver og tall)`,
   email: `E-postadresse`,
+  inviteLink: `Inviter Link`,
+  splitExpense: `Dele en regning med meg på LNDR app`,
+  sendInvite: `Send via e-post eller tekst`,
+  unknownTransaction: `ukjent Transaksjons`,
+  yourFriend: `vennen din`,
   lndrVerified: {
     ok: `OK`,
     title: `Sett høyere oppgjør grenseverdier og krypto abstinens mengder ved å fullføre vet at kunden krav.`,

@@ -6,6 +6,7 @@ import com.facebook.react.ReactApplication;
 import org.devio.rn.splashscreen.SplashScreenReactPackage;
 import io.invertase.firebase.RNFirebasePackage;
 import io.invertase.firebase.analytics.RNFirebaseAnalyticsPackage;
+import io.invertase.firebase.links.RNFirebaseLinksPackage;
 import com.imagepicker.ImagePickerPackage;
 import com.rnfingerprint.FingerprintAuthPackage;
 import com.urbanairship.reactnative.ReactAirshipPackage;
@@ -50,7 +51,8 @@ public class MainApplication extends Application implements ReactApplication {
             new ImageResizerPackage(),
             new PayPalPackage(),
             new LocalizationPackage(),
-            new RNFirebaseAnalyticsPackage()
+            new RNFirebaseAnalyticsPackage(),
+            new RNFirebaseLinksPackage()
       );
     }
 

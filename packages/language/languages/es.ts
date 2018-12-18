@@ -75,6 +75,11 @@ export default {
   setEmail: `Establecer un correo electrónico para recibir información sobre las novedades y actualizaciones de Lndr`,
   nickname: `Nombre de Usuario (en minúsculas y números)`,
   email: `Dirección de Correo Electrónico`,
+  inviteLink: `invitar Enlace`,
+  splitExpense: `Dividir un gasto conmigo en la aplicación LNDR`,
+  sendInvite: `Enviar por correo electrónico o de texto`,
+  unknownTransaction: `Transacción desconocido`,
+  yourFriend: `tu amigo`,
   lndrVerified: {
     ok: `DE ACUERDO`,
     title: `Establecer límite más alto asentamiento y abstinencia cripto cantidades completando saber sus necesidades del cliente.`,

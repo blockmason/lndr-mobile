@@ -75,6 +75,11 @@ export default {
   setEmail: `Lndr güncellemeleri hakkında bilgi almak için bir e-posta girin`,
   nickname: `Kullanıcı adı (sadece küçük harfler ve sayılar)`,
   email: `E-posta Adresi`,
+  inviteLink: `Linki Davet`,
+  splitExpense: `LNDR uygulamasında benimle bir masraf böl`,
+  sendInvite: `e-posta veya metin aracılığıyla gönder`,
+  unknownTransaction: `Bilinmeyen İşlem`,
+  yourFriend: `senin arkadaşın`,
   lndrVerified: {
     ok: `tamam`,
     title: `Müşteri gereksinimlerini bilin tamamlayarak yüksek yerleşim limiti ve kripto çekilme miktarlarını ayarlayın.`,

@@ -7,8 +7,10 @@ target 'LNDR' do
 
   # Pods for LNDR
   pod 'UrbanAirship-iOS-SDK', '~>9.0'
-  pod 'Firebase/Core'
   pod 'PayPal-iOS-SDK'
+  pod 'Firebase/Core', '~> 5.11.0'
+  pod 'Firebase/DynamicLinks', '~> 5.11.0'
+  pod 'Firebase/Analytics'
 
   # target 'LNDR-tvOSTests' do
   #   inherit! :search_paths

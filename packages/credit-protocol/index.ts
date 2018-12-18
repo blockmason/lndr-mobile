@@ -16,6 +16,8 @@ export { default as CreditRecord } from './lib/credit-record'
 import { currencySymbols, hasNoDecimals } from 'lndr/currencies'
 import { formatSettlementCurrencyAmount, formatSettlementAmount, isERC20Settlement } from 'lndr/format'
 import KYC from 'lndr/kyc'
+import Web3 from 'web3'
+import InviteTransaction from 'lndr/invite-transaction';
 
 import { ERC20_Transaction, WEI_PER_ETH, getERC20_token } from 'lndr/erc-20'
 import Tx from 'ethereumjs-tx'
@@ -285,9 +287,9 @@ export default class CreditProtocol {
     })
   }
 
-  async createCreditRecord(ucac, address1, address2, amount, memo) {
-    const nonce = await this.getNonce(address1, address2)
-    return new CreditRecord(ucac, address1, address2, amount, memo, nonce)
+  async createCreditRecord({ ucacAddress, creditorAddress, debtorAddress, amount, memo, fromLink }) {
+    const nonce = await this.getNonce(creditorAddress, debtorAddress)
+    return new CreditRecord({ ucacAddress, creditorAddress, debtorAddress, amount, memo, nonce, fromLink, hash: undefined })
   }
 
   async submitCreditRecord(creditRecord, action: string, signature, denomination?: string) {
@@ -301,7 +303,8 @@ export default class CreditProtocol {
       debtorAddress: debtor,
       amount,
       memo,
-      nonce
+      nonce,
+      fromLink
     } = creditRecord
 
     return this.client.post(`/${action}`, {
@@ -314,6 +317,7 @@ export default class CreditProtocol {
       hash: bufferToHex(creditRecord.hash),
       nonce,
       signature,
+      fromLink,
       settlementCurrency: denomination
     })
   }
@@ -541,5 +545,23 @@ export default class CreditProtocol {
     const hash = bufferToHex(ethUtil.sha3(hashBuffer))
     const verificationStatusSignature = this.serverSign(hash, privateKeyBuffer)
     return this.client.post('/check_verification_status', { user, verificationStatusSignature })
+  }
+
+  sendEmailTx(tx: InviteTransaction, privateKeyBuffer: any) {
+    tx.signature = this.serverSign(tx.hash, privateKeyBuffer)
+    return this.client.post('/email_transaction', tx)
+  }
+
+  getEmailTx(hash: string) {
+    return this.client.get('/email_transaction_hash/' + hash)
+  }
+
+  getInviteTransactions(address: string) {
+    return this.cacheHttpRequest(`/email_transaction/${address}`, 3000)
+  }
+
+  deleteEmailTx(hash: string) {
+    console.log('DELETING')
+    return this.client.delete('/email_transaction/' + hash)
   }
 }

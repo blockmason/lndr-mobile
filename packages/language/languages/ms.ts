@@ -75,6 +75,11 @@ export default {
   setEmail: `Tetapkan e-mel untuk menerima maklumat mengenai kemas kini Lndr`,
   nickname: `Nama samaran (huruf kecil dan nombor)`,
   email: `Alamat e-mel`,
+  inviteLink: `menjemput Link`,
+  splitExpense: `Split perbelanjaan dengan saya pada aplikasi LNDR yang`,
+  sendInvite: `Hantar melalui e-mel atau teks`,
+  unknownTransaction: `tidak diketahui Transaksi`,
+  yourFriend: `kawan awak`,
   lndrVerified: {
     ok: `Okey`,
     title: `Menetapkan had penyelesaian dan pengeluaran crypto jumlah yang lebih tinggi dengan melengkapkan Tahu keperluan Pelanggan Anda.`,

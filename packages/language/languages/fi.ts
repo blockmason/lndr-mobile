@@ -75,6 +75,11 @@ export default {
   setEmail: `Syötä sähköpostiosoite, johon voit saada tietoja Lndr-päivityksistä`,
   nickname: `Käyttäjänimi (pieniä kirjaimia ja numeroita)`,
   email: `Sähköpostiosoite`,
+  inviteLink: `Kutsulinkki`,
+  splitExpense: `Split kustannuksella kanssani LNDR sovellus`,
+  sendInvite: `Lähetä sähköpostitse tai tekstiä`,
+  unknownTransaction: `tuntematon Transaction`,
+  yourFriend: `ystäväsi`,
   lndrVerified: {
     ok: `kunnossa`,
     title: `Korkeampia ratkaisun raja ja salauksen peruuttamista määriä täyttämällä Tunne asiakkaiden vaatimuksiin.`,

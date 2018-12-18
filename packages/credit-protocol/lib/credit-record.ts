@@ -11,16 +11,18 @@ export default class CreditRecord {
   amount: number
   memo: string
   nonce: number
+  fromLink: boolean
 
   hash: any
 
-  constructor(ucacAddress: string, creditorAddress: string, debtorAddress: string, amount: number, memo: string, nonce: number, hash?: string) {
+  constructor({ ucacAddress, creditorAddress, debtorAddress, amount, memo, nonce, fromLink, hash }) {
     this.ucacAddress = ucacAddress
     this.creditorAddress = creditorAddress.replace('0x', '')
     this.debtorAddress = debtorAddress.replace('0x', '')
     this.amount = amount
     this.memo = memo
     this.nonce = nonce
+    this.fromLink = fromLink
 
     const buffer = Buffer.concat([
       hexToBuffer(ucacAddress),

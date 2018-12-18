@@ -75,6 +75,11 @@ export default {
   setEmail: `Đặt email để nhận thông tin cập nhật về Lndr`,
   nickname: `Biệt danh (chữ thường & số)`,
   email: `Địa chỉ email`,
+  inviteLink: `mời liên kết`,
+  splitExpense: `Chia một khoản chi phí với tôi trên ứng dụng LNDR`,
+  sendInvite: `Gửi qua email hoặc văn bản`,
+  unknownTransaction: `giao dịch Unknown`,
+  yourFriend: `bạn của bạn`,
   lndrVerified: {
     ok: `được`,
     title: `Đặt một lượng giới hạn giải quyết và rút crypto cao hơn bằng cách hoàn thành Biết yêu cầu khách hàng của bạn.`,
