@@ -53,7 +53,7 @@ export const generateMultiTransaction = async (address: string, friendAddress: s
     tooLow = tooLow || sanAmount <= 0
     tooHigh = tooHigh || sanAmount >= 1e11
 
-    const creditRecord = new CreditRecord(ucac, creditor, debtor, sanAmount, memo, startNonce + index, false)
+    const creditRecord = new CreditRecord({ ucacAddress: ucac, creditorAddress: creditor, debtorAddress: debtor, amount: sanAmount, memo, nonce: startNonce + index, fromLink: false, hash: undefined })
     const signature = creditRecord.sign(privateKeyBuffer)
 
     return {

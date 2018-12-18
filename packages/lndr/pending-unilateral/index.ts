@@ -13,7 +13,7 @@ export default class PendingUnilateral {
 
   constructor(data) {
     const { creditor, debtor, amount, memo, nonce, ucac, submitter, hash, settlementAmount, settlementCurrency, settlementBlocknumber, multiSettlements } = data
-    this.creditRecord = new CreditRecord(ucac, creditor, debtor, amount, memo, 0)
+    this.creditRecord = new CreditRecord({ ucacAddress: ucac, creditorAddress: creditor, debtorAddress: debtor, amount, memo, nonce: 0, fromLink: false, hash })
     this.submitter = submitter.replace('0x', '')
     this.hash = hash
     this.settlementAmount = settlementAmount

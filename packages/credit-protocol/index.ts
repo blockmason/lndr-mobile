@@ -287,9 +287,9 @@ export default class CreditProtocol {
     })
   }
 
-  async createCreditRecord(ucac, address1, address2, amount, memo, fromLink = false) {
-    const nonce = await this.getNonce(address1, address2)
-    return new CreditRecord(ucac, address1, address2, amount, memo, nonce, fromLink)
+  async createCreditRecord({ ucacAddress, creditorAddress, debtorAddress, amount, memo, fromLink }) {
+    const nonce = await this.getNonce(creditorAddress, debtorAddress)
+    return new CreditRecord({ ucacAddress, creditorAddress, debtorAddress, amount, memo, nonce, fromLink, hash: undefined })
   }
 
   async submitCreditRecord(creditRecord, action: string, signature, denomination?: string) {

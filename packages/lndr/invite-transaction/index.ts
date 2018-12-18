@@ -16,7 +16,6 @@ export default class InviteTransaction {
 
   constructor(data, fromServer = false) {
     const { address, ucac, settlementCurrency, amount, memo, direction, currency, hash } = data
-    console.log('WHAT IS THE DATA', data)
     this.address = address.replace('0x', '')
     this.ucac = ucac.replace('0x', '')
     this.settlementCurrency = typeof settlementCurrency === 'string' ? settlementCurrency.trim() : settlementCurrency

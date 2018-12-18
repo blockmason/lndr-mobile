@@ -124,11 +124,8 @@ class AddDebt extends Component<Props, State> {
           dialogTitle: splitExpense
         })
         .then( async() => {
-          console.log(3)
           try {
-            console.log(4)
             await submittingTransaction.wrap(sendEmailTx(inviteTx))
-            console.log(5)
             this.clearAndGoHome(friend, { type: true })
           } catch(e) {
             console.log('ERROR SENDING EMAIL TRANSACTION: ', e)
