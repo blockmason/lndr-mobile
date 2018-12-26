@@ -105,6 +105,14 @@ export default StyleSheet.create({
     ...xsmall,
     color: gray
   },
+  arrowIcon: {
+    marginTop: 10,
+    fontSize: 60,
+    fontWeight: 'bold'
+  },
+  selfPic: {
+    width: 140,
+  },
   emptyState: {
     ...verticalMargin,
     ...medium,
@@ -116,6 +124,11 @@ export default StyleSheet.create({
   },
   header: {
     fontSize: 36,
+    ...bold,
+    color: black
+  },
+  midHeader: {
+    fontSize: 24,
     ...bold,
     color: black
   },
@@ -314,10 +327,7 @@ export default StyleSheet.create({
     borderRadius: 25
   },
   friendIcon: {
-    width: 60,
-    height: 60,
-    marginRight: 15,
-    borderRadius: 30
+    marginRight: 15
   },
   recentIcon: {
     width: 30,
@@ -345,15 +355,14 @@ export default StyleSheet.create({
     paddingRight: m,
     paddingVertical: m
   },
-  seeAllActivityButton: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'center'
+  seeAllButton: {
+    width: width - 60
   },
   seeAllActivityArrow: {
-    height: 16,
-    width: 16,
-    marginRight: m
+    fontSize: 36,
+    paddingRight: 16,
+    color: aqua,
+    marginTop: 12,
   },
   transactionHeader: {
     ...medium,
@@ -421,6 +430,52 @@ export default StyleSheet.create({
     marginHorizontal: 10,
     marginBottom: 10,
     minWidth: '40%'
-  }
+  },
+  tileText: {
+    ...medium,
+    ...bold,
+    color: black,
+    marginTop: 10,
+  },
+  grayTile: {
+    width: (width - 80) / 2,
+    backgroundColor: paleGray,
+    height: (width - 120) / 2,
+    borderRadius: 20,
+  },
+  walletIcon: {
+    fontSize: 60,
+    color: black
+  },
+  newTransactionIcon: {
+    fontSize: 60,
+    color: aqua,
+  },
+  aquaTile: {
+    width: (width - 60),
+    backgroundColor: softAqua,
+    height: (width - 100) / 2,
+    borderRadius: 20,
+    marginBottom: 10
+  },
+  seeActivityTile: {
+    width: (width - 60),
+    backgroundColor: paleGray,
+    height: 50,
+    borderRadius: 10,
+  },
+  directionTile: {
+    backgroundColor: paleGray,
+    paddingHorizontal: l,
+    paddingTop: s,
+    borderRadius: 20,
+    marginBottom: 20,
+  },
+  tap: {
+    ...small,
+    color: black,
+    marginBottom: s
+  },
+
 
 } as any)

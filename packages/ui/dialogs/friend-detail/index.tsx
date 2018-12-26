@@ -7,7 +7,6 @@ import Balance from 'lndr/balance'
 import Friend from 'lndr/friend'
 import { UserData } from 'lndr/user'
 import { currencyFormats } from 'lndr/format'
-import profilePic from 'lndr/profile-pic'
 import { currencySymbols } from 'lndr/currencies'
 
 import PendingView from 'ui/views/account/activity/pending'
@@ -18,6 +17,7 @@ import Button from 'ui/components/button'
 import Loading, { LoadingContext } from 'ui/components/loading'
 import BalanceSection from 'ui/components/balance-section'
 import AddDebtButtons from 'ui/components/add-debt-buttons'
+import ProfilePic from 'ui/components/images/profile-pic'
 
 import style from 'theme/friend'
 import formStyle from 'theme/form'
@@ -63,7 +63,6 @@ interface State {
   balance: Balance
   isWalletShowing: boolean
   friend: Friend
-  pic?: string
 }
 
 class FriendDetail extends Component<Props, State> {
@@ -85,13 +84,7 @@ class FriendDetail extends Component<Props, State> {
 
   async componentWillMount() {
     const friend = this.props.navigation ? this.props.navigation.state.params.friend : {}
-
-    if (friend.address !== undefined) {
-      const pic = await profilePic.get(friend.address)
-      this.setState({ pic, friend })
-    } else {
-      this.setState({ friend })
-    }
+    this.setState({ friend })
   }
 
   async componentDidMount() {
@@ -170,8 +163,6 @@ class FriendDetail extends Component<Props, State> {
   render() {
     const { friend } = this.state
     const { navigation, primaryCurrency, getPendingFromFriend, copyToClipboard } = this.props
-    const { pic } = this.state
-    const imageSource = pic ? { uri: pic } : require('images/person-outline-dark.png')
     const { route } = getPendingFromFriend(friend.nickname)
 
     return <View style={general.whiteFlex}>
@@ -182,7 +173,7 @@ class FriendDetail extends Component<Props, State> {
       </View>
       <ScrollView style={general.view}  keyboardShouldPersistTaps="always">
         <View style={general.centeredColumn}>
-          <Image source={imageSource} style={pendingStyle.image}/>
+          <ProfilePic size={120} style={pendingStyle.image} address={friend.address} />
           <Text style={pendingStyle.title}>{`  @${friend.nickname}  `}</Text>
           {route ? null : <AddDebtButtons fat={false} friend lend={() => this.addDebt('lend')} borrow={() => this.addDebt('borrow')} />}
           <Text style={pendingStyle.subTitle}>{`${recentTransactionsLanguage.consolidatedBalance}:`}</Text>

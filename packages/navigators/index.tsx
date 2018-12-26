@@ -7,16 +7,15 @@ import DashboardNavigator from './dashboard'
 import MyAccount from 'ui/dialogs/my-account'
 import AddDebt from 'ui/dialogs/add-debt'
 import ConfirmationScreen from 'ui/dialogs/confirmation-screen'
-import PendingTransactionDetail from 'ui/dialogs/pending-transaction-detail'
-import PendingSettlementDetail from 'ui/dialogs/pending-settlement-detail'
+import RequestDetail from 'ui/dialogs/request-detail'
 import Settlement from 'ui/dialogs/settlement'
 import FriendDetail from 'ui/dialogs/friend-detail'
 import TransferEth from 'ui/dialogs/transfer-eth'
 import TransferERC20 from 'ui/dialogs/transfer-erc20'
 import FriendRequest from 'ui/dialogs/friend-request'
-import PayPalRequestDetail from 'ui/dialogs/paypal-request-detail'
 import RemoveAccountView from 'ui/dialogs/remove-account'
 import VerifyIdentityForm from 'ui/forms/verify-identity'
+import Wallet from 'ui/dialogs/wallet'
 
 import {
   createReactNavigationReduxMiddleware,
@@ -39,14 +38,11 @@ export const AppNavigator = StackNavigator(
     MyAccount: {
       screen: MyAccount
     },
-    PendingTransaction: {
-      screen: PendingTransactionDetail
-    },
     Settlement: {
       screen: Settlement
     },
-    PendingSettlement: {
-      screen: PendingSettlementDetail
+    RequestDetail: {
+      screen: RequestDetail
     },
     FriendDetail: {
       screen: FriendDetail
@@ -69,9 +65,11 @@ export const AppNavigator = StackNavigator(
     RemoveAccount: {
       screen: RemoveAccountView
     },
-    PayPalRequest: PayPalRequestDetail,
     VerifyIdentityForm: {
       screen: VerifyIdentityForm
+    },
+    Wallet: {
+      screen: Wallet
     }
   },
   {

@@ -9,8 +9,8 @@ import Popup, { closePopup } from 'ui/components/popup'
 import Loading, { LoadingContext } from 'ui/components/loading'
 import { UserData } from 'lndr/user'
 
-import RecentTransactionDetail from 'ui/dialogs/recent-transaction-detail'
-import RecentTransactionRow from 'ui/components/recent-transaction-row'
+import RequestDetail from 'ui/dialogs/request-detail'
+import Row from 'ui/components/row'
 
 import style from 'theme/account'
 
@@ -46,6 +46,8 @@ class RecentTransactionsView extends Component<Props, State> {
   constructor(props) {
     super(props)
     this.state = {}
+
+    this.renderRequestDetailDialog = this.renderRequestDetailDialog.bind(this)
   }
 
   async componentDidMount() {
@@ -67,19 +69,21 @@ class RecentTransactionsView extends Component<Props, State> {
     this.refresh()
   }
 
-  renderRecentTransactionDetailDialog() {
+  renderRequestDetailDialog() {
     const { recentTransaction } = this.state
 
     if (!recentTransaction) {
       return null
     }
 
-    return <Popup onClose={() => this.setState({ recentTransaction: undefined })}>
-      <RecentTransactionDetail
-        recentTransaction={recentTransaction}
-        closePopup={() => this.closePopupAndRefresh()}
-      />
-    </Popup>
+    return null
+
+    // return <Popup onClose={() => this.setState({ recentTransaction: undefined })}>
+    //   <RequestDetail
+    //     content={recentTransaction}
+    //     closePopup={() => this.closePopupAndRefresh()}
+    //   />
+    // </Popup>
   }
 
   render() {
@@ -87,7 +91,7 @@ class RecentTransactionsView extends Component<Props, State> {
     const { user, friend } = this.props
 
     return <View>
-      { this.renderRecentTransactionDetailDialog() }
+      { this.renderRequestDetailDialog() }
 
       <Section contentContainerStyle={style.list}>
         <Loading context={loadingRecentTransactions} />
@@ -97,12 +101,8 @@ class RecentTransactionsView extends Component<Props, State> {
             if(friend && friend.address !== recentTransaction.creditorAddress && friend.address !== recentTransaction.debtorAddress) {
                 return null
             }
-            return <RecentTransactionRow
-              user={user}
-              key={`${recentTransaction.creditorAddress}${index}` }
-              recentTransaction={recentTransaction}
-              friend={friend ? true : false }
-            />
+            return <Row picId={recentTransaction.creditorAddress === user.address ? recentTransaction.debtorAddress : recentTransaction.creditorAddress} 
+              onPress={this.renderRequestDetailDialog} key={`${recentTransaction.creditorAddress}${index}` } content={recentTransaction} friend={friend ? true : false }/>
           }
         )}
       </Section>

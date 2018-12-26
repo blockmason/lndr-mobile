@@ -1,6 +1,6 @@
 import React, { Component } from 'react'
 import { View, Text, Switch, ScrollView, TextInput, Alert, BackHandler, KeyboardAvoidingView, Platform, Picker, Image, TouchableHighlight,
-    Linking, ActionSheetIOS, Keyboard, Modal } from 'react-native'
+    Linking, Keyboard, Modal } from 'react-native'
 import ActionSheet from 'react-native-actionsheet'
 import ImagePicker from 'react-native-image-picker'
 import Icon from 'react-native-vector-icons/Ionicons'

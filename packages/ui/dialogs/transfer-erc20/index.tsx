@@ -128,9 +128,7 @@ class TransferERC20 extends Component<Props, State> {
   }
 
   render() {
-    const { amount, destinationAddress, formInputError, token, tokenBalance } = this.state
-    const { currencyCostFormatted, ethCostFormatted} = this.state.transactionCosts
-    const { primaryCurrency } = this.props
+    const { state: { amount, destinationAddress, formInputError, token, tokenBalance, transactionCosts: { currencyCostFormatted, ethCostFormatted } } } = this
 
     const tokenName = (token) ? token.tokenName : ''
     const vertOffset = (Platform.OS === 'android') ? -300 : 0;

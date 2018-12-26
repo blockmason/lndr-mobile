@@ -1,6 +1,6 @@
 import { StyleSheet, Dimensions, Platform } from 'react-native'
 
-import { white } from 'theme/include/colors'
+import { white, lightGray } from 'theme/include/colors'
 
 const { height, width } = Dimensions.get('window')
 
@@ -58,6 +58,10 @@ export default StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'space-between'
   },
+  aroundRow: {
+    flexDirection: 'row',
+    justifyContent: 'space-around'
+  },
   standardHMargin: {
     marginHorizontal: 15
   },
@@ -87,5 +91,15 @@ export default StyleSheet.create({
   },
   spaceBelowM: {
     paddingBottom: 20
+  },
+  smallBottomMargin: {
+    marginBottom: 10
+  },
+  mediumBottomMargin: {
+    marginBottom: 20
+  },
+  lineBreak: {
+    borderBottomColor: lightGray,
+    borderBottomWidth: 2
   }
 } as any)

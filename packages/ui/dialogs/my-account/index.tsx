@@ -88,7 +88,6 @@ interface State {
   shouldPickCurrency: boolean
   payPalEmail: any // the user's PayPal id (email)
   showNicknameInput: boolean
-  cryptoBalances: any
   transferLimitLevel: string
 }
 
@@ -110,7 +109,6 @@ class MyAccount extends Component<Props, State> {
       shouldPickCurrency: false,
       payPalEmail: null,
       showNicknameInput: false,
-      cryptoBalances: {},
       transferLimitLevel: TRANSFER_LIMIT_STANDARD
     }
 
@@ -142,8 +140,7 @@ class MyAccount extends Component<Props, State> {
 
     const transferLimitLevel = await getTransferLimitLevel(this.props.user.address, this.props.getStore())
 
-    this.setState({cryptoBalances: cryptoBalances,
-      transferLimitLevel: transferLimitLevel})
+    this.setState({ transferLimitLevel })
   }
 
   componentDidMount( ) {
@@ -388,34 +385,6 @@ class MyAccount extends Component<Props, State> {
         {!!showButtonOrEmail && centerMessage}
         {identityVerificationStatus.status === 'RED' && <Text style={[style.smallText, style.spaceTop]}>{lndrVerified.tryAgain}</Text>}
         <Text style={[style.smallText, style.spaceTop, general.spaceBelowM]}>{lndrVerified.prefix} <Text style={[style.link]} onPress={() => Linking.openURL('https://blockmason.io/lndr/terms/')}>{lndrVerified.linkTitle}</Text>{lndrVerified.postfix}</Text>
-      </View>
-    )
-  }
-
-  renderCryptoBalancesSubpanel() {
-    const { ethBalance } = this.props.state
-    const { cryptoBalances } = this.state
-
-    const sortedTokens = ERC20_Tokens.sort( (token1, token2) => {
-      return token1.tokenName.localeCompare(token2.tokenName, language)
-    })
-    const allTokens = [{tokenName: 'ETH'}, ...sortedTokens]
-    const cryptoSubpanels = allTokens.map( (token, index) => {
-      const tokenName = token.tokenName
-      const cryptoBalance = tokenName === 'ETH' ? ethBalance : cryptoBalances[tokenName]
-      const displayBalance = formatCommaDecimal(cryptoBalance === undefined ? '0.0' : cryptoBalance).slice(0, 14)
-      return (
-        <View style={[general.betweenRow, general.alignCenter, general.smallTopMargin, general.standardHMargin]} key={`cryptosub-${index}`}>
-          <Text style={[style.titleLarge, {marginTop:0}]}>{token.tokenName}</Text>
-          <Text selectable style={style.displayTextBorderRight}>{displayBalance}</Text>
-          <Button disabled={Number(cryptoBalance) <= 0} action icon='md-send' iconButton round onPress={() => this.props.navigation.navigate('TransferERC20', { token })} style={{marginRight: 10}} />
-        </View>
-      )
-    })
-
-    return (
-      <View>
-        {cryptoSubpanels}
       </View>
     )
   }

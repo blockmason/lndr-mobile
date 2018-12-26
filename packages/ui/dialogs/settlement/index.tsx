@@ -1,6 +1,5 @@
 import React, { Component } from 'react'
-import { Text, TextInput, TouchableHighlight, View, Image, ScrollView, KeyboardAvoidingView, Platform, Linking, Alert, Picker, Modal,
-  ActionSheetIOS } from 'react-native'
+import { Text, TextInput, TouchableHighlight, View, ScrollView, KeyboardAvoidingView, Platform, Linking, Alert, Picker, ActionSheetIOS } from 'react-native'
 import firebase from 'react-native-firebase'
 import FontAwesome from 'react-native-vector-icons/FontAwesome'
 
@@ -14,7 +13,6 @@ import { currencyFormats, sanitizeAmount, formatSettlementAmount, formatExchange
   formatEthRemaining, amountFormat, cleanFiatAmount, isERC20Settlement, isEthSettlement, isPayPalSettlement, isSettlementFree } from 'lndr/format'
 import Friend from 'lndr/friend'
 import { currencySymbols, transferLimits, TRANSFER_LIMIT_STANDARD } from 'lndr/currencies'
-import profilePic from 'lndr/profile-pic'
 
 import BackButton from 'ui/components/back-button'
 import Button from 'ui/components/button'
@@ -22,6 +20,7 @@ import Loading, { LoadingContext } from 'ui/components/loading'
 import DashboardShell from 'ui/components/dashboard-shell'
 import BalanceSection from 'ui/components/balance-section'
 import PayPalSettlementButton from 'ui/components/paypal-settle-button'
+import ProfilePic from 'ui/components/images/profile-pic'
 
 import style from 'theme/friend'
 import formStyle from 'theme/form'
@@ -30,14 +29,7 @@ import accountStyle from 'theme/account'
 import { white } from 'theme/include/colors'
 
 import language from 'language'
-const {
-  back,
-  debtManagement,
-  accountManagement,
-  payPalLanguage,
-  pendingTransactionsLanguage,
-  settlementManagement
-} = language
+const { back, debtManagement, accountManagement, payPalLanguage, pendingTransactionsLanguage, settlementManagement } = language
 
 import { getUser, recentTransactions, getEthBalance, getEthExchange, getERC20EthPrice, getWeeklyEthTotal, hasPendingTransaction,
   calculateBalance, convertCurrency, getUcacCurrency, getPrimaryCurrency } from 'reducers/app'
@@ -46,8 +38,6 @@ import { connect } from 'react-redux'
 
 const submittingTransaction = new LoadingContext()
 const loadingContext = new LoadingContext()
-
-let unmounting = false
 
 interface SettlementInfo {
   formInputError?: string,
@@ -100,7 +90,6 @@ interface State {
   amount?: string
   balance: number
   direction: string
-  pic?: string
   settlementType?: string
   friend: Friend
   fromPayPalRequest?: boolean
@@ -137,7 +126,6 @@ class Settlement extends Component<Props, State> {
     const friend = this.props.navigation ? this.props.navigation.state.params.friend : {}
     const settlementType = this.props.navigation ? this.props.navigation.state.params.settlementType : ''
     const fromPayPalRequest = this.props.navigation ? this.props.navigation.state.params.fromPayPalRequest : false
-    const pic = (friend.address !== undefined) ? await profilePic.get(friend.address) : undefined
 
     const { primaryCurrency, user } = this.props
     const amount = (this.state.balance) ? formatSettlementAmount(String(Math.abs(this.state.balance)), primaryCurrency) : undefined
@@ -146,16 +134,11 @@ class Settlement extends Component<Props, State> {
     const transferLimitLevel = await getTransferLimitLevel(user.address, this.props.getStore())
 
     const pickerSelection = this.settlementChoices().find(choice => choice.settlementType === settlementType)
-    this.setState({settlementType, friend, amount, pic, fromPayPalRequest, transferLimitLevel, pickerSelection})
-    unmounting = false
+    this.setState({settlementType, friend, amount, fromPayPalRequest, transferLimitLevel, pickerSelection})
   }
 
   componentDidMount( ) {
     firebase.analytics().setCurrentScreen('settlement', 'Settlement');
-  }
-
-  componentWillUnmount() {
-    unmounting = true
   }
 
   settlementChoices() {
@@ -485,16 +468,13 @@ class Settlement extends Component<Props, State> {
   }
 
   render() {
-    const { amount, balance, pic, friend, fromPayPalRequest, pickerSelection, settlementType } = this.state
-    const { currencyCostFormatted, ethCostFormatted} = this.state.transactionCosts
-    const { formInputError, settlementBalance, settlementBalancePrimary, settlementCost, settlementCostFormatted } = this.state.settlementInfo
-    const { primaryCurrency } = this.props
-    const imageSource = pic ? { uri: pic } : require('images/person-outline-dark.png')
+    const { state: { amount, balance, friend, fromPayPalRequest, pickerSelection, settlementType, 
+      settlementInfo: { formInputError, settlementBalance, settlementBalancePrimary, settlementCostFormatted },
+      transactionCosts: { currencyCostFormatted, ethCostFormatted } },
+      props: { primaryCurrency } } = this
+      
     const vertOffset = (Platform.OS === 'android') ? -300 : 20
-
     const paymentButton = this.renderPaymentButton()
-    const cleanAmount = cleanFiatAmount(String(amount))
-    const exchangeRate = this.calculateExchangeRate(settlementType)
     const isERC20 = isEthSettlement(settlementType) || isERC20Settlement(settlementType)
 
     const settlementText = (settlementType && isERC20 && settlementCostFormatted !== '') ? `${settlementCostFormatted} ${settlementType.toUpperCase()}` : amount
@@ -507,7 +487,7 @@ class Settlement extends Component<Props, State> {
       <KeyboardAvoidingView style={general.whiteFlex} behavior={'padding'} keyboardVerticalOffset={vertOffset} >
         <ScrollView style={general.view} keyboardShouldPersistTaps='handled'>
           <View style={[general.centeredColumn, {marginBottom: 20}]}>
-            <Image source={imageSource} style={style.settleImage}/>
+            <ProfilePic address={friend.address} size={100}/>
             <Text style={[style.header, {marginBottom: 20, marginHorizontal: 20, textAlign: 'center'}]}>{this.displayMessage()}</Text>
             <View style={style.transactions}>
               <BalanceSection friend={friend} />

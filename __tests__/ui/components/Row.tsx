@@ -4,7 +4,7 @@ import React from 'react'
 // Note: test renderer must be required after react-native.
 import renderer from 'react-test-renderer'
 
-import AddFriendRow from 'ui/components/add-friend-row'
+import Row from 'ui/components/row'
 import Friend from 'lndr/friend'
 
 
@@ -32,12 +32,13 @@ jest.mock('react-native-fetch-blob', () => {
 
 describe('Initialization', () => {
   it('renders correctly', () => {
-    const myFriend = new Friend('4608576895476', 'Joe')
 
     const tree = renderer.create(
-      <AddFriendRow 
+      <Row 
         onPress={() => null}
-        friend={myFriend}
+        friend
+        picId=""
+        content={new Friend('', '')}
       />
     ).toJSON()
     expect(tree).toMatchSnapshot()

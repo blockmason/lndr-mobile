@@ -2,23 +2,43 @@ import { StyleSheet, Dimensions } from 'react-native'
 
 import { l, m, s, xs, largePad, smallPad, mediumPad, verticalMargin, verticalMarginXS, verticalMarginXXS } from 'theme/include/spacing'
 import { xlarge, large, medium, small, xsmall, bold } from 'theme/include/fonts'
-import { gray, softGray, warning, warningDark, black, white, aqua } from 'theme/include/colors'
+import { gray, softGray, warning, warningDark, black, white, aqua, moneyGreen, moneyRed } from 'theme/include/colors'
 import { attention, radius, thinSoftBorder } from 'theme/include/borders'
 import { center } from 'theme/include/align'
 
 const { height, width } = Dimensions.get('window')
 
 export default StyleSheet.create({
-  searchRow: {
+  rowPadding: {
     paddingLeft: m,
     paddingRight: m,
     paddingTop: s,
     paddingBottom: m - xs
   },
+  friendRequest: {
+    color: aqua,
+    ...medium,
+    maxWidth: width * 2 / 3
+  },
+  pendingAmount: {
+    ...large,
+    textAlign: 'right'
+  },
+  redAmount: {
+    color: moneyRed
+  },
+  greenAmount: {
+    color: moneyGreen
+  },
   searchList: {
     marginLeft: -15,
     marginRight: -15,
     minHeight: height - 130
+  },
+  pendingMemo: {
+    color: aqua,
+    ...medium,
+    maxWidth: width * 0.35
   },
   image: {
     marginTop: 50,
@@ -35,12 +55,21 @@ export default StyleSheet.create({
   fullWidth: {
     width: width
   },
+  titledPending: {
+    color: aqua,
+    ...bold,
+    ...medium,
+    maxWidth: width * 0.5
+  },
   noMargin: {
     marginBottom: 0
   },
   settleUpButton: {
     width: '70%',
     textAlign: 'center'
+  },
+  picIcon: {
+    marginRight: 15
   },
   header: {
     ...xlarge,
@@ -62,6 +91,11 @@ export default StyleSheet.create({
     fontSize: 32,
     color: aqua,
     textAlign: 'right'
+  },
+  settleImage: {
+    width: 100,
+    height: 100,
+    borderRadius: 50
   },
   transactions: {
     flex: 1,

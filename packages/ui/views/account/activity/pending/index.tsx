@@ -11,12 +11,8 @@ import PendingBilateral from 'lndr/pending-bilateral'
 import Section from 'ui/components/section'
 import { closePopup } from 'ui/components/popup'
 import Loading, { LoadingContext } from 'ui/components/loading'
-import PendingTransactionRow from 'ui/components/pending-transaction-row'
-import PendingSettlementRow from 'ui/components/pending-settlement-row'
-import PendingFriendRow from 'ui/components/pending-friend-row'
-import PayPalRequestRow from 'ui/components/paypal-request-row'
-import PendingEmailTxRow from 'ui/components/pending-email-tx-row'
 import InviteTransaction from 'lndr/invite-transaction'
+import Row from 'ui/components/row'
 
 import style from 'theme/account'
 
@@ -63,6 +59,7 @@ class PendingView extends Component<Props, State> {
   constructor(props) {
     super(props)
     this.state = {}
+    this.goToSettlement = this.goToSettlement.bind(this)
   }
 
   async componentDidMount() {
@@ -127,6 +124,17 @@ class PendingView extends Component<Props, State> {
     return homeScreen || numBilat === 0
   }
 
+  goToSettlement(payPalRequest: PayPalRequest) {
+    const { navigation } = this.props
+    const { friend } = payPalRequest
+
+    if (payPalRequest.requestorIsMe) {
+      navigation.navigate('RequestDetail', { friend })
+    } else {
+      navigation.navigate('Settlement', { friend, settlementType: 'paypal', fromPayPalRequest: true })
+    }
+  }
+
   render() {
     const { pendingSettlements, settlerIsMe, payPalRequests, bilateralSettlements, user, friend, homeScreen, onlyFriends, navigation, pendingInviteTxs,
       state: { pendingTransactions, pendingFriends, pendingOutboundFriends } } = this.props
@@ -135,11 +143,7 @@ class PendingView extends Component<Props, State> {
       if (pendingFriends.length === 0)
         return null
       const friendList = pendingFriends.map( friend => {
-        return <PendingFriendRow
-          key={friend.address}
-          friend={friend}
-          navigation={this.props.navigation}
-        />
+        return <Row picId={friend.address} key={friend.address} content={friend} onPress={() => navigation.navigate('FriendRequest', { friend, isOutbound: true })}/>
       })
       return (
         <View>
@@ -157,94 +161,57 @@ class PendingView extends Component<Props, State> {
         <Loading context={loadingPending} />
         {this.showNoneMessage()}
         { pendingTransactions.map(pendingTransaction => {
-            if (friend && friend.address !== pendingTransaction.creditorAddress && friend.address !== pendingTransaction.debtorAddress) {
-                return null
-            }
-            if (homeScreen && this.props.submitterIsMe(pendingTransaction)) {
+            if ((friend && friend.address !== pendingTransaction.creditorAddress && friend.address !== pendingTransaction.debtorAddress) || (homeScreen && this.props.submitterIsMe(pendingTransaction))) {
               return null
             }
-            return <PendingTransactionRow
-              user={user}
-              key={pendingTransaction.hash}
-              pendingTransaction={pendingTransaction}
-              friend={friend ? true : false }
-              onPress={() => navigation.navigate('PendingTransaction', { pendingTransaction })}
-            />
+            return <Row picId={user.address === pendingTransaction.creditorAddress ? pendingTransaction.debtorAddress : pendingTransaction.creditorAddress} key={pendingTransaction.hash}
+              content={pendingTransaction} friend={friend ? true : false } onPress={() => navigation.navigate('RequestDetail', { pendingTransaction })}/>
           })
         }
         { pendingSettlements.map( pendingSettlement => {
             if (homeScreen && this.props.settlerIsMe(pendingSettlement)) {
               return null
             }
-            return <PendingSettlementRow
-              user={user}
-              pendingSettlement={pendingSettlement}
-              key={pendingSettlement.hash}
-              friend={friend ? true : false}
-              onPress={() => this.props.navigation.navigate('PendingSettlement', { pendingSettlement })}
-              settlerIsMe={settlerIsMe}
-            />
+            return <Row picId={pendingSettlement.creditorAddress === user.address ? pendingSettlement.debtorAddress : pendingSettlement.creditorAddress}
+              content={pendingSettlement} settlerIsMe={settlerIsMe} key={pendingSettlement.hash} friend={!!friend}
+               onPress={() => this.props.navigation.navigate('RequestDetail', { pendingSettlement })}/>
           })
         }
         { payPalRequests.map( payPalRequest => {
-            if(homeScreen && payPalRequest.requestorIsMe) {
+            if (homeScreen && payPalRequest.requestorIsMe) {
               return null
             }
             const uniquifier = (payPalRequest.requestorIsMe) ? 'm' : ''
-            return <PayPalRequestRow
-              payPalRequest={payPalRequest}
-              navigation={navigation}
-              key={`${uniquifier}${payPalRequest.friend.address}`}
-            />
+            return <Row content={payPalRequest} picId={payPalRequest.friend.address} onPress={() => this.goToSettlement(payPalRequest)} key={`${uniquifier}${payPalRequest.friend.address}`}/>
           })
         }
         { this.hideBilateralMsg() ? null : <Text style={style.transactionHeader}>{pendingTransactionsLanguage.bilateral}</Text> }
         { homeScreen ? null :
           bilateralSettlements.map( bilateralSettlement => {
-            if (friend && friend.address !== bilateralSettlement.creditorAddress && friend.address !== bilateralSettlement.debtorAddress) {
+            if ((friend && friend.address !== bilateralSettlement.creditorAddress && friend.address !== bilateralSettlement.debtorAddress) || (homeScreen && this.props.settlerIsMe(bilateralSettlement))) {
               return null
             }
-            if (homeScreen && this.props.settlerIsMe(bilateralSettlement)) {
-              return null
-            }
-            return <PendingSettlementRow
-              user={user}
-              pendingSettlement={bilateralSettlement}
-              key={bilateralSettlement.creditRecord.hash}
-              friend={friend ? true : false}
-              onPress={() => null}
-              settlerIsMe={settlerIsMe}
-            />
+            const picId = user.address === bilateralSettlement.creditorAddress ? bilateralSettlement.debtorAddress : bilateralSettlement.creditorAddress
+
+            return <Row picId={picId} content={bilateralSettlement} key={bilateralSettlement.creditRecord.hash} friend={friend ? true : false} onPress={() => null} settlerIsMe={settlerIsMe} />
           })
         }
         { homeScreen || !pendingFriends.length ? null : <Text style={style.transactionHeader}>{pendingFriendRequestsLanguage.message}</Text>}
         { pendingFriends.length === 0 ? null :
           pendingFriends.map( friend => {
-            return <PendingFriendRow
-              key={friend.address}
-              friend={friend}
-              navigation={this.props.navigation}
-            />
+            return <Row pendingFriend picId={friend.address} key={friend.address} content={friend}
+              onPress={() => navigation.navigate('FriendRequest', { friend, isOutbound: false })}/>
           })
         }
         { homeScreen || !pendingOutboundFriends.length ? null :
           pendingOutboundFriends.map( friend => {
-            return <PendingFriendRow
-              key={friend.address}
-              friend={friend}
-              navigation={this.props.navigation}
-              isOutbound
-            />
+            return <Row pendingFriend picId={friend.address} key={friend.address} content={friend} isOutbound
+              onPress={() => navigation.navigate('FriendRequest', { friend, isOutbound: true })}/>
           })
         }
         { homeScreen || !pendingInviteTxs.length ? null :
           pendingInviteTxs.map( tx => {
-            return <PendingEmailTxRow
-              user={user}
-              key={tx.hash}
-              onPress={() => this.props.navigation.navigate('PendingTransaction', { emailTransaction: tx })}
-              inviteTx={tx}
-            />
+            return <Row picId={user.address === tx.address ? '' : user.address} key={tx.hash} onPress={() => this.props.navigation.navigate('RequestDetail', { emailTransaction: tx })} content={tx} />
           })
         }
       </Section>

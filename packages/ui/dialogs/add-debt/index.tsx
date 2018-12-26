@@ -1,7 +1,7 @@
 import React, { Component } from 'react'
-import { View, ScrollView, Text, TextInput, TouchableHighlight, Platform, Modal, Keyboard, KeyboardAvoidingView, Share, Dimensions } from 'react-native'
-
+import { View, ScrollView, Text, TextInput, Platform, Modal, Keyboard, KeyboardAvoidingView, Share } from 'react-native'
 import firebase from 'react-native-firebase'
+import Icon from 'react-native-vector-icons/Ionicons'
 
 import InviteTransaction from 'lndr/invite-transaction'
 import Friend from 'lndr/friend'
@@ -16,6 +16,8 @@ import DashboardShell from 'ui/components/dashboard-shell'
 import InputImage from 'ui/components/images/input-image'
 import Section from 'ui/components/section'
 import SpinningPicker from 'ui/components/spinning-picker'
+import TransactionDisplay from 'ui/components/transaction-display'
+import Tile from 'ui/components/tile'
 
 import style from 'theme/account'
 import formStyle from 'theme/form'
@@ -23,10 +25,9 @@ import general from 'theme/general'
 import popupStyle from 'theme/popup'
 
 import language from 'language'
-const { debtManagement, noFriends, submit, nickname, share, splitExpense, inviteLink, sendInvite } = language
+const { debtManagement, noFriends, submit, nickname, splitExpense,  sendInvite, tapToChange } = language
 
-import { getStore, pendingTransactions, recentTransactions, getAllUcacCurrencies, hasPendingTransaction, getPrimaryCurrency,
-  getPendingFromFriend, getUcacAddr } from 'reducers/app'
+import { getStore, pendingTransactions, recentTransactions, getAllUcacCurrencies, hasPendingTransaction, getPrimaryCurrency, getPendingFromFriend, getUcacAddr } from 'reducers/app'
 import { getResetAction } from 'reducers/nav'
 import { addDebt, getFriends, hasPendingMessage, sendEmailTx } from 'actions'
 import { connect } from 'react-redux'
@@ -42,13 +43,7 @@ interface Props {
   allCurrencies: any
   primaryCurrency: string
   getFriends: () => any
-  addDebt: (
-    friend: Friend,
-    amount: string,
-    memo: string,
-    direction: string,
-    currency: string
-  ) => any
+  addDebt: (friend: Friend, amount: string, memo: string, direction: string, currency: string) => any
   sendEmailTx: (inviteTx: InviteTransaction) => Promise<any>
   hasPendingMessage: () => any
   hasPendingTransaction: (friend: Friend) => boolean
@@ -65,6 +60,7 @@ interface State {
   shouldPickCurrency: boolean
   searchText: string
   sendViaLink: boolean
+  direction: string
 }
 
 class AddDebt extends Component<Props, State> {
@@ -78,15 +74,20 @@ class AddDebt extends Component<Props, State> {
       currency: props.primaryCurrency,
       shouldPickCurrency: false,
       searchText: '',
-      sendViaLink: false
+      sendViaLink: false,
+      direction: 'lend'
     }
 
     this.blurCurrencyFormat = this.blurCurrencyFormat.bind(this)
+    this.cancel = this.cancel.bind(this)
+    this.changeDirection = this.changeDirection.bind(this)
+    this.selectFriend = this.selectFriend.bind(this)
   }
 
   componentWillMount() {
+    const direction = this.props.navigation.state.params ? this.props.navigation.state.params.direction : 'lend'
     const friend = this.props.navigation ? this.props.navigation.state.params.friend : {}
-    this.setState({ friend })
+    this.setState({ friend, direction })
   }
 
   async componentDidMount() {
@@ -184,35 +185,19 @@ class AddDebt extends Component<Props, State> {
     }
   }
 
-  renderSelectedFriend() {
-    const { friend, sendViaLink } = this.state
-    const { navigation } = this.props
-    const { friendsLoaded, friends } = this.props.state
-    const selectFriend = () => {
-      if(!friendsLoaded) {
-        return
-      } else if(friends.length === 0){
-        navigation.navigate('Friends')
-      } else {
-        this.setState({ shouldSelectFriend: true })
-      }
+  selectFriend() {
+    const { props: { navigation, state: { friendsLoaded, friends } } } = this
+    if(!friendsLoaded) {
+      return
+    } else if(friends.length === 0){
+      navigation.navigate('Friends')
+    } else {
+      this.setState({ shouldSelectFriend: true })
     }
-
-    if (!friend && !sendViaLink) {
-      return <Button round onPress={selectFriend} text={debtManagement.selectFriend} />
-    }
-
-    return (<TouchableHighlight onPress={selectFriend}>
-      <View style={general.centeredColumn}>
-        <Text style={style.nickname}>{!!friend ? `@${friend.nickname}` : inviteLink}</Text>
-      </View>
-    </TouchableHighlight>)
   }
 
   renderSelectFriend() {
-    const { friendsLoaded, friends, recentTransactions } = this.props.state
-    const { searchText } = this.state
-    const { hasPendingTransaction } = this.props
+    const { state: { searchText }, props: { hasPendingTransaction, state: { friendsLoaded, friends, recentTransactions } } }  = this
 
     return <ScrollView style={[general.view, {paddingTop: 30}]} keyboardShouldPersistTaps='handled'>
       <BackButton onPress={() => this.setState({ shouldSelectFriend: false })} />
@@ -236,14 +221,8 @@ class AddDebt extends Component<Props, State> {
         {!!friendsLoaded && friends.length === 0 ? <Text style={style.emptyState}>{noFriends}</Text> : null}
         {friends.map(
           friend => friend.nickname.indexOf(searchText) === -1 ? null : (
-            <FriendRow
-              key={friend.address}
-              onPress={() => this.setFriend(friend)}
-              friend={friend}
-              recentTransactions={recentTransactions}
-              navigation={this.props.navigation}
-              hasPending={hasPendingTransaction(friend)}
-            />
+            <FriendRow key={friend.address} onPress={() => this.setFriend(friend)} friend={friend} recentTransactions={recentTransactions}
+              navigation={this.props.navigation} hasPending={hasPendingTransaction(friend)}/>
           )
         )}
       </View>
@@ -270,6 +249,11 @@ class AddDebt extends Component<Props, State> {
     this.setState({currency: value, shouldPickCurrency: false})
   }
 
+  changeDirection() {
+    const direction = this.state.direction === 'lend' ? 'borrow' : 'lend'
+    this.setState({ direction })
+  }
+
   renderSubmit() {
     const { friend, amount, memo, sendViaLink } = this.state
     if ((friend || sendViaLink) && amount && memo) {
@@ -284,9 +268,7 @@ class AddDebt extends Component<Props, State> {
   }
 
   render() {
-    const direction = this.props.navigation.state.params ? this.props.navigation.state.params.direction : 'lend'
-
-    const { shouldSelectFriend, amount, memo, currency, shouldPickCurrency } = this.state
+    const { state: { shouldSelectFriend, amount, memo, currency, shouldPickCurrency, direction, friend, sendViaLink }, props: { state: { user } } } = this
 
     if (shouldSelectFriend) {
       return this.renderSelectFriend()
@@ -296,21 +278,18 @@ class AddDebt extends Component<Props, State> {
     return <View style={general.whiteFlex}>
       <View style={general.view}>
         <DashboardShell text={debtManagement.shell} navigation={this.props.navigation} />
-        <BackButton onPress={() => this.cancel()} />
+        <BackButton onPress={this.cancel} />
       </View>
       <KeyboardAvoidingView style={general.whiteFlex} behavior={'padding'} keyboardVerticalOffset={vertOffset} >
         <ScrollView style={general.view} keyboardShouldPersistTaps='handled'>
           <View style={[general.centeredColumn, {marginBottom: 20}]}>
-            <Text style={[style.header]}>{debtManagement[direction]}</Text>
-            <Text style={[style.subHeader, {marginBottom: 20}]}>{direction === 'lend' ? debtManagement.iLent : debtManagement.iBorrowed}</Text>
-            <View style={[general.flex, general.centeredColumn]} >
-              <View style={[general.centeredColumn, {minWidth: 150, marginBottom: 20}]}>
-                <Text style={formStyle.title}>{debtManagement.fields.selectFriend}</Text>
-                <View style={style.newTransactionRow}>
-                  { this.renderSelectedFriend() }
-                </View>
-              </View>
-            </View>
+            <Tile onPress={this.changeDirection} style={style.directionTile} >
+              <Text style={[style.header]}>{debtManagement[direction]}</Text>
+              <Text style={style.subHeader}>{direction === 'lend' ? debtManagement.iLent : debtManagement.iBorrowed}</Text>
+              <Text style={style.tap}>{tapToChange}</Text>
+            </Tile>
+
+            <TransactionDisplay selectFriend={this.selectFriend} user={user} direction={direction} changeDirection={this.changeDirection} friend={friend} sendViaLink={sendViaLink} />
             <View style={[general.flex, general.flexRow]} >
               <View style={[general.centeredColumn, {minWidth: 150}]}>
                 <Text style={formStyle.title}>{debtManagement.fields.currency}</Text>

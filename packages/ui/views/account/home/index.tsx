@@ -1,7 +1,7 @@
 import React, { Component } from 'react'
 import { connect } from 'react-redux'
 
-import { Text, View, ScrollView, Platform, Dimensions, Image, TouchableHighlight, RefreshControl, Linking } from 'react-native'
+import { Text, View, ScrollView, Platform, RefreshControl, Linking } from 'react-native'
 import firebase from 'react-native-firebase'
 
 import Balance from 'lndr/balance'
@@ -16,7 +16,9 @@ import Button from 'ui/components/button'
 import { LoadingContext } from 'ui/components/loading'
 import Section from 'ui/components/section'
 import PendingView from 'ui/views/account/activity/pending'
-import AddDebtButtons from 'ui/components/add-debt-buttons'
+import Tile from 'ui/components/tile'
+import Icon from 'react-native-vector-icons/Ionicons'
+import FAIcon from 'react-native-vector-icons/FontAwesome'
 
 import { isFocusingOn } from 'reducers/nav'
 import { getStore, getUser, getNeedsReviewCount, calculateBalance, calculateCounterparties,
@@ -28,19 +30,10 @@ import { UrbanAirship } from 'urbanairship-react-native'
 import style from 'theme/account'
 import formStyle from 'theme/form'
 import general from 'theme/general'
-import { underlayColor } from 'theme/general'
 
 import language from 'language'
 
-const {
-  notice,
-  noBalanceWarning,
-  accountManagement,
-  newTransaction,
-  needsReview,
-  recentTransactionsLanguage,
-  seeAllActivity
-} = language
+const { notice, noBalanceWarning, accountManagement, newTransaction, needsReview, recentTransactionsLanguage, seeAllActivity, myWallet, totalBalance } = language
 
 const loadingRecentTransactions = new LoadingContext()
 const loadingPending = new LoadingContext()
@@ -114,7 +107,7 @@ class HomeView extends Component<Props, State> {
             const inviteTx = new InviteTransaction(rawEmailTx, true)
             const submitterNickname = await getNicknameForAddress(inviteTx.address)
             inviteTx.submitterNickname = submitterNickname
-            this.props.navigation.navigate('PendingTransaction', { emailTransaction: inviteTx })
+            this.props.navigation.navigate('RequestDetail', { emailTransaction: inviteTx })
           })
         }
       }).catch(err => console.log('An error occurred getting the email transaction', err))
@@ -207,12 +200,10 @@ class HomeView extends Component<Props, State> {
   }
 
   renderBalanceInformation() {
-    const { calculateBalance, calculateCounterparties, primaryCurrency, ethExchange } = this.props
-    const { recentTransactionsLoaded, ethBalance } = this.props.state
+    const { calculateBalance, calculateCounterparties, primaryCurrency, ethExchange, state: { recentTransactionsLoaded, ethBalance } } = this.props
 
-    if (!recentTransactionsLoaded) {
+    if (!recentTransactionsLoaded)
       return
-    }
 
     const balance = calculateBalance()
 
@@ -223,28 +214,24 @@ class HomeView extends Component<Props, State> {
       </Text>
     }
 
-    return <Section contentContainerStyle={style.column}>
-      <View style={style.negativeMargin}>
+    return <Tile style={style.aquaTile} onPress={() => this.props.navigation.navigate('Friends')}>
+      <View style={general.centeredColumn}>
+        <Text style={style.midHeader}>{totalBalance}</Text>
         <View style={style.balanceRow}>
           <Text style={style.balanceInfo} >{`${currencySymbols(primaryCurrency)}`}</Text>
           <Text style={style.largeFactAmount}>{`${currencyFormats(primaryCurrency)(balance)} `}</Text>
         </View>
       </View>
-      <View style={style.balanceRow}>
-        <Text style={[style.balance, {marginLeft: '2%'}]}>{recentTransactionsLanguage.balance}</Text>
-        <Button alternate blackText narrow arrow small onPress={() => {this.props.navigation.navigate('Friends')}}
-          text={recentTransactionsLanguage.friends(calculateCounterparties())}
-          containerStyle={{marginTop: -6}}
-        />
-      </View>
-      <View style={[style.balanceRow, {marginTop: 10}]}>
+      <Button alternate blackText narrow small onPress={() => null} text={recentTransactionsLanguage.friends(calculateCounterparties())} />
+    </Tile>
+      
+      {/* <View style={[style.balanceRow, {marginTop: 10}]}>
         <Text style={[style.balance, {marginLeft: '2%'}]}>{accountManagement.cryptoBalance.display('ETH', formatCommaDecimal(ethBalance))}</Text>
         <Button alternate blackText narrow arrow small onPress={() => {this.props.navigation.navigate('MyAccount')}}
           text={formatExchangeCurrency(ethBalance, ethExchange(primaryCurrency), primaryCurrency)}
           containerStyle={{marginTop: -6}}
         />
-      </View>
-    </Section>
+      </View> */}
   }
 
   showAddDebt() {
@@ -262,27 +249,37 @@ class HomeView extends Component<Props, State> {
 
   render() {
     return <ScrollView style={general.view} keyboardShouldPersistTaps="always"
-        refreshControl={
-          <RefreshControl
-            refreshing={this.state.refreshing}
-            onRefresh={() => this.refresh()}
-          />
-        }
+        refreshControl={<RefreshControl refreshing={this.state.refreshing} onRefresh={() => this.refresh()} />}
       >
       <Section>
-        { this.renderBalanceInformation() }
-      </Section>
-      <Section>
-        <Text style={[formStyle.titleXLarge, formStyle.center, formStyle.spaceBottomS]}>{newTransaction}</Text>
-        <AddDebtButtons fat={true} lend={() => this.addDebt('lend')} borrow={() => this.addDebt('borrow')} />
+        <Section>
+          { this.renderBalanceInformation() }
+        </Section>
+        <Section>
+          {/* change this stuff */}
+          <View style={general.betweenRow}>
+            <Tile style={style.grayTile} onPress={() => this.props.navigation.navigate('MyAccount')}>
+              <Icon name="ios-wallet" style={style.walletIcon} />
+              <Text style={style.tileText}>{myWallet}</Text>
+            </Tile>
+            <Tile style={style.grayTile} onPress={() => this.addDebt('lend')}>
+              <Icon name="md-add-circle" style={style.newTransactionIcon} />
+              <Text style={style.tileText}>{newTransaction}</Text>
+            </Tile>
+          </View>
+        </Section>
       </Section>
       {this.renderNeedsReview()}
-      <TouchableHighlight {...underlayColor} onPress={() => this.props.navigation.navigate('Activity')}>
-        <View style={style.seeAllActivityButton}>
-          <Text style={style.seeAllActivity}>{seeAllActivity}</Text>
-          <Image source={require('images/blue-chevron.png')} style={style.seeAllActivityArrow} />
-        </View>
-      </TouchableHighlight>
+      <Section>
+        <Section>
+          <Tile style={style.seeActivityTile} onPress={() => this.props.navigation.navigate('Activity')}>
+            <View style={[general.betweenRow, style.seeAllButton]}>
+              <Text style={style.seeAllActivity}>{seeAllActivity}</Text>
+              <Icon name="ios-arrow-forward" style={style.seeAllActivityArrow} />
+            </View>
+          </Tile>
+        </Section>
+      </Section>
     </ScrollView>
   }
 }

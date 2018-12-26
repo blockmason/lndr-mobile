@@ -4,7 +4,7 @@ import { radius } from 'theme/include/borders'
 import { center } from 'theme/include/align'
 import { wide, bold, lmedium, xlarge, large, medium, small, xsmall, monospace } from 'theme/include/fonts'
 import { xxl, ml, l, m, s, xs, verticalMargin } from 'theme/include/spacing'
-import { softGray, white, goodDark, danger, aqua, lightGray, softAqua } from 'theme/include/colors'
+import { softGray, white, goodDark, danger, aqua, lightGray, softAqua, black } from 'theme/include/colors'
 
 const { width } = Dimensions.get('window')
 
@@ -36,17 +36,15 @@ export default StyleSheet.create({
     marginBottom: 10
   },
   balanceInfo: {
-    minWidth: 45,
-    ...xlarge,
-    color: aqua
+    fontWeight: 'bold',
+    ...large
   },
   amount: {
-    fontSize: 40,
-    color: aqua,
-    marginTop: -15,
+    fontWeight: 'bold',
+    ...large,
+    color: black,
     marginLeft: s,
-    marginRight: s,
-    maxWidth: 250
+    marginRight: s
   },
   pendingInfo: {
     ...medium,
@@ -66,13 +64,13 @@ export default StyleSheet.create({
     color: aqua,
     fontWeight: 'bold'
   },
-  info: {
-    ...large,
-    color: aqua
-  },
   memo: {
     ...large,
     fontWeight: 'bold',
-    color: aqua
+    marginLeft: 20
+  },
+  multiSection: {
+    marginTop: 20,
+    width: '100%'
   }
 })

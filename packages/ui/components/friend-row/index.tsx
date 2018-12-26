@@ -2,10 +2,10 @@ import React, { Component } from 'react'
 
 import { Text, TouchableHighlight, View, Image } from 'react-native'
 import Button from 'ui/components/button'
+import ProfilePic from 'ui/components/images/profile-pic'
 
 import Friend from 'lndr/friend'
 import { currencyFormats } from 'lndr/format'
-import profilePic from 'lndr/profile-pic'
 import { currencySymbols } from 'lndr/currencies'
 import PendingTransaction from 'lndr/pending-transaction'
 import RecentTransaction from 'lndr/recent-transaction'
@@ -43,35 +43,11 @@ interface PassedProps extends React.Props<any> {
   onPress?: () => void
 }
 
-interface State {
-  pic?: string
-}
-
-let unmounting = false;
-
-class FriendRow extends Component<Props, State> {
+class FriendRow extends Component<Props> {
   constructor(props) {
     super(props)
-    this.state = {}
 
     this.navigateToSettlement = this.navigateToSettlement.bind(this)
-  }
-
-  async componentWillMount() {
-    const { friend } = this.props
-    let pic
-    unmounting = false;
-
-    try {
-      pic = await profilePic.get(friend.address)
-    } catch (e) {}
-    if (!unmounting && pic) {
-      this.setState({pic})
-    }
-  }
-
-  componentWillUnmount() {
-    unmounting = true;
   }
 
   getRecentTotal() {
@@ -136,14 +112,12 @@ class FriendRow extends Component<Props, State> {
 
   render() {
     const { onPress, friend, hasPending } = this.props
-    const { pic } = this.state
-    const imageSource = pic ? { uri: pic } : require('images/person-outline-dark.png')
 
     return (
       <TouchableHighlight style={style.friendRow} onPress={onPress} underlayColor={white} activeOpacity={1}>
         <View style={style.pendingTransactionRow}>
           <View style={[general.flexRow, general.alignCenter]}>
-            <Image source={imageSource} style={style.friendIcon}/>
+            <ProfilePic address={friend.address} size={60} style={style.friendIcon}/>
             <View style={general.flexColumn}>
               <Text style={style.titledPending}>{`@${friend.nickname}`}</Text>
               <Text style={style.pendingMemo}>{this.getTransactionTotal()}</Text>
