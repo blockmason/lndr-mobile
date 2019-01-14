@@ -10,7 +10,7 @@ import general from 'theme/general'
 import formStyle from 'theme/form'
 
 import language from 'language'
-const { debtManagement, inviteLink } = language
+const { debtManagement } = language
 
 export interface Props {
   selectFriend: () => void
@@ -18,15 +18,26 @@ export interface Props {
   direction: string
   changeDirection: () => void
   friend?: Friend
-  sendViaLink?: boolean
+  nonFriend?: string
+  settlement?: boolean
 }
 
 export default class TransactionDisplay extends React.Component<Props> {
+  renderIcon() {
+    const { direction, changeDirection, settlement } = this.props
+    if (settlement) {
+      return <Icon name={"md-swap"} style={style.arrowIcon} />
+    } else if (direction === 'lend') {
+      return <Icon name={"md-arrow-round-back"} style={[style.greenAmount, style.arrowIcon]} onPress={changeDirection} />
+    }
+    return <Icon name={"md-arrow-round-forward"} style={[style.redAmount, style.arrowIcon]} onPress={changeDirection} />
+  }
+
   render() {
-    const { friend, sendViaLink, selectFriend, user, direction, changeDirection } = this.props
+    const { friend, nonFriend, selectFriend, user } = this.props
 
     let selectedFriend
-    if (!friend && !sendViaLink) {
+    if (!friend && !nonFriend) {
       selectedFriend = <View style={general.centeredColumn}>
         <Text style={formStyle.title}>{debtManagement.fields.selectFriend}</Text>
         <Button round onPress={selectFriend} text={debtManagement.selectFriend} />
@@ -34,18 +45,18 @@ export default class TransactionDisplay extends React.Component<Props> {
     } else {
       selectedFriend = (<TouchableHighlight onPress={selectFriend}>
         <View style={[general.centeredColumn, style.selfPic]}>
-          <ProfilePic size={80} address={!!friend ? friend.address : ''} />
-          <Text style={style.subHeader}>{!!friend ? `@${friend.nickname}` : inviteLink}</Text>
+          <ProfilePic size={80} address={friend ? friend.address : ''} />
+          <Text style={style.subHeader}>{friend ? `${friend.nickname}` : nonFriend}</Text>
         </View>
       </TouchableHighlight>)
     }
 
-    return (<View style={[general.flex, general.flexRow, general.smallBottomMargin, general.lineBreak]} >
+    return (<View style={[general.flex, general.flexRow, general.smallBottomMargin, general.lineBreak, { maxHeight: 120 }]} >
       <View style={[general.centeredColumn, style.selfPic]}>
         <ProfilePic size={80} address={user.address}/>
         <Text style={style.subHeader}>{user.nickname}</Text>
       </View>
-      <Icon name={direction === 'lend' ? "md-arrow-round-back": "md-arrow-round-forward"} style={[direction === 'lend' ? style.greenAmount : style.redAmount, style.arrowIcon]} onPress={changeDirection} />
+      {this.renderIcon()}
       <View style={[general.centeredColumn, {minWidth: 150, marginBottom: 20}]}>
         {selectedFriend}
       </View>

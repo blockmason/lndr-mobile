@@ -46,6 +46,14 @@ export default StyleSheet.create({
     marginLeft: s,
     marginRight: s
   },
+  settlementAmount: {
+    ...small,
+    color: black,
+    marginTop: -10,
+    marginLeft: s,
+    marginRight: s,
+    textAlign: 'center'
+  },
   pendingInfo: {
     ...medium,
     color: aqua

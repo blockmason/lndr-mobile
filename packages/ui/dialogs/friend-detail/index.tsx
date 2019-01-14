@@ -16,7 +16,7 @@ import BackButton from 'ui/components/back-button'
 import Button from 'ui/components/button'
 import Loading, { LoadingContext } from 'ui/components/loading'
 import BalanceSection from 'ui/components/balance-section'
-import AddDebtButtons from 'ui/components/add-debt-buttons'
+import NewTransactionButtons from 'ui/components/new-transaction-buttons'
 import ProfilePic from 'ui/components/images/profile-pic'
 
 import style from 'theme/friend'
@@ -153,7 +153,7 @@ class FriendDetail extends Component<Props, State> {
   addDebt(direction: string) {
     const { friend } = this.state
     const { navigation } = this.props
-    navigation.navigate('AddDebt', { friend, direction })
+    navigation.navigate('NewTransaction', { friend, direction })
   }
 
   toggleShowWallet() {
@@ -175,7 +175,7 @@ class FriendDetail extends Component<Props, State> {
         <View style={general.centeredColumn}>
           <ProfilePic size={120} style={pendingStyle.image} address={friend.address} />
           <Text style={pendingStyle.title}>{`  @${friend.nickname}  `}</Text>
-          {route ? null : <AddDebtButtons fat={false} friend lend={() => this.addDebt('lend')} borrow={() => this.addDebt('borrow')} />}
+          {route ? null : <NewTransactionButtons fat={false} friend lend={() => this.addDebt('lend')} borrow={() => this.addDebt('borrow')} />}
           <Text style={pendingStyle.subTitle}>{`${recentTransactionsLanguage.consolidatedBalance}:`}</Text>
           <View style={pendingStyle.balanceRow}>
             <Text style={pendingStyle.balanceInfo}>{currencySymbols(primaryCurrency)}</Text>

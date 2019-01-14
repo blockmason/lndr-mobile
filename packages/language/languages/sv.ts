@@ -76,6 +76,7 @@ export default {
   nickname: `Användarnamn (små bokstäver & siffror)`,
   email: `E-postadress`,
   inviteLink: `Bjud Link`,
+  sendToAddress: `Send to address`,
   splitExpense: `Split en kostnad med mig på LNDR appen`,
   sendInvite: `Skicka via e-post eller text`,
   unknownTransaction: `okänd transaktion`,
@@ -221,7 +222,6 @@ export default {
     },
     panelHeaders: [
       `Plånbok Adress`,
-      `Crypto Konto Vågar`,
       `Ta bort konto`,
       `ETH Transaktionshistorik`,
       `Aktivera PayPal`,
@@ -339,6 +339,7 @@ export default {
       initiatedBorrow: X => `${X} säger att du är skyldig`,
       pendingLend: X => `@${X} är skyldig dig`,
       pendingBorrow: X => `Du är skyldig @${X} `,
+      settlement: settlement => `${settlement.settlementCurrency} Settlement`,
       pendingLendSettlement: S => `@${S.debtorNickname} begär en betalning i ${S.settlementCurrency}`,
       pendingBorrowSettlement: S => `@${S.creditorNickname} vill betala dig i ${S.settlementCurrency}`,
       pendingLendSettlementMe: S => `Du har begärt att betala @${S.debtorNickname} i ${S.settlementCurrency} `,

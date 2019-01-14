@@ -76,6 +76,7 @@ export default {
   nickname: `छोटा नाम (लोअरकेस और संख्याएँ)`,
   email: `ईमेल पता`,
   inviteLink: `लिंक को आमंत्रित करें`,
+  sendToAddress: `Send to address`,
   splitExpense: `LNDR एप्लिकेशन पर मेरे साथ एक व्यय विभाजित`,
   sendInvite: `ईमेल या पाठ के माध्यम से भेजें`,
   unknownTransaction: `अज्ञात लेन-देन`,
@@ -221,7 +222,6 @@ export default {
     },
     panelHeaders: [
       `बटुआ पता`,
-      `क्रिप्टो शेष`,
       `अकाउंट डिलीट करें`,
       `ETH बैलेंस हिस्ट्री`,
       `पेपैल सक्षम करें`,
@@ -339,6 +339,7 @@ export default {
       initiatedBorrow: X => `${X} का कहना है कि आपको देना है`,
       pendingLend: X => `@${X} को आपको देना`,
       pendingBorrow: X => `आपको @${X} को देना है`,
+      settlement: settlement => `${settlement.settlementCurrency} Settlement`,
       pendingLendSettlement: S => `@${S.debtorNickname} ने ${S.settlementCurrency} में निपटान की रिक्वेस्ट की है`,
       pendingBorrowSettlement: S => `@${S.creditorNickname} आपसे ${S.settlementCurrency} में निपटान करना चाहते हैं`,
       pendingLendSettlementMe: S => `आपने @${S.debtorNickname} से ${S.settlementCurrency} में निपटान की रिक्वेस्ट की है`,

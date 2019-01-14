@@ -14,7 +14,7 @@ import InputImage from 'ui/components/images/input-image'
 import SpinningPicker from 'ui/components/spinning-picker'
 
 import { ERC20_Tokens } from 'lndr/erc-20'
-import { formatNick, formatLockTimeout, formatEmail, emailFormatIncorrect, formatCommaDecimal } from 'lndr/format'
+import { formatNick, formatLockTimeout, formatEmail, emailFormatIncorrect } from 'lndr/format'
 import { UpdateAccountData, UserData } from 'lndr/user'
 import { TRANSFER_LIMIT_STANDARD } from 'lndr/currencies'
 
@@ -34,9 +34,9 @@ import { underlayColor } from 'theme/general'
 import popupStyle from 'theme/popup'
 import pendingStyle from 'theme/pending'
 
-import languageValues, { language } from 'language'
+import languageValues from 'language'
 const { nickname, setNickname, email, setEmail, copy, accountManagement, changePin, enterNewPin, confirmPin, pleaseWait,
-  mnemonicExhortation, addressExhortation, logoutAction, notifications, currentBalance, showMnemonic, enterCurrentPin,
+  mnemonicExhortation, addressExhortation, logoutAction, notifications,  showMnemonic, enterCurrentPin,
   myAccount, debtManagement, removeAccount, payPalLanguage, cancel, confirmAccount, lndrVerified
 } = languageValues
 const updateAccountText = languageValues.updateAccount
@@ -45,8 +45,6 @@ const loadingContext = new LoadingContext()
 const loadingPayPal = new LoadingContext()
 
 const { height } = Dimensions.get('window');
-
-let unmounting = false
 
 interface Props {
   navigation: any
@@ -145,10 +143,6 @@ class MyAccount extends Component<Props, State> {
 
   componentDidMount( ) {
     firebase.analytics().setCurrentScreen('my-account', 'MyAccount');
-  }
-
-  componentWillUnmount() {
-    unmounting = true
   }
 
   handleOnCancel() {
@@ -405,9 +399,6 @@ class MyAccount extends Component<Props, State> {
         <Text style={[style.smallText, style.spaceTop, style.center]}>{accountManagement.sendEth.note(currency, transferLimitLevel)}</Text>
         <Text selectable style={style.displayText}>{hexAddress}</Text>
         <Button round onPress={() => copyToClipboard(hexAddress)} text={copy} />
-      </View>),
-      (<View>
-        {this.renderCryptoBalancesSubpanel()}
       </View>),
       (<View style={style.spaceHorizontalL}>
         <Button round onPress={() => this.props.navigation.navigate('RemoveAccount')} text={removeAccount} />

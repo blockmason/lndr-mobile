@@ -451,11 +451,9 @@ export const getPending = () => {
     const user = getUser(getState())()
     const rawPendingTransactions = await creditProtocol.getPendingTransactions(user.address)
     const flatPendingTransactions = rawPendingTransactions.map(jsonToPendingTransaction)
-    console.log('RAW PENDING TRANSACTIONS: ', flatPendingTransactions)
     const pendingTransactions = filterMultiTransactions(user.address, flatPendingTransactions, getState())
 
     const rawPendingSettlements = await creditProtocol.getPendingSettlements(user.address)
-    console.log('RAW PENDING SETTLEMENTS: ', rawPendingSettlements)
     const pendingSettlements = filterMultiTransactions(user.address, rawPendingSettlements.unilateralSettlements.map(jsonToPendingUnilateral), getState())
     const bilateralSettlements = filterMultiTransactions(user.address, rawPendingSettlements.bilateralSettlements.map(jsonToPendingBilateral), getState())
     settleBilateral(user, bilateralSettlements, dispatch, getState)
@@ -463,7 +461,6 @@ export const getPending = () => {
 
     const rawInviteTxs = await creditProtocol.getInviteTransactions(user.address)
     const pendingInviteTxs = rawInviteTxs.map(tx => new InviteTransaction(tx, true))
-    console.log('RAW PENDING INVITE TRANSACTIONS: ', rawInviteTxs)
 
     await Promise.all(pendingTransactions.map((tx: PendingTransaction) => tx.fromLink ? sendConfirmedTransaction(dispatch, getState, tx) : null))
 
@@ -625,63 +622,63 @@ export const addDebt = (friend: Friend, amount: string, memo: string, direction:
     const { address, privateKeyBuffer } = getUser(getState())()
     const { ucacBalances } = calculateUcacBalances(getState())(friend.address)
     const sanitizedAmount = sanitizeAmount(amount, currency)
-
+    
     if(direction !== 'borrow' && direction !== 'lend') {
       return
     }
-
+    
     if (sanitizedAmount <= 0) {
       return dispatch(displayError(debtManagement.createError.amountTooLow))
     } else if (sanitizedAmount >= 1e11) {
       return dispatch(displayError(debtManagement.createError.amountTooHigh))
     }
-
+    
     if(settleTotal) {
       const { transactions, tooLow, tooHigh } = await generateMultiTransaction(address, friend.address, ucacBalances, memo, getState, privateKeyBuffer, creditProtocol, denomination)
-
+      
       if (tooLow) {
         return dispatch(displayError(debtManagement.createError.amountTooLow))
       } else if (tooHigh) {
         return dispatch(displayError(debtManagement.createError.amountTooHigh))
       }
-
+      
       try {
         await creditProtocol.submitMultiSettlement(transactions)
-
+        
         if(denomination === 'PAYPAL' && direction === 'borrow') {
           await creditProtocol.deletePayPalSettlementRequest(address, friend.address, privateKeyBuffer)
         }
         refreshTransactions()
-
+        
         dispatch(displaySuccess(debtManagement.pending.success(friend)))
         return true
       } catch (e) {
         dispatch(displayError(debtManagement.pending.error))
       }
     }
-
+    
     const [ creditorAddress, debtorAddress ] = {
       lend: [ address, friend.address ],
       borrow: [ friend.address, address ]
     }[direction]
-
+    
     const ucac = await getUcacAddr(getState())(currency)
     try {
       const creditRecord = await creditProtocol.createCreditRecord({ ucacAddress: ucac, creditorAddress, debtorAddress, amount: sanitizedAmount, memo, fromLink: false })
-
       const signature = creditRecord.sign(privateKeyBuffer)
-
+      
       await creditProtocol.submitCreditRecord(creditRecord, direction, signature, denomination)
-
+      
       if(denomination === 'PAYPAL' && direction === 'borrow') {
         await creditProtocol.deletePayPalSettlementRequest(address, friend.address, privateKeyBuffer)
       }
       refreshTransactions()
-
+      
       dispatch(displaySuccess(debtManagement.pending.success(friend)))
-
+      
       return true
-    } catch (e) {
+    } catch (error) {
+      console.log('ERROR SENDING CREDIT RECORD:', error)
       dispatch(displayError(debtManagement.pending.error))
     }
   }

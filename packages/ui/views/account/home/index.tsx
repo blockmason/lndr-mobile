@@ -10,15 +10,14 @@ import PendingTransaction from 'lndr/pending-transaction'
 import Friend from 'lndr/friend'
 import InviteTransaction from 'lndr/invite-transaction'
 import { currencySymbols } from 'lndr/currencies'
-import { currencyFormats, formatExchangeCurrency, formatCommaDecimal } from 'lndr/format'
+import { currencyFormats } from 'lndr/format'
 
 import Button from 'ui/components/button'
 import { LoadingContext } from 'ui/components/loading'
 import Section from 'ui/components/section'
 import PendingView from 'ui/views/account/activity/pending'
-import Tile from 'ui/components/tile'
+import Card from 'ui/components/card'
 import Icon from 'react-native-vector-icons/Ionicons'
-import FAIcon from 'react-native-vector-icons/FontAwesome'
 
 import { isFocusingOn } from 'reducers/nav'
 import { getStore, getUser, getNeedsReviewCount, calculateBalance, calculateCounterparties,
@@ -87,10 +86,8 @@ class HomeView extends Component<Props, State> {
     firebase.analytics().setCurrentScreen('home', 'HomeView');
     this.initializePushNotifications()
     try {
-      const accountInformation = await this.props.getAccountInformation()
-    }
-
-    catch (error) {
+      await this.props.getAccountInformation()
+    } catch (error) {
       this.props.displayError(accountManagement.loadInformation.error)
     }
 
@@ -101,7 +98,6 @@ class HomeView extends Component<Props, State> {
 
           const startIndex = url.indexOf('link=')
           const hash = url.slice(startIndex + 5)
-          console.log('Initial url hash is: ' + hash)
           return this.props.getEmailTx(hash)
           .then( async (rawEmailTx) => {
             const inviteTx = new InviteTransaction(rawEmailTx, true)
@@ -110,7 +106,7 @@ class HomeView extends Component<Props, State> {
             this.props.navigation.navigate('RequestDetail', { emailTransaction: inviteTx })
           })
         }
-      }).catch(err => console.log('An error occurred getting the email transaction', err))
+      }).catch(error => console.log('An error occurred getting the email transaction', error))
     }
 
     this.props.getVerificationStatus()
@@ -138,7 +134,6 @@ class HomeView extends Component<Props, State> {
   async initializePushNotifications() {
     const { navigation } = this.props
     UrbanAirship.getChannelId().then(channelId => {
-      console.log('CHANNEL ID', channelId)
       if (channelId) {
         this.props.registerChannelID(channelId, Platform.OS)
       }
@@ -148,7 +143,6 @@ class HomeView extends Component<Props, State> {
 
     UrbanAirship.setUserNotificationsEnabled(notificationsEnabled)
     UrbanAirship.addListener("pushReceived", async(notification) => {
-      console.log('Received push: ', JSON.stringify(notification))
       const actions = JSON.parse(notification.extras['com.urbanairship.actions'])
       const { type } = actions
 
@@ -200,7 +194,7 @@ class HomeView extends Component<Props, State> {
   }
 
   renderBalanceInformation() {
-    const { calculateBalance, calculateCounterparties, primaryCurrency, ethExchange, state: { recentTransactionsLoaded, ethBalance } } = this.props
+    const { calculateBalance, calculateCounterparties, primaryCurrency, state: { recentTransactionsLoaded } } = this.props
 
     if (!recentTransactionsLoaded)
       return
@@ -214,7 +208,7 @@ class HomeView extends Component<Props, State> {
       </Text>
     }
 
-    return <Tile style={style.aquaTile} onPress={() => this.props.navigation.navigate('Friends')}>
+    return <Card style={style.aquaCard} onPress={() => this.props.navigation.navigate('Friends')}>
       <View style={general.centeredColumn}>
         <Text style={style.midHeader}>{totalBalance}</Text>
         <View style={style.balanceRow}>
@@ -223,19 +217,11 @@ class HomeView extends Component<Props, State> {
         </View>
       </View>
       <Button alternate blackText narrow small onPress={() => null} text={recentTransactionsLanguage.friends(calculateCounterparties())} />
-    </Tile>
-      
-      {/* <View style={[style.balanceRow, {marginTop: 10}]}>
-        <Text style={[style.balance, {marginLeft: '2%'}]}>{accountManagement.cryptoBalance.display('ETH', formatCommaDecimal(ethBalance))}</Text>
-        <Button alternate blackText narrow arrow small onPress={() => {this.props.navigation.navigate('MyAccount')}}
-          text={formatExchangeCurrency(ethBalance, ethExchange(primaryCurrency), primaryCurrency)}
-          containerStyle={{marginTop: -6}}
-        />
-      </View> */}
+    </Card>
   }
 
-  showAddDebt() {
-    this.props.navigation.navigate('AddDebt')
+  showNewTransaction() {
+    this.props.navigation.navigate('NewTransaction')
   }
 
   addDebt(direction: string) {
@@ -243,7 +229,7 @@ class HomeView extends Component<Props, State> {
     if(friendList.length === 0) {
       navigation.navigate('Friends')
     } else {
-      navigation.navigate('AddDebt', { direction })
+      navigation.navigate('NewTransaction', { direction })
     }
   }
 
@@ -256,28 +242,27 @@ class HomeView extends Component<Props, State> {
           { this.renderBalanceInformation() }
         </Section>
         <Section>
-          {/* change this stuff */}
           <View style={general.betweenRow}>
-            <Tile style={style.grayTile} onPress={() => this.props.navigation.navigate('MyAccount')}>
+            <Card style={style.grayCard} onPress={() => this.props.navigation.navigate('Wallet')}>
               <Icon name="ios-wallet" style={style.walletIcon} />
               <Text style={style.tileText}>{myWallet}</Text>
-            </Tile>
-            <Tile style={style.grayTile} onPress={() => this.addDebt('lend')}>
+            </Card>
+            <Card style={style.grayCard} onPress={() => this.addDebt('lend')}>
               <Icon name="md-add-circle" style={style.newTransactionIcon} />
               <Text style={style.tileText}>{newTransaction}</Text>
-            </Tile>
+            </Card>
           </View>
         </Section>
       </Section>
       {this.renderNeedsReview()}
       <Section>
         <Section>
-          <Tile style={style.seeActivityTile} onPress={() => this.props.navigation.navigate('Activity')}>
+          <Card style={style.seeActivityCard} onPress={() => this.props.navigation.navigate('Activity')}>
             <View style={[general.betweenRow, style.seeAllButton]}>
               <Text style={style.seeAllActivity}>{seeAllActivity}</Text>
               <Icon name="ios-arrow-forward" style={style.seeAllActivityArrow} />
             </View>
-          </Tile>
+          </Card>
         </Section>
       </Section>
     </ScrollView>

@@ -76,6 +76,7 @@ export default {
   nickname: `Biệt danh (chữ thường & số)`,
   email: `Địa chỉ email`,
   inviteLink: `mời liên kết`,
+  sendToAddress: `Send to address`,
   splitExpense: `Chia một khoản chi phí với tôi trên ứng dụng LNDR`,
   sendInvite: `Gửi qua email hoặc văn bản`,
   unknownTransaction: `giao dịch Unknown`,
@@ -221,7 +222,6 @@ export default {
     },
     panelHeaders: [
       `Wallet Địa chỉ`,
-      `Số dư tài khoản Crypto`,
       `Xoá tài khoản`,
       `Lịch sử giao dịch ETH`,
       `Bật PayPal`,
@@ -339,6 +339,7 @@ export default {
       initiatedBorrow: X => `${X} nói rằng bạn nợ`,
       pendingLend: X => `@${X} nợ bạn`,
       pendingBorrow: X => `Bạn nợ @${X}`,
+      settlement: settlement => `${settlement.settlementCurrency} Settlement`,
       pendingLendSettlement: S => `@${S.debtorNickname} yêu cầu thanh toán bằng ${S.settlementCurrency}`,
       pendingBorrowSettlement: S => `@${S.creditorNickname} muốn thanh toán với bạn bằng ${S.settlementCurrency}`,
       pendingLendSettlementMe: S => `Bạn đã yêu cầu thanh toán với @${S.debtorNickname} bằng ${S.settlementCurrency}`,

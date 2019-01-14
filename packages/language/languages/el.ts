@@ -76,6 +76,7 @@ export default {
   nickname: `Ψευδώνυμο (πεζά & αριθμοί)`,
   email: `Διεύθυνση Ηλεκτρονικού Ταχυδρομείου`,
   inviteLink: `Πρόσκληση Σύνδεση`,
+  sendToAddress: `Send to address`,
   splitExpense: `Split έξοδο μαζί μου σχετικά με την εφαρμογή LNDR`,
   sendInvite: `Αποστολή μέσω e-mail ή το κείμενο`,
   unknownTransaction: `Άγνωστη συναλλαγών`,
@@ -221,7 +222,6 @@ export default {
     },
     panelHeaders: [
       `Πορτοφόλι Διεύθυνση`,
-      `Crypto Υπόλοιπα`,
       `Yπόλοιπο BCPT`,
       `Κατάργηση Λογαριασμού`,
       `Ιστορικό Συναλλαγών ETH`,
@@ -340,6 +340,7 @@ export default {
       initiatedBorrow: X => `${X} λέει χρωστάμε`,
       pendingLend: X => `@${X} σου χρωστά`,
       pendingBorrow: X => `Xρωστάτε @${X}`,
+      settlement: settlement => `${settlement.settlementCurrency} Settlement`,
       pendingLendSettlement: S => `@${S.debtorNickname} ζητά διακανονισμό σε ${S.settlementCurrency}`,
       pendingBorrowSettlement: S => `@${S.creditorNickname} θέλει να πραγματοποιήσει διακανονισμό μαζί σας σε ${S.settlementCurrency}`,
       pendingLendSettlementMe: S => `Zητήσατε να πραγματοποιήσετε διακανονισμό με @${S.debtorNickname} σε ${S.settlementCurrency}`,

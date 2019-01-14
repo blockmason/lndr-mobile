@@ -21,8 +21,9 @@ import DashboardShell from 'ui/components/dashboard-shell'
 import PayPalSettlementButton from 'ui/components/paypal-settle-button'
 import BalanceSection from 'ui/components/balance-section'
 import TransactionDisplay from 'ui/components/transaction-display'
+import { isSettlement } from 'ui/components/row/helpers'
 
-import { getColor, getTitle, getFriendNickname, getSettlementAmount } from './helpers'
+import { getFriendNickname, getSettlementAmount } from './helpers'
 
 import style from 'theme/request-detail'
 import formStyle from 'theme/form'
@@ -31,7 +32,7 @@ import general from 'theme/general'
 import pendingStyle from 'theme/pending'
 
 import language from 'language'
-const { cancel, accountManagement, back, pendingTransactionsLanguage, payPalLanguage } = language
+const { cancel, accountManagement, back, pendingTransactionsLanguage, payPalLanguage, debtManagement, inviteLink } = language
 
 import { getResetAction } from 'reducers/nav'
 import { getUser, settlerIsMe, getEthExchange, getWeeklyEthTotal, calculateBalance, getUcacCurrency, getPrimaryCurrency,
@@ -210,9 +211,9 @@ class RequestDetail extends Component<Props, State> {
 
   renderButtons() {
     const { state: { content }, props: { user, submitterIsMe, settlerIsMe } } = this
-    const userIsSubmitter = (content instanceof PendingTransaction && submitterIsMe(content)) ||
-      (content instanceof InviteTransaction && content.address === user.address) ||
-      (content instanceof PendingUnilateral && settlerIsMe(content))
+    const userIsSubmitter = (content instanceof PendingTransaction && submitterIsMe(content))
+      || (content instanceof InviteTransaction && content.address === user.address)
+      || (content instanceof PendingUnilateral && settlerIsMe(content))
 
     if (content instanceof Friend) {
       return <View style={{marginBottom: 10}}>
@@ -259,11 +260,14 @@ class RequestDetail extends Component<Props, State> {
     let balanceAndTitle: any = null
     if (content instanceof PendingTransaction || content instanceof InviteTransaction || content instanceof PendingUnilateral) {
       balanceAndTitle = <View style={[general.betweenRow, general.mediumBottomMargin]}>
-        <View style={style.balanceRow}>
-          <Text style={style.balanceInfo}>{currencySymbols(primaryCurrency)}</Text>
-          <Text style={style.amount}>{currencyFormats(primaryCurrency)(content.amount)}</Text>
+        <View style={general.flexColumn}>
+          <View style={style.balanceRow}>
+            <Text style={style.balanceInfo}>{currencySymbols(primaryCurrency)}</Text>
+            <Text style={style.amount}>{currencyFormats(primaryCurrency)(content.amount)}</Text>
+          </View>
+          {content instanceof PendingUnilateral ? <Text style={style.settlementAmount}>{`${getSettlementAmount(content, token)} ${content.settlementCurrency}`}</Text> : null}
         </View>
-        <Text style={style.memo}>{memo}</Text>
+        {content instanceof PendingUnilateral ? null : <Text style={style.memo}>{memo}</Text>}
       </View>
     }
 
@@ -284,18 +288,11 @@ class RequestDetail extends Component<Props, State> {
 
     } else if (content instanceof PendingUnilateral) {
       detailContent = <View style={general.centeredColumn}>
-        <Text style={style.title}>{getTitle(content, user, settlerIsMe)}</Text>
         {balanceAndTitle}
-        <View style={style.balanceRow}>
-          <Text style={style.amount}>{getSettlementAmount(content, token)}</Text>
-          <Text style={style.balanceInfo}>{content.settlementCurrency}</Text>
-        </View>
-        {content.multiSettlements === undefined ? null :
-        <BalanceSection friend={friend} />
-        }
-        <View style={{marginBottom: 20}}/>
-        {!isPayee && <Text style={[formStyle.smallText, formStyle.spaceTop, formStyle.center]}>{accountManagement.sendEth.warning(this.getLimit(), primaryCurrency, transferLimitLevel)}</Text>}
-        {!isPayee && <Text style={[accountStyle.txCost, formStyle.spaceBottom, {marginLeft: '2%'}]}>{accountManagement.sendERC20.txCost(ethCostFormatted, currencyCostFormatted)}</Text>}
+        {content.multiSettlements === undefined ? null : <BalanceSection friend={friend} />}
+        {!isPayee && <Text style={[formStyle.smallText, formStyle.center, {marginTop: 0}]}>{accountManagement.sendEth.warning(this.getLimit(), primaryCurrency, transferLimitLevel)}</Text>}
+        {!isPayee && <Text style={[accountStyle.txCost]}>{accountManagement.sendERC20.txCost(ethCostFormatted, currencyCostFormatted)}</Text>}
+        <View style={{marginBottom: 10}}/>
         {confirmationError && <Text style={[formStyle.warningText, {alignSelf: 'center'}]}>{confirmationError}</Text>}
       </View>
       
@@ -306,12 +303,12 @@ class RequestDetail extends Component<Props, State> {
     return <View style={general.whiteFlex}>
       <View style={general.view}>
         <Loading context={loadingContext} />
-        <DashboardShell text={pendingTransactionsLanguage.shell} navigation={this.props.navigation} />
+        <DashboardShell text={content instanceof PendingUnilateral ? debtManagement.direction.settlement(content) : pendingTransactionsLanguage.shell} navigation={this.props.navigation} />
         <BackButton onPress={() => this.props.navigation.goBack()} />
       </View>
       <ScrollView style={general.whiteFlex} keyboardShouldPersistTaps="always">
         <View style={[general.centeredColumn, general.standardHMargin]}>
-          <TransactionDisplay selectFriend={() => null} user={user} direction={direction} changeDirection={() => null} friend={friend} sendViaLink={content instanceof InviteTransaction} />
+          <TransactionDisplay selectFriend={() => null} user={user} direction={direction} changeDirection={() => null} friend={friend} nonFriend={content instanceof InviteTransaction && inviteLink} settlement={isSettlement(content)} />
           {detailContent}
           {this.renderButtons()}
         </View>

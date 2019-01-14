@@ -76,6 +76,7 @@ export default {
   nickname: `כינוי (אותיות קטנות & מספרים)`,
   email: `כתובת דוא"ל`,
   inviteLink: `קישור זמן`,
+  sendToAddress: `Send to address`,
   splitExpense: `פיצול הוצאה איתי על האפליקציה LNDR`,
   sendInvite: `שלח בדוא"ל או בטקסט`,
   unknownTransaction: `עסקה לא ידועה`,
@@ -221,7 +222,6 @@ export default {
     },
     panelHeaders: [
       `כתובת ארנק`,
-      `יתרות האנוסים`,
       `להסיר חשבון`,
       `היסטוריית עסקאות ETH`,
       `הפוך את PayPal`,
@@ -339,6 +339,7 @@ export default {
       initiatedBorrow: X => `אומר שאתה חייב ${X}`,
       pendingLend: X => `חייב לך @${X}`,
       pendingBorrow: X => `@${X} אתה חייב`,
+      settlement: settlement => `${settlement.settlementCurrency} Settlement`,
       pendingLendSettlement: S => `${S.settlementCurrency} -מבקש החזרת חוב ב @${S.debtorNickname}`,
       pendingBorrowSettlement: S => `${S.settlementCurrency} -רצה להחזיר לך חוב ב @${S.debtorNickname}`,
       pendingLendSettlementMe: S => `${S.settlementCurrency} -ב @${S.debtorNickname} -בקשת להחזיר חוב ל`,

@@ -307,7 +307,9 @@ export default class CreditProtocol {
       fromLink
     } = creditRecord
 
-    return this.client.post(`/${action}`, {
+    console.log('CREDIT RECORD', creditRecord)
+
+    const result = await this.client.post(`/${action}`, {
       ucac,
       creditor,
       debtor,
@@ -320,6 +322,8 @@ export default class CreditProtocol {
       fromLink,
       settlementCurrency: denomination
     })
+
+    console.log(result)
   }
 
   getRandomMnemonic() {

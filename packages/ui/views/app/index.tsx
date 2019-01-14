@@ -3,15 +3,13 @@ import React, { Component } from 'react'
 // TODO Remove button / go through the entire import dependecy list
 import { View, NetInfo } from 'react-native'
 
-import firebase from 'react-native-firebase'
 import SplashScreen from 'react-native-splash-screen'
 import { connect, Provider } from 'react-redux'
-import { Toast, ToastActionsCreators } from 'react-native-redux-toast'
+import { Toast } from 'react-native-redux-toast'
 
 import AuthenticateView from 'ui/views/authenticate'
 import WelcomeView from 'ui/views/welcome'
 import PrivacyPolicyView from 'ui/views/privacy-policy'
-import { PopupTarget } from 'ui/components/popup'
 import AndroidStatusBar from 'ui/components/android-status-bar'
 
 import { UserData } from 'lndr/user'
@@ -138,7 +136,6 @@ export default class AppView extends Component {
       <Provider store={store}>
         <View style={style.isX}>
           <AndroidStatusBar />
-          <PopupTarget />
           <AppContents />
           <Toast />
         </View>

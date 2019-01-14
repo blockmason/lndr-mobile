@@ -51,7 +51,7 @@ export default class Client {
   }
 
   get(path) {
-    console.log(`[fetch] GET ${this.baseUrl}${path}`)
+    // console.log(`[fetch] GET ${this.baseUrl}${path}`)
     let headers:any = {
       'Accept': (this.accept) ? this.accept : 'application/json, text/plain, */*'
     }
@@ -66,7 +66,7 @@ export default class Client {
   }
 
   post(path, data) {
-    console.log(`[fetch] POST ${this.baseUrl}${path} {${Object.keys(data).join(', ')}:${Object.values(data).join(', ')}}`)
+    // console.log(`[fetch] POST ${this.baseUrl}${path} {${Object.keys(data).join(', ')}:${Object.values(data).join(', ')}}`)
     let headers:any = {
       'Accept': (this.accept) ? this.accept : 'application/json, text/plain, */*'
       ,'Content-Type': (this.contentType) ? this.contentType : 'application/json'
@@ -84,7 +84,7 @@ export default class Client {
   }
 
   delete(path) {
-    console.log(`[fetch] DELETE ${this.baseUrl}${path}`)
+    // console.log(`[fetch] DELETE ${this.baseUrl}${path}`)
     let headers:any = {
       'Accept': (this.accept) ? this.accept : 'application/json, text/plain, */*'
     }

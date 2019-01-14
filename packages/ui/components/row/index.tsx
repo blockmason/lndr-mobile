@@ -1,10 +1,14 @@
 import React, { Component } from 'react'
 import { connect } from 'react-redux'
 
-import { Text, TouchableHighlight, View } from 'react-native'
+import { Text, View } from 'react-native'
 import Button from 'ui/components/button'
-import ZIcon from 'react-native-vector-icons/Zocial'
+
 import ProfilePic from 'ui/components/images/profile-pic'
+import Card from 'ui/components/card'
+
+import { getAmount, getColor, renderText, isRecentTransaction, isInviteTransaction, isPendingTransaction, isPendingUnilateral, isPendingBilateral,
+  isFriend, isCreditor, getPaymentIcon, isSettlement } from './helpers'
 
 import User from 'lndr/user'
 import Friend from 'lndr/friend'
@@ -15,17 +19,10 @@ import PendingTransaction from 'lndr/pending-transaction'
 import PendingUnilateral from 'lndr/pending-unilateral'
 import PendingBilateral from 'lndr/pending-bilateral'
 
-import { currencyFormats, isPayPalSettlement } from 'lndr/format'
-import { currencySymbols } from 'lndr/currencies'
-
 import { getUcacCurrency, getUser } from 'reducers/app'
 
-import { white, light, darkAqua } from 'theme/include/colors'
 import general from 'theme/general'
 import style from 'theme/row'
-
-import language from 'language'
-const { addFriendButton, payPalLanguage, debtManagement, inviteLink, pendingFriendRequestsLanguage } = language
 
 interface Props {
   onPress: () => void
@@ -58,126 +55,30 @@ class Row extends Component<Props> {
     this.state = {}
   }
 
-  addFriendButton() {
-    return <Button icon="md-add-circle" round onPress={this.props.onPress} text='ADD' />
-  }
-
-  getTitle(content: RecentTransaction | InviteTransaction | PendingUnilateral | PendingBilateral) {
-    const { user, settlerIsMe } = this.props
-    if (content instanceof InviteTransaction) {
-      return inviteLink
-    } else if (user.address === content.creditorAddress) {
-      return `@${content.debtorNickname}`
-    } else if (user.address === content.debtorAddress) {
-      return `@${content.creditorNickname}`
-    } else if (settlerIsMe && (content instanceof PendingBilateral || content instanceof PendingUnilateral)) {
-      if(settlerIsMe(content)) {
-        if (user.address === content.creditorAddress) {
-          return debtManagement.direction.pendingLendSettlementMe(content)
-        } else if (user.address === content.debtorAddress) {
-          return debtManagement.direction.pendingBorrowSettlementMe(content)
-        } else {
-          return 'Unknown Settlement'
-        }
-      } else {
-        if (user.address === content.creditorAddress) {
-          return debtManagement.direction.pendingLendSettlement(content)
-        } else if (user.address === content.debtorAddress) {
-          return debtManagement.direction.pendingBorrowSettlement(content)
-        } else {
-          return 'Unknown Settlement'
-        }
-      }
-    } else {
-      return 'Unknown Transaction'
-    }
-  }
-
-  getAmount(content: RecentTransaction | InviteTransaction | PendingUnilateral | PendingBilateral) {
-    const { getUcacCurrency, user } = this.props
-    let sign = ''
-    
-    if (content instanceof RecentTransaction || content instanceof PendingBilateral || content instanceof PendingUnilateral) {
-      if (user.address === content.creditorAddress) {
-        sign = '+'
-      } else if (user.address === content.debtorAddress) {
-        sign = '-'
-      }
-    } else {
-      if (content.direction === 'lend') {
-        sign = '+'
-      } else {
-        sign = '-'
-      }
-    }
-
-    const currentCurrency = getUcacCurrency ? getUcacCurrency(content.ucac) : 'USD'
-
-    return `${sign} ${currencySymbols(currentCurrency)}${currencyFormats(currentCurrency)(content.amount)}`
-  }
-
-  getColor(isCreditor: boolean) {
-    return isCreditor ? style.redAmount : style.greenAmount
-  }
-
   left() {
-    const { props: { content, friend, pendingFriend, isOutbound, picId } } = this
+    const { content, friend, picId } = this.props
+    const dontShowImage = (isPendingTransaction(content) || isSettlement(content)) && friend
 
-    const renderText = (content: Friend | PayPalRequest | RecentTransaction | InviteTransaction | PendingBilateral | PendingUnilateral) => {
-      if (content instanceof Friend && !pendingFriend) {
-        return <Text numberOfLines={1} style={[style.titledPending, {maxWidth:160}]}>{`@${content.nickname}`}</Text>
-      } else if (content instanceof Friend) {
-        const message = isOutbound ? pendingFriendRequestsLanguage.outbound : pendingFriendRequestsLanguage.request
-        return <Text style={style.friendRequest}>{message(content.nickname)}</Text>
-      } else if (content instanceof PayPalRequest) {
-        return <Text style={style.friendRequest}>{content.requestorIsMe ? payPalLanguage.requestFriendConnect(content.friend.nickname) : payPalLanguage.friendRequestedConnect(content.friend.nickname)}</Text>
-      } else if (content instanceof RecentTransaction || content instanceof PendingTransaction) {
-        return <View>
-          <Text style={style.titledPending}>{!!friend ? content.memo : this.getTitle(content)}</Text>
-          {!!friend ? null : <Text style={style.pendingMemo}>{content.memo}</Text>}
-        </View>
-      } else if (content instanceof PendingUnilateral || content instanceof PendingBilateral) {
-        return <View style={general.flexColumn}>
-          {!friend ? <Text style={style.titledPending}>{this.getTitle(content)}</Text> : null }
-          {!!friend ? <Text style={style.pendingMemo}>{content.memo}</Text> : null }
-        </View>
-      } else if (content instanceof InviteTransaction) {
-        return <View>
-          <Text style={style.titledPending}>{this.getTitle(content)}</Text>
-          <Text style={style.pendingMemo}>{content.memo}</Text>
-        </View>
-      } else {
-        return <View/>
-      }
-    }
-
-    const dontShowImage = (content instanceof PendingTransaction || content instanceof PendingUnilateral || content instanceof PendingBilateral) && friend
-
-    return <View style={[general.flexRow, general.alignCenter]}>
+    return <View style={general.flexRow}>
       {dontShowImage ? null : <ProfilePic size={60} style={style.picIcon} address={picId} />}
-      <View style={general.flexColumn}>
-        {renderText(content)}
+      <View style={style.rowLeftText}>
+        {renderText(this.props)}
       </View>
     </View>
   }
 
-  right(content: Friend | PayPalRequest | RecentTransaction | InviteTransaction | PendingTransaction | PendingBilateral | PendingUnilateral) {
-    const { user, friend, pendingFriend } = this.props
+  right() {
+    const { user, pendingFriend, content } = this.props
 
-    if (content instanceof Friend && !pendingFriend) {
-      return !this.props.selected && this.addFriendButton()
-    } else if (content instanceof PayPalRequest) {
-      return null
-    } else if (content instanceof RecentTransaction || content instanceof InviteTransaction || content instanceof PendingTransaction) {
-      const isCreditor = (content instanceof RecentTransaction || content instanceof PendingTransaction && content.creditorAddress === user.address)
-        || (content instanceof InviteTransaction && content.direction === 'lend')
-      
-      const paymentIcon = content instanceof PendingTransaction && isPayPalSettlement(content.settlementCurrency) ? (<ZIcon name='paypal' color={darkAqua} style={{fontSize:15}}/>) : null
+    if (isFriend(content) && !pendingFriend) {
+      return !this.props.selected && <Button icon="md-add-circle" round onPress={this.props.onPress} text='ADD' />
 
+    } else if (isRecentTransaction(content) || isInviteTransaction(content) || isPendingTransaction(content) || isSettlement(content)) {
       return <View>
-        <Text style={[style.pendingAmount, this.getColor(isCreditor)]}>{this.getAmount(content)}</Text>
-        {!friend && content instanceof PendingTransaction ? paymentIcon : null }
+        <Text style={[style.pendingAmount, getColor(isCreditor({ content, user }))]}>{getAmount(this.props)}</Text>
+        {getPaymentIcon(content)}
       </View>
+
     } else {
       return <View/>
     }
@@ -185,19 +86,16 @@ class Row extends Component<Props> {
 
   render() {
     return (
-      <TouchableHighlight onPress={this.props.onPress} underlayColor={light}>
-        <View style={style.rowPadding} >
-          <View style={general.betweenRow}>
+      <Card onPress={this.props.onPress} style={style.rowCard} >
+        <View>
+          <View style={style.row}>
             {this.left()}
-            {this.right(this.props.content)}
+            {this.right()}
           </View>
         </View>
-      </TouchableHighlight>
+      </Card>
     )
   }
 }
 
 export default connect<any, any, PassedProps>((state) => ({ getUcacCurrency: getUcacCurrency(state), user: getUser(state)() }))(Row)
-
-
-

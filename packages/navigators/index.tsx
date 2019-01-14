@@ -5,12 +5,11 @@ import { connect } from 'react-redux'
 
 import DashboardNavigator from './dashboard'
 import MyAccount from 'ui/dialogs/my-account'
-import AddDebt from 'ui/dialogs/add-debt'
-import ConfirmationScreen from 'ui/dialogs/confirmation-screen'
+import NewTransaction from 'ui/dialogs/new-transaction'
+import Confirmation from 'ui/dialogs/confirmation'
 import RequestDetail from 'ui/dialogs/request-detail'
 import Settlement from 'ui/dialogs/settlement'
 import FriendDetail from 'ui/dialogs/friend-detail'
-import TransferEth from 'ui/dialogs/transfer-eth'
 import TransferERC20 from 'ui/dialogs/transfer-erc20'
 import FriendRequest from 'ui/dialogs/friend-request'
 import RemoveAccountView from 'ui/dialogs/remove-account'
@@ -47,17 +46,14 @@ export const AppNavigator = StackNavigator(
     FriendDetail: {
       screen: FriendDetail
     },
-    TransferEth: {
-      screen: TransferEth
-    },
     TransferERC20: {
       screen: TransferERC20
     },
-    AddDebt: {
-      screen: AddDebt
+    NewTransaction: {
+      screen: NewTransaction
     },
     Confirmation: {
-      screen: ConfirmationScreen
+      screen: Confirmation
     },
     FriendRequest: {
       screen: FriendRequest

@@ -22,7 +22,8 @@ const styles = {
   }),
   iconStyle: (size: number) => ({
     fontSize: size,
-    color: black
+    color: black,
+    paddingHorizontal: size / 12
   })
 }
 

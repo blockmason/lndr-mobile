@@ -1,16 +1,12 @@
 import React, { Component } from 'react'
-
-import RecentTransaction from 'lndr/recent-transaction'
-
 import { Text, View } from 'react-native'
 
 import Section from 'ui/components/section'
-import Popup, { closePopup } from 'ui/components/popup'
 import Loading, { LoadingContext } from 'ui/components/loading'
-import { UserData } from 'lndr/user'
-
-import RequestDetail from 'ui/dialogs/request-detail'
 import Row from 'ui/components/row'
+
+import RecentTransaction from 'lndr/recent-transaction'
+import { UserData } from 'lndr/user'
 
 import style from 'theme/account'
 
@@ -64,11 +60,6 @@ class RecentTransactionsView extends Component<Props, State> {
     this.componentDidMount()
   }
 
-  closePopupAndRefresh() {
-    closePopup()
-    this.refresh()
-  }
-
   renderRequestDetailDialog() {
     const { recentTransaction } = this.state
 
@@ -77,13 +68,6 @@ class RecentTransactionsView extends Component<Props, State> {
     }
 
     return null
-
-    // return <Popup onClose={() => this.setState({ recentTransaction: undefined })}>
-    //   <RequestDetail
-    //     content={recentTransaction}
-    //     closePopup={() => this.closePopupAndRefresh()}
-    //   />
-    // </Popup>
   }
 
   render() {

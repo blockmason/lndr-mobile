@@ -76,6 +76,7 @@ export default {
   nickname: `Přezdívka (malá písmena a čísla)`,
   email: `Emailová adresa`,
   inviteLink: `Pozvat Link`,
+  sendToAddress: `Send to address`,
   splitExpense: `Rozdělit náklady se mnou na aplikaci LNDR`,
   sendInvite: `Poslat e-mailem nebo textu`,
   unknownTransaction: `neznámý Transaction`,
@@ -221,7 +222,6 @@ export default {
     },
     panelHeaders: [
       `Peněženka Address`,
-      `Crypto váhy`,
       `Odstranit účet`,
       `ETH Transakční historie`,
       `Umožnit PayPal`,
@@ -339,6 +339,7 @@ export default {
       initiatedBorrow: X => `${X} říká, že dlužíš`,
       pendingLend: X => ` '${X} ti dluží`,
       pendingBorrow: X => `Dlužíte @${X}`,
+      settlement: settlement => `${settlement.settlementCurrency} Settlement`,
       pendingLendSettlement: S => `@${S.debtorNickname} žádá vypořádání v ${S.settlementCurrency}`,
       pendingBorrowSettlement: S => `@${S.creditorNickname} se chce s vámi vypořádat v ${S.settlementCurrency}`,
       pendingLendSettlementMe: S => `Zažádal(a) jste o vyrovnání s @${S.debtorNickname} v ${S.settlementCurrency}`,

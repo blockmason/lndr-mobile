@@ -1,31 +1,32 @@
 import React, { Component } from 'react'
-
 import { Text, TextInput, View, ScrollView, KeyboardAvoidingView, Platform } from 'react-native'
 import firebase from 'react-native-firebase'
 import { connect } from 'react-redux'
 
-import { getUser, getPrimaryCurrency } from 'reducers/app'
+import { getUser, getPrimaryCurrency, getEthBalance, getStore, getEthExchange, getWeeklyEthTotal } from 'reducers/app'
 import { getResetAction } from 'reducers/nav'
-import { getTransactionCosts, sendERC20 } from 'actions'
+import { getTransactionCosts, sendERC20, sendEth, getTransferLimitLevel, exceedsTransferLimit } from 'actions'
 import { defaultTransactionCosts, TransactionCosts } from 'credit-protocol'
 
 import { UserData } from 'lndr/user'
-import { cryptoAmount, formatCommaDecimal, isEthAddress } from 'lndr/format'
 import { ERC20_Token } from 'lndr/erc-20'
+import Friend from 'lndr/friend'
+import { cryptoAmount, isEthAddress, formatCommaDecimal, formatEthRemaining } from 'lndr/format'
+import { currencySymbols, isCommaDecimal, transferLimits, TRANSFER_LIMIT_STANDARD } from 'lndr/currencies'
 
 import BackButton from 'ui/components/back-button'
 import Button from 'ui/components/button'
 import Loading, { LoadingContext } from 'ui/components/loading'
 import DashboardShell from 'ui/components/dashboard-shell'
+import SelectFriend from 'ui/components/select-friend'
+import TransactionDisplay from 'ui/components/transaction-display'
 
 import general from 'theme/general'
 import formStyle from 'theme/form'
 import accountStyle from 'theme/account'
 
 import language from 'language'
-const {
-  accountManagement
-} = language
+const { currentBalance, accountManagement, sendToAddress } = language
 
 const loadingContext = new LoadingContext()
 
@@ -33,7 +34,13 @@ interface Props {
   primaryCurrency: string
   user: UserData
   navigation: any
+  ethBalance: string
   sendERC20: (token: ERC20_Token, destinationAddress: string, amount: string) => any
+
+  ethSentPastWeek: number
+  ethExchange: (currency: string) => string
+  sendEth: (address: string, amount: string) => any
+  getStore: () => any
 }
 
 interface State {
@@ -44,6 +51,10 @@ interface State {
   token?: ERC20_Token
   tokenBalance: string
   transactionCosts: TransactionCosts
+  transferLimitLevel: string
+  friend?: Friend
+  shouldSelectFriend: boolean
+  nonFriend?: string
 }
 
 class TransferERC20 extends Component<Props, State> {
@@ -53,27 +64,41 @@ class TransferERC20 extends Component<Props, State> {
       token: undefined,
       tokenBalance: '0.00',
       transactionCosts: defaultTransactionCosts(),
+      transferLimitLevel: TRANSFER_LIMIT_STANDARD,
+      shouldSelectFriend: false,
     }
+
+    this.blurAmountFormat = this.blurAmountFormat.bind(this)
+    this.setDestinationAddress = this.setDestinationAddress.bind(this)
+    this.setAmount = this.setAmount.bind(this)
+    this.setFriend = this.setFriend.bind(this)
+    this.selectFriend = this.selectFriend.bind(this)
+    this.submit = this.submit.bind(this)
   }
 
   async componentWillMount() {
-    const { primaryCurrency, user } = this.props
-    const token = this.props.navigation ? this.props.navigation.state.params.token : undefined
+    const { primaryCurrency, user, navigation, ethBalance } = this.props
+    const token = navigation ? navigation.state.params.token : undefined
+
+    // token: { tokenName }
+    console.log('TOKEN', token)
     if (token) {
       const transactionCosts = await getTransactionCosts(token.tokenName, primaryCurrency)
-      const tokenBalance = await token.getBalance(user.address as string)
-      this.setState({ token, transactionCosts, tokenBalance })
+      const tokenBalance = token.tokenName === 'ETH' ? ethBalance : await token.getBalance(user.address as string)
+      const transferLimitLevel = await getTransferLimitLevel(user.address, this.props.getStore())
+      this.setState({ token, transactionCosts, tokenBalance, transferLimitLevel })
     }
   }
 
   componentDidMount( ) {
     const { token } = this.state
     const tokenName = (token) ? token.tokenName : 'erc20'
-    firebase.analytics().setCurrentScreen(`transfer-${tokenName.toLowerCase()}`, `Transfer${tokenName}`);
+    firebase.analytics().setCurrentScreen(`transfer-${tokenName.toUpperCase()}`, `Transfer${tokenName}`);
   }
 
   async submit() {
-    const { amount, destinationAddress, token } = this.state
+    const { state: { amount, destinationAddress, token, transferLimitLevel },
+      props: { primaryCurrency, ethExchange, ethSentPastWeek, sendERC20, sendEth, navigation } } = this
 
     if (!token)
       return
@@ -85,23 +110,25 @@ class TransferERC20 extends Component<Props, State> {
       this.setState({ formInputError: accountManagement.sendERC20.error.amount })
       return
     }
+    if (token && token.tokenName === 'ETH' && exceedsTransferLimit(Number(amount), transferLimitLevel, ethExchange(primaryCurrency), ethSentPastWeek)) {
+      this.setState({ formInputError: accountManagement.sendEth.error.limitExceeded(primaryCurrency, transferLimitLevel) })
+      return
+    }
 
     const trimmedAddress = destinationAddress.toLowerCase().startsWith('0x') ? destinationAddress.substring(2) : destinationAddress
     const success = await loadingContext.wrap(
-      this.props.sendERC20(
-        token,
-        trimmedAddress as string,
-        amount as string
-      )
+      token && token.tokenName === 'ETH' ?
+      sendEth(trimmedAddress as string, amount as string) :
+      sendERC20(token, trimmedAddress as string, amount as string)
     )
 
     this.clear()
 
     if (success && typeof success !== 'string' && success.type === '@@TOAST/DISPLAY_ERROR') {
-      this.props.navigation.goBack()
+      navigation.goBack()
     } else {
       const resetAction = getResetAction({ routeName:'Confirmation', params: { type: 'erc20Sent', txHash: success, amount: amount, token: token } })
-      this.props.navigation.dispatch(resetAction)
+      navigation.dispatch(resetAction)
     }
   }
 
@@ -115,11 +142,19 @@ class TransferERC20 extends Component<Props, State> {
   }
 
   setAmount(amount) {
-    return `${cryptoAmount(amount)}`
+    this.setState({ amount: `${cryptoAmount(amount)}` })
   }
 
   setDestinationAddress(destinationAddress) {
-    return destinationAddress
+    this.setState({ destinationAddress })
+  }
+
+  setFriend(friend: Friend) {
+    this.setState({ shouldSelectFriend: false, friend, nonFriend: undefined, destinationAddress: friend.address })
+  }
+
+  selectFriend() {
+    this.setState({ shouldSelectFriend: true })
   }
 
   validDestinationAddress() {
@@ -127,11 +162,34 @@ class TransferERC20 extends Component<Props, State> {
     return `${isEthAddress(destinationAddress)}`
   }
 
+  getLimit() {
+    const { ethExchange, ethSentPastWeek, primaryCurrency } = this.props
+    return formatEthRemaining(ethExchange, ethSentPastWeek, primaryCurrency, this.state.transferLimitLevel)
+  }
+
+  blurAmountFormat() {
+    let { amount } = this.state
+    if(amount && (amount.slice(-1) === '.' || amount.slice(-1) === ',')) {
+      amount = amount.slice(0, -1)
+      this.setState({ amount })
+    }
+  }
+
   render() {
-    const { state: { amount, destinationAddress, formInputError, token, tokenBalance, transactionCosts: { currencyCostFormatted, ethCostFormatted } } } = this
+    const { state: { nonFriend, friend, shouldSelectFriend, amount, destinationAddress, formInputError, token, tokenBalance, transferLimitLevel, transactionCosts: { currencyCostFormatted, ethCostFormatted } },
+      props: { primaryCurrency, navigation, user } } = this
 
     const tokenName = (token) ? token.tokenName : ''
     const vertOffset = (Platform.OS === 'android') ? -300 : 0;
+
+    if (shouldSelectFriend) {
+      return <SelectFriend
+        button={<Button round onPress={() => this.setState({ nonFriend: sendToAddress, shouldSelectFriend: false, friend: undefined, destinationAddress: undefined })} text={sendToAddress}/>}
+        navigation={navigation}
+        onBack={() => this.setState({ shouldSelectFriend: false })}
+        onSelect={(friend) => this.setFriend(friend)}
+      />
+    }
 
     return <View style={general.whiteFlex}>
       <View style={general.view}>
@@ -144,36 +202,30 @@ class TransferERC20 extends Component<Props, State> {
           <View style={general.largeHMargin} >
             <View style={[general.centeredColumn, {marginBottom: 20}]}>
               <View style={general.centeredColumn} >
-                <Text style={[formStyle.header, {textAlign: 'center'}]}>{accountManagement.sendERC20.balance(tokenName, tokenBalance)}</Text>
-                <View style={formStyle.textInputContainer}>
-                  <TextInput
-                    style={[formStyle.textInput,  {paddingVertical: 3}]}
-                    placeholder={accountManagement.sendERC20.address}
-                    placeholderTextColor='black'
-                    value={destinationAddress}
-                    maxLength={42}
-                    underlineColorAndroid='transparent'
-                    onChangeText={destinationAddress => this.setState({ destinationAddress: this.setDestinationAddress(destinationAddress) })}
-                  />
-                </View>
+
+                <Text style={formStyle.erc20Balance}>{`${currentBalance(tokenName)}:
+${tokenBalance}`}</Text>
+
+                <TransactionDisplay selectFriend={this.selectFriend} user={user} direction={'borrow'} changeDirection={() => null} friend={friend} nonFriend={nonFriend} />
+
+                {nonFriend ? <View style={formStyle.textInputContainer}>
+                  <TextInput style={[formStyle.textInput,  {paddingVertical: 3}]} placeholder={accountManagement.sendERC20.address} placeholderTextColor='black' 
+                  value={destinationAddress} maxLength={42} underlineColorAndroid='transparent' onChangeText={this.setDestinationAddress} />
+                </View> : null}
+
+                {token && token.tokenName === 'ETH' ? <Text style={[formStyle.smallText, formStyle.spaceTop, formStyle.center]}>{accountManagement.sendEth.warning(this.getLimit(), primaryCurrency, transferLimitLevel)}</Text> : null}
                 <Text style={formStyle.title}>{accountManagement.sendEth.amount}</Text>
+
                 <View style={formStyle.textInputContainer}>
-                  <TextInput
-                    style={[{flex: 1}, formStyle.jumboInput, {paddingVertical: 4}]}
-                    placeholder={'0'}
-                    placeholderTextColor='black'
-                    value={amount}
-                    maxLength={14}
-                    underlineColorAndroid='transparent'
-                    keyboardType='numeric'
-                    onChangeText={amount => this.setState({ amount: this.setAmount(amount) })}
-                  />
+                  <TextInput style={[{flex: 1}, formStyle.jumboInput, {paddingVertical: 4}]} placeholder={'0'} placeholderTextColor='black' value={amount} maxLength={14} 
+                  underlineColorAndroid='transparent' keyboardType='numeric' onChangeText={this.setAmount} onBlur={this.blurAmountFormat}/>
                 </View>
+
                 <Text style={[accountStyle.txCost, formStyle.spaceTop]}>{accountManagement.sendERC20.txCost(ethCostFormatted, currencyCostFormatted)}</Text>
               </View>
             </View>
             { !!formInputError && <Text style={formStyle.warningText}>{formInputError}</Text>}
-            <Button large round wide onPress={() => this.submit()} text={accountManagement.sendERC20.transfer(tokenName)} />
+            <Button large round onPress={this.submit} text={accountManagement.sendERC20.transfer(tokenName)} />
           </View>
         </ScrollView>
       </KeyboardAvoidingView>
@@ -181,5 +233,5 @@ class TransferERC20 extends Component<Props, State> {
   }
 }
 
-export default connect((state) => ({ user: getUser(state)(), primaryCurrency: getPrimaryCurrency(state) }),
-{ sendERC20 })(TransferERC20)
+export default connect((state) => ({ user: getUser(state)(), primaryCurrency: getPrimaryCurrency(state), ethBalance: getEthBalance(state),
+  ethExchange: getEthExchange(state), ethSentPastWeek: getWeeklyEthTotal(state),  getStore: getStore(state) }), { sendERC20, sendEth })(TransferERC20)

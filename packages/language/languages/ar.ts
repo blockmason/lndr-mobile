@@ -76,6 +76,7 @@ export default {
   nickname: `الاسم المستعار (أحرف صغيرة & أرقام)`,
   email: `البريد الإلكتروني`,
   inviteLink: `دعوة لينك`,
+  sendToAddress: `Send to address`,
   splitExpense: `انقسام حساب معي على التطبيق LNDR`,
   sendInvite: `إرسال عبر البريد الإلكتروني أو النص`,
   unknownTransaction: `عملية غير معروفة`,
@@ -221,7 +222,6 @@ export default {
     },
     panelHeaders: [
       `محفظة عنوان`,
-      `أرصدة التشفير`,
       `إزالة الحساب`,
       `سجل معاملات إثيريوم`,
       `تمكين باي بال`,
@@ -339,6 +339,7 @@ export default {
       initiatedBorrow: X => `${X} يقول أنك مدين`,
       pendingLend: X => `@${X} مدين لك`,
       pendingBorrow: X => `أنت مدين لـ @${X}`,
+      settlement: settlement => `${settlement.settlementCurrency} Settlement`,
       pendingLendSettlement: S => `@${S.debtorNickname} طلب سداد مبلغ بـ ${S.settlementCurrency}`,
       pendingBorrowSettlement: S => `@${S.creditorNickname} يريد السداد معك بـ ${S.settlementCurrency}`,
       pendingLendSettlementMe: S => `أنت طلبت السداد مع @${S.debtorNickname} بـ ${S.settlementCurrency}`,

@@ -2,18 +2,26 @@ import { StyleSheet, Dimensions } from 'react-native'
 
 import { l, m, s, xs, largePad, smallPad, mediumPad, verticalMargin, verticalMarginXS, verticalMarginXXS } from 'theme/include/spacing'
 import { xlarge, large, medium, small, xsmall, bold } from 'theme/include/fonts'
-import { gray, softGray, warning, warningDark, black, white, aqua, moneyGreen, moneyRed } from 'theme/include/colors'
-import { attention, radius, thinSoftBorder } from 'theme/include/borders'
-import { center } from 'theme/include/align'
+import { paleGray, softGray, warning, warningDark, black, white, aqua, moneyGreen, moneyRed } from 'theme/include/colors'
 
 const { height, width } = Dimensions.get('window')
 
 export default StyleSheet.create({
-  rowPadding: {
-    paddingLeft: m,
-    paddingRight: m,
-    paddingTop: s,
-    paddingBottom: m - xs
+  rowCard: {
+    marginHorizontal: 16,
+    marginVertical: 8,
+    width: width - 32
+  },
+  row: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    width: width - (32 + m * 2),
+    height: 80
+  },
+  rowLeftText: {
+    flexDirection: 'column',
+    justifyContent: 'center'
   },
   friendRequest: {
     color: aqua,
@@ -120,8 +128,4 @@ export default StyleSheet.create({
     justifyContent: 'space-between',
     flex: 1
   },
-  recentText: {
-    color: aqua,
-    ...medium
-  }
 })

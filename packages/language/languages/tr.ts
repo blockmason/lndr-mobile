@@ -76,6 +76,7 @@ export default {
   nickname: `Kullanıcı adı (sadece küçük harfler ve sayılar)`,
   email: `E-posta Adresi`,
   inviteLink: `Linki Davet`,
+  sendToAddress: `Send to address`,
   splitExpense: `LNDR uygulamasında benimle bir masraf böl`,
   sendInvite: `e-posta veya metin aracılığıyla gönder`,
   unknownTransaction: `Bilinmeyen İşlem`,
@@ -221,7 +222,6 @@ export default {
     },
     panelHeaders: [
       `Cüzdan Adresi`,
-      `Kripto Hesap Bakiyesi`,
       `Hesabı Kaldır`,
       `ETH İşlem Geçmişi`,
       `Paypal etkinleştirme`,
@@ -339,6 +339,7 @@ export default {
       initiatedBorrow: X => `${X} sizin borçlu olduğunuzu söylüyor`,
       pendingLend: X => `@${X} size borçlu`,
       pendingBorrow: X => `@${X}’a borçlusunuz`,
+      settlement: settlement => `${settlement.settlementCurrency} Settlement`,
       pendingLendSettlement: S => `@${S.debtorNickname} ${S.settlementCurrency} üzerinden ödeşmeyi talep ediyor`,
       pendingBorrowSettlement: S => `@${S.debtorNickname} ${S.settlementCurrency} üzerinden ödeşmek istiyor`,
       pendingLendSettlementMe: S => `@${S.debtorNickname} ile ${S.settlementCurrency} üzerinden ödeşmeyi talep ettiniz`,

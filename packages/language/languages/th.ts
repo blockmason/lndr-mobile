@@ -76,6 +76,7 @@ export default {
   nickname: `ชื่อเล่น (ตัวพิมพ์เล็กและตัวเลข)`,
   email: `อีเมลแอดเดรส`,
   inviteLink: `เชิญลิงค์`,
+  sendToAddress: `Send to address`,
   splitExpense: `แยกค่าใช้จ่ายกับฉันในแอปพลิเค LNDR`,
   sendInvite: `ส่งผ่านทางอีเมลหรือข้อความ`,
   unknownTransaction: `ไม่รู้จักการทำธุรกรรม`,
@@ -221,7 +222,6 @@ export default {
     },
     panelHeaders: [
       `ที่อยู่ Wallet`,
-      `ยอดคงเหลือบัญชีลับ`,
       `ปิดบัญชี`,
       `ประวัติการทำธุรกรรม ETH`,
       `เปิดใช้งาน PayPal`,
@@ -339,6 +339,7 @@ export default {
       initiatedBorrow: X => `${X} บอกว่าคุณติดหนี้`,
       pendingLend: X => `@${X} ติดหนี้คุณ`,
       pendingBorrow: X => `คุณติดหนี้ @${X}`,
+      settlement: settlement => `${settlement.settlementCurrency} Settlement`,
       pendingLendSettlement: S => `@${S.debtorNickname} ขอชำระหนี้ในสกุลเงิน ${S.settlementCurrency}`,
       pendingBorrowSettlement: S => `@${S.creditorNickname} ต้องการรับชำระหนี้จากคุณในสกุลเงิน ${S.settlementCurrency}`,
       pendingLendSettlementMe: S => `คุณขอรับชำระหนี้จาก @${S.debtorNickname} ในสกุลเงิน ${S.settlementCurrency}`,

@@ -76,6 +76,7 @@ export default {
   nickname: `Soprannome (lettere minuscole e cifre)`,
   email: `Indirizzo email`,
   inviteLink: `Invita link`,
+  sendToAddress: `Send to address`,
   splitExpense: `Split una spesa con me sul app LNDR`,
   sendInvite: `Invia via e-mail o il testo`,
   unknownTransaction: `Operazione sconosciuta`,
@@ -221,7 +222,6 @@ export default {
     },
     panelHeaders: [
       `Portafoglio Indirizzo`,
-      `Bilance crypto`,
       `Rimuovi l'account`,
       `Cronologia delle Transazioni ETH`,
       `Abilita PayPal`,
@@ -339,6 +339,7 @@ export default {
       initiatedBorrow: X => `${X} dice che gli devi`,
       pendingLend: X => `@${X} ti deve`,
       pendingBorrow: X => `Devi@${X}`,
+      settlement: settlement => `${settlement.settlementCurrency} Settlement`,
       pendingLendSettlement: S => `@${S.debtorNickname} vuole un pagamento in ${S.settlementCurrency}`,
       pendingBorrowSettlement: S => `@${S.creditorNickname} vuole saldare un debito con te in ${S.settlementCurrency}`,
       pendingLendSettlementMe: S => `Hai richiesto di saldare un debito con @${S.debtorNickname} in ${S.settlementCurrency}`,

@@ -76,6 +76,7 @@ export default {
   nickname: `Brukernavn (små bokstaver og tall)`,
   email: `E-postadresse`,
   inviteLink: `Inviter Link`,
+  sendToAddress: `Send to address`,
   splitExpense: `Dele en regning med meg på LNDR app`,
   sendInvite: `Send via e-post eller tekst`,
   unknownTransaction: `ukjent Transaksjons`,
@@ -221,7 +222,6 @@ export default {
     },
     panelHeaders: [
       `Lommebok Adresse`,
-      `Crypto kontosaldoer`,
       `Fjern konto`,
       `ETH Transaksjonshistorikk`,
       `Aktiver PayPal`,
@@ -339,6 +339,7 @@ export default {
       initiatedBorrow: X => `${X} sier du skylder`,
       pendingLend: X => `@${X} skylder deg`,
       pendingBorrow: X => `Du skylder @${X}`,
+      settlement: settlement => `${settlement.settlementCurrency} Settlement`,
       pendingLendSettlement: S => `@${S.debtorNickname} ber om et oppgjør i ${S.settlementCurrency}`,
       pendingBorrowSettlement: S => `@${S.creditorNickname} ønsker å gjøre opp med deg i ${S.settlementCurrency}`,
       pendingLendSettlementMe: S => `Du har bedt om å gjøre opp for deg med @${S.debtorNickname} i ${S.settlementCurrency}`,

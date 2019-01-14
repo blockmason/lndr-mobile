@@ -1,6 +1,5 @@
 import React, { Component } from 'react'
-
-import { Text, View, ScrollView, RefreshControl, Dimensions, Platform, Share } from 'react-native'
+import { Text, View, ScrollView, RefreshControl, Platform, Share } from 'react-native'
 import firebase from 'react-native-firebase'
 
 import Friend from 'lndr/friend'
@@ -9,7 +8,6 @@ import Button from 'ui/components/button'
 import Section from 'ui/components/section'
 import Loading, { LoadingContext } from 'ui/components/loading'
 import FriendRow from 'ui/components/friend-row'
-
 import SearchFriend from 'ui/views/account/friends/search-friend'
 import PendingView from 'ui/views/account/activity/pending'
 
@@ -20,7 +18,7 @@ import language from 'language'
 const { noFriends, currentFriends, inviteFriends, tryLndr } = language
 
 import { isFocusingOn } from 'reducers/nav'
-import { getStore, pendingTransactions, recentTransactions, getPrimaryCurrency } from 'reducers/app'
+import { getStore, pendingTransactions, recentTransactions, getPrimaryCurrency, calculateBalance, calculateTransactionNumber } from 'reducers/app'
 import { getFriends, getRecentTransactions, addFriend, getFriendRequests } from 'actions'
 import { connect } from 'react-redux'
 
@@ -28,8 +26,6 @@ const loadingFriends = new LoadingContext()
 const loadingAddFriend = new LoadingContext()
 const loadingRecentTransactions = new LoadingContext()
 const loadingFriendRequests = new LoadingContext()
-
-const { width } = Dimensions.get('window')
 
 interface Props {
   isFocused: boolean
@@ -42,6 +38,8 @@ interface Props {
   navigation: any
   primaryCurrency: string
   getFriendRequests: () => void
+  calculateBalance: (friend: Friend) => number
+  calculateTransactionNumber: (friend: Friend) => number
 }
 
 interface State {
@@ -57,6 +55,8 @@ class FriendsView extends Component<Props, State> {
     this.state = {
       refreshing: false
     }
+
+    this.sortFriendsByBalance = this.sortFriendsByBalance.bind(this)
   }
 
   async componentDidMount() {
@@ -110,6 +110,15 @@ class FriendsView extends Component<Props, State> {
     }
   }
 
+  sortFriendsByBalance(friend1: Friend, friend2: Friend) {
+    const getAbsoluteBalance = (friend: Friend) => Math.abs(this.props.calculateBalance(friend))
+
+    if (getAbsoluteBalance(friend2) === getAbsoluteBalance(friend1)) {
+      return this.props.calculateTransactionNumber(friend2) - this.props.calculateTransactionNumber(friend1)
+    }
+    return getAbsoluteBalance(friend2) - getAbsoluteBalance(friend1)
+  }
+
   renderFriendRequests() {
     return (<View>
         <Loading context={loadingFriendRequests} />
@@ -129,15 +138,10 @@ class FriendsView extends Component<Props, State> {
       friendListTitle.push(<Text key='noFriendsTitle' style={style.emptyState}>{noFriends}</Text>)
 
     return <ScrollView style={general.view} keyboardShouldPersistTaps='handled' ref='_friendScrollView'
-      refreshControl={
-        <RefreshControl
-          refreshing={this.state.refreshing}
-          onRefresh={() => this.refresh()}
-        />
-      }
+      refreshControl={<RefreshControl refreshing={this.state.refreshing} onRefresh={() => this.refresh()}/>}
     >
       <View style={general.centeredColumn}>
-        <Button round onPress={() => this.shareLndr()} text={inviteFriends} style={{width: width / 4 * 3}} />
+        <Button round onPress={() => this.shareLndr()} text={inviteFriends} style={{width: 260}} />
       </View>
       <Section>
         <SearchFriend
@@ -153,7 +157,7 @@ class FriendsView extends Component<Props, State> {
       <Section contentContainerStyle={[style.list, style.friendList]}>
         <Loading context={loadingFriends} />
         {friendListTitle}
-        {friends.map(
+        {friends.sort(this.sortFriendsByBalance).map(
           friend => (
             <FriendRow
               key={friend.address}
@@ -171,6 +175,6 @@ class FriendsView extends Component<Props, State> {
   }
 }
 
-export default connect((state) => ({ state: getStore(state)(), isFocused: isFocusingOn(state)('Friends'),
-pendingTransactions: pendingTransactions(state), recentTransactions: recentTransactions(state),
+export default connect((state) => ({ state: getStore(state)(), isFocused: isFocusingOn(state)('Friends'), calculateTransactionNumber: calculateTransactionNumber(state),
+pendingTransactions: pendingTransactions(state), recentTransactions: recentTransactions(state), calculateBalance: calculateBalance(state),
 primaryCurrency: getPrimaryCurrency(state) }), { getFriends, getRecentTransactions, addFriend, getFriendRequests })(FriendsView)

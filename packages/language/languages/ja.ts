@@ -75,6 +75,7 @@ export default {
   nickname: `ニックネーム（小文字と数字）`,
   email: `メールアドレス`,
   inviteLink: `リンクを招待`,
+  sendToAddress: `Send to address`,
   splitExpense: `LNDRアプリ上で私と一緒に費用を分割`,
   sendInvite: `電子メールやテキストを経由して送信します`,
   unknownTransaction: `不明なトランザクション`,
@@ -220,7 +221,6 @@ export default {
     },
     panelHeaders: [
       `ウォレット住所`,
-      `暗号残高`,
       `アカウントを削除する`,
       `ETHの取引履歴`,
       `ペイパルを接続します`,
@@ -339,6 +339,7 @@ export default {
       initiatedBorrow: X => `${X}はあなたは貸しがあります`,
       pendingLend: X => `@${X} はあなたに借りがあります`,
       pendingBorrow: X => `あなたは @${X}に借りがあります`,
+      settlement: settlement => `${settlement.settlementCurrency} Settlement`,
       pendingLendSettlement: S => `@${S.debtorNickname} が ${S.settlementCurrency}で決済することを要請しています`,
       pendingBorrowSettlement: S => `@${S.creditorNickname} があなたと ${S.settlementCurrency}での決済を求めています`,
       pendingLendSettlementMe: S => ` @${S.debtorNickname}と  ${S.settlementCurrency}で決済することを要請しました`,

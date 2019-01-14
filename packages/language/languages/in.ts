@@ -76,6 +76,7 @@ export default {
   nickname: `Nama panggilan (huruf kecil & angka)`,
   email: `Alamat Email`,
   inviteLink: `Undang Tautan`,
+  sendToAddress: `Send to address`,
   splitExpense: `Membagi beban dengan saya di aplikasi LNDR`,
   sendInvite: `Kirim via email atau teks`,
   unknownTransaction: `Transaksi yang tidak diketahui`,
@@ -221,7 +222,6 @@ export default {
     },
     panelHeaders: [
       `Dompet Alamat`,
-      `Saldo kripto`,
       `Hapus Akun`,
       `Riwayat Transaksi ETH`,
       `Aktifkan PayPal`,
@@ -339,6 +339,7 @@ export default {
       initiatedBorrow: X => `${X} mengatakan Anda berutang.`,
       pendingLend: X => `@${X} berutang pada Anda.`,
       pendingBorrow: X => `Anda berutang pada @${X}.`,
+      settlement: settlement => `${settlement.settlementCurrency} Settlement`,
       pendingLendSettlement: S => `@${S.debtorNickname} meminta pelunasan dengan ${S.settlementCurrency}.`,
       pendingBorrowSettlement: S => `@${S.creditorNickname} ingin melunasi Anda dengan ${S.settlementCurrency}.`,
       pendingLendSettlementMe: S => `Anda diminta untuk melunasi @${S.debtorNickname} dengan ${S.settlementCurrency}.`,

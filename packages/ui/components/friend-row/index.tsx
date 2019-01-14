@@ -1,8 +1,9 @@
 import React, { Component } from 'react'
 
-import { Text, TouchableHighlight, View, Image } from 'react-native'
+import { Text, View } from 'react-native'
 import Button from 'ui/components/button'
 import ProfilePic from 'ui/components/images/profile-pic'
+import Card from 'ui/components/card'
 
 import Friend from 'lndr/friend'
 import { currencyFormats } from 'lndr/format'
@@ -10,7 +11,6 @@ import { currencySymbols } from 'lndr/currencies'
 import PendingTransaction from 'lndr/pending-transaction'
 import RecentTransaction from 'lndr/recent-transaction'
 
-import { white } from 'theme/include/colors'
 import style from 'theme/account'
 import general from 'theme/general'
 
@@ -114,8 +114,8 @@ class FriendRow extends Component<Props> {
     const { onPress, friend, hasPending } = this.props
 
     return (
-      <TouchableHighlight style={style.friendRow} onPress={onPress} underlayColor={white} activeOpacity={1}>
-        <View style={style.pendingTransactionRow}>
+      <Card style={style.friendRowCard} onPress={onPress}>
+        <View style={style.friendRowContent}>
           <View style={[general.flexRow, general.alignCenter]}>
             <ProfilePic address={friend.address} size={60} style={style.friendIcon}/>
             <View style={general.flexColumn}>
@@ -130,7 +130,7 @@ class FriendRow extends Component<Props> {
             </View>
           </View>
         </View>
-      </TouchableHighlight>
+      </Card>
     )
   }
 }

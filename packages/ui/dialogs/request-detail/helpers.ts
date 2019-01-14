@@ -5,35 +5,12 @@ import InviteTransaction from 'lndr/invite-transaction'
 import Friend from 'lndr/friend'
 
 import { formatSettlementCurrencyAmount, isEthSettlement } from 'lndr/format'
-import { WEI_PER_ETH, ERC20_Token, getERC20_token } from 'lndr/erc-20'
+import { WEI_PER_ETH } from 'lndr/erc-20'
 
 import language from 'language'
-const {
-  cancel, pendingSettlementsLanguage, debtManagement, accountManagement, pendingTransactionsLanguage,
-  back, contentsLanguage, payPalLanguage, inviteLink, unknownTransaction, yourFriend
-} = language
+const { debtManagement, yourFriend } = language
 
 import accountStyle from 'theme/account'
-
-export const getTitle = (content: PendingUnilateral, user: User, settlerIsMe: (settlement: PendingUnilateral) => boolean) : string => {
-  if(settlerIsMe(content)) {
-    if (user.address === content.creditorAddress) {
-      return debtManagement.direction.pendingLendSettlementMe(content)
-    } else if (user.address === content.debtorAddress) {
-      return debtManagement.direction.pendingBorrowSettlementMe(content)
-    } else {
-      return 'Unknown Settlement'
-    }
-  } else {
-    if (user.address === content.creditorAddress) {
-      return debtManagement.direction.pendingLendSettlement(content)
-    } else if (user.address === content.debtorAddress) {
-      return debtManagement.direction.pendingBorrowSettlement(content)
-    } else {
-      return 'Unknown Settlement'
-    }
-  }
-}
 
 export const getFriendNickname = (content: PendingTransaction | PendingUnilateral | Friend | InviteTransaction, user: User) => {
   if (content instanceof InviteTransaction) {
