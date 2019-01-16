@@ -76,7 +76,7 @@ export default {
   nickname: `Kullanıcı adı (sadece küçük harfler ve sayılar)`,
   email: `E-posta Adresi`,
   inviteLink: `Linki Davet`,
-  sendToAddress: `Send to address`,
+  sendToAddress: `Bir adrese gönder`,
   splitExpense: `LNDR uygulamasında benimle bir masraf böl`,
   sendInvite: `e-posta veya metin aracılığıyla gönder`,
   unknownTransaction: `Bilinmeyen İşlem`,
@@ -242,6 +242,7 @@ export default {
     },
     logoutSuccess: `Başarıyla çıkış yaptınız!`,
     logoutError: generalCommunicationError,
+    addressWarning: `Manuel olarak bir adres girerek kaçınılmalıdır. Kendi riski tamamen. Biz yanlış adrese veya kayıp transferler için sorumlu değildir.`,
   },
 
   currentBalance: name => `Geçerli ${name} bakiyeniz`,

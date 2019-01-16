@@ -11,8 +11,10 @@
     "test": "jest"
   },
   "dependencies": {
+    "@babel/core": "^7.2.2",
     "assert": "^1.4.1",
     "aws-sdk": "^2.188.0",
+    "babel-plugin-module-resolver": "^3.1.1",
     "babel-plugin-transform-remove-console": "^6.9.4",
     "bcryptjs": "^2.4.3",
     "bitcore-mnemonic": "^1.5.0",
@@ -55,7 +57,7 @@
     "redux-form": "^7.2.0",
     "redux-logger": "^3.0.6",
     "redux-thunk": "^2.2.0",
-    "rn-nodeify": "^8.2.0",
+    "rn-nodeify": "^10.0.1",
     "solidity-sha3": "^0.4.1",
     "stream": "^0.0.2",
     "stream-browserify": "^1.0.0",
@@ -72,7 +74,6 @@
     "@types/react-redux": "^5.0.12",
     "@types/react-test-renderer": "^16.0.0",
     "babel-jest": "^22.0.0",
-    "babel-plugin-module-alias": "^1.6.0",
     "babel-preset-expo": "^4.0.0",
     "babel-preset-react-native": "^4.0.0",
     "jest": "^22.0.0",

@@ -76,7 +76,7 @@ export default {
   nickname: `Gebruikersnaam (kleine letters en nummers)`,
   email: `E-mailadres`,
   inviteLink: `Nodig Link`,
-  sendToAddress: `Send to address`,
+  sendToAddress: `Stuur naar een adres`,
   splitExpense: `Split een last met mij op de LNDR app`,
   sendInvite: `Stuur via e-mail of tekst`,
   unknownTransaction: `onbekend Transactie`,
@@ -242,6 +242,7 @@ export default {
     },
     logoutSuccess: `U bent succesvol uitgelogd!`,
     logoutError: generalCommunicationError,
+    addressWarning: `Handmatig invoeren van een adres moet worden vermeden. Doe dit op eigen risico. Wij zijn niet verantwoordelijk voor verkeerd bezorgde of verloren transfers.`,
   },
 
   currentBalance: name => `Uw huidige ${name} saldo is`,

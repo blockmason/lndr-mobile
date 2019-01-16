@@ -1,18 +1,17 @@
 import React, { Component } from 'react'
-import { Text, TextInput, TouchableHighlight, View, ScrollView, KeyboardAvoidingView, Platform, Linking, Alert, Picker, ActionSheetIOS } from 'react-native'
+import { Text, TextInput, View, ScrollView, KeyboardAvoidingView, Platform, Linking, Alert } from 'react-native'
 import firebase from 'react-native-firebase'
-import FontAwesome from 'react-native-vector-icons/FontAwesome'
 
 import { getStore } from 'reducers/app'
 import { getResetAction } from 'reducers/nav'
 
 import { TransactionCosts, defaultTransactionCosts } from 'credit-protocol'
 import { UserData } from 'lndr/user'
-import { ERC20_Tokens, getERC20_token } from 'lndr/erc-20'
+import { getERC20_token, settlementChoices } from 'lndr/erc-20'
 import { currencyFormats, sanitizeAmount, formatSettlementAmount, formatExchangeCurrency, formatCommaDecimal, formatMemo,
   formatEthRemaining, amountFormat, cleanFiatAmount, isERC20Settlement, isEthSettlement, isPayPalSettlement, isSettlementFree } from 'lndr/format'
 import Friend from 'lndr/friend'
-import { currencySymbols, transferLimits, TRANSFER_LIMIT_STANDARD } from 'lndr/currencies'
+import { currencySymbols, TRANSFER_LIMIT_STANDARD } from 'lndr/currencies'
 
 import BackButton from 'ui/components/back-button'
 import Button from 'ui/components/button'
@@ -21,12 +20,12 @@ import DashboardShell from 'ui/components/dashboard-shell'
 import BalanceSection from 'ui/components/balance-section'
 import PayPalSettlementButton from 'ui/components/paypal-settle-button'
 import ProfilePic from 'ui/components/images/profile-pic'
+import DropdownPicker from 'ui/components/dropdown-picker'
 
 import style from 'theme/friend'
 import formStyle from 'theme/form'
 import general from 'theme/general'
 import accountStyle from 'theme/account'
-import { white } from 'theme/include/colors'
 
 import language from 'language'
 const { back, debtManagement, accountManagement, payPalLanguage, pendingTransactionsLanguage, settlementManagement } = language
@@ -118,7 +117,6 @@ class Settlement extends Component<Props, State> {
     this.rejectPayPalRequest = this.rejectPayPalRequest.bind(this)
     this.changeSettlementType = this.changeSettlementType.bind(this)
     this.updateAmount = this.updateAmount.bind(this)
-    this.showActionSheet = this.showActionSheet.bind(this)
     this.submit = this.submit.bind(this)
   }
 
@@ -133,7 +131,7 @@ class Settlement extends Component<Props, State> {
 
     const transferLimitLevel = await getTransferLimitLevel(user.address, this.props.getStore())
 
-    const pickerSelection = this.settlementChoices().find(choice => choice.settlementType === settlementType)
+    const pickerSelection = settlementChoices().find(choice => choice.settlementType === settlementType)
     this.setState({settlementType, friend, amount, fromPayPalRequest, transferLimitLevel, pickerSelection})
   }
 
@@ -141,27 +139,9 @@ class Settlement extends Component<Props, State> {
     firebase.analytics().setCurrentScreen('settlement', 'Settlement');
   }
 
-  settlementChoices() {
-    const transferableTokens = ERC20_Tokens.filter( (token) => token.canTransfer )
-    const cryptoSettlementChoices = transferableTokens.map( (token) => {
-      return {
-        settlementType: token.tokenName,
-        name: settlementManagement.erc20(token.tokenName)
-      }
-    })
-
-    return [
-      { settlementType: undefined, name: settlementManagement.select },
-      { settlementType: 'settlement', name: settlementManagement.nonPayment },
-      { settlementType: 'eth', name: settlementManagement.eth },
-      ...cryptoSettlementChoices,
-      { settlementType: 'paypal', name: settlementManagement.paypal }
-    ]
-  }
-
   async updateTransactionCosts(pickerSelection: any, amount: any) {
     if (!pickerSelection || pickerSelection.settlementType === undefined)
-      pickerSelection = this.settlementChoices()[0]
+      pickerSelection = settlementChoices()[0]
     const { settlementType } = pickerSelection
 
     if (isSettlementFree(settlementType)) {
@@ -281,7 +261,7 @@ class Settlement extends Component<Props, State> {
   }
 
   calculateExchangeRate(settlementType: string | undefined) : number {
-    const { erc20EthPrice, ethExchange, convertCurrency, primaryCurrency } = this.props
+    const { erc20EthPrice, ethExchange, primaryCurrency } = this.props
 
     let exchangeRate = 1.0
 
@@ -341,6 +321,8 @@ class Settlement extends Component<Props, State> {
     if (!formInputError && !this.isPayee() && exceedsTransferLimit(Number(cleanAmount), this.state.transferLimitLevel, ethExchange(primaryCurrency), ethSentPastWeek))
       formInputError = accountManagement.sendEth.error.limitExceeded(primaryCurrency, this.state.transferLimitLevel)
 
+    console.log(settlementBalance, String(exchangeRate), primaryCurrency, formatExchangeCurrency(settlementBalance, String(exchangeRate), primaryCurrency))
+
     return { formInputError,
       settlementBalance,
       settlementBalancePrimary: formatExchangeCurrency(settlementBalance, String(exchangeRate), primaryCurrency),
@@ -392,19 +374,11 @@ class Settlement extends Component<Props, State> {
   }
 
   changeSettlementType(pickerSelectionName: string) {
-    const pickerSelection = this.settlementChoices().find(choice => choice.name === pickerSelectionName)
+    if (Platform.OS === 'android') {
+      this.setState({pickerSelection: settlementChoices().find(choice => choice.name === pickerSelectionName)})
+    }
+    const pickerSelection = settlementChoices().find(choice => choice.name === pickerSelectionName)
     this.updateTransactionCosts(pickerSelection, this.state.amount)
-  }
-
-  showActionSheet() {
-    const settlementChoices = this.settlementChoices()
-    ActionSheetIOS.showActionSheetWithOptions({
-      options: settlementChoices.slice(1).map(choice => choice.name),
-      title: settlementManagement.select
-    },
-    (index) => {
-      this.changeSettlementType(settlementChoices.slice(1)[index].name)
-    })
   }
 
   renderPaymentButton() {
@@ -437,36 +411,6 @@ class Settlement extends Component<Props, State> {
     )
   }
 
-  renderPicker(pickerSelection: any) {
-    const text = this.state.pickerSelection ? this.state.pickerSelection.name : settlementManagement.select
-    if (this.state.fromPayPalRequest) {
-      return <View style={formStyle.settlementPickerBackground}>
-        <Text style={[formStyle.settlementPicker, {paddingTop: 12}]}>{text}</Text>
-        <FontAwesome style={formStyle.whiteCaretDown} name={'caret-down'} />
-      </View>
-    } else if(Platform.OS === 'android') {
-      return <View style={formStyle.settlementPickerBackground}>
-        <Picker
-          selectedValue={pickerSelection.name} style={formStyle.settlementPicker}
-          onValueChange={(newVal) => {
-            this.setState({pickerSelection: this.settlementChoices().find(choice => choice.name === newVal)})
-            this.changeSettlementType(newVal)
-          } }>
-          {this.settlementChoices().map((value, key) =>
-            <Picker.Item label={value.name} key={key} value={value.name}>{pickerSelection.name}</Picker.Item>)}
-        </Picker>
-        <FontAwesome style={formStyle.whiteCaretDown} name={'caret-down'} />
-      </View>
-    } else {
-      return <TouchableHighlight onPress={this.showActionSheet} underlayColor={white}>
-        <View style={formStyle.settlementPickerBackground}>
-          <Text style={[formStyle.settlementPicker, {paddingTop: 12}]}>{text}</Text>
-          <FontAwesome style={formStyle.whiteCaretDown} name={'caret-down'} />
-        </View>
-      </TouchableHighlight>
-    }
-  }
-
   render() {
     const { state: { amount, balance, friend, fromPayPalRequest, pickerSelection, settlementType, 
       settlementInfo: { formInputError, settlementBalance, settlementBalancePrimary, settlementCostFormatted },
@@ -478,6 +422,8 @@ class Settlement extends Component<Props, State> {
     const isERC20 = isEthSettlement(settlementType) || isERC20Settlement(settlementType)
 
     const settlementText = (settlementType && isERC20 && settlementCostFormatted !== '') ? `${settlementCostFormatted} ${settlementType.toUpperCase()}` : amount
+
+    console.log('CHOICES', settlementChoices())
 
     return <View style={general.whiteFlex}>
       <View style={general.view}>
@@ -497,13 +443,13 @@ class Settlement extends Component<Props, State> {
               </View>
 
               <View style={general.centeredColumn}>
-                {this.renderPicker(pickerSelection)}
+                <DropdownPicker selectText={Platform.OS === 'ios'} targetKey="name" options={settlementChoices()} selection={pickerSelection} onSelect={this.changeSettlementType} />
               </View>
 
               <View style={general.centeredColumn}>
                 { (settlementType && isERC20) ? <View style={[accountStyle.balanceRow, {marginTop: 20}]}>
                   <Text style={[accountStyle.balance, {marginLeft: '2%'}]}>{accountManagement.cryptoBalance.display(settlementType.toUpperCase(), formatCommaDecimal(String(settlementBalance)))}</Text>
-                  <Button alternate blackText narrow arrow small onPress={() => {this.props.navigation.navigate('MyAccount')}}
+                  <Button alternate blackText narrow arrow small onPress={() => {this.props.navigation.navigate('Wallet')}}
                     text={settlementBalancePrimary}
                     containerStyle={{marginTop: -6}}
                   />

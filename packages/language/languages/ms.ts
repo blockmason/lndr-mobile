@@ -75,8 +75,8 @@ export default {
   setEmail: `Tetapkan e-mel untuk menerima maklumat mengenai kemas kini Lndr`,
   nickname: `Nama samaran (huruf kecil dan nombor)`,
   email: `Alamat e-mel`,
-  inviteLink: `menjemput Link`,
-  sendToAddress: `Send to address`,
+  inviteLink: `Menjemput Link`,
+  sendToAddress: `Hantar ke alamat`,
   splitExpense: `Split perbelanjaan dengan saya pada aplikasi LNDR yang`,
   sendInvite: `Hantar melalui e-mel atau teks`,
   unknownTransaction: `tidak diketahui Transaksi`,
@@ -242,6 +242,7 @@ export default {
     },
     logoutSuccess: `Anda telah berjaya log keluar!`,
     logoutError: generalCommunicationError,
+    addressWarning: `Secara manual memasukkan alamat yang harus dielakkan. Berbuat demikian atas risiko anda sendiri. Kami tidak bertanggungjawab untuk pemindahan misaddressed atau hilang.`,
   },
 
   currentBalance: name => `Baki semasa ${name} anda ialah`,

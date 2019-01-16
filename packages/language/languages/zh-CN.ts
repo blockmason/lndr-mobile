@@ -76,7 +76,7 @@ export default {
   nickname: `昵称（小写＆数字）`,
   email: `电子邮件地址`,
   inviteLink: `邀请链接`,
-  sendToAddress: `Send to address`,
+  sendToAddress: `发送到地址`,
   splitExpense: `与我一同在LNDR应用拆分费用`,
   sendInvite: `通过电子邮件或短信发送`,
   unknownTransaction: `未知的事务`,
@@ -242,6 +242,7 @@ export default {
     },
     logoutSuccess: `您已成功登出！`,
     logoutError: generalCommunicationError,
+    addressWarning: `手动输入地址应该避免。这样做自担风险。我们不负责寄错或丢失传输。`,
   },
 
   currentBalance: name => `当前的${name}余额为`,

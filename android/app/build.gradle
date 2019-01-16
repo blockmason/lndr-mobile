@@ -101,8 +101,8 @@ android {
         applicationId "com.lndr"
         minSdkVersion 16
         targetSdkVersion 27
-        versionCode 38
-        versionName "1.6.0"
+        versionCode 39
+        versionName "2.0.0"
         ndk {
             abiFilters "armeabi-v7a", "x86"
         }

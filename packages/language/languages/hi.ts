@@ -76,7 +76,7 @@ export default {
   nickname: `छोटा नाम (लोअरकेस और संख्याएँ)`,
   email: `ईमेल पता`,
   inviteLink: `लिंक को आमंत्रित करें`,
-  sendToAddress: `Send to address`,
+  sendToAddress: `एक पते पर भेजें`,
   splitExpense: `LNDR एप्लिकेशन पर मेरे साथ एक व्यय विभाजित`,
   sendInvite: `ईमेल या पाठ के माध्यम से भेजें`,
   unknownTransaction: `अज्ञात लेन-देन`,
@@ -242,6 +242,7 @@ export default {
     },
     logoutSuccess: `आप लॉग-आउट हो गए हैं!`,
     logoutError: generalCommunicationError,
+    addressWarning: `मैन्युअल रूप से एक पता दर्ज बचा जाना चाहिए। ऐसा अपने जोख़िम पर करें। हम misaddressed या खो हस्तांतरण के लिए जिम्मेदार नहीं हैं।`,
   },
 
   currentBalance: name => `आपका वर्तमान ${name} बैलेन्स`,

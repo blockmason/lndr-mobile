@@ -76,7 +76,7 @@ export default {
   nickname: `Nama panggilan (huruf kecil & angka)`,
   email: `Alamat Email`,
   inviteLink: `Undang Tautan`,
-  sendToAddress: `Send to address`,
+  sendToAddress: `Kirim ke alamat`,
   splitExpense: `Membagi beban dengan saya di aplikasi LNDR`,
   sendInvite: `Kirim via email atau teks`,
   unknownTransaction: `Transaksi yang tidak diketahui`,
@@ -242,6 +242,7 @@ export default {
     },
     logoutSuccess: `Anda berhasil keluar!`,
     logoutError: generalCommunicationError,
+    addressWarning: `Manual memasukkan alamat harus dihindari. Melakukannya dengan resiko Anda sendiri. Kami tidak bertanggung jawab untuk transfer misaddressed atau hilang.`,
   },
 
   currentBalance: name => `Saldo ${name} Anda saat ini adalah`,

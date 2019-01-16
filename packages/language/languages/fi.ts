@@ -76,7 +76,7 @@ export default {
   nickname: `Käyttäjänimi (pieniä kirjaimia ja numeroita)`,
   email: `Sähköpostiosoite`,
   inviteLink: `Kutsulinkki`,
-  sendToAddress: `Send to address`,
+  sendToAddress: `Lähetä osoitteeseen`,
   splitExpense: `Split kustannuksella kanssani LNDR sovellus`,
   sendInvite: `Lähetä sähköpostitse tai tekstiä`,
   unknownTransaction: `tuntematon Transaction`,
@@ -242,6 +242,7 @@ export default {
     },
     logoutSuccess: `Olet onnistuneesti kirjautunut ulos!`,
     logoutError: generalCommunicationError,
+    addressWarning: `Manuaalisesti syöttämällä osoite tulee välttää. Niin omalla vastuullasi. Emme ole vastuussa misaddressed tai kadonnut siirtoja.`,
   },
 
   currentBalance: name => `Nykyinen ${name}-saldosi on`,

@@ -238,32 +238,28 @@ class HomeView extends Component<Props, State> {
         refreshControl={<RefreshControl refreshing={this.state.refreshing} onRefresh={() => this.refresh()} />}
       >
       <Section>
-        <Section>
-          { this.renderBalanceInformation() }
-        </Section>
-        <Section>
-          <View style={general.betweenRow}>
-            <Card style={style.grayCard} onPress={() => this.props.navigation.navigate('Wallet')}>
-              <Icon name="ios-wallet" style={style.walletIcon} />
-              <Text style={style.tileText}>{myWallet}</Text>
-            </Card>
-            <Card style={style.grayCard} onPress={() => this.addDebt('lend')}>
-              <Icon name="md-add-circle" style={style.newTransactionIcon} />
-              <Text style={style.tileText}>{newTransaction}</Text>
-            </Card>
-          </View>
-        </Section>
+        { this.renderBalanceInformation() }
+      </Section>
+      <Section>
+        <View style={general.betweenRow}>
+          <Card style={style.grayCard} onPress={() => this.props.navigation.navigate('Wallet')}>
+            <Icon name="ios-wallet" style={style.walletIcon} />
+            <Text style={style.tileText}>{myWallet}</Text>
+          </Card>
+          <Card style={style.grayCard} onPress={() => this.addDebt('lend')}>
+            <Icon name="md-add-circle" style={style.newTransactionIcon} />
+            <Text style={style.tileText}>{newTransaction}</Text>
+          </Card>
+        </View>
       </Section>
       {this.renderNeedsReview()}
       <Section>
-        <Section>
-          <Card style={style.seeActivityCard} onPress={() => this.props.navigation.navigate('Activity')}>
-            <View style={[general.betweenRow, style.seeAllButton]}>
-              <Text style={style.seeAllActivity}>{seeAllActivity}</Text>
-              <Icon name="ios-arrow-forward" style={style.seeAllActivityArrow} />
-            </View>
-          </Card>
-        </Section>
+        <Card style={style.seeActivityCard} onPress={() => this.props.navigation.navigate('Activity')}>
+          <View style={[general.betweenRow, style.seeAllButton]}>
+            <Text style={style.seeAllActivity}>{seeAllActivity}</Text>
+            <Icon name="ios-arrow-forward" style={style.seeAllActivityArrow} />
+          </View>
+        </Card>
       </Section>
     </ScrollView>
   }

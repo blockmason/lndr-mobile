@@ -76,7 +76,7 @@ export default {
   nickname: `כינוי (אותיות קטנות & מספרים)`,
   email: `כתובת דוא"ל`,
   inviteLink: `קישור זמן`,
-  sendToAddress: `Send to address`,
+  sendToAddress: `שלח לכתובת`,
   splitExpense: `פיצול הוצאה איתי על האפליקציה LNDR`,
   sendInvite: `שלח בדוא"ל או בטקסט`,
   unknownTransaction: `עסקה לא ידועה`,
@@ -242,6 +242,7 @@ export default {
     },
     logoutSuccess: `התנתקת בהצלחה!`,
     logoutError: generalCommunicationError,
+    addressWarning: `הזנה ידנית של כתובת יש להימנע. עושה זאת על אחריותך בלבד. אנחנו לא אחראים העברות misaddressed או אבדו.`,
   },
 
   currentBalance: name => `שלך היא ${name} -יתרת ה`,

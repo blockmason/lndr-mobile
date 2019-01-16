@@ -242,6 +242,7 @@ export default {
     },
     logoutSuccess: `You have successfully logged out!`,
     logoutError: generalCommunicationError,
+    addressWarning: `Manually entering an address should be avoided. Do so at your own risk. We are not responsible for misaddressed or lost transfers.`,
   },
 
   currentBalance: name => `Current ${name} balance`,

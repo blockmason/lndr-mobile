@@ -76,7 +76,7 @@ export default {
   nickname: `Biệt danh (chữ thường & số)`,
   email: `Địa chỉ email`,
   inviteLink: `mời liên kết`,
-  sendToAddress: `Send to address`,
+  sendToAddress: `Gửi đến một địa chỉ`,
   splitExpense: `Chia một khoản chi phí với tôi trên ứng dụng LNDR`,
   sendInvite: `Gửi qua email hoặc văn bản`,
   unknownTransaction: `giao dịch Unknown`,
@@ -242,6 +242,7 @@ export default {
     },
     logoutSuccess: `Bạn đã đăng xuất thành công!`,
     logoutError: generalCommunicationError,
+    addressWarning: `Tự nhập một địa chỉ nên tránh. Tự làm tự chịu. Chúng tôi không chịu trách nhiệm chuyển misaddressed hoặc bị mất.`,
   },
 
   currentBalance: name => `Số dư ${name} hiện tại là`,

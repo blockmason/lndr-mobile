@@ -76,7 +76,7 @@ export default {
   nickname: `Přezdívka (malá písmena a čísla)`,
   email: `Emailová adresa`,
   inviteLink: `Pozvat Link`,
-  sendToAddress: `Send to address`,
+  sendToAddress: `Zaslat na adresu`,
   splitExpense: `Rozdělit náklady se mnou na aplikaci LNDR`,
   sendInvite: `Poslat e-mailem nebo textu`,
   unknownTransaction: `neznámý Transaction`,
@@ -242,6 +242,7 @@ export default {
     },
     logoutSuccess: `Došlo k úspěšnému odhlášení!`,
     logoutError: generalCommunicationError,
+    addressWarning: `Ručním zadáním adresy je třeba se vyhnout. Činíte tak na vlastní riziko. Nejsme zodpovědní za misaddressed nebo ztracené převodů.`,
   },
 
   currentBalance: name => `Aktuální ${name} zůstatek`,

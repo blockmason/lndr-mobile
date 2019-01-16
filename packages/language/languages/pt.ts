@@ -76,7 +76,7 @@ export default {
   nickname: `Apelido (letras minúsculas e números)`,
   email: `Endereço de e-mail`,
   inviteLink: `Convidar link`,
-  sendToAddress: `Send to address`,
+  sendToAddress: `Enviar para um endereço`,
   splitExpense: `Dividir uma despesa comigo no aplicativo LNDR`,
   sendInvite: `Enviar por e-mail ou de texto`,
   unknownTransaction: `Transação desconhecido`,
@@ -242,6 +242,7 @@ export default {
     },
     logoutSuccess: `Você deslogou com sucesso!`,
     logoutError: generalCommunicationError,
+    addressWarning: `Manualmente inserir um endereço deve ser evitado. Fazê-lo em seu próprio risco. Nós não somos responsáveis ​​por transferências misaddressed ou perdidos.`,
   },
 
   currentBalance: name => `Seu saldo ${name} atual é de R`,

@@ -76,7 +76,7 @@ export default {
   nickname: `Псевдоним (в нижнем регистре и цифры)`,
   email: `Адрес электронной почты`,
   inviteLink: `Пригласить Ссылка`,
-  sendToAddress: `Send to address`,
+  sendToAddress: `Отправить на ETH адрес`,
   splitExpense: `Разделить расход со мной на приложение LNDR`,
   sendInvite: `Отправить по электронной почте или текст`,
   unknownTransaction: `Неизвестная сделка`,
@@ -242,6 +242,7 @@ export default {
     },
     logoutSuccess: `Вы успешно вышли!`,
     logoutError: generalCommunicationError,
+    addressWarning: `Вручную ввести адрес следует избегать. Делайте это на свой страх и риск. Мы не несем ответственности за misaddressed или потерянных переводов.`,
   },
 
   currentBalance: name => `Ваш текущий баланс ${name}`,

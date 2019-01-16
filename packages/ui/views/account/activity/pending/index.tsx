@@ -209,7 +209,7 @@ class PendingView extends Component<Props, State> {
               onPress={() => navigation.navigate('FriendRequest', { friend, isOutbound: true })}/>
           })
         }
-        { homeScreen || !pendingInviteTxs.length ? null :
+        { homeScreen || !pendingInviteTxs.length || friend ? null :
           pendingInviteTxs.map( tx => {
             return <Row picId={user.address === tx.address ? '' : user.address} key={tx.hash} onPress={() => this.props.navigation.navigate('RequestDetail', { emailTransaction: tx })} content={tx} />
           })

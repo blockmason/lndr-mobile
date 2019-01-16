@@ -76,7 +76,7 @@ export default {
   nickname: `Becenév (kisbetűk és számok)`,
   email: `Email Cím`,
   inviteLink: `meghívó link`,
-  sendToAddress: `Send to address`,
+  sendToAddress: `Küldése egy címre`,
   splitExpense: `Osztott költségként velem a LNDR app`,
   sendInvite: `Küldés e-mail vagy szöveges`,
   unknownTransaction: `ismeretlen Tranzakciós`,
@@ -242,6 +242,7 @@ export default {
     },
     logoutSuccess: `Sikeresen kijelentkezett!`,
     logoutError: generalCommunicationError,
+    addressWarning: `Kézzel megadni egy címet el kell kerülni. Ehhez a saját felelősségére. Nem vagyunk felelősek misaddressed vagy elveszett transzferek.`,
   },
 
   currentBalance: name => `Jelenlegi ${name} egyenlege`,

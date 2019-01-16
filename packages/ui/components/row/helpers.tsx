@@ -69,7 +69,7 @@ export const renderText = (props: any) => {
 
   } else if (isRecentTransaction(content) || isPendingTransaction(content)) {
     return <View>
-      <Text style={style.titledPending}>{!!friend ? content.memo : getTitle(props)}</Text>
+      <Text style={style.titledPending}>{friend ? content.memo : getTitle(props)}</Text>
       {!friend ? <Text style={style.pendingMemo}>{content.memo}</Text> : null}
     </View>
 

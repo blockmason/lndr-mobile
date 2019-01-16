@@ -46,7 +46,7 @@ export default StyleSheet.create({
   pendingMemo: {
     color: aqua,
     ...medium,
-    maxWidth: width * 0.35
+    maxWidth: width * 0.5 - 40
   },
   image: {
     marginTop: 50,
@@ -67,7 +67,7 @@ export default StyleSheet.create({
     color: aqua,
     ...bold,
     ...medium,
-    maxWidth: width * 0.5
+    maxWidth: width * 0.5 - 40
   },
   noMargin: {
     marginBottom: 0
@@ -77,7 +77,7 @@ export default StyleSheet.create({
     textAlign: 'center'
   },
   picIcon: {
-    marginRight: 15
+    marginRight: 12
   },
   header: {
     ...xlarge,

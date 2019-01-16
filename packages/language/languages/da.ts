@@ -76,7 +76,7 @@ export default {
   nickname: `Brugernavn (små bogstaver & tal)`,
   email: `Email adresse`,
   inviteLink: `Inviter Link`,
-  sendToAddress: `Send to address`,
+  sendToAddress: `Send til adresse`,
   splitExpense: `Split en udgift med mig på LNDR app`,
   sendInvite: `Send via email eller tekst`,
   unknownTransaction: `ukendt Transaktion`,
@@ -242,6 +242,7 @@ export default {
     },
     logoutSuccess: `Du har logget ud!`,
     logoutError: generalCommunicationError,
+    addressWarning: `Manuelt bør undgås at indtaste en adresse. Gør det på egen risiko. Vi er ikke ansvarlige for fejladresserede eller tabte overførsler.`,
   },
 
   currentBalance: name => `Aktuelle ${name} saldo`,

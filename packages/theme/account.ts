@@ -331,7 +331,7 @@ export default StyleSheet.create({
     fontSize: 36,
     paddingRight: 16,
     color: aqua,
-    marginTop: 12,
+    marginTop: Platform.OS === 'ios' ? 8 : 10,
   },
   transactionHeader: {
     ...medium,
@@ -407,7 +407,7 @@ export default StyleSheet.create({
     marginTop: 10,
   },
   grayCard: {
-    width: (width - 80) / 2,
+    width: (width - 50) / 2,
     height: (width - 120) / 2,
     borderRadius: 20,
   },
@@ -420,16 +420,17 @@ export default StyleSheet.create({
     color: aqua,
   },
   aquaCard: {
-    width: (width - 60),
+    width: (width - 30),
     backgroundColor: softAqua,
-    height: (width - 100) / 2,
+    minHeight: (width - 100) / 2,
     borderRadius: 20,
     marginBottom: 10
   },
   seeActivityCard: {
-    width: (width - 60),
+    width: (width - 30),
     height: 50,
     borderRadius: 10,
+    marginBottom: 30,
   },
   directionCard: {
     backgroundColor: paleGray,

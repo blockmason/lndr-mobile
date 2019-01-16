@@ -77,7 +77,7 @@ export default {
   nickname: `닉네임(소문자 & 숫자)`,
   email: `이메일 주소`,
   inviteLink: `링크 초대`,
-  sendToAddress: `Send to address`,
+  sendToAddress: `주소로 보내기`,
   splitExpense: `LNDR 응용 프로그램에 나와 함께 비용을 분할`,
   sendInvite: `이메일이나 텍스트로 보내기`,
   unknownTransaction: `알 수없는 트랜잭션`,
@@ -243,6 +243,7 @@ export default {
     },
     logoutSuccess: `성공적으로 로그아웃했습니다!`,
     logoutError: generalCommunicationError,
+    addressWarning: `수동으로 주소를 입력하는 것은 피해야한다. 귀하의 책임입니다. 우리는 잘못 발송 된 또는 손실 전송에 대한 책임을지지 않습니다.`,
   },
 
     currentBalance: name => `당신의 현재 ${name} 잔액은`,

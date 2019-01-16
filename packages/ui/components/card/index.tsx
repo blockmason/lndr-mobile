@@ -1,7 +1,7 @@
 import React, { Component } from 'react'
 
 import { TouchableHighlight, View } from 'react-native'
-import { clear, paleGray } from 'theme/include/colors'
+import { clear, paleGray, gray } from 'theme/include/colors'
 
 interface Props {
   style: any
@@ -19,6 +19,9 @@ const styles: any = {
     elevation: 4,
     backgroundColor: paleGray,
     borderRadius: 10,
+    shadowColor: gray,
+    shadowRadius: 2,
+    shadowOpacity: 0.5
   }
 }
 

@@ -76,7 +76,7 @@ export default {
   nickname: `الاسم المستعار (أحرف صغيرة & أرقام)`,
   email: `البريد الإلكتروني`,
   inviteLink: `دعوة لينك`,
-  sendToAddress: `Send to address`,
+  sendToAddress: `ارسل الى معالجة`,
   splitExpense: `انقسام حساب معي على التطبيق LNDR`,
   sendInvite: `إرسال عبر البريد الإلكتروني أو النص`,
   unknownTransaction: `عملية غير معروفة`,
@@ -242,6 +242,7 @@ export default {
     },
     logoutSuccess: `تم تسجيل الخروج بنجاح!`,
     logoutError: generalCommunicationError,
+    addressWarning: `يدويا إدخال عنوان ينبغي تجنبها. القيام بذلك على مسؤوليتك الخاصة. نحن لسنا مسؤولين عن نقل misaddressed أو فقدت.`,
   },
 
   currentBalance: name => `رصيدك الحالي من ${name} هو`,
