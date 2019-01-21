@@ -1,8 +1,8 @@
-const jwt = require('jsonwebtoken');
+import jwt from 'jsonwebtoken'
 
-const { Buffer } = require('buffer');
-const crypto = require('crypto');
-const SHA3 = require('sha3');
+import { Buffer } from 'buffer'
+import crypto from 'crypto'
+import SHA3 from 'sha3'
 
 const PEM = {
   encodePrivateKey: (keyPair) => {

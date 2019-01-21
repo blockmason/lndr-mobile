@@ -35,7 +35,7 @@ import { ToastActionsCreators } from 'react-native-redux-toast'
 import { defaultCurrency, transferLimits, TRANSFER_LIMIT_STANDARD, TRANSFER_LIMIT_BCPT, TRANSFER_LIMIT_KYC } from 'lndr/currencies'
 import { getUser, getUcacAddr, calculateUcacBalances, getPrimaryCurrency, getChannelID, getEthExchange, getWeeklyEthTotal } from 'reducers/app'
 
-const bcrypt = require('bcryptjs')
+import bcrypt from 'bcryptjs'
 
 const mnemonicStorage = new Storage('mnemonic')
 const hashedPasswordStorage = new Storage('hashed-password')

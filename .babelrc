@@ -2,8 +2,11 @@
   "ignore": [
     "**/__tests__"
   ],
-  "presets": ["react-native"],
+  "presets": [
+    "module:metro-react-native-babel-preset"
+  ],
   "plugins": [
+    "transform-class-properties",
     ["module-resolver", {
       "root": ["./lib/packages"],
       "alias": {

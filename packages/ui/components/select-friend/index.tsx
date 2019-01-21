@@ -21,7 +21,6 @@ const { noFriends, nickname } = language
 const loadingFriends = new LoadingContext()
 
 export interface Props {
-  state: any
   friendsLoaded: boolean
   friends: Friend[]
   recentTransactions: RecentTransaction[]
@@ -52,8 +51,6 @@ class SelectFriend extends React.Component<Props, State> {
 
   render() {
     const { state: { searchText }, props: { friendsLoaded, friends, recentTransactions, onSelect, button, navigation, hasPendingTransaction, onBack } } = this
-
-    console.log(this.props.friends)
 
     return <ScrollView style={[general.view, {paddingTop: 30}]} keyboardShouldPersistTaps='handled'>
       <BackButton onPress={onBack} />
@@ -88,4 +85,3 @@ class SelectFriend extends React.Component<Props, State> {
 
 export default connect<any, any, PassedProps>((state) => ({ hasPendingTransaction: hasPendingTransaction(state), friendsLoaded: getFriendsLoaded(state),
   friends: getFriends(state), recentTransactions: recentTransactions(state) }), {})(SelectFriend)
-

@@ -195,14 +195,13 @@ class TransferERC20 extends Component<Props, State> {
 
     if (shouldSelectFriend) {
       return <SelectFriend
-        button={<Button round onPress={() => this.setState({ nonFriend: sendToAddress, shouldSelectFriend: false, friend: undefined, destinationAddress: undefined })} text={sendToAddress}/>}
+        button={<Button round onPress={() => this.setState({ nonFriend: sendToAddress, shouldSelectFriend: false, friend: undefined, destinationAddress: undefined })}
+        text={sendToAddress}/>}
         navigation={navigation}
         onBack={() => this.setState({ shouldSelectFriend: false })}
         onSelect={(friend) => this.setFriend(friend)}
       />
     }
-
-    console.log('TOKEN', token, tokenName)
 
     return <View style={general.whiteFlex}>
       <View style={general.view}>
