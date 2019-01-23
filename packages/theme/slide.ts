@@ -55,7 +55,7 @@ export default StyleSheet.create({
     textDecorationLine: 'underline'
   },
   completeButton: {
-    marginTop: '7%'
+    marginTop: 30,
   },
   horizontial: {
     flexDirection: 'row'

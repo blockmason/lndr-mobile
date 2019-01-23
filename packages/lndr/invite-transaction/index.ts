@@ -29,6 +29,6 @@ export default class InviteTransaction {
       stringToBuffer(this.memo),
       stringToBuffer(this.direction),
     ])
-    this.hash = fromServer ? hash : bufferToHex(ethUtil.sha3(buffer1))
+    this.hash = fromServer ? hash : bufferToHex(ethUtil.keccak(buffer1))
   }
 }

@@ -97,18 +97,18 @@ class NewTransaction extends Component<Props, State> {
     let success
 
     if (nonFriend) {
-      const { state: { user: { address } }, getUcacFromCurrency, sendEmailTx } = this.props
-      const ucac = getUcacFromCurrency(currency)
-      const inviteTx = new InviteTransaction({ address, amount, memo, ucac, direction, currency })
-
-      const buildLink = new firebase.links.DynamicLink(inviteTx.hash, 'lndr.page.link')
-      buildLink
-      .android.setPackageName('com.lndr')
-      .android.setFallbackUrl('https://play.google.com/store/apps/details?id=com.lndr')
-      .ios.setAppStoreId('1322487591')
-      .ios.setBundleId('io.lndr')
-      
       try {
+        const { state: { user: { address } }, getUcacFromCurrency, sendEmailTx } = this.props
+        const ucac = getUcacFromCurrency(currency)
+        const inviteTx = new InviteTransaction({ address, amount, memo, ucac, direction, currency })
+
+        const buildLink = new firebase.links.DynamicLink(inviteTx.hash, 'lndr.page.link')
+        buildLink
+        .android.setPackageName('com.lndr')
+        .android.setFallbackUrl('https://play.google.com/store/apps/details?id=com.lndr')
+        .ios.setAppStoreId('1322487591')
+        .ios.setBundleId('io.lndr')
+      
         const url = await firebase.links().createDynamicLink(buildLink)
 
         const { action } : any = await Share.share({

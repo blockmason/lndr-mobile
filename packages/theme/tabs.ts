@@ -44,11 +44,11 @@ export default StyleSheet.create({
     alignItems: 'center'
   },
   leftTriangle: {
-    width: 35,
+    width: Platform.OS === 'ios' ? 0 : 35,
     height: 0,
-    marginTop: 25,
+    marginTop: Platform.OS === 'ios' ? -30 : 25,
     borderBottomColor: white,
-    borderBottomWidth: 60,
+    borderBottomWidth: Platform.OS === 'ios' ? 110 : 60,
     borderLeftWidth: 35,
     borderRightWidth: 0,
     borderRightColor: 'transparent',
