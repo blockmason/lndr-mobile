@@ -29,17 +29,17 @@ _*Note:* this file is over 50 lines long because it contains a lot of relevant i
 
 - `language` contains all text strings and functions used to generate text.
 
-  - i.e. `import { helloWorld } from 'language'`
+  - i.e. `import language from 'language'; const { privacyPolicy, pendingTransactionsLanguage } = language`
 
-- `lndr/default` is the core application logic and should have *zero* references to `react` or any other ui.
+- `lndr/*` is the core application logic and should have *zero* references to `react` or any other ui.
 
   - i.e. `import LNDR from 'lndr'`
 
-- `theme/default` contains all stylesheets.
+- `theme/*` contains all stylesheets.
 
   - i.e. `import style from 'theme/button'`
 
-- `ui/default` is the `react-native` user interface.
+- `ui/*` is the `react-native` user interface.
 
   - i.e. `import App from 'ui/app'`
 
@@ -88,7 +88,7 @@ Running Android
 - `react-native log-android`
 - Download and start React Native Debugger, then select 'Debug Remotely' from the simulator/emulator
 
-## Building Android APK for Testing
+## Building Android APK for Debug
 - in separate terminal sessions, run `yarn start` and `yarn run typescript`
 - ```react-native run-android```
 - ```react-native bundle --dev false --platform android --entry-file index.android.js --bundle-output ./android/app/build/intermediates/assets/debug/index.android.bundle --assets-dest ./android/app/build/intermediates/res/merged/debug```
@@ -109,7 +109,7 @@ To create a new snapshot after changing a ```.tsx``` file, run ```jest -u```
 
 ### Prerequisites
 
-XCode 9.0 or higher is required, which in turn requires macOS Sierra (10.12) or higher.
+XCode 10.0 or higher is required, which in turn requires macOS Sierra (10.12) or higher.
 
 Private keys to sign the build: ios_dist_bm.p12 for iOS and blockmason-lndr-android.keystore for Android
 
@@ -145,3 +145,7 @@ Private keys to sign the build: ios_dist_bm.p12 for iOS and blockmason-lndr-andr
 8. Once the build finishes, run Product > Archive
 
 9. Click 'Upload to App Store' on the right side, and follow steps to upload.
+
+## Building Production Android APK for Distribution
+- in separate terminal sessions, run `yarn start` and `yarn run typescript`
+- ```./build-android.sh```
