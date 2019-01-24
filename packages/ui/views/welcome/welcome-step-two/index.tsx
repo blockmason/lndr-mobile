@@ -1,9 +1,9 @@
 import React, { Component } from 'react'
 import { Image, View, Text, ScrollView, TouchableHighlight, Dimensions } from 'react-native'
 import firebase from 'react-native-firebase'
+import Icon from 'react-native-vector-icons/Ionicons'
 
 import Button from 'ui/components/button'
-import AndroidStatusBar from 'ui/components/android-status-bar'
 import TextLogo from 'ui/components/images/text-logo'
 
 import general from 'theme/general'
@@ -39,9 +39,9 @@ export default class WelcomeStepTwoView extends Component<Props, State> {
     const redCircleStyle = {
       position: 'absolute',
       top: 5,
-      width: friendsWidth + 20,
-      height: (friendsWidth + 20) * 0.55,
-      right: language === 'ja' ? friendsXOffset + 45 : friendsXOffset + 8,
+      width: friendsWidth - 10,
+      height: (friendsWidth + 60) * 0.55,
+      right: friendsXOffset + 10,
       zIndex: 2
     }
 
@@ -80,12 +80,11 @@ export default class WelcomeStepTwoView extends Component<Props, State> {
             </View>
             <View style={tabStyle.leftTriangle}/>
             <View style={tabStyle.tabsContainer}>
-              <Image style={this.getRedCircleStyle()} source={require('images/drawn-circle-red.png')}/>
-              <Text style={style.dashboardText}>{tabs.home}</Text>
+              <Icon name="ios-home" style={tabStyle.icon}/>
               <View style={tabStyle.underlineActive} onLayout={event => this.setFriendsPosition(event)}>
-                <Text style={style.dashboardText}>{tabs.friends}</Text>
+                <Icon name="ios-people" style={tabStyle.icon}/>
               </View>
-              <Text style={style.dashboardText}>{tabs.activity}</Text>
+              <Icon name="md-swap" style={tabStyle.icon}/>
             </View>
           </View>
           {settingsButton}
