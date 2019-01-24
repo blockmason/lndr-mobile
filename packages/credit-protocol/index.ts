@@ -307,8 +307,6 @@ export default class CreditProtocol {
       fromLink
     } = creditRecord
 
-    console.log('CREDIT RECORD', creditRecord)
-
     const result = await this.client.post(`/${action}`, {
       ucac,
       creditor,
@@ -322,8 +320,6 @@ export default class CreditProtocol {
       fromLink,
       settlementCurrency: denomination
     })
-
-    console.log(result)
   }
 
   getRandomMnemonic() {
@@ -538,7 +534,6 @@ export default class CreditProtocol {
     const hash = bufferToHex(ethUtil.keccak(hashBuffer))
     const identitySignature = this.serverSign(hash, privateKeyBuffer)
     kyc.identitySignature = identitySignature
-    console.log('ABOUT TO SEND ', kyc)
     return this.client.post('/verify_identity', kyc)
   }
 
