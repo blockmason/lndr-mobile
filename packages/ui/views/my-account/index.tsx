@@ -12,6 +12,7 @@ import DashboardShell from 'ui/components/dashboard-shell'
 import Loading, { LoadingContext } from 'ui/components/loading'
 import InputImage from 'ui/components/images/input-image'
 import SpinningPicker from 'ui/components/spinning-picker'
+import ProfilePic from 'ui/components/images/profile-pic'
 
 import { ERC20_Tokens } from 'lndr/erc-20'
 import { formatNick, formatLockTimeout, formatEmail, emailFormatIncorrect } from 'lndr/format'
@@ -239,8 +240,8 @@ class MyAccount extends Component<Props, State> {
           this.setNewProfilePic(uri, data)
         }
       })
-    } catch (e) {
-      console.log(e)
+    } catch (error) {
+      console.log(error)
     }
   }
 
@@ -470,8 +471,7 @@ class MyAccount extends Component<Props, State> {
 
   render() {
     const { password, confirmPassword, step, nickTextInputErrorText, shouldPickCurrency, currency, showNicknameInput, photos } = this.state
-    const { user, userPic } = this.props.state
-    const imageSource = userPic ? { uri: userPic } : require('images/person-outline-dark.png')
+    const { user } = this.props.state
 
     if (step === 5) {
       return <View style={[general.fullHeight, general.view]}>
@@ -509,7 +509,7 @@ class MyAccount extends Component<Props, State> {
               <TouchableHighlight {...underlayColor} onPress={() => this.getPhoto()}>
                 <View style={general.centeredColumn}>
                   <Icon style={style.cameraImage} name="md-camera" />
-                  {!photos.length ? <Image source={imageSource} style={style.accountImage}/> : null}
+                  <ProfilePic size={120} address={user.address} />
                 </View>
               </TouchableHighlight>
               <TouchableHighlight {...underlayColor} onPress={() => this.setState({ showNicknameInput: !showNicknameInput })}>
