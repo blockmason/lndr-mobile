@@ -2,7 +2,7 @@
 platform :ios, '10.0'
 
 target 'LNDR' do
-  # Uncomment the next line if you're using Swift or would like to use dynamic frameworks
+  # Uncomment the next line if you're using Swift or would like to use dynamic frameworks, I can tell you that you don't for LNDR
   # use_frameworks!
 
   # Pods for LNDR
@@ -15,43 +15,4 @@ target 'LNDR' do
   pod 'UrbanAirship-iOS-SDK'
 
   pod 'PayPal-iOS-SDK'
-
-  # pod 'React', :path => '../node_modules/react-native', :subspecs => [
-  #   'Core',
-  #   'CxxBridge', # Include this for RN >= 0.47
-  #   'DevSupport', # Include this to enable In-App Devmenu if RN >= 0.43
-  #   'RCTText',
-  #   'RCTNetwork',
-  #   'RCTWebSocket', # Needed for debugging
-  #   'RCTAnimation', # Needed for FlatList and animations running on native UI thread
-  #   'RCTImage'
-  #   # Add any other subspecs you want to use in your project
-  # ]
-
-  # pod 'DoubleConversion', :podspec => '../node_modules/react-native/third-party-podspecs/DoubleConversion.podspec'
-  # pod 'glog', :podspec => '../node_modules/react-native/third-party-podspecs/glog.podspec'
-  # pod 'Folly', :podspec => '../node_modules/react-native/third-party-podspecs/Folly.podspec'
-
-  # pod 'yoga', :path => '../node_modules/react-native/ReactCommon/yoga'
-
-  # pod 'react-native-blur', :path => '../node_modules/react-native-blur'
-
-  # pod 'react-native-fetch-blob', :path => '../node_modules/react-native-fetch-blob'
-
-  # pod 'react-native-image-picker', :path => '../node_modules/react-native-image-picker'
-
-  # pod 'react-native-image-resizer', :path => '../node_modules/react-native-image-resizer'
-
-  # pod 'react-native-randombytes', :path => '../node_modules/react-native-randombytes'
-
-  # pod 'react-native-splash-screen', :path => '../node_modules/react-native-splash-screen'
-
-  # pod 'react-native-sqlite-storage', :path => '../node_modules/react-native-sqlite-storage'
-
-  # pod 'TouchID', :path => '../node_modules/react-native-touch-id'
-  
-  # pod 'RNVectorIcons', :path => '../node_modules/react-native-vector-icons'
-
-  # pod 'RNGestureHandler', :path => '../node_modules/react-native-gesture-handler'
-
 end
