@@ -378,7 +378,7 @@ export default {
       }
     },
     eth: `Lunasi dengan ETH`,
-    erc20: name => `Settle with ${name}`,
+    erc20: name => `Lunasi dengan ${name}`,
     paypal: `Lunasi dengan PayPal`,
     nonPayment: `Catat Pelunasan`,
     select: `Pilih Settlement Jenis`,

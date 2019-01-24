@@ -378,7 +378,7 @@ export default {
       }
     },
     eth: `Betala genom ETH`,
-    erc20: name => `Settle with ${name}`,
+    erc20: name => `Betala genom ${name}`,
     paypal: `Betala genom PayPal`,
     nonPayment: `Registrera betalning`,
     select: `Välj Settlement Typ`,

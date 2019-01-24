@@ -378,7 +378,7 @@ export default {
       }
     },
     eth: `使用以太坊结算`,
-    erc20: name => `Settle with ${name}`,
+    erc20: name => `使用 ${name} 结算`,
     paypal: `使用PayPal结算`,
     nonPayment: `记录一笔结账清算`,
     select: `选择结算类型`,

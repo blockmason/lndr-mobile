@@ -379,7 +379,7 @@ export default {
       }
     },
     eth: `이더리움으로 청산하기`,
-    erc20: name => `Settle with ${name}`,
+    erc20: name => `${name} 청산하기`,
     paypal: `PayPal 청산하기`,
     nonPayment: `청산내역 기록하기`,
     select: `선택 결제 유형`,

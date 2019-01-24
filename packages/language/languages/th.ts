@@ -378,7 +378,7 @@ export default {
       }
     },
     eth: `ชำระหนี้ด้วย ETH`,
-    erc20: name => `Settle with ${name}`,
+    erc20: name => `ชำระหนี้ด้วย ${name}`,
     paypal: `ชำระหนี้ด้วย PayPal`,
     nonPayment: `บันทึกการชำระหนี้`,
     select: `เลือกประเภทการชำระบัญชี`,

@@ -379,7 +379,7 @@ export default {
       }
     },
     eth: `ETHで決済`,
-    erc20: name => `Settle with ${name}`,
+    erc20: name => `${name}で決済`,
     paypal: `PayPalで決済`,
     nonPayment: `決済を記録する`,
     select: `決済タイプを選択します`,

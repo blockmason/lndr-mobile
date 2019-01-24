@@ -379,7 +379,7 @@ export default {
       }
     },
     eth: `Διακανονισμός Με ETH`,
-    erc20: name => `Settle with ${name}`,
+    erc20: name => `Διακανονισμός Με ${name}`,
     paypal: `Διακανονισμός Με PayPal`,
     nonPayment: `Καταγράψτε έναν Διακανονισμό`,
     select: `Επιλογή τύπου Οικισμός`,

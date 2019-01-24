@@ -378,7 +378,7 @@ export default {
       }
     },
     eth: `Gjør opp med ETH`,
-    erc20: name => `Settle with ${name}`,
+    erc20: name => `Gjør opp med ${name}`,
     paypal: `Gjør opp med PayPal`,
     nonPayment: `Ta opp et oppgjør`,
     select: `Velg Oppgjør Type`,

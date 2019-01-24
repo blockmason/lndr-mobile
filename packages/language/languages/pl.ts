@@ -378,7 +378,7 @@ export default {
       }
     },
     eth: `Rozlicz w ETH`,
-    erc20: name => `Settle with ${name}`,
+    erc20: name => `Rozlicz w ${name}`,
     paypal: `Rozlicz przez PayPal`,
     nonPayment: `Zapisz Rozliczenie`,
     select: `Wybierz Typ Rozliczenia`,

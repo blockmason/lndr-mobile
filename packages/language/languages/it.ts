@@ -378,7 +378,7 @@ export default {
       }
     },
     eth: `Salda debito con ETH`,
-    erc20: name => `Settle with ${name}`,
+    erc20: name => `Salda debito con ${name}`,
     paypal: `Salda debito con PayPal`,
     nonPayment: `Registrare un pagamento`,
     select: `Selezionare il tipo di insediamento`,

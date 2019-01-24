@@ -378,7 +378,7 @@ export default {
       }
     },
     eth: `Eth kullanarak ödeşin`,
-    erc20: name => `Settle with ${name}`,
+    erc20: name => `${name} kullanarak ödeşin`,
     paypal: `PayPal kullanarak ödeşin`,
     nonPayment: `Bir ödeme kaydı oluşturun`,
     select: `Uzlaşma tipi seç`,

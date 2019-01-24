@@ -378,7 +378,7 @@ export default {
       }
     },
     eth: `Vyrovnat prostřednictvím ETH`,
-    erc20: name => `Settle with ${name}`,
+    erc20: name => `Vyrovnat prostřednictvím ${name}`,
     paypal: `Vyrovnat prostřednictvím PayPal`,
     nonPayment: `Nahrát vyrovnání`,
     select: `Vyberte typ vypořádání`,

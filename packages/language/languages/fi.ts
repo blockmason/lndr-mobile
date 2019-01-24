@@ -378,7 +378,7 @@ export default {
       }
     },
     eth: `Maksa velkasi ETHlla:`,
-    erc20: name => `Settle with ${name}`,
+    erc20: name => `Maksa velkasi ${name}lla`,
     paypal: `Maksa velkasi PAYPALlla:`,
     nonPayment: `Kirjaa maksu`,
     select: `Valitse maksujen tyyppi`,

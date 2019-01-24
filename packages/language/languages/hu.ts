@@ -378,7 +378,7 @@ export default {
       }
     },
     eth: `Kiegyenlítés ETH használatával`,
-    erc20: name => `Settle with ${name}`,
+    erc20: name => `Kiegyenlítés ${name} használatával`,
     paypal: `Kiegyenlítés PayPal használatával`,
     nonPayment: `Kifizetés Rögzítése`,
     select: `Kiválasztás település típusa`,

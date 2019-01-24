@@ -378,7 +378,7 @@ export default {
       }
     },
     eth: `Pagar com ETH`,
-    erc20: name => `Settle with ${name}`,
+    erc20: name => `Pagar com ${name}`,
     paypal: `Pagar com PayPal`,
     nonPayment: `Gravar um Pagamento`,
     select: `Escolha um tipo de liquidação`,

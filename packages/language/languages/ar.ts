@@ -378,7 +378,7 @@ export default {
       }
     },
     eth: `سدد الحساب بالإثيريوم`,
-    erc20: name => `Settle with ${name}`,
+    erc20: name => `${name}دفع الفاتورة مع `,
     paypal: `دفع الفاتورة مع باي بال`,
     nonPayment: `سجّل مبلغ سداد`,
     select: `حدد نوع التسوية`,

@@ -378,7 +378,7 @@ export default {
       }
     },
     eth: `החזרה בעזרת ETH`,
-    erc20: name => `Settle with ${name}`,
+    erc20: name => `${name} החזרה בעזרת`,
     paypal: `החזרה בעזרת PayPal`,
     nonPayment: `לרשום הסדר`,
     select: `סוג היישוב בחר`,

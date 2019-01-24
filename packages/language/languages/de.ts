@@ -378,7 +378,7 @@ export default {
       }
     },
     eth: `Mit ETH begleichen`,
-    erc20: name => `Settle with ${name}`,
+    erc20: name => `Mit ${name} begleichen`,
     paypal: `Mit PayPal begleichen`,
     nonPayment: `Eine Abrechnung erfassen`,
     select: `Wählen Sie Abrechnungsart`,

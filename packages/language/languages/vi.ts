@@ -378,7 +378,7 @@ export default {
       }
     },
     eth: `Thanh toán bằng ​​ETH`,
-    erc20: name => `Settle with ${name}`,
+    erc20: name => `Thanh toán bằng ​​${name}`,
     paypal: `Thanh toán bằng ​​PayPal`,
     nonPayment: `Ghi chép Thanh toán`,
     select: `Chọn Loại Settlement`,
