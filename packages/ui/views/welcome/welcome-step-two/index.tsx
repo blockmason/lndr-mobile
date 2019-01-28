@@ -1,18 +1,22 @@
 import React, { Component } from 'react'
-import { Image, View, Text, ScrollView, TouchableHighlight, Dimensions } from 'react-native'
+import { Image, View, Text, ScrollView, TouchableHighlight, Dimensions, TextInput } from 'react-native'
 import firebase from 'react-native-firebase'
 import Icon from 'react-native-vector-icons/Ionicons'
 
 import Button from 'ui/components/button'
 import TextLogo from 'ui/components/images/text-logo'
+import InputImage from 'ui/components/images/input-image'
+import Row from 'ui/components/row'
 
 import general from 'theme/general'
 import style from 'theme/slide'
+import formStyle from 'theme/form'
 import tabStyle from 'theme/tabs'
 import accountStyle from 'theme/account'
 
-import languageText, {language} from 'language'
-const { walkthrough, inviteFriends, tabs } = languageText
+import languageText, { language } from 'language'
+import Friend from 'lndr/friend';
+const { walkthrough, inviteFriends, friendShell } = languageText
 
 interface Props {}
 
@@ -60,6 +64,7 @@ export default class WelcomeStepTwoView extends Component<Props, State> {
     const { width } = Dimensions.get('window')
     const logoSize = (width > kSmallScreenThreshold) ? "normal" : "small"
     const logoContainerStyle = (width > kSmallScreenThreshold) ? accountStyle.dashboardLogo : accountStyle.dashboardLogoSmall
+    const fakeFriend = new Friend('1234567890123456789012345678901234567890', friendShell)
 
     const settingsButton = (<View style={[accountStyle.settingsButton, {top: 0}]}>
       <View style={accountStyle.settingsTriangleLeft}/>
@@ -95,7 +100,13 @@ export default class WelcomeStepTwoView extends Component<Props, State> {
           <Button small round text={inviteFriends} onPress={() => null} />
           <Text style={style.caption}>{walkthrough.step2.friendsScreen}</Text>
 
-          <Image style={style.fullWidthImage35} source={require('images/walkthrough2-sample.png')} />
+          <View style={formStyle.horizontalView}>
+            <View style={formStyle.textInputContainer}>
+              <InputImage name='search' />
+              <TextInput style={formStyle.textInput} underlineColorAndroid='transparent' clearButtonMode='always' onChangeText={() => null} value={fakeFriend.nickname} />
+            </View>
+          </View>
+          <Row content={fakeFriend} onPress={() => null} picId={fakeFriend.address}/>
         </View>
       </ScrollView>
     )

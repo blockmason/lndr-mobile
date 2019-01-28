@@ -124,16 +124,9 @@ export default class SearchFriend extends Component<Props, State> {
 
     return <ScrollView keyboardShouldPersistTaps='handled'>
       <View style={style.horizontalView}>
-        <View style={[style.textInputContainer]}>
+        <View style={style.textInputContainer}>
           <InputImage name='search' />
-          <TextInput
-            style={style.textInput}
-            underlineColorAndroid='transparent'
-            autoCapitalize='none'
-            placeholder={nickname}
-            clearButtonMode='always'
-            onChangeText={text => this.searchAction(text)}
-          />
+          <TextInput style={style.textInput} underlineColorAndroid='transparent' autoCapitalize='none' placeholder={nickname} clearButtonMode='always' onChangeText={text => this.searchAction(text)} />
         </View>
       </View>
       { hasSearchTerm &&

@@ -1,7 +1,7 @@
 import { StyleSheet, Dimensions } from 'react-native'
 
-import { light, white, black, gray, aqua, darkGray, moneyGreen } from 'theme/include/colors'
-import { large, medium, small } from 'theme/include/fonts'
+import { light, white, black, gray, aqua, darkGray, moneyGreen, paleGray, lightGray } from 'theme/include/colors'
+import { large, medium, small, xlarge } from 'theme/include/fonts'
 
 const { height, width } = Dimensions.get('window')
 
@@ -184,5 +184,29 @@ export default StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'flex-end',
     minWidth: 120,
-  }
+  },
+  currencyRow: {
+    width: width - 140,
+    paddingVertical: 6,
+    borderTopColor: lightGray,
+    borderTopWidth: 1,
+  },
+  currencySymbol: {
+    ...large,
+    color: black,
+  },
+  currencyAmount: {
+    ...large,
+    color: moneyGreen,
+  },
+  totalRow: {
+    width: width - 100,
+    paddingVertical: 10,
+    borderTopColor: black,
+    borderTopWidth: 2,
+  },
+  currencyTotal: {
+    ...xlarge,
+    color: aqua,
+  },
 } as any)

@@ -1,6 +1,6 @@
 import React, { Component } from 'react'
 
-import { Image, View, Text, ScrollView } from 'react-native'
+import { View, Text, ScrollView } from 'react-native'
 import firebase from 'react-native-firebase'
 
 import { defaultCurrency } from 'lndr/currencies'
