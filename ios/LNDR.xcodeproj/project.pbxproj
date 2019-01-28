@@ -44,6 +44,8 @@
 		3997519A21F7977A00604894 /* libRNFetchBlob.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 39FEC5A120339D40006E6F8A /* libRNFetchBlob.a */; };
 		3997519B21F7977A00604894 /* libRNRandomBytes.a in Frameworks */ = {isa = PBXBuildFile; fileRef = E038E1071FD4832D006DE943 /* libRNRandomBytes.a */; };
 		399751D421F79A9B00604894 /* libSplashScreen.a in Frameworks */ = {isa = PBXBuildFile; fileRef = AACF330D20AA2E660025FFF7 /* libSplashScreen.a */; };
+		39ADDA4721FF4884002BD4FC /* libRCTActionSheet.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 00C302AC1ABCB8CE00DB3ED1 /* libRCTActionSheet.a */; };
+		39ADDA7921FF493A002BD4FC /* libRCTAnimation.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 5E9157331DD0AC6500FF2AA8 /* libRCTAnimation.a */; };
 		3A41961AED1B4ACC8BD3D5DD /* Entypo.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 77636632FF0747C588A7AA56 /* Entypo.ttf */; };
 		3F010359DD6942BBAD149999 /* FontAwesome5_Brands.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 39497C924E51477B97798CB4 /* FontAwesome5_Brands.ttf */; };
 		4D7FD223CB4341688DEEF406 /* FontAwesome5_Solid.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 48FAC5DA71E64608AE8D6C27 /* FontAwesome5_Solid.ttf */; };
@@ -555,6 +557,8 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				39ADDA7921FF493A002BD4FC /* libRCTAnimation.a in Frameworks */,
+				39ADDA4721FF4884002BD4FC /* libRCTActionSheet.a in Frameworks */,
 				398C7DD921F9037100F9C1DB /* libReact.a in Frameworks */,
 				398C7DB521F9036400F9C1DB /* libyoga.a in Frameworks */,
 				39193BC221F825D7006C4FE9 /* libRCTText.a in Frameworks */,
