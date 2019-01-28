@@ -21,17 +21,11 @@ const { noFriends, nickname } = language
 const loadingFriends = new LoadingContext()
 
 export interface Props {
+  hasPendingTransaction: (friend: Friend) => any
   friendsLoaded: boolean
   friends: Friend[]
   recentTransactions: RecentTransaction[]
-  hasPendingTransaction: (friend: Friend) => any
-  navigation: any
-  onBack: () => void
-  onSelect: (friend: Friend) => void
-  button: React.ReactNode
-}
 
-interface PassedProps extends React.Props<any> {
   navigation: any
   onBack: () => void
   onSelect: (friend: Friend) => void
@@ -83,5 +77,5 @@ class SelectFriend extends React.Component<Props, State> {
   }
 }
 
-export default connect<any, any, PassedProps>((state) => ({ hasPendingTransaction: hasPendingTransaction(state), friendsLoaded: getFriendsLoaded(state),
+export default connect((state) => ({ hasPendingTransaction: hasPendingTransaction(state), friendsLoaded: getFriendsLoaded(state)(),
   friends: getFriends(state), recentTransactions: recentTransactions(state) }), {})(SelectFriend)

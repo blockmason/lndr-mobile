@@ -38,17 +38,6 @@ interface Props {
   getUcacCurrency: (ucac: string) => string
 }
 
-interface PassedProps extends React.Props<any> {
-  onPress: () => void
-  picId: string
-  content: Friend | PayPalRequest | RecentTransaction | InviteTransaction | PendingTransaction | PendingUnilateral | PendingBilateral
-  settlerIsMe?: (pendingSettlement: PendingUnilateral | PendingBilateral) => boolean
-  selected? : boolean
-  friend?: boolean
-  isOutbound?: boolean
-  pendingFriend?: boolean
-}
-
 class Row extends Component<Props> {
   constructor(props) {
     super(props)
@@ -98,4 +87,4 @@ class Row extends Component<Props> {
   }
 }
 
-export default connect<any, any, PassedProps>((state) => ({ getUcacCurrency: getUcacCurrency(state), user: getUser(state)() }))(Row)
+export default connect((state) => ({ getUcacCurrency: getUcacCurrency(state), user: getUser(state)() }))(Row)

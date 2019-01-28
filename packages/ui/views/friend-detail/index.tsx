@@ -5,7 +5,7 @@ import firebase from 'react-native-firebase'
 
 import Balance from 'lndr/balance'
 import Friend from 'lndr/friend'
-import { UserData } from 'lndr/user'
+import User, { UserData } from 'lndr/user'
 import { currencyFormats } from 'lndr/format'
 import { currencySymbols } from 'lndr/currencies'
 
@@ -53,7 +53,7 @@ interface Props {
   navigation: any
   calculateBalance: (friend: Friend) => number
   copyToClipboard: (text: string) => any
-  getTwoPartyBalance: (user, friend) => Balance
+  getTwoPartyBalance: (user: User, friend: Friend) => Promise<Balance>
   primaryCurrency: string
   getPendingFromFriend: (friendNick: string) => any
 }

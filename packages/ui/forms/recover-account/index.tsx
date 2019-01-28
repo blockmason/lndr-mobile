@@ -34,11 +34,6 @@ interface Props {
   user: User
 }
 
-interface PassedProps extends React.Props<any> {
-  onSubmitRecoverUser: (formData: RecoverAccountData) => any
-  onCancel: () => void
-}
-
 interface State {
   step: number
   mnemonic: string
@@ -193,4 +188,4 @@ class RecoverAccountForm extends Component<Props, State> {
   }
 }
 
-export default connect<any, any, PassedProps>((state) => ({ user: getUser(state)() }))(RecoverAccountForm)
+export default connect((state) => ({ user: getUser(state)() }))(RecoverAccountForm)

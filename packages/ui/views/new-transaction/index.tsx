@@ -119,11 +119,10 @@ class NewTransaction extends Component<Props, State> {
           dialogTitle: splitExpense // Android only
         })
         
-        if (action === 'sharedAction') {
+        if (action === Share.sharedAction) {
           await submittingTransaction.wrap(sendEmailTx(inviteTx))
           this.clearAndGoHome(friend, { type: true })
         }
-
       } catch(error) {
         console.log('ERROR SENDING EMAIL TRANSACTION: ', error)
       }

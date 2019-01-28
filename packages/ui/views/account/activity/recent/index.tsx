@@ -29,11 +29,6 @@ interface Props {
   getRecentTransactions: () => any
 }
 
-interface PassedProps extends React.Props<any> {
-  friend?: any
-  navigation: any
-}
-
 interface State {
   recentTransaction?: RecentTransaction
 }
@@ -94,5 +89,5 @@ class RecentTransactionsView extends Component<Props, State> {
   }
 }
 
-export default connect<any, any, PassedProps>((state) => ({ state: getStore(state)(), user: getUser(state)(), isFocused: isFocusingOn(state)('Activity') }),
+export default connect((state) => ({ state: getStore(state)(), user: getUser(state)(), isFocused: isFocusingOn(state)('Activity') }),
  { getRecentTransactions })(RecentTransactionsView)

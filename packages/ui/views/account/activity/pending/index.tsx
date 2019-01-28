@@ -43,13 +43,6 @@ interface Props {
   getPending: () => any
 }
 
-interface PassedProps extends React.Props<any> {
-  navigation: any
-  friend?: any
-  onlyFriends?: boolean
-  homeScreen?: boolean
-}
-
 interface State {
   pendingTransaction?: PendingTransaction
 }
@@ -230,6 +223,6 @@ class PendingView extends Component<Props, State> {
   }
 }
 
-export default connect<any, any, PassedProps>((state) => ({ state: getStore(state)(), user: getUser(state)(), isFocused: isFocusingOn(state)('Activity'),
+export default connect((state) => ({ state: getStore(state)(), user: getUser(state)(), isFocused: isFocusingOn(state)('Activity'),
 pendingSettlements: pendingSettlements(state), bilateralSettlements: bilateralSettlements(state), submitterIsMe: submitterIsMe(state),
 settlerIsMe: settlerIsMe(state), payPalRequests: payPalRequests(state), pendingInviteTxs: pendingInviteTxs(state) }), { getPending })(PendingView)

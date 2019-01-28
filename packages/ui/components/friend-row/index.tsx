@@ -33,16 +33,6 @@ interface Props {
   getPendingFromFriend: (friendNick: string) => any
 }
 
-interface PassedProps extends React.Props<any> {
-  navigation: any
-  friend: Friend
-  recentTransactions?: any
-  pendingTransactions?: PendingTransaction[]
-  friendScreen?: boolean
-  hasPending?: boolean
-  onPress?: () => void
-}
-
 class FriendRow extends Component<Props> {
   constructor(props) {
     super(props)
@@ -135,5 +125,5 @@ class FriendRow extends Component<Props> {
   }
 }
 
-export default connect<any, any, PassedProps>((state) => ({ calculateBalance: calculateBalance(state), primaryCurrency: getPrimaryCurrency(state),
+export default connect((state) => ({ calculateBalance: calculateBalance(state), primaryCurrency: getPrimaryCurrency(state),
   getPendingFromFriend: getPendingFromFriend(state), convertCurrency: convertCurrency(state) }))(FriendRow)

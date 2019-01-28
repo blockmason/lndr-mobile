@@ -1,5 +1,5 @@
 import React from 'react'
-import { Text, View } from 'react-native'
+import { Text, View, TextStyle } from 'react-native'
 import ZIcon from 'react-native-vector-icons/Zocial'
 
 import Friend from 'lndr/friend'
@@ -58,7 +58,7 @@ export const getTitle = ({ content, user }) => {
 export const renderText = (props: any) => {
   const { content, friend, pendingFriend, isOutbound } = props
   if (isFriend(content) && !pendingFriend) {
-    return <Text numberOfLines={1} style={[style.titledPending, {maxWidth:160}]}>{`@${content.nickname}`}</Text>
+    return <Text numberOfLines={1} style={[style.titledPending, {maxWidth:160}] as TextStyle}>{`@${content.nickname}`}</Text>
 
   } else if (isFriend(content)) {
     const message = isOutbound ? pendingFriendRequestsLanguage.outbound : pendingFriendRequestsLanguage.request
@@ -69,19 +69,19 @@ export const renderText = (props: any) => {
 
   } else if (isRecentTransaction(content) || isPendingTransaction(content)) {
     return <View>
-      <Text style={style.titledPending}>{friend ? content.memo : getTitle(props)}</Text>
+      <Text style={style.titledPending as TextStyle}>{friend ? content.memo : getTitle(props)}</Text>
       {!friend ? <Text style={style.pendingMemo}>{content.memo}</Text> : null}
     </View>
 
   } else if (isSettlement(content)) {
     return <View style={general.flexColumn}>
-      {!friend ? <Text style={style.titledPending}>{getTitle(props)}</Text> : null }
+      {!friend ? <Text style={style.titledPending as TextStyle}>{getTitle(props)}</Text> : null }
       <Text style={style.pendingMemo}>{debtManagement.direction.settlement(content)}</Text>
     </View>
 
   } else if (isInviteTransaction(content)) {
     return <View>
-      <Text style={style.titledPending}>{getTitle(props)}</Text>
+      <Text style={style.titledPending as TextStyle}>{getTitle(props)}</Text>
       <Text style={style.pendingMemo}>{content.memo}</Text>
     </View>
 
