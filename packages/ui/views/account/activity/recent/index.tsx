@@ -1,16 +1,12 @@
 import React, { Component } from 'react'
-
-import RecentTransaction from 'lndr/recent-transaction'
-
 import { Text, View } from 'react-native'
 
 import Section from 'ui/components/section'
-import Popup, { closePopup } from 'ui/components/popup'
 import Loading, { LoadingContext } from 'ui/components/loading'
-import { UserData } from 'lndr/user'
+import Row from 'ui/components/row'
 
-import RecentTransactionDetail from 'ui/dialogs/recent-transaction-detail'
-import RecentTransactionRow from 'ui/components/recent-transaction-row'
+import RecentTransaction from 'lndr/recent-transaction'
+import { UserData } from 'lndr/user'
 
 import style from 'theme/account'
 
@@ -33,11 +29,6 @@ interface Props {
   getRecentTransactions: () => any
 }
 
-interface PassedProps extends React.Props<any> {
-  friend?: any
-  navigation: any
-}
-
 interface State {
   recentTransaction?: RecentTransaction
 }
@@ -46,6 +37,8 @@ class RecentTransactionsView extends Component<Props, State> {
   constructor(props) {
     super(props)
     this.state = {}
+
+    this.renderRequestDetailDialog = this.renderRequestDetailDialog.bind(this)
   }
 
   async componentDidMount() {
@@ -62,24 +55,14 @@ class RecentTransactionsView extends Component<Props, State> {
     this.componentDidMount()
   }
 
-  closePopupAndRefresh() {
-    closePopup()
-    this.refresh()
-  }
-
-  renderRecentTransactionDetailDialog() {
+  renderRequestDetailDialog() {
     const { recentTransaction } = this.state
 
     if (!recentTransaction) {
       return null
     }
 
-    return <Popup onClose={() => this.setState({ recentTransaction: undefined })}>
-      <RecentTransactionDetail
-        recentTransaction={recentTransaction}
-        closePopup={() => this.closePopupAndRefresh()}
-      />
-    </Popup>
+    return null
   }
 
   render() {
@@ -87,7 +70,7 @@ class RecentTransactionsView extends Component<Props, State> {
     const { user, friend } = this.props
 
     return <View>
-      { this.renderRecentTransactionDetailDialog() }
+      { this.renderRequestDetailDialog() }
 
       <Section contentContainerStyle={style.list}>
         <Loading context={loadingRecentTransactions} />
@@ -97,12 +80,8 @@ class RecentTransactionsView extends Component<Props, State> {
             if(friend && friend.address !== recentTransaction.creditorAddress && friend.address !== recentTransaction.debtorAddress) {
                 return null
             }
-            return <RecentTransactionRow
-              user={user}
-              key={`${recentTransaction.creditorAddress}${index}` }
-              recentTransaction={recentTransaction}
-              friend={friend ? true : false }
-            />
+            return <Row picId={recentTransaction.creditorAddress === user.address ? recentTransaction.debtorAddress : recentTransaction.creditorAddress} 
+              onPress={this.renderRequestDetailDialog} key={`${recentTransaction.creditorAddress}${index}` } content={recentTransaction} friend={friend ? true : false }/>
           }
         )}
       </Section>
@@ -110,5 +89,5 @@ class RecentTransactionsView extends Component<Props, State> {
   }
 }
 
-export default connect<any, any, PassedProps>((state) => ({ state: getStore(state)(), user: getUser(state)(), isFocused: isFocusingOn(state)('Activity') }),
+export default connect((state) => ({ state: getStore(state)(), user: getUser(state)(), isFocused: isFocusingOn(state)('Activity') }),
  { getRecentTransactions })(RecentTransactionsView)

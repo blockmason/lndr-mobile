@@ -76,6 +76,7 @@ export default {
   nickname: `ชื่อเล่น (ตัวพิมพ์เล็กและตัวเลข)`,
   email: `อีเมลแอดเดรส`,
   inviteLink: `เชิญลิงค์`,
+  sendToAddress: `ส่งไปยังที่อยู่`,
   splitExpense: `แยกค่าใช้จ่ายกับฉันในแอปพลิเค LNDR`,
   sendInvite: `ส่งผ่านทางอีเมลหรือข้อความ`,
   unknownTransaction: `ไม่รู้จักการทำธุรกรรม`,
@@ -221,7 +222,6 @@ export default {
     },
     panelHeaders: [
       `ที่อยู่ Wallet`,
-      `ยอดคงเหลือบัญชีลับ`,
       `ปิดบัญชี`,
       `ประวัติการทำธุรกรรม ETH`,
       `เปิดใช้งาน PayPal`,
@@ -242,6 +242,7 @@ export default {
     },
     logoutSuccess: `คุณออกจากระบบเรียบร้อยแล้ว!`,
     logoutError: generalCommunicationError,
+    addressWarning: `ด้วยตนเองป้อนที่อยู่ควรหลีกเลี่ยง ทำเช่นนั้นที่มีความเสี่ยงของคุณเอง เราจะไม่รับผิดชอบสำหรับการถ่ายโอน misaddressed หรือสูญหาย`,
   },
 
   currentBalance: name => `ยอด ${name} คงเหลือในปัจจุบันของคุณคือ`,
@@ -339,6 +340,7 @@ export default {
       initiatedBorrow: X => `${X} บอกว่าคุณติดหนี้`,
       pendingLend: X => `@${X} ติดหนี้คุณ`,
       pendingBorrow: X => `คุณติดหนี้ @${X}`,
+      settlement: settlement => `${settlement.settlementCurrency} Settlement`,
       pendingLendSettlement: S => `@${S.debtorNickname} ขอชำระหนี้ในสกุลเงิน ${S.settlementCurrency}`,
       pendingBorrowSettlement: S => `@${S.creditorNickname} ต้องการรับชำระหนี้จากคุณในสกุลเงิน ${S.settlementCurrency}`,
       pendingLendSettlementMe: S => `คุณขอรับชำระหนี้จาก @${S.debtorNickname} ในสกุลเงิน ${S.settlementCurrency}`,
@@ -376,7 +378,7 @@ export default {
       }
     },
     eth: `ชำระหนี้ด้วย ETH`,
-    erc20: name => `Settle with ${name}`,
+    erc20: name => `ชำระหนี้ด้วย ${name}`,
     paypal: `ชำระหนี้ด้วย PayPal`,
     nonPayment: `บันทึกการชำระหนี้`,
     select: `เลือกประเภทการชำระบัญชี`,

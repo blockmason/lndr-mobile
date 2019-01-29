@@ -76,7 +76,7 @@ export const getUcacCurrency = state => (ucac: string) => {
 export const getAllUcacCurrencies = state => Object.keys(state.store.ucacAddresses);
 
 export const getWeeklyEthTotal = state => {
-  let { ethTransactions, pendingSettlements, bilateralSettlements, user } = getStore(state)()
+  let { ethTransactions, bilateralSettlements, user } = getStore(state)()
   if (!ethTransactions) {
     ethTransactions = []
   }
@@ -104,6 +104,8 @@ export const bilateralSettlements = state => state.store.bilateralSettlements
 
 export const pendingInviteTxs = state => state.store.pendingInviteTxs
 
+export const getFriends = state => state.store.friends
+
 export const pendingFriends = state => state.store.pendingFriends
 
 export const payPalRequests = (state) : [PayPalRequest] => state.store.payPalRequests
@@ -130,44 +132,60 @@ export const convertCurrency = state => (fromUcac: string, amount: number) : num
   return amount / fromExchange * toExchange
 }
 
-export const calculateBalance = state => (friend: Friend) : number => {
+export const calculateBalanceAndTransactionNumber = state => (friend?: Friend) => {
   const recent = recentTransactions(state)
   const user = getUser(state)()
 
-  let total = 0
+  const friends = {}
+  let balance = 0, transactionNumber = 0
 
-  recent.map( transaction => {
+  recent.forEach( tx => {
     if(friend) {
-      if(transaction.creditorAddress === friend.address) {
-        total -= convertCurrency(state)(transaction.ucac, transaction.amount)
-      } else if(transaction.debtorAddress === friend.address) {
-        total += convertCurrency(state)(transaction.ucac, transaction.amount)
+      if(tx.creditorAddress === friend.address) {
+        balance -= convertCurrency(state)(tx.ucac, tx.amount)
+        transactionNumber++
+      } else if(tx.debtorAddress === friend.address) {
+        balance += convertCurrency(state)(tx.ucac, tx.amount)
+        transactionNumber++
       }
     } else {
-      if(transaction.creditorAddress === user.address) {
-        total += convertCurrency(state)(transaction.ucac, transaction.amount)
-      } else if(transaction.debtorAddress === user.address) {
-        total -= convertCurrency(state)(transaction.ucac, transaction.amount)
+      if(tx.creditorAddress === user.address) {
+        balance += convertCurrency(state)(tx.ucac, tx.amount)
+
+        if (friends[tx.debtorAddress] && friends[tx.debtorAddress].balance) {
+          friends[tx.debtorAddress].balance -= convertCurrency(state)(tx.ucac, tx.amount)
+        } else {
+          friends[tx.debtorAddress] = { balance: -(convertCurrency(state)(tx.ucac, tx.amount)) }
+        }
+      } else {
+        if (friends[tx.creditorAddress] && friends[tx.creditorAddress].balance) {
+          friends[tx.creditorAddress].balance += convertCurrency(state)(tx.ucac, tx.amount)
+        } else {
+          friends[tx.creditorAddress] = { balance: convertCurrency(state)(tx.ucac, tx.amount) }
+        }
+
+        balance -= convertCurrency(state)(tx.ucac, tx.amount)
       }
+      transactionNumber++
     }
   })
 
-  return Math.round(total)
+  return { balance: Math.round(balance), transactionNumber, friends }
 }
 
-export const calculateCounterparties = state => () : number => {
-  const recent = recentTransactions(state)
-  if(recent.length === 0) {
-    return 0
-  }
+export const calculateBalance = state => (friend?: Friend) : number => calculateBalanceAndTransactionNumber(state)(friend).balance
 
-  const friends = {}
-  recent.map( transaction => {
-    friends[transaction.creditorAddress] = 1
-    friends[transaction.debtorAddress] = 1
-  })
+export const calculateTransactionNumber = state => (friend?: Friend) : number => calculateBalanceAndTransactionNumber(state)(friend).transactionNumber
 
-  return Object.keys(friends).length - 1
+export const calculateCounterparties = state => () => {
+  const { friends } = calculateBalanceAndTransactionNumber(state)()
+
+  return Object.values(friends).reduce((counterparties: number, friend: any) => {
+    if (friend.balance === 0) {
+      return counterparties
+    }
+    return counterparties + 1
+  }, 0)
 }
 
 export const calculateUcacBalances = state => (friendAddress: string) : any => {
@@ -224,6 +242,8 @@ function storeMemo(memos: object, ind: number, lastSettlementIndex: number, memo
 export const getPrimaryCurrency = (state) : string => state.store.primaryCurrency
 
 export const getFriendList = state => () : Friend[] => state.store.friends
+
+export const getFriendsLoaded = state => () : boolean => state.store.friendsLoaded
 
 export const getPendingFromFriend = state => (nick: string) => {
   const friend = state.store.friends.find(fr => fr.nickname === nick)

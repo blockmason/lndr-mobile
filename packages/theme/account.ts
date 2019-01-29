@@ -9,16 +9,11 @@ import { softGray, black, gray, white, moneyGreen, moneyRed, goodDark, danger, a
 const { width } = Dimensions.get('window')
 
 export default StyleSheet.create({
-
   whiteBackground: {
     backgroundColor: white
   },
   list: {
     minHeight: 40,
-    borderTopWidth: 1,
-    borderTopColor: softGray,
-    borderBottomWidth: 1,
-    borderBottomColor: softGray,
     paddingTop: -5,
     paddingBottom: -5,
     paddingLeft: -15,
@@ -105,6 +100,14 @@ export default StyleSheet.create({
     ...xsmall,
     color: gray
   },
+  arrowIcon: {
+    marginTop: 10,
+    fontSize: 60,
+    fontWeight: 'bold'
+  },
+  selfPic: {
+    width: 140,
+  },
   emptyState: {
     ...verticalMargin,
     ...medium,
@@ -116,6 +119,11 @@ export default StyleSheet.create({
   },
   header: {
     fontSize: 36,
+    ...bold,
+    color: black
+  },
+  midHeader: {
+    fontSize: 24,
     ...bold,
     color: black
   },
@@ -189,49 +197,23 @@ export default StyleSheet.create({
     ...bold,
     ...verticalMargin
   },
-  pendingTransaction: {
-    minHeight: 40,
-    borderColor: softGray,
-    borderBottomWidth: 1,
-    borderTopWidth: 1,
-    paddingLeft: m,
-    paddingRight: m,
-    paddingTop: s,
-    paddingBottom: m - xs
+  friendRowCard: {
+    marginVertical: 8,
+    marginHorizontal: 16,
+    width: width - 32,
+    height: 80,
+    paddingHorizontal: m,
+    paddingVertical: s
   },
-  pendingTransactionRow: {
+  friendRowContent: {
     flexDirection: 'row',
-    justifyContent: 'space-between'
-  },
-  friendRow: {
-    borderColor: softAqua,
-    borderBottomWidth: 1,
-    borderTopWidth: 1,
-    paddingLeft: m,
-    paddingRight: m,
-    paddingTop: s,
-    paddingBottom: m - xs
+    justifyContent: 'space-between',
+    width: width - (32 + 2 * m)
   },
   memoRow: {
     flexDirection: 'row',
     maxWidth: width * 0.5,
     flexWrap: 'wrap'
-  },
-  recentTransaction: {
-    ...radius,
-    paddingLeft: m,
-    paddingRight: m,
-    paddingTop: s,
-    paddingBottom: m - xs,
-    ...verticalMargin
-  },
-  transactionIcon: {
-    position: 'absolute',
-    color: gray,
-    top: 5,
-    right: 3,
-    zIndex: 1,
-    ...large
   },
   settingsButton: {
     position: 'absolute',
@@ -248,17 +230,18 @@ export default StyleSheet.create({
     width: 15,
     height: 0,
     borderBottomColor: aqua,
-    borderBottomWidth: 25,
+    borderBottomWidth: Platform.OS === 'ios' ? 50 : 25,
     borderLeftWidth: 15,
     borderRightWidth: 0,
     borderRightColor: 'transparent',
     borderLeftColor: 'transparent',
+    marginTop: Platform.OS === 'ios' ? -25 : 0,
   },
   settingsTriangleRight: {
     width: 15,
     height: 0,
     borderTopColor: aqua,
-    borderTopWidth: 25,
+    borderTopWidth: Platform.OS === 'ios' ? 50 : 25,
     borderLeftWidth: 0,
     borderRightWidth: 15,
     borderRightColor: 'transparent',
@@ -314,10 +297,7 @@ export default StyleSheet.create({
     borderRadius: 25
   },
   friendIcon: {
-    width: 60,
-    height: 60,
-    marginRight: 15,
-    borderRadius: 30
+    marginRight: 15
   },
   recentIcon: {
     width: 30,
@@ -345,19 +325,18 @@ export default StyleSheet.create({
     paddingRight: m,
     paddingVertical: m
   },
-  seeAllActivityButton: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'center'
+  seeAllButton: {
+    width: width - 60
   },
   seeAllActivityArrow: {
-    height: 16,
-    width: 16,
-    marginRight: m
+    fontSize: 36,
+    paddingRight: 16,
+    color: aqua,
+    marginTop: Platform.OS === 'ios' ? 8 : 10,
   },
   transactionHeader: {
     ...medium,
-    backgroundColor: paleGray,
+    backgroundColor: white,
     color: aqua,
     ...bold,
     paddingLeft: m,
@@ -417,10 +396,53 @@ export default StyleSheet.create({
     paddingBottom: 20,
     marginHorizontal: 20
   },
-  friendAddDebtButtons: {
+  friendNewTransactionButtons: {
     marginHorizontal: 10,
     marginBottom: 10,
     minWidth: '40%'
-  }
-
+  },
+  tileText: {
+    ...medium,
+    ...bold,
+    color: black,
+    marginTop: 10,
+  },
+  grayCard: {
+    width: (width - 50) / 2,
+    height: (width - 120) / 2,
+    borderRadius: 20,
+  },
+  walletIcon: {
+    fontSize: 60,
+    color: black
+  },
+  newTransactionIcon: {
+    fontSize: 60,
+    color: aqua,
+  },
+  aquaCard: {
+    width: (width - 30),
+    backgroundColor: softAqua,
+    minHeight: (width - 100) / 2,
+    borderRadius: 20,
+    marginBottom: 10
+  },
+  seeActivityCard: {
+    width: (width - 30),
+    height: 50,
+    borderRadius: 10,
+    marginBottom: 30,
+  },
+  directionCard: {
+    backgroundColor: paleGray,
+    paddingHorizontal: l,
+    paddingVertical: s,
+    borderRadius: 20,
+    marginBottom: 20,
+  },
+  tap: {
+    ...small,
+    color: black,
+    marginBottom: s
+  },
 } as any)

@@ -76,6 +76,7 @@ export default {
   nickname: `Käyttäjänimi (pieniä kirjaimia ja numeroita)`,
   email: `Sähköpostiosoite`,
   inviteLink: `Kutsulinkki`,
+  sendToAddress: `Lähetä osoitteeseen`,
   splitExpense: `Split kustannuksella kanssani LNDR sovellus`,
   sendInvite: `Lähetä sähköpostitse tai tekstiä`,
   unknownTransaction: `tuntematon Transaction`,
@@ -221,7 +222,6 @@ export default {
     },
     panelHeaders: [
       `Lompakko Osoite`,
-      `Crypto saldot`,
       `Poista tili`,
       `ETH-tapahtumahistoria`,
       `Ota PayPal`,
@@ -242,6 +242,7 @@ export default {
     },
     logoutSuccess: `Olet onnistuneesti kirjautunut ulos!`,
     logoutError: generalCommunicationError,
+    addressWarning: `Manuaalisesti syöttämällä osoite tulee välttää. Niin omalla vastuullasi. Emme ole vastuussa misaddressed tai kadonnut siirtoja.`,
   },
 
   currentBalance: name => `Nykyinen ${name}-saldosi on`,
@@ -339,6 +340,7 @@ export default {
       initiatedBorrow: X => `${X} sanoo, että olen velkaa hänelle`,
       pendingLend: X => `@${X} on velkaa sinulle`,
       pendingBorrow: X => `Sinä olet velkaa @${X}:lle`,
+      settlement: settlement => `${settlement.settlementCurrency} Settlement`,
       pendingLendSettlement: S => `@${S.debtorNickname} pyytää, että maksat tässä valuutassa: ${S.settlementCurrency}`,
       pendingBorrowSettlement: S => `@${S.creditorNickname} haluaa maksaa sinulle tässä valuutassa: ${S.settlementCurrency}`,
       pendingLendSettlementMe: S => `Halusit maksaa velkasi @${S.debtorNickname}:lle tässä valuutassa: ${S.settlementCurrency}`,
@@ -376,7 +378,7 @@ export default {
       }
     },
     eth: `Maksa velkasi ETHlla:`,
-    erc20: name => `Settle with ${name}`,
+    erc20: name => `Maksa velkasi ${name}lla`,
     paypal: `Maksa velkasi PAYPALlla:`,
     nonPayment: `Kirjaa maksu`,
     select: `Valitse maksujen tyyppi`,

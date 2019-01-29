@@ -1,6 +1,6 @@
 import React from 'react'
 
-import { View, Image, Text, Dimensions } from 'react-native'
+import { View, Image, Dimensions } from 'react-native'
 
 import style from 'theme/image'
 

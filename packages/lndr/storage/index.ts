@@ -8,8 +8,8 @@ export default class Storage {
   }
 
   async get() {
-    const string = await AsyncStorage.getItem(this.key)
-    return JSON.parse(string)
+    const jsonData: any = await AsyncStorage.getItem(this.key)
+    return JSON.parse(jsonData)
   }
 
   async set(value: any) {

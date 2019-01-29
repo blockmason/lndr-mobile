@@ -76,6 +76,7 @@ export default {
   nickname: `Brugernavn (små bogstaver & tal)`,
   email: `Email adresse`,
   inviteLink: `Inviter Link`,
+  sendToAddress: `Send til adresse`,
   splitExpense: `Split en udgift med mig på LNDR app`,
   sendInvite: `Send via email eller tekst`,
   unknownTransaction: `ukendt Transaktion`,
@@ -221,7 +222,6 @@ export default {
     },
     panelHeaders: [
       `Wallet Adresse`,
-      `Crypto Vægte`,
       `Fjern konto`,
       `ETH Transaktionshistorik`,
       `Aktiver PayPal`,
@@ -242,6 +242,7 @@ export default {
     },
     logoutSuccess: `Du har logget ud!`,
     logoutError: generalCommunicationError,
+    addressWarning: `Manuelt bør undgås at indtaste en adresse. Gør det på egen risiko. Vi er ikke ansvarlige for fejladresserede eller tabte overførsler.`,
   },
 
   currentBalance: name => `Aktuelle ${name} saldo`,
@@ -339,6 +340,7 @@ export default {
       initiatedBorrow: X => `${X} siger du skylder`,
       pendingLend: X => `@${X} skylder dig`,
       pendingBorrow: X => `Du skylder @${X}`,
+      settlement: settlement => `${settlement.settlementCurrency} Afregning`,
       pendingLendSettlement: S => `@${S.debtorNickname} anmoder om en opgørelse i ${S.settlementCurrency}`,
       pendingBorrowSettlement: S => `@${S.creditorNickname} ønsker at afregne med dig i ${S.settlementCurrency}`,
       pendingLendSettlementMe: S => `Du har anmodet om at afregne med @${S.debtorNickname} i ${S.settlementCurrency}`,
@@ -376,7 +378,7 @@ export default {
       }
     },
     eth: `Gør op med ETH`,
-    erc20: name => `Settle with ${name}`,
+    erc20: name => `Gør op med ${name}`,
     paypal: `Gør op med PayPal`,
     nonPayment: `Gem afregningen`,
     select: `Vælg Afregning type`,

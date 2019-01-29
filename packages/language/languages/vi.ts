@@ -76,6 +76,7 @@ export default {
   nickname: `Biệt danh (chữ thường & số)`,
   email: `Địa chỉ email`,
   inviteLink: `mời liên kết`,
+  sendToAddress: `Gửi đến một địa chỉ`,
   splitExpense: `Chia một khoản chi phí với tôi trên ứng dụng LNDR`,
   sendInvite: `Gửi qua email hoặc văn bản`,
   unknownTransaction: `giao dịch Unknown`,
@@ -221,7 +222,6 @@ export default {
     },
     panelHeaders: [
       `Wallet Địa chỉ`,
-      `Số dư tài khoản Crypto`,
       `Xoá tài khoản`,
       `Lịch sử giao dịch ETH`,
       `Bật PayPal`,
@@ -242,6 +242,7 @@ export default {
     },
     logoutSuccess: `Bạn đã đăng xuất thành công!`,
     logoutError: generalCommunicationError,
+    addressWarning: `Tự nhập một địa chỉ nên tránh. Tự làm tự chịu. Chúng tôi không chịu trách nhiệm chuyển misaddressed hoặc bị mất.`,
   },
 
   currentBalance: name => `Số dư ${name} hiện tại là`,
@@ -339,6 +340,7 @@ export default {
       initiatedBorrow: X => `${X} nói rằng bạn nợ`,
       pendingLend: X => `@${X} nợ bạn`,
       pendingBorrow: X => `Bạn nợ @${X}`,
+      settlement: settlement => `${settlement.settlementCurrency} Settlement`,
       pendingLendSettlement: S => `@${S.debtorNickname} yêu cầu thanh toán bằng ${S.settlementCurrency}`,
       pendingBorrowSettlement: S => `@${S.creditorNickname} muốn thanh toán với bạn bằng ${S.settlementCurrency}`,
       pendingLendSettlementMe: S => `Bạn đã yêu cầu thanh toán với @${S.debtorNickname} bằng ${S.settlementCurrency}`,
@@ -376,7 +378,7 @@ export default {
       }
     },
     eth: `Thanh toán bằng ​​ETH`,
-    erc20: name => `Settle with ${name}`,
+    erc20: name => `Thanh toán bằng ​​${name}`,
     paypal: `Thanh toán bằng ​​PayPal`,
     nonPayment: `Ghi chép Thanh toán`,
     select: `Chọn Loại Settlement`,

@@ -76,6 +76,7 @@ export default {
   nickname: `الاسم المستعار (أحرف صغيرة & أرقام)`,
   email: `البريد الإلكتروني`,
   inviteLink: `دعوة لينك`,
+  sendToAddress: `ارسل الى معالجة`,
   splitExpense: `انقسام حساب معي على التطبيق LNDR`,
   sendInvite: `إرسال عبر البريد الإلكتروني أو النص`,
   unknownTransaction: `عملية غير معروفة`,
@@ -221,7 +222,6 @@ export default {
     },
     panelHeaders: [
       `محفظة عنوان`,
-      `أرصدة التشفير`,
       `إزالة الحساب`,
       `سجل معاملات إثيريوم`,
       `تمكين باي بال`,
@@ -242,6 +242,7 @@ export default {
     },
     logoutSuccess: `تم تسجيل الخروج بنجاح!`,
     logoutError: generalCommunicationError,
+    addressWarning: `يدويا إدخال عنوان ينبغي تجنبها. القيام بذلك على مسؤوليتك الخاصة. نحن لسنا مسؤولين عن نقل misaddressed أو فقدت.`,
   },
 
   currentBalance: name => `رصيدك الحالي من ${name} هو`,
@@ -339,6 +340,7 @@ export default {
       initiatedBorrow: X => `${X} يقول أنك مدين`,
       pendingLend: X => `@${X} مدين لك`,
       pendingBorrow: X => `أنت مدين لـ @${X}`,
+      settlement: settlement => `${settlement.settlementCurrency} Settlement`,
       pendingLendSettlement: S => `@${S.debtorNickname} طلب سداد مبلغ بـ ${S.settlementCurrency}`,
       pendingBorrowSettlement: S => `@${S.creditorNickname} يريد السداد معك بـ ${S.settlementCurrency}`,
       pendingLendSettlementMe: S => `أنت طلبت السداد مع @${S.debtorNickname} بـ ${S.settlementCurrency}`,
@@ -376,7 +378,7 @@ export default {
       }
     },
     eth: `سدد الحساب بالإثيريوم`,
-    erc20: name => `Settle with ${name}`,
+    erc20: name => `${name}دفع الفاتورة مع `,
     paypal: `دفع الفاتورة مع باي بال`,
     nonPayment: `سجّل مبلغ سداد`,
     select: `حدد نوع التسوية`,

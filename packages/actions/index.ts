@@ -35,7 +35,7 @@ import { ToastActionsCreators } from 'react-native-redux-toast'
 import { defaultCurrency, transferLimits, TRANSFER_LIMIT_STANDARD, TRANSFER_LIMIT_BCPT, TRANSFER_LIMIT_KYC } from 'lndr/currencies'
 import { getUser, getUcacAddr, calculateUcacBalances, getPrimaryCurrency, getChannelID, getEthExchange, getWeeklyEthTotal } from 'reducers/app'
 
-const bcrypt = require('bcryptjs')
+import bcrypt from 'bcryptjs'
 
 const mnemonicStorage = new Storage('mnemonic')
 const hashedPasswordStorage = new Storage('hashed-password')
@@ -79,35 +79,39 @@ export const initializeStorage = () => {
 
     const touchIdSupported = await isTouchIdSupported()
 
-    if (storedUser && moment(storedSession).add(storedUser.lockTimeout, 'minute') > moment()) {
-      await sessionStorage.set(moment())
-      let { ethBalance, ethPrices } = await getEthInfo(storedUser, creditProtocol)
-      let ucacAddresses = await creditProtocol.getUcacAddresses()
-      const erc20EthPrices = await creditProtocol.getERC20EthPrices()
-      let ethTransactions = await ethTransactionsStorage.get()
-      const payload = { hasStoredUser: true, welcomeComplete: true, privacyPolicyVerified: true, user: storedUser, notificationsEnabled, ethBalance,
-        ethPrices, ucacAddresses, erc20EthPrices, ethTransactions, primaryCurrency }
-      dispatch(setState(payload))
-
-    } else if (touchIdSupported && storedMnemonic && storedUser) {
-      let { ethBalance, ethPrices } = await getEthInfo(storedUser, creditProtocol)
-      let ucacAddresses = await creditProtocol.getUcacAddresses()
-      const erc20EthPrices = await creditProtocol.getERC20EthPrices()
-      let ethTransactions = await ethTransactionsStorage.get()
-      const payload = await triggerTouchId(storedUser, notificationsEnabled, sessionStorage)
-      payload.ethBalance = ethBalance
-      payload.ethPrices = ethPrices
-      payload.ucacAddresses = ucacAddresses
-      payload.erc20EthPrices = erc20EthPrices
-      payload.ethTransactions = ethTransactions
-      payload.primaryCurrency = primaryCurrency
-      dispatch(setState(payload))
-
-    } else if (storedMnemonic) {
-      const lockTimeout = storedUser ? storedUser.lockTimeout : 15
-      dispatch(setState({ hasStoredUser: true, welcomeComplete: true, privacyPolicyVerified: true, notificationsEnabled, lockTimeout, primaryCurrency }))
+    try {
+      if (storedUser && moment(storedSession).add(storedUser.lockTimeout, 'minute') > moment()) {
+        await sessionStorage.set(moment())
+        let { ethBalance, ethPrices } = await getEthInfo(storedUser, creditProtocol)
+        let ucacAddresses = await creditProtocol.getUcacAddresses()
+        const erc20EthPrices = await creditProtocol.getERC20EthPrices()
+        let ethTransactions = await ethTransactionsStorage.get()
+        const payload = { hasStoredUser: true, welcomeComplete: true, privacyPolicyVerified: true, user: storedUser, notificationsEnabled, ethBalance,
+          ethPrices, ucacAddresses, erc20EthPrices, ethTransactions, primaryCurrency }
+        dispatch(setState(payload))
+  
+      } else if (touchIdSupported && storedMnemonic && storedUser) {
+        let { ethBalance, ethPrices } = await getEthInfo(storedUser, creditProtocol)
+        let ucacAddresses = await creditProtocol.getUcacAddresses()
+        const erc20EthPrices = await creditProtocol.getERC20EthPrices()
+        let ethTransactions = await ethTransactionsStorage.get()
+        const payload = await triggerTouchId(storedUser, notificationsEnabled, sessionStorage)
+        payload.ethBalance = ethBalance
+        payload.ethPrices = ethPrices
+        payload.ucacAddresses = ucacAddresses
+        payload.erc20EthPrices = erc20EthPrices
+        payload.ethTransactions = ethTransactions
+        payload.primaryCurrency = primaryCurrency
+        dispatch(setState(payload))
+  
+      } else if (storedMnemonic) {
+        const lockTimeout = storedUser ? storedUser.lockTimeout : 15
+        dispatch(setState({ hasStoredUser: true, welcomeComplete: true, privacyPolicyVerified: true, notificationsEnabled, lockTimeout, primaryCurrency }))
+      }
+      dispatch(setState({ isInitializing: false, notificationsEnabled }))
+    } catch (error) {
+      dispatch(setState({ isInitializing: false, notificationsEnabled }))
     }
-    dispatch(setState({ isInitializing: false, notificationsEnabled }))
   }
 }
 
@@ -208,8 +212,12 @@ export const updatePin = (password: string, confirmPassword: string) =>  {
 export const registerChannelID = (channelID: string, platform: string) => {
   return async (dispatch, getState) => {
     const { address, privateKeyBuffer } = getUser(getState())()
-    creditProtocol.registerChannelID(address, channelID, platform, privateKeyBuffer)
-    dispatch(setState({ channelID }))
+    try {
+      creditProtocol.registerChannelID(address, channelID, platform, privateKeyBuffer)
+      dispatch(setState({ channelID }))
+    } catch (error) {
+
+    }
   }
 }
 
@@ -253,6 +261,7 @@ export const createUserFromCredentials = async (mnemonic, hashedPassword, lockTi
 }
 
 export const confirmAccount = async (recovery: boolean, shouldDisplayMnemonic: boolean, password: string, mnemonic: string) => {
+  try {
     const hashedPassword = bcrypt.hashSync(password)
     const user = await createUserFromCredentials(mnemonic, hashedPassword, 15)
     await storeUserSession(user)
@@ -262,6 +271,9 @@ export const confirmAccount = async (recovery: boolean, shouldDisplayMnemonic: b
     let ethTransactions = await getEthTransactions(user.address, recovery)
     const payload = { user, hasStoredUser: true, ethBalance, ethPrices, ucacAddresses, erc20EthPrices, ethTransactions, shouldDisplayMnemonic, password, mnemonic }
     return payload
+  } catch (error) {
+    return {}
+  }
 }
 
 export const createAccount = (accountData: CreateAccountData) => {
@@ -306,8 +318,12 @@ export async function getNicknameForAddress(address) {
 //Not a redux action
 export const getTwoPartyBalance = (state) => async(user: User, friend: Friend) => {
   const { address } = user
-  const amount = await creditProtocol.getBalanceBetween(address, friend.address, getPrimaryCurrency(state))
-  return new Balance({ relativeToNickname: friend.nickname, relativeTo: friend.address, amount: amount })
+  try {
+    const amount = await creditProtocol.getBalanceBetween(address, friend.address, getPrimaryCurrency(state))
+    return new Balance({ relativeToNickname: friend.nickname, relativeTo: friend.address, amount: amount })
+  } catch (error) {
+    return new Balance({ relativeToNickname: friend.nickname, relativeTo: friend.address, amount: 0 })
+  }
 }
 
 //Not a redux action
@@ -315,7 +331,7 @@ export async function takenNick(nickname: string) {
   let result = false
   if (nickname.length >= minimumNicknameLength) {
     try {
-      const response = await creditProtocol.takenNick(nickname)
+      await creditProtocol.takenNick(nickname)
       result = true
     } catch (e) {
       result = false
@@ -382,14 +398,18 @@ export async function ensureNicknames(friends: Friend[]) {
     friend => !friend.nickname || friend.nickname === 'N/A'
   )
 
-  await Promise.all(
-    needNicknamesFor.map(
-      async (friend) => {
-        const nickname = await creditProtocol.getNickname(friend.address)
-        friend.nickname = nickname
-      }
+  try {
+    await Promise.all(
+      needNicknamesFor.map(
+        async (friend) => {
+          const nickname = await creditProtocol.getNickname(friend.address)
+          friend.nickname = nickname
+        }
+      )
     )
-  )
+  } catch (error) {
+
+  }
 }
 
 //Not a redux action
@@ -410,101 +430,122 @@ export async function ensureTransactionNicknames(transactions: Array<PendingTran
 
 export const getFriends = () => {
   return async (dispatch, getState) => {
-    const { address } = getUser(getState())()
-    const friends = await creditProtocol.getFriends(address)
-    const result = friends.map(jsonToFriend).sort( (friend1, friend2) => {
-      return friend1.nickname.localeCompare(friend2.nickname, language)
-    })
-    await ensureNicknames(result)
-    return dispatch(setState({ friends: result, friendsLoaded: true }))
+    try {
+      const { address } = getUser(getState())()
+      const friends = await creditProtocol.getFriends(address)
+      const result = friends.map(jsonToFriend).sort( (friend1, friend2) => {
+        return friend1.nickname.localeCompare(friend2.nickname, language)
+      })
+      await ensureNicknames(result)
+      return dispatch(setState({ friends: result, friendsLoaded: true }))
+    } catch (error) {
+
+    }
   }
 }
 
 //Not a redux action
 export async function searchUsers(searchData) {
-  let nickname = searchData.nickname
-  if (nickname.substring(0, 1) === '@') {
-    nickname = nickname.substring(1);
-  }
-  if (nickname.length >= minimumNicknameLength) {
-    const users = await creditProtocol.searchUsers(nickname)
-    return users.map(jsonToFriend).sort( (user1, user2) => {
-      return user1.nickname.localeCompare(user2.nickname, language)
-    })
-  } else {
+  try {
+    let nickname = searchData.nickname
+    if (nickname.substring(0, 1) === '@') {
+      nickname = nickname.substring(1);
+    }
+    if (nickname.length >= minimumNicknameLength) {
+      const users = await creditProtocol.searchUsers(nickname)
+      return users.map(jsonToFriend).sort( (user1, user2) => {
+        return user1.nickname.localeCompare(user2.nickname, language)
+      })
+    } else {
+      return []
+    }
+  } catch (error) {
     return []
   }
 }
 
 export const getRecentTransactions = () => {
   return async (dispatch, getState) => {
-    const { address } = getUser(getState())()
-    const rawRecentTransactions = await creditProtocol.getTransactions(address)
-    const recentTransactions = rawRecentTransactions.map(jsonToRecentTransaction)
-    await ensureTransactionNicknames(recentTransactions)
-    dispatch(setState({ recentTransactions, recentTransactionsLoaded: true }))
+    try {
+      const { address } = getUser(getState())()
+      const rawRecentTransactions = await creditProtocol.getTransactions(address)
+      const recentTransactions = rawRecentTransactions.map(jsonToRecentTransaction)
+      await ensureTransactionNicknames(recentTransactions)
+      dispatch(setState({ recentTransactions, recentTransactionsLoaded: true }))
+    } catch (error) {
+
+    }
   }
 }
 
 export const getPending = () => {
   return async (dispatch, getState) => {
-    const user = getUser(getState())()
-    const rawPendingTransactions = await creditProtocol.getPendingTransactions(user.address)
-    const flatPendingTransactions = rawPendingTransactions.map(jsonToPendingTransaction)
-    console.log('RAW PENDING TRANSACTIONS: ', flatPendingTransactions)
-    const pendingTransactions = filterMultiTransactions(user.address, flatPendingTransactions, getState())
+    try {
+      const user = getUser(getState())()
+      const rawPendingTransactions = await creditProtocol.getPendingTransactions(user.address)
+      const flatPendingTransactions = rawPendingTransactions.map(jsonToPendingTransaction)
+      const pendingTransactions = filterMultiTransactions(user.address, flatPendingTransactions, getState())
+  
+      const rawPendingSettlements = await creditProtocol.getPendingSettlements(user.address)
+      const pendingSettlements = filterMultiTransactions(user.address, rawPendingSettlements.unilateralSettlements.map(jsonToPendingUnilateral), getState())
+      const bilateralSettlements = filterMultiTransactions(user.address, rawPendingSettlements.bilateralSettlements.map(jsonToPendingBilateral), getState())
+      settleBilateral(user, bilateralSettlements, dispatch, getState)
+  
+  
+      const rawInviteTxs = await creditProtocol.getInviteTransactions(user.address)
+      const pendingInviteTxs = rawInviteTxs.map(tx => new InviteTransaction(tx, true))
+  
+      await Promise.all(pendingTransactions.map((tx: PendingTransaction) => tx.fromLink ? sendConfirmedTransaction(dispatch, getState, tx) : null))
+  
+      await ensureTransactionNicknames(pendingSettlements)
+      await ensureTransactionNicknames(bilateralSettlements)
+      await ensureTransactionNicknames(pendingTransactions)
+      dispatch(setState({ pendingTransactions, pendingTransactionsLoaded: true, pendingSettlements, pendingSettlementsLoaded: true, bilateralSettlements, pendingInviteTxs }))
+    } catch (error) {
 
-    const rawPendingSettlements = await creditProtocol.getPendingSettlements(user.address)
-    console.log('RAW PENDING SETTLEMENTS: ', rawPendingSettlements)
-    const pendingSettlements = filterMultiTransactions(user.address, rawPendingSettlements.unilateralSettlements.map(jsonToPendingUnilateral), getState())
-    const bilateralSettlements = filterMultiTransactions(user.address, rawPendingSettlements.bilateralSettlements.map(jsonToPendingBilateral), getState())
-    settleBilateral(user, bilateralSettlements, dispatch, getState)
-
-
-    const rawInviteTxs = await creditProtocol.getInviteTransactions(user.address)
-    const pendingInviteTxs = rawInviteTxs.map(tx => new InviteTransaction(tx, true))
-    console.log('RAW PENDING INVITE TRANSACTIONS: ', rawInviteTxs)
-
-    await Promise.all(pendingTransactions.map((tx: PendingTransaction) => tx.fromLink ? sendConfirmedTransaction(dispatch, getState, tx) : null))
-
-    await ensureTransactionNicknames(pendingSettlements)
-    await ensureTransactionNicknames(bilateralSettlements)
-    await ensureTransactionNicknames(pendingTransactions)
-    dispatch(setState({ pendingTransactions, pendingTransactionsLoaded: true, pendingSettlements, pendingSettlementsLoaded: true, bilateralSettlements, pendingInviteTxs }))
+    }
   }
 }
 
 export const getFriendRequests = () => {
   return async (dispatch, getState) => {
-    const user = getUser(getState())()
-    const rawPendingFriends = await creditProtocol.getFriendRequests(user.address)
-    const pendingFriends = rawPendingFriends.map(jsonToPendingFriend).sort( (friend1, friend2) => {
-      return friend1.nickname.localeCompare(friend2.nickname, language)
-    })
+    try {
+      const user = getUser(getState())()
+      const rawPendingFriends = await creditProtocol.getFriendRequests(user.address)
+      const pendingFriends = rawPendingFriends.map(jsonToPendingFriend).sort( (friend1, friend2) => {
+        return friend1.nickname.localeCompare(friend2.nickname, language)
+      })
+  
+      const rawPendingOutboundFriends = await creditProtocol.getOutboundFriendRequests(user.address)
+      const pendingOutboundFriends = rawPendingOutboundFriends.map(jsonToPendingFriend)
+  
+      dispatch(setState({ pendingFriends, pendingOutboundFriends, pendingFriendsLoaded: true }))
+    } catch (error) {
 
-    const rawPendingOutboundFriends = await creditProtocol.getOutboundFriendRequests(user.address)
-    const pendingOutboundFriends = rawPendingOutboundFriends.map(jsonToPendingFriend)
-
-    dispatch(setState({ pendingFriends, pendingOutboundFriends, pendingFriendsLoaded: true }))
+    }
   }
 }
 
 export const getPayPalRequests = () => {
   return async (dispatch, getState) => {
-    const user = getUser(getState())()
-    const rawPayPalRequests = await creditProtocol.retrievePayPalSettlementRequests(user.address)
+    try {
+      const user = getUser(getState())()
+      const rawPayPalRequests = await creditProtocol.retrievePayPalSettlementRequests(user.address)
+  
+      const payPalRequests = rawPayPalRequests.map( request => {
+        const { requestor } = request
+        const target = request.friend
+  
+        const requestorIsMe = requestor.addr.indexOf(user.address) >= 0
+        const friend = requestorIsMe ? target : requestor
+  
+        return jsonToPayPalRequest({ requestorIsMe, friend })
+      })
+  
+      dispatch(setState({ payPalRequests, payPalRequestsLoaded: true }))
+    } catch (error) {
 
-    const payPalRequests = rawPayPalRequests.map( request => {
-      const { requestor } = request
-      const target = request.friend
-
-      const requestorIsMe = requestor.addr.indexOf(user.address) >= 0
-      const friend = requestorIsMe ? target : requestor
-
-      return jsonToPayPalRequest({ requestorIsMe, friend })
-    })
-
-    dispatch(setState({ payPalRequests, payPalRequestsLoaded: true }))
+    }
   }
 }
 
@@ -625,63 +666,63 @@ export const addDebt = (friend: Friend, amount: string, memo: string, direction:
     const { address, privateKeyBuffer } = getUser(getState())()
     const { ucacBalances } = calculateUcacBalances(getState())(friend.address)
     const sanitizedAmount = sanitizeAmount(amount, currency)
-
+    
     if(direction !== 'borrow' && direction !== 'lend') {
       return
     }
-
+    
     if (sanitizedAmount <= 0) {
       return dispatch(displayError(debtManagement.createError.amountTooLow))
     } else if (sanitizedAmount >= 1e11) {
       return dispatch(displayError(debtManagement.createError.amountTooHigh))
     }
-
+    
     if(settleTotal) {
       const { transactions, tooLow, tooHigh } = await generateMultiTransaction(address, friend.address, ucacBalances, memo, getState, privateKeyBuffer, creditProtocol, denomination)
-
+      
       if (tooLow) {
         return dispatch(displayError(debtManagement.createError.amountTooLow))
       } else if (tooHigh) {
         return dispatch(displayError(debtManagement.createError.amountTooHigh))
       }
-
+      
       try {
         await creditProtocol.submitMultiSettlement(transactions)
-
+        
         if(denomination === 'PAYPAL' && direction === 'borrow') {
           await creditProtocol.deletePayPalSettlementRequest(address, friend.address, privateKeyBuffer)
         }
         refreshTransactions()
-
+        
         dispatch(displaySuccess(debtManagement.pending.success(friend)))
         return true
       } catch (e) {
         dispatch(displayError(debtManagement.pending.error))
       }
     }
-
+    
     const [ creditorAddress, debtorAddress ] = {
       lend: [ address, friend.address ],
       borrow: [ friend.address, address ]
     }[direction]
-
+    
     const ucac = await getUcacAddr(getState())(currency)
     try {
       const creditRecord = await creditProtocol.createCreditRecord({ ucacAddress: ucac, creditorAddress, debtorAddress, amount: sanitizedAmount, memo, fromLink: false })
-
       const signature = creditRecord.sign(privateKeyBuffer)
-
+      
       await creditProtocol.submitCreditRecord(creditRecord, direction, signature, denomination)
-
+      
       if(denomination === 'PAYPAL' && direction === 'borrow') {
         await creditProtocol.deletePayPalSettlementRequest(address, friend.address, privateKeyBuffer)
       }
       refreshTransactions()
-
+      
       dispatch(displaySuccess(debtManagement.pending.success(friend)))
-
+      
       return true
-    } catch (e) {
+    } catch (error) {
+      console.log('ERROR SENDING CREDIT RECORD:', error)
       dispatch(displayError(debtManagement.pending.error))
     }
   }
@@ -689,29 +730,33 @@ export const addDebt = (friend: Friend, amount: string, memo: string, direction:
 
 export const loginAccount = (loginData: LoginAccountData) => {
   return async (dispatch) => {
-    const { confirmPassword } = loginData
-    const hashedPassword = await hashedPasswordStorage.get()
-    const passwordMatch = bcrypt.compareSync(confirmPassword, hashedPassword)
-    if (!passwordMatch) {
-      dispatch(displayError(accountManagement.pin.failedHashComparison))
+    try {
+      const { confirmPassword } = loginData
+      const hashedPassword = await hashedPasswordStorage.get()
+      const passwordMatch = bcrypt.compareSync(confirmPassword, hashedPassword)
+      if (!passwordMatch) {
+        dispatch(displayError(accountManagement.pin.failedHashComparison))
+        return false
+      }
+  
+      const mnemonic = await mnemonicStorage.get()
+      const oldUser = await userStorage.get()
+      const lockTimeout = oldUser ? oldUser.lockTimeout : 15
+      const user = await createUserFromCredentials(mnemonic, hashedPassword, lockTimeout)
+  
+      await storeUserSession(user)
+      let { ethBalance, ethPrices } = await getEthInfo(user, creditProtocol)
+      let ucacAddresses = await creditProtocol.getUcacAddresses()
+      const erc20EthPrices = await creditProtocol.getERC20EthPrices()
+      let ethTransactions = await ethTransactionsStorage.get()
+  
+      const payload = { user, hasStoredUser: true, ethBalance, ethPrices, ucacAddresses, erc20EthPrices, ethTransactions }
+      dispatch(setState(payload))
+      refreshTransactions()
+      return true
+    } catch (error) {
       return false
     }
-
-    const mnemonic = await mnemonicStorage.get()
-    const oldUser = await userStorage.get()
-    const lockTimeout = oldUser ? oldUser.lockTimeout : 15
-    const user = await createUserFromCredentials(mnemonic, hashedPassword, lockTimeout)
-
-    await storeUserSession(user)
-    let { ethBalance, ethPrices } = await getEthInfo(user, creditProtocol)
-    let ucacAddresses = await creditProtocol.getUcacAddresses()
-    const erc20EthPrices = await creditProtocol.getERC20EthPrices()
-    let ethTransactions = await ethTransactionsStorage.get()
-
-    const payload = { user, hasStoredUser: true, ethBalance, ethPrices, ucacAddresses, erc20EthPrices, ethTransactions }
-    dispatch(setState(payload))
-    refreshTransactions()
-    return true
   }
 }
 

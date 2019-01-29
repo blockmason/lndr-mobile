@@ -29,25 +29,12 @@ interface Props {
   direction: string
   primaryCurrency: string
   memo:string
-  isPendingTransaction: boolean
+  isPendingTransaction?: boolean
   onRequestPayPalPayment: () => any
   onPayPalPaymentSuccess: () => any
   onRequestPayPalPayee: () => any
   showPayPalSettlementError: (email: string) => void
   friend?: Friend
-}
-
-
-interface PassedProps extends React.Props<any> {
-  navigation: any
-  displayAmount: string
-  direction: string
-  memo:string
-  friend?: Friend
-  isPendingTransaction?: boolean
-  onRequestPayPalPayment: () => any
-  onPayPalPaymentSuccess: () => any
-  onRequestPayPalPayee: () => any
 }
 
 interface State {
@@ -197,4 +184,4 @@ class PayPalSettlementButton extends Component<Props, State> {
   }
 }
 
-export default connect<any, any, PassedProps>((state) => ({ user: getUser(state)(), primaryCurrency: getPrimaryCurrency(state)}), {showPayPalSettlementError})(PayPalSettlementButton)
+export default connect((state) => ({ user: getUser(state)(), primaryCurrency: getPrimaryCurrency(state)}), {showPayPalSettlementError})(PayPalSettlementButton)

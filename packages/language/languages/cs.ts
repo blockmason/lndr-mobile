@@ -76,6 +76,7 @@ export default {
   nickname: `Přezdívka (malá písmena a čísla)`,
   email: `Emailová adresa`,
   inviteLink: `Pozvat Link`,
+  sendToAddress: `Zaslat na adresu`,
   splitExpense: `Rozdělit náklady se mnou na aplikaci LNDR`,
   sendInvite: `Poslat e-mailem nebo textu`,
   unknownTransaction: `neznámý Transaction`,
@@ -221,7 +222,6 @@ export default {
     },
     panelHeaders: [
       `Peněženka Address`,
-      `Crypto váhy`,
       `Odstranit účet`,
       `ETH Transakční historie`,
       `Umožnit PayPal`,
@@ -242,6 +242,7 @@ export default {
     },
     logoutSuccess: `Došlo k úspěšnému odhlášení!`,
     logoutError: generalCommunicationError,
+    addressWarning: `Ručním zadáním adresy je třeba se vyhnout. Činíte tak na vlastní riziko. Nejsme zodpovědní za misaddressed nebo ztracené převodů.`,
   },
 
   currentBalance: name => `Aktuální ${name} zůstatek`,
@@ -339,6 +340,7 @@ export default {
       initiatedBorrow: X => `${X} říká, že dlužíš`,
       pendingLend: X => ` '${X} ti dluží`,
       pendingBorrow: X => `Dlužíte @${X}`,
+      settlement: settlement => `${settlement.settlementCurrency} Settlement`,
       pendingLendSettlement: S => `@${S.debtorNickname} žádá vypořádání v ${S.settlementCurrency}`,
       pendingBorrowSettlement: S => `@${S.creditorNickname} se chce s vámi vypořádat v ${S.settlementCurrency}`,
       pendingLendSettlementMe: S => `Zažádal(a) jste o vyrovnání s @${S.debtorNickname} v ${S.settlementCurrency}`,
@@ -376,7 +378,7 @@ export default {
       }
     },
     eth: `Vyrovnat prostřednictvím ETH`,
-    erc20: name => `Settle with ${name}`,
+    erc20: name => `Vyrovnat prostřednictvím ${name}`,
     paypal: `Vyrovnat prostřednictvím PayPal`,
     nonPayment: `Nahrát vyrovnání`,
     select: `Vyberte typ vypořádání`,

@@ -14,10 +14,7 @@ export default StyleSheet.create({
     marginTop: 15
   },
   image: {
-    marginTop: 0,
-    width: 120,
-    height: 120,
-    borderRadius: 60
+    marginTop: 0
   },
   title: {
     ...xlarge,

@@ -15,13 +15,6 @@ import { logoutAccount } from 'actions'
 
 import { connect } from 'react-redux'
 
-import language from 'language'
-
-const {
-  accountViewLanguage,
-  tabs
- } = language
-
 import general from 'theme/general'
 import style from 'theme/account'
 import TabStyle from 'theme/tabs'
@@ -86,9 +79,9 @@ class DashboardNavigatorWithHeader extends Component<Props> {
             </View>
             <View style={TabStyle.leftTriangle}/>
             <View style={TabStyle.tabsContainer}>
-              <Tab style={tabContainer} onPress={() => this.navigateTo('Home')} text={tabs.home} alerts={this.props.needsReviewTransactionsCount} active={this.props.isFocusingOn('Home')} />
-              <Tab style={tabContainer} onPress={() => this.navigateTo('Friends')} text={tabs.friends} active={this.props.isFocusingOn('Friends')} />
-              <Tab style={tabContainer} onPress={() => this.navigateTo('Activity')} text={tabs.activity} active={this.props.isFocusingOn('Activity')} />
+              <Tab style={tabContainer} onPress={() => this.navigateTo('Home')} icon="ios-home" alerts={this.props.needsReviewTransactionsCount} active={this.props.isFocusingOn('Home')} />
+              <Tab style={tabContainer} onPress={() => this.navigateTo('Friends')} icon="ios-people" active={this.props.isFocusingOn('Friends')} />
+              <Tab style={tabContainer} onPress={() => this.navigateTo('Activity')} icon="md-swap" active={this.props.isFocusingOn('Activity')} />
             </View>
           </View>
         </View>

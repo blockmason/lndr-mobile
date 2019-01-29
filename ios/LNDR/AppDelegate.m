@@ -8,7 +8,7 @@
  */
 
 #import "AppDelegate.h"
-#import "SplashScreen.h"
+#import "RNSplashScreen.h"
 
 #import <Firebase.h>
 #import "RNFirebaseLinks.h"
@@ -53,7 +53,7 @@
   self.window.rootViewController = rootViewController;
   [self.window makeKeyAndVisible];
   
-  [SplashScreen show];
+  [RNSplashScreen show];
   return YES;
 }
 

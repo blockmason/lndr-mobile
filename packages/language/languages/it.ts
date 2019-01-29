@@ -76,6 +76,7 @@ export default {
   nickname: `Soprannome (lettere minuscole e cifre)`,
   email: `Indirizzo email`,
   inviteLink: `Invita link`,
+  sendToAddress: `Invia ad un indirizzo`,
   splitExpense: `Split una spesa con me sul app LNDR`,
   sendInvite: `Invia via e-mail o il testo`,
   unknownTransaction: `Operazione sconosciuta`,
@@ -221,7 +222,6 @@ export default {
     },
     panelHeaders: [
       `Portafoglio Indirizzo`,
-      `Bilance crypto`,
       `Rimuovi l'account`,
       `Cronologia delle Transazioni ETH`,
       `Abilita PayPal`,
@@ -242,6 +242,7 @@ export default {
     },
     logoutSuccess: `Ti sei disconnesso con successo!`,
     logoutError: generalCommunicationError,
+    addressWarning: `Manualmente inserendo un indirizzo dovrebbe essere evitato. Lo fanno a proprio rischio e pericolo. Noi non siamo responsabili per i trasferimenti misaddressed o persi.`,
   },
 
   currentBalance: name => `Il tuo attuale saldo ${name} è`,
@@ -339,6 +340,7 @@ export default {
       initiatedBorrow: X => `${X} dice che gli devi`,
       pendingLend: X => `@${X} ti deve`,
       pendingBorrow: X => `Devi@${X}`,
+      settlement: settlement => `${settlement.settlementCurrency} Settlement`,
       pendingLendSettlement: S => `@${S.debtorNickname} vuole un pagamento in ${S.settlementCurrency}`,
       pendingBorrowSettlement: S => `@${S.creditorNickname} vuole saldare un debito con te in ${S.settlementCurrency}`,
       pendingLendSettlementMe: S => `Hai richiesto di saldare un debito con @${S.debtorNickname} in ${S.settlementCurrency}`,
@@ -376,7 +378,7 @@ export default {
       }
     },
     eth: `Salda debito con ETH`,
-    erc20: name => `Settle with ${name}`,
+    erc20: name => `Salda debito con ${name}`,
     paypal: `Salda debito con PayPal`,
     nonPayment: `Registrare un pagamento`,
     select: `Selezionare il tipo di insediamento`,

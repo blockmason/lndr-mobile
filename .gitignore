@@ -1,17 +1,11 @@
-# General
-.env
-
-# TypeScript
-/lib
-
 # OSX
 #
 .DS_Store
 
-
 # Xcode
 #
 build/
+lib/
 *.pbxuser
 !default.pbxuser
 *.mode1v3
@@ -28,13 +22,7 @@ DerivedData
 *.ipa
 *.xcuserstate
 project.xcworkspace
-ios/LNDR.xcworkspace
-ios/Pods
-ios/AirshipConfig.plist
-ios/PayPalConfig.plist
-ios/Index
 
-.flowconfig
 # Android/IntelliJ
 #
 build/
@@ -42,20 +30,12 @@ build/
 .gradle
 local.properties
 *.iml
-android/app/src/main/assets/airshipconfig.properties
-android/app/src/main/assets/paypalconfig.properties
-
-android/app/src/main/assets/index.android.bundle
-android/app/src/main/assets/index.android.bundle.meta
 
 # node.js
 #
 node_modules/
 npm-debug.log
 yarn-error.log
-ios/Podfile.lock
-yarn.lock
-package-lock.json
 
 # BUCK
 buck-out/
@@ -76,13 +56,20 @@ buck-out/
 #app signing .keystore file
 android/gradle.properties
 android/app/blockmason-lndr-android.keystore
+
+#android config variables
 android/app/google-services.json
+android/app/src/main/assets/airshipconfig.properties
+android/app/src/main/assets/index.android.bundle
+android/app/src/main/assets/paypalconfig.properties
 
 #aws secrets
 packages/lndr/profile-pic/config.json
 
+ios/AirshipConfig.plist
 ios/GoogleService-Info.plist
 ios/PayPalConfig.plist
+ios/Pods/
 
 #JEST
 .jest

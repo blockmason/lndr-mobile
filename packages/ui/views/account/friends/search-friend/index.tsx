@@ -8,7 +8,7 @@ import Friend from 'lndr/friend'
 
 import Button from 'ui/components/button'
 import Loading, { LoadingContext } from 'ui/components/loading'
-import AddFriendRow from 'ui/components/add-friend-row'
+import Row from 'ui/components/row'
 import FriendRow from 'ui/components/friend-row'
 import InputImage from 'ui/components/images/input-image'
 
@@ -116,12 +116,7 @@ export default class SearchFriend extends Component<Props, State> {
       return <View style={[style.form, general.centeredColumn]}>
         <Text style={[style.text, style.center]}>{addFriendConfirmationQuestion}</Text>
         <Loading context={loadingContext} />
-        <AddFriendRow
-            key={candidateForFriendship.address}
-            friend={candidateForFriendship}
-            onPress={() => null}
-            selected
-          />
+        <Row key={candidateForFriendship.address} content={candidateForFriendship} onPress={() => null} selected picId={candidateForFriendship.address}/>
         <Button round onPress={() => this.confirmFriend(candidateForFriendship)} text={addFriendText} />
         <Button alternate small arrow onPress={() => this.removeCandidateForFriendship()} text={back} />
       </View>
@@ -129,16 +124,9 @@ export default class SearchFriend extends Component<Props, State> {
 
     return <ScrollView keyboardShouldPersistTaps='handled'>
       <View style={style.horizontalView}>
-        <View style={[style.textInputContainer]}>
+        <View style={style.textInputContainer}>
           <InputImage name='search' />
-          <TextInput
-            style={style.textInput}
-            underlineColorAndroid='transparent'
-            autoCapitalize='none'
-            placeholder={nickname}
-            clearButtonMode='always'
-            onChangeText={text => this.searchAction(text)}
-          />
+          <TextInput style={style.textInput} underlineColorAndroid='transparent' autoCapitalize='none' placeholder={nickname} clearButtonMode='always' onChangeText={text => this.searchAction(text)} />
         </View>
       </View>
       { hasSearchTerm &&
@@ -157,11 +145,7 @@ export default class SearchFriend extends Component<Props, State> {
                 onPress={addDebt ? () => selectFriend(match) : () => removeFriend(match)}
               />
             } else {
-              return <AddFriendRow
-                key={match.address}
-                friend={match}
-                onPress={addDebt ? () => selectFriend(match) : () => this.setFriendCandidate(match) }
-              />
+              return <Row key={match.address} content={match} onPress={addDebt ? () => selectFriend(match) : () => this.setFriendCandidate(match) } picId={match.address}/>
             }
           }
         )}

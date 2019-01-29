@@ -76,6 +76,7 @@ export default {
   nickname: `昵称（小写＆数字）`,
   email: `电子邮件地址`,
   inviteLink: `邀请链接`,
+  sendToAddress: `发送到地址`,
   splitExpense: `与我一同在LNDR应用拆分费用`,
   sendInvite: `通过电子邮件或短信发送`,
   unknownTransaction: `未知的事务`,
@@ -221,7 +222,6 @@ export default {
     },
     panelHeaders: [
       `钱包地址`,
-      `加密账户余额`,
       `删除账号`,
       `以太坊转账交易历史`,
       `启用PayPal`,
@@ -242,6 +242,7 @@ export default {
     },
     logoutSuccess: `您已成功登出！`,
     logoutError: generalCommunicationError,
+    addressWarning: `手动输入地址应该避免。这样做自担风险。我们不负责寄错或丢失传输。`,
   },
 
   currentBalance: name => `当前的${name}余额为`,
@@ -339,6 +340,7 @@ export default {
       initiatedBorrow: X => `${X}说欠你`,
       pendingLend: X => `@${X}欠了你`,
       pendingBorrow: X => `你欠了@${X}`,
+      settlement: settlement => `${settlement.settlementCurrency} Settlement`,
       pendingLendSettlement: S => `@${S.debtorNickname}请求以${S.settlementCurrency}结算`,
       pendingBorrowSettlement: S => `@${S.creditorNickname}希望以${S.settlementCurrency}结算`,
       pendingLendSettlementMe: S => `你要求以 ${S.settlementCurrency}与@${S.debtorNickname}结算`,
@@ -376,7 +378,7 @@ export default {
       }
     },
     eth: `使用以太坊结算`,
-    erc20: name => `Settle with ${name}`,
+    erc20: name => `使用 ${name} 结算`,
     paypal: `使用PayPal结算`,
     nonPayment: `记录一笔结账清算`,
     select: `选择结算类型`,

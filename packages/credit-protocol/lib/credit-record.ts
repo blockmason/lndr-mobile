@@ -29,10 +29,10 @@ export default class CreditRecord {
       hexToBuffer(creditorAddress),
       hexToBuffer(debtorAddress),
       int32ToBuffer(amount),
-      int32ToBuffer(nonce)
+      int32ToBuffer(nonce || 0)
     ])
 
-    this.hash = hash ? hexToBuffer(hash) : ethUtil.sha3(buffer)
+    this.hash = hash ? hexToBuffer(hash) : ethUtil.keccak(buffer)
   }
 
   sign(privateKeyBuffer): String {

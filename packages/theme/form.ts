@@ -390,5 +390,12 @@ export default StyleSheet.create({
     marginTop: 10,
     fontWeight: 'bold',
     textAlign: 'center'
-  }
+  },
+  erc20Balance: {
+    ...large,
+    ...bold,
+    color: black,
+    marginBottom: l,
+    textAlign: 'center'
+  },
 } as any)

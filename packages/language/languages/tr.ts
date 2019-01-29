@@ -76,6 +76,7 @@ export default {
   nickname: `Kullanıcı adı (sadece küçük harfler ve sayılar)`,
   email: `E-posta Adresi`,
   inviteLink: `Linki Davet`,
+  sendToAddress: `Bir adrese gönder`,
   splitExpense: `LNDR uygulamasında benimle bir masraf böl`,
   sendInvite: `e-posta veya metin aracılığıyla gönder`,
   unknownTransaction: `Bilinmeyen İşlem`,
@@ -221,7 +222,6 @@ export default {
     },
     panelHeaders: [
       `Cüzdan Adresi`,
-      `Kripto Hesap Bakiyesi`,
       `Hesabı Kaldır`,
       `ETH İşlem Geçmişi`,
       `Paypal etkinleştirme`,
@@ -242,6 +242,7 @@ export default {
     },
     logoutSuccess: `Başarıyla çıkış yaptınız!`,
     logoutError: generalCommunicationError,
+    addressWarning: `Manuel olarak bir adres girerek kaçınılmalıdır. Kendi riski tamamen. Biz yanlış adrese veya kayıp transferler için sorumlu değildir.`,
   },
 
   currentBalance: name => `Geçerli ${name} bakiyeniz`,
@@ -339,6 +340,7 @@ export default {
       initiatedBorrow: X => `${X} sizin borçlu olduğunuzu söylüyor`,
       pendingLend: X => `@${X} size borçlu`,
       pendingBorrow: X => `@${X}’a borçlusunuz`,
+      settlement: settlement => `${settlement.settlementCurrency} Settlement`,
       pendingLendSettlement: S => `@${S.debtorNickname} ${S.settlementCurrency} üzerinden ödeşmeyi talep ediyor`,
       pendingBorrowSettlement: S => `@${S.debtorNickname} ${S.settlementCurrency} üzerinden ödeşmek istiyor`,
       pendingLendSettlementMe: S => `@${S.debtorNickname} ile ${S.settlementCurrency} üzerinden ödeşmeyi talep ettiniz`,
@@ -376,7 +378,7 @@ export default {
       }
     },
     eth: `Eth kullanarak ödeşin`,
-    erc20: name => `Settle with ${name}`,
+    erc20: name => `${name} kullanarak ödeşin`,
     paypal: `PayPal kullanarak ödeşin`,
     nonPayment: `Bir ödeme kaydı oluşturun`,
     select: `Uzlaşma tipi seç`,

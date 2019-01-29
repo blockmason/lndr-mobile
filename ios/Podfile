@@ -1,38 +1,18 @@
 # Uncomment the next line to define a global platform for your project
-platform :ios, '9.0'
+platform :ios, '10.0'
 
 target 'LNDR' do
-  # Uncomment the next line if you're using Swift or would like to use dynamic frameworks
+  # Uncomment the next line if you're using Swift or would like to use dynamic frameworks, I can tell you that you don't for LNDR
   # use_frameworks!
 
   # Pods for LNDR
-  pod 'UrbanAirship-iOS-SDK', '~>9.0'
-  pod 'PayPal-iOS-SDK'
-  pod 'Firebase/Core', '~> 5.11.0'
-  pod 'Firebase/DynamicLinks', '~> 5.11.0'
+
+  pod 'Firebase'
+  pod 'Firebase/Core'
+  pod 'Firebase/DynamicLinks'
   pod 'Firebase/Analytics'
 
-  # target 'LNDR-tvOSTests' do
-  #   inherit! :search_paths
-    # Pods for testing
-  # end
+  pod 'UrbanAirship-iOS-SDK'
 
-  # target 'LNDRTests' do
-    # inherit! :search_paths
-    # Pods for testing
-  # end
-
+  pod 'PayPal-iOS-SDK'
 end
-
-# target 'LNDR-tvOS' do
-  # Uncomment the next line if you're using Swift or would like to use dynamic frameworks
-  # use_frameworks!
-
-  # Pods for LNDR-tvOS
-
-  # target 'LNDR-tvOSTests' do
-  #   inherit! :search_paths
-    # Pods for testing
-  # end
-
-# end

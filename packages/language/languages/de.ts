@@ -76,6 +76,7 @@ export default {
   nickname: `Nickname (Kleinbuchstaben & Zahlen)`,
   email: `E-Mail-Addresse`,
   inviteLink: `Einladen Link`,
+  sendToAddress: `Senden an eine Adresse`,
   splitExpense: `Split einen Aufwand mit mir auf der LNDR App`,
   sendInvite: `Senden Sie per E-Mail oder Text`,
   unknownTransaction: `unbekannte Transaktion`,
@@ -221,7 +222,6 @@ export default {
     },
     panelHeaders: [
       `Wallet-Adresse`,
-      `Crypto Balances`,
       `Konto entfernen`,
       `ETH-Transaktionshistorie`,
       `Aktivieren Sie PayPal`,
@@ -242,6 +242,7 @@ export default {
     },
     logoutSuccess: `Sie haben sich erfolgreich abgemeldet!`,
     logoutError: generalCommunicationError,
+    addressWarning: `Manuelle Eingabe einer Adresse sollten vermieden werden. Tun Sie dies auf eigene Gefahr. Wir sind nicht für falsch adressiert oder verloren gegangene Transfers verantwortlich.`,
   },
 
   currentBalance: name => `Aktueller ${name}-Kontostand`,
@@ -339,6 +340,7 @@ export default {
       initiatedBorrow: X => `${X} sagt, Sie schulden`,
       pendingLend: X => `@${X} schuldet Ihnen`,
       pendingBorrow: X => `Sie schulden @${X}`,
+      settlement: settlement => `${settlement.settlementCurrency} Abrechnung`,
       pendingLendSettlement: S => `@${S.debtorNickname} fordert eine Abrechnung in ${S.settlementCurrency}`,
       pendingBorrowSettlement: S => `@${S.creditorNickname} möchte mit Ihnen in ${S.settlementCurrency} abrechnen`,
       pendingLendSettlementMe: S => `Sie möchten mit @${S.debtorNickname} in ${S.settlementCurrency} abrechnen`,
@@ -376,7 +378,7 @@ export default {
       }
     },
     eth: `Mit ETH begleichen`,
-    erc20: name => `Settle with ${name}`,
+    erc20: name => `Mit ${name} begleichen`,
     paypal: `Mit PayPal begleichen`,
     nonPayment: `Eine Abrechnung erfassen`,
     select: `Wählen Sie Abrechnungsart`,

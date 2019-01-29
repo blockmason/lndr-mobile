@@ -76,6 +76,7 @@ export default {
   nickname: `Gebruikersnaam (kleine letters en nummers)`,
   email: `E-mailadres`,
   inviteLink: `Nodig Link`,
+  sendToAddress: `Stuur naar een adres`,
   splitExpense: `Split een last met mij op de LNDR app`,
   sendInvite: `Stuur via e-mail of tekst`,
   unknownTransaction: `onbekend Transactie`,
@@ -221,7 +222,6 @@ export default {
     },
     panelHeaders: [
       `Wallet Adres`,
-      `Crypto Rekeningsaldi`,
       `Verwijder account`,
       `ETH transactiegeschiedenis`,
       `Inschakelen PayPal`,
@@ -242,6 +242,7 @@ export default {
     },
     logoutSuccess: `U bent succesvol uitgelogd!`,
     logoutError: generalCommunicationError,
+    addressWarning: `Handmatig invoeren van een adres moet worden vermeden. Doe dit op eigen risico. Wij zijn niet verantwoordelijk voor verkeerd bezorgde of verloren transfers.`,
   },
 
   currentBalance: name => `Uw huidige ${name} saldo is`,
@@ -339,6 +340,7 @@ export default {
       initiatedBorrow: X => `${X} zegt dat u verschuldigd bent`,
       pendingLend: X => `@${X} is u verschuldigd`,
       pendingBorrow: X => `U bent verschuldigd @${X} `,
+      settlement: settlement => `${settlement.settlementCurrency} Settlement`,
       pendingLendSettlement: S => `@${S.debtorNickname} vraagt ​​om een ​​betaling in ${S.settlementCurrency}`,
       pendingBorrowSettlement: S => `@${S.creditorNickname} wil u betalen in ${S.settlementCurrency}`,
       pendingLendSettlementMe: S => `U verzocht om betaling aan @${S.debtorNickname} in ${S.settlementCurrency} `,
@@ -376,7 +378,7 @@ export default {
       }
     },
     eth: `Betaal met ETH`,
-    erc20: name => `Settle with ${name}`,
+    erc20: name => `Betaal met ${name}`,
     paypal: `Betaal met PayPal`,
     nonPayment: `Documenteer een betaling`,
     select: `Selecteer Betalingssoort`,

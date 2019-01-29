@@ -16,8 +16,6 @@ import language from 'language'
 const { accountManagement } = language
 
 interface Props {
-  setAuthLoading: (state: boolean) => any
-  createAccount: (formData: CreateAccountData) => any
   goToRecoverAccount: () => any
 }
 

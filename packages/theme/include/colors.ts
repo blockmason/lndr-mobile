@@ -34,4 +34,4 @@ export const clear = 'rgba(0, 0, 0, 0)'
 
 export const aqua = '#01c5d9'
 export const darkAqua = '#0193b2'
-export const softAqua = '#e0f8ff'
+export const softAqua = '#c1f0fe'

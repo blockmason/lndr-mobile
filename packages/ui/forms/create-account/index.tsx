@@ -46,20 +46,6 @@ interface Props {
   createAccount: (accountData: CreateAccountData) => any
 }
 
-interface PassedProps extends React.Props<any> {
-  onNickTextInputBlur: (nickname: string) => void
-  onNickTextChange: (nickname: string) => void
-  nickInputError: string
-  onEmailTextInputBlur: (email: string) => void
-  onEmailTextChange: (email: string) => void
-  emailInputError: string
-  onSubmitRecover: () => void
-  nickDuplicationViolation?: boolean
-  emailDuplicationViolation?: boolean
-  emailFormatViolation?: boolean
-  nickLengthViolation?: boolean
-}
- 
 interface State {
   step: number
   nickname: string
@@ -206,4 +192,4 @@ class CreateAccountForm extends Component<Props, State> {
   }
 }
 
-export default connect<any, any, PassedProps>(() => ({ }), { createAccount })(CreateAccountForm)
+export default connect(() => ({ }), { createAccount })(CreateAccountForm)

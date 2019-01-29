@@ -105,7 +105,7 @@ export default class CreditProtocol {
       hexToBuffer(addr),
       utf8ToBuffer(nick)
     ])
-    const hash = bufferToHex(ethUtil.sha3(hashBuffer))
+    const hash = bufferToHex(ethUtil.keccak(hashBuffer))
     const signature = this.serverSign(hash, privateKeyBuffer)
 
     delete this.tempStorage[`/nick/${addr}`]
@@ -123,7 +123,7 @@ export default class CreditProtocol {
       hexToBuffer(addr),
       utf8ToBuffer(email)
     ])
-    const hash = bufferToHex(ethUtil.sha3(hashBuffer))
+    const hash = bufferToHex(ethUtil.keccak(hashBuffer))
     const signature = this.serverSign(hash, privateKeyBuffer)
 
     delete this.tempStorage[`/email/${addr}`]
@@ -141,7 +141,7 @@ export default class CreditProtocol {
       hexToBuffer(addr),
       utf8ToBuffer(paypal)
     ])
-    const hash = bufferToHex(ethUtil.sha3(hashBuffer))
+    const hash = bufferToHex(ethUtil.keccak(hashBuffer))
     const signature = this.serverSign(hash, privateKeyBuffer)
 
     return this.client.post('/paypal', {
@@ -204,7 +204,7 @@ export default class CreditProtocol {
       utf8ToBuffer(channelID),
       hexToBuffer(address)
     ])
-    const hash = bufferToHex(ethUtil.sha3(hashBuffer))
+    const hash = bufferToHex(ethUtil.keccak(hashBuffer))
     const signature = this.serverSign(hash, privateKeyBuffer)
 
     return this.tempStorage.registerId[channelID] = this.client.post(`/register_push`, { channelID, platform, address, signature })
@@ -216,7 +216,7 @@ export default class CreditProtocol {
       utf8ToBuffer(channelID),
       hexToBuffer(address)
     ])
-    const hash = bufferToHex(ethUtil.sha3(hashBuffer))
+    const hash = bufferToHex(ethUtil.keccak(hashBuffer))
     const signature = this.serverSign(hash, privateKeyBuffer)
 
     return this.client.post(`/unregister_push`, { channelID, platform, address, signature })
@@ -307,7 +307,7 @@ export default class CreditProtocol {
       fromLink
     } = creditRecord
 
-    return this.client.post(`/${action}`, {
+    const result = await this.client.post(`/${action}`, {
       ucac,
       creditor,
       debtor,
@@ -379,7 +379,7 @@ export default class CreditProtocol {
       hexToBuffer(txHash),
       hexToBuffer(creditorAddress)
     ])
-    const newHash = bufferToHex(ethUtil.sha3(hashBuffer))
+    const newHash = bufferToHex(ethUtil.keccak(hashBuffer))
     const signature = this.serverSign(newHash, privateKeyBuffer)
 
     return this.client.post('/verify_settlement', {
@@ -410,7 +410,7 @@ export default class CreditProtocol {
       base64ImageData = await RNFetchBlob.fs.readFile(resizedImageResponse.path, 'base64')
     }
 
-    const signature = this.serverSign(ethUtil.sha3(base64ImageData), privateKeyBuffer)
+    const signature = this.serverSign(ethUtil.keccak(base64ImageData), privateKeyBuffer)
     await this.client.post(`/profile_photo`, {
       image: base64ImageData,
       signature: signature
@@ -505,7 +505,7 @@ export default class CreditProtocol {
       hexToBuffer(friend),
       hexToBuffer(requestor)
     ])
-    const hash = bufferToHex(ethUtil.sha3(hashBuffer))
+    const hash = bufferToHex(ethUtil.keccak(hashBuffer))
     const paypalRequestSignature = this.serverSign(hash, privateKeyBuffer)
     return this.client.post('/request_paypal', { friend, requestor, paypalRequestSignature })
   }
@@ -519,7 +519,7 @@ export default class CreditProtocol {
       hexToBuffer(friend),
       hexToBuffer(requestor)
     ])
-    const hash = bufferToHex(ethUtil.sha3(hashBuffer))
+    const hash = bufferToHex(ethUtil.keccak(hashBuffer))
     const paypalRequestSignature = this.serverSign(hash, privateKeyBuffer)
 
     return this.client.post('/remove_paypal_request', { friend, requestor, paypalRequestSignature })
@@ -531,10 +531,9 @@ export default class CreditProtocol {
     const hashBuffer = Buffer.concat([
       hexToBuffer(externalUserId)
     ])
-    const hash = bufferToHex(ethUtil.sha3(hashBuffer))
+    const hash = bufferToHex(ethUtil.keccak(hashBuffer))
     const identitySignature = this.serverSign(hash, privateKeyBuffer)
     kyc.identitySignature = identitySignature
-    console.log('ABOUT TO SEND ', kyc)
     return this.client.post('/verify_identity', kyc)
   }
 
@@ -542,7 +541,7 @@ export default class CreditProtocol {
     const hashBuffer = Buffer.concat([
       hexToBuffer(user)
     ])
-    const hash = bufferToHex(ethUtil.sha3(hashBuffer))
+    const hash = bufferToHex(ethUtil.keccak(hashBuffer))
     const verificationStatusSignature = this.serverSign(hash, privateKeyBuffer)
     return this.client.post('/check_verification_status', { user, verificationStatusSignature })
   }

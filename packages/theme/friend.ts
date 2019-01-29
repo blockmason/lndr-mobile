@@ -63,11 +63,6 @@ export default StyleSheet.create({
     color: aqua,
     textAlign: 'right'
   },
-  settleImage: {
-    width: 100,
-    height: 100,
-    borderRadius: 50
-  },
   transactions: {
     flex: 1,
     alignSelf: 'stretch',

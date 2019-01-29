@@ -2,6 +2,9 @@
 import ERC20_Token from './erc20-token'
 import ERC20_Transaction from './erc20-transaction'
 
+import language from 'language'
+const { settlementManagement } = language
+
 export const WEI_PER_ETH = Math.pow(10, 18)
 
 export const ERC20_Tokens = [
@@ -20,6 +23,24 @@ export const getERC20_token = (tokenName : string) => {
   if (!token)
     throw new Error('invalidToken')
   return token;
+}
+
+export const settlementChoices = () => {
+  const transferableTokens = ERC20_Tokens.filter( (token) => token.canTransfer )
+  const cryptoSettlementChoices = transferableTokens.map( (token) => {
+    return {
+      settlementType: token.tokenName,
+      name: settlementManagement.erc20(token.tokenName)
+    }
+  })
+
+  return [
+    { settlementType: undefined, name: settlementManagement.select },
+    { settlementType: 'settlement', name: settlementManagement.nonPayment },
+    { settlementType: 'eth', name: settlementManagement.eth },
+    ...cryptoSettlementChoices,
+    { settlementType: 'paypal', name: settlementManagement.paypal }
+  ]
 }
 
 export { ERC20_Token, ERC20_Transaction }

@@ -76,6 +76,7 @@ export default {
   nickname: `Becenév (kisbetűk és számok)`,
   email: `Email Cím`,
   inviteLink: `meghívó link`,
+  sendToAddress: `Küldése egy címre`,
   splitExpense: `Osztott költségként velem a LNDR app`,
   sendInvite: `Küldés e-mail vagy szöveges`,
   unknownTransaction: `ismeretlen Tranzakciós`,
@@ -221,7 +222,6 @@ export default {
     },
     panelHeaders: [
       `Wallet Cím`,
-      `Crypto mérlegek`,
       `Fiók Törlése`,
       `ETH Tranzakció Előzmények`,
       `Engedélyezze a PayPalt`,
@@ -242,6 +242,7 @@ export default {
     },
     logoutSuccess: `Sikeresen kijelentkezett!`,
     logoutError: generalCommunicationError,
+    addressWarning: `Kézzel megadni egy címet el kell kerülni. Ehhez a saját felelősségére. Nem vagyunk felelősek misaddressed vagy elveszett transzferek.`,
   },
 
   currentBalance: name => `Jelenlegi ${name} egyenlege`,
@@ -339,6 +340,7 @@ export default {
       initiatedBorrow: X => `${X} mondja, Ön tartozik`,
       pendingLend: X => `@${X} tartozik Önnek`,
       pendingBorrow: X => `Ön tartozik neki @${X} `,
+      settlement: settlement => `${settlement.settlementCurrency} Settlement`,
       pendingLendSettlement: S => `@${S.debtorNickname} kifizetést kér az alábbi pénznemben ${S.settlementCurrency}`,
       pendingBorrowSettlement: S => `@${S.creditorNickname} szeretne fizetni Önnek az alábbi pénznemben ${S.settlementCurrency} `,
       pendingLendSettlementMe: S => `Ön kérte, hogy tartozása a @${S.debtorNickname} felhasználóval ${S.settlementCurrency} pénznemben rendezésre kerüljön`,
@@ -376,7 +378,7 @@ export default {
       }
     },
     eth: `Kiegyenlítés ETH használatával`,
-    erc20: name => `Settle with ${name}`,
+    erc20: name => `Kiegyenlítés ${name} használatával`,
     paypal: `Kiegyenlítés PayPal használatával`,
     nonPayment: `Kifizetés Rögzítése`,
     select: `Kiválasztás település típusa`,

@@ -4,19 +4,17 @@ import { addNavigationHelpers, StackNavigator } from 'react-navigation'
 import { connect } from 'react-redux'
 
 import DashboardNavigator from './dashboard'
-import MyAccount from 'ui/dialogs/my-account'
-import AddDebt from 'ui/dialogs/add-debt'
-import ConfirmationScreen from 'ui/dialogs/confirmation-screen'
-import PendingTransactionDetail from 'ui/dialogs/pending-transaction-detail'
-import PendingSettlementDetail from 'ui/dialogs/pending-settlement-detail'
-import Settlement from 'ui/dialogs/settlement'
-import FriendDetail from 'ui/dialogs/friend-detail'
-import TransferEth from 'ui/dialogs/transfer-eth'
-import TransferERC20 from 'ui/dialogs/transfer-erc20'
-import FriendRequest from 'ui/dialogs/friend-request'
-import PayPalRequestDetail from 'ui/dialogs/paypal-request-detail'
-import RemoveAccountView from 'ui/dialogs/remove-account'
+import MyAccount from 'ui/views/my-account'
+import NewTransaction from 'ui/views/new-transaction'
+import Confirmation from 'ui/views/confirmation'
+import RequestDetail from 'ui/views/request-detail'
+import Settlement from 'ui/views/settlement'
+import FriendDetail from 'ui/views/friend-detail'
+import TransferERC20 from 'ui/views/transfer-erc20'
+import FriendRequest from 'ui/views/friend-request'
+import RemoveAccountView from 'ui/views/remove-account'
 import VerifyIdentityForm from 'ui/forms/verify-identity'
+import Wallet from 'ui/views/wallet'
 
 import {
   createReactNavigationReduxMiddleware,
@@ -39,29 +37,23 @@ export const AppNavigator = StackNavigator(
     MyAccount: {
       screen: MyAccount
     },
-    PendingTransaction: {
-      screen: PendingTransactionDetail
-    },
     Settlement: {
       screen: Settlement
     },
-    PendingSettlement: {
-      screen: PendingSettlementDetail
+    RequestDetail: {
+      screen: RequestDetail
     },
     FriendDetail: {
       screen: FriendDetail
     },
-    TransferEth: {
-      screen: TransferEth
-    },
     TransferERC20: {
       screen: TransferERC20
     },
-    AddDebt: {
-      screen: AddDebt
+    NewTransaction: {
+      screen: NewTransaction
     },
     Confirmation: {
-      screen: ConfirmationScreen
+      screen: Confirmation
     },
     FriendRequest: {
       screen: FriendRequest
@@ -69,9 +61,11 @@ export const AppNavigator = StackNavigator(
     RemoveAccount: {
       screen: RemoveAccountView
     },
-    PayPalRequest: PayPalRequestDetail,
     VerifyIdentityForm: {
       screen: VerifyIdentityForm
+    },
+    Wallet: {
+      screen: Wallet
     }
   },
   {

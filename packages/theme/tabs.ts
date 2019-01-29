@@ -3,7 +3,7 @@ import { StyleSheet, Platform } from 'react-native'
 import { medium } from 'theme/include/fonts'
 
 import { smallPad } from 'theme/include/spacing'
-import { charcoal, gray, aqua, white, alert } from 'theme/include/colors'
+import { charcoal, gray, aqua, white, alert, black } from 'theme/include/colors'
 
 export default StyleSheet.create({
   topView: {
@@ -35,32 +35,20 @@ export default StyleSheet.create({
     alignItems: 'center',
     minWidth: 50
   },
-  tabActive: {
-
-  },
-  text: {
-    color: charcoal,
-    ...medium,
-    borderBottomColor: 'transparent',
-    borderBottomWidth: 2
-  },
-  textActive: {
-    color: charcoal,
-    fontWeight: 'bold'
-  },
   underlineActive: {
+    width: 36,
     borderBottomColor: aqua,
-    borderBottomWidth: 2
-  },
-  noUnderline: {
-    
+    borderBottomWidth: 3,
+    display: 'flex',
+    flexDirection: 'column',
+    alignItems: 'center'
   },
   leftTriangle: {
-    width: 35,
+    width: Platform.OS === 'ios' ? 0 : 35,
     height: 0,
-    marginTop: 25,
+    marginTop: Platform.OS === 'ios' ? -30 : 25,
     borderBottomColor: white,
-    borderBottomWidth: 60,
+    borderBottomWidth: Platform.OS === 'ios' ? 110 : 60,
     borderLeftWidth: 35,
     borderRightWidth: 0,
     borderRightColor: 'transparent',
@@ -86,5 +74,9 @@ export default StyleSheet.create({
     marginLeft: 2,
     height: 20,
     width: 20
+  },
+  icon: {
+    fontSize: 33,
+    color: black
   }
 } as any)

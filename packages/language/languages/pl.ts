@@ -76,6 +76,7 @@ export default {
   nickname: `Nazwa użytkownika (małe litery i cyfry)`,
   email: `Adres e-mail`,
   inviteLink: `Zaproś link`,
+  sendToAddress: `Wyślij na adres`,
   splitExpense: `Podzielić wydatek ze mną na aplikacji LNDR`,
   sendInvite: `Wysłać za pośrednictwem poczty elektronicznej lub tekst`,
   unknownTransaction: `Nieznany transakcja`,
@@ -221,7 +222,6 @@ export default {
     },
     panelHeaders: [
       `Portfel Adres`,
-      `Crypto Salda kont`,
       `Usuń Konto`,
       `Historia transakcji ETH`,
       `Podłącz PayPal`,
@@ -242,6 +242,7 @@ export default {
     },
     logoutSuccess: `Wylogowanie zakończone sukcesem`,
     logoutError: generalCommunicationError,
+    addressWarning: `Ręczne wprowadzanie adresu należy unikać. Czy to na własne ryzyko. Nie ponosimy odpowiedzialności za błędnie zaadresowaną lub utraconych transferów.`,
   },
 
   currentBalance: name => `Obecne saldo ${name} wynosi`,
@@ -339,6 +340,7 @@ export default {
       initiatedBorrow: X => `${X} mówi, że jesteś dłużny/dłużna`,
       pendingLend: X => `@${X} jest Ci dłużny/dłużna`,
       pendingBorrow: X => `Jesteś dłużny/dłużna @${X}`,
+      settlement: settlement => `${settlement.settlementCurrency} Settlement`,
       pendingLendSettlement: S => `@${S.debtorNickname} żąda rozliczenia w ${S.settlementCurrency}`,
       pendingBorrowSettlement: S => `@${S.creditorNickname} chce się z Tobą rozliczyć w ${S.settlementCurrency}`,
       pendingLendSettlementMe: S => `Zażądano rozliczenia z @${S.debtorNickname} w ${S.settlementCurrency}`,
@@ -376,7 +378,7 @@ export default {
       }
     },
     eth: `Rozlicz w ETH`,
-    erc20: name => `Settle with ${name}`,
+    erc20: name => `Rozlicz w ${name}`,
     paypal: `Rozlicz przez PayPal`,
     nonPayment: `Zapisz Rozliczenie`,
     select: `Wybierz Typ Rozliczenia`,

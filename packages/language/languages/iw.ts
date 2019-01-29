@@ -76,6 +76,7 @@ export default {
   nickname: `כינוי (אותיות קטנות & מספרים)`,
   email: `כתובת דוא"ל`,
   inviteLink: `קישור זמן`,
+  sendToAddress: `שלח לכתובת`,
   splitExpense: `פיצול הוצאה איתי על האפליקציה LNDR`,
   sendInvite: `שלח בדוא"ל או בטקסט`,
   unknownTransaction: `עסקה לא ידועה`,
@@ -221,7 +222,6 @@ export default {
     },
     panelHeaders: [
       `כתובת ארנק`,
-      `יתרות האנוסים`,
       `להסיר חשבון`,
       `היסטוריית עסקאות ETH`,
       `הפוך את PayPal`,
@@ -242,6 +242,7 @@ export default {
     },
     logoutSuccess: `התנתקת בהצלחה!`,
     logoutError: generalCommunicationError,
+    addressWarning: `הזנה ידנית של כתובת יש להימנע. עושה זאת על אחריותך בלבד. אנחנו לא אחראים העברות misaddressed או אבדו.`,
   },
 
   currentBalance: name => `שלך היא ${name} -יתרת ה`,
@@ -339,6 +340,7 @@ export default {
       initiatedBorrow: X => `אומר שאתה חייב ${X}`,
       pendingLend: X => `חייב לך @${X}`,
       pendingBorrow: X => `@${X} אתה חייב`,
+      settlement: settlement => `${settlement.settlementCurrency} Settlement`,
       pendingLendSettlement: S => `${S.settlementCurrency} -מבקש החזרת חוב ב @${S.debtorNickname}`,
       pendingBorrowSettlement: S => `${S.settlementCurrency} -רצה להחזיר לך חוב ב @${S.debtorNickname}`,
       pendingLendSettlementMe: S => `${S.settlementCurrency} -ב @${S.debtorNickname} -בקשת להחזיר חוב ל`,
@@ -376,7 +378,7 @@ export default {
       }
     },
     eth: `החזרה בעזרת ETH`,
-    erc20: name => `Settle with ${name}`,
+    erc20: name => `${name} החזרה בעזרת`,
     paypal: `החזרה בעזרת PayPal`,
     nonPayment: `לרשום הסדר`,
     select: `סוג היישוב בחר`,

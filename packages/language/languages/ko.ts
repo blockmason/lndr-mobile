@@ -77,6 +77,7 @@ export default {
   nickname: `닉네임(소문자 & 숫자)`,
   email: `이메일 주소`,
   inviteLink: `링크 초대`,
+  sendToAddress: `주소로 보내기`,
   splitExpense: `LNDR 응용 프로그램에 나와 함께 비용을 분할`,
   sendInvite: `이메일이나 텍스트로 보내기`,
   unknownTransaction: `알 수없는 트랜잭션`,
@@ -222,7 +223,6 @@ export default {
     },
     panelHeaders: [
       `지갑 주소`,
-      `암호화 계정 잔액`,
       `계정 삭제`,
       `이더리움 거래 내역`,
       `차 환율 변경`,
@@ -243,6 +243,7 @@ export default {
     },
     logoutSuccess: `성공적으로 로그아웃했습니다!`,
     logoutError: generalCommunicationError,
+    addressWarning: `수동으로 주소를 입력하는 것은 피해야한다. 귀하의 책임입니다. 우리는 잘못 발송 된 또는 손실 전송에 대한 책임을지지 않습니다.`,
   },
 
     currentBalance: name => `당신의 현재 ${name} 잔액은`,
@@ -339,6 +340,7 @@ export default {
       initiatedBorrow: nickname => `${nickname} 은 그/그녀가 빚지고 있다고 말합니다`,
       pendingLend: nickname => `@${nickname} 은 당신에게 빚이 있습니다`,
       pendingBorrow: nickname => `당신은 @${nickname} 으로부터 빚을 갚아야합니다`,
+      settlement: settlement => `${settlement.settlementCurrency} Settlement`,
       pendingLendSettlement: settlement => `@${settlement.debtorNickname} 은 당신과의 채무관계를 청산하기를 ${settlement.settlementCurrency} 원합니다`,
       pendingBorrowSettlement: settlement => `@${settlement.creditorNickname} 은 청산을 ${settlement.settlementCurrency} 통한 요청합니다`,
       pendingLendSettlementMe: settlement => `당신은 @${settlement.debtorNickname} 에게 ${settlement.settlementCurrency} 을 통한 청산을 요청합니다`,
@@ -377,7 +379,7 @@ export default {
       }
     },
     eth: `이더리움으로 청산하기`,
-    erc20: name => `Settle with ${name}`,
+    erc20: name => `${name} 청산하기`,
     paypal: `PayPal 청산하기`,
     nonPayment: `청산내역 기록하기`,
     select: `선택 결제 유형`,

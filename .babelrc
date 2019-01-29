@@ -2,20 +2,17 @@
   "ignore": [
     "**/__tests__"
   ],
-  "presets": ["react-native"],
+  "presets": [
+    "module:metro-react-native-babel-preset"
+  ],
   "plugins": [
-    ["module-alias", [
-      { "src": "./lib/packages/actions", "expose": "actions" },
-      { "src": "./lib/packages/credit-protocol", "expose": "credit-protocol" },
-      { "src": "./lib/packages/language", "expose": "language" },
-      { "src": "./lib/packages/lndr", "expose": "lndr" },
-      { "src": "./lib/packages/navigators", "expose": "navigators" },
-      { "src": "./lib/packages/reducers", "expose": "reducers" },
-      { "src": "./lib/packages/store", "expose": "store" },
-      { "src": "./lib/packages/theme", "expose": "theme" },
-      { "src": "./lib/packages/ui", "expose": "ui" },
-      { "src": "./packages/images", "expose": "images" }
-    ]]
+    "transform-class-properties",
+    ["module-resolver", {
+      "root": ["./lib/packages"],
+      "alias": {
+        "images": "./packages/images"
+      }
+    }]
   ],
   "env": {
     "production": {

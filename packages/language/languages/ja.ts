@@ -75,6 +75,7 @@ export default {
   nickname: `ニックネーム（小文字と数字）`,
   email: `メールアドレス`,
   inviteLink: `リンクを招待`,
+  sendToAddress: `住所に送る`,
   splitExpense: `LNDRアプリ上で私と一緒に費用を分割`,
   sendInvite: `電子メールやテキストを経由して送信します`,
   unknownTransaction: `不明なトランザクション`,
@@ -220,7 +221,6 @@ export default {
     },
     panelHeaders: [
       `ウォレット住所`,
-      `暗号残高`,
       `アカウントを削除する`,
       `ETHの取引履歴`,
       `ペイパルを接続します`,
@@ -241,6 +241,7 @@ export default {
     },
     logoutSuccess: `ログアウトに成功しました`,
     logoutError: generalCommunicationError,
+    addressWarning: `手動でアドレスを入力することは避けるべきです。ご自身の責任で行ってください。私たちは、misaddressedまたは失われた転送の責任を負いません。`,
   },
 
   currentBalance: name => `現在の${name}残高は`,
@@ -339,6 +340,7 @@ export default {
       initiatedBorrow: X => `${X}はあなたは貸しがあります`,
       pendingLend: X => `@${X} はあなたに借りがあります`,
       pendingBorrow: X => `あなたは @${X}に借りがあります`,
+      settlement: settlement => `${settlement.settlementCurrency} Settlement`,
       pendingLendSettlement: S => `@${S.debtorNickname} が ${S.settlementCurrency}で決済することを要請しています`,
       pendingBorrowSettlement: S => `@${S.creditorNickname} があなたと ${S.settlementCurrency}での決済を求めています`,
       pendingLendSettlementMe: S => ` @${S.debtorNickname}と  ${S.settlementCurrency}で決済することを要請しました`,
@@ -377,7 +379,7 @@ export default {
       }
     },
     eth: `ETHで決済`,
-    erc20: name => `Settle with ${name}`,
+    erc20: name => `${name}で決済`,
     paypal: `PayPalで決済`,
     nonPayment: `決済を記録する`,
     select: `決済タイプを選択します`,

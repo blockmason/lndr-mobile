@@ -76,6 +76,7 @@ export default {
   nickname: `Nama panggilan (huruf kecil & angka)`,
   email: `Alamat Email`,
   inviteLink: `Undang Tautan`,
+  sendToAddress: `Kirim ke alamat`,
   splitExpense: `Membagi beban dengan saya di aplikasi LNDR`,
   sendInvite: `Kirim via email atau teks`,
   unknownTransaction: `Transaksi yang tidak diketahui`,
@@ -221,7 +222,6 @@ export default {
     },
     panelHeaders: [
       `Dompet Alamat`,
-      `Saldo kripto`,
       `Hapus Akun`,
       `Riwayat Transaksi ETH`,
       `Aktifkan PayPal`,
@@ -242,6 +242,7 @@ export default {
     },
     logoutSuccess: `Anda berhasil keluar!`,
     logoutError: generalCommunicationError,
+    addressWarning: `Manual memasukkan alamat harus dihindari. Melakukannya dengan resiko Anda sendiri. Kami tidak bertanggung jawab untuk transfer misaddressed atau hilang.`,
   },
 
   currentBalance: name => `Saldo ${name} Anda saat ini adalah`,
@@ -339,6 +340,7 @@ export default {
       initiatedBorrow: X => `${X} mengatakan Anda berutang.`,
       pendingLend: X => `@${X} berutang pada Anda.`,
       pendingBorrow: X => `Anda berutang pada @${X}.`,
+      settlement: settlement => `${settlement.settlementCurrency} Settlement`,
       pendingLendSettlement: S => `@${S.debtorNickname} meminta pelunasan dengan ${S.settlementCurrency}.`,
       pendingBorrowSettlement: S => `@${S.creditorNickname} ingin melunasi Anda dengan ${S.settlementCurrency}.`,
       pendingLendSettlementMe: S => `Anda diminta untuk melunasi @${S.debtorNickname} dengan ${S.settlementCurrency}.`,
@@ -376,7 +378,7 @@ export default {
       }
     },
     eth: `Lunasi dengan ETH`,
-    erc20: name => `Settle with ${name}`,
+    erc20: name => `Lunasi dengan ${name}`,
     paypal: `Lunasi dengan PayPal`,
     nonPayment: `Catat Pelunasan`,
     select: `Pilih Settlement Jenis`,
