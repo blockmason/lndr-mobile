@@ -52,7 +52,7 @@ Log in to Firebase (https://console.firebase.google.com/u/0/project/lndr-english
 
 - Ensure that CocoaPods and Yarn are both installed (`sudo gem install cocoapods` and `brew install yarn`)
 - `yarn` (this installs the packages)
-- Fill in the `.env.example` with the proper information and save as `.env`.
+- Fill in the `.env.example` with the proper information and save as `.env`. (info is in airshipconfig.properties or AirshipConfig.plist)
 - `yarn run setup:env`
 - Put 
 - (only need to do this once or if native dependencies change) `react-native link` (note it may hang on `rnpm-install info Assets have been successfully linked to your project` - it's ok to kill it then)
@@ -64,6 +64,8 @@ Log in to Firebase (https://console.firebase.google.com/u/0/project/lndr-english
 - Put `GoogleService-Info.plist` in `ios/`
 - Put `AirshipConfig.plist` in `ios/`
 - Put `PayPalConfig.plist` in `ios/`
+
+- Run `cd ios && pod install && cd ..`
 
 - `react-native run-ios`
 
