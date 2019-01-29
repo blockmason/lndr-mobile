@@ -102,18 +102,16 @@ class NewTransaction extends Component<Props, State> {
         const ucac = getUcacFromCurrency(currency)
         const inviteTx = new InviteTransaction({ address, amount, memo, ucac, direction, currency })
 
-        const buildLink = new firebase.links.DynamicLink(inviteTx.hash, 'lndr.page.link')
+        const buildLink = new firebase.links.DynamicLink('https://blockmason.io/lndr', 'lndr.page.link')
         buildLink
         .android.setPackageName('com.lndr')
-        .android.setFallbackUrl('https://play.google.com/store/apps/details?id=com.lndr')
         .ios.setAppStoreId('1322487591')
         .ios.setBundleId('io.lndr')
       
-        const url = await firebase.links().createDynamicLink(buildLink)
+        const url = await firebase.links().createShortDynamicLink(buildLink, "SHORT")
 
         const { action } : any = await Share.share({
-          message: `${splitExpense}: ${url}`,
-          url: url,
+          message: `${splitExpense}: ${url}?hash=${inviteTx.hash}`,
           title: splitExpense
         }, {
           dialogTitle: splitExpense // Android only

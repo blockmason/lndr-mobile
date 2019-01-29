@@ -560,11 +560,12 @@ export const cancelPayPalRequestFail = () => {
 }
 
 const sendConfirmedTransaction = async(dispatch: any, getState: any, pendingTransaction: PendingTransaction) => {
-  if (!pendingTransaction)
-      return
-    
+  const { creditorAddress, debtorAddress, amount, memo, creditorNickname, debtorNickname, creditRecord, multiTransactions, submitter } = pendingTransaction
   const { address, privateKeyBuffer } = getUser(getState())()
-  const { creditorAddress, debtorAddress, amount, memo, creditorNickname, debtorNickname, creditRecord, multiTransactions } = pendingTransaction
+
+  if (!pendingTransaction || submitter === address)
+    return
+    
   const { ucacAddress } = creditRecord
   const direction = address === creditorAddress ? 'lend' : 'borrow'
   const friendAddress = address === creditorAddress ? debtorAddress : creditorAddress
@@ -1221,9 +1222,9 @@ export const confirmEmailTx = (inviteTx: InviteTransaction) => {
   return async (dispatch, getState) => {
     const { address, privateKeyBuffer } = getUser(getState())()
     // create the transaction here
-    const creditorAddress = inviteTx.direction === 'lend' ? inviteTx.address : address
-    const debtorAddress = inviteTx.direction === 'lend' ? address : inviteTx.address
-    const direction = inviteTx.direction === 'lend' ? 'borrow' : 'lend'
+    const creditorAddress = inviteTx.direction === 'borrow' ? inviteTx.address : address
+    const debtorAddress = inviteTx.direction === 'borrow' ? address : inviteTx.address
+    const direction = inviteTx.direction
     try {
       const creditRecord = await creditProtocol.createCreditRecord({ ucacAddress: inviteTx.ucac, creditorAddress, debtorAddress, amount: inviteTx.amount, memo: inviteTx.memo, fromLink: true })
       const signature = creditRecord.sign(privateKeyBuffer)
@@ -1231,10 +1232,9 @@ export const confirmEmailTx = (inviteTx: InviteTransaction) => {
       await creditProtocol.deleteEmailTx(inviteTx.hash)
       refreshTransactions()
 
-      const friendNickname = await getNicknameForAddress(inviteTx.address)
-      dispatch(displaySuccess(debtManagement.confirmation.transaction(friendNickname)))
+      dispatch(displaySuccess(debtManagement.confirmation.transaction(inviteTx.submitterNickname)))
       return true
-    } catch (e) {
+    } catch (error) {
       dispatch(displayError(debtManagement.confirmation.error))
       return false
     }

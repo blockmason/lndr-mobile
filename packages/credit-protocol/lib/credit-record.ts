@@ -21,7 +21,7 @@ export default class CreditRecord {
     this.debtorAddress = debtorAddress.replace('0x', '')
     this.amount = amount
     this.memo = memo
-    this.nonce = nonce
+    this.nonce = nonce || 0
     this.fromLink = fromLink
 
     const buffer = Buffer.concat([
