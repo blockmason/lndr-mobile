@@ -242,7 +242,6 @@ class RequestDetail extends Component<Props, State> {
     let friendAddress = '', friend = new Friend('', ''), memo = '', isPayee = false, direction = 'lend'
 
     if (content instanceof InviteTransaction) {
-      console.log(content)
       direction = content.direction
       friend = new Friend(content.address, content.submitterNickname || '')
     }

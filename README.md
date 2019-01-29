@@ -54,8 +54,6 @@ Log in to Firebase (https://console.firebase.google.com/u/0/project/lndr-english
 - `yarn` (this installs the packages)
 - Fill in the `.env.example` with the proper information and save as `.env`. (info is in airshipconfig.properties or AirshipConfig.plist)
 - `yarn run setup:env`
-- Put 
-- (only need to do this once or if native dependencies change) `react-native link` (note it may hang on `rnpm-install info Assets have been successfully linked to your project` - it's ok to kill it then)
 - (in new terminal) `yarn run typescript`
 - (in new terminal) `yarn start`
 
