@@ -560,7 +560,6 @@ export default class CreditProtocol {
   }
 
   deleteEmailTx(hash: string) {
-    console.log('DELETING')
     return this.client.delete('/email_transaction/' + hash)
   }
 }

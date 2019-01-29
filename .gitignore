@@ -22,6 +22,7 @@ DerivedData
 *.ipa
 *.xcuserstate
 project.xcworkspace
+ios/Pods/
 
 # Android/IntelliJ
 #
@@ -57,19 +58,16 @@ buck-out/
 android/gradle.properties
 android/app/blockmason-lndr-android.keystore
 
+#ios config variables
+ios/AirshipConfig.plist
+ios/GoogleService-Info.plist
+ios/PayPalConfig.plist
+
 #android config variables
 android/app/google-services.json
 android/app/src/main/assets/airshipconfig.properties
 android/app/src/main/assets/index.android.bundle
 android/app/src/main/assets/paypalconfig.properties
-
-#aws secrets
-packages/lndr/profile-pic/config.json
-
-ios/AirshipConfig.plist
-ios/GoogleService-Info.plist
-ios/PayPalConfig.plist
-ios/Pods/
 
 #JEST
 .jest

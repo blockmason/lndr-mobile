@@ -80,9 +80,11 @@ class HomeView extends Component<Props, State> {
     this.state = {
       refreshing: false
     }
+
+    this.checkForFriends = this.checkForFriends.bind(this)
   }
 
-  async componentDidMount() {
+  async componentWillMount() {
     firebase.analytics().setCurrentScreen('home', 'HomeView');
     this.initializePushNotifications()
     try {
@@ -91,22 +93,27 @@ class HomeView extends Component<Props, State> {
       this.props.displayError(accountManagement.loadInformation.error)
     }
 
-    if (this.props.state.initialHomeLoad) {
-      await Linking.getInitialURL().then((url) => {
-        if (url) {
-          this.props.setInitialHomeLoad(null)
-
-          const startIndex = url.indexOf('link=')
-          const hash = url.slice(startIndex + 5)
-          return this.props.getEmailTx(hash)
-          .then( async (rawEmailTx) => {
-            const inviteTx = new InviteTransaction(rawEmailTx, true)
-            const submitterNickname = await getNicknameForAddress(inviteTx.address)
-            inviteTx.submitterNickname = submitterNickname
-            this.props.navigation.navigate('RequestDetail', { emailTransaction: inviteTx })
-          })
-        }
-      }).catch(error => console.log('An error occurred getting the email transaction', error))
+    try {
+      if (this.props.state.initialHomeLoad) {
+        await Linking.getInitialURL().then((url) => {
+          if (url) {
+            this.props.setInitialHomeLoad(null)
+  
+            const startIndex = url.indexOf('hash=')
+            const hash = url.slice(startIndex + 5)
+            return this.props.getEmailTx(hash)
+              .then( async (rawEmailTx) => {
+                rawEmailTx.direction = rawEmailTx.direction === 'lend' ? 'borrow' : 'lend'
+                const inviteTx = new InviteTransaction(rawEmailTx, true)
+                const submitterNickname = await getNicknameForAddress(inviteTx.address)
+                inviteTx.submitterNickname = submitterNickname
+                this.props.navigation.navigate('RequestDetail', { emailTransaction: inviteTx })
+              })
+          }
+        })
+      }
+    } catch (error) {
+      console.log('An error occurred getting the email transaction', error)
     }
 
     this.props.getVerificationStatus()
@@ -115,9 +122,11 @@ class HomeView extends Component<Props, State> {
     await loadingRecentTransactions.wrap(this.props.getRecentTransactions())
     await loadingFriends.wrap(this.props.getFriends())
     await loadingPayPalRequests.wrap(this.props.getPayPalRequests())
+
+    this.checkForFriends()
   }
 
-  async componentDidUpdate() {
+  async checkForFriends() {
     const { initialHomeLoad, friendsLoaded, friends } = this.props.state
     if(initialHomeLoad && friendsLoaded && !friends.length) {
       this.props.navigation.navigate(initialHomeLoad)
@@ -181,7 +190,7 @@ class HomeView extends Component<Props, State> {
 
   refresh() {
     this.setState({ refreshing: true })
-    this.componentDidMount()
+    this.componentWillMount()
     this.setState({ refreshing: false })
   }
 

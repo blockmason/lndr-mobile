@@ -111,6 +111,8 @@ class RequestDetail extends Component<Props, State> {
     const { state: { content, transferLimitLevel }, props: { confirmPendingTransaction, confirmEmailTx, addDebt, ethExchange, ethSentPastWeek, user, primaryCurrency } }= this
     let success
 
+    console.log('CONTENT', content)
+
     if (content instanceof InviteTransaction) {
       success = await loadingContext.wrap(confirmEmailTx(content))
     } else if (content instanceof PendingTransaction) {
@@ -238,6 +240,11 @@ class RequestDetail extends Component<Props, State> {
       props: { user, primaryCurrency, settlerIsMe } } = this
 
     let friendAddress = '', friend = new Friend('', ''), memo = '', isPayee = false, direction = 'lend'
+
+    if (content instanceof InviteTransaction) {
+      direction = content.direction
+      friend = new Friend(content.address, content.submitterNickname || '')
+    }
     
     if (content instanceof PendingTransaction || content instanceof InviteTransaction) {
       memo = content.memo.trim()

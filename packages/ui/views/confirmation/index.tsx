@@ -29,6 +29,9 @@ interface State {
 class ConfirmationScreen extends Component<Props, State> {
   constructor(props) {
     super(props)
+
+    this.goHome = this.goHome.bind(this)
+    this.goActivity = this.goActivity.bind(this)
   }
 
   componentDidMount( ) {
@@ -118,20 +121,20 @@ class ConfirmationScreen extends Component<Props, State> {
     return <View style={general.whiteFlex}>
       <View style={general.view}>
         <DashboardShell text={confirmation.shell} navigation={this.props.navigation} />
-        <BackButton onPress={() => this.goHome()} />
+        <BackButton onPress={this.goHome} />
       </View>
       <ScrollView style={[general.whiteFlex]} keyboardShouldPersistTaps="always">
         <View style={[general.centeredColumn, general.standardHMargin]}>
           {this.getConfirmationImage(type)}
           {this.displayMessage()}
           {type === 'erc20Sent' || type === 'confirmFriend' || type === 'rejectFriend' || type === 'kycSuccess' ? <View style={{marginBottom: 20}}/> :
-          <TouchableHighlight onPress={() => this.goActivity()}>
+          <TouchableHighlight onPress={this.goActivity}>
             <Text style={[style.text, style.spacing]}>
               <Text>{confirmation.status}</Text>
               <Text style={[style.text, style.link]}>{confirmation.activity}</Text>
             </Text>
           </TouchableHighlight>}
-          <Button fat wide round onPress={() => this.goHome()} text={confirmation.done} />
+          <Button fat wide round onPress={this.goHome} text={confirmation.done} />
         </View>
       </ScrollView>
     </View>
