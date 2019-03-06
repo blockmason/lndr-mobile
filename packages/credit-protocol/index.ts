@@ -23,6 +23,8 @@ import { ERC20_Transaction, WEI_PER_ETH, getERC20_token } from 'lndr/erc-20'
 import Tx from 'ethereumjs-tx'
 import web3 from 'lndr/web3-connection'
 
+import { language } from 'language'
+
 export interface TransactionCosts {
   ethCost: number,
   ethCostFormatted: string,
@@ -207,7 +209,7 @@ export default class CreditProtocol {
     const hash = bufferToHex(ethUtil.keccak(hashBuffer))
     const signature = this.serverSign(hash, privateKeyBuffer)
 
-    return this.tempStorage.registerId[channelID] = this.client.post(`/register_push`, { channelID, platform, address, signature })
+    return this.tempStorage.registerId[channelID] = this.client.post(`/register_push`, { channelID, language, platform, address, signature })
   }
 
   deleteChannelID(address: string, channelID: string, platform: string, privateKeyBuffer: any) {
@@ -219,7 +221,7 @@ export default class CreditProtocol {
     const hash = bufferToHex(ethUtil.keccak(hashBuffer))
     const signature = this.serverSign(hash, privateKeyBuffer)
 
-    return this.client.post(`/unregister_push`, { channelID, platform, address, signature })
+    return this.client.post(`/unregister_push`, { channelID, language, platform, address, signature })
   }
 
   takenNick(nick: string) {
