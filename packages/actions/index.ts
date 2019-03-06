@@ -89,7 +89,7 @@ export const initializeStorage = () => {
         const payload = { hasStoredUser: true, welcomeComplete: true, privacyPolicyVerified: true, user: storedUser, notificationsEnabled, ethBalance,
           ethPrices, ucacAddresses, erc20EthPrices, ethTransactions, primaryCurrency }
         dispatch(setState(payload))
-  
+
       } else if (touchIdSupported && storedMnemonic && storedUser) {
         let { ethBalance, ethPrices } = await getEthInfo(storedUser, creditProtocol)
         let ucacAddresses = await creditProtocol.getUcacAddresses()
@@ -103,7 +103,7 @@ export const initializeStorage = () => {
         payload.ethTransactions = ethTransactions
         payload.primaryCurrency = primaryCurrency
         dispatch(setState(payload))
-  
+
       } else if (storedMnemonic) {
         const lockTimeout = storedUser ? storedUser.lockTimeout : 15
         dispatch(setState({ hasStoredUser: true, welcomeComplete: true, privacyPolicyVerified: true, notificationsEnabled, lockTimeout, primaryCurrency }))
@@ -485,18 +485,18 @@ export const getPending = () => {
       const rawPendingTransactions = await creditProtocol.getPendingTransactions(user.address)
       const flatPendingTransactions = rawPendingTransactions.map(jsonToPendingTransaction)
       const pendingTransactions = filterMultiTransactions(user.address, flatPendingTransactions, getState())
-  
+
       const rawPendingSettlements = await creditProtocol.getPendingSettlements(user.address)
       const pendingSettlements = filterMultiTransactions(user.address, rawPendingSettlements.unilateralSettlements.map(jsonToPendingUnilateral), getState())
       const bilateralSettlements = filterMultiTransactions(user.address, rawPendingSettlements.bilateralSettlements.map(jsonToPendingBilateral), getState())
       settleBilateral(user, bilateralSettlements, dispatch, getState)
-  
-  
+
+
       const rawInviteTxs = await creditProtocol.getInviteTransactions(user.address)
       const pendingInviteTxs = rawInviteTxs.map(tx => new InviteTransaction(tx, true))
-  
+
       await Promise.all(pendingTransactions.map((tx: PendingTransaction) => tx.fromLink ? sendConfirmedTransaction(dispatch, getState, tx) : null))
-  
+
       await ensureTransactionNicknames(pendingSettlements)
       await ensureTransactionNicknames(bilateralSettlements)
       await ensureTransactionNicknames(pendingTransactions)
@@ -515,10 +515,10 @@ export const getFriendRequests = () => {
       const pendingFriends = rawPendingFriends.map(jsonToPendingFriend).sort( (friend1, friend2) => {
         return friend1.nickname.localeCompare(friend2.nickname, language)
       })
-  
+
       const rawPendingOutboundFriends = await creditProtocol.getOutboundFriendRequests(user.address)
       const pendingOutboundFriends = rawPendingOutboundFriends.map(jsonToPendingFriend)
-  
+
       dispatch(setState({ pendingFriends, pendingOutboundFriends, pendingFriendsLoaded: true }))
     } catch (error) {
 
@@ -531,17 +531,17 @@ export const getPayPalRequests = () => {
     try {
       const user = getUser(getState())()
       const rawPayPalRequests = await creditProtocol.retrievePayPalSettlementRequests(user.address)
-  
+
       const payPalRequests = rawPayPalRequests.map( request => {
         const { requestor } = request
         const target = request.friend
-  
+
         const requestorIsMe = requestor.addr.indexOf(user.address) >= 0
         const friend = requestorIsMe ? target : requestor
-  
+
         return jsonToPayPalRequest({ requestorIsMe, friend })
       })
-  
+
       dispatch(setState({ payPalRequests, payPalRequestsLoaded: true }))
     } catch (error) {
 
@@ -565,7 +565,7 @@ const sendConfirmedTransaction = async(dispatch: any, getState: any, pendingTran
 
   if (!pendingTransaction || submitter === address)
     return
-    
+
   const { ucacAddress } = creditRecord
   const direction = address === creditorAddress ? 'lend' : 'borrow'
   const friendAddress = address === creditorAddress ? debtorAddress : creditorAddress
@@ -667,60 +667,60 @@ export const addDebt = (friend: Friend, amount: string, memo: string, direction:
     const { address, privateKeyBuffer } = getUser(getState())()
     const { ucacBalances } = calculateUcacBalances(getState())(friend.address)
     const sanitizedAmount = sanitizeAmount(amount, currency)
-    
+
     if(direction !== 'borrow' && direction !== 'lend') {
       return
     }
-    
+
     if (sanitizedAmount <= 0) {
       return dispatch(displayError(debtManagement.createError.amountTooLow))
     } else if (sanitizedAmount >= 1e11) {
       return dispatch(displayError(debtManagement.createError.amountTooHigh))
     }
-    
+
     if(settleTotal) {
       const { transactions, tooLow, tooHigh } = await generateMultiTransaction(address, friend.address, ucacBalances, memo, getState, privateKeyBuffer, creditProtocol, denomination)
-      
+
       if (tooLow) {
         return dispatch(displayError(debtManagement.createError.amountTooLow))
       } else if (tooHigh) {
         return dispatch(displayError(debtManagement.createError.amountTooHigh))
       }
-      
+
       try {
         await creditProtocol.submitMultiSettlement(transactions)
-        
+
         if(denomination === 'PAYPAL' && direction === 'borrow') {
           await creditProtocol.deletePayPalSettlementRequest(address, friend.address, privateKeyBuffer)
         }
         refreshTransactions()
-        
+
         dispatch(displaySuccess(debtManagement.pending.success(friend)))
         return true
       } catch (e) {
         dispatch(displayError(debtManagement.pending.error))
       }
     }
-    
+
     const [ creditorAddress, debtorAddress ] = {
       lend: [ address, friend.address ],
       borrow: [ friend.address, address ]
     }[direction]
-    
+
     const ucac = await getUcacAddr(getState())(currency)
     try {
       const creditRecord = await creditProtocol.createCreditRecord({ ucacAddress: ucac, creditorAddress, debtorAddress, amount: sanitizedAmount, memo, fromLink: false })
       const signature = creditRecord.sign(privateKeyBuffer)
-      
+
       await creditProtocol.submitCreditRecord(creditRecord, direction, signature, denomination)
-      
+
       if(denomination === 'PAYPAL' && direction === 'borrow') {
         await creditProtocol.deletePayPalSettlementRequest(address, friend.address, privateKeyBuffer)
       }
       refreshTransactions()
-      
+
       dispatch(displaySuccess(debtManagement.pending.success(friend)))
-      
+
       return true
     } catch (error) {
       console.log('ERROR SENDING CREDIT RECORD:', error)
@@ -739,18 +739,18 @@ export const loginAccount = (loginData: LoginAccountData) => {
         dispatch(displayError(accountManagement.pin.failedHashComparison))
         return false
       }
-  
+
       const mnemonic = await mnemonicStorage.get()
       const oldUser = await userStorage.get()
       const lockTimeout = oldUser ? oldUser.lockTimeout : 15
       const user = await createUserFromCredentials(mnemonic, hashedPassword, lockTimeout)
-  
+
       await storeUserSession(user)
       let { ethBalance, ethPrices } = await getEthInfo(user, creditProtocol)
       let ucacAddresses = await creditProtocol.getUcacAddresses()
       const erc20EthPrices = await creditProtocol.getERC20EthPrices()
       let ethTransactions = await ethTransactionsStorage.get()
-  
+
       const payload = { user, hasStoredUser: true, ethBalance, ethPrices, ucacAddresses, erc20EthPrices, ethTransactions }
       dispatch(setState(payload))
       refreshTransactions()
