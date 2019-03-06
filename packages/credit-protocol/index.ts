@@ -202,6 +202,7 @@ export default class CreditProtocol {
     }
 
     const hashBuffer = Buffer.concat([
+      utf8ToBuffer(language),
       utf8ToBuffer(platform),
       utf8ToBuffer(channelID),
       hexToBuffer(address)
@@ -214,6 +215,7 @@ export default class CreditProtocol {
 
   deleteChannelID(address: string, channelID: string, platform: string, privateKeyBuffer: any) {
     const hashBuffer = Buffer.concat([
+      utf8ToBuffer(language),
       utf8ToBuffer(platform),
       utf8ToBuffer(channelID),
       hexToBuffer(address)
