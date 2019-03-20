@@ -12,6 +12,7 @@ export const ERC20_Tokens = [
   new ERC20_Token('BCPT', '1c4481750daa5ff521a2a7490d9981ed46465dbd', 18, false),
   new ERC20_Token('BNB', 'B8c77482e45F1F44dE1745F52C74426C631bDD52', 18, true),
   new ERC20_Token('DAI', '89d24a6b4ccb1b6faa2625fe562bdd9a23260359', 18, true),
+  new ERC20_Token('TUSD', '0000000000085d4780B73119b644AE5ecd22b376', 18, true),
 
   //these are for local testing
   // new ERC20_Token('BCPT', 'f5cad0db6415a71a5bc67403c87b56b629b4ddaa', 18, undefined),
