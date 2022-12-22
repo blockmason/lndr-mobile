@@ -25,7 +25,7 @@
     "events": "^3.0.0",
     "hoek": "^6.1.2",
     "jest-fetch-mock": "^2.1.0",
-    "jsonwebtoken": "8.4.0",
+    "jsonwebtoken": "9.0.0",
     "metro-bundler": "^0.22.1",
     "react": "16.6.3",
     "react-native": "^0.57.8",
